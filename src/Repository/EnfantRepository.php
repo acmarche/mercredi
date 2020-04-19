@@ -47,4 +47,18 @@ class EnfantRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function remove(Enfant $enfant)
+    {
+        $this->_em->remove($enfant);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
+    public function persist(Enfant $enfant)
+    {
+        $this->_em->persist($enfant);
+    }
 }

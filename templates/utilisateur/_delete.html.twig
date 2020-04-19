@@ -13,7 +13,7 @@
                 Supprimer {{ utilisateur }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('bottin_utilisateur_delete', {'id': utilisateur.id}) }}">
+                <form method="post" action="{{ path('mercredi_utilisateur_delete', {'id': utilisateur.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
                     <button type="button" class="btn btn-secondary"

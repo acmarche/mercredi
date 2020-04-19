@@ -4,7 +4,7 @@
 
     <h3>Liste des utilisateurs</h3>
 
-    <a href="{{ path('bottin_utilisateur_new') }}" class="btn btn-primary">
+    <a href="{{ path('mercredi_utilisateur_new') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Ajouter un utilisateur
     </a> <br/><br/>
 
@@ -20,7 +20,7 @@
         {% for utilisateur in users %}
             <tr>
                 <td>
-                    <a href="{{ path('bottin_utilisateur_show', { 'id': utilisateur.id }) }}">
+                    <a href="{{ path('mercredi_utilisateur_show', { 'id': utilisateur.id }) }}">
                         {{ utilisateur.nom }} {{ utilisateur.prenom }}
                     </a>
                 </td>
