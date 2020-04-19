@@ -1,0 +1,41 @@
+<table class='table table-bordered table-hover'>
+    <tr>
+        <th><i class="fas fa-map-marked-alt"></i> Adresse</th>
+        <td>{{ fiche.rue }} {{ fiche.numero }} <br />
+            {{ fiche.cp }} {{ fiche.localite }}
+        </td>
+    <tr>
+        <th><i class="fas fa-globe-europe"></i> Site web</th>
+        <td>
+            <a href="{{ fiche.website }}">{{ fiche.website }}</a>
+        </td>
+    </tr>
+    <tr>
+        <th><i class="far fa-envelope"></i> Email</th>
+        <td>
+            {{ fiche.email }}
+        </td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-phone-alt"></i> Téléphone</th>
+        <td>
+            {{ fiche.telephone }}
+        </td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-phone-alt"></i> Autre téléphone</th>
+        <td>
+            {{ fiche.telephoneautre }}
+        </td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-fax"></i> Fax </th>
+        <td>{{ fiche.fax }}</td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-mobile-alt"></i> Gsm </th>
+        <td>
+            {{ fiche.gsm }}
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,8 @@
+<div class="form-group">
+    <select name="category" size="5" class="custom-select my-1 mr-sm-2 form-control category-root"
+            onchange="getCategories(this, {{ level }})">
+        {% for category in categories %}
+            <option value="{{ category.id }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+</div>

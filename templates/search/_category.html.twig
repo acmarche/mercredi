@@ -1,0 +1,16 @@
+<div class="hidden-print">
+    {{ form_start(search_form, { 'attr': {'class': 'form-inline'}}) }}
+    {{ form_errors(search_form) }}
+
+    {{ form_row(search_form.parent, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    {{ form_row(search_form.name, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+
+    <button class="btn btn-primary mr-1" type="submit"><i class="fas fa-search" aria-hidden="true"></i>
+        Rechercher
+    </button>
+
+    {{ form_row(search_form.raz) }}
+
+    {{ form_end(search_form) }}
+</div>
+<br/>

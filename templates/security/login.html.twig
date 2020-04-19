@@ -1,0 +1,37 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block title %}Me connecter{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/acmarchebottin/css/signin.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+
+        <form class="form-signin" method="post" action="{{ path('app_login') }}">
+            <img class="mb-4 img-fluid" title="Adl" src="{{ asset('bundles/acmarchebottin/images/logo_adl.jpg') }}"
+                 alt="logo" width="72">
+            <h1 class="h3 mb-3 font-weight-normal">Authentification</h1>
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <label for="inputEmail"
+                   class="sr-only">Nom d'utilisateur</label>
+            <input type="text" name="username" value="{{ last_username }}" id="inputEmail" class="form-control mb-2"
+                   placeholder="Votre nom d'utilisateur" required autofocus>
+            <label for="inputPassword"
+                   class="sr-only">Mot de passe</label>
+            <input name="password" type="password" id="inputPassword" class="form-control"
+                   placeholder="Mot de passe" required>
+
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+            <button class="btn btn-lg btn-primary btn-block"
+                    type="submit"><i class="fas fa-sign-in-alt"></i> Me connecter
+            </button>
+        </form>
+    </div>
+
+{% endblock %}

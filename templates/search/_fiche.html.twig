@@ -1,0 +1,13 @@
+<div class="hidden-print">
+    {{ form_start(search_form, { 'attr': {'class': 'form-inline'}}) }}
+    {{ form_errors(search_form) }}
+
+    {{ form_row(search_form.nom, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    {{ form_row(search_form.localite, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    {{ form_row(search_form.type, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    <input type="submit" class="btn btn-primary mr-1" value="Rechercher" name="submit">
+    {{ form_row(search_form.raz) }}
+
+    {{ form_rest(search_form) }}
+    {{ form_end(search_form) }}
+</div>

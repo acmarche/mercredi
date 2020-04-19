@@ -1,0 +1,25 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ fiche }}</h3>
+            {% if fiche.ftlb %}
+                <img src="{{ asset('bundles/acmarchebottin/images/ftlb.png') }}" title="Fiche provenant de la Ftlb"
+                     alt="ftlb"/>
+            {% endif %}
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheBottin/fiche/_form.html.twig' %}
+
+            <a href="{{ path('bottin_fiche_show', {'id' : fiche.id }) }}" class="btn btn-secondary">
+             <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ include('@AcMarcheBottin/fiche/_horaires.js.html.twig') }}
+{% endblock %}

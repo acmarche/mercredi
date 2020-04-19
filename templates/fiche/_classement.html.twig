@@ -1,0 +1,26 @@
+<h4 class="text-success">Classements</h4>
+{% if classements | length > 0 %}
+    {% for classement in classements %}
+        {% set category = classement.category %}
+        {% set paths =  category.path %}
+        <nav aria-label="breadcrumb">
+            <ol class='breadcrumb'>
+                {% if classement.principal %}
+                    <li class="breadcrumb-item" aria-current="page"><i class="fas fa-check"></i></li>
+                {% endif %}
+                {% for path in paths %}
+                    {% if loop.last %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ path }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item" aria-current="page">
+                            {{ path }}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </nav>
+    {% endfor %}
+
+{% else %}
+    <p class="text-warning">Aucun classement</p>
+{% endif %}

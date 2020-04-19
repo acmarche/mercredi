@@ -1,0 +1,47 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>Géolocaliser {{ fiche }}</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-info">
+                Déplacer le curseur à l'endroit voulu pour obtenir la longitude et latitude.
+                <br/>Ensuite valider les nouvelles coordonnées.
+            </div>
+
+            {{ form_start(form, { 'attr': {'class': 'well'}}) }}
+            {{ form_errors(form) }}
+            <div class="row">
+
+                <div class="col-md-6">
+                    {{ form_row(form.adresse) }}
+                    <button class="btn btn-primary mr-1 mb-2" type="submit">
+                        <i class="far fa-save" aria-hidden="true"></i>
+                        Sauvegarder
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.latitude) }}
+                    {{ form_row(form.longitude) }}
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+
+            <a href="{{ path('bottin_fiche_show', {'id' : fiche.id }) }}" class="btn btn-secondary float-right">
+                <i class="fas fa-long-arrow-alt-left mt-2"></i> Annuler
+            </a>
+            <div class="clearfix"></div>
+            <div id="map" style="width: 950px; height: 600px; margin: 30px;" class="border border-primary">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}"></script>
+    <script src="{{ asset('bundles/acmarchebottin/js/google.js') }}"></script>
+{% endblock %}

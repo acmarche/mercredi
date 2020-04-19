@@ -1,0 +1,49 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Liste des demandes de modification par les commerçants</h3>
+    </div>
+
+    {% if demandes | length > 0 %}
+
+        <table class='table table-bordered table-hover'>
+            <thead>
+            <tr>
+                <th>Demande num</th>
+                <th>Demandé le</th>
+                <th>Pour la fiche</th>
+                <th>Nbre de modifs</th>
+                <th>Demande traitée ?</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for demande in demandes %}
+                <tr>
+                    <td>
+                        {{ demande.id }}
+                    </td>
+                    <td>{{ demande.createdAt | date('d-m-Y à H:i') }}</td>
+                    <td>
+                        <a href="{{ path('bottin_demande_show', { 'id': demande.id }) }}">
+                            {{ demande.fiche }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ demande.metas | length }}
+                    </td>
+                    <td>
+                        {% if demande.traiter %}
+                            <i class="fas fa-check"></i> par {{ demande.traiterby }}
+                        {% else %}
+
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endif %}
+
+{% endblock %}

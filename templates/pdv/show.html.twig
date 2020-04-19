@@ -1,0 +1,51 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ pdv }}</h3>
+        </div>
+        <div class="card-body">
+
+            {% if is_granted('ROLE_BOTTIN_ADMIN') %}
+                <a href="{{ path('bottin_pdv_edit', { 'id': pdv.id }) }}" class="btn btn-primary"
+                   role="button"><i class="far fa-edit"></i> Editer</a>
+            {% endif %}
+
+            <br/><br/>
+            {% set count = fiches | length %}
+            {% if  count > 0 %}
+
+                <h3>{% if  count > 0 %} {{ count }} {% endif %}Fiches dans cette catégorie</h3>
+
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Societe</th>
+                        <th>Adresse</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Nom</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for fiche in fiches %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('bottin_fiche_show', { 'id': fiche.id }) }}"
+                                   title="Détail de la fiche">{{ fiche.societe }}</a>
+                            </td>
+                            <td>{{ fiche.rue }}</td>
+                            <td>{{ fiche.telephone }}</td>
+                            <td>{{ fiche.email }}</td>
+                            <td>{{ fiche.nom }} {{ fiche.prenom }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-info">Aucune</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

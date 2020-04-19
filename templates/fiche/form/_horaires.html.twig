@@ -1,0 +1,73 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Jour</th>
+        <th>Fermé ?</th>
+        <th>Ouvert à midi ?</th>
+        <th>Ouverture matinée</th>
+        <th>Fermeture matinée</th>
+        <th>Ouverture après midi</th>
+        <th>Fermeture après midi</th>
+        <th>Sur rdv</th>
+    </tr>
+    </thead>
+    {% for horaire in form.horaires %}
+        {% set valueday = horaire.vars.value.day %}
+        {% set isclosed = horaire.vars.value.isclosed %}
+        <tr>
+            <td>
+                {{ ("jour"~valueday) | trans }}
+                {% if valueday != 1 %}
+                    <br/>
+                    <a class="btn btn-warning btn-xs btnidem" id="btn-{{ valueday }}" data-jf="{{ valueday }}">
+                        Idem
+                    </a>
+                {% endif %}
+                {{ form_row(horaire.day) }}
+            </td>
+            <td class="text-center">
+                {{ form_label(horaire.is_closed) }}
+                {{ form_widget(horaire.is_closed, {'attr': {'data-jf': valueday}}) }}
+            </td>
+            <td class="text-center">
+                {{ form_label(horaire.is_open_at_lunch) }}
+                {{ form_widget(horaire.is_open_at_lunch, {'attr': {'data-jf': valueday}}) }}
+            </td>
+            <td>
+                {% if isclosed %}
+                    {{ form_row(horaire.morning_start, {'attr': {'class': 'nodisplay'}}) }}
+                {% else %}
+                    {{ form_row(horaire.morning_start) }}
+                {% endif %}
+            </td>
+            <td>
+                {% if isclosed %}
+                    {{ form_row(horaire.morning_end, {'attr': {'class': 'nodisplay'}}) }}
+                {% else %}
+                    {{ form_row(horaire.morning_end) }}
+                {% endif %}
+            </td>
+            <td>
+                {% if isclosed %}
+                    {{ form_row(horaire.noon_start, {'attr': {'class': 'nodisplay'}}) }}
+                {% else %}
+                    {{ form_row(horaire.noon_start) }}
+                {% endif %}
+            </td>
+            <td>
+                {% if isclosed %}
+                    {{ form_row(horaire.noon_end, {'attr': {'class': 'nodisplay'}}) }}
+                {% else %}
+                    {{ form_row(horaire.noon_end) }}
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if isclosed %}
+                    {{ form_row(horaire.is_rdv, {'attr': {'class': 'nodisplay'}}) }}
+                {% else %}
+                    {{ form_row(horaire.is_rdv) }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

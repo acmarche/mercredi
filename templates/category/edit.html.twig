@@ -1,0 +1,20 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ category }}</h3>
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheBottin/category/_form.html.twig' %}
+
+            <a href="{{ path('bottin_category_show', {'id': category.id}) }}">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+
+
+{% endblock %}

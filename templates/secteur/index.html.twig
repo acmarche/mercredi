@@ -1,0 +1,49 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>Index</h3>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered">
+                <tr>
+                    {% for letter in 'A'..'Z' %}
+                        <td>
+                            <a href="#{{ letter }}">{{ letter }}</a>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+
+            <table class="table table-bordered table-hover">
+                {% for letter in 'A'..'Z' %}
+                    <tr id="{{ letter }}" class="info">
+                        <td colspan="2">{{ letter }}</td>
+                    </tr>
+                    {% for fiche in fiches %}
+                        {% if fiche.societe|first|upper == letter %}
+                            <tr id="{{ fiche.id }}">
+                                <td>
+                                    {% if anchor == fiche.id %}
+                                        <i class="fas fa-anchor"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('bottin_fiche_show', {'id': fiche.id}) }}">{{ fiche.societe }}</a>
+                                    <br/>
+                                    {% for classement in fiche.classements %}
+                                        <span class="text-muted {% if classement.principal %} text-success{% endif %}">{{ classement }}</span>
+                                        {% if not loop.last %} | {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

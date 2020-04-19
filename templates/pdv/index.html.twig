@@ -1,0 +1,36 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Liste des points de vente</h3>
+    </div>
+    {% if is_granted('ROLE_BOTTIN_ADMIN') %}
+
+        <a href="{{ path('bottin_pdv_new') }}" class="btn btn-primary" role="button"><i
+                    class="glyphicon glyphicon-plus"></i> Ajouter</a>
+        <br/><br/>
+
+    {% endif %}
+
+    <table class='table table-bordered table-hover'>
+        <thead>
+        <tr>
+            <th>Intitule</th>
+            <th>Fiches</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pdv in pdvs %}
+            <tr>
+                <td>
+                    <a href="{{ path('bottin_pdv_show', { 'id': pdv.id }) }}">
+                        {{ pdv.intitule }}
+                    </a>
+                </td>
+                <td>{{ pdv.fiches | length }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

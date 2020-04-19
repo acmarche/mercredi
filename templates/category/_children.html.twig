@@ -1,0 +1,26 @@
+{% if category.getChildNodes | length > 0 %}
+<br />
+    <div class='row well'>
+        <div class='col-md-6'>
+            <ul class='list-group'>
+                {% for child in category.getChildNodes %}
+                    <li class="list-group-item">
+                        <a href="{{ path('bottin_category_show', { 'id': child.id }) }}">{{ child }}</a>
+                        {% if child.mobile %}
+                            <img class="float-right" src="{{ asset('bundles/acmarchebottin/images/mobile.png') }}" alt='mobile' title="Visible sur l'appli mobile" />
+                        {% endif %}
+                        {% if child.logo %}
+                            <img height="32px" class="float-right" src="{{ vich_uploader_asset(child, 'logoFile') }}" alt="{{ child.id }}" />
+                        {% endif %}
+                    </li>
+                    {% if (loop.index) == loop.length // 2 %}
+                    </ul>
+                </div>
+                <div class='col-md-6'>
+                    <ul>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

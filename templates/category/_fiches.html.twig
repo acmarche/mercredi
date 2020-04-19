@@ -1,0 +1,44 @@
+{% set count = fiches | length %}
+{% if  count > 0 %}
+
+    <h4 class="text-success">{% if  count > 0 %} {{ count }} {% endif %}Fiches dans cette catégorie</h4>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-download"></i> Exporter les fiches
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{ path('bottin_export_fiche_xls', { 'id' : category.id }) }}">En xls</a>
+            <a class="dropdown-item"
+               href="{{ path('bottin_export_fiches_by_category_pdf', { 'category' : category.id }) }}">En pdf</a>
+        </div>
+    </div>
+
+    <br/><br/>
+    <table class='table table-bordered table-hover'>
+        <thead>
+        <tr>
+            <th>Societe</th>
+            <th>Adresse</th>
+            <th>Téléphone</th>
+            <th>Nom</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for fiche in fiches %}
+            <tr>
+                <td>
+                    <a href="{{ path('bottin_fiche_show', { 'id': fiche.id }) }}"
+                       title="Détail de la fiche">{{ fiche.societe }}</a>
+                </td>
+                <td>{{ fiche.rue }}</td>
+                <td>{{ fiche.telephone }}</td>
+                <td>{{ fiche.nom }} {{ fiche.prenom }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-info">Aucune fiche classée dans cette catégorie</p>
+{% endif %}

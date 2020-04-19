@@ -1,0 +1,50 @@
+<div id="classements">
+    {% if classements | length > 0 %}
+        <table class='table table-bordered'>
+            <tbody>
+            {% for classement in classements %}
+                {% set category = classement.category %}
+                {% set paths =  category.path %}
+                <tr>
+                    <td style="width: 5%;">
+                        {% if classement.principal %}
+                            <i class="fas fa-check" title="Principal catégorie"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <nav aria-label="breadcrumb">
+                            <ol class='breadcrumb'>
+                                {% for path in paths %}
+                                    {% if loop.last %}
+                                        <li class="breadcrumb-item active" aria-current="page">{{ path }}</li>
+                                    {% else %}
+                                        <li class="breadcrumb-item" aria-current="page">
+                                            {{ path }}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </nav>
+                    </td>
+                    <td>
+                        <a title="supprimer ce classement"
+                           onclick="removeClassement({{ classement.id }});return false;" href="#"
+                           class="removeclassment text-center"
+                           data-id="{{ classement.id }}"> <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a title="Définir en principal"
+                           onclick="setPrincipal({{ classement.id }});return false;" href="#"
+                           class="setprincipal text-center"
+                           data-id="{{ classement.id }}"><i class="fas fa-check"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-warning">Aucun classement</p>
+    {% endif %}
+</div>

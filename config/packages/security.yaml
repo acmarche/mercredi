@@ -1,0 +1,23 @@
+security:
+    encoders:
+      AcMarche\Mercredi\Entity\User:
+            algorithm: auto
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        mercredi_user_provider:
+            entity:
+                class: AcMarche\Mercredi\Entity\User
+                property: username
+    firewalls:
+        main:
+            anonymous: lazy
+            provider: bottin_user_provider
+            guard:
+                authenticators:
+                    - AcMarche\Mercredi\Security\MercrediAuthenticator
+            logout:
+                path: app_logout
+    role_hierarchy:
+        ROLE_BOTTIN_ADMIN: [ROLE_BOTTIN]

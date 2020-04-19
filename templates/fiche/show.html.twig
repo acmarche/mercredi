@@ -1,0 +1,58 @@
+{% extends '@AcMarcheBottin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ fiche }}</h3>
+            {% if fiche.ftlb %}
+                <img src="{{ asset('bundles/acmarchebottin/images/ftlb.png') }}" title="Fiche provenant de la Ftlb" alt="ftlb"/>
+            {% endif %}
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheBottin/fiche/_actions.html.twig' %}
+            {% include '@AcMarcheBottin/fiche/_tabs.html.twig' %}
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_activite.html.twig' %}
+
+                    {% include '@AcMarcheBottin/fiche/_classement.html.twig' %}
+
+                    {% include '@AcMarcheBottin/fiche/_images.html.twig' %}
+                </div>
+
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="profile-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_contact.html.twig' %}
+                </div>
+                <div class="tab-pane fade" id="infos" role="tabpanel" aria-labelledby="profile-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_infos.html.twig' %}
+                </div>
+                <div class="tab-pane fade" id="horaires" role="tabpanel" aria-labelledby="profile-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_horaires.html.twig' %}
+                </div>
+                <div class="tab-pane fade" id="sociaux" role="tabpanel" aria-labelledby="profile-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_sociaux.html.twig' %}
+                </div>
+                <div class="tab-pane fade" id="note" role="tabpanel" aria-labelledby="profile-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_note.html.twig' %}
+                </div>
+                <div class="tab-pane fade" id="contact_administratif" role="tabpanel"
+                     aria-labelledby="profile-tab">
+                    {% include '@AcMarcheBottin/fiche/identite/_contact_administratif.html.twig' %}
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-muted">
+
+         {#
+         Crée le {{ fiche.createdAt|date('d-m-Y H:i:s') }} par {{ fiche.user }}. Mis à jour le {{ fiche|date('d-m-Y H:i:s') }}
+         #}
+        </div>
+    </div>
+
+    {% include '@AcMarcheBottin/fiche/_delete.html.twig' %}
+
+{% endblock %}

@@ -1,0 +1,11 @@
+liip_imagine:
+    resolvers:
+        default:
+            web_path: ~
+
+    filter_sets:
+        cache: ~
+        acbottin_thumb:
+            quality: 100
+            filters:
+                thumbnail: { size: [250, 188], mode: inset }
