@@ -2,32 +2,21 @@
 
 <li class="nav-item{% if action == 'fiche_new' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('bottin_fiche_new') }}"><i class="fas fa-plus"></i> Ajouter une fiche</a>
+       href="{{ path('mercredi_home') }}"><i class="fas fa-plus"></i> Ajouter une fiche</a>
 </li>
 
-<li class="nav-item{% if action == 'bottin_fiche' %} active {% endif %}">
+<li class="nav-item{% if action == 'mercredi_fiche' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('bottin_fiche') }}">Fiches</a>
+       href="{{ path('mercredi_home') }}">Fiches</a>
 </li>
 
-<li class="nav-item{% if action == 'bottin_category' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('bottin_category') }}">Catégories</a>
-</li>
-
-{% if is_granted('ROLE_BOTTIN_ADMIN') %}
+{% if is_granted('ROLE_MERCREDI_ADMIN') %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
            aria-haspopup="true"
            aria-expanded="false">...</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="{{ path('bottin_index') }}">Index des fiches</a>
-            <a class="dropdown-item" href="{{ path('bottin_demande') }}">Demande des commerçants</a>
-            <a class="dropdown-item" href="{{ path('bottin_pdv') }}"> Points de vente</a>
-            <a class="dropdown-item" href="{{ path('bottin_categories_empty') }}">Catégories sans fiches</a>
-            <a class="dropdown-item" href="{{ path('bottin_publipostage') }}">Publipostage</a>
-            <a class="dropdown-item" href="{{ path('bottin_utilisateur') }}">Les utilisateurs</a>
-            <a class="dropdown-item" href="{{ path('bottin_api_test_index') }}">Api tests</a>
+            <a class="dropdown-item" href="{{ path('mercredi_home') }}">Index des fiches</a>
         </div>
     </li>
 {% endif %}

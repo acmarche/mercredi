@@ -1,9 +1,0 @@
-{% if suggests|length > 0 %}
-    <div class="text-muted mb-2">
-        Essayer avec cette orthographe :
-        {% for option in suggests %}
-            <a href="{{ path('bottin_fiche_search', {'keyword':option.text}) }}">{{ option.text }}</a>
-            {% if loop.last != 'true' %}/{% endif %}
-        {% endfor %}
-    </div>
-{% endif %}

@@ -1,8 +1,7 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 parameters:
-    bottin.api_key: '%env(BOTTIN_CLEF_GOOGLE)%'
-    bottin.cp_default: '6900'
+    mercredi.email_sender: '%env(BOTTIN_CLEF_GOOGLE)%'
 
 services:
     # default configuration for services in *this* file
@@ -14,16 +13,14 @@ services:
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
         public: false
-        bind:
-            $clefGoogle: '%env(BOTTIN_CLEF_GOOGLE)%'
 
     # makes classes in src/App available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    AcMarche\Bottin\:
+    AcMarche\Mercredi\:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
         exclude: '../src/{Entity,Tests}'
 
-    AcMarche\Bottin\Namer\DirectoryNamer:
+    AcMarche\Mercredi\Namer\DirectoryNamer:
         public: true

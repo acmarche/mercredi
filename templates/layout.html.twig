@@ -4,18 +4,21 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Bottin{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarchebottin/favicon.ico') }}"/>
+    <title>{% block title %}Mercredi{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarchemercredi/favicon.ico') }}"/>
     {% block stylesheets %}{% endblock %}
 
-    <link href="{{ asset('bundles/acmarchebottin/css/print.css') }}" rel="stylesheet" media="print">
-    {{ encore_entry_link_tags('app') }}
-
+    <link href="{{ asset('bundles/acmarchemercredi/css/app.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{{ asset('bundles/acmarchemercredi/css/print.css') }}" rel="stylesheet" media="print">
+    <link href="{{ asset('bundles/acmarchemercredi/css/typeahead.css') }}" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top border-bottom shadow-sm">
     {% block brand %}
-        <i class="fas fa-store icon-rose"></i> <a class="navbar-brand" href="{{ path('bottin_home') }}">Bottin</a>
+        <i class="fas fa-store icon-rose"></i> <a class="navbar-brand" href="{{ path('mercredi_home') }}">Mercredi</a>
     {% endblock %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +29,7 @@
         <ul class="navbar-nav mr-auto ml-auto">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 {% block menu_top %}
-                    {% include '@AcMarcheBottin/_menu.html.twig' %}
+                    {% include '@AcMarcheMercredi/_menu.html.twig' %}
                 {% endblock %}
             {% endif %}
         </ul>
@@ -44,7 +47,7 @@
 
 <main role="main" {% block main_class %}class="container pt-3"{% endblock %}>
 
-    {% include '@AcMarcheBottin/_flash_messages.html.twig' %}
+    {% include '@AcMarcheMercredi/_flash_messages.html.twig' %}
 
     {% block notifications %}
 
@@ -70,9 +73,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-<script src="{{ asset('bundles/acmarchebottin/js/typeahead/typeahead.bundle.js') }} " type="text/javascript"></script>
-
-{#{ encore_entry_script_tags('app') }#}
+<script src="{{ asset('bundles/acmarchemercredi/js/typeahead/typeahead.bundle.js') }} " type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 
 {% block javascripts %}{% endblock %}
 

@@ -13,14 +13,14 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class AcMarcheBottinExtension extends Extension implements PrependExtensionInterface
+class AcMarcheMercrediExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
     }
 
@@ -42,16 +42,16 @@ class AcMarcheBottinExtension extends Extension implements PrependExtensionInter
                         $this->loadConfig($container, 'twig');
                         break;
                     case 'liip_imagine':
-                      //  $this->loadConfig($container, 'liip_imagine');
+                        $this->loadConfig($container, 'liip_imagine');
                         break;
                     case 'framework':
-                    //    $this->loadConfig($container, 'security');
+                        $this->loadConfig($container, 'security');
                         break;
                     case 'vich_uploader':
-                  //      $this->loadConfig($container, 'vich_uploader');
+                        $this->loadConfig($container, 'vich_uploader');
                         break;
-                    case 'api_platform222':
-                        $this->loadConfig($container, 'api_platform');
+                    case 'api_platform':
+                        //$this->loadConfig($container, 'api_platform');
                         break;
                 }
             }
@@ -62,7 +62,7 @@ class AcMarcheBottinExtension extends Extension implements PrependExtensionInter
     {
         $configs = $this->loadYamlFile($container);
 
-        $configs->load($name . '.yaml');
+        $configs->load($name.'.yaml');
     }
 
     /**
@@ -73,7 +73,7 @@ class AcMarcheBottinExtension extends Extension implements PrependExtensionInter
     {
         return new Loader\YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../config/packages/')
+            new FileLocator(__DIR__.'/../../config/packages/')
         );
     }
 }

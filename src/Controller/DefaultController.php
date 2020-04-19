@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Controller;
 
 use AcMarche\Mercredi\Entity\Article;
 use AcMarche\Mercredi\Repository\ArticleRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class DefaultController
  * @package AcMarche\Mercredi\Controller
  *
- * @IsGranted("ROLE_ADMINISTRATOR")
+ * IsGranted("ROLE_ADMINISTRATOR")
  */
 class DefaultController extends AbstractController
 {
@@ -27,8 +26,21 @@ class DefaultController extends AbstractController
         $this->articleRepository = $articleRepository;
     }
 
+
     /**
-     * @Route("/books/{id}", name="book_detail")
+     * @Route("/", name="mercredi_home")
+     */
+    public function default(Request $request)
+    {
+        return $this->render(
+            '@AcMarcheMercredi/default/index.html.twig',
+            [
+            ]
+        );
+    }
+
+    /**
+     * @Route("/books/{id}", name="mercredi_push")
      */
     public function book(Request $request, Article $article)
     {

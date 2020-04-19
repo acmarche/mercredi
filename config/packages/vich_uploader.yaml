@@ -1,14 +1,9 @@
 vich_uploader:
     mappings:
-        bottin_fiche_image:
-            uri_prefix:         /bottin/fiches
-            upload_destination: "%kernel.project_dir%/public/bottin/fiches"
+        mercredi_enfant_image:
+            uri_prefix:         /enfants
+            upload_destination: "%kernel.project_dir%/public/enfants"
             directory_namer:
-                service: AcMarche\Bottin\Namer\DirectoryNamer
+                service: AcMarche\Mercredi\Namer\DirectoryNamer
             namer:              vich_uploader.namer_uniqid
-            inject_on_load:     false
-        bottin_category_logo:
-            uri_prefix:         /bottin/categories
-            namer:              vich_uploader.namer_uniqid
-            upload_destination: "%kernel.project_dir%/public/bottin/categories"
             inject_on_load:     false

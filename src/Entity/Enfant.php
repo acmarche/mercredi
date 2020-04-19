@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Traits\NameTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -13,8 +14,9 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
  */
 class Enfant implements SluggableInterface, TimestampableInterface
 {
-
-    use SluggableTrait,
+    use
+        NameTrait,
+        SluggableTrait,
         TimestampableTrait;
 
     public function getSluggableFields(): array

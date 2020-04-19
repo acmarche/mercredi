@@ -13,11 +13,11 @@ security:
     firewalls:
         main:
             anonymous: lazy
-            provider: bottin_user_provider
+            provider: mercredi_user_provider
             guard:
                 authenticators:
                     - AcMarche\Mercredi\Security\MercrediAuthenticator
             logout:
                 path: app_logout
     role_hierarchy:
-        ROLE_BOTTIN_ADMIN: [ROLE_BOTTIN]
+        ROLE_MERCREDI_ADMIN: [ROLE_MERCREDI]
