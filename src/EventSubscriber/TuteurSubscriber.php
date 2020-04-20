@@ -39,7 +39,7 @@ class TuteurSubscriber implements EventSubscriber
         $this->setUserAdd($entity);
     }
 
-    private function setUserAdd(Enfant $enfant)
+    private function setUserAdd(Tuteur $tuteur)
     {
         $user = $this->security->getUser();
         if (!$user) {
@@ -47,7 +47,7 @@ class TuteurSubscriber implements EventSubscriber
         }
 
         if ($user) {
-            $enfant->setUserAdd($user->getUsername());
+            $tuteur->setUserAdd($user->getUsername());
         }
     }
 

@@ -4,9 +4,9 @@ namespace AcMarche\Mercredi\Controller;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Form\EnfantType;
-use AcMarche\Mercredi\Message\Enfant\TuteurCreated;
-use AcMarche\Mercredi\Message\Enfant\TuteurDeleted;
-use AcMarche\Mercredi\Message\Enfant\TuteurUpdated;
+use AcMarche\Mercredi\Message\Enfant\EnfantCreated;
+use AcMarche\Mercredi\Message\Enfant\EnfantDeleted;
+use AcMarche\Mercredi\Message\Enfant\EnfantUpdated;
 use AcMarche\Mercredi\Repository\EnfantRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,7 +57,7 @@ class EnfantController extends AbstractController
             $this->enfantRepository->persist($enfant);
             $this->enfantRepository->flush();
 
-            $this->dispatchMessage(new TuteurCreated($enfant->getId()));
+            $this->dispatchMessage(new EnfantCreated($enfant->getId()));
 
             return $this->redirectToRoute('mercredi_enfant_show', ['id' => $enfant->getId()]);
         }
@@ -95,7 +95,7 @@ class EnfantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantRepository->flush();
 
-            $this->dispatchMessage(new TuteurUpdated($enfant->getId()));
+            $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
 
             return $this->redirectToRoute('mercredi_enfant_show', ['id' => $enfant->getId()]);
         }
@@ -117,7 +117,7 @@ class EnfantController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
             $this->enfantRepository->remove($enfant);
             $this->enfantRepository->flush();
-            $this->dispatchMessage(new TuteurDeleted($enfant->getId()));
+            $this->dispatchMessage(new EnfantDeleted($enfant->getId()));
         }
 
         return $this->redirectToRoute('mercredi_enfant_index');
