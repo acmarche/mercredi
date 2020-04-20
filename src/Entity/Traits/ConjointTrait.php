@@ -9,9 +9,9 @@ trait ConjointTrait
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "belle-mere, pere, mere"})
+     * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "pere, mere, oncle..."})
      */
-    private $conjoint;
+    private $relation_conjoint;
 
     /**
      * @var string|null
@@ -58,17 +58,17 @@ trait ConjointTrait
     /**
      * @return string|null
      */
-    public function getConjoint(): ?string
+    public function getRelationConjoint(): ?string
     {
-        return $this->conjoint;
+        return $this->relation_conjoint;
     }
 
     /**
-     * @param string|null $conjoint
+     * @param string|null $relation_conjoint
      */
-    public function setConjoint(?string $conjoint): void
+    public function setRelationConjoint(?string $relation_conjoint): void
     {
-        $this->conjoint = $conjoint;
+        $this->relation_conjoint = $relation_conjoint;
     }
 
     /**

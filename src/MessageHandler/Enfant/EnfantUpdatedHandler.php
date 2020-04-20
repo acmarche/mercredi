@@ -3,13 +3,10 @@
 
 namespace AcMarche\Mercredi\MessageHandler\Enfant;
 
-use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Message\Enfant\EnfantCreated;
 use AcMarche\Mercredi\Message\Enfant\EnfantUpdated;
 use AcMarche\Mercredi\Repository\EnfantRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class EnfantUpdatedHandler implements MessageHandlerInterface
 {
@@ -28,7 +25,7 @@ class EnfantUpdatedHandler implements MessageHandlerInterface
         $this->enfantRepository = $enfantRepository;
     }
 
-    public function __invoke(EnfantUpdated $enfantCreated)
+    public function __invoke(EnfantUpdated $enfantUpdated)
     {
         $this->flashBag->add('success', "L'enfant a bien été modifié");
     }

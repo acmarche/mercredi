@@ -1,8 +1,19 @@
 {% set action = app.request.attributes.get("_route") %}
 
+
+<li class="nav-item{% if action == 'mercredi_tuteur_new' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('mercredi_tuteur_new') }}"><i class="fas fa-plus"></i> Ajouter un tuteur</a>
+</li>
+
 <li class="nav-item{% if action == 'mercredi_enfant_new' %} active {% endif %}">
     <a class="nav-link"
        href="{{ path('mercredi_enfant_new') }}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_tuteur_index' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('mercredi_tuteur_index') }}">Les tuteurs</a>
 </li>
 
 <li class="nav-item{% if action == 'mercredi_enfant_index' %} active {% endif %}">

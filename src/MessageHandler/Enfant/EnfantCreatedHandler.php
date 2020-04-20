@@ -3,12 +3,10 @@
 
 namespace AcMarche\Mercredi\MessageHandler\Enfant;
 
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Message\Enfant\EnfantCreated;
 use AcMarche\Mercredi\Repository\EnfantRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class EnfantCreatedHandler implements MessageHandlerInterface
 {

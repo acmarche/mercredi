@@ -19,34 +19,7 @@ class EnfantRepository extends ServiceEntityRepository
         parent::__construct($registry, Enfant::class);
     }
 
-    // /**
-    //  * @return Enfant[] Returns an array of Enfant objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Enfant
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
     public function remove(Enfant $enfant)
     {
         $this->_em->remove($enfant);
