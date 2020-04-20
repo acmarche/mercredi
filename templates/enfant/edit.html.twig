@@ -1,0 +1,34 @@
+{% extends '@AcMarcheMercredi/layout.html.twig' %}
+{% block stylesheets %}
+    <style>
+        #accompagnateurs-list li * {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        #accompagnateurs-list li input {
+            width: 50%;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ enfant }}</h3>
+        </div>
+        <div class="card-body">
+
+            {{ include('@AcMarcheMercredi/enfant/_form.html.twig') }}
+
+            <a href="{{ path('mercredi_enfant_show',{'id':enfant.id}) }}" class="mt-4">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('/bundles/acmarchemercredi/js/accompagnateur.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends '@AcMarcheMercredi/layout.html.twig' %}
+
+{% block title %}Enfant{% endblock %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ enfant }}</h3>
+            {% include '@AcMarcheMercredi/default/_sexe.html.twig' with {'entity':enfant} %}
+            {% include '@AcMarcheMercredi/default/_archive.html.twig' with {'entity':enfant} %}
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheMercredi/enfant/_actions.html.twig' %}
+
+            {% include '@AcMarcheMercredi/enfant/_scolaire.html.twig' %}
+
+            <img class="img-thumbnail"
+                 src="{{ vich_uploader_asset(enfant, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
+
+            <br/>
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>né le</th>
+                    <td>
+                        <span class="fas fa-birthday-cake"></span> {{ enfant.birthday ? enfant.birthday|format_datetime('full', 'none') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        ({{ enfant.numeronational }})
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercredi/enfant/_delete_form.html.twig' %}
+
+{% endblock %}
