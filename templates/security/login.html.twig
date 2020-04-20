@@ -1,16 +1,16 @@
-{% extends '@AcMarcheBottin/layout.html.twig' %}
+{% extends '@AcMarcheMercredi/layout.html.twig' %}
 
 {% block title %}Me connecter{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{ asset('bundles/acmarchebottin/css/signin.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/acmarchemercredi/css/signin.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
     <div class="text-center">
 
         <form class="form-signin" method="post" action="{{ path('app_login') }}">
-            <img class="mb-4 img-fluid" title="Adl" src="{{ asset('bundles/acmarchebottin/images/logo_adl.jpg') }}"
+            <img class="mb-4 img-fluid" title="Adl" src="{{ asset('bundles/acmarchemercredi/images/favicon/favicon-96x96.png') }}"
                  alt="logo" width="72">
             <h1 class="h3 mb-3 font-weight-normal">Authentification</h1>
             {% if error %}

@@ -1,13 +1,13 @@
 {% set action = app.request.attributes.get("_route") %}
 
-<li class="nav-item{% if action == 'fiche_new' %} active {% endif %}">
+<li class="nav-item{% if action == 'mercredi_enfant_new' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('mercredi_home') }}"><i class="fas fa-plus"></i> Ajouter une fiche</a>
+       href="{{ path('mercredi_enfant_new') }}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
 </li>
 
-<li class="nav-item{% if action == 'mercredi_fiche' %} active {% endif %}">
+<li class="nav-item{% if action == 'mercredi_enfant_index' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('mercredi_home') }}">Fiches</a>
+       href="{{ path('mercredi_enfant_index') }}">Les enfants</a>
 </li>
 
 {% if is_granted('ROLE_MERCREDI_ADMIN') %}

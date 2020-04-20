@@ -12,4 +12,20 @@ trait RemarqueTrait
      */
     private $remarque;
 
+    /**
+     * @return string|null
+     */
+    public function getRemarque(): ?string
+    {
+        return $this->remarque;
+    }
+
+    /**
+     * @param string|null $remarque
+     */
+    public function setRemarque(?string $remarque): void
+    {
+        $this->remarque = $remarque;
+    }
+
 }

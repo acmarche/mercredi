@@ -46,7 +46,7 @@ class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements Pa
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email' => $request->request->get('email'),
+            'email' => $request->request->get('username'),
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];

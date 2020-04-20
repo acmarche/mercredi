@@ -2,8 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller;
 
-use AcMarche\Mercredi\Entity\Article;
-use AcMarche\Mercredi\Repository\ArticleRepository;
+use AcMarche\Mercredi\Entity\Enfant;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,14 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DefaultController extends AbstractController
 {
-    /**
-     * @var ArticleRepository
-     */
-    private $articleRepository;
 
-    public function __construct(ArticleRepository $articleRepository)
+
+    public function __construct()
     {
-        $this->articleRepository = $articleRepository;
+
     }
 
 
@@ -42,7 +38,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/books/{id}", name="mercredi_push")
      */
-    public function book(Request $request, Article $article)
+    public function book(Request $request, Enfant $article)
     {
         if (isset($request->request->statuts)) {
             $data = json_decode($request->request->statuts);

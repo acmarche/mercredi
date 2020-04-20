@@ -4,7 +4,7 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 
-trait TelephonyTrait
+trait TelephonieTrait
 {
     /**
      * @var string|null

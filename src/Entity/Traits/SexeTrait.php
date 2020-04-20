@@ -13,4 +13,19 @@ trait SexeTrait
      */
     private $sexe;
 
+    /**
+     * @return string|null
+     */
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    /**
+     * @param string|null $sexe
+     */
+    public function setSexe(?string $sexe): void
+    {
+        $this->sexe = $sexe;
+    }
 }

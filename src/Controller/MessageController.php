@@ -4,13 +4,11 @@ namespace AcMarche\Mercredi\Controller;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Message\EnfantCreated;
-use AcMarche\Mercredi\Message\FlashNotification;
 use AcMarche\Mercredi\Message\NewUserWelcomeEmail;
 use AcMarche\Mercredi\Message\SmsNotification;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -37,12 +35,12 @@ class MessageController extends AbstractController
 
         // or use the shortcut
         $this->dispatchMessage(new SmsNotification('Look! I created a message!'));
-    //    $this->dispatchMessage(new FlashNotification('Super flash notification!'));
+        //    $this->dispatchMessage(new FlashNotification('Super flash notification!'));
         $this->dispatchMessage(new EnfantCreated($enfant));
-        $this->dispatchMessage(new NewUserWelcomeEmail($enfant->getId()));
+        $this->dispatchMessage(new NewUserWelcomeEmail(44));
 
         return $this->render(
-            'default/index.html.twig',
+            '@AcMarcheMercredi/default/index.html.twig',
             [
 
             ]

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AcMarche\Mercredi\Message;
+namespace AcMarche\Mercredi\Message\Test;
 
 
 class SmsNotification

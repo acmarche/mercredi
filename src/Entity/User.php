@@ -3,10 +3,13 @@
 namespace AcMarche\Mercredi\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Repository\UserRepository")
+ * @UniqueEntity("email")
+ * @UniqueEntity("username")
  */
 class User implements UserInterface
 {

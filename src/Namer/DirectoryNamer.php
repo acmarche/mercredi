@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Namer;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
@@ -24,15 +25,13 @@ class DirectoryNamer implements DirectoryNamerInterface
     /**
      * Creates a directory name for the file being uploaded.
      *
-     * @param Category $object The object the upload is attached to
+     * @param Enfant $object The object the upload is attached to
      * @param PropertyMapping $mapping The mapping to use to manipulate the given object
      *
      * @return string The directory name
      */
     public function directoryName($object, PropertyMapping $mapping): string
     {
-        $fiche = $object->getFiche();
-
-        return $fiche->getId();
+       return $object->getId();
     }
 }

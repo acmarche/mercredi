@@ -12,9 +12,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class HottonCreateUserCommand extends Command
+class CreateUserCommand extends Command
 {
-    protected static $defaultName = 'hotton:create:user';
+    protected static $defaultName = 'mercredi:create-user';
     /**
      * @var UserRepository
      */
@@ -72,7 +72,7 @@ class HottonCreateUserCommand extends Command
         $user->setEmail($email);
         $user->setNom($name);
         $user->setPassword($this->userPasswordEncoder->encodePassword($user, $password));
-        $user->addRole('ROLE_ADMINISTRATOR');
+        $user->addRole('ROLE_MERCREDI_ADMIN');
 
         $this->userRepository->insert($user);
 

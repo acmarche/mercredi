@@ -1,11 +1,16 @@
 <?php
 
 
-namespace AcMarche\Mercredi\Message;
+namespace AcMarche\Mercredi\Message\Enfant;
 
 
-class NewUserWelcomeEmail
+use AcMarche\Mercredi\Entity\Enfant;
+
+class EnfantUpdated
 {
+    /**
+     * @var int
+     */
     private $enfantId;
 
     public function __construct(int $enfantId)
@@ -13,8 +18,12 @@ class NewUserWelcomeEmail
         $this->enfantId = $enfantId;
     }
 
+    /**
+     * @return int
+     */
     public function getEnfantId(): int
     {
         return $this->enfantId;
     }
+
 }
