@@ -1,0 +1,37 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block title %}Enfant{% endblock %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ jour.dateJour|format_date('full') }}</h3>
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheMercrediAdmin/jour/_actions.html.twig' %}
+
+            <br/>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Prix 1</th>
+                    <td>{{ jour.prix1 }} €</td>
+                </tr>
+                <tr>
+                    <th>Prix 2</th>
+                    <td>{{ jour.prix2 }} €</td>
+                </tr>
+                <tr>
+                    <th>Prix suivant</th>
+                    <td>{{ jour.prix3 }} €</td>
+                </tr>
+            </table>
+
+            {{ jour.remarque|nl2br }}
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/jour/_delete_form.html.twig' %}
+
+{% endblock %}

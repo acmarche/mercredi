@@ -19,32 +19,19 @@ class ReductionRepository extends ServiceEntityRepository
         parent::__construct($registry, Reduction::class);
     }
 
-    // /**
-    //  * @return Reduction[] Returns an array of Reduction objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function remove(Reduction $reduction)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->_em->remove($reduction);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Reduction
+    public function flush()
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->_em->flush();
     }
-    */
+
+    public function persist(Reduction $reduction)
+    {
+        $this->_em->persist($reduction);
+    }
+
 }

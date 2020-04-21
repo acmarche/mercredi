@@ -34,4 +34,20 @@ class Reduction
         return $this->getNom().' ('.$this->pourcentage.'%)';
     }
 
+    /**
+     * @return float|null
+     */
+    public function getPourcentage(): ?float
+    {
+        return $this->pourcentage;
+    }
+
+    /**
+     * @param float|null $pourcentage
+     */
+    public function setPourcentage(?float $pourcentage): void
+    {
+        $this->pourcentage = $pourcentage;
+    }
+
 }

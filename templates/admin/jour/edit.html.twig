@@ -1,14 +1,16 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
 {% block body %}
+
     <div class="card bg-light mb-3">
         <div class="card-header">
-            <h3>Nouvelle réduction</h3>
+            <h3>{{ jour }}</h3>
         </div>
         <div class="card-body">
 
-           {{ include('@AcMarcheMercrediAdmin/reduction/_form.html.twig') }}
+            {{ include('@AcMarcheMercrediAdmin/jour/_form.html.twig') }}
 
         </div>
     </div>
+
 {% endblock %}

@@ -1,26 +1,11 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 <div class="row">
-    <div class="col-4">
+    <div class="col-6">
         {{ form_row(form.nom) }}
     </div>
-    <div class="col-4">
-        {{ form_row(form.rue) }}
-    </div>
-    <div class="col-4">
-        {{ form_row(form.code_postal) }}
-    </div>
-    <div class="col-4">
-        {{ form_row(form.localite) }}
-    </div>
     <div class="col-6">
-        {{ form_row(form.email) }}
-    </div>
-    <div class="col-6">
-        {{ form_row(form.telephone) }}
-    </div>
-    <div class="col-6">
-        {{ form_row(form.gsm) }}
+        {{ form_row(form.pourcentage) }}
     </div>
 </div>
 {{ form_row(form.remarque) }}
