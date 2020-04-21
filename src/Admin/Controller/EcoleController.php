@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Ecole\Message\EcoleCreated;
 use AcMarche\Mercredi\Ecole\Message\EcoleDeleted;
 use AcMarche\Mercredi\Ecole\Message\EcoleUpdated;
 use AcMarche\Mercredi\Entity\Ecole;
-use AcMarche\Mercredi\Form\EcoleType;
+use AcMarche\Mercredi\Ecole\Form\EcoleType;
 use AcMarche\Mercredi\Repository\EcoleRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

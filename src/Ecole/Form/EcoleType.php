@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Form;
+namespace AcMarche\Mercredi\Ecole\Form;
 
 use AcMarche\Mercredi\Entity\Ecole;
 use Symfony\Component\Form\AbstractType;

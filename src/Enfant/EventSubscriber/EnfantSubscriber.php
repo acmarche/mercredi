@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\EventSubscriber;
+namespace AcMarche\Mercredi\Enfant\EventSubscriber;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use Doctrine\Common\EventSubscriber;

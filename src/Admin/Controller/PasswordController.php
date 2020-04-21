@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\User;
-use AcMarche\Mercredi\Form\Security\UtilisateurPasswordType;
+use AcMarche\Mercredi\Utilisateur\Form\UtilisateurPasswordType;
 use AcMarche\Mercredi\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

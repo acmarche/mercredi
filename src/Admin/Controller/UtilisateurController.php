@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\User;
-use AcMarche\Mercredi\Form\Security\UtilisateurEditType;
-use AcMarche\Mercredi\Form\Security\UtilisateurType;
+use AcMarche\Mercredi\Utilisateur\Form\UtilisateurEditType;
+use AcMarche\Mercredi\Utilisateur\Form\UtilisateurType;
 use AcMarche\Mercredi\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

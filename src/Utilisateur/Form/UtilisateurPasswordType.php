@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Form\Security;
+namespace AcMarche\Mercredi\Utilisateur\Form;
 
 use AcMarche\Mercredi\Entity\User;
 use Symfony\Component\Form\AbstractType;

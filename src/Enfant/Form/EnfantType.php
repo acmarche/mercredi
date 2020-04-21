@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Form;
+namespace AcMarche\Mercredi\Enfant\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Ecole;

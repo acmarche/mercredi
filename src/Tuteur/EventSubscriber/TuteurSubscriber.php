@@ -1,8 +1,7 @@
 <?php
 
-namespace AcMarche\Mercredi\EventSubscriber;
+namespace AcMarche\Mercredi\Tuteur\EventSubscriber;
 
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;

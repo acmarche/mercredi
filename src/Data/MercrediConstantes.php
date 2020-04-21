@@ -7,7 +7,6 @@ namespace AcMarche\Mercredi\Data;
 class MercrediConstantes
 {
     const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
-    const CIVILITES = ['Monsieur' => 'Monsieur', 'Madame' => 'Madame'];
     const ORDRES = [1 => 1, 2 => 2, 'Suivant' => 3];
     const COLORS = [
         'Bleu' => '#a4bdfc',
@@ -23,5 +22,20 @@ class MercrediConstantes
         'Vert clair' => '#7ae7bf',
         'Vert foncé' => '#51b749',
     ];
+
+    public static function getCiviliteBySexe(?string $sexe): string
+    {
+        switch ($sexe) {
+            case 'Masculin':
+                return 'Monsieur';
+                break;
+            case 'Féminin':
+                return 'Madame';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
 
 }
