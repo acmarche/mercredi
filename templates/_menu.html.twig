@@ -3,31 +3,6 @@
 
 <li class="nav-item{% if action == 'mercredi_tuteur_new' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('mercredi_tuteur_new') }}"><i class="fas fa-plus"></i> Ajouter un tuteur</a>
+       href="{{ path('mercredi_parent_home') }}"><i class="fas fa-plus"></i> Contact</a>
 </li>
 
-<li class="nav-item{% if action == 'mercredi_enfant_new' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('mercredi_enfant_new') }}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
-</li>
-
-<li class="nav-item{% if action == 'mercredi_tuteur_index' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('mercredi_tuteur_index') }}">Les tuteurs</a>
-</li>
-
-<li class="nav-item{% if action == 'mercredi_enfant_index' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('mercredi_enfant_index') }}">Les enfants</a>
-</li>
-
-{% if is_granted('ROLE_MERCREDI_ADMIN') %}
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-           aria-haspopup="true"
-           aria-expanded="false">...</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="{{ path('mercredi_home') }}">Index des fiches</a>
-        </div>
-    </li>
-{% endif %}

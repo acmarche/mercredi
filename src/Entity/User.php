@@ -2,6 +2,13 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Traits\EmailTrait;
+use AcMarche\Mercredi\Entity\Traits\EnabledTrait;
+use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\PlainPasswordTrait;
+use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\RoleTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,32 +20,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdTrait,
+        EmailTrait,
+        NomTrait,
+        PrenomTrait,
+        RoleTrait,
+        EnabledTrait,
+        PlainPasswordTrait;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $email;
-
-     /**
-     * @ORM\Column(type="string", length=180, nullable=false)
-     */
-    private $nom;
-
-     /**
-     * @ORM\Column(type="string", length=180, nullable=true)
-     */
-    private $prenom;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
 
     /**
      * @var string The hashed password
@@ -46,42 +39,9 @@ class User implements UserInterface
      */
     private $password;
 
-
-    public function addRole(string $role): void
+    public function __toString()
     {
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-    }
-
-    public function removeRole(string $role): void
-    {
-        if (in_array($role, $this->roles, true)) {
-            $index = array_search($role, $this->roles);
-            unset($this->roles[$index]);
-        }
-    }
-
-    public function hasRole(string $role): bool
-    {
-        return in_array($role, $this->getRoles(), true);
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
     /**
@@ -91,26 +51,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
+        return (string)$this->email;
     }
 
     /**
@@ -118,7 +59,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -145,27 +86,4 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): self
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(?string $prenom): self
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
 }

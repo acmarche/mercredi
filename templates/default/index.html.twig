@@ -1,14 +1,19 @@
 {% extends '@AcMarcheMercredi/layout.html.twig' %}
 
+{% block title %}Accueil Mercredi{% endblock %}
+
 {% block body -%}
 
     <div class="card bg-lig2ht mb-3">
         <div class="card-header">
-            <h3>Gestion des présences</h3>
+            <h3>Front du Mercredi</h3>
         </div>
         <div class="card-body">
-
-
+            Accès libre<br />
+Se connecter pour le reste<br />
+<br /><br />
+            <a href="{{ path('mercredi_admin_home') }}">Admin</a><br /><br />
+            <a href="{{ path('mercredi_parent_home') }}">Parent</a>
         </div>
     </div>
 

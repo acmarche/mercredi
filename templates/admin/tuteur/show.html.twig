@@ -1,0 +1,39 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block title %}Enfant{% endblock %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ tuteur }}</h3>
+            {% include '@AcMarcheMercredi/commun/_sexe.html.twig' with {'entity':tuteur} %}
+            {% include '@AcMarcheMercredi/commun/_archive.html.twig' with {'entity':tuteur} %}
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheMercrediAdmin/tuteur/_actions.html.twig' %}
+
+            <br/>
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>Adresse</th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        ({{ tuteur.email }})
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/tuteur/_delete_form.html.twig' %}
+
+{% endblock %}

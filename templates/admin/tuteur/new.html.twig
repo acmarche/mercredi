@@ -1,0 +1,17 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>Nouveau tuteur</h3>
+        </div>
+        <div class="card-body">
+
+           {{ include('@AcMarcheMercrediAdmin/tuteur/_form.html.twig') }}
+
+            <a href="{{ path('admin_mercredi_tuteur_index') }}">
+                <span class="fas fa-list"></span> Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %}

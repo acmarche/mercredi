@@ -8,7 +8,7 @@ trait PrenomTrait
 {
       /**
      * @var string|null
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=150, nullable=true)
      */
     private $prenom;
 

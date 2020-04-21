@@ -23,4 +23,9 @@ class Ecole
         TelephonieTrait,
         EmailTrait,
         RemarqueTrait;
+
+    public function __toString()
+    {
+        return $this->nom;
+    }
 }

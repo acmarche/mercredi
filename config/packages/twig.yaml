@@ -1,4 +1,7 @@
 twig:
   form_themes: ['bootstrap_4_layout.html.twig']
   paths:
-    '%kernel.project_dir%/src/AcMarche/Mercredi/templates': AcMarcheMercredi
+    '%kernel.project_dir%/src/AcMarche/Mercredi/templates/admin': AcMarcheMercrediAdmin
+    '%kernel.project_dir%/src/AcMarche/Mercredi/templates/parent': AcMarcheMercrediParent
+    '%kernel.project_dir%/src/AcMarche/Mercredi/templates/animateur': AcMarcheMercrediAnimateur
+    '%kernel.project_dir%/src/AcMarche/Mercredi/templates/ecole': AcMarcheMercrediAnimateur

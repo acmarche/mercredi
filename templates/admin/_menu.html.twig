@@ -1,0 +1,34 @@
+{% set action = app.request.attributes.get("_route") %}
+
+
+<li class="nav-item{% if action == 'mercredi_tuteur_new' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('admin_mercredi_tuteur_new') }}"><i class="fas fa-plus"></i> Ajouter un tuteur</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_enfant_new' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('admin_mercredi_enfant_new') }}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_tuteur_index' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('admin_mercredi_tuteur_index') }}">Les tuteurs</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_enfant_index' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('admin_mercredi_enfant_index') }}">Les enfants</a>
+</li>
+
+{% if is_granted('ROLE_MERCREDI_ADMIN') %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">...</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="{{ path('admin_mercredi_utilisateur_index') }}">Les utilisateurs</a>
+            <a class="dropdown-item" href="{{ path('admin_mercredi_ecole_index') }}">Les écoles</a>
+        </div>
+    </li>
+{% endif %}
