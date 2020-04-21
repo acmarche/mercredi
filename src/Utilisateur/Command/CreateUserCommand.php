@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Command;
+namespace AcMarche\Mercredi\Utilisateur\Command;
 
 use AcMarche\Mercredi\Entity\User;
 use AcMarche\Mercredi\Repository\UserRepository;

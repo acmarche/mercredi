@@ -10,9 +10,9 @@ class EcoleUpdated
      */
     private $ecoleId;
 
-    public function __construct(int $enfantId)
+    public function __construct(int $ecoleId)
     {
-        $this->ecoleId = $enfantId;
+        $this->ecoleId = $ecoleId;
     }
 
     /**
@@ -22,5 +22,4 @@ class EcoleUpdated
     {
         return $this->ecoleId;
     }
-
 }

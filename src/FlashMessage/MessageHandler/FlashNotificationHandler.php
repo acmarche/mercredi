@@ -1,9 +1,9 @@
 <?php
 
 
-namespace AcMarche\Mercredi\Security;
+namespace AcMarche\Mercredi\FlashMessage\MessageHandler;
 
-use AcMarche\Mercredi\Message\FlashNotification;
+use AcMarche\Mercredi\FlashMessage\Message\FlashNotification;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

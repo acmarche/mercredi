@@ -4,15 +4,14 @@ namespace AcMarche\Mercredi\Ecole\Message;
 
 class EcoleDeleted
 {
-
     /**
      * @var int
      */
     private $ecoleId;
 
-    public function __construct(int $enfantId)
+    public function __construct(int $ecoleId)
     {
-        $this->ecoleId = $enfantId;
+        $this->ecoleId = $ecoleId;
     }
 
     /**
@@ -22,5 +21,4 @@ class EcoleDeleted
     {
         return $this->ecoleId;
     }
-
 }
