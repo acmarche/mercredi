@@ -11,21 +11,21 @@ trait PrixTrait
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
-    protected $prix1;
+    private $prix1;
 
     /**
      * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
-    protected $prix2;
+    private $prix2;
 
     /**
      * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
-    protected $prix3;
+    private $prix3;
 
     /**
      * @return float

@@ -33,7 +33,7 @@ class Jour implements TimestampableInterface
      * @ORM\Column(name="date_jour", type="date", unique=true)
      * @Assert\Type("datetime")
      */
-    protected $date_jour;
+    private $date_jour;
 
     public function __construct()
     {

@@ -19,21 +19,21 @@ trait PhotoTrait
      *
      * @var UploadedFile
      */
-    protected $photo;
+    private $photo;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @var string|null
      */
-    protected $photoName;
+    private $photoName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
      */
-    protected $mime;
+    private $mime;
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance

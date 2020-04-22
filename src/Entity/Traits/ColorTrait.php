@@ -11,7 +11,7 @@ trait ColorTrait
      *
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $color;
+    private $color;
 
     /**
      * @return string|null

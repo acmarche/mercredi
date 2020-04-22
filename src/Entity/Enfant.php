@@ -45,14 +45,14 @@ class Enfant implements SluggableInterface, TimestampableInterface
      *
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $numero_national;
+    private $numero_national;
 
     /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    protected $photo_autorisation = false;
+    private $photo_autorisation = false;
 
     /**
      * @var int
@@ -60,7 +60,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
      * @ORM\Column(type="smallint", length=2, nullable=true, options={"comment" = "1,2, suviant", "default" = "0"})
      * @Assert\NotBlank()
      */
-    protected $ordre = 0;
+    private $ordre = 0;
 
     /**
      * @var string|null
@@ -68,20 +68,20 @@ class Enfant implements SluggableInterface, TimestampableInterface
      * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
-    protected $annee_scolaire;
+    private $annee_scolaire;
 
     /**
      * @var string|null
      *             Forcer le groupe scolaire
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    protected $groupe_scolaire;
+    private $groupe_scolaire;
 
     /**
      * @var Ecole|null
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
      */
-    protected $ecole;
+    private $ecole;
 
     public function getSluggableFields(): array
     {

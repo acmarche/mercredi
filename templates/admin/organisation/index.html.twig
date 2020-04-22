@@ -1,0 +1,34 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <h3>Mon organisation</h3>
+
+    <a class="btn btn-primary m-2" role="button"
+       href="{{ path('admin_mercredi_organisation_new') }}"><i class="fas fa-plus"></i> Ajouter une organisation</a>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Initiale</th>
+            <th>Localité</th>
+            <th>Téléphone</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for organisation in organisations %}
+            <tr>
+                <td>
+                    <a href="{{ path('admin_mercredi_organisation_show', { 'id': organisation.id }) }}">
+                        {{ organisation.nom }}
+                    </a>
+                </td>
+                <td>{{ organisation.initiale }}</td>
+                <td>{{ organisation.localite }}</td>
+                <td>{{ organisation.telephone }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
