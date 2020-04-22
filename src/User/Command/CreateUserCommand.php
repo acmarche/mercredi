@@ -1,9 +1,9 @@
 <?php
 
-namespace AcMarche\Mercredi\Utilisateur\Command;
+namespace AcMarche\Mercredi\User\Command;
 
 use AcMarche\Mercredi\Entity\User;
-use AcMarche\Mercredi\Repository\UserRepository;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -76,7 +76,7 @@ class CreateUserCommand extends Command
 
         $this->userRepository->insert($user);
 
-        $io->success('Utilisateur créé.');
+        $io->success('User créé.');
 
         return 0;
     }

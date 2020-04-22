@@ -20,7 +20,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Repository\TuteurRepository")
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Tuteur\Repository\TuteurRepository")
  */
 class Tuteur implements SluggableInterface, TimestampableInterface
 {

@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Tuteur\Form\TuteurType;
-use AcMarche\Mercredi\Repository\TuteurRepository;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Message\TuteurCreated;
 use AcMarche\Mercredi\Tuteur\Message\TuteurDeleted;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;

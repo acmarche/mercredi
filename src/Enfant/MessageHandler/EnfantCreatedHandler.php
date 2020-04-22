@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Enfant\MessageHandler;
 
 
 use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
-use AcMarche\Mercredi\Repository\EnfantRepository;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

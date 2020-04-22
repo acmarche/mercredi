@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Utilisateur\Form;
+namespace AcMarche\Mercredi\User\Form;
 
 use AcMarche\Mercredi\Entity\User;
 use AcMarche\Mercredi\Security\MercrediSecurity;
@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UtilisateurEditType extends AbstractType
+class UserEditType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -33,7 +33,7 @@ class UtilisateurEditType extends AbstractType
 
     public function getParent()
     {
-        return UtilisateurType::class;
+        return UserType::class;
     }
 
     /**

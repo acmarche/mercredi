@@ -4,7 +4,7 @@
 namespace AcMarche\Mercredi\Jour\MessageHandler;
 
 use AcMarche\Mercredi\Jour\Message\JourUpdated;
-use AcMarche\Mercredi\Repository\JourRepository;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

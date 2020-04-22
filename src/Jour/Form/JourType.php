@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Jour\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Form\Type\ArchivedType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -67,10 +68,8 @@ class JourType extends AbstractType
             )
             ->add(
                 'archived',
-                CheckboxType::class,
+                ArchivedType::class,
                 [
-                    'required' => false,
-                    'label' => 'Archiver',
                     'help' => 'En archivant la date ne sera plus proposée lors de l\'ajout d\'une présence',
                 ]
             )
@@ -82,7 +81,7 @@ class JourType extends AbstractType
                     'label' => 'Remarques',
                     'help' => 'Cette donnée est visible par les parents et dans le listing des présences',
                     'attr' => [
-                        'rows' => 8,
+                        'rows' => 5,
                     ],
                 ]
             );

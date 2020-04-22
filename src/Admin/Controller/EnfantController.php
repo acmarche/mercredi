@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Enfant\Message\EnfantDeleted;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
-use AcMarche\Mercredi\Repository\EnfantRepository;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

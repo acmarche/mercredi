@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Jour\Message\JourDeleted;
 use AcMarche\Mercredi\Jour\Message\JourUpdated;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Form\JourType;
-use AcMarche\Mercredi\Repository\JourRepository;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

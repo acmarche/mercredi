@@ -3,7 +3,7 @@
 
 namespace AcMarche\Mercredi\Tuteur\MessageHandler;
 
-use AcMarche\Mercredi\Repository\TuteurRepository;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Message\TuteurDeleted;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

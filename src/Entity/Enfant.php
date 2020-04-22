@@ -21,7 +21,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Repository\EnfantRepository")
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Enfant\Repository\EnfantRepository")
  * @Vich\Uploadable
  */
 class Enfant implements SluggableInterface, TimestampableInterface

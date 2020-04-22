@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Repository;
+namespace AcMarche\Mercredi\Jour\Repository;
 
 use AcMarche\Mercredi\Entity\Jour;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

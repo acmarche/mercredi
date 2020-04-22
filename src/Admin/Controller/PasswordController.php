@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\User;
-use AcMarche\Mercredi\Utilisateur\Form\UtilisateurPasswordType;
-use AcMarche\Mercredi\Repository\UserRepository;
+use AcMarche\Mercredi\User\Repository\UserRepository;
+use AcMarche\Mercredi\User\Form\UserPasswordType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +40,7 @@ class PasswordController extends AbstractController
      */
     public function passord(Request $request, User $utilisateur)
     {
-        $form = $this->createForm(UtilisateurPasswordType::class, $utilisateur);
+        $form = $this->createForm(UserPasswordType::class, $utilisateur);
 
         $form->handleRequest($request);
 

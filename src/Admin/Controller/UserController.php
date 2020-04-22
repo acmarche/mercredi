@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\User;
-use AcMarche\Mercredi\Utilisateur\Form\UtilisateurEditType;
-use AcMarche\Mercredi\Utilisateur\Form\UtilisateurType;
-use AcMarche\Mercredi\Repository\UserRepository;
+use AcMarche\Mercredi\User\Repository\UserRepository;
+use AcMarche\Mercredi\User\Form\UserEditType;
+use AcMarche\Mercredi\User\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @Route("/utilisateur")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class UtilisateurController extends AbstractController
+class UserController extends AbstractController
 {
     private $userRepository;
     /**
@@ -34,7 +34,7 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * Lists all Utilisateur entities.
+     * Lists all User entities.
      *
      * @Route("/", name="admin_mercredi_utilisateur_index", methods={"GET"})
      *
@@ -52,7 +52,7 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Utilisateur utilisateur.
+     * Displays a form to create a new User utilisateur.
      *
      * @Route("/new", name="admin_mercredi_utilisateur_new", methods={"GET","POST"})
      *
@@ -61,7 +61,7 @@ class UtilisateurController extends AbstractController
     {
         $utilisateur = new User();
 
-        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+        $form = $this->createForm(UserType::class, $utilisateur);
 
         $form->handleRequest($request);
 
@@ -73,7 +73,7 @@ class UtilisateurController extends AbstractController
 
             $this->addFlash("success", "L'utilisateur a bien été ajouté");
 
-            return $this->redirectToRoute('admin_mercredi_utilisateur');
+            return $this->redirectToRoute('admin_mercredi_utilisateur_show', ['id' => $utilisateur->getId()]);
         }
 
         return $this->render(
@@ -86,7 +86,7 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * Finds and displays a Utilisateur utilisateur.
+     * Finds and displays a User utilisateur.
      *
      * @Route("/{id}", name="admin_mercredi_utilisateur_show", methods={"GET"})
      *
@@ -102,14 +102,14 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Utilisateur utilisateur.
+     * Displays a form to edit an existing User utilisateur.
      *
      * @Route("/{id}/edit", name="admin_mercredi_utilisateur_edit", methods={"GET","POST"})
      *
      */
     public function edit(Request $request, User $utilisateur)
     {
-        $editForm = $this->createForm(UtilisateurEditType::class, $utilisateur);
+        $editForm = $this->createForm(UserEditType::class, $utilisateur);
 
         $editForm->handleRequest($request);
 
@@ -117,7 +117,7 @@ class UtilisateurController extends AbstractController
             $this->userRepository->flush();
             $this->addFlash("success", "L'utilisateur a bien été modifié");
 
-            return $this->redirectToRoute('admin_mercredi_utilisateur');
+            return $this->redirectToRoute('admin_mercredi_utilisateur_show', ['id' => $utilisateur->getId()]);
         }
 
         return $this->render(
@@ -130,19 +130,19 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * Deletes a Utilisateur utilisateur.
+     * Deletes a User utilisateur.
      *
      * @Route("/{id}", name="admin_mercredi_utilisateur_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $this->userRepository->remove($user);
             $this->userRepository->flush();
             $this->addFlash('success', 'L\'utilisateur a été supprimé');
         }
 
-        return $this->redirectToRoute('admin_mercredi_utilisateur');
+        return $this->redirectToRoute('admin_mercredi_utilisateur_index');
     }
 
 }

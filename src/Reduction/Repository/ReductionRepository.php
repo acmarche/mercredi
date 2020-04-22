@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Repository;
+namespace AcMarche\Mercredi\Reduction\Repository;
 
 use AcMarche\Mercredi\Entity\Reduction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

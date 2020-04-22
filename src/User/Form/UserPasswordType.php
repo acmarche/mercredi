@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Utilisateur\Form;
+namespace AcMarche\Mercredi\User\Form;
 
 use AcMarche\Mercredi\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UtilisateurPasswordType extends AbstractType
+class UserPasswordType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

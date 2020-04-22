@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Reduction\Message\ReductionDeleted;
 use AcMarche\Mercredi\Reduction\Message\ReductionUpdated;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Reduction\Form\ReductionType;
-use AcMarche\Mercredi\Repository\ReductionRepository;
+use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

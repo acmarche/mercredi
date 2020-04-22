@@ -4,7 +4,7 @@
 namespace AcMarche\Mercredi\Ecole\MessageHandler;
 
 use AcMarche\Mercredi\Ecole\Message\EcoleDeleted;
-use AcMarche\Mercredi\Repository\EcoleRepository;
+use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
