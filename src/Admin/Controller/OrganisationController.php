@@ -35,10 +35,14 @@ class OrganisationController extends AbstractController
      */
     public function index(): Response
     {
+        if ($organisation = $this->organisationRepository->getOrganisation()) {
+            return $this->redirectToRoute('admin_mercredi_organisation_show', ['id' => $organisation->getId()]);
+        }
+
         return $this->render(
             '@AcMarcheMercrediAdmin/organisation/index.html.twig',
             [
-                'organisations' => $this->organisationRepository->findAll(),
+                'organisation' => $organisation,
             ]
         );
     }
@@ -48,12 +52,17 @@ class OrganisationController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if ($organisation = $this->organisationRepository->getOrganisation()) {
+            $this->addFlash('danger', 'Une seule organisation peut être enregistrée');
+
+            return $this->redirectToRoute('admin_mercredi_organisation_show', ['id' => $organisation->getId()]);
+        }
+
         $organisation = new Organisation();
         $form = $this->createForm(OrganisationType::class, $organisation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->organisationRepository->persist($organisation);
             $this->organisationRepository->flush();
 
@@ -115,9 +124,10 @@ class OrganisationController extends AbstractController
     public function delete(Request $request, Organisation $organisation): Response
     {
         if ($this->isCsrfTokenValid('delete'.$organisation->getId(), $request->request->get('_token'))) {
+            $id = $organisation->getId();
             $this->organisationRepository->remove($organisation);
             $this->organisationRepository->flush();
-            $this->dispatchMessage(new OrganisationDeleted($organisation->getId()));
+            $this->dispatchMessage(new OrganisationDeleted($id));
         }
 
         return $this->redirectToRoute('admin_mercredi_organisation_index');

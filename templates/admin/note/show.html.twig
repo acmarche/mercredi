@@ -1,0 +1,20 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>Note {{ note.id }}</h3>
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheMercrediAdmin/note/_actions.html.twig' %}
+
+            {{ note.remarque | nl2br }}
+
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/note/_delete_form.html.twig' %}
+
+{% endblock %}

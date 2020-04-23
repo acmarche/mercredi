@@ -16,6 +16,7 @@ class ArchivedType extends AbstractType
             [
                 'required' => false,
                 'label' => 'Archiver',
+                'attr' => ['class' => 'switch-custom'],
             ]
         );
     }

@@ -36,11 +36,6 @@ class Organisation
      */
     private $initiale;
 
-    public function __toString()
-    {
-        return $this->nom;
-    }
-
     /**
      * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
      *
@@ -52,6 +47,11 @@ class Organisation
      * @var UploadedFile
      */
     private $photo;
+
+    public function __toString()
+    {
+        return $this->nom;
+    }
 
     /**
      * @return string|null

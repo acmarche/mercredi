@@ -1,23 +1,28 @@
 <?php
 
-namespace AcMarche\Mercredi\Enfant\EventSubscriber;
+namespace AcMarche\Mercredi\Doctrine\EventSubscriber;
 
-use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Utils\PropertyUtil;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\Security\Core\Security;
 
-class EnfantSubscriber implements EventSubscriber
+class UserAddSubscriber implements EventSubscriber
 {
     /**
      * @var Security
      */
     private $security;
+    /**
+     * @var PropertyUtil
+     */
+    private $propertyUtil;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, PropertyUtil $propertyUtil)
     {
         $this->security = $security;
+        $this->propertyUtil = $propertyUtil;
     }
 
     public function getSubscribedEvents()
@@ -31,14 +36,14 @@ class EnfantSubscriber implements EventSubscriber
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
-        if (!$entity instanceof Enfant) {
+        if (!$this->propertyUtil->getPropertyAccessor()->isWritable($entity, 'userAdd')) {
             return;
         }
 
         $this->setUserAdd($entity);
     }
 
-    private function setUserAdd(Enfant $enfant)
+    private function setUserAdd(object $enfant)
     {
         $user = $this->security->getUser();
         if (!$user) {

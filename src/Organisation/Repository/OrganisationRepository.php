@@ -18,6 +18,13 @@ class OrganisationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Organisation::class);
     }
+
+    public function getOrganisation(): ?Organisation
+    {
+      return  $this->createQueryBuilder('organisation')
+            ->getQuery()->getOneOrNullResult();
+    }
+
     public function remove(Organisation $organisation)
     {
         $this->_em->remove($organisation);
