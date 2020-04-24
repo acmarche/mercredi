@@ -84,7 +84,7 @@ class EnfantType extends AbstractType
                 'annee_scolaire',
                 ChoiceType::class,
                 [
-                    'choices' => ScolaireData::ANNEES_SCOLAIRES,
+                    'choices' => array_combine(ScolaireData::ANNEES_SCOLAIRES,ScolaireData::ANNEES_SCOLAIRES),
                     'label' => 'Année scolaire',
                     'placeholder' => 'Choisissez son année scolaire',
                 ]

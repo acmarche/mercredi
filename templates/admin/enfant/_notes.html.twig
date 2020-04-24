@@ -1,0 +1,7 @@
+<a href="{{ path('note', {'slugname': enfant.slugname}) }}">
+    {% if enfant.notes | length  > 0 %}
+        <span class='badge'>{{ enfant.notes | length }}</span>
+        <img src="{{ asset('images/note.png') }}" alt="postit"
+             title="Notes de l'enfant"/>
+    {% endif %}
+</a>

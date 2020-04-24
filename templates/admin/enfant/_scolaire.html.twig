@@ -1,4 +1,7 @@
-Scolarisé à <strong>{{ enfant.ecole }}</strong> en <strong>{{ enfant.anneescolaire }}</strong>
-Ordre par défaut: {{ enfant.ordre }}
 <br/>
-Groupe scolaire forcé :<strong>{{ enfant.groupescolaire }}</strong>
+<i class="fas fa-university"></i> Scolarisé à <strong>{{ enfant.ecole }}</strong> en
+<strong>{{ enfant.anneescolaire }}</strong>
+{% if enfant.groupeScolaire %}
+    <br/>
+    Groupe scolaire forcé :<strong>{{ enfant.groupescolaire }}</strong>
+{% endif %}

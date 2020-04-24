@@ -32,6 +32,8 @@ class DirectoryNamer implements DirectoryNamerInterface
      */
     public function directoryName($object, PropertyMapping $mapping): string
     {
-       return $object->getId();
+        return '';
+        //todo bug getId() empty
+       return (string)$object->getId();
     }
 }

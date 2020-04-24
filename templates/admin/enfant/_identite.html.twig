@@ -1,0 +1,31 @@
+<span class="fas fa-birthday-cake"></span>
+Né le {{ enfant.birthday ? enfant.birthday|format_datetime('full', 'none') }}
+{% if enfant.numeronational %}
+    <br/>
+    <i class="far fa-address-card"></i> Registre national: {{ enfant.numeronational }}
+{% endif %}
+
+<br/>
+<i class="fas fa-university"></i> Scolarisé à <strong>{{ enfant.ecole }}</strong> en
+<strong>{{ enfant.anneescolaire }}</strong>
+{% if enfant.groupeScolaire %}
+    <br/>
+    Groupe scolaire forcé :<strong>{{ enfant.groupescolaire }}</strong>
+{% endif %}
+<br/>
+<i class="fas fa-camera-retro" title="oui"></i>
+Autorisation de la diffusion des photos:
+{% if enfant.photoAutorisation %}
+    Oui
+{% else %}
+    Non
+{% endif %}
+
+<br/>
+<i class="fas fa-list-ol"></i>
+Ordre par défaut: {{ enfant.ordre }}
+{% if enfant.remarque %}
+    <p class="card-text text-muted pt-2">
+        {{ enfant.remarque | nl2br }}
+    </p>
+{% endif %}
