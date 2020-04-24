@@ -38,7 +38,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/index.html.twig',
             [
-                'santeQuestions' => $this->santeQuestionRepository->findAll(),
+                'sante_questions' => $this->santeQuestionRepository->findAll(),
             ]
         );
     }
@@ -65,7 +65,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/new.html.twig',
             [
-                'santeQuestion' => $santeQuestion,
+                'sante_question' => $santeQuestion,
                 'form' => $form->createView(),
             ]
         );
@@ -79,7 +79,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/show.html.twig',
             [
-                'santeQuestion' => $santeQuestion,
+                'sante_question' => $santeQuestion,
             ]
         );
     }
@@ -103,7 +103,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/edit.html.twig',
             [
-                'santeQuestion' => $santeQuestion,
+                'sante_question' => $santeQuestion,
                 'form' => $form->createView(),
             ]
         );

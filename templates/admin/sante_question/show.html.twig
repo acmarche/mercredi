@@ -11,21 +11,21 @@
             {% include '@AcMarcheMercrediAdmin/sante_question/_actions.html.twig' %}
 
             <br/>
-            <table class="table table-bordered table-hover">
-                <tbody>
+            <table class="table table-bordered">
                 <tr>
-                    <th>né le</th>
+                    <th>Complément d'information nécessaire ?</th>
                     <td>
-
+                        {% if sante_question.complement %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
-                    <th>Email</th>
-                    <td>
-
-                    </td>
+                    <th>Texte d'aide au complément</th>
+                    <td>{{ sante_question.complementLabel }}</td>
                 </tr>
-                </tbody>
             </table>
         </div>
     </div>

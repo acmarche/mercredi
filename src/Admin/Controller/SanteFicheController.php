@@ -38,7 +38,7 @@ class SanteFicheController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_fiche/index.html.twig',
             [
-                'santeFiches' => $this->santeFicheRepository->findAll(),
+                'sante_fiches' => $this->santeFicheRepository->findAll(),
             ]
         );
     }
@@ -65,7 +65,7 @@ class SanteFicheController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_fiche/new.html.twig',
             [
-                'santeFiche' => $santeFiche,
+                'sante_fiche' => $santeFiche,
                 'form' => $form->createView(),
             ]
         );
@@ -79,7 +79,7 @@ class SanteFicheController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_fiche/show.html.twig',
             [
-                'santeFiche' => $santeFiche,
+                'sante_fiche' => $santeFiche,
             ]
         );
     }
@@ -103,7 +103,7 @@ class SanteFicheController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_fiche/edit.html.twig',
             [
-                'santeFiche' => $santeFiche,
+                'sante_fiche' => $santeFiche,
                 'form' => $form->createView(),
             ]
         );

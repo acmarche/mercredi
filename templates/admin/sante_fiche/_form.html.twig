@@ -1,0 +1,36 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.medecinNom) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.medecinTelephone) }}
+    </div>
+
+</div>
+
+{{ form_row(form.personneUrgence) }}
+
+<h4 class="text-success">Questions</h4>
+
+{% for question in form.questions %}
+    <h4 class="text-warning"><strong>{{ question.vars.data.nom }}</strong></h4>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4 col-sm-4">
+            {{ form_row(question.reponse) }}
+        </div>
+        <div class="col-md-8 col-sm-8">
+            {{ form_row(question.remarque) }}
+        </div>
+    </div>
+{% endfor %}
+
+{{ form_row(form.remarque) }}
+
+<button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+    Sauvegarder
+</button>
+{{ form_end(form) }}

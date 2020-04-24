@@ -22,7 +22,7 @@ class SanteQuestionType extends AbstractType
                     'label' => 'Un complément d\'information est-il nécessaire ?',
                     'help' => 'Si oui cochez la case',
                     'required' => false,
-                    'attr' => ['class' => 'switch-custom'],
+                    'label_attr'=> ['class' => 'switch-custom']
                 ]
             )
             ->add(
