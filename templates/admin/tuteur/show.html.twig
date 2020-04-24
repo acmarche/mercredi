@@ -4,33 +4,40 @@
 
 {% block body %}
 
-    <div class="card bg-light mb-3">
-        <div class="card-header">
-            <h3>{{ tuteur }}</h3>
-            {% include '@AcMarcheMercredi/commun/_sexe.html.twig' with {'entity':tuteur} %}
-            {% include '@AcMarcheMercredi/commun/_archive.html.twig' with {'entity':tuteur} %}
-        </div>
+
+    <div class="card mb-3">
+
+        <h3 class="card-header">{{ tuteur }}
+            <div class="float-right">
+                {% include '@AcMarcheMercredi/commun/_sexe.html.twig' with {'entity':tuteur} %}
+                {% include '@AcMarcheMercredi/commun/_archive.html.twig' with {'entity':tuteur} %}
+            </div>
+        </h3>
+
         <div class="card-body">
 
             {% include '@AcMarcheMercrediAdmin/tuteur/_actions.html.twig' %}
 
-            <br/>
-            <table class="table table-bordered table-hover">
-                <tbody>
-                <tr>
-                    <th>Adresse</th>
-                    <td>
+            <div class="row">
+                <div class="col-6">
+                    <i class="fas fa-map-marked-alt"></i>
+                    {{ tuteur.rue }} <br/>
+                    {{ tuteur.codepostal }} {{ tuteur.localite }}
 
-                    </td>
-                </tr>
-                <tr>
-                    <th>Email</th>
-                    <td>
-                        ({{ tuteur.email }})
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    <br/>
+                    {% include '@AcMarcheMercrediAdmin/tuteur/_identite.html.twig' %}
+                </div>
+                <div class="col-6">
+                     {% include '@AcMarcheMercrediAdmin/tuteur/_conjoint.html.twig' %}
+                </div>
+            </div>
+
+            {{ tuteur.remarque | nl2br }}
+
+        </div>
+        <div class="card-footer text-muted mt-3">
+            Créé le {{ tuteur.createdAt | format_date('full') }} par {{ tuteur.userAdd }}. Mis à jour
+            le {{ tuteur.updatedAt | format_date('full') }}
         </div>
     </div>
 

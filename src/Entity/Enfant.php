@@ -3,8 +3,10 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
+use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\Validator\Constraints as Assert;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
@@ -33,6 +35,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
         BirthdayTrait,
         SexeTrait,
         RemarqueTrait,
+        OrdreTrait,
         PhotoTrait,
         AccompagnateursTrait,
         UserAddTrait,
@@ -55,14 +58,6 @@ class Enfant implements SluggableInterface, TimestampableInterface
     private $photo_autorisation = false;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="smallint", length=2, nullable=true, options={"comment" = "1,2, suviant", "default" = "0"})
-     * @Assert\NotBlank()
-     */
-    private $ordre = 0;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=200, nullable=false)
@@ -82,6 +77,10 @@ class Enfant implements SluggableInterface, TimestampableInterface
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
      */
     private $ecole;
+    /**
+     * @var Tuteur
+     */
+    private $parent;
 
     public function getSluggableFields(): array
     {
@@ -128,22 +127,6 @@ class Enfant implements SluggableInterface, TimestampableInterface
     public function setPhotoAutorisation(bool $photo_autorisation): void
     {
         $this->photo_autorisation = $photo_autorisation;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrdre(): int
-    {
-        return $this->ordre;
-    }
-
-    /**
-     * @param int $ordre
-     */
-    public function setOrdre(int $ordre): void
-    {
-        $this->ordre = $ordre;
     }
 
     /**

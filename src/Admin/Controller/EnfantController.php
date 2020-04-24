@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Tuteur;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,9 +45,9 @@ class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_enfant_new", methods={"GET","POST"})
+     * @Route("/new/{id}", name="admin_mercredi_enfant_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Tuteur $tuteur): Response
     {
         $enfant = new Enfant();
         $form = $this->createForm(EnfantType::class, $enfant);
