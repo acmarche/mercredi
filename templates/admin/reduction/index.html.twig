@@ -4,7 +4,7 @@
     <h3>Liste des réductions</h3>
 
     <a class="btn btn-primary m-2" role="button"
-       href="{{ path('admin_mercredi_reduction_new') }}"><i class="fas fa-plus"></i> Ajouter une réduction</a>
+       href="{{ path('mercredi_admin_reduction_new') }}"><i class="fas fa-plus"></i> Ajouter une réduction</a>
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -17,7 +17,7 @@
         {% for reduction in reductions %}
             <tr>
                 <td>
-                    <a href="{{ path('admin_mercredi_reduction_show', { 'id': reduction.id }) }}">
+                    <a href="{{ path('mercredi_admin_reduction_show', { 'id': reduction.id }) }}">
                         {{ reduction.nom }}
                     </a>
                 </td>

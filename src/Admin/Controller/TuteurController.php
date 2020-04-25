@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Form\TuteurType;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Message\TuteurCreated;
@@ -24,14 +25,19 @@ class TuteurController extends AbstractController
      * @var TuteurRepository
      */
     private $tuteurRepository;
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
 
-    public function __construct(TuteurRepository $tuteurRepository)
+    public function __construct(TuteurRepository $tuteurRepository, RelationRepository $relationRepository)
     {
         $this->tuteurRepository = $tuteurRepository;
+        $this->relationRepository = $relationRepository;
     }
 
     /**
-     * @Route("/", name="admin_mercredi_tuteur_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_tuteur_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -44,7 +50,7 @@ class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_tuteur_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_tuteur_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -53,13 +59,12 @@ class TuteurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->tuteurRepository->persist($tuteur);
             $this->tuteurRepository->flush();
 
             $this->dispatchMessage(new TuteurCreated($tuteur->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_tuteur_show', ['id' => $tuteur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
 
         return $this->render(
@@ -72,20 +77,23 @@ class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_tuteur_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_tuteur_show", methods={"GET"})
      */
     public function show(Tuteur $tuteur): Response
     {
+        $relations = $this->relationRepository->findByTuteur($tuteur);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/show.html.twig',
             [
                 'tuteur' => $tuteur,
+                'relations' => $relations,
             ]
         );
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_tuteur_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_tuteur_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Tuteur $tuteur): Response
     {
@@ -97,7 +105,7 @@ class TuteurController extends AbstractController
 
             $this->dispatchMessage(new TuteurUpdated($tuteur->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_tuteur_show', ['id' => $tuteur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
 
         return $this->render(
@@ -110,7 +118,7 @@ class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_tuteur_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_tuteur_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Tuteur $tuteur): Response
     {
@@ -120,6 +128,6 @@ class TuteurController extends AbstractController
             $this->dispatchMessage(new TuteurDeleted($tuteur->getId()));
         }
 
-        return $this->redirectToRoute('admin_mercredi_tuteur_index');
+        return $this->redirectToRoute('mercredi_admin_tuteur_index');
     }
 }

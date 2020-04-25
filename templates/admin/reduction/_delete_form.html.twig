@@ -13,7 +13,7 @@
                 Supprimer {{ reduction }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('admin_mercredi_reduction_delete', {'id': reduction.id}) }}">
+                <form method="post" action="{{ path('mercredi_admin_reduction_delete', {'id': reduction.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reduction.id) }}">
                     <button type="button" class="btn btn-secondary"

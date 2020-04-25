@@ -31,7 +31,7 @@ class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_mercredi_reduction_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_reduction_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -44,7 +44,7 @@ class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_reduction_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_reduction_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -59,7 +59,7 @@ class ReductionController extends AbstractController
 
             $this->dispatchMessage(new ReductionCreated($reduction->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_reduction_show', ['id' => $reduction->getId()]);
+            return $this->redirectToRoute('mercredi_admin_reduction_show', ['id' => $reduction->getId()]);
         }
 
         return $this->render(
@@ -72,7 +72,7 @@ class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_reduction_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_reduction_show", methods={"GET"})
      */
     public function show(Reduction $reduction): Response
     {
@@ -85,7 +85,7 @@ class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_reduction_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_reduction_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Reduction $reduction): Response
     {
@@ -97,7 +97,7 @@ class ReductionController extends AbstractController
 
             $this->dispatchMessage(new ReductionUpdated($reduction->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_reduction_show', ['id' => $reduction->getId()]);
+            return $this->redirectToRoute('mercredi_admin_reduction_show', ['id' => $reduction->getId()]);
         }
 
         return $this->render(
@@ -110,7 +110,7 @@ class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_reduction_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_reduction_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Reduction $reduction): Response
     {
@@ -120,6 +120,6 @@ class ReductionController extends AbstractController
             $this->dispatchMessage(new ReductionDeleted($reduction->getId()));
         }
 
-        return $this->redirectToRoute('admin_mercredi_reduction_index');
+        return $this->redirectToRoute('mercredi_admin_reduction_index');
     }
 }

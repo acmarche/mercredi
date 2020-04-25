@@ -1,0 +1,23 @@
+<h4 class="text-success">Enfant(s)</h4>
+<table class="table table-bordered table-hover">
+
+    <tbody>
+    {% for relation in relations %}
+        {% set enfant = relation.enfant %}
+        <tr>
+            <td>
+                <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
+                    {{ enfant }}
+                </a>
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr>
+
+    {% endfor %}
+    </tbody>
+</table>

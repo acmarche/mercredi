@@ -19,7 +19,6 @@ class TuteurRepository extends ServiceEntityRepository
         parent::__construct($registry, Tuteur::class);
     }
 
-
     public function remove(Tuteur $tuteur)
     {
         $this->_em->remove($tuteur);

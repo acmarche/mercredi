@@ -26,6 +26,9 @@
             </div>
         </div>
 
+        <br />
+        {% include '@AcMarcheMercrediAdmin/enfant/_tuteurs.html.twig' %}
+
         <div class="card-footer text-muted mt-3">
             Créé le {{ enfant.createdAt | format_date('full') }} par {{ enfant.userAdd }}. Mis à jour
             le {{ enfant.updatedAt | format_date('full') }}

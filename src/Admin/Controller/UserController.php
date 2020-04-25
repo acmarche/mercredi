@@ -36,7 +36,7 @@ class UserController extends AbstractController
     /**
      * Lists all User entities.
      *
-     * @Route("/", name="admin_mercredi_utilisateur_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_utilisateur_index", methods={"GET"})
      *
      */
     public function index()
@@ -54,7 +54,7 @@ class UserController extends AbstractController
     /**
      * Displays a form to create a new User utilisateur.
      *
-     * @Route("/new", name="admin_mercredi_utilisateur_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_utilisateur_new", methods={"GET","POST"})
      *
      */
     public function new(Request $request)
@@ -73,7 +73,7 @@ class UserController extends AbstractController
 
             $this->addFlash("success", "L'utilisateur a bien été ajouté");
 
-            return $this->redirectToRoute('admin_mercredi_utilisateur_show', ['id' => $utilisateur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_utilisateur_show', ['id' => $utilisateur->getId()]);
         }
 
         return $this->render(
@@ -88,7 +88,7 @@ class UserController extends AbstractController
     /**
      * Finds and displays a User utilisateur.
      *
-     * @Route("/{id}", name="admin_mercredi_utilisateur_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_utilisateur_show", methods={"GET"})
      *
      */
     public function show(User $utilisateur)
@@ -104,7 +104,7 @@ class UserController extends AbstractController
     /**
      * Displays a form to edit an existing User utilisateur.
      *
-     * @Route("/{id}/edit", name="admin_mercredi_utilisateur_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_utilisateur_edit", methods={"GET","POST"})
      *
      */
     public function edit(Request $request, User $utilisateur)
@@ -117,7 +117,7 @@ class UserController extends AbstractController
             $this->userRepository->flush();
             $this->addFlash("success", "L'utilisateur a bien été modifié");
 
-            return $this->redirectToRoute('admin_mercredi_utilisateur_show', ['id' => $utilisateur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_utilisateur_show', ['id' => $utilisateur->getId()]);
         }
 
         return $this->render(
@@ -132,7 +132,7 @@ class UserController extends AbstractController
     /**
      * Deletes a User utilisateur.
      *
-     * @Route("/{id}", name="admin_mercredi_utilisateur_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_utilisateur_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response
     {
@@ -142,7 +142,7 @@ class UserController extends AbstractController
             $this->addFlash('success', 'L\'utilisateur a été supprimé');
         }
 
-        return $this->redirectToRoute('admin_mercredi_utilisateur_index');
+        return $this->redirectToRoute('mercredi_admin_utilisateur_index');
     }
 
 }

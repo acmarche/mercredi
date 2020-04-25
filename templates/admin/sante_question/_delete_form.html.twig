@@ -13,7 +13,7 @@
                 Supprimer {{ sante_question }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('admin_mercredi_sante_question_delete', {'id': sante_question.id}) }}">
+                <form method="post" action="{{ path('mercredi_admin_sante_question_delete', {'id': sante_question.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sante_question.id) }}">
                     <button type="button" class="btn btn-secondary"

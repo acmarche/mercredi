@@ -13,7 +13,7 @@
                 Supprimer {{ jour }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('admin_mercredi_jour_delete', {'id': jour.id}) }}">
+                <form method="post" action="{{ path('mercredi_admin_jour_delete', {'id': jour.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jour.id) }}">
                     <button type="button" class="btn btn-secondary"

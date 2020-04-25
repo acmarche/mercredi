@@ -4,7 +4,7 @@
     <h3>Liste des fiches</h3>
 
     <a class="btn btn-primary m-2" role="button"
-       href="{{ path('admin_mercredi_sante_fiche_new') }}"><i class="fas fa-plus"></i> Ajouter une fiche</a>
+       href="{{ path('mercredi_admin_sante_fiche_new') }}"><i class="fas fa-plus"></i> Ajouter une fiche</a>
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -17,7 +17,7 @@
         {% for sante_fiche in sante_fiches %}
             <tr>
                 <td>
-                    <a href="{{ path('admin_mercredi_sante_fiche_show', { 'id': sante_fiche.id }) }}">
+                    <a href="{{ path('mercredi_admin_sante_fiche_show', { 'id': sante_fiche.id }) }}">
                         {{ sante_fiche.medecinNom }}
                     </a>
                 </td>

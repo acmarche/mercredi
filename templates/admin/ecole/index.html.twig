@@ -4,7 +4,7 @@
     <h3>Liste des ecoles</h3>
 
     <a class="btn btn-primary m-2" role="button"
-       href="{{ path('admin_mercredi_ecole_new') }}"><i class="fas fa-plus"></i> Ajouter une école</a>
+       href="{{ path('mercredi_admin_ecole_new') }}"><i class="fas fa-plus"></i> Ajouter une école</a>
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -18,7 +18,7 @@
         {% for ecole in ecoles %}
             <tr>
                 <td>
-                    <a href="{{ path('admin_mercredi_ecole_show', { 'id': ecole.id }) }}">
+                    <a href="{{ path('mercredi_admin_ecole_show', { 'id': ecole.id }) }}">
                         {{ ecole.nom }}
                     </a>
                 </td>

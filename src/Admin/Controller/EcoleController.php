@@ -31,7 +31,7 @@ class EcoleController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_mercredi_ecole_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_ecole_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -44,7 +44,7 @@ class EcoleController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_ecole_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_ecole_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -59,7 +59,7 @@ class EcoleController extends AbstractController
 
             $this->dispatchMessage(new EcoleCreated($ecole->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_ecole_show', ['id' => $ecole->getId()]);
+            return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
         }
 
         return $this->render(
@@ -72,7 +72,7 @@ class EcoleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_ecole_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_ecole_show", methods={"GET"})
      */
     public function show(Ecole $ecole): Response
     {
@@ -85,7 +85,7 @@ class EcoleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_ecole_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_ecole_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Ecole $ecole): Response
     {
@@ -97,7 +97,7 @@ class EcoleController extends AbstractController
 
             $this->dispatchMessage(new EcoleUpdated($ecole->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_ecole_show', ['id' => $ecole->getId()]);
+            return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
         }
 
         return $this->render(
@@ -110,7 +110,7 @@ class EcoleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_ecole_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_ecole_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Ecole $ecole): Response
     {
@@ -120,6 +120,6 @@ class EcoleController extends AbstractController
             $this->dispatchMessage(new EcoleDeleted($ecole->getId()));
         }
 
-        return $this->redirectToRoute('admin_mercredi_ecole_index');
+        return $this->redirectToRoute('mercredi_admin_ecole_index');
     }
 }

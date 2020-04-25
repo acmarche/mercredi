@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use Symfony\Component\Validator\Constraints as Assert;
 
 trait OrdreTrait
 {

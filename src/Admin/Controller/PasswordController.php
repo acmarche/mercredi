@@ -35,7 +35,7 @@ class PasswordController extends AbstractController
     /**
      * Displays a form to edit an existing Utilisateur utilisateur.
      *
-     * @Route("/{id}/password", name="admin_mercredi_utilisateur_password", methods={"GET","POST"})
+     * @Route("/{id}/password", name="mercredi_admin_utilisateur_password", methods={"GET","POST"})
      *
      */
     public function passord(Request $request, User $utilisateur)
@@ -50,7 +50,7 @@ class PasswordController extends AbstractController
             $this->userRepository->flush();
             $this->addFlash("success", "Le mot de passe a bien été modifié");
 
-            return $this->redirectToRoute('admin_mercredi_utilisateur_show', ['id' => $utilisateur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_utilisateur_show', ['id' => $utilisateur->getId()]);
         }
 
         return $this->render(

@@ -31,7 +31,7 @@ class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_mercredi_note_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_note_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -44,7 +44,7 @@ class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_note_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_note_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -59,7 +59,7 @@ class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
         }
 
         return $this->render(
@@ -72,7 +72,7 @@ class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_note_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_note_show", methods={"GET"})
      */
     public function show(Note $note): Response
     {
@@ -85,7 +85,7 @@ class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_note_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_note_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Note $note): Response
     {
@@ -97,7 +97,7 @@ class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteUpdated($note->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
         }
 
         return $this->render(
@@ -110,7 +110,7 @@ class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_note_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_note_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Note $note): Response
     {
@@ -120,6 +120,6 @@ class NoteController extends AbstractController
             $this->dispatchMessage(new NoteDeleted($note->getId()));
         }
 
-        return $this->redirectToRoute('admin_mercredi_note_index');
+        return $this->redirectToRoute('mercredi_admin_note_index');
     }
 }

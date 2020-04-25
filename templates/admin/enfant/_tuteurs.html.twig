@@ -1,0 +1,33 @@
+<h4 class="text-success">Les parent(s)</h4>
+
+{% for relation in relations %}
+
+    {% set tuteur= relation.tuteur %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h5>
+                <a href="{{ path('mercredi_admin_tuteur_show', { 'id': tuteur.id }) }}">
+                    {{ tuteur }}
+                </a>
+            </h5>
+
+            {% if relation.type %}
+                <span class="text-muted">{{ relation.type }}</span>
+            {% endif %}
+
+            <div class="float-right">
+                <i class="fas fa-link"></i> <a
+                        href="{{ path('mercredi_admin_relation_edit', {'id': relation.id}) }}">
+                    Spécifier le type de relation
+                </a>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <h5 class="card-header">Les présences</h5>
+
+        </div>
+    </div>
+
+{% endfor %}

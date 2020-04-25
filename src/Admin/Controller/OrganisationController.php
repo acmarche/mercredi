@@ -31,12 +31,12 @@ class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_mercredi_organisation_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_organisation_index", methods={"GET"})
      */
     public function index(): Response
     {
         if ($organisation = $this->organisationRepository->getOrganisation()) {
-            return $this->redirectToRoute('admin_mercredi_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         return $this->render(
@@ -48,14 +48,14 @@ class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_organisation_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_organisation_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         if ($organisation = $this->organisationRepository->getOrganisation()) {
             $this->addFlash('danger', 'Une seule organisation peut être enregistrée');
 
-            return $this->redirectToRoute('admin_mercredi_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         $organisation = new Organisation();
@@ -68,7 +68,7 @@ class OrganisationController extends AbstractController
 
             $this->dispatchMessage(new OrganisationCreated($organisation->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         return $this->render(
@@ -81,7 +81,7 @@ class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_organisation_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_organisation_show", methods={"GET"})
      */
     public function show(Organisation $organisation): Response
     {
@@ -94,7 +94,7 @@ class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_organisation_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_organisation_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Organisation $organisation): Response
     {
@@ -106,7 +106,7 @@ class OrganisationController extends AbstractController
 
             $this->dispatchMessage(new OrganisationUpdated($organisation->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         return $this->render(
@@ -119,7 +119,7 @@ class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_organisation_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_organisation_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Organisation $organisation): Response
     {
@@ -130,6 +130,6 @@ class OrganisationController extends AbstractController
             $this->dispatchMessage(new OrganisationDeleted($id));
         }
 
-        return $this->redirectToRoute('admin_mercredi_organisation_index');
+        return $this->redirectToRoute('mercredi_admin_organisation_index');
     }
 }

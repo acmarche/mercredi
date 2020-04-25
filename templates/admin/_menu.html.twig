@@ -1,24 +1,26 @@
 {% set action = app.request.attributes.get("_route") %}
 
 
-<li class="nav-item{% if action == 'mercredi_tuteur_new' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('admin_mercredi_tuteur_new') }}"><i class="fas fa-plus"></i> Ajouter un tuteur</a>
-</li>
+{% if is_granted('ROLE_MERCREDI_ADMIN') %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">Ajouter...</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="{{ path('mercredi_admin_tuteur_new') }}">Un tuteur</a>
 
-<li class="nav-item{% if action == 'mercredi_enfant_new' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('admin_mercredi_enfant_new') }}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
-</li>
+        </div>
+    </li>
+{% endif %}
 
 <li class="nav-item{% if action == 'mercredi_tuteur_index' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('admin_mercredi_tuteur_index') }}">Les tuteurs</a>
+       href="{{ path('mercredi_admin_tuteur_index') }}">Les tuteurs</a>
 </li>
 
 <li class="nav-item{% if action == 'mercredi_enfant_index' %} active {% endif %}">
     <a class="nav-link"
-       href="{{ path('admin_mercredi_enfant_index') }}">Les enfants</a>
+       href="{{ path('mercredi_admin_enfant_index') }}">Les enfants</a>
 </li>
 
 {% if is_granted('ROLE_MERCREDI_ADMIN') %}
@@ -27,13 +29,13 @@
            aria-haspopup="true"
            aria-expanded="false">...</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="{{ path('admin_mercredi_jour_index') }}">Les jours de garde</a>
-            <a class="dropdown-item" href="{{ path('admin_mercredi_utilisateur_index') }}">Les utilisateurs</a>
-            <a class="dropdown-item" href="{{ path('admin_mercredi_note_index') }}">Les notes</a>
-            <a class="dropdown-item" href="{{ path('admin_mercredi_ecole_index') }}">Les écoles</a>
-            <a class="dropdown-item" href="{{ path('admin_mercredi_sante_question_index') }}">Questionnaire santé</a>
-            <a class="dropdown-item" href="{{ path('admin_mercredi_reduction_index') }}">Les réductions</a>
-            <a class="dropdown-item" href="{{ path('admin_mercredi_organisation_index') }}">L'organisation</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_jour_index') }}">Les jours de garde</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_utilisateur_index') }}">Les utilisateurs</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_note_index') }}">Les notes</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_ecole_index') }}">Les écoles</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_sante_question_index') }}">Questionnaire santé</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_reduction_index') }}">Les réductions</a>
+            <a class="dropdown-item" href="{{ path('mercredi_admin_organisation_index') }}">L'organisation</a>
         </div>
     </li>
 {% endif %}

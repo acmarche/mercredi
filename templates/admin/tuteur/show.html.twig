@@ -28,12 +28,18 @@
                     {% include '@AcMarcheMercrediAdmin/tuteur/_identite.html.twig' %}
                 </div>
                 <div class="col-6">
-                     {% include '@AcMarcheMercrediAdmin/tuteur/_conjoint.html.twig' %}
+                    {% include '@AcMarcheMercrediAdmin/tuteur/_conjoint.html.twig' %}
                 </div>
             </div>
 
-            {{ tuteur.remarque | nl2br }}
+            {% if tuteur.remarque %}
+                <p class="text-muted">
+                    {{ tuteur.remarque | nl2br }}
+                </p>
+            {% endif %}
 
+            <br />
+            {% include '@AcMarcheMercrediAdmin/tuteur/_enfants.html.twig' %}
         </div>
         <div class="card-footer text-muted mt-3">
             Créé le {{ tuteur.createdAt | format_date('full') }} par {{ tuteur.userAdd }}. Mis à jour

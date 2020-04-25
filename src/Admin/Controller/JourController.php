@@ -31,7 +31,7 @@ class JourController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_mercredi_jour_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_jour_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -44,7 +44,7 @@ class JourController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_jour_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_jour_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -59,7 +59,7 @@ class JourController extends AbstractController
 
             $this->dispatchMessage(new JourCreated($jour->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
         }
 
         return $this->render(
@@ -72,7 +72,7 @@ class JourController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_jour_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_jour_show", methods={"GET"})
      */
     public function show(Jour $jour): Response
     {
@@ -85,7 +85,7 @@ class JourController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_jour_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_jour_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Jour $jour): Response
     {
@@ -97,7 +97,7 @@ class JourController extends AbstractController
 
             $this->dispatchMessage(new JourUpdated($jour->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
         }
 
         return $this->render(
@@ -110,7 +110,7 @@ class JourController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_jour_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_jour_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Jour $jour): Response
     {
@@ -120,6 +120,6 @@ class JourController extends AbstractController
             $this->dispatchMessage(new JourDeleted($jour->getId()));
         }
 
-        return $this->redirectToRoute('admin_mercredi_jour_index');
+        return $this->redirectToRoute('mercredi_admin_jour_index');
     }
 }

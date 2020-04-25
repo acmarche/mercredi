@@ -1,0 +1,22 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>
+                Relation entre {{ relation.enfant}} et {{ relation.tuteur }}
+            </h3>
+        </div>
+        <div class="card-body">
+
+            {{ include('@AcMarcheMercrediAdmin/relation/_form.html.twig') }}
+
+            <br />
+            <a href="{{ path('mercredi_admin_enfant_show', {'id': relation.enfant.id}) }}">
+                <i class="fas fa-long-arrow-alt-left"></i>   Annuler
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

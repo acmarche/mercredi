@@ -31,7 +31,7 @@ class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_mercredi_sante_fiche_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_sante_fiche_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -44,7 +44,7 @@ class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_mercredi_sante_fiche_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_sante_fiche_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -59,7 +59,7 @@ class SanteFicheController extends AbstractController
 
             $this->dispatchMessage(new SanteFicheCreated($santeFiche->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_sante_fiche_show', ['id' => $santeFiche->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $santeFiche->getId()]);
         }
 
         return $this->render(
@@ -72,7 +72,7 @@ class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_sante_fiche_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_sante_fiche_show", methods={"GET"})
      */
     public function show(SanteFiche $santeFiche): Response
     {
@@ -85,7 +85,7 @@ class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_mercredi_sante_fiche_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_sante_fiche_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, SanteFiche $santeFiche): Response
     {
@@ -97,7 +97,7 @@ class SanteFicheController extends AbstractController
 
             $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
 
-            return $this->redirectToRoute('admin_mercredi_sante_fiche_show', ['id' => $santeFiche->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $santeFiche->getId()]);
         }
 
         return $this->render(
@@ -110,7 +110,7 @@ class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_mercredi_sante_fiche_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_sante_fiche_delete", methods={"DELETE"})
      */
     public function delete(Request $request, SanteFiche $santeFiche): Response
     {
@@ -120,6 +120,6 @@ class SanteFicheController extends AbstractController
             $this->dispatchMessage(new SanteFicheDeleted($santeFiche->getId()));
         }
 
-        return $this->redirectToRoute('admin_mercredi_sante_fiche_index');
+        return $this->redirectToRoute('mercredi_admin_sante_fiche_index');
     }
 }
