@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Form\RelationType;
+use AcMarche\Mercredi\Relation\Message\RelationCreated;
 use AcMarche\Mercredi\Relation\Message\RelationDeleted;
 use AcMarche\Mercredi\Relation\Message\RelationUpdated;
 use AcMarche\Mercredi\Relation\RelationHandler;
@@ -46,13 +47,13 @@ class RelationController extends AbstractController
             $enfantId = $request->request->get('enfantId');
 
             try {
-                $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
+                $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
+                $this->dispatchMessage(new RelationCreated($relation->getId()));
             } catch (\Exception $e) {
                 $this->addFlash('danger', $e->getMessage());
 
                 return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
             }
-            $this->dispatchMessage(new EnfantCreated($enfantId));
         } else {
             $this->addFlash('danger', 'Formulaire non valide');
         }
@@ -104,7 +105,7 @@ class RelationController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_home');
         }
 
-        $enfant = $relation->getEnfant();
+        $tuteur = $relation->getTuteur();
 
         if ($this->isCsrfTokenValid('delete'.$relation->getId(), $request->request->get('_token'))) {
             $this->relationRepository->remove($relation);
@@ -112,6 +113,6 @@ class RelationController extends AbstractController
             $this->dispatchMessage(new RelationDeleted($relationId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $tuteur->getId()]);
     }
 }

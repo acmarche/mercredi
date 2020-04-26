@@ -28,7 +28,7 @@ class RelationCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(RelationCreated $relationCreated)
     {
-        $this->flashBag->add('success', "La réduction a bien été ajoutée");
+        $this->flashBag->add('success', "L'enfant a bien été ajouté");
     }
 
 }

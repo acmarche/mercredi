@@ -27,7 +27,7 @@ class RelationDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(RelationDeleted $relationDeleted)
     {
-        $this->flashBag->add('success', "La réduction a bien été suppriméé");
+        $this->flashBag->add('success', "La relation a bien été supprimée");
     }
 
 }

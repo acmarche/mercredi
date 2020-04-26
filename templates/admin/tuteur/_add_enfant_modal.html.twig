@@ -3,18 +3,18 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addEnfantModalLabel">Supprimer</h5>
+                <h5 class="modal-title" id="addEnfantModalLabel">Ajouter un enfant</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <h6 class="text-success" id="myModalLabel">Ajouter un enfant existant:</h6>
+                <h6 class="text-success" id="myModalLabel">Un enfant existant:</h6>
 
                 <form method="post" action="{{ path('mercredi_admin_relation_attach_enfant', {'id': tuteur.id}) }}">
                     <div class="form-group2">
                         <label for="search"> </label>
-                        <input type="text" id="search" name="search" placeholder="Rechercher"
+                        <input type="search" id="search" name="search" placeholder="Rechercher"
                                class="form-control typeahead" autocomplete="off">
                     </div>
                     <input type="hidden" name="enfantId" id="enfantId">

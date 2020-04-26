@@ -31,7 +31,7 @@ class RelationHandler
      * @param int|null $enfantId
      * @throws \Exception
      */
-    public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId)
+    public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): ?Relation
     {
         if (!$enfantId) {
             throw new \Exception('Enfant non trouvé');
@@ -49,5 +49,7 @@ class RelationHandler
         $relation = new Relation($tuteur, $enfant);
         $this->relationRepository->persist($relation);
         $this->relationRepository->flush();
+
+        return $relation;
     }
 }
