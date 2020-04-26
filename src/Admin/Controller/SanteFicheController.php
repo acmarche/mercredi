@@ -53,7 +53,6 @@ class SanteFicheController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->santeFicheRepository->persist($santeFiche);
             $this->santeFicheRepository->flush();
 
@@ -115,9 +114,10 @@ class SanteFicheController extends AbstractController
     public function delete(Request $request, SanteFiche $santeFiche): Response
     {
         if ($this->isCsrfTokenValid('delete'.$santeFiche->getId(), $request->request->get('_token'))) {
+            $id = $santeFiche->getId();
             $this->santeFicheRepository->remove($santeFiche);
             $this->santeFicheRepository->flush();
-            $this->dispatchMessage(new SanteFicheDeleted($santeFiche->getId()));
+            $this->dispatchMessage(new SanteFicheDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_sante_fiche_index');

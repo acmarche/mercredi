@@ -115,9 +115,10 @@ class JourController extends AbstractController
     public function delete(Request $request, Jour $jour): Response
     {
         if ($this->isCsrfTokenValid('delete'.$jour->getId(), $request->request->get('_token'))) {
+            $jourId = $jour->getId();
             $this->jourRepository->remove($jour);
             $this->jourRepository->flush();
-            $this->dispatchMessage(new JourDeleted($jour->getId()));
+            $this->dispatchMessage(new JourDeleted($jourId));
         }
 
         return $this->redirectToRoute('mercredi_admin_jour_index');

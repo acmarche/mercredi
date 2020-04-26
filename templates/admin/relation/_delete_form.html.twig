@@ -1,25 +1,26 @@
 <!-- Modal candidat -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+<div class="modal fade" id="unlinkModal" tabindex="-1" role="dialog" aria-labelledby="unlinkModal"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Supprimer</h5>
+                <h5 class="modal-title" id="unlinkModal">Détacher</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Supprimer {{ relation }} ?
+                Détacher du parent ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('mercredi_admin_relation_delete', {'id': relation.id}) }}">
+                <form method="post" action="{{ path('mercredi_admin_relation_delete') }}">
                     <input type="hidden" name="_method" value="DELETE">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ relation.id) }}">
+                    <input type="hidden" name="relationid" id="relationid">
+                    <input type="hidden" name="_token" id="relationtoken">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Annuler
                     </button>
-                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-danger">Détacher</button>
                 </form>
             </div>
         </div>

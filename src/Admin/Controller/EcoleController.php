@@ -115,9 +115,10 @@ class EcoleController extends AbstractController
     public function delete(Request $request, Ecole $ecole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
+            $ecoleId = $ecole->getId();
             $this->ecoleRepository->remove($ecole);
             $this->ecoleRepository->flush();
-            $this->dispatchMessage(new EcoleDeleted($ecole->getId()));
+            $this->dispatchMessage(new EcoleDeleted($ecoleId));
         }
 
         return $this->redirectToRoute('mercredi_admin_ecole_index');

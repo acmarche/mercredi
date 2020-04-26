@@ -7,11 +7,11 @@ class RelationDeleted
     /**
      * @var int
      */
-    private $ecoleId;
+    private $relationId;
 
     public function __construct(int $relationId)
     {
-        $this->ecoleId = $relationId;
+        $this->relationId = $relationId;
     }
 
     /**
@@ -19,6 +19,6 @@ class RelationDeleted
      */
     public function getRelationId(): int
     {
-        return $this->ecoleId;
+        return $this->relationId;
     }
 }

@@ -115,9 +115,10 @@ class SanteQuestionController extends AbstractController
     public function delete(Request $request, SanteQuestion $santeQuestion): Response
     {
         if ($this->isCsrfTokenValid('delete'.$santeQuestion->getId(), $request->request->get('_token'))) {
+            $id = $santeQuestion->getId();
             $this->santeQuestionRepository->remove($santeQuestion);
             $this->santeQuestionRepository->flush();
-            $this->dispatchMessage(new SanteQuestionDeleted($santeQuestion->getId()));
+            $this->dispatchMessage(new SanteQuestionDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_sante_question_index');

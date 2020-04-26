@@ -115,9 +115,10 @@ class ReductionController extends AbstractController
     public function delete(Request $request, Reduction $reduction): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reduction->getId(), $request->request->get('_token'))) {
+            $id = $reduction->getId();
             $this->reductionRepository->remove($reduction);
             $this->reductionRepository->flush();
-            $this->dispatchMessage(new ReductionDeleted($reduction->getId()));
+            $this->dispatchMessage(new ReductionDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_reduction_index');

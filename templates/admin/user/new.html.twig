@@ -1,10 +1,10 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
-{% block body -%}
+{% block body %}
 
     <div class="card bg-light mb-3">
         <div class="card-header">
-            <h3>{{ utilisateur }}</h3>
+            <h3>Nouvelle utilisateur</h3>
         </div>
         <div class="card-body">
 
@@ -24,8 +24,17 @@
                 <div class="col-6">
                     {{ form_row(form.username) }}
                 </div>
+
+                <div class="col-6">
+                    {{ form_row(form.plainPassword.first) }}
+                </div>
+
+                <div class="col-6">
+                    {{ form_row(form.plainPassword.second) }}
+                </div>
+
+
             </div>
-            {{ form_row(form.roles) }}
             <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
                 Sauvegarder
             </button>
@@ -33,7 +42,4 @@
 
         </div>
     </div>
-
 {% endblock %}
-
-

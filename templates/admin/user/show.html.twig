@@ -4,25 +4,19 @@
 
 <div class="card bg-light mb-3">
     <div class="card-header">
-        <h3>{{ utilisateur }}</h3>
+        <h3>{{ user }}</h3>
     </div>
     <div class="card-body">
 
-    {% include '@AcMarcheMercrediAdmin/utilisateur/_actions.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_actions.html.twig' %}
 
     <br />
     <table class="table table-bordered table-hover">
         <tbody>
         <tr>
-            <th>Nom prénom</th>
-            <td>
-                {{ utilisateur.nom }} {{ utilisateur.prenom }}
-            </td>
-        </tr>
-        <tr>
             <th>Email</th>
             <td>
-                {{ utilisateur.email }}
+                {{ user.email }}
             </td>
         </tr>
         </tbody>
@@ -30,6 +24,6 @@
     </div>
 </div>
 
-    {% include '@AcMarcheMercrediAdmin/utilisateur/_delete.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_delete.html.twig' %}
 
 {% endblock %}

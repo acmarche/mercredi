@@ -3,6 +3,9 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\User\Message\UserCreated;
+use AcMarche\Mercredi\User\Message\UserDeleted;
+use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserType;
@@ -36,7 +39,7 @@ class UserController extends AbstractController
     /**
      * Lists all User entities.
      *
-     * @Route("/", name="mercredi_admin_utilisateur_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_user_index", methods={"GET"})
      *
      */
     public function index()
@@ -44,7 +47,7 @@ class UserController extends AbstractController
         $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/utilisateur/index.html.twig',
+            '@AcMarcheMercrediAdmin/user/index.html.twig',
             array(
                 'users' => $users,
             )
@@ -54,32 +57,31 @@ class UserController extends AbstractController
     /**
      * Displays a form to create a new User utilisateur.
      *
-     * @Route("/new", name="mercredi_admin_utilisateur_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_user_new", methods={"GET","POST"})
      *
      */
     public function new(Request $request)
     {
-        $utilisateur = new User();
+        $user = new User();
 
-        $form = $this->createForm(UserType::class, $utilisateur);
+        $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $utilisateur->setPassword(
-                $this->passwordEncoder->encodePassword($utilisateur, $form->getData()->getPlainPassword())
+            $user->setPassword(
+                $this->passwordEncoder->encodePassword($user, $form->getData()->getPlainPassword())
             );
-            $this->userRepository->insert($utilisateur);
+            $this->userRepository->insert($user);
+            $this->dispatchMessage(new UserCreated($user->getId()));
 
-            $this->addFlash("success", "L'utilisateur a bien été ajouté");
-
-            return $this->redirectToRoute('mercredi_admin_utilisateur_show', ['id' => $utilisateur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/utilisateur/new.html.twig',
+            '@AcMarcheMercrediAdmin/user/new.html.twig',
             array(
-                'utilisateur' => $utilisateur,
+                'user' => $user,
                 'form' => $form->createView(),
             )
         );
@@ -88,15 +90,15 @@ class UserController extends AbstractController
     /**
      * Finds and displays a User utilisateur.
      *
-     * @Route("/{id}", name="mercredi_admin_utilisateur_show", methods={"GET"})
+     * @Route("/{id}", name="mercredi_admin_user_show", methods={"GET"})
      *
      */
-    public function show(User $utilisateur)
+    public function show(User $user)
     {
         return $this->render(
-            '@AcMarcheMercrediAdmin/utilisateur/show.html.twig',
+            '@AcMarcheMercrediAdmin/user/show.html.twig',
             array(
-                'utilisateur' => $utilisateur,
+                'user' => $user,
             )
         );
     }
@@ -104,26 +106,26 @@ class UserController extends AbstractController
     /**
      * Displays a form to edit an existing User utilisateur.
      *
-     * @Route("/{id}/edit", name="mercredi_admin_utilisateur_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET","POST"})
      *
      */
-    public function edit(Request $request, User $utilisateur)
+    public function edit(Request $request, User $user)
     {
-        $editForm = $this->createForm(UserEditType::class, $utilisateur);
+        $editForm = $this->createForm(UserEditType::class, $user);
 
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->userRepository->flush();
-            $this->addFlash("success", "L'utilisateur a bien été modifié");
+            $this->dispatchMessage(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_utilisateur_show', ['id' => $utilisateur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/utilisateur/edit.html.twig',
+            '@AcMarcheMercrediAdmin/user/edit.html.twig',
             array(
-                'utilisateur' => $utilisateur,
+                'user' => $user,
                 'form' => $editForm->createView(),
             )
         );
@@ -132,17 +134,18 @@ class UserController extends AbstractController
     /**
      * Deletes a User utilisateur.
      *
-     * @Route("/{id}", name="mercredi_admin_utilisateur_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_user_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $id = $user->getId();
             $this->userRepository->remove($user);
             $this->userRepository->flush();
-            $this->addFlash('success', 'L\'utilisateur a été supprimé');
+            $this->dispatchMessage(new UserDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_utilisateur_index');
+        return $this->redirectToRoute('mercredi_admin_user_index');
     }
 
 }

@@ -53,7 +53,6 @@ class NoteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->noteRepository->persist($note);
             $this->noteRepository->flush();
 
@@ -115,9 +114,10 @@ class NoteController extends AbstractController
     public function delete(Request $request, Note $note): Response
     {
         if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
+            $noteId = $note->getId();
             $this->noteRepository->remove($note);
             $this->noteRepository->flush();
-            $this->dispatchMessage(new NoteDeleted($note->getId()));
+            $this->dispatchMessage(new NoteDeleted($noteId));
         }
 
         return $this->redirectToRoute('mercredi_admin_note_index');

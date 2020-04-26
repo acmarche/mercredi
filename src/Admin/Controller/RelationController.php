@@ -55,15 +55,30 @@ class RelationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_relation_delete", methods={"DELETE"})
+     * @Route("/", name="mercredi_admin_relation_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Relation $relation): Response
+    public function delete(Request $request): Response
     {
+        $relationId = $request->request->get('relationid');
+
+        if (!$relationId) {
+            $this->addFlash('danger', 'Relation non trouvée');
+
+            return $this->redirectToRoute('mercredi_admin_home');
+        }
+        $relation = $this->relationRepository->find($relationId);
+        if (!$relation) {
+            $this->addFlash('danger', 'Relation non trouvée');
+
+            return $this->redirectToRoute('mercredi_admin_home');
+        }
+
         $enfant = $relation->getEnfant();
+
         if ($this->isCsrfTokenValid('delete'.$relation->getId(), $request->request->get('_token'))) {
             $this->relationRepository->remove($relation);
             $this->relationRepository->flush();
-            $this->dispatchMessage(new RelationDeleted($relation->getId()));
+            $this->dispatchMessage(new RelationDeleted($relationId));
         }
 
         return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);

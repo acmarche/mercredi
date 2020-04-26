@@ -132,9 +132,10 @@ class EnfantController extends AbstractController
     public function delete(Request $request, Enfant $enfant): Response
     {
         if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
+            $enfantId = $enfant->getId();
             $this->enfantRepository->remove($enfant);
             $this->enfantRepository->flush();
-            $this->dispatchMessage(new EnfantDeleted($enfant->getId()));
+            $this->dispatchMessage(new EnfantDeleted($enfantId));
         }
 
         return $this->redirectToRoute('mercredi_admin_enfant_index');

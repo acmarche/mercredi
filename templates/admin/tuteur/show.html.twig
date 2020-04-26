@@ -40,6 +40,8 @@
 
             <br />
             {% include '@AcMarcheMercrediAdmin/tuteur/_enfants.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/relation/_delete_form.html.twig' %}
+
         </div>
         <div class="card-footer text-muted mt-3">
             Créé le {{ tuteur.createdAt | format_date('full') }} par {{ tuteur.userAdd }}. Mis à jour
@@ -49,4 +51,14 @@
 
     {% include '@AcMarcheMercrediAdmin/tuteur/_delete_form.html.twig' %}
 
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(".unlinkparent").click(function () {
+            var relationId = $(this).attr("data-id");
+            var relationToken = $(this).attr("data-token");
+            $("#relationid").val(relationId);
+            $("#relationtoken").val(relationToken);
+        });
+    </script>
 {% endblock %}

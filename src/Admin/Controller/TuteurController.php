@@ -123,9 +123,10 @@ class TuteurController extends AbstractController
     public function delete(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
+            $id = $tuteur->getId();
             $this->tuteurRepository->remove($tuteur);
             $this->tuteurRepository->flush();
-            $this->dispatchMessage(new TuteurDeleted($tuteur->getId()));
+            $this->dispatchMessage(new TuteurDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_tuteur_index');

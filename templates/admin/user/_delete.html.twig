@@ -10,12 +10,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                Supprimer {{ utilisateur }} ?
+                Supprimer {{ user }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('mercredi_admin_utilisateur_delete', {'id': utilisateur.id}) }}">
+                <form method="post" action="{{ path('mercredi_admin_user_delete', {'id': user.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Annuler
                     </button>

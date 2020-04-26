@@ -8,11 +8,11 @@ class RelationUpdated
     /**
      * @var int
      */
-    private $ecoleId;
+    private $relationId;
 
     public function __construct(int $relationId)
     {
-        $this->ecoleId = $relationId;
+        $this->relationId = $relationId;
     }
 
     /**
@@ -20,6 +20,6 @@ class RelationUpdated
      */
     public function getRelationId(): int
     {
-        return $this->ecoleId;
+        return $this->relationId;
     }
 }
