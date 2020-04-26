@@ -19,6 +19,21 @@ class TuteurRepository extends ServiceEntityRepository
         parent::__construct($registry, Tuteur::class);
     }
 
+    /**
+     * @param $keyword
+     * @return Tuteur[]
+     */
+    public function search($keyword): array
+    {
+        $qb = $this->createQueryBuilder('tuteur')
+            ->andWhere('tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword')
+            ->setParameter('keyword', '%'.$keyword.'%')
+            ->addOrderBy('tuteur.nom', 'ASC')
+            ->getQuery()->getResult();
+
+        return $qb;
+    }
+
     public function remove(Tuteur $tuteur)
     {
         $this->_em->remove($tuteur);

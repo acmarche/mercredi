@@ -81,6 +81,11 @@ class RelationRepository extends ServiceEntityRepository
         return $enfants;
     }
 
+    public function checkExist(Tuteur $tuteur, $enfant): ?Relation
+    {
+        return $this->findOneBy(['tuteur' => $tuteur, 'enfant' => $enfant]);
+    }
+
     public function remove(Relation $relation)
     {
         $this->_em->remove($relation);

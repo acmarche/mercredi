@@ -19,6 +19,20 @@ class EnfantRepository extends ServiceEntityRepository
         parent::__construct($registry, Enfant::class);
     }
 
+    /**
+     * @param $keyword
+     * @return Enfant[]
+     */
+    public function search($keyword): array
+    {
+        $qb = $this->createQueryBuilder('enfant')
+            ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
+            ->setParameter('keyword', '%'.$keyword.'%')
+            ->addOrderBy('enfant.nom', 'ASC')
+            ->getQuery()->getResult();
+
+        return $qb;
+    }
 
     public function remove(Enfant $enfant)
     {
@@ -34,4 +48,5 @@ class EnfantRepository extends ServiceEntityRepository
     {
         $this->_em->persist($enfant);
     }
+
 }

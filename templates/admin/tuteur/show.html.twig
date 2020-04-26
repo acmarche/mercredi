@@ -1,9 +1,10 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
-{% block title %}Enfant{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('bundles/acmarchemercredi/css/typeahead.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-
 
     <div class="card mb-3">
 
@@ -38,7 +39,7 @@
                 </p>
             {% endif %}
 
-            <br />
+            <br/>
             {% include '@AcMarcheMercrediAdmin/tuteur/_enfants.html.twig' %}
             {% include '@AcMarcheMercrediAdmin/relation/_delete_form.html.twig' %}
 
@@ -50,9 +51,60 @@
     </div>
 
     {% include '@AcMarcheMercrediAdmin/tuteur/_delete_form.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/tuteur/_add_enfant_modal.html.twig' %}
 
 {% endblock %}
 {% block javascripts %}
+
+
+    <script type="text/javascript">
+
+        function initTypeahead() {
+
+            var tuteurs = new Bloodhound({
+                datumTokenizer: function (datum) {
+                    return Bloodhound.tokenizers.whitespace(datum.value);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: "{{ path('mercredi_admin_ajax_enfants') }}/%QUERY",
+                    wildcard: '%QUERY'
+                }
+            });
+
+            var options = {
+                hint: true,
+                highlight: true,
+                minLength: 2
+            };
+
+            var dataSetParents = {
+                display: 'label',
+                limit: 10,
+                source: tuteurs,
+                templates: {
+                    suggestion: function (data) {
+                        var value = data.nom + ' ' + data.birthday;
+                        return '<p>' + value + ' </p>';
+                    }
+                }
+            };
+
+            $('.typeahead').typeahead(options, dataSetParents);
+            $('.typeahead').bind('typeahead:select', function (ev, suggestion) {
+                $('#enfantId').val(suggestion.id)
+            });
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            initTypeahead();
+        });
+
+    </script>
+
     <script type="text/javascript">
         $(".unlinkparent").click(function () {
             var relationId = $(this).attr("data-id");

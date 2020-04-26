@@ -1,6 +1,8 @@
-<a class="btn btn-primary m-2" role="button"
-   href="{{ path('mercredi_admin_enfant_new',{'id': tuteur.id}) }}">
-    <i class="fas fa-plus"></i> Ajouter un enfant</a>
+<a class="btn btn-primary" role="button"  href="#"
+        data-toggle="modal"
+        data-target="#addEnfantModal">
+    <i class="fas fa-plus"></i> Ajouter un enfant
+</a>
 
 <a href="{{ path('mercredi_admin_tuteur_edit', { 'id': tuteur.id }) }}" role="button"
    class="btn btn-primary"><i

@@ -2,10 +2,13 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Entity\Relation;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Form\RelationType;
 use AcMarche\Mercredi\Relation\Message\RelationDeleted;
 use AcMarche\Mercredi\Relation\Message\RelationUpdated;
+use AcMarche\Mercredi\Relation\RelationHandler;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,10 +26,38 @@ class RelationController extends AbstractController
      * @var RelationRepository
      */
     private $relationRepository;
+    /**
+     * @var RelationHandler
+     */
+    private $relationHandler;
 
-    public function __construct(RelationRepository $relationRepository)
+    public function __construct(RelationRepository $relationRepository, RelationHandler $relationHandler)
     {
         $this->relationRepository = $relationRepository;
+        $this->relationHandler = $relationHandler;
+    }
+
+    /**
+     * @Route("/attach/enfant/{id}", name="mercredi_admin_relation_attach_enfant", methods={"POST"})
+     */
+    public function attachEnfant(Request $request, Tuteur $tuteur): Response
+    {
+        if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
+            $enfantId = $request->request->get('enfantId');
+
+            try {
+                $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
+            } catch (\Exception $e) {
+                $this->addFlash('danger', $e->getMessage());
+
+                return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+            }
+            $this->dispatchMessage(new EnfantCreated($enfantId));
+        } else {
+            $this->addFlash('danger', 'Formulaire non valide');
+        }
+
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
     }
 
     /**
