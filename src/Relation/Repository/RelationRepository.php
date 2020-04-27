@@ -86,6 +86,31 @@ class RelationRepository extends ServiceEntityRepository
         return $this->findOneBy(['tuteur' => $tuteur, 'enfant' => $enfant]);
     }
 
+    /**
+     * @param Enfant $enfant
+     * @param Tuteur $tuteur
+     * @return Enfant[]
+     */
+    public function findFrateries(Enfant $enfant, Tuteur $tuteur)
+    {
+        $relations = $this->createQueryBuilder('relation')
+            ->leftJoin('relation.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->andWhere('relation.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('relation.enfant != :enfant')
+            ->setParameter('enfant', $enfant)
+            ->orderBy('enfant.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($relations as $relation) {
+            $enfants[] = $relation->getTuteur();
+        }
+
+        return $enfants;
+    }
+
     public function remove(Relation $relation)
     {
         $this->_em->remove($relation);

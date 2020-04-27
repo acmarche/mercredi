@@ -1,0 +1,26 @@
+<div class="btn-group">
+    {% if relations | length == 1 %}
+        {% set tuteur = relation.0.tuteur %}
+        <a href="{{ path('mercredi_admin_presence_new', { 'enfant': enfant.id, 'tuteur': tuteur.id }) }}" role="button"
+           class="btn btn-primary"><i
+                    class="fas fa-plus"></i> Ajouter une présence</a>
+    {% else %}
+        <div class="dropdown">
+            <a class="btn btn-primary dropdown-toggle"
+               href="#"
+               role="button" id="dropdownMenuLink"
+               data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-plus"></i> Ajouter une présence
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                {% for relation in relations %}
+                    {% set tuteur = relation.tuteur %}
+                    <a class="dropdown-item"
+                       href="{{ path('mercredi_admin_presence_new', { 'enfant': enfant.id, 'tuteur': tuteur.id }) }}">
+                        Sous la garde de <i>{{ tuteur }}</i></a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>

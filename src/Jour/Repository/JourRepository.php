@@ -3,7 +3,9 @@
 namespace AcMarche\Mercredi\Jour\Repository;
 
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Presence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,27 @@ class JourRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Jour::class);
+    }
+
+    /**
+     * @param $enfant
+     * @return QueryBuilder
+     */
+    public function getQbDaysNotRegisteredByEnfant($enfant): QueryBuilder
+    {
+        $joursRegistered = $this->getEntityManager()->getRepository(Presence::class)
+            ->findDaysRegisteredByEnfant($enfant);
+
+        $qb = $this->createQueryBuilder('jour');
+        if (count($joursRegistered) > 0) {
+            $qb
+                ->andWhere('jour.id NOT IN (:jours)')
+                ->setParameter('jours', $joursRegistered);
+        }
+        $qb->andwhere('jour.archived = 0')
+            ->orderBy('jour.date_jour', 'DESC');
+
+        return $qb;
     }
 
     public function remove(Jour $jour)
@@ -33,6 +56,5 @@ class JourRepository extends ServiceEntityRepository
     {
         $this->_em->persist($jour);
     }
-
 
 }

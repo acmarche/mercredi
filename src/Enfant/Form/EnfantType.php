@@ -5,6 +5,8 @@ namespace AcMarche\Mercredi\Enfant\Form;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Form\Type\OrdreType;
+use AcMarche\Mercredi\Form\Type\RemarqueType;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -66,9 +68,9 @@ class EnfantType extends AbstractType
             )
             ->add(
                 'ordre',
-                ChoiceType::class,
+                OrdreType::class,
                 [
-                    'choices' => MercrediConstantes::ORDRES,
+
                 ]
             )
             ->add(
@@ -84,7 +86,7 @@ class EnfantType extends AbstractType
                 'annee_scolaire',
                 ChoiceType::class,
                 [
-                    'choices' => array_combine(ScolaireData::ANNEES_SCOLAIRES,ScolaireData::ANNEES_SCOLAIRES),
+                    'choices' => array_combine(ScolaireData::ANNEES_SCOLAIRES, ScolaireData::ANNEES_SCOLAIRES),
                     'label' => 'Année scolaire',
                     'placeholder' => 'Choisissez son année scolaire',
                 ]
@@ -102,11 +104,7 @@ class EnfantType extends AbstractType
             )
             ->add(
                 'remarque',
-                TextareaType::class,
-                [
-                    'required' => false,
-                    'attr' => ['rows' => 4],
-                ]
+                RemarqueType::class
             )
             ->add(
                 'photoAutorisation',

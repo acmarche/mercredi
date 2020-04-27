@@ -23,6 +23,10 @@ class MercrediConstantes
         'Vert foncé' => '#51b749',
     ];
 
+    const ABSENT_PRESENT = 0;
+    const ABSENT_AVEC_CERTIF = 1;
+    const ABSENT_SANS_CERTIF = -1;
+
     public static function getCiviliteBySexe(?string $sexe): string
     {
         switch ($sexe) {

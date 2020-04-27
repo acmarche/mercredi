@@ -1,0 +1,19 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>Présence de {{ presence.enfant }} le {{ presence.jour.dateJour | format_date('full') }}</h3>
+        </div>
+        <div class="card-body">
+
+            {{ include('@AcMarcheMercrediAdmin/presence/_form.html.twig') }}
+            <br/>
+            <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,12 +1,18 @@
-<a href="{{ path('mercredi_admin_enfant_edit', { 'id': enfant.id }) }}" role="button"
-   class="btn btn-primary"><i
-            class="far fa-edit"></i> Editer</a>
+{% include '@AcMarcheMercrediAdmin/enfant/_btn_add_presence.html.twig' %}
 
-<a href="{{ path('mercredi_admin_enfant_index') }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
-    Retour à la Liste</a>
-
-<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
-    <i class="fas fa-trash"></i> Supprimer
-</button>
-
-<br /><br />
+<div class="btn-group">
+    <a href="{{ path('mercredi_admin_enfant_edit', { 'id': enfant.id }) }}" role="button"
+       class="btn btn-primary"><i
+                class="far fa-edit"></i> Editer</a>
+</div>
+<div class="btn-group">
+    <a href="{{ path('mercredi_admin_enfant_index') }}" class="btn btn-primary" role='button'><i
+                class="fas fa-list"></i>
+        Retour à la Liste</a>
+</div>
+<div class="btn-group">
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+        <i class="fas fa-trash"></i> Supprimer
+    </button>
+</div>
+<br/><br/>
