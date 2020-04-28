@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
+use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
@@ -29,10 +30,15 @@ class PresenceController extends AbstractController
      * @var PresenceRepository
      */
     private $presenceRepository;
+    /**
+     * @var PresenceHandler
+     */
+    private $presenceHandler;
 
-    public function __construct(PresenceRepository $presenceRepository)
+    public function __construct(PresenceRepository $presenceRepository, PresenceHandler $presenceHandler)
     {
         $this->presenceRepository = $presenceRepository;
+        $this->presenceHandler = $presenceHandler;
     }
 
     /**
@@ -62,13 +68,7 @@ class PresenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $days = $form->getData()->getJours();
 
-            foreach ($days as $jour) {
-                $presence = new Presence($tuteur, $enfant);
-                $presence->setJour($jour);
-                $this->presenceRepository->persist($presence);
-            }
-
-            $this->presenceRepository->flush();
+            $this->presenceHandler->handleNew($tuteur, $enfant, $days);
 
             $this->dispatchMessage(new PresenceCreated(1));
 

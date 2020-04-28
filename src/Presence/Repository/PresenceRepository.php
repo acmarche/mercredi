@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Presence\Repository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -48,6 +49,22 @@ class PresenceRepository extends ServiceEntityRepository
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
+    }
+
+    /**
+     * @param Enfant $enfant
+     * @param Jour $jour
+     * @return Presence
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function exist(Enfant $enfant, Jour $jour): ?Presence
+    {
+        return $this->createQueryBuilder('presence')
+            ->andWhere('presence.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->andWhere('presence.jour = :jour')
+            ->setParameter('jour', $jour)
+            ->getQuery()->getOneOrNullResult();
     }
 
     public function remove(Presence $presence)

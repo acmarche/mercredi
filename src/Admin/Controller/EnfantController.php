@@ -11,6 +11,8 @@ use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Relation;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,15 +38,27 @@ class EnfantController extends AbstractController
      * @var RelationRepository
      */
     private $relationRepository;
+    /**
+     * @var PresenceRepository
+     */
+    private $presenceRepository;
+    /**
+     * @var PresenceUtils
+     */
+    private $presenceUtils;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         EnfantHandler $enfantHandler,
-        RelationRepository $relationRepository
+        RelationRepository $relationRepository,
+        PresenceRepository $presenceRepository,
+        PresenceUtils $presenceUtils
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->enfantHandler = $enfantHandler;
         $this->relationRepository = $relationRepository;
+        $this->presenceRepository = $presenceRepository;
+        $this->presenceUtils = $presenceUtils;
     }
 
     /**
@@ -91,12 +105,15 @@ class EnfantController extends AbstractController
     public function show(Enfant $enfant): Response
     {
         $relations = $this->relationRepository->findByEnfant($enfant);
+        $data = $this->presenceRepository->findPresencesByEnfant($enfant);
+        $presencesGrouped = $this->presenceUtils->groupByYear($data);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/show.html.twig',
             [
                 'enfant' => $enfant,
                 'relations' => $relations,
+                'prensencesGrouped' => $presencesGrouped,
             ]
         );
     }
