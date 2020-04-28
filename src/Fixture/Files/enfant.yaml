@@ -1,0 +1,11 @@
+AcMarche\Mercredi\Entity\Enfant:
+  enfant0:
+    nom: Peret
+    prenom: Merlin
+    birthday: '<dateTimeBetween("-200 days", "now")>'
+    userAdd: administrator
+  enfant1:
+    nom: Peret
+    prenom: Peeter
+    birthday: '<dateTimeBetween("-200 days", "now")>'
+    userAdd: administrator
