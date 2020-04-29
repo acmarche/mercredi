@@ -1,6 +1,7 @@
 AcMarche\Mercredi\Entity\Ecole:
   ecole_{Aye, Waha}:
     nom: '<current()>'
-    telephone: <numberBetween(7,9)>
-    rue: <numberBetween(19,22)>
+    email: '<email()>'
+    telephone: '<numberBetween(7,9)>'
+    rue: 'Rue x, <numberBetween(1,50)>'
     localite: '<current()>'

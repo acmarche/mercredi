@@ -43,15 +43,21 @@ class UserAddSubscriber implements EventSubscriber
         $this->setUserAdd($entity);
     }
 
-    private function setUserAdd(object $enfant)
+    private function setUserAdd(object $entity)
     {
+        //for loading fixtures
+        if ($entity->getUserAdd()) {
+            return;
+        }
+
         $user = $this->security->getUser();
+
         if (!$user) {
             throw new \Exception('You must be login');
         }
 
         if ($user) {
-            $enfant->setUserAdd($user->getUsername());
+            $entity->setUserAdd($user->getUsername());
         }
     }
 

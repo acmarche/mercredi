@@ -1,6 +1,22 @@
 AcMarche\Mercredi\Entity\Tuteur:
-  ecole_{Aye, Waha}:
+  tuteur_{Peret, Dupont}:
     nom: '<current()>'
-    telephone: <numberBetween(7,9)>
-    rue: <numberBetween(19,22)>
-    localite: '<current()>'
+    prenom: '<firstName()>'
+    rue: '<streetName()>'
+    code_postal: '<postcode()>'
+    localite: '<city()>'
+    email: '<email()>'
+    telephone: '<phoneNumber()>'
+    telephone_bureau: '<phoneNumber()>'
+    gsm: '<phoneNumber()>'
+    sexe: shuffle('Féminin, Masculin')
+    userAdd: administrator
+    relation_conjoint: ''
+    nom_conjoint: '<firstName()>'
+    prenom_conjoint: '<lastName()>'
+    email_conjoint: '<email()>'
+    telephone_conjoint: '<phoneNumber()>'
+    telephone_bureau_conjoint: '<phoneNumber()>'
+    gsm_conjoint: '<phoneNumber()>'
+
+  #tuteur{1..10}:

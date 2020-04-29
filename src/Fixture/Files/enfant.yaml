@@ -2,10 +2,25 @@ AcMarche\Mercredi\Entity\Enfant:
   enfant0:
     nom: Peret
     prenom: Merlin
-    birthday: '<dateTimeBetween("-200 days", "now")>'
+    birthday: '<dateTimeBetween("-10 years", "-10 months")>'
+    annee_scolaire: 1P
+    sexe: Masculin
+    ordre: 1
+    ecole: '@ecole_Aye'
+    remarque: >
+      Il n'ose pas aller sur une grande toilette même avec une planche.
+      Petit pot uniquement.
+      SIESTE avec doudou
+    photo_autorisation: true
     userAdd: administrator
+    #photo_name: image($dir, $width, $height, 'cats')
   enfant1:
     nom: Peret
     prenom: Peeter
-    birthday: '<dateTimeBetween("-200 days", "now")>'
+    birthday: '<dateTimeBetween("-10 years", "-10 months")>'
+    annee_scolaire: 2M
+    sexe: Masculin
+    ordre: 2
+    ecole: '@ecole_Aye'
+    photo_autorisation: true
     userAdd: administrator

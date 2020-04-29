@@ -1,12 +1,12 @@
 AcMarche\Mercredi\Entity\User:
   user0:
-    email: administrateur@domain.be
-    nom: Jf
+    email: jf@marche.be
+    nom: Simpson
+    prenom: Jf
     password: homer
     roles: ["ROLE_MERCREDI_ADMIN"]
   user_{alice, bob, fred, raoul, joseph, kevin, charle, brenda, jules, lisa}:
     email: '<current()>\@domain.be'
-    nom: 'Adams'
+    nom: '<lastName()>'
     prenom: '<current()>'
     password: homer
-

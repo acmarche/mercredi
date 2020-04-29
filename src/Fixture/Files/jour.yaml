@@ -1,0 +1,7 @@
+AcMarche\Mercredi\Entity\Jour:
+  jour{1..10}:
+    date_jour: <dateTimeBetween('-2 years', '+ 6 months')>
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'

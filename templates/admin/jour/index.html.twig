@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     <a href="{{ path('mercredi_admin_jour_show', { 'id': jour.id }) }}">
-                        {{ jour.dateJour|format_date('full') }}
+                        {{ (jour.dateJour|format_date('full'))|title }}
                     </a>
                 </td>
                 <td>{{ jour.prix1 }} €</td>
