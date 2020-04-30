@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Admin\Controller;
 use AcMarche\Mercredi\Ecole\Message\EcoleCreated;
 use AcMarche\Mercredi\Ecole\Message\EcoleDeleted;
 use AcMarche\Mercredi\Ecole\Message\EcoleUpdated;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Ecole\Form\EcoleType;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
@@ -24,10 +25,15 @@ class EcoleController extends AbstractController
      * @var EcoleRepository
      */
     private $ecoleRepository;
+    /**
+     * @var EnfantRepository
+     */
+    private $enfantRepository;
 
-    public function __construct(EcoleRepository $ecoleRepository)
+    public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository)
     {
         $this->ecoleRepository = $ecoleRepository;
+        $this->enfantRepository = $enfantRepository;
     }
 
     /**
@@ -53,7 +59,6 @@ class EcoleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->ecoleRepository->persist($ecole);
             $this->ecoleRepository->flush();
 
@@ -115,6 +120,11 @@ class EcoleController extends AbstractController
     public function delete(Request $request, Ecole $ecole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
+            if (count($this->enfantRepository->findBy(['ecole' => $ecole])) > 0) {
+                $this->addFlash('danger', 'L\'école contient des enfants et ne peut être supprimée');
+
+                return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
+            }
             $ecoleId = $ecole->getId();
             $this->ecoleRepository->remove($ecole);
             $this->ecoleRepository->flush();

@@ -1,0 +1,13 @@
+mercredi_front:
+  resource: ../../src/AcMarche/Mercredi/src/Front/Controller/
+  type: annotation
+
+mercredi_admin:
+  resource: ../../src/AcMarche/Mercredi/src/Admin/Controller/
+  type: annotation
+  prefix: admin/
+
+mercredi_parent:
+  resource: ../../src/AcMarche/Mercredi/src/Parent/Controller/
+  type: annotation
+  prefix: parent/

@@ -27,7 +27,7 @@ class ReductionDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(ReductionDeleted $reductionDeleted)
     {
-        $this->flashBag->add('success', "La réduction a bien été suppriméé");
+        $this->flashBag->add('success', "La réduction a bien été supprimée");
     }
 
 }

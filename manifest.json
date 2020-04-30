@@ -1,0 +1,8 @@
+{
+  "bundles": {
+    "AcMarche\\Mercredi\\AcMarcheMercrediBundle::class": ["all"]
+  },
+  "copy-from-recipe": {
+    "config/routes": "%CONFIG_DIR%/routes"
+  }
+}

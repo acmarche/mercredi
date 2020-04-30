@@ -27,7 +27,7 @@ class EcoleDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(EcoleDeleted $ecoleDeleted)
     {
-        $this->flashBag->add('success', "L'école a bien été suppriméé");
+        $this->flashBag->add('success', "L'école a bien été supprimée");
     }
 
 }

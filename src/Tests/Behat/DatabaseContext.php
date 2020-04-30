@@ -32,6 +32,7 @@ class DatabaseContext implements Context
         $files =
             [
                 $this->pathFixtures.'ecole.yaml',
+                $this->pathFixtures.'organisation.yaml',
                 $this->pathFixtures.'enfant.yaml',
                 $this->pathFixtures.'tuteur.yaml',
                 $this->pathFixtures.'jour.yaml',

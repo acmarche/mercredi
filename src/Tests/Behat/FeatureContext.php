@@ -24,11 +24,11 @@ class FeatureContext extends RawMinkContext
      */
     public function iAmLoggedInAsAnAdmin(): void
     {
-        $this->visitPath('/fr/login');
+        $this->visitPath('/login');
         //var_dump($this->getSession()->getPage()->getContent());
-        $this->fillField('username', 'grr@domain.be');
+        $this->fillField('username', 'jf@marche.be');
         $this->fillField('password', 'homer');
-        $this->pressButton('S\'identifier');
+        $this->pressButton('Me connecter');
     }
 
     /**

@@ -27,7 +27,7 @@ class SanteQuestionDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(SanteQuestionDeleted $santeQuestionDeleted)
     {
-        $this->flashBag->add('success', "La question a bien été suppriméé");
+        $this->flashBag->add('success', "La question a bien été supprimée");
     }
 
 }

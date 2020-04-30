@@ -6,28 +6,14 @@ Feature: Front view
   Scenario: Homepage
     Given I am on homepage
     Then the response status code should be 200
-    Then I should see "Aujourd'hui"
-    And I should see "Mercredi"
+    Then I should see "Front du Mercredi"
 
-  Scenario: Vue par mois
+  Scenario: Je me loggue
     Given I am on homepage
     Then the response status code should be 200
-    And I should see "Réunion a ce jour"
-    Then I follow "Réunion a ce jour"
-    Then I should see "Location"
-
-  Scenario: Vue par semaine
-    Given I am on homepage
-    When I follow this week
-    Then the response status code should be 200
-    And I should see "Réunion a ce jour"
-    Then I follow "Réunion a ce jour"
-    Then I should see "Location"
-
-  Scenario: Vue par jour
-    Given I am on homepage
-    Then I follow this day
-    Then the response status code should be 200
-    And I should see "Réunion a ce jour"
-    Then I follow "Réunion a ce jour"
-    Then I should see "Location"
+    Then I follow "Admin"
+    Then I should see "Authentification"
+    And I fill in "username" with "jf@marche.be"
+    And I fill in "password" with "homer"
+    And I press "Me connecter"
+    Then I should see "Admin mercredi"

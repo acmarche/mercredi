@@ -27,7 +27,7 @@ class JourDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(JourDeleted $jourDeleted)
     {
-        $this->flashBag->add('success', "L'école a bien été suppriméé");
+        $this->flashBag->add('success', "L'école a bien été supprimée");
     }
 
 }

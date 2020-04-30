@@ -27,7 +27,7 @@ class NoteDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(NoteDeleted $noteDeleted)
     {
-        $this->flashBag->add('success', "L'école a bien été suppriméé");
+        $this->flashBag->add('success', "L'école a bien été supprimée");
     }
 
 }

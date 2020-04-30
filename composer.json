@@ -1,8 +1,9 @@
 {
   "name": "acmarche/mercredi",
   "description": "Gestion des gardes des mercredi et jours fériés, des petites plaines(carnaval, paques...)",
-  "homepage": "https://github.com/acmarche/mercredi",
+  "homepage": "https://github.com/acmarche/mercredi.git",
   "license": "MIT",
+  "type": "symfony-bundle",
   "authors": [
     {
       "name": "Jean-François Sénéchal",
@@ -11,13 +12,17 @@
       "role": "Developer"
     }
   ],
-  "type": "symfony-bundle",
   "require": {
     "php": "^7.3"
   },
   "autoload": {
     "psr-4": {
       "AcMarche\\Mercredi\\": "src/AcMarche/Mercredi/src"
+    }
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": "true"
     }
   }
 }

@@ -76,6 +76,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
      */
     private $ecole;
+
     /**
      * @var Tuteur
      */
@@ -175,6 +176,4 @@ class Enfant implements SluggableInterface, TimestampableInterface
     {
         $this->ecole = $ecole;
     }
-
-
 }

@@ -76,7 +76,7 @@ class CreateUserCommand extends Command
 
         $this->userRepository->insert($user);
 
-        $io->success('User créé.');
+        $io->success('User crée.');
 
         return 0;
     }

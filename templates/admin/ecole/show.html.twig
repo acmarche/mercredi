@@ -9,23 +9,30 @@
         <div class="card-body">
 
             {% include '@AcMarcheMercrediAdmin/ecole/_actions.html.twig' %}
-
+            <i class="fas fa-map-marked-alt"></i>
+            {{ ecole.rue }} <br/>
+            {{ ecole.codepostal }} {{ ecole.localite }}
             <br/>
-            <table class="table table-bordered table-hover">
+            {% if ecole.remarque %}
+                <p class="text-muted">
+                    {{ ecole.remarque | nl2br }}
+                </p>
+            {% endif %}
+            <br/>
+            <table class='table table-bordered table-hover table-condensed'>
                 <tbody>
                 <tr>
-                    <th>né le</th>
-                    <td>
-
-                    </td>
+                    <th><span class="fas fa-phone"></span> Téléphone</th>
+                    <td>{{ ecole.telephone }}</td>
                 </tr>
                 <tr>
-                    <th>Email</th>
-                    <td>
-
-                    </td>
+                    <th><span class="fas fa-mobile-alt"></span> Gsm</th>
+                    <td>{{ ecole.gsm }}</td>
                 </tr>
-                </tbody>
+                <tr>
+                    <th><span class="far fa-envelope"></span> Email</th>
+                    <td><a href='mailto:{{ ecole.email }}'>{{ ecole.email }}</a></td>
+                </tr>
             </table>
         </div>
     </div>

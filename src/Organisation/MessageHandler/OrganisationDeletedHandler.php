@@ -27,7 +27,7 @@ class OrganisationDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(OrganisationDeleted $organisationDeleted)
     {
-        $this->flashBag->add('success', "L'organisation a bien été suppriméé");
+        $this->flashBag->add('success', "L'organisation a bien été supprimée");
     }
 
 }
