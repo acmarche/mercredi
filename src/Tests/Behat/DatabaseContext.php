@@ -34,6 +34,8 @@ class DatabaseContext implements Context
                 $this->pathFixtures.'ecole.yaml',
                 $this->pathFixtures.'enfant.yaml',
                 $this->pathFixtures.'tuteur.yaml',
+                $this->pathFixtures.'jour.yaml',
+                $this->pathFixtures.'reduction.yaml',
                 $this->pathFixtures.'user.yaml',
             ];
         $this->loader->load($files);
