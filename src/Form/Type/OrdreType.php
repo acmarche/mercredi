@@ -15,7 +15,7 @@ class OrdreType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'required' => false,
+                'required' => true,
                 'choices' => MercrediConstantes::ORDRES,
             ]
         );

@@ -7,33 +7,42 @@ Feature: Gestion des enfants
 
   Background:
     Given I am logged in as an admin
-    Given I am on "/admin/enfant/"
-    Then I should see "Liste des enfants"
+    Given I am on "/admin/tuteur/"
+    Then I should see "Liste des tuteurs"
 
   Scenario: Ajout une enfant
-    Then I follow "Ajouter un enfant"
-    And I fill in "enfant[nom]" with "Springfield"
-    And I fill in "enfant[rue]" with "Rue des Armoiries"
-    And I fill in "enfant[code_postal]" with "6900"
-    And I fill in "enfant[localite]" with "Hargimont"
+    Then I follow "Peret"
+    Then I follow "ajouter un nouvel enfant"
+    Then I should see "Nouvel enfant"
+    And I fill in "enfant[nom]" with "Funes"
+    And I fill in "enfant[prenom]" with "Jules"
+    And I fill in "enfant[birthday]" with "2015-12-06"
+    And I select "Waha" from "enfant[ecole]"
+    And I select "3M" from "enfant[annee_scolaire]"
     And I press "Sauvegarder"
-    Then I should see "Springfield"
-    Then I should see "Rue des Armoiries"
+    Then I should see "FUNES Jules"
+    Then I should see "Waha"
 
   Scenario: Modifier une enfant
-    Then I follow "Aye"
+    Given I am on "/admin/enfant/"
+    Then I should see "Liste des enfants"
+    Then I follow "Peret"
     Then I follow "Editer"
-    And I fill in "enfant[telephone]" with "084 55 66 99"
+    And I fill in "enfant[numero_national]" with "781004199"
     And I press "Sauvegarder"
-    Then I should see "084 55 66 99"
+    Then I should see "781004199"
 
   Scenario: Supprimer un enfant sans tuteur
-    Then I follow "Waha"
+    Given I am on "/admin/enfant/"
+    Then I should see "Liste des enfants"
+    Then I follow "Gauthie"
     Then I press "Supprimer l'enfant"
    # Then print last response
-    Then I should see "L'enfant a bien été supprimée"
+    Then I should see "L'enfant a bien été supprimé"
 
   Scenario: Supprimer un enfant avec tuteur
-    Then I follow "Aye"
+    Given I am on "/admin/enfant/"
+    Then I should see "Liste des enfants"
+    Then I follow "Peret"
     Then I press "Supprimer l'enfant"
-    Then I should see "L'enfant contient des enfants et ne peut être supprimée"
+    Then I should see "L'enfant a bien été supprimé"

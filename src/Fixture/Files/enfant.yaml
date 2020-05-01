@@ -15,7 +15,7 @@ AcMarche\Mercredi\Entity\Enfant:
     userAdd: administrator
     #photo_name: image($dir, $width, $height, 'cats')
   enfant_peeter:
-    nom: Peret
+    nom: Gauthie
     prenom: Peeter
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
     annee_scolaire: 2M

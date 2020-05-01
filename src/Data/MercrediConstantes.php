@@ -7,7 +7,7 @@ namespace AcMarche\Mercredi\Data;
 class MercrediConstantes
 {
     const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
-    const ORDRES = [1 => 1, 2 => 2, 'Suivant' => 3];
+    const ORDRES = ['' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
     const COLORS = [
         'Bleu' => '#a4bdfc',
         'Bleu foncé' => '#5484ed',
