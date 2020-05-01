@@ -28,7 +28,7 @@ class JourCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(JourCreated $jourCreated)
     {
-        $this->flashBag->add('success', "L'école a bien été ajoutée");
+        $this->flashBag->add('success', "La date a bien été ajoutée");
     }
 
 }

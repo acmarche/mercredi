@@ -5,3 +5,21 @@ AcMarche\Mercredi\Entity\Jour:
     prix1: '<randomFloat(2, 2, 7)>'
     prix2: '<randomFloat(2, 2, 7)>'
     prix3: '<randomFloat(2, 2, 7)>'
+  jour_2020_09_02:
+    date_jour: '<carbonDateTime(2020,9,2,9,0)>'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
+  jour_2020_09_09:
+    date_jour: '<carbonDateTime(2020,9,9,9,0)>'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
+  jour_2020_09_16:
+    date_jour: '<carbonDateTime(2020,9,16,9,0)>'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
