@@ -1,5 +1,9 @@
 <div class="btn-group">
-    {% if relations | length == 1 %}
+    {% if relations | length == 0 %}
+     <button disabled="disabled" type="button" role="button" title="Aucun tuteur"
+           class="btn btn-primary"><i
+                    class="fas fa-plus"></i> Ajouter une présence</button>
+    {% elseif relations | length == 1 %}
         {% set tuteur = relations|first.tuteur %}
         <a href="{{ path('mercredi_admin_presence_new', { 'enfant': enfant.id, 'tuteur': tuteur.id }) }}" role="button"
            class="btn btn-primary"><i

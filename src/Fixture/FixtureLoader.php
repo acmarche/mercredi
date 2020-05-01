@@ -42,6 +42,7 @@ class FixtureLoader
             $path.'user.yaml',
             $path.'jour.yaml',
             $path.'organisation.yaml',
+            $path.'presence.yaml',
             $path.'reduction.yaml',
         ];
 

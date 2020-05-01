@@ -27,8 +27,7 @@ class PresenceHandler
             if ($this->presenceRepository->exist($enfant, $jour)) {
                 continue;
             }
-            $presence = new Presence($tuteur, $enfant);
-            $presence->setJour($jour);
+            $presence = new Presence($tuteur, $enfant, $jour);
             $this->presenceRepository->persist($presence);
         }
 

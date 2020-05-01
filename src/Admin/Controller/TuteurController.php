@@ -118,6 +118,7 @@ class TuteurController extends AbstractController
     }
 
     /**
+     * //todo que faire si presence
      * @Route("/{id}", name="mercredi_admin_tuteur_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Tuteur $tuteur): Response

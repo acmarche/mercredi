@@ -1,0 +1,4 @@
+AcMarche\Mercredi\Entity\Presence:
+  presence_merlin_16_09:
+    __construct: ['@tuteur_Peret','@enfant_merlin', '@jour_2020_09_16']
+    userAdd: 'administrateur'

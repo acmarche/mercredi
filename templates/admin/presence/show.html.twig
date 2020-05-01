@@ -10,8 +10,40 @@
 
             {% include '@AcMarcheMercrediAdmin/presence/_actions.html.twig' %}
 
+            <table class="table table-bordered">
+                <tr>
+                    <th>Sous la garde de</th>
+                    <td>
+                        <a href="{{ path('mercredi_admin_tuteur_show', {'id': presence.tuteur.id}) }}">
+                            {{ presence.tuteur }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Absent</th>
+                    <td>{{ presence.absent|mercredi_absence_text }}</td>
+                </tr>
+                <tr>
+                    <th>Réduction</th>
+                    <td>{{ presence.reduction }} </td>
+                </tr>
+                <tr>
+                    <th>Ordre</th>
+                    <td>{{ presence.ordre }} </td>
+                </tr>
+            </table>
+
+            {% if presence.remarque %}
+                <p class="text-muted">
+                    {{ presence.remarque | nl2br }}
+                </p>
+            {% endif %}
             <br/>
 
+        </div>
+        <div class="card-footer text-muted mt-3">
+            Crée le {{ presence.createdAt | format_date('full') }} par {{ presence.userAdd }}. Mis à jour
+            le {{ presence.updatedAt | format_date('full') }}
         </div>
     </div>
 

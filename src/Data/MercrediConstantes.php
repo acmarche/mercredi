@@ -27,6 +27,29 @@ class MercrediConstantes
     const ABSENT_AVEC_CERTIF = 1;
     const ABSENT_SANS_CERTIF = -1;
 
+    public static function getListAbsences()
+    {
+        return [
+            0 => 'Non',
+            1 => 'Oui avec certificat',
+            -1 => 'Oui sans certificat',
+        ];
+    }
+
+    public static function getAbsenceTxt($number = false)
+    {
+        $absences = self::getListAbsences();
+        //attention si number = 0
+        if (false !== $number) {
+            return isset($absences[$number]) ? $absences[$number] : $number;
+        }
+
+        /*
+         * inverse clef valeur pour le form
+         */
+        return array_flip($absences);
+    }
+
     public static function getCiviliteBySexe(?string $sexe): string
     {
         switch ($sexe) {

@@ -61,18 +61,18 @@ class Presence implements TimestampableInterface
      */
     protected $absent = 0;
 
-    public function __construct(Tuteur $tuteur, Enfant $enfant)
+    public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
     {
         $this->tuteur = $tuteur;
         $this->enfant = $enfant;
+        $this->jour = $jour;
     }
 
     public function __toString()
     {
         $date_jour = $this->jour->getDateJour();
 
-        return '';
+        return 'presence to string';
     }
-
 
 }

@@ -46,4 +46,3 @@ Feature: Gestion des tuteurs
     Given I am on "/admin/checkup/orphelin/"
     Then I should see "Les enfants sans tuteur"
     Then I should see "Merlin"
-

@@ -10,7 +10,9 @@
     {% for presence in presences %}
         <tr>
             <td>
+            <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
                 {{ (presence.jour.dateJour | format_date('full'))|capitalize }}
+            </a>
             </td>
             <td>
                 {{ presence.tuteur }}
