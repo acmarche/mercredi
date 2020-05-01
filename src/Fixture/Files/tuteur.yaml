@@ -1,5 +1,5 @@
 AcMarche\Mercredi\Entity\Tuteur:
-  tuteur_{Peret, Dupont}:
+  tuteur_{Peret, Dupont, Fernandel, Gaspard}:
     nom: '<current()>'
     prenom: '<firstName()>'
     rue: '<streetName()>'
@@ -18,5 +18,23 @@ AcMarche\Mercredi\Entity\Tuteur:
     telephone_conjoint: '<phoneNumber()>'
     telephone_bureau_conjoint: '<phoneNumber()>'
     gsm_conjoint: '<phoneNumber()>'
-
+  tuteur_{Gaspard}:
+    nom: '<current()>'
+    prenom: 'Aurore'
+    rue: '<streetName()>'
+    code_postal: '<postcode()>'
+    localite: '<city()>'
+    email: '<email()>'
+    telephone: '<phoneNumber()>'
+    telephone_bureau: '<phoneNumber()>'
+    gsm: '<phoneNumber()>'
+    sexe: shuffle('Féminin, Masculin')
+    userAdd: administrator
+    relation_conjoint: ''
+    nom_conjoint: '<firstName()>'
+    prenom_conjoint: '<lastName()>'
+    email_conjoint: '<email()>'
+    telephone_conjoint: '<phoneNumber()>'
+    telephone_bureau_conjoint: '<phoneNumber()>'
+    gsm_conjoint: '<phoneNumber()>'
   #tuteur{1..10}:

@@ -1,5 +1,5 @@
 AcMarche\Mercredi\Entity\Ecole:
-  ecole_{Aye, Waha}:
+  ecole_{Aye, Waha, Champlon, Hollogne}:
     nom: '<current()>'
     email: '<email()>'
     telephone: '<numberBetween(7,9)>'

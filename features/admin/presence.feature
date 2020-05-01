@@ -18,6 +18,16 @@ Feature: Gestion des présences
     Then I should see "La présence a bien été ajoutée"
     Then I should see "Mercredi 2 septembre 2020"
 
+  Scenario: Ajout une présence 2 tuteurs
+    Then I follow "Fernandel"
+    Then I follow "Sous la garde de GASPARD Aurore"
+    Then I should see "Nouvelle présence pour FERNANDEL Yves"
+    When I select "02-09-2020" from "presence_new_jours"
+    When I additionally select "16-09-2020" from "presence_new_jours"
+    And I press "Sauvegarder"
+    Then I should see "La présence a bien été ajoutée"
+    Then I should see "Mercredi 2 septembre 2020"
+
   Scenario: J'édite une présence
     Then I follow "Peret"
     Then I follow "Mercredi 16 septembre 2020"

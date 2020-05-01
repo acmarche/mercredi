@@ -3,3 +3,11 @@ AcMarche\Mercredi\Entity\Relation:
     __construct: ['@tuteur_Peret','@enfant_merlin']
     type: 'Papa'
     ordre: '0'
+  relation_divorce1:
+    __construct: ['@tuteur_Fernandel','@enfant_divorce']
+    type: 'Papa'
+    ordre: '0'
+  relation_divorce2:
+    __construct: ['@tuteur_Gaspard','@enfant_divorce']
+    type: 'Maman'
+    ordre: '0'
