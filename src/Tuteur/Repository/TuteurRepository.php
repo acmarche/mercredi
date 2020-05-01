@@ -34,6 +34,18 @@ class TuteurRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    /**
+     * @return Tuteur[]
+     */
+    public function findSansEnfants()
+    {
+        $qb = $this->createQueryBuilder('tuteur')
+            ->andWhere('tuteur.relations IS EMPTY')
+            ->getQuery()->getResult();
+
+        return $qb;
+    }
+
     public function remove(Tuteur $tuteur)
     {
         $this->_em->remove($tuteur);

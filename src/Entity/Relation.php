@@ -33,7 +33,7 @@ class Relation
 
     /**
      * @var Enfant
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      * */
@@ -41,7 +41,7 @@ class Relation
 
     /**
      * @var Tuteur
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      * */

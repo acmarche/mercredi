@@ -2,44 +2,27 @@
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
+use AcMarche\Mercredi\Fixture\FixtureLoader;
 use Behat\Behat\Context\Context;
-use Fidry\AliceDataFixtures\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DatabaseContext implements Context
 {
     /**
-     * @var LoaderInterface
+     * @var FixtureLoader
      */
-    private $loader;
-    /**
-     * @var string
-     */
-    private $pathFixtures;
+    private $fixtureLoader;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(FixtureLoader $fixtureLoader)
     {
-        $path = $container->getParameter('kernel.project_dir');
-        $this->loader = $container->get('fidry_alice_data_fixtures.loader.doctrine');
-        $this->pathFixtures = $path.'/src/AcMarche/Mercredi/src/Fixture/Files/';
+        $this->fixtureLoader = $fixtureLoader;
     }
 
     /**
      * @BeforeScenario
      */
-    public function clearRepositories(): void
+    public function loadFixtures(): void
     {
-        $files =
-            [
-                $this->pathFixtures.'ecole.yaml',
-                $this->pathFixtures.'organisation.yaml',
-                $this->pathFixtures.'enfant.yaml',
-                $this->pathFixtures.'tuteur.yaml',
-                $this->pathFixtures.'jour.yaml',
-                $this->pathFixtures.'reduction.yaml',
-                $this->pathFixtures.'user.yaml',
-            ];
-        $this->loader->load($files);
+        $this->fixtureLoader->load();
     }
 
     /**

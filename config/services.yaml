@@ -24,3 +24,7 @@ services:
 
     AcMarche\Mercredi\Namer\DirectoryNamer:
         public: true
+
+    Fidry\AliceDataFixtures\LoaderInterface:
+        #alias: 'fidry_alice_data_fixtures.doctrine.persister_loader' //ne purge pas
+        alias: 'fidry_alice_data_fixtures.loader.doctrine'

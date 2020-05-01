@@ -1,5 +1,5 @@
 AcMarche\Mercredi\Entity\Enfant:
-  enfant0:
+  enfant_merlin:
     nom: Peret
     prenom: Merlin
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
@@ -14,7 +14,7 @@ AcMarche\Mercredi\Entity\Enfant:
     photo_autorisation: true
     userAdd: administrator
     #photo_name: image($dir, $width, $height, 'cats')
-  enfant1:
+  enfant_peeter:
     nom: Peret
     prenom: Peeter
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'

@@ -49,4 +49,16 @@ class EnfantRepository extends ServiceEntityRepository
         $this->_em->persist($enfant);
     }
 
+    /**
+     * @return Enfant[]
+     */
+    public function findOrphelins()
+    {
+        $qb = $this->createQueryBuilder('enfant')
+            ->andWhere('enfant.relations IS EMPTY')
+            ->getQuery()->getResult();
+
+        return $qb;
+    }
+
 }

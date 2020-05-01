@@ -3,14 +3,14 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
+use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
+use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
+use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
+use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use Symfony\Component\Validator\Constraints as Assert;
-use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
-use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
-use AcMarche\Mercredi\Entity\Traits\IdTrait;
-use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\UserAddTrait;
@@ -19,6 +19,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -39,8 +40,15 @@ class Enfant implements SluggableInterface, TimestampableInterface
         AccompagnateursTrait,
         UserAddTrait,
         SluggableTrait,
+        EcoleTrait,
         ArchiveTrait,
         TimestampableTrait;
+
+    /**
+     * @var Relation[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="enfant", cascade={"remove"})
+     */
+    private $relations;
 
     /**
      * @var string|null
@@ -76,11 +84,6 @@ class Enfant implements SluggableInterface, TimestampableInterface
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
      */
     private $ecole;
-
-    /**
-     * @var Tuteur
-     */
-    private $parent;
 
     public function getSluggableFields(): array
     {
@@ -159,21 +162,5 @@ class Enfant implements SluggableInterface, TimestampableInterface
     public function setGroupeScolaire(?string $groupe_scolaire): void
     {
         $this->groupe_scolaire = $groupe_scolaire;
-    }
-
-    /**
-     * @return Ecole|null
-     */
-    public function getEcole(): ?Ecole
-    {
-        return $this->ecole;
-    }
-
-    /**
-     * @param Ecole|null $ecole
-     */
-    public function setEcole(?Ecole $ecole): void
-    {
-        $this->ecole = $ecole;
     }
 }

@@ -4,19 +4,18 @@ Feature: Gestion de l' organisation
   Je supprime l'organisation
   Et j' ajoute l'organisation "Le paradis des enfants"
 
-  Scenario: Modifier une organisation
+  Background:
     Given I am logged in as an admin
     Given I am on "/admin/organisation/"
     Then I should see "Espace enfance jeunesse"
+
+  Scenario: Modifier une organisation
     Then I follow "Editer"
     And I fill in "organisation[telephone]" with "084 55 66 99"
     And I press "Sauvegarder"
     Then I should see "084 55 66 99"
 
   Scenario: Supprimer et ajouter une organisation
-    Given I am logged in as an admin
-    Given I am on "/admin/organisation/"
-    Then I should see "Espace enfance jeunesse"
     Then I press "Supprimer l'organisation"
     #Then print last response
     Then I should see "L'organisation a bien été supprimée"
