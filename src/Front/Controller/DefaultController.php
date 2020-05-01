@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Front\Controller;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +16,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DefaultController extends AbstractController
 {
+    /**
+     * @var OrganisationRepository
+     */
+    private $organisationRepository;
 
-
-    public function __construct()
+    public function __construct(OrganisationRepository $organisationRepository)
     {
-
+        $this->organisationRepository = $organisationRepository;
     }
-
 
     /**
      * @Route("/", name="mercredi_home")
@@ -36,34 +39,15 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/books/{id}", name="mercredi_push")
-     */
-    public function book(Request $request, Enfant $article)
-    {
-        if (isset($request->request->statuts)) {
-            $data = json_decode($request->request->statuts);
-            $article->setStatus($data);
-            $this->articleRepository->flush();
-        }
-
-
-        return $this->render(
-            'publish/book.html.twig',
-            [
-                'article' => $article,
-            ]
-        );
-    }
-
-    /**
-     * @Route("/", name="publish")
+     * @Route("/showorganisation", name="mercredi_show_organisation")
      */
     public function index()
     {
+        $organisation = $this->organisationRepository->getOrganisation();
         return $this->render(
-            'publish/index.html.twig',
+            '@AcMarcheMercredi/default/_organisation.html.twig',
             [
-                'controller_name' => 'PublishController',
+                'organisation' => $organisation,
             ]
         );
     }

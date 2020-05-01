@@ -1,0 +1,41 @@
+{% block body %}
+
+    {% if organisation is not null %}
+
+        {% if organisation.photoName %}
+            <img class="img-thumbnail"
+                 src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-4">
+                <i class="fas fa-map-marked-alt"></i>
+                {{ organisation.rue }} <br/>
+                {{ organisation.codePostal }}
+                {{ organisation.localite }}<br/>
+            </div>
+            <div class="col-4">
+                {% if organisation.email %}
+                    <i class="far fa-envelope"></i> {{ organisation.email }}<br/>
+                {% endif %}
+
+                {% if organisation.siteWeb %}
+                    <i class="fas fa-globe-europe"></i> {{ organisation.siteWeb }}<br/>
+                {% endif %}
+
+                {% if organisation.gsm %}
+                    <i class="fas fa-mobile-alt"></i> {{ organisation.gsm }}<br/>
+                {% endif %}
+
+                {% if organisation.telephone or organisation.telephoneBureau %}
+                    <i class="fas fa-phone-alt"></i> {{ organisation.telephone }} {{ organisation.telephoneBureau }}
+                    <br/>
+                {% endif %}
+
+            </div>
+            <div class="col-4">
+
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
