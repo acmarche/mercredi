@@ -4,11 +4,13 @@ namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Search\SearchHelper;
+use AcMarche\Mercredi\Tuteur\Form\SearchTuteurType;
 use AcMarche\Mercredi\Tuteur\Form\TuteurType;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Message\TuteurCreated;
 use AcMarche\Mercredi\Tuteur\Message\TuteurDeleted;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,22 +31,44 @@ class TuteurController extends AbstractController
      * @var RelationRepository
      */
     private $relationRepository;
+    /**
+     * @var SearchHelper
+     */
+    private $searchHelper;
 
-    public function __construct(TuteurRepository $tuteurRepository, RelationRepository $relationRepository)
-    {
+    public function __construct(
+        TuteurRepository $tuteurRepository,
+        RelationRepository $relationRepository,
+        SearchHelper $searchHelper
+    ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
+        $this->searchHelper = $searchHelper;
     }
 
     /**
-     * @Route("/", name="mercredi_admin_tuteur_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_tuteur_index", methods={"GET","POST"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $form = $this->createForm(SearchTuteurType::class);
+        $form->handleRequest($request);
+        $search = false;
+        $tuteurs = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $this->searchHelper->saveSearch('enfant_list', $data);
+            $search = true;
+            $tuteurs = $this->tuteurRepository->search($data['nom']);
+        }
+
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/index.html.twig',
             [
-                'tuteurs' => $this->tuteurRepository->findAll(),
+                'tuteurs' => $tuteurs,
+                'form' => $form->createView(),
+                'search' => $search,
             ]
         );
     }

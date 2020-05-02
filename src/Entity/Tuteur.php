@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
@@ -35,6 +36,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
         TelephonieTrait,
         SluggableTrait,
         ArchiveTrait,
+        RelationTrait,
         TimestampableTrait,
         UserAddTrait;
 
@@ -52,6 +54,11 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
+    }
+
+    public function __construct()
+    {
+        $this->relations = [];
     }
 
     public function __toString()

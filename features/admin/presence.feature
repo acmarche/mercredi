@@ -1,8 +1,9 @@
 Feature: Gestion des présences
-  Enfant avec un tuteur
-  Enfant sans tuteur
-  Enfant avec 2 tuteurs
+  Ajouter une présence avec un tuteur
+  Ajouter une présence sans tuteur
+  Ajouter une présence avec 2 tuteurs
   Editer une présence
+  Supprimer une présence
 
   Background:
     Given I am logged in as an admin
@@ -37,3 +38,10 @@ Feature: Gestion des présences
     And I press "Sauvegarder"
     Then I should see "La présence a bien été modifiée"
     Then I should see "Oui avec certificat"
+
+  Scenario: Je supprime une présence
+    Then I follow "Peret"
+    Then I follow "Mercredi 16 septembre 2020"
+    Then I should see "Détail de la présence de PERET Merlin"
+    Then I press "Supprimer la présence"
+    Then I should see "La présence a bien été supprimée"

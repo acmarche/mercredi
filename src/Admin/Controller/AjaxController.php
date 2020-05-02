@@ -62,7 +62,7 @@ class AjaxController extends AbstractController
     {
         $enfants = $data = [];
         if ($keyword) {
-            $enfants = $this->enfantRepository->search($keyword);
+            $enfants = $this->enfantRepository->findByName($keyword);
         }
 
         $i = 0;

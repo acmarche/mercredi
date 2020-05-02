@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Repository;
 
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -23,15 +24,63 @@ class EnfantRepository extends ServiceEntityRepository
      * @param $keyword
      * @return Enfant[]
      */
-    public function search($keyword): array
+    public function findByName(string $keyword): array
     {
-        $qb = $this->createQueryBuilder('enfant')
+        return $this->createQueryBuilder('enfant')
             ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%')
             ->addOrderBy('enfant.nom', 'ASC')
             ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Enfant[]
+     */
+    public function findOrphelins()
+    {
+        $qb = $this->createQueryBuilder('enfant')
+            ->andWhere('enfant.relations IS EMPTY')
+            ->getQuery()->getResult();
 
         return $qb;
+    }
+
+    /**
+     * @param string|null $nom
+     * @param Ecole|null $ecole
+     * @param string|null $annee_scolaire
+     * @return Enfant[]
+     */
+    public function search(?string $nom, ?Ecole $ecole, ?string $annee_scolaire, bool $archive = false): array
+    {
+        $qb = $this->createQueryBuilder('enfant')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->addSelect('ecole','relations');
+
+        if ($nom) {
+            $qb->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
+                ->setParameter('keyword', '%'.$nom.'%');
+        }
+
+        if ($ecole) {
+            $qb->andWhere('ecole = :ecole')
+                ->setParameter('ecole', $ecole);
+        }
+
+        if ($annee_scolaire) {
+            $qb->andWhere('enfant.annee_scolaire = :annee')
+                ->setParameter('annee', $annee_scolaire);
+        }
+
+        if ($archive) {
+            $qb->andWhere('enfant.archived = 1');
+        } else {
+            $qb->andWhere('enfant.archived = 0');
+        }
+
+        return $qb->addOrderBy('enfant.nom', 'ASC')
+            ->getQuery()->getResult();
     }
 
     public function remove(Enfant $enfant)
@@ -48,17 +97,4 @@ class EnfantRepository extends ServiceEntityRepository
     {
         $this->_em->persist($enfant);
     }
-
-    /**
-     * @return Enfant[]
-     */
-    public function findOrphelins()
-    {
-        $qb = $this->createQueryBuilder('enfant')
-            ->andWhere('enfant.relations IS EMPTY')
-            ->getQuery()->getResult();
-
-        return $qb;
-    }
-
 }

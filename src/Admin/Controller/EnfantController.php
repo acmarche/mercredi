@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Enfant\Form\SearchEnfantType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
 use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Enfant\Message\EnfantDeleted;
@@ -14,6 +15,7 @@ use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,30 +48,51 @@ class EnfantController extends AbstractController
      * @var PresenceUtils
      */
     private $presenceUtils;
+    /**
+     * @var SearchHelper
+     */
+    private $searchHelper;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         EnfantHandler $enfantHandler,
         RelationRepository $relationRepository,
         PresenceRepository $presenceRepository,
-        PresenceUtils $presenceUtils
+        PresenceUtils $presenceUtils,
+        SearchHelper $searchHelper
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->enfantHandler = $enfantHandler;
         $this->relationRepository = $relationRepository;
         $this->presenceRepository = $presenceRepository;
         $this->presenceUtils = $presenceUtils;
+        $this->searchHelper = $searchHelper;
     }
 
     /**
-     * @Route("/", name="mercredi_admin_enfant_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_enfant_index", methods={"GET","POST"})
+     * @Route("/all/{all}", name="mercredi_admin_enfant_all", methods={"GET"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $form = $this->createForm(SearchEnfantType::class);
+        $form->handleRequest($request);
+        $enfants = [];
+        $search = false;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $this->searchHelper->saveSearch('enfant_list', $data);
+            $search = true;
+            $enfants = $this->enfantRepository->search($data['nom'], $data['ecole'], $data['annee_scolaire']);
+        }
+
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/index.html.twig',
             [
-                'enfants' => $this->enfantRepository->findAll(),
+                'enfants' => $enfants,
+                'form' => $form->createView(),
+                'search' => $search,
             ]
         );
     }

@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\UserAddTrait;
@@ -41,6 +42,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
         UserAddTrait,
         SluggableTrait,
         EcoleTrait,
+        RelationTrait,
         ArchiveTrait,
         TimestampableTrait;
 
@@ -93,6 +95,11 @@ class Enfant implements SluggableInterface, TimestampableInterface
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
+    }
+
+    public function __construct()
+    {
+        $this->relations = [];
     }
 
     public function __toString()

@@ -23,15 +23,15 @@ class TuteurRepository extends ServiceEntityRepository
      * @param $keyword
      * @return Tuteur[]
      */
-    public function search($keyword): array
+    public function search(?string $keyword): array
     {
-        $qb = $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder('tuteur')
+            ->leftJoin('tuteur.relations', 'relations', 'WITH')
+            ->addSelect('relations')
             ->andWhere('tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%')
             ->addOrderBy('tuteur.nom', 'ASC')
             ->getQuery()->getResult();
-
-        return $qb;
     }
 
     /**
