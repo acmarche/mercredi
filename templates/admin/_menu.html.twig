@@ -24,6 +24,16 @@
        href="{{ path('mercredi_admin_enfant_index') }}">Les enfants</a>
 </li>
 
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">Présences...</a>
+    <div class="dropdown-menu" aria-labelledby="dropdown01">
+        <a class="dropdown-item" href="{{ path('mercredi_admin_presence_index') }}">Listing</a>
+        <a class="dropdown-item" href="{{ path('mercredi_admin_presence_by_month') }}">Par mois</a>
+    </div>
+</li>
+
 {% if is_granted('ROLE_MERCREDI_ADMIN') %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"

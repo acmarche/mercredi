@@ -3,16 +3,19 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
+use AcMarche\Mercredi\Presence\Form\PresenceType;
+use AcMarche\Mercredi\Presence\Form\SearchPresenceByMonthType;
+use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
-use AcMarche\Mercredi\Entity\Presence;
-use AcMarche\Mercredi\Presence\Form\PresenceType;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,22 +37,82 @@ class PresenceController extends AbstractController
      * @var PresenceHandler
      */
     private $presenceHandler;
+    /**
+     * @var SearchHelper
+     */
+    private $searchHelper;
 
-    public function __construct(PresenceRepository $presenceRepository, PresenceHandler $presenceHandler)
-    {
+    public function __construct(
+        PresenceRepository $presenceRepository,
+        PresenceHandler $presenceHandler,
+        SearchHelper $searchHelper
+    ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
+        $this->searchHelper = $searchHelper;
     }
 
     /**
-     * @Route("/", name="mercredi_admin_presence_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_presence_index", methods={"GET","POST"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $form = $this->createForm(SearchPresenceType::class);
+        $form->handleRequest($request);
+        $presences = [];
+        $search = false;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $data);
+            $search = true;
+            $presences = $this->presenceRepository->search($data['nom'], $data['ecole'], $data['annee_scolaire']);
+        }
+
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index.html.twig',
             [
-                'presences' => $this->presenceRepository->findAll(),
+                'presences' => $presences,
+                'form' => $form->createView(),
+                'search' => $search,
+            ]
+        );
+    }
+
+    /**
+     * Liste toutes les presences par mois.
+     *
+     * @Route("/by/mois", name="mercredi_admin_presence_by_month", methods={"GET"})
+     *
+     */
+    public function indexByMonth(Request $request)
+    {
+        $mois = $type = $search = false;
+        $allenfants = $allpresences = [];
+
+        $form = $this->createForm(SearchPresenceByMonthType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $mois = $data['mois'];
+
+            if (!\DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
+                $this->addFlash('danger', 'Mauvais format de date');
+
+                return $this->redirectToRoute('mercredi_admin_presence_by_month');
+            }
+            $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST_BY_MONTH, $data);
+            $search = true;
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/presence/index_by_month.html.twig',
+            [
+                'form' => $form->createView(),
+                'search_form' => $form->createView(),
+                'search' => $search,
             ]
         );
     }

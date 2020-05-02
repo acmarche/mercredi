@@ -82,7 +82,7 @@ class EnfantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $this->searchHelper->saveSearch('enfant_list', $data);
+            $this->searchHelper->saveSearch(SearchHelper::ENFANT_LIST, $data);
             $search = true;
             $enfants = $this->enfantRepository->search($data['nom'], $data['ecole'], $data['annee_scolaire']);
         }

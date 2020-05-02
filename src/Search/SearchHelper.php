@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SearchHelper
 {
+    const ENFANT_LIST = 'enfant_list';
+    const TUTEUR_LIST = 'tuteur_list';
+    const PRESENCE_LIST = 'presence_list';
+    const PRESENCE_LIST_BY_MONTH = 'presence_list_by_month';
+
     /**
      * @var SessionInterface
      */

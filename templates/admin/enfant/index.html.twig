@@ -11,7 +11,7 @@
 
     {% include '@AcMarcheMercrediAdmin/enfant/_search.html.twig' %}
 
-    {% if search %}
+    {% if search and enfants|length > 0 %}
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
