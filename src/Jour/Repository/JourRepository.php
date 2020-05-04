@@ -42,6 +42,19 @@ class JourRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    /**
+     * @param string $date
+     * @return Jour[]
+     */
+    public function findDaysByMonth(\DateTimeInterface $date): array
+    {
+        return $this->createQueryBuilder('jour')
+            ->andWhere('jour.date_jour LIKE :date')
+            ->setParameter('date', $date->format('Y-m').'%')
+            ->addOrderBy('jour.date_jour', 'ASC')
+            ->getQuery()->getResult();
+    }
+
     public function remove(Jour $jour)
     {
         $this->_em->remove($jour);

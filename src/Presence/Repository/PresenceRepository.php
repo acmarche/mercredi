@@ -26,7 +26,7 @@ class PresenceRepository extends ServiceEntityRepository
      * @param Enfant $enfant
      * @return Jour[]
      */
-    public function findDaysRegisteredByEnfant(Enfant $enfant)
+    public function findDaysRegisteredByEnfant(Enfant $enfant): array
     {
         $presences = $this->findPresencesByEnfant($enfant);
         $jours = [];
@@ -41,7 +41,7 @@ class PresenceRepository extends ServiceEntityRepository
      * @param Enfant $enfant
      * @return Presence[]
      */
-    public function findPresencesByEnfant(Enfant $enfant)
+    public function findPresencesByEnfant(Enfant $enfant): array
     {
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')
@@ -67,6 +67,22 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @param \DateTimeInterface $date mm/YYYY
+     * @return Presence[]
+     */
+    public function findByMonth(\DateTimeInterface $date): array
+    {
+        $jours = $this->getEntityManager()->getRepository(Jour::class)->findDaysByMonth($date);
+
+        return $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours)
+            ->getQuery()->getResult();
+    }
+
     public function remove(Presence $presence)
     {
         $this->_em->remove($presence);
@@ -81,5 +97,20 @@ class PresenceRepository extends ServiceEntityRepository
     {
         $this->_em->persist($presence);
     }
+
+    /**
+     * @param $jour
+     * @return Presence[]
+     */
+    public function findByDay($jour)
+    {
+        return $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->andWhere('presence.jour = :jour')
+            ->setParameter('jour', $jour)
+            ->getQuery()->getResult();
+    }
+
 
 }

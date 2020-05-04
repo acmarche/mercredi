@@ -2,10 +2,37 @@
 
 {% block body %}
     <h3>Liste des présences par mois</h3>
-    <hr >
+    <hr>
 
     {% include '@AcMarcheMercrediAdmin/presence/_search_by_month.html.twig' %}
 
     https://fullcalendar.io/ ??
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Né le</th>
+            {% for jourDto in joursDto %}
+                <th>{{ jourDto.jour|format_date('short') }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for enfant in enfants %}
+            <tr>
+                <td>
+                    <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
+                        {{ enfant }}
+                    </a>
+                </td>
+                <td>{{ enfant.birthday ? enfant.birthday|format_datetime('short', 'none') }}</td>
+                {% for jourDto in joursDto %}
+                    <td>{{ jourDto.hasEnfant(enfant) }} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}JourListing
+        </tbody>
+    </table>
 
 {% endblock %}

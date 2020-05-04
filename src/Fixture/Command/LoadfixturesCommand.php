@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class LoadfixturesCommand extends Command
 {
-    protected static $defaultName = 'mercredi:loadfixtures';
+    protected static $defaultName = 'mercredi:load-fixtures';
     /**
      * @var EntityManagerInterface
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Faker;
+namespace AcMarche\Mercredi\Fixture\Faker;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
