@@ -8,6 +8,11 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Pour le listing par mois
+ * Class JourListing
+ * @package AcMarche\Mercredi\Presence\Dto
+ */
 class JourListing
 {
     protected $enfants;

@@ -13,13 +13,15 @@
         <tr>
             <th>Nom</th>
             <th>Né le</th>
-            {% for jourDto in joursDto %}
-                <th>{{ jourDto.jour|format_date('short') }}</th>
+            {% for jourListing in listingPresences.joursListing %}
+                <th class="text-center">{{ jourListing.jour|format_date('short') }}</th>
             {% endfor %}
+            <th class="text-center">Total</th>
         </tr>
         </thead>
         <tbody>
-        {% for enfant in enfants %}
+        {% for enfant in listingPresences.enfants %}
+            {% set i = 0 %}
             <tr>
                 <td>
                     <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
@@ -27,12 +29,28 @@
                     </a>
                 </td>
                 <td>{{ enfant.birthday ? enfant.birthday|format_datetime('short', 'none') }}</td>
-                {% for jourDto in joursDto %}
-                    <td>{{ jourDto.hasEnfant(enfant) }} </td>
+                {% for jourListing in listingPresences.joursListing %}
+                    <td class="text-center">
+                        {% if jourListing.hasEnfant(enfant) %}
+                            {% set i = i + 1 %}
+                            <img src="{{ asset('bundles/acmarchemercredi/images/tick_16.png') }}" alt="ok">
+                        {% endif %}
+                    </td>
                 {% endfor %}
+                <td class="text-center">{{ i }}</td>
             </tr>
-        {% endfor %}JourListing
+        {% endfor %}
         </tbody>
+        <tfoot>
+        <tr>
+            <th>{{ listingPresences.enfants|length }} enfants</th>
+            <td></td>
+            {% for jourListing in listingPresences.joursListing %}
+                <td class="text-center">{{ jourListing.enfants|length }} </td>
+            {% endfor %}
+            <td class="text-center">{{ listingPresences.presences | length }}</td>
+        </tr>
+        </tfoot>
     </table>
 
 {% endblock %}

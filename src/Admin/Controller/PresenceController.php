@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Dto\JourListing;
-use AcMarche\Mercredi\Presence\Dto\PresenceListingByMonth;
+use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
 use AcMarche\Mercredi\Presence\Form\PresenceType;
@@ -48,17 +48,23 @@ class PresenceController extends AbstractController
      * @var JourRepository
      */
     private $jourRepository;
+    /**
+     * @var ListingPresenceByMonth
+     */
+    private $listingPresenceByMonth;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         JourRepository $jourRepository,
         PresenceHandler $presenceHandler,
-        SearchHelper $searchHelper
+        SearchHelper $searchHelper,
+        ListingPresenceByMonth $listingPresenceByMonth
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
         $this->searchHelper = $searchHelper;
         $this->jourRepository = $jourRepository;
+        $this->listingPresenceByMonth = $listingPresenceByMonth;
     }
 
     /**
@@ -68,7 +74,7 @@ class PresenceController extends AbstractController
     {
         $form = $this->createForm(SearchPresenceType::class);
         $form->handleRequest($request);
-        $presences = [];
+        $presences = $joursDto = [];
         $search = false;
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -97,7 +103,7 @@ class PresenceController extends AbstractController
     public function indexByMonth(Request $request)
     {
         $mois = $type = $search = false;
-        $enfants = $allpresences = [];
+        $enfants = $presencesOfMonth = $joursListing = [];
 
         $form = $this->createForm(SearchPresenceByMonthType::class);
 
@@ -113,30 +119,7 @@ class PresenceController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_presence_by_month');
             }
 
-            $jours = $this->jourRepository->findDaysByMonth($date);
-            $allpresences = $this->presenceRepository->findByMonth($date);
-
-            $enfants = array_map(
-                function ($presence) {
-                    return $presence->getEnfant();
-                },
-                $allpresences
-            );
-            $enfants = array_unique($enfants);
-
-            $joursDto = [];
-            $presenceListing = new PresenceListingByMonth($enfants);
-            foreach ($jours as $jour) {
-                $presences = $this->presenceRepository->findByDay($jour);
-                $enfantsTmp = array_map(
-                    function ($presence) {
-                        return $presence->getEnfant();
-                    },
-                    $presences
-                );
-                $joursDto[] = new JourListing($jour, $enfantsTmp);
-            }
-
+            $listingPresences = $this->listingPresenceByMonth->create($date);
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST_BY_MONTH, $data);
             $search = true;
         }
@@ -147,8 +130,7 @@ class PresenceController extends AbstractController
                 'form' => $form->createView(),
                 'search_form' => $form->createView(),
                 'search' => $search,
-                'enfants' => $enfants,
-                'joursDto' => $joursDto,
+                'listingPresences' => $listingPresences,
             ]
         );
     }
