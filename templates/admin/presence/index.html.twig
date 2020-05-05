@@ -6,22 +6,19 @@
 
     {% include '@AcMarcheMercrediAdmin/presence/_search.html.twig' %}
 
-
     <div class="page-header">
         <h3>
             Listing des présences {% if datejour %} {{ datejour | date('d-m-Y') }}
-                <a href="{{ path('message_new_jour', {'id': jour.id, 'type': type}) }}"
+                <a href="{{ path('mercredi_message_new_jour', {'id': jour.id, 'type': type}) }}"
                    title="Envoyer un message aux parents">
                     <i class="far fa-envelope"></i></a>
 
-                <a href="{{ path('presence_xls', {'id': jour.id, 'type': type}) }}"
+                <a href="{{ path('mercredi_admin_export_presence_xls', {'id': jour.id, 'type': type}) }}"
                    title="Exporter en xls">
                     <i class="fas fa-file-excel"></i> </a>
             {% endif %}
         </h3>
     </div>
-
-    {% include 'admin/search/presence.html.twig' with {'form': search_form } %}
 
     <div class="hidden-print">
         <div class="alert alert-info" role="alert">Choisissez la date pour afficher les enfants inscrits</div>
@@ -29,12 +26,12 @@
 
     {% if datejour %}
 
-        <h3>Petit <a href="{{ path('message_new_groupescolaire', {'groupe': 'petits'}) }}"
+        <h3>Petit <a href="{{ path('mercredi_message_new_groupescolaire', {'groupe': 'petits'}) }}"
                      title="Envoyer un message aux parents">
                 <i class="far fa-envelope"></i></a>
         </h3>
 
-        {% include 'admin/presence/line.html.twig' with {'groups': petits } %}
+        {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' with {'groups': petits } %}
 
         <div class="saut_page"></div>
 
@@ -42,10 +39,10 @@
             <h3>Listing des présences {{ datejour | date('d-m-Y') }}</h3>
         </div>
 
-        <h3>Moyen <a href="{{ path('message_new_groupescolaire', {'groupe': 'moyens'}) }}"
+        <h3>Moyen <a href="{{ path('mercredi_message_new_groupescolaire', {'groupe': 'moyens'}) }}"
                      title="Envoyer un message aux parents">
                 <i class="far fa-envelope"></i></a></h3>
-        {% include 'admin/presence/line.html.twig' with {'groups': moyens } %}
+        {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' with {'groups': moyens } %}
 
         <div class="saut_page"></div>
 
@@ -56,7 +53,8 @@
         <h3>Grand <a href="{{ path('message_new_groupescolaire', {'groupe': 'grands'}) }}"
                      title="Envoyer un message aux parents">
                 <i class="far fa-envelope"></i></a></h3>
-        {% include 'admin/presence/line.html.twig' with {'groups': grands } %}
+
+        {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' with {'groups': grands } %}
 
     {% endif %}
 

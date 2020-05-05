@@ -4,6 +4,7 @@
 namespace AcMarche\Mercredi\Presence\Dto;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -39,17 +40,10 @@ class ListingPresenceByMonth
 
     public function create(\DateTimeInterface $month): self
     {
-        $daysOfMonth = $this->jourRepository->findDaysByMonth($month);
-        $this->presences = $this->presenceRepository->findByMonth($month);
+        $daysOfMonth = $this->getDaysOfMonth($month);
+        $this->presences = $this->getPresencesOfMonth($month);
+        $this->enfants = $this->getEnfantsPresentsOfMonth($month);
 
-        $enfants = array_map(
-            function ($presence) {
-                return $presence->getEnfant();
-            },
-            $this->presences
-        );
-
-        $this->enfants = array_unique($enfants);
         $joursListing = [];
 
         foreach ($daysOfMonth as $jour) {
@@ -65,6 +59,15 @@ class ListingPresenceByMonth
         $this->joursListing = $joursListing;
 
         return $this;
+    }
+
+    /**
+     * @param \DateTimeInterface $month
+     * @return Jour[]
+     */
+    public function getDaysOfMonth(\DateTimeInterface $month)
+    {
+        return $this->jourRepository->findDaysByMonth($month);
     }
 
     /**
@@ -89,6 +92,33 @@ class ListingPresenceByMonth
     public function getJoursListing(): array
     {
         return $this->joursListing;
+    }
+
+    /**
+     * @param \DateTimeInterface $month
+     * @return Presence[]
+     */
+    private function getPresencesOfMonth(\DateTimeInterface $month): array
+    {
+        return $this->presenceRepository->findByMonth($month);
+    }
+
+    /**
+     * @param \DateTimeInterface $month
+     * @return Enfant[]
+     */
+    private function getEnfantsPresentsOfMonth(\DateTimeInterface $month): array
+    {
+        $enfants = array_map(
+            function ($presence) {
+                return $presence->getEnfant();
+            },
+            $this->presences
+        );
+
+        $enfants = array_unique($enfants);
+
+        return $enfants;
     }
 
 }
