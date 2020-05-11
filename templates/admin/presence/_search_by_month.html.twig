@@ -1,10 +1,30 @@
-{{ form_start(form, { 'attr': {'class': 'form-inline hidden-print'}}) }}
+{{ form_start(form, { 'attr': {'class': 'd-print-none'}}) }}
 {{ form_errors(form) }}
 
-{{ form_row(form.mois, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
-
-<button class="btn btn-primary mr-1" type="submit"><i class="fas fa-search"></i> Rechercher</button>
-
+<div class="form-row">
+    <div class="col-lg-3">
+        {{ form_row(form.mois, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    </div>
+    <div class="col-lg-3">
+        <button class="btn btn-primary mr-1" type="submit"><i class="fas fa-search"></i> Rechercher</button>
+    </div>
+    <div class="col-lg-3">
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-warning"><i class="far fa-file-excel"></i> Exporter</button>
+            <button type="button" class="btn btn-outline-warning dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ path('mercredi_admin_export_presence_mois_xls', {'one': 'false'}) }}">Par
+                    défaut</a>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_export_presence_mois_xls', {'one': 'true'}) }}">Pour
+                    l'One</a>
+            </div>
+        </div>
+    </div>
+</div>
 {{ form_rest(form) }}
 {{ form_end(form) }}
-<br />
+<br/>

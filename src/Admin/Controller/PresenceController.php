@@ -102,8 +102,9 @@ class PresenceController extends AbstractController
      */
     public function indexByMonth(Request $request)
     {
-        $mois = $type = $search = false;
-        $enfants = $presencesOfMonth = $joursListing = [];
+        $search = false;
+        $mois = null;
+        $listingPresences = [];
 
         $form = $this->createForm(SearchPresenceByMonthType::class);
 
@@ -130,6 +131,7 @@ class PresenceController extends AbstractController
                 'form' => $form->createView(),
                 'search_form' => $form->createView(),
                 'search' => $search,
+                'month' => $mois,
                 'listingPresences' => $listingPresences,
             ]
         );
