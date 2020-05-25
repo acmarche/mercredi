@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Repository;
 
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
@@ -83,20 +84,6 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function remove(Presence $presence)
-    {
-        $this->_em->remove($presence);
-    }
-
-    public function flush()
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Presence $presence)
-    {
-        $this->_em->persist($presence);
-    }
 
     /**
      * @param $jour
@@ -112,5 +99,73 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * @param string $nom
+     * @param Ecole $ecole
+     * @param string $annee_scolaire
+     * @return Presence[]
+     */
+    public function searchListing(Jour $jour, ?Ecole $ecole): array
+    {
+        $qb = $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant');
 
+        if ($jour) {
+            $qb->andWhere('presence.jour = :jour')
+                ->setParameter('jour', $jour);
+        }
+
+        if ($ecole) {
+            $qb->andWhere('enfant.ecole = :ecole')
+                ->setParameter('ecole', $ecole);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param string $nom
+     * @param Ecole $ecole
+     * @param string $annee_scolaire
+     * @return Presence[]
+     */
+    public function search(string $nom, Ecole $ecole, string $annee_scolaire): array
+    {
+        $qb = $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant');
+
+        if ($nom) {
+            $qb->andWhere('enfant.nom LIKE :nom')
+                ->setParameter('nom', $nom);
+        }
+
+        if ($ecole) {
+            $qb->andWhere('enfant.ecole = :ecole')
+                ->setParameter('ecole', $ecole);
+        }
+
+        if ($annee_scolaire) {
+            $qb->andWhere('enfant.annee_scolaire = :annee')
+                ->setParameter('annee', $annee_scolaire);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function remove(Presence $presence)
+    {
+        $this->_em->remove($presence);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
+    public function persist(Presence $presence)
+    {
+        $this->_em->persist($presence);
+    }
 }

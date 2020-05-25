@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Ecole\Repository;
 use AcMarche\Mercredi\Entity\Ecole;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Ecole|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,5 +33,13 @@ class EcoleRepository extends ServiceEntityRepository
     public function persist(Ecole $ecole)
     {
         $this->_em->persist($ecole);
+    }
+
+    public function getQbForListing(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('ecole')
+            ->orderBy('ecole.nom', 'ASC');
+
+        return $qb;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Spreadsheet\SpreadsheetFactory;
 use AcMarche\Mercredi\Search\SearchHelper;
@@ -44,13 +45,12 @@ class ExportController extends AbstractController
     }
 
     /**
-     * @Route("/presence", name="mercredi_admin_export_presence_xls")
+     * @Route("/presence/{id}", name="mercredi_admin_export_presence_xls")
      */
-    public function default(Request $request): Response
+    public function default(Request $request, Jour $jour): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
-        dump($args);
-        $date = $args['date'];
+        $date = $args['mois'];
         $listingPresences = $this->listingPresenceByMonth->create($date);
         $spreadsheet = $this->spreadsheetFactory->presenceXls($listingPresences);
 
@@ -58,14 +58,14 @@ class ExportController extends AbstractController
     }
 
     /**
-     * @Route("/presence/mois/{mois}/{one}", name="mercredi_admin_export_presence_mois_xls", requirements={"mois"=".+"}, methods={"GET"})
+     * @Route("/presence/mois/{one}", name="mercredi_admin_export_presence_mois_xls", requirements={"mois"=".+"}, methods={"GET"})
      * Requirement a cause du format "mois/annee"
      *
      * @param $mois
      * @param bool $one Office de l'enfance
      *
      */
-    public function xls(string $mois, bool $one): Response
+    public function presenceByMonthxls(bool $one): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST_BY_MONTH);
         dump($args);

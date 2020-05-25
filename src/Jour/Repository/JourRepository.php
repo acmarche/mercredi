@@ -79,4 +79,13 @@ class JourRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getQbForListing(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('jour')
+            ->andWhere('jour.archived = 0')
+            ->orderBy('jour.date_jour', 'DESC');
+
+        return $qb;
+    }
+
 }

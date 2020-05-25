@@ -9,9 +9,12 @@ Feature: Gestion des tuteurs
     Given I am logged in as an admin
     Given I am on "/admin/tuteur/"
     Then I should see "Liste des tuteurs"
+    Then I fill in "search_tuteur[nom]" with "Peret"
+    And I press "Rechercher"
+    Then I should see "Peret"
 
   Scenario: Ajout un tuteur
-    Then I follow "Un tuteur"
+    Then I follow "Un parent"
     And I fill in "tuteur[nom]" with "Marchal"
     And I fill in "tuteur[prenom]" with "Joseph"
     And I fill in "tuteur[rue]" with "Rue des Dentelles"
@@ -34,6 +37,9 @@ Feature: Gestion des tuteurs
     Then I should see "0476 22 66 99"
 
   Scenario: Supprimer un tuteur sans enfant
+    Then I fill in "search_tuteur[nom]" with "Dupont"
+    And I press "Rechercher"
+    Then I should see "Dupont"
     Then I follow "Dupont"
     Then I press "Supprimer le tuteur"
    # Then print last response

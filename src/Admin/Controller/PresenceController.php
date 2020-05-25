@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
@@ -74,14 +75,21 @@ class PresenceController extends AbstractController
     {
         $form = $this->createForm(SearchPresenceType::class);
         $form->handleRequest($request);
-        $presences = $joursDto = [];
-        $search = false;
+        $presences = $joursDto = $petits = $moyens = $grands = [];
+        $search = $display_remarque = false;
+        $jour = $remarques = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            /**
+             * @var Jour $jour
+             */
+            $jour = $data['jour'];
+            $display_remarque = $data['displayRemarque'];
+            $remarques = $jour->getRemarque();
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $data);
             $search = true;
-            $presences = $this->presenceRepository->search($data['nom'], $data['ecole'], $data['annee_scolaire']);
+            $presences = $this->presenceRepository->searchListing($jour, $data['ecole']);
         }
 
         return $this->render(
@@ -90,6 +98,12 @@ class PresenceController extends AbstractController
                 'presences' => $presences,
                 'form' => $form->createView(),
                 'search' => $search,
+                'jour' => $jour,
+                'petits' => $petits,
+                'moyens' => $moyens,
+                'grands' => $grands,
+                'remarques' => $remarques,
+                'display_remarques' => $display_remarque,
             ]
         );
     }

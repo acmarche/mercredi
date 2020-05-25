@@ -46,6 +46,13 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      */
     private $relations;
 
+    /**
+     * J'ai mis la definition pour pouvoir mettre le cascade
+     * @var Presence[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="tuteur", cascade={"remove"})
+     */
+    private $presences;
+
     public function getSluggableFields(): array
     {
         return ['nom', 'prenom'];

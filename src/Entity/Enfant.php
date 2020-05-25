@@ -15,6 +15,7 @@ use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\UserAddTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -45,12 +46,6 @@ class Enfant implements SluggableInterface, TimestampableInterface
         RelationTrait,
         ArchiveTrait,
         TimestampableTrait;
-
-    /**
-     * @var Relation[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="enfant", cascade={"remove"})
-     */
-    private $relations;
 
     /**
      * @var string|null
@@ -87,6 +82,30 @@ class Enfant implements SluggableInterface, TimestampableInterface
      */
     private $ecole;
 
+    /**
+     * @var Relation[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="enfant", cascade={"remove"})
+     */
+    private $relations;
+
+    /**
+     * J'ai mis la definition pour pouvoir mettre le cascade
+     * @var Presence[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="enfant", cascade={"remove"})
+     */
+    private $presences;
+
+    public function __construct()
+    {
+        $this->relations = new ArrayCollection();
+        $this->presences = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+    }
+
     public function getSluggableFields(): array
     {
         return ['nom', 'prenom'];
@@ -95,16 +114,6 @@ class Enfant implements SluggableInterface, TimestampableInterface
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
-    }
-
-    public function __construct()
-    {
-        $this->relations = [];
-    }
-
-    public function __toString()
-    {
-        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
     /**
@@ -170,4 +179,10 @@ class Enfant implements SluggableInterface, TimestampableInterface
     {
         $this->groupe_scolaire = $groupe_scolaire;
     }
+
+    public function getPhotoAutorisation(): ?bool
+    {
+        return $this->photo_autorisation;
+    }
+
 }
