@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Spreadsheet\SpreadsheetFactory;
 use AcMarche\Mercredi\Search\SearchHelper;
+use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,20 +66,27 @@ class ExportController extends AbstractController
      * @param bool $one Office de l'enfance
      *
      */
-    public function presenceByMonthxls(bool $one): Response
+    public function presenceByMonthXls(bool $one): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST_BY_MONTH);
-        dump($args);
-        $date = $args['date'];
+        $mois = $args['mois'];
 
-        $fileName = 'listing-'.preg_replace('#/#', '-', $mois).'.xls';
+        try {
+            $date = DateUtils::createDateTimeFromDayMonth($mois);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
+
+            return $this->redirectToRoute('mercredi_admin_presence_by_month');
+        }
+
+        $fileName = 'listing-'.$date->format('m-Y').'.xls';
 
         $listingPresences = $this->listingPresenceByMonth->create($date);
 
         if ($one) {
-            $spreadsheet = $this->spreadsheetFactory->createXSLOne($mois, $listingPresences);
+            $spreadsheet = $this->spreadsheetFactory->createXlsOne($date, $listingPresences);
         } else {
-            $spreadsheet = $this->spreadsheetFactory->createXSLObject($listingPresences);
+            $spreadsheet = $this->spreadsheetFactory->createXls($listingPresences);
         }
 
         return $this->spreadsheetFactory->downloadXls($spreadsheet, $fileName);

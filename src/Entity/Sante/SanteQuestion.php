@@ -155,4 +155,9 @@ class SanteQuestion
         $this->sante_fiche = $sante_fiche;
     }
 
+    public function getComplement(): ?bool
+    {
+        return $this->complement;
+    }
+
 }

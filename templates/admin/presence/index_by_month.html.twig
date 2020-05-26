@@ -6,7 +6,7 @@
 
     {% include '@AcMarcheMercrediAdmin/presence/_search_by_month.html.twig' %}
 
-    https://fullcalendar.io/ ??
+    {#  https://fullcalendar.io/ ?? #}
 
     {% if search %}
         <table class="table table-bordered table-hover">
@@ -22,7 +22,7 @@
             </thead>
             <tbody>
             {% for enfant in listingPresences.enfants %}
-                {% set i = 0 %}
+                {% set nbPresences = 0 %}
                 <tr>
                     <td>
                         <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
@@ -33,7 +33,7 @@
                     {% for jourListing in listingPresences.joursListing %}
                         <td class="text-center">
                             {% if jourListing.hasEnfant(enfant) %}
-                                {% set i = i + 1 %}
+                                {% set nbPresences = nbPresences + 1 %}
                                 <img src="{{ asset('bundles/acmarchemercredi/images/tick_16.png') }}" alt="ok">
                             {% endif %}
                         </td>

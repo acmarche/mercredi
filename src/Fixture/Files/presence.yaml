@@ -2,3 +2,12 @@ AcMarche\Mercredi\Entity\Presence:
   presence_merlin_16_09:
     __construct: ['@tuteur_Peret','@enfant_merlin', '@jour_2020_09_16']
     userAdd: 'administrateur'
+  presence_divorce_16_09:
+    __construct: ['@tuteur_Fernandel','@enfant_divorce', '@jour_2020_09_16']
+    userAdd: 'administrateur'
+  presence_gaspard_09_09:
+    __construct: ['@tuteur_Gaspard','@enfant_divorce', '@jour_2020_09_09']
+    userAdd: 'administrateur'
+  presence_lisa_02_09:
+    __construct: ['@tuteur_Simpson','@enfant_lisa', '@jour_2020_09_02']
+    userAdd: 'administrateur'

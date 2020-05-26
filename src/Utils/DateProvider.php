@@ -13,9 +13,9 @@ class DateProvider
      *
      * @throws \Exception
      */
-    public static function getDateIntervale(string $date): \DatePeriod
+    public static function getDatePeriod(\DateTime $date): \DatePeriod
     {
-        $begin = \DateTimeImmutable::createFromFormat('d/m/Y', $date);
+        $begin = \DateTimeImmutable::createFromMutable($date);
         $end = $begin->modify('last day of this month');
         $end = $end->modify('+1 day');
 

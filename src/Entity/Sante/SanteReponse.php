@@ -103,4 +103,9 @@ class SanteReponse
         $this->remarque = $remarque;
     }
 
+    public function getReponse(): ?bool
+    {
+        return $this->reponse;
+    }
+
 }

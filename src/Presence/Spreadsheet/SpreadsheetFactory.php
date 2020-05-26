@@ -11,12 +11,12 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class SpreadsheetFactory extends AbstractSpreadsheetDownloader
 {
-    public function createXSLOne($mois, ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
+    public function createXlsOne(\DateTime $date, ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $dateInterval = DateProvider::getDateIntervale('01/'.$mois);
+        $dateInterval = DateProvider::getDatePeriod($date);
 
         /**
          * titre de la feuille.
@@ -63,60 +63,65 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         return $spreadsheet;
     }
 
-    public function createXSLObject(ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
+    public function createXls(ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $alphabets = range('A', 'Z');
-        //  $lastLettre = $alphabets[(count($dates) * 2) - 1];
         /**
          * title.
          */
-        $c = 1;
-        $colonne = 'C';
-        $sheet->setCellValue('A'.$c, 'Enfant')
-            ->setCellValue('B'.$c, 'Né le');
-        foreach ($listingPresenceByMonth->getPresences() as $date => $count) {
-            $sheet->setCellValue($colonne.$c, $date);
-            ++$colonne;
-        }
-        $sheet->setCellValue($colonne.$c, 'Total');
+        $ligne = 1;
+        $colonne = 'A';
+        $sheet
+            ->setCellValue($colonne.$ligne, 'Nom')
+            ->setCellValue(++$colonne.$ligne, 'Prénom')
+            ->setCellValue(++$colonne.$ligne, 'Né le');
 
+        foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
+            $sheet->setCellValue(++$colonne.$ligne, $jourListing->getJour()->getDateJour()->format('d-m-Y'));
+        }
+        $sheet->setCellValue(++$colonne.$ligne, 'Total');
+
+        /**
+         * Pour chaque enfant on affiche present ou pas et son total
+         */
         $ligne = 3;
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
             $colonne = 'A';
-            $count = 0;
-            $enfantNom = $enfant->__toString();
+
             $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
-            $sheet->setCellValue($colonne.$ligne, $enfantNom);
-            ++$colonne;
-            $sheet->setCellValue($colonne.$ligne, $neLe);
-            foreach ($listingPresenceByMonth->getPresences() as $date => $data) {
-                $enfantsByDate = $data['enfants'];
-                $txt = 0;
-                if (in_array($enfant, $enfantsByDate)) {
-                    $txt = '1';
-                    ++$count;
+            $sheet
+                ->setCellValue($colonne.$ligne, $enfant->getNom())
+                ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
+                ->setCellValue(++$colonne.$ligne, $neLe);
+
+            $countPresences = 0;
+            foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
+                $present = 0;
+                if ($jourListing->hasEnfant($enfant)) {
+                    $present = 1;
+                    $countPresences++;
                 }
-                ++$colonne;
-                $sheet->setCellValue($colonne.$ligne, $txt);
+                $sheet->setCellValue(++$colonne.$ligne, $present);
             }
-            ++$colonne;
-            $sheet->setCellValue($colonne.$ligne, $count);
+            $sheet->setCellValue(++$colonne.$ligne, $countPresences);
             ++$ligne;
         }
+
+        /**
+         * Total enfants et total enfants par jour
+         */
         $colonne = 'A';
         $sheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getEnfants()).' enfants');
-        $colonne = 'C';
-        $totalmois = 0;
-        foreach ($listingPresenceByMonth->getPresences() as $date => $data) {
-            $sheet->setCellValue($colonne.$ligne, $data['count']);
-            $totalmois += $data['count'];
+        $colonne = 'D';
+
+        foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
+            $sheet->setCellValue($colonne.$ligne, count($jourListing->getEnfants()));
             ++$colonne;
         }
 
-        $sheet->setCellValue($colonne.$ligne, $totalmois);
+        $sheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getPresences()));
 
         return $spreadsheet;
     }

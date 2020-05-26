@@ -20,6 +20,7 @@ use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
+use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -113,6 +114,7 @@ class PresenceController extends AbstractController
      *
      * @Route("/by/mois", name="mercredi_admin_presence_by_month", methods={"GET","POST"})
      *
+     *
      */
     public function indexByMonth(Request $request)
     {
@@ -128,8 +130,10 @@ class PresenceController extends AbstractController
             $data = $form->getData();
             $mois = $data['mois'];
 
-            if (!$date = \DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
-                $this->addFlash('danger', 'Mauvais format de date');
+            try {
+                $date = DateUtils::createDateTimeFromDayMonth($mois);
+            } catch (\Exception $e) {
+                $this->addFlash('danger', $e->getMessage());
 
                 return $this->redirectToRoute('mercredi_admin_presence_by_month');
             }
