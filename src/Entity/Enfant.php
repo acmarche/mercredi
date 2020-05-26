@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
+use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
@@ -14,6 +15,7 @@ use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
+use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
 use AcMarche\Mercredi\Entity\Traits\UserAddTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,7 +47,9 @@ class Enfant implements SluggableInterface, TimestampableInterface
         EcoleTrait,
         RelationTrait,
         ArchiveTrait,
-        TimestampableTrait;
+        TimestampableTrait,
+        TelephonesTrait,
+        AgeTrait;
 
     /**
      * @var string|null

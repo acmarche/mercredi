@@ -19,6 +19,8 @@ use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use AcMarche\Mercredi\Scolaire\ScolaireData;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -54,19 +56,25 @@ class PresenceController extends AbstractController
      * @var ListingPresenceByMonth
      */
     private $listingPresenceByMonth;
+    /**
+     * @var PresenceUtils
+     */
+    private $presenceUtils;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         JourRepository $jourRepository,
         PresenceHandler $presenceHandler,
         SearchHelper $searchHelper,
-        ListingPresenceByMonth $listingPresenceByMonth
+        ListingPresenceByMonth $listingPresenceByMonth,
+        PresenceUtils $presenceUtils
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
         $this->searchHelper = $searchHelper;
         $this->jourRepository = $jourRepository;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
+        $this->presenceUtils = $presenceUtils;
     }
 
     /**
@@ -76,8 +84,8 @@ class PresenceController extends AbstractController
     {
         $form = $this->createForm(SearchPresenceType::class);
         $form->handleRequest($request);
-        $presences = $joursDto = $petits = $moyens = $grands = [];
-        $search = $display_remarque = false;
+        $data = [];
+        $search = $displayRemarque = false;
         $jour = $remarques = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -86,25 +94,27 @@ class PresenceController extends AbstractController
              * @var Jour $jour
              */
             $jour = $data['jour'];
-            $display_remarque = $data['displayRemarque'];
-            $remarques = $jour->getRemarque();
+            $displayRemarque = $data['displayRemarque'];
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $data);
             $search = true;
             $presences = $this->presenceRepository->searchListing($jour, $data['ecole']);
+
+            $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
+            $this->presenceUtils->addTelephonesOnEnfant($enfants);
+            $data = PresenceUtils::groupByGroupScolaire($enfants);
         }
+
+        $groupes = ScolaireData::GROUPES_SCOLAIRES;
+        unset($groupes[0]);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index.html.twig',
             [
-                'presences' => $presences,
+                'data' => $data,
                 'form' => $form->createView(),
                 'search' => $search,
                 'jour' => $jour,
-                'petits' => $petits,
-                'moyens' => $moyens,
-                'grands' => $grands,
-                'remarques' => $remarques,
-                'display_remarques' => $display_remarque,
+                'display_remarques' => $displayRemarque,
             ]
         );
     }
@@ -112,9 +122,7 @@ class PresenceController extends AbstractController
     /**
      * Liste toutes les presences par mois.
      *
-     * @Route("/by/mois", name="mercredi_admin_presence_by_month", methods={"GET","POST"})
-     *
-     *
+     * @Route("/by/month", name="mercredi_admin_presence_by_month", methods={"GET","POST"})
      */
     public function indexByMonth(Request $request)
     {

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace AcMarche\Mercredi\Tests\Behat;
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -17,32 +19,40 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 final class DemoContext implements Context
 {
-    /** @var KernelInterface */
-    private $kernel;
-
     /** @var Response|null */
     private $response;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
-    public function __construct(KernelInterface $kernel)
+    public function __construct(Response $requestStack)
     {
-        $this->kernel = $kernel;
+        $this->requestStack = $requestStack;
     }
 
     /**
-     * @When a demo scenario sends a request to :path
+     * @Then /^the "([^"]*)" response header exists$/
      */
-    public function aDemoScenarioSendsARequestTo(string $path): void
+    public function theResponseHeaderExists($arg1)
     {
-        $this->response = $this->kernel->handle(Request::create($path, 'GET'));
-    }
+        $headers = $this->requestStack->getMasterRequest();
+        var_dump($headers);
 
-    /**
-     * @Then the response should be received
-     */
-    public function theResponseShouldBeReceived(): void
-    {
         if ($this->response === null) {
             throw new \RuntimeException('No response received');
         }
+        var_dump($arg1);
+        var_dump($this->response->headers);
     }
+
+    /**
+     * @Then /^the "([^"]*)" response header is "([^"]*)"$/
+     */
+    public function theResponseHeaderIs($arg1, $arg2)
+    {
+        var_dump($arg1, $arg2);
+        throw new PendingException();
+    }
+
 }

@@ -18,35 +18,23 @@
 
     {% if jour %}
 
-        <h3>Petit <a href="{{ path('mercredi_message_new_groupescolaire', {'groupe': 'petits'}) }}"
-                     title="Envoyer un message aux parents">
-                <i class="far fa-envelope"></i></a>
-        </h3>
+        {% for groupeName, enfants in data %}
 
-        {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' with {'groups': petits } %}
+            <div class="page-header">
+                <h3>Listing des présences {{ jour.dateJour | format_date('full') }}</h3>
+            </div>
 
-        <div class="saut_page"></div>
+            <h3>
+                {{ groupeName | title }} <a href="{{ path('mercredi_message_new_groupescolaire', {'groupe': groupeName}) }}"
+                         title="Envoyer un message aux parents" class="d-print-none">
+                    <i class="far fa-envelope"></i></a>
+            </h3>
 
-        <div class="page-header visible-print">
-            <h3>Listing des présences {{ jour.dateJour | format_date('full') }}</h3>
-        </div>
+            {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' %}
 
-        <h3>Moyen <a href="{{ path('mercredi_message_new_groupescolaire', {'groupe': 'moyens'}) }}"
-                     title="Envoyer un message aux parents">
-                <i class="far fa-envelope"></i></a></h3>
-        {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' with {'groups': moyens } %}
+            <div class="saut_page"></div>
 
-        <div class="saut_page"></div>
-
-        <div class="page-header visible-print">
-            <h3>Listing des présences {{ jour.dateJour | format_date('full') }}</h3>
-        </div>
-
-        <h3>Grand <a href="{{ path('message_new_groupescolaire', {'groupe': 'grands'}) }}"
-                     title="Envoyer un message aux parents">
-                <i class="far fa-envelope"></i></a></h3>
-
-        {% include '@AcMarcheMercrediAdmin/presence/_line_by_groupe.html.twig' with {'groups': grands } %}
+        {% endfor %}
 
     {% endif %}
 

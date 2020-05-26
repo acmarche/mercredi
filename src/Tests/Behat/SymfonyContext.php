@@ -6,6 +6,7 @@ namespace AcMarche\Mercredi\Tests\Behat;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,4 +78,5 @@ final class SymfonyContext implements Context
             throw new RuntimeException('No user received');
         }
     }
+
 }

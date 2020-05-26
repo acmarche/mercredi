@@ -1,10 +1,10 @@
-{% if remarques %}
+{% if jour.remarque %}
     <p class="text-muted">
-        {{ remarques | nl2br }}
+        {{ jour.remarque | nl2br }}
     </p>
 {% endif %}
 
-    {% if groups | length > 0 %}
+    {% if enfants | length > 0 %}
         <table class='table table-bordered table-hover'>
             <thead>
             <tr>
@@ -20,19 +20,19 @@
             </tr>
             </thead>
             <tbody>
-            {% for enfant in groups %}
+            {% for enfant in enfants %}
                 <tr>
                     <td>
                         <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">{{ enfant.nom | upper }}</a>
                         {{ enfant.prenom }} <br/>
                         <span class='text-muted'>{{ enfant.telephones }}</span>
                     </td>
-                    <td style="text-align: center">{{ enfant.age(datejour) }} ans</td>
+                    <td style="text-align: center">{{ enfant.age(jour.dateJour) }} ans</td>
                     <td>{{ enfant.anneescolaire }}</td>
                     <td>{{ enfant.ecole }}</td>
                     <td>
                         {% if enfant.accompagnateurs %}
-                            <strong>Accompagnateurs: </strong><br /> {{ enfant.accompagnateurs | join(', ') }}
+                            <strong>Accompagnateurs: </strong><br/> {{ enfant.accompagnateurs | join(', ') }}
                         {% endif %}
                     </td>
                     <td style="text-align: center">
@@ -44,7 +44,7 @@
                     </td>
                     {% if display_remarques %}
                         <td class='text-muted'>
-                            {{ enfant.remarques | nl2br }}
+                            {{ enfant.remarque | nl2br }}
                         </td>
                     {% endif %}
                 </tr>
@@ -58,7 +58,7 @@
                     <strong>Nombre d'enfants</strong>
                 </td>
                 <td class='text-center'>
-                    {{ groups | length }}
+                    {{ enfants | length }}
                 </td>
             </tr>
             </tbody>

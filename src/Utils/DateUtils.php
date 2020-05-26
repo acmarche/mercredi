@@ -16,13 +16,13 @@ class DateUtils
         if ($date = \DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
             return $date;
         }
-        throw new \Exception('Impossible de créer un dateTime depuis le string '.$mois);
+        throw new \Exception('Mauvais format de date: '.$mois);
     }
 
     public static function formatFr(\DateTime $dateTime, $format = \IntlDateFormatter::FULL): string
     {
         $formatter = new \IntlDateFormatter(
-            'fr',
+            \Locale::getDefault(),
             $format,
             \IntlDateFormatter::NONE,
             new \DateTimeZone('Europe/Brussels'),
