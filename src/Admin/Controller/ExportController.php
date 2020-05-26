@@ -84,9 +84,9 @@ class ExportController extends AbstractController
         $listingPresences = $this->listingPresenceByMonth->create($date);
 
         if ($one) {
-            $spreadsheet = $this->spreadsheetFactory->createXlsOne($date, $listingPresences);
+            $spreadsheet = $this->spreadsheetFactory->createXlsByMonthForOne($date, $listingPresences);
         } else {
-            $spreadsheet = $this->spreadsheetFactory->createXls($listingPresences);
+            $spreadsheet = $this->spreadsheetFactory->createXlsByMonthDefault($listingPresences);
         }
 
         return $this->spreadsheetFactory->downloadXls($spreadsheet, $fileName);

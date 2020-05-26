@@ -7,11 +7,12 @@ use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
 use AcMarche\Mercredi\Spreadsheet\AbstractSpreadsheetDownloader;
 use AcMarche\Mercredi\Utils\DateProvider;
+use AcMarche\Mercredi\Utils\DateUtils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class SpreadsheetFactory extends AbstractSpreadsheetDownloader
 {
-    public function createXlsOne(\DateTime $date, ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
+    public function createXlsByMonthForOne(\DateTime $date, ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -21,49 +22,50 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         /**
          * titre de la feuille.
          */
-        $c = 1;
+        $ligne = 1;
         $sheet
-            ->setCellValue('A'.$c, 'Nom')
-            ->setCellValue('B'.$c, 'Prénom')
-            ->setCellValue('C'.$c, 'Né le')
-            ->setCellValue('D'.$c, 'Groupe');
+            ->setCellValue('A'.$ligne, 'Nom')
+            ->setCellValue('B'.$ligne, 'Prénom')
+            ->setCellValue('C'.$ligne, 'Né le')
+            ->setCellValue('D'.$ligne, 'Groupe');
 
         $colonne = 'E';
+
         foreach ($dateInterval as $date) {
-            $sheet->setCellValue($colonne.$c, $date->format('D j'));
+            $sheet->setCellValue($colonne.$ligne, DateUtils::formatFr($date, \IntlDateFormatter::SHORT));
             ++$colonne;
         }
 
         $ligne = 3;
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
             $colonne = 'A';
-        }
-        $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
-        $sheet->setCellValue($colonne.$ligne, $enfant->getNom());
-        ++$colonne;
-        $sheet->setCellValue($colonne.$ligne, $enfant->getPrenom());
-        ++$colonne;
-        $sheet->setCellValue($colonne.$ligne, $neLe);
-        ++$colonne;
-        $sheet->setCellValue($colonne.$ligne, ScolaireData::getGroupeScolaire($enfant));
 
-        foreach ($dateInterval as $date) {
-            $presence = $this->plaineService->getPresenceByDateAndEnfant($date, $enfant);
+            $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
 
-            if (!$presence) {
+            $sheet
+                ->setCellValue($colonne.$ligne, $enfant->getNom())
+                ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
+                ->setCellValue(++$colonne.$ligne, $neLe)
+                ->setCellValue(++$colonne.$ligne, ScolaireData::getGroupeScolaire($enfant));
+
+            foreach ($dateInterval as $date) {
+                //$presence = $this->plaineService->getPresenceByDateAndEnfant($date, $enfant);
+
+                /*  if (!$presence) {
+                      ++$colonne;
+                      continue;
+                  }*/
+
                 ++$colonne;
-                continue;
+                $sheet->setCellValue($colonne.$ligne, 1);
             }
-
-            ++$colonne;
-            $sheet->setCellValue($colonne.$ligne, 1);
+            ++$ligne;
         }
-        ++$ligne;
 
         return $spreadsheet;
     }
 
-    public function createXls(ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
+    public function createXlsByMonthDefault(ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
