@@ -3,7 +3,9 @@
 
 namespace AcMarche\Mercredi\Presence\Spreadsheet;
 
+use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
 use AcMarche\Mercredi\Spreadsheet\AbstractSpreadsheetDownloader;
 use AcMarche\Mercredi\Utils\DateProvider;
@@ -128,7 +130,12 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         return $spreadsheet;
     }
 
-    public function presenceXls(ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
+    /**
+     * @param Presence[] $presences
+     * @return Spreadsheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function presenceXls(array $presences): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -140,14 +147,16 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
             ->setCellValue('C'.$c, 'Né le');
 
         $ligne = 3;
-        foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
+
+        $enfants = PresenceUtils::extractEnfants($presences, false);
+
+        foreach ($enfants as $enfant) {
             $colonne = 'A';
             $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
-            $sheet->setCellValue($colonne.$ligne, $enfant->getNom());
-            ++$colonne;
-            $sheet->setCellValue($colonne.$ligne, $enfant->getPrenom());
-            ++$colonne;
-            $sheet->setCellValue($colonne.$ligne, $neLe);
+            $sheet
+                ->setCellValue($colonne.$ligne, $enfant->getNom())
+                ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
+                ->setCellValue(++$colonne.$ligne, $neLe);
             ++$ligne;
         }
 

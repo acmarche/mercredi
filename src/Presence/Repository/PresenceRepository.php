@@ -105,7 +105,7 @@ class PresenceRepository extends ServiceEntityRepository
      * @param string $annee_scolaire
      * @return Presence[]
      */
-    public function searchListing(Jour $jour, ?Ecole $ecole): array
+    public function findPresencesByJourAndEcole(Jour $jour, ?Ecole $ecole): array
     {
         $qb = $this->createQueryBuilder('presence')
             ->join('presence.enfant', 'enfant', 'WITH')

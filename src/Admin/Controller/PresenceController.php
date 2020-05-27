@@ -97,7 +97,7 @@ class PresenceController extends AbstractController
             $displayRemarque = $data['displayRemarque'];
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $data);
             $search = true;
-            $presences = $this->presenceRepository->searchListing($jour, $data['ecole']);
+            $presences = $this->presenceRepository->findPresencesByJourAndEcole($jour, $data['ecole']);
 
             $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
             $this->presenceUtils->addTelephonesOnEnfant($enfants);

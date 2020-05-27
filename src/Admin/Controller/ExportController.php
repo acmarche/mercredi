@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Spreadsheet\SpreadsheetFactory;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
@@ -34,28 +35,37 @@ class ExportController extends AbstractController
      * @var SearchHelper
      */
     private $searchHelper;
+    /**
+     * @var PresenceRepository
+     */
+    private $presenceRepository;
 
     public function __construct(
         SpreadsheetFactory $spreadsheetFactory,
         ListingPresenceByMonth $listingPresenceByMonth,
+        PresenceRepository $presenceRepository,
         SearchHelper $searchHelper
     ) {
         $this->spreadsheetFactory = $spreadsheetFactory;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->searchHelper = $searchHelper;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
-     * @Route("/presence/{id}", name="mercredi_admin_export_presence_xls")
+     * @Route("/presence", name="mercredi_admin_export_presence_xls")
      */
-    public function default(Request $request, Jour $jour): Response
+    public function default(): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
-        $date = $args['mois'];
-        $listingPresences = $this->listingPresenceByMonth->create($date);
-        $spreadsheet = $this->spreadsheetFactory->presenceXls($listingPresences);
+        $jour = $args['jour'];
+        $ecole = $args['ecole'];
 
-        return $this->spreadsheetFactory->downloadXls($spreadsheet, 'presences.xls');
+        $presences = $this->presenceRepository->findPresencesByJourAndEcole($jour, $ecole);
+
+        $spreadsheet = $this->spreadsheetFactory->presenceXls($presences);
+
+        return $this->spreadsheetFactory->downloadXls($spreadsheet, 'listing-presences.xls');
     }
 
     /**
