@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Relation\Repository;
 
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -46,6 +47,21 @@ class RelationRepository extends ServiceEntityRepository
             ->addSelect('enfant')
             ->andWhere('relation.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
+            ->orderBy('enfant.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Relation[] Returns an array of Relation objects
+     */
+    public function findByEcole(Ecole $ecole)
+    {
+        return $this->createQueryBuilder('relation')
+            ->leftJoin('relation.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->andWhere('enfant.ecole = :ecole')
+            ->setParameter('ecole', $ecole)
             ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
@@ -124,5 +140,37 @@ class RelationRepository extends ServiceEntityRepository
     public function persist(Relation $relation)
     {
         $this->_em->persist($relation);
+    }
+
+    /**
+     * @param Tuteur $tuteur
+     * @return Relation[]
+     */
+    public function findEnfantsActifs(Tuteur $tuteur): array
+    {
+        return $this->createQueryBuilder('relation')
+            ->leftJoin('relation.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->andwhere('relation.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andwhere('enfant.archived != 1')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @param Tuteur $tuteur
+     * @return Relation[]
+     */
+    public function findTuteursActifs(): array
+    {
+        return $this->createQueryBuilder('relation')
+            ->leftJoin('relation.enfant', 'enfant', 'WITH')
+            ->leftJoin('relation.tuteur', 'tuteur', 'WITH')
+            ->addSelect('enfant', 'tuteur')
+            ->andwhere('enfant.archived != 1')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -12,6 +12,7 @@ class SearchHelper
     const TUTEUR_LIST = 'tuteur_list';
     const PRESENCE_LIST = 'presence_list';
     const PRESENCE_LIST_BY_MONTH = 'presence_list_by_month';
+    const MESSAGE_INDEX = 'message_index';
 
     /**
      * @var SessionInterface

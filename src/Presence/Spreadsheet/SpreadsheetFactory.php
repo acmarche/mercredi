@@ -148,7 +148,7 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
 
         $ligne = 3;
 
-        $enfants = PresenceUtils::extractEnfants($presences, false);
+        $enfants = PresenceUtils::extractEnfants($presences);
 
         foreach ($enfants as $enfant) {
             $colonne = 'A';

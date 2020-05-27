@@ -37,6 +37,4 @@ Feature: Gestion des présences
     Then I should see "PERET Merlin"
     Then I should see "FERNANDEL Yves"
     Then I should see "SIMPSON Lisa"
-    Then I should see "02/09/2020"
-    Then I should see "03/05/2016"
-    And I follow "Par défaut"
+    Then I should see "16 septembre 2020"

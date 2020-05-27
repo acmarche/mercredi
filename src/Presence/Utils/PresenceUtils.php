@@ -6,6 +6,7 @@ namespace AcMarche\Mercredi\Presence\Utils;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -39,24 +40,43 @@ class PresenceUtils
 
     /**
      * @param Presence[] $presences
+     * @return Tuteur[]
+     */
+    public static function extractTuteurs(array $presences): array
+    {
+        return array_unique(
+            array_map(
+                function ($presence) {
+                    return $presence->getTuteur();
+                },
+                $presences
+            ),
+            SORT_REGULAR
+        );
+    }
+
+    /**
+     * @param Presence[] $presences
      * @return Enfant[]
      */
-    public static function extractEnfants(array $presences, bool $registerRemarques): array
+    public static function extractEnfants(array $presences, bool $registerRemarques = false): array
     {
-        $enfants = [];
-        foreach ($presences as $presence) {
-            $enfant = $presence->getEnfant();
-            if ($registerRemarques) {
-                $remarques = $enfant->getRemarque();
-                if ($presence->getRemarque()) {
-                    $remarques .= ' (Parent=>) '.$presence->getRemarque();
-                }
-                $enfant->setRemarque($remarques);
-            }
-            $enfants[] = $enfant;
-        }
-
-        return $enfants;
+        return array_unique(
+            array_map(
+                function ($presence) use ($registerRemarques) {
+                    $enfant = $presence->getEnfant();
+                    if ($registerRemarques) {
+                        $remarques = $enfant->getRemarque();
+                        if ($presence->getRemarque()) {
+                            $remarques .= ' (Parent=>) '.$presence->getRemarque();
+                        }
+                        $enfant->setRemarque($remarques);
+                    }
+                },
+                $presences
+            ),
+            SORT_REGULAR
+        );
     }
 
     /**
