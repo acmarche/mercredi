@@ -20,4 +20,19 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
+
+    public function remove(Message $message)
+    {
+        $this->_em->remove($message);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
+    public function persist(Message $message)
+    {
+        $this->_em->persist($message);
+    }
 }

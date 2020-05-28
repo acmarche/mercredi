@@ -14,12 +14,12 @@
 
     <br/>
 
-    {% if tuteursWithOutEmails | length > 0 %}
+    {% if tuteurs | length > 0 %}
         <div class="alert alert-warning">
             Les {{ tuteursWithOutEmails | length }} tuteurs suivants n'ont pas d' adresse mail, ni leur conjoint
         </div>
 
-        {% include '@AcMarcheMercrediAdmin/message/_tuteurs.html.twig' } %}
+        {% include '@AcMarcheMercrediAdmin/message/_tuteurs.html.twig' %}
 
     {% endif %}
 

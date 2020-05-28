@@ -3,7 +3,10 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Message\Factory\MessageFactory;
+use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
+use AcMarche\Mercredi\Message\Handler\MessageHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -42,25 +45,42 @@ class MessageController extends AbstractController
      * @var SearchHelper
      */
     private $searchHelper;
+    /**
+     * @var TuteurUtils
+     */
+    private $tuteurUtils;
+    /**
+     * @var MessageFactory
+     */
+    private $messageFactory;
+    /**
+     * @var MessageHandler
+     */
+    private $messageHandler;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
-        SearchHelper $searchHelper
+        SearchHelper $searchHelper,
+        TuteurUtils $tuteurUtils,
+        MessageFactory $messageFactory,
+        MessageHandler $messageHandler
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
         $this->searchHelper = $searchHelper;
+        $this->tuteurUtils = $tuteurUtils;
+        $this->messageFactory = $messageFactory;
+        $this->messageHandler = $messageHandler;
     }
 
     /**
-     * @Route("/", name="mercredi_message")
+     * @Route("/", name="mercredi_message_index")
      */
     public function index(Request $request): Response
     {
-        $tuteurs = [];
         $form = $this->createForm(SearchMessageType::class);
         $form->handleRequest($request);
 
@@ -68,28 +88,31 @@ class MessageController extends AbstractController
             $data = $form->getData();
             $ecole = $data['ecole'];
             $jour = $data['jour'];
-
-            if ($jour && $ecole) {
-                $this->addFlash('danger', 'Un seul critère de recherche');
-                $this->redirectToRoute('mercredi_message');
-            }
+            $tuteurs = [[]];
 
             if ($jour) {
                 $presences = $this->presenceRepository->findByDay($jour);
-                $tuteurs = PresenceUtils::extractTuteurs($presences);
+                $tuteurs[] = PresenceUtils::extractTuteurs($presences);
             }
 
             if ($ecole) {
                 $relations = $enfants = $this->relationRepository->findByEcole($ecole);
-                $tuteurs = RelationUtils::extractTuteurs($relations);
+                $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
+
+            if (!$jour && !$ecole) {
+                $relations = $this->relationRepository->findTuteursActifs();
+                $tuteurs[] = RelationUtils::extractTuteurs($relations);
+            }
+
+            $tuteurs = array_merge(...$tuteurs);
         } else {
             $relations = $this->relationRepository->findTuteursActifs();
             $tuteurs = RelationUtils::extractTuteurs($relations);
         }
 
-        $emails = TuteurUtils::getEmails($tuteurs);
-        $tuteursWithOutEmails = TuteurUtils::filterTuteursWithOutEmail($tuteurs);
+        $emails = $this->tuteurUtils->getEmails($tuteurs);
+        $tuteursWithOutEmails = $this->tuteurUtils->filterTuteursWithOutEmail($tuteurs);
 
         $this->searchHelper->saveSearch(SearchHelper::MESSAGE_INDEX, $emails);
 
@@ -132,9 +155,30 @@ class MessageController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $emails = $this->searchHelper->getArgs(SearchHelper::MESSAGE_INDEX);
+
+        $message = $this->messageFactory->createInstance();
+        $message->setDestinataires($emails);
+
+        $form = $this->createForm(MessageType::class, $message);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->messageHandler->handle($message);
+
+            $this->addFlash('success', 'Le message a bien été envoyé');
+
+            $this->searchHelper->deleteSearch(SearchHelper::MESSAGE_INDEX);
+
+            return $this->redirectToRoute('mercredi_message_index');
+        }
+
         return $this->render(
-            '@AcMarcheMercrediAdmin/default/index.html.twig',
+            '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
+                'emails' => $emails,
+                'form' => $form->createView(),
             ]
         );
     }

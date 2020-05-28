@@ -9,6 +9,16 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
 class TuteurUtils
 {
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
+
+    public function __construct(RelationRepository $relationRepository)
+    {
+        $this->relationRepository = $relationRepository;
+    }
+
     public static function getTelephones(Tuteur $tuteur): string
     {
         $telephones = '';
@@ -37,11 +47,11 @@ class TuteurUtils
      *
      * @return array
      */
-    public static function getEmails(array $tuteurs)
+    public function getEmails(array $tuteurs)
     {
         $emails = [[]];
         foreach ($tuteurs as $tuteur) {
-            if (self::tuteurIsActif($tuteur)) {
+            if ($this->tuteurIsActif($tuteur)) {
                 $emails[] = self::getEmailsOfOneTuteur($tuteur);
             }
         }
@@ -51,13 +61,9 @@ class TuteurUtils
         return array_unique($emails);
     }
 
-    public static function tuteurIsActif(Tuteur $tuteur): bool
+    public function tuteurIsActif(Tuteur $tuteur): bool
     {
-        return call_user_func(
-            function (RelationRepository $relationRepository) use ($tuteur) : bool {
-                return count($relationRepository->findEnfantsActifs($tuteur)) > 0;
-            }
-        , $tuteur);
+        return count($this->relationRepository->findEnfantsActifs($tuteur)) > 0;
     }
 
     /**
@@ -92,11 +98,11 @@ class TuteurUtils
      *
      * @return Tuteur[]
      */
-    public  static function filterTuteursWithOutEmail(array $tuteurs): array
+    public  function filterTuteursWithOutEmail(array $tuteurs): array
     {
         $data = [];
         foreach ($tuteurs as $tuteur) {
-            if (self::tuteurIsActif($tuteur)) {
+            if ($this->tuteurIsActif($tuteur)) {
                 if (0 == count(self::getEmailsOfOneTuteur($tuteur))) {
                     $data[] = $tuteur;
                 }

@@ -33,4 +33,9 @@ class SearchHelper
     {
         return $this->session->get($name, []);
     }
+
+    public function deleteSearch(string $name): void
+    {
+        $this->session->remove($name);
+    }
 }
