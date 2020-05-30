@@ -89,19 +89,15 @@ class PresenceController extends AbstractController
         $jour = $remarques = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+            $dataForm = $form->getData();
             /**
              * @var Jour $jour
              */
-            $jour = $data['jour'];
-            $displayRemarque = $data['displayRemarque'];
-            $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $data);
+            $jour = $dataForm['jour'];
+            $displayRemarque = $dataForm['displayRemarque'];
+            $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $dataForm);
             $search = true;
-            $presences = $this->presenceRepository->findPresencesByJourAndEcole($jour, $data['ecole']);
-
-            $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
-            $this->presenceUtils->addTelephonesOnEnfant($enfants);
-            $data = PresenceUtils::groupByGroupScolaire($enfants);
+            $data = $this->presenceHandler->handleForGroupe($jour, $dataForm['ecole'], $displayRemarque);
         }
 
         $groupes = ScolaireData::GROUPES_SCOLAIRES;

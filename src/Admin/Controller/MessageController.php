@@ -2,11 +2,13 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Enfant\Utils\EnfantUtils;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Message\Factory\MessageFactory;
 use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
 use AcMarche\Mercredi\Message\Handler\MessageHandler;
+use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -57,6 +59,10 @@ class MessageController extends AbstractController
      * @var MessageHandler
      */
     private $messageHandler;
+    /**
+     * @var PresenceHandler
+     */
+    private $presenceHandler;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -65,7 +71,8 @@ class MessageController extends AbstractController
         SearchHelper $searchHelper,
         TuteurUtils $tuteurUtils,
         MessageFactory $messageFactory,
-        MessageHandler $messageHandler
+        MessageHandler $messageHandler,
+        PresenceHandler $presenceHandler
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->tuteurRepository = $tuteurRepository;
@@ -74,6 +81,7 @@ class MessageController extends AbstractController
         $this->tuteurUtils = $tuteurUtils;
         $this->messageFactory = $messageFactory;
         $this->messageHandler = $messageHandler;
+        $this->presenceHandler = $presenceHandler;
     }
 
     /**
@@ -129,11 +137,35 @@ class MessageController extends AbstractController
     /**
      * @Route("/jour/{id}", name="mercredi_message_new_jour")
      */
-    public function default(Request $request, Jour $jour): Response
+    public function fromJour(Request $request, Jour $jour): Response
     {
+        $presences = $this->presenceRepository->findByDay($jour);
+
+        $tuteurs = PresenceUtils::extractTuteurs($presences);
+        $emails = $this->tuteurUtils->getEmails($tuteurs);
+
+        $message = $this->messageFactory->createInstance();
+        $message->setDestinataires($emails);
+
+        $form = $form = $this->createForm(MessageType::class, $message);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->messageHandler->handle($message);
+
+            $this->addFlash('success', 'Le message a bien été envoyé');
+
+            return $this->redirectToRoute('mercredi_message_index');
+        }
+
         return $this->render(
-            '@AcMarcheMercrediAdmin/default/index.html.twig',
+            '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
+                'emailuser' => $this->getUser()->getEmail(),
+                'form' => $form->createView(),
+                'emails' => $emails,
+                'tuteurs' => [],
             ]
         );
     }
@@ -141,11 +173,44 @@ class MessageController extends AbstractController
     /**
      * @Route("/groupe", name="mercredi_message_new_groupescolaire")
      */
-    public function groupeScolaire(Request $request): Response
+    public function groupeScolaire(Request $request, string $groupe): Response
     {
+        $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
+        if (count($args) < 1) {
+            return $this->redirectToRoute('mercredi_admin_presence_index');
+        }
+
+        $jour = $args['jour'];
+        $ecole = $args['ecole'];
+
+        $data = $this->presenceHandler->handleForGroupe($jour, $ecole, false);
+        $enfants = $data[$groupe] ?? [];
+
+        $tuteurs = EnfantUtils::extractTuteurs($enfants);
+        $emails = $this->tuteurUtils->getEmails($tuteurs);
+
+        $message = $this->messageFactory->createInstance();
+        $message->setDestinataires($emails);
+
+        $form = $form = $this->createForm(MessageType::class, $message);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->messageHandler->handle($message);
+
+            $this->addFlash('success', 'Le message a bien été envoyé');
+
+            return $this->redirectToRoute('mercredi_admin_presence_index');
+        }
+
         return $this->render(
-            '@AcMarcheMercrediAdmin/default/index.html.twig',
+            '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
+                'emailuser' => $this->getUser()->getEmail(),
+                'form' => $form->createView(),
+                'emails' => $emails,
+                'tuteurs' => [],
             ]
         );
     }
@@ -164,7 +229,6 @@ class MessageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->messageHandler->handle($message);
 
             $this->addFlash('success', 'Le message a bien été envoyé');
