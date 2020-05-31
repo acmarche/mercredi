@@ -26,7 +26,7 @@ final class DemoContext implements Context
      */
     private $requestStack;
 
-    public function __construct(Response $requestStack)
+    public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
     }

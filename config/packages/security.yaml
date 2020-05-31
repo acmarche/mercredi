@@ -12,11 +12,11 @@ security:
                 property: username
     firewalls:
         main:
-            anonymous: lazy
+            #anonymous: lazy
             provider: mercredi_user_provider
             guard:
                 authenticators:
-                    - AcMarche\Mercredi\Security\MercrediAuthenticator
+                    - AcMarche\Mercredi\Security\Authenticator\MercrediAuthenticator
             logout:
                 path: app_logout
     role_hierarchy:

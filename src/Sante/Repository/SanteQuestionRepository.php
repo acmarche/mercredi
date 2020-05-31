@@ -18,21 +18,6 @@ class SanteQuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, SanteQuestion::class);
     }
 
-    public function persist(SanteQuestion $santeQuestion)
-    {
-        $this->_em->persist($santeQuestion);
-    }
-
-    public function remove(SanteQuestion $santeQuestion)
-    {
-        $this->_em->remove($santeQuestion);
-    }
-
-    public function flush()
-    {
-        $this->_em->flush();
-    }
-
     public function findAll()
     {
         return $this->findBy([], ['display_order' => 'ASC']);
@@ -57,5 +42,20 @@ class SanteQuestionRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return $query->getResult();
+    }
+
+    public function persist(SanteQuestion $santeQuestion)
+    {
+        $this->_em->persist($santeQuestion);
+    }
+
+    public function remove(SanteQuestion $santeQuestion)
+    {
+        $this->_em->remove($santeQuestion);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
     }
 }

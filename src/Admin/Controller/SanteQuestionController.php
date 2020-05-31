@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/santeQuestion")
+ * @Route("/sante/question")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
 class SanteQuestionController extends AbstractController
@@ -122,5 +122,37 @@ class SanteQuestionController extends AbstractController
         }
 
         return $this->redirectToRoute('mercredi_admin_sante_question_index');
+    }
+
+    /**
+     * @Route("/q/sort", name="mercredi_admin_sante_question_sort", methods={"GET","POST"})
+     */
+    public function trier(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $questions = $request->request->get('questions');
+            if (is_array($questions)) {
+                foreach ($questions as $position => $questionId) {
+                    $santeQuestion = $this->santeQuestionRepository->find($questionId);
+                    if ($santeQuestion) {
+                        $santeQuestion->setDisplayOrder($position);
+                    }
+                }
+                $this->santeQuestionRepository->flush();
+
+                return new Response('<div class="alert alert-success">Tri enregistré</div>');
+            }
+
+            return new Response('<div class="alert alert-error">Erreur</div>');
+        }
+
+        $questions = $this->santeQuestionRepository->findAll();
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/sante_question/sort.html.twig',
+            [
+                'questions' => $questions,
+            ]
+        );
     }
 }

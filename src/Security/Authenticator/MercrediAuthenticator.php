@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Security;
+namespace AcMarche\Mercredi\Security\Authenticator;
 
 use AcMarche\Mercredi\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
