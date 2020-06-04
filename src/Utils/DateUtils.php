@@ -1,14 +1,12 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Utils;
-
 
 class DateUtils
 {
     /**
      * @param string $mois 05/2020
-     * @return \DateTime
+     *
      * @throws \Exception
      */
     public static function createDateTimeFromDayMonth(string $mois): \DateTime
@@ -31,5 +29,4 @@ class DateUtils
 
         return $formatter->format($dateTime);
     }
-
 }

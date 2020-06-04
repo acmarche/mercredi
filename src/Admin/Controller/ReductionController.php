@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Reduction;
+use AcMarche\Mercredi\Reduction\Form\ReductionType;
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
 use AcMarche\Mercredi\Reduction\Message\ReductionDeleted;
 use AcMarche\Mercredi\Reduction\Message\ReductionUpdated;
-use AcMarche\Mercredi\Entity\Reduction;
-use AcMarche\Mercredi\Reduction\Form\ReductionType;
 use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,7 +53,6 @@ class ReductionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->reductionRepository->persist($reduction);
             $this->reductionRepository->flush();
 

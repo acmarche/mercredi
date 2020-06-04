@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Spreadsheet;
 
 use AcMarche\Mercredi\Entity\Presence;
@@ -88,7 +87,7 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         $sheet->setCellValue(++$colonne.$ligne, 'Total');
 
         /**
-         * Pour chaque enfant on affiche present ou pas et son total
+         * Pour chaque enfant on affiche present ou pas et son total.
          */
         $ligne = 3;
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
@@ -105,7 +104,7 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
                 $present = 0;
                 if ($jourListing->hasEnfant($enfant)) {
                     $present = 1;
-                    $countPresences++;
+                    ++$countPresences;
                 }
                 $sheet->setCellValue(++$colonne.$ligne, $present);
             }
@@ -114,7 +113,7 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         }
 
         /**
-         * Total enfants et total enfants par jour
+         * Total enfants et total enfants par jour.
          */
         $colonne = 'A';
         $sheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getEnfants()).' enfants');
@@ -132,7 +131,7 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
 
     /**
      * @param Presence[] $presences
-     * @return Spreadsheet
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function presenceXls(array $presences): Spreadsheet

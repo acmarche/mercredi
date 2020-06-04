@@ -14,9 +14,6 @@ class JourCreated
         $this->jourId = $jourId;
     }
 
-    /**
-     * @return int
-     */
     public function getJourId(): int
     {
         return $this->jourId;

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Dto;
 
 use AcMarche\Mercredi\Entity\Enfant;
@@ -62,7 +61,6 @@ class ListingPresenceByMonth
     }
 
     /**
-     * @param \DateTimeInterface $month
      * @return Jour[]
      */
     public function getDaysOfMonth(\DateTimeInterface $month)
@@ -95,7 +93,6 @@ class ListingPresenceByMonth
     }
 
     /**
-     * @param \DateTimeInterface $month
      * @return Presence[]
      */
     private function getPresencesOfMonth(\DateTimeInterface $month): array
@@ -104,7 +101,6 @@ class ListingPresenceByMonth
     }
 
     /**
-     * @param \DateTimeInterface $month
      * @return Enfant[]
      */
     private function getEnfantsPresentsOfMonth(\DateTimeInterface $month): array
@@ -120,5 +116,4 @@ class ListingPresenceByMonth
 
         return $enfants;
     }
-
 }

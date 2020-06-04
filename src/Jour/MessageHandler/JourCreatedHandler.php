@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Jour\MessageHandler;
-
 
 use AcMarche\Mercredi\Jour\Message\JourCreated;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
@@ -28,7 +26,6 @@ class JourCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(JourCreated $jourCreated)
     {
-        $this->flashBag->add('success', "La date a bien été ajoutée");
+        $this->flashBag->add('success', 'La date a bien été ajoutée');
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\Message;
 
 class SanteQuestionUpdated
@@ -15,9 +14,6 @@ class SanteQuestionUpdated
         $this->santeQuestionId = $santeQuestionId;
     }
 
-    /**
-     * @return int
-     */
     public function getSanteQuestionId(): int
     {
         return $this->santeQuestionId;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Form\Type;
-
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -16,7 +14,7 @@ class ArchivedType extends AbstractType
             [
                 'required' => false,
                 'label' => 'Archiver',
-                'label_attr'=> ['class' => 'switch-custom']
+                'label_attr' => ['class' => 'switch-custom'],
             ]
         );
     }
@@ -25,5 +23,4 @@ class ArchivedType extends AbstractType
     {
         return CheckboxType::class;
     }
-
 }

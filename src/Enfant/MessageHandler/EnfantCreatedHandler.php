@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\MessageHandler;
-
 
 use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
@@ -30,5 +28,4 @@ class EnfantCreatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'enfant a bien été ajouté");
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 use AcMarche\Mercredi\Entity\Relation;
 
@@ -28,5 +26,4 @@ trait RelationTrait
     {
         $this->relations = $relations;
     }
-
 }

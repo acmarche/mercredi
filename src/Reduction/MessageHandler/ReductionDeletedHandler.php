@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Reduction\MessageHandler;
 
 use AcMarche\Mercredi\Reduction\Message\ReductionDeleted;
@@ -27,7 +26,6 @@ class ReductionDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(ReductionDeleted $reductionDeleted)
     {
-        $this->flashBag->add('success', "La réduction a bien été supprimée");
+        $this->flashBag->add('success', 'La réduction a bien été supprimée');
     }
-
 }

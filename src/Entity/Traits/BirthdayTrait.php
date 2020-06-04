@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait BirthdayTrait
 {
@@ -13,21 +11,13 @@ trait BirthdayTrait
      */
     private $birthday;
 
-    /**
-     * @return \DateTime|null
-     */
     public function getBirthday(): ?\DateTime
     {
         return $this->birthday;
     }
 
-    /**
-     * @param \DateTime|null $birthday
-     */
     public function setBirthday(?\DateTime $birthday): void
     {
         $this->birthday = $birthday;
     }
-
-
 }

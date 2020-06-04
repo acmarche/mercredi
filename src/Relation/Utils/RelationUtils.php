@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation\Utils;
-
 
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -25,5 +23,4 @@ class RelationUtils
             )
         );
     }
-
 }

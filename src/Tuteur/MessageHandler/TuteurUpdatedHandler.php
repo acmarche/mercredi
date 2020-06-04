@@ -1,10 +1,9 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Tuteur\MessageHandler;
 
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -27,7 +26,6 @@ class TuteurUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(TuteurUpdated $tuteurUpdated)
     {
-        $this->flashBag->add('success', "Le tuteur a bien été modifié");
+        $this->flashBag->add('success', 'Le tuteur a bien été modifié');
     }
-
 }

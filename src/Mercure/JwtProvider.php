@@ -1,16 +1,14 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Mercure;
 
 use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key;
 
 /**
  * https://afsy.fr/avent/2019/21-symfony-et-mercure
- * Class JwtProvider
- * @package AcMarche\Mercredi\Jwt
+ * Class JwtProvider.
  */
 class JwtProvider
 {

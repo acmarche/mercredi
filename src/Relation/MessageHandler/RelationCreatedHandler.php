@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation\MessageHandler;
-
 
 use AcMarche\Mercredi\Relation\Message\RelationCreated;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -30,5 +28,4 @@ class RelationCreatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'enfant a bien été ajouté");
     }
-
 }

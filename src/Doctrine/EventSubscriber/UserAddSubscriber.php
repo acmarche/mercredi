@@ -60,5 +60,4 @@ class UserAddSubscriber implements EventSubscriber
             $entity->setUserAdd($user->getUsername());
         }
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\FlashMessage\MessageHandler;
 
 use AcMarche\Mercredi\FlashMessage\Message\FlashNotification;

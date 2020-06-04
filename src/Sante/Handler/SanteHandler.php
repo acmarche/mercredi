@@ -1,13 +1,10 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\Handler;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
-use AcMarche\Mercredi\Entity\Sante\SanteReponse;
 use AcMarche\Mercredi\Sante\Factory\SanteFactory;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
@@ -55,8 +52,8 @@ class SanteHandler
     /**
      * Si pas de reponse ou remarque on ne cree pas la reponse.
      *
-     * @param SanteFiche $santeFiche
      * @param SanteQuestion[] $questions
+     *
      * @return void|null
      */
     public function handle(SanteFiche $santeFiche, array $questions)

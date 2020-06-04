@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SanteQuestion
 {
-    use IdTrait,
-        NomTrait;
+    use IdTrait;
+    use NomTrait;
 
     /**
      * Information complementaire necessaire.
@@ -40,7 +40,7 @@ class SanteQuestion
 
     /**
      * @var int|null
-     * 0 => Non, 1 => Oui, -1 => Pas de reponse
+     *               0 => Non, 1 => Oui, -1 => Pas de reponse
      */
     protected $reponse;
 
@@ -59,97 +59,61 @@ class SanteQuestion
         return $this->nom;
     }
 
-    /**
-     * @return bool
-     */
     public function isComplement(): bool
     {
         return $this->complement;
     }
 
-    /**
-     * @param bool $complement
-     */
     public function setComplement(bool $complement): void
     {
         $this->complement = $complement;
     }
 
-    /**
-     * @return string|null
-     */
     public function getComplementLabel(): ?string
     {
         return $this->complement_label;
     }
 
-    /**
-     * @param string|null $complement_label
-     */
     public function setComplementLabel(?string $complement_label): void
     {
         $this->complement_label = $complement_label;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDisplayOrder(): ?int
     {
         return $this->display_order;
     }
 
-    /**
-     * @param int|null $display_order
-     */
     public function setDisplayOrder(?int $display_order): void
     {
         $this->display_order = $display_order;
     }
 
-    /**
-     * @return int|null
-     */
     public function getReponse(): ?int
     {
         return $this->reponse;
     }
 
-    /**
-     * @param int|null $reponse
-     */
     public function setReponse(?int $reponse): void
     {
         $this->reponse = $reponse;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRemarque(): ?string
     {
         return $this->remarque;
     }
 
-    /**
-     * @param string|null $remarque
-     */
     public function setRemarque(?string $remarque): void
     {
         $this->remarque = $remarque;
     }
 
-    /**
-     * @return SanteFiche|null
-     */
     public function getSanteFiche(): ?SanteFiche
     {
         return $this->sante_fiche;
     }
 
-    /**
-     * @param SanteFiche|null $sante_fiche
-     */
     public function setSanteFiche(?SanteFiche $sante_fiche): void
     {
         $this->sante_fiche = $sante_fiche;
@@ -159,5 +123,4 @@ class SanteQuestion
     {
         return $this->complement;
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Handler;
-
 
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -42,12 +40,6 @@ class PresenceHandler
         $this->presenceRepository->flush();
     }
 
-    /**
-     * @param Jour $jour
-     * @param Ecole|null $ecole
-     * @param bool $displayRemarque
-     * @return array
-     */
     public function handleForGroupe(Jour $jour, ?Ecole $ecole, bool $displayRemarque): array
     {
         $presences = $this->presenceRepository->findPresencesByJourAndEcole($jour, $ecole);

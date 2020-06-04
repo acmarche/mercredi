@@ -6,10 +6,8 @@ namespace AcMarche\Mercredi\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * This context class contains the definitions of the steps used by the demo
@@ -39,7 +37,7 @@ final class DemoContext implements Context
         $headers = $this->requestStack->getMasterRequest();
         var_dump($headers);
 
-        if ($this->response === null) {
+        if (null === $this->response) {
             throw new \RuntimeException('No response received');
         }
         var_dump($arg1);
@@ -54,5 +52,4 @@ final class DemoContext implements Context
         var_dump($arg1, $arg2);
         throw new PendingException();
     }
-
 }

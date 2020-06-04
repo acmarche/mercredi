@@ -33,5 +33,4 @@ class ReductionRepository extends ServiceEntityRepository
     {
         $this->_em->persist($reduction);
     }
-
 }

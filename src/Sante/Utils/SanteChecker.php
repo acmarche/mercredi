@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\Utils;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;

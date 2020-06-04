@@ -19,13 +19,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Jour implements TimestampableInterface
 {
+    use IdTrait;
 
-    use IdTrait,
-        TimestampableTrait,
-        PrixTrait,
-        ColorTrait,
-        RemarqueTrait,
-        ArchiveTrait;
+    use TimestampableTrait;
+
+    use PrixTrait;
+
+    use ColorTrait;
+
+    use RemarqueTrait;
+
+    use ArchiveTrait;
 
     /**
      * @var \DateTime|null
@@ -47,20 +51,13 @@ class Jour implements TimestampableInterface
         return $this->date_jour->format('d-m-Y');
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getDateJour(): ?\DateTime
     {
         return $this->date_jour;
     }
 
-    /**
-     * @param \DateTime|null $date_jour
-     */
     public function setDateJour(?\DateTime $date_jour): void
     {
         $this->date_jour = $date_jour;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
 use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
@@ -33,22 +32,22 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Enfant implements SluggableInterface, TimestampableInterface
 {
     use
-        IdTrait,
-        NomTrait,
-        PrenomTrait,
-        BirthdayTrait,
-        SexeTrait,
-        RemarqueTrait,
-        OrdreTrait,
-        PhotoTrait,
-        UserAddTrait,
-        SluggableTrait,
-        EcoleTrait,
-        RelationTrait,
-        ArchiveTrait,
-        TimestampableTrait,
-        TelephonesTrait,
-        AgeTrait;
+        IdTrait;
+    use NomTrait;
+    use PrenomTrait;
+    use BirthdayTrait;
+    use SexeTrait;
+    use RemarqueTrait;
+    use OrdreTrait;
+    use PhotoTrait;
+    use UserAddTrait;
+    use SluggableTrait;
+    use EcoleTrait;
+    use RelationTrait;
+    use ArchiveTrait;
+    use TimestampableTrait;
+    use TelephonesTrait;
+    use AgeTrait;
 
     /**
      * @var string|null
@@ -74,7 +73,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
 
     /**
      * @var string|null
-     *             Forcer le groupe scolaire
+     *                  Forcer le groupe scolaire
      * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $groupe_scolaire;
@@ -92,7 +91,8 @@ class Enfant implements SluggableInterface, TimestampableInterface
     private $relations;
 
     /**
-     * J'ai mis la definition pour pouvoir mettre le cascade
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
      * @var Presence[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="enfant", cascade={"remove"})
      */
@@ -119,65 +119,41 @@ class Enfant implements SluggableInterface, TimestampableInterface
         return true;
     }
 
-    /**
-     * @return string|null
-     */
     public function getNumeroNational(): ?string
     {
         return $this->numero_national;
     }
 
-    /**
-     * @param string|null $numero_national
-     */
     public function setNumeroNational(?string $numero_national): void
     {
         $this->numero_national = $numero_national;
     }
 
-    /**
-     * @return bool
-     */
     public function isPhotoAutorisation(): bool
     {
         return $this->photo_autorisation;
     }
 
-    /**
-     * @param bool $photo_autorisation
-     */
     public function setPhotoAutorisation(bool $photo_autorisation): void
     {
         $this->photo_autorisation = $photo_autorisation;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAnneeScolaire(): ?string
     {
         return $this->annee_scolaire;
     }
 
-    /**
-     * @param string|null $annee_scolaire
-     */
     public function setAnneeScolaire(?string $annee_scolaire): void
     {
         $this->annee_scolaire = $annee_scolaire;
     }
 
-    /**
-     * @return string|null
-     */
     public function getGroupeScolaire(): ?string
     {
         return $this->groupe_scolaire;
     }
 
-    /**
-     * @param string|null $groupe_scolaire
-     */
     public function setGroupeScolaire(?string $groupe_scolaire): void
     {
         $this->groupe_scolaire = $groupe_scolaire;
@@ -187,5 +163,4 @@ class Enfant implements SluggableInterface, TimestampableInterface
     {
         return $this->photo_autorisation;
     }
-
 }

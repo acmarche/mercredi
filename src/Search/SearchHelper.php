@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Search;
-
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 

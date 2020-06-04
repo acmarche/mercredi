@@ -25,16 +25,16 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Presence implements TimestampableInterface
 {
-    use IdTrait,
-        EnfantTrait,
-        TuteurTrait,
-        JourTrait,
-        AbsentTrait,
-        OrdreTrait,
-        ReductionTrait,
-        RemarqueTrait,
-        UserAddTrait,
-        TimestampableTrait;
+    use IdTrait;
+    use EnfantTrait;
+    use TuteurTrait;
+    use JourTrait;
+    use AbsentTrait;
+    use OrdreTrait;
+    use ReductionTrait;
+    use RemarqueTrait;
+    use UserAddTrait;
+    use TimestampableTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
@@ -74,5 +74,4 @@ class Presence implements TimestampableInterface
 
         return 'presence to string';
     }
-
 }

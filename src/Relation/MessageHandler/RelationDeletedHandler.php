@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation\MessageHandler;
 
 use AcMarche\Mercredi\Relation\Message\RelationDeleted;
@@ -27,7 +26,6 @@ class RelationDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(RelationDeleted $relationDeleted)
     {
-        $this->flashBag->add('success', "La relation a bien été supprimée");
+        $this->flashBag->add('success', 'La relation a bien été supprimée');
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Reduction\MessageHandler;
 
 use AcMarche\Mercredi\Reduction\Message\ReductionUpdated;
@@ -27,7 +26,6 @@ class ReductionUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(ReductionUpdated $reductionUpdated)
     {
-        $this->flashBag->add('success', "La réduction a bien été modifiée");
+        $this->flashBag->add('success', 'La réduction a bien été modifiée');
     }
-
 }

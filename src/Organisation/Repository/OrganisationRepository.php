@@ -21,7 +21,7 @@ class OrganisationRepository extends ServiceEntityRepository
 
     public function getOrganisation(): ?Organisation
     {
-      return  $this->createQueryBuilder('organisation')
+        return  $this->createQueryBuilder('organisation')
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -39,5 +39,4 @@ class OrganisationRepository extends ServiceEntityRepository
     {
         $this->_em->persist($organisation);
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Message\Factory;
-
 
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;

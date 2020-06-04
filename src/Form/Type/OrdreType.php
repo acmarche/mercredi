@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Form\Type;
-
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use Symfony\Component\Form\AbstractType;
@@ -26,5 +24,4 @@ class OrdreType extends AbstractType
     {
         return ChoiceType::class;
     }
-
 }

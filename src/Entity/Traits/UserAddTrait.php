@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait UserAddTrait
 {
@@ -12,20 +10,13 @@ trait UserAddTrait
      */
     private $userAdd;
 
-    /**
-     * @return string|null
-     */
     public function getUserAdd(): ?string
     {
         return $this->userAdd;
     }
 
-    /**
-     * @param string|null $userAdd
-     */
     public function setUserAdd(?string $userAdd): void
     {
         $this->userAdd = $userAdd;
     }
-
 }

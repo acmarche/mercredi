@@ -3,11 +3,11 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Sante\Form\SanteFicheType;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Message\SanteFicheDeleted;
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
-use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

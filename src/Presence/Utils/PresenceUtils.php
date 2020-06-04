@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Utils;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence;
@@ -25,7 +23,6 @@ class PresenceUtils
 
     /**
      * @param Presence[] $presences
-     * @return array
      */
     public function groupByYear(array $presences): array
     {
@@ -40,6 +37,7 @@ class PresenceUtils
 
     /**
      * @param Presence[] $presences
+     *
      * @return Tuteur[]
      */
     public static function extractTuteurs(array $presences): array
@@ -57,6 +55,7 @@ class PresenceUtils
 
     /**
      * @param Presence[] $presences
+     *
      * @return Enfant[]
      */
     public static function extractEnfants(array $presences, bool $registerRemarques = false): array
@@ -81,7 +80,6 @@ class PresenceUtils
 
     /**
      * @param Enfant[] $enfants
-     * @return array
      */
     public static function groupByGroupScolaire(array $enfants): array
     {
@@ -104,5 +102,4 @@ class PresenceUtils
             $enfant->setTelephones($telephones);
         }
     }
-
 }

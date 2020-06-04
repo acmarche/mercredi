@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Data;
-
 
 class MercrediConstantes
 {
@@ -64,5 +62,4 @@ class MercrediConstantes
                 break;
         }
     }
-
 }

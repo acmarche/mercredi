@@ -23,7 +23,6 @@ class JourRepository extends ServiceEntityRepository
 
     /**
      * @param $enfant
-     * @return QueryBuilder
      */
     public function getQbDaysNotRegisteredByEnfant($enfant): QueryBuilder
     {
@@ -44,6 +43,7 @@ class JourRepository extends ServiceEntityRepository
 
     /**
      * @param string $date
+     *
      * @return Jour[]
      */
     public function findDaysByMonth(\DateTimeInterface $date): array
@@ -87,5 +87,4 @@ class JourRepository extends ServiceEntityRepository
 
         return $qb;
     }
-
 }

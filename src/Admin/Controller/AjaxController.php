@@ -8,12 +8,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class DefaultController
- * @package AcMarche\Mercredi\Controller
+ * Class DefaultController.
  *
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/ajax")
@@ -48,9 +46,8 @@ class AjaxController extends AbstractController
         foreach ($tuteurs as $tuteur) {
             $data[$i]['id'] = $tuteur->getId();
             $data[$i]['nom'] = $tuteur->getNom().' '.$tuteur->getPrenom();
-            $i++;
+            ++$i;
         }
-
 
         return $this->json($data);
     }
@@ -76,10 +73,9 @@ class AjaxController extends AbstractController
                 $birthday = $enfant->getBirthday()->format('d-m-Y');
             }
             $data[$i]['birthday'] = $birthday;
-            $i++;
+            ++$i;
         }
 
         return $this->json($data);
     }
-
 }

@@ -1,12 +1,9 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\Utils;
-
 
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
-use AcMarche\Mercredi\Entity\Sante\SanteReponse;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 

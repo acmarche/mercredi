@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Dto;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
@@ -10,8 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Pour le listing par mois
- * Class JourListing
- * @package AcMarche\Mercredi\Presence\Dto
+ * Class JourListing.
  */
 class JourListing
 {
@@ -27,42 +24,28 @@ class JourListing
         $this->jour = $jour;
     }
 
-    public function hasEnfant(Enfant $enfant): bool {
+    public function hasEnfant(Enfant $enfant): bool
+    {
         return $this->enfants->contains($enfant);
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getEnfants(): ArrayCollection
     {
         return $this->enfants;
     }
 
-    /**
-     * @param ArrayCollection $enfants
-     */
     public function setEnfants(ArrayCollection $enfants): void
     {
         $this->enfants = $enfants;
     }
 
-    /**
-     * @return Jour
-     */
     public function getJour(): Jour
     {
         return $this->jour;
     }
 
-    /**
-     * @param Jour $jour
-     */
     public function setJour(Jour $jour): void
     {
         $this->jour = $jour;
     }
-
-
-
 }

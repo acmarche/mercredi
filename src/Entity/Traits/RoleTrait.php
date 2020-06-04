@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait RoleTrait
 {

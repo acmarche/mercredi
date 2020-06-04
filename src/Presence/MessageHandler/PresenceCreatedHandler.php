@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\MessageHandler;
-
 
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -28,7 +26,6 @@ class PresenceCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(PresenceCreated $presenceCreated)
     {
-        $this->flashBag->add('success', "La présence a bien été ajoutée");
+        $this->flashBag->add('success', 'La présence a bien été ajoutée');
     }
-
 }

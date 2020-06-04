@@ -34,7 +34,6 @@ class NoteRepository extends ServiceEntityRepository
         $this->_em->persist($note);
     }
 
-
     // /**
     //  * @return Note[] Returns an array of Note objects
     //  */

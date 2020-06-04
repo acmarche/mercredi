@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\MessageHandler;
 
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
@@ -27,7 +26,6 @@ class PresenceUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(PresenceUpdated $presenceUpdated)
     {
-        $this->flashBag->add('success', "La présence a bien été modifiée");
+        $this->flashBag->add('success', 'La présence a bien été modifiée');
     }
-
 }

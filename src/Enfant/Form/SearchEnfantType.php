@@ -1,15 +1,12 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\Form;
-
 
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -48,5 +45,4 @@ class SearchEnfantType extends AbstractType
                 ]
             );
     }
-
 }

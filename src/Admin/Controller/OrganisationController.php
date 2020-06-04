@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Organisation;
+use AcMarche\Mercredi\Organisation\Form\OrganisationType;
 use AcMarche\Mercredi\Organisation\Message\OrganisationCreated;
 use AcMarche\Mercredi\Organisation\Message\OrganisationDeleted;
 use AcMarche\Mercredi\Organisation\Message\OrganisationUpdated;
-use AcMarche\Mercredi\Entity\Organisation;
-use AcMarche\Mercredi\Organisation\Form\OrganisationType;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

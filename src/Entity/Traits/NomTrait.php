@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait NomTrait
 {
@@ -12,17 +10,11 @@ trait NomTrait
      */
     private $nom;
 
-    /**
-     * @return string|null
-     */
     public function getNom(): ?string
     {
         return $this->nom;
     }
 
-    /**
-     * @param string $nom
-     */
     public function setNom(string $nom): void
     {
         $this->nom = $nom;

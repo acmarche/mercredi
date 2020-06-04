@@ -1,15 +1,11 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Utils;
-
 
 class DateProvider
 {
     /**
      * @param string $date "01/08/2018"
-     *
-     * @return \DatePeriod
      *
      * @throws \Exception
      */
@@ -23,5 +19,4 @@ class DateProvider
 
         return new \DatePeriod($begin, $interval, $end);
     }
-
 }

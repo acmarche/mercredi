@@ -14,9 +14,6 @@ class NoteCreated
         $this->noteId = $noteId;
     }
 
-    /**
-     * @return int
-     */
     public function getNoteId(): int
     {
         return $this->noteId;

@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Sante\Form\SanteQuestionType;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionCreated;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionDeleted;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionUpdated;
-use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,7 +53,6 @@ class SanteQuestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->santeQuestionRepository->persist($santeQuestion);
             $this->santeQuestionRepository->flush();
 

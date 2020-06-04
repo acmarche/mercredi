@@ -25,7 +25,7 @@ class DirectoryNamer implements DirectoryNamerInterface
     /**
      * Creates a directory name for the file being uploaded.
      *
-     * @param Enfant $object The object the upload is attached to
+     * @param Enfant          $object  The object the upload is attached to
      * @param PropertyMapping $mapping The mapping to use to manipulate the given object
      *
      * @return string The directory name
@@ -34,6 +34,6 @@ class DirectoryNamer implements DirectoryNamerInterface
     {
         return '';
         //todo bug getId() empty
-       return (string)$object->getId();
+        return (string) $object->getId();
     }
 }

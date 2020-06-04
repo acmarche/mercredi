@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Reduction\Message;
 
 class ReductionUpdated
@@ -15,9 +14,6 @@ class ReductionUpdated
         $this->ecoleId = $reductionId;
     }
 
-    /**
-     * @return int
-     */
     public function getReductionId(): int
     {
         return $this->ecoleId;

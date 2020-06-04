@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table("relation", uniqueConstraints={
@@ -19,10 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Relation
 {
-    use IdTrait,
-        TuteurTrait,
-        EnfantTrait,
-        OrdreTrait;
+    use IdTrait;
+    use TuteurTrait;
+    use EnfantTrait;
+    use OrdreTrait;
 
     /**
      * @var string|null
@@ -53,20 +52,13 @@ class Relation
         $this->enfant = $enfant;
     }
 
-    /**
-     * @return string|null
-     */
     public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @param string|null $type
-     */
     public function setType(?string $type): void
     {
         $this->type = $type;
     }
-
 }

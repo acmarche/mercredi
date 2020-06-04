@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Tuteur\Utils;
-
 
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -66,10 +64,6 @@ class TuteurUtils
         return count($this->relationRepository->findEnfantsActifs($tuteur)) > 0;
     }
 
-    /**
-     * @param Tuteur $tuteur
-     * @return array
-     */
     public static function getEmailsOfOneTuteur(Tuteur $tuteur): array
     {
         $emails = [];
@@ -90,7 +84,6 @@ class TuteurUtils
         return array_unique($emails);
     }
 
-
     /**
      * Retourne la liste des tuteurs qui n'ont pas d'emails.
      *
@@ -98,7 +91,7 @@ class TuteurUtils
      *
      * @return Tuteur[]
      */
-    public  function filterTuteursWithOutEmail(array $tuteurs): array
+    public function filterTuteursWithOutEmail(array $tuteurs): array
     {
         $data = [];
         foreach ($tuteurs as $tuteur) {
@@ -111,5 +104,4 @@ class TuteurUtils
 
         return $data;
     }
-
 }

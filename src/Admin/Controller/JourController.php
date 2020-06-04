@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Jour\Form\JourType;
 use AcMarche\Mercredi\Jour\Message\JourCreated;
 use AcMarche\Mercredi\Jour\Message\JourDeleted;
 use AcMarche\Mercredi\Jour\Message\JourUpdated;
-use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Jour\Form\JourType;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,7 +53,6 @@ class JourController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->jourRepository->persist($jour);
             $this->jourRepository->flush();
 

@@ -14,9 +14,6 @@ class EcoleCreated
         $this->ecoleId = $ecoleId;
     }
 
-    /**
-     * @return int
-     */
     public function getEcoleId(): int
     {
         return $this->ecoleId;

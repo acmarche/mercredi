@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Message\Handler;
-
 
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Message\Factory\EmailFactory;
@@ -58,5 +56,4 @@ class MessageHandler
         $this->messageRepository->persist($message);
         $this->messageRepository->flush();
     }
-
 }

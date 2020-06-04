@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait ColorTrait
 {
@@ -13,20 +11,13 @@ trait ColorTrait
      */
     private $color;
 
-    /**
-     * @return string|null
-     */
     public function getColor(): ?string
     {
         return $this->color;
     }
 
-    /**
-     * @param string|null $color
-     */
     public function setColor(?string $color): void
     {
         $this->color = $color;
     }
-
 }

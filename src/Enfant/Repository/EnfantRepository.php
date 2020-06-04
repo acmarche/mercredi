@@ -22,6 +22,7 @@ class EnfantRepository extends ServiceEntityRepository
 
     /**
      * @param $keyword
+     *
      * @return Enfant[]
      */
     public function findByName(string $keyword): array
@@ -46,9 +47,6 @@ class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string|null $nom
-     * @param Ecole|null $ecole
-     * @param string|null $annee_scolaire
      * @return Enfant[]
      */
     public function search(?string $nom, ?Ecole $ecole, ?string $annee_scolaire, bool $archive = false): array
@@ -56,7 +54,7 @@ class EnfantRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('enfant')
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
             ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->addSelect('ecole','relations');
+            ->addSelect('ecole', 'relations');
 
         if ($nom) {
             $qb->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')

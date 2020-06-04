@@ -1,6 +1,6 @@
 <?php
-namespace AcMarche\Mercredi\Sante\Form;
 
+namespace AcMarche\Mercredi\Sante\Form;
 
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use Symfony\Component\Form\AbstractType;

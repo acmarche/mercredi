@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\MessageHandler;
 
 use AcMarche\Mercredi\Sante\Message\SanteFicheDeleted;
@@ -27,7 +26,6 @@ class SanteFicheDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(SanteFicheDeleted $santeFicheDeleted)
     {
-        $this->flashBag->add('success', "La question a bien été supprimée");
+        $this->flashBag->add('success', 'La question a bien été supprimée');
     }
-
 }

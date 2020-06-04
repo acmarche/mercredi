@@ -1,10 +1,8 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
-
 
 trait AccompagnateursTrait
 {

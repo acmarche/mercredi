@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Scolaire;
 
 use AcMarche\Mercredi\Entity\Enfant;

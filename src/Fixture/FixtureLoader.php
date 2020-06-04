@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Fixture;
 
 use Fidry\AliceDataFixtures\LoaderInterface;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Reduction\MessageHandler;
-
 
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
 use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
@@ -28,7 +26,6 @@ class ReductionCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(ReductionCreated $reductionCreated)
     {
-        $this->flashBag->add('success', "La réduction a bien été ajoutée");
+        $this->flashBag->add('success', 'La réduction a bien été ajoutée');
     }
-
 }

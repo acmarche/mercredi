@@ -65,10 +65,6 @@ class AcMarcheMercrediExtension extends Extension implements PrependExtensionInt
         $configs->load($name.'.yaml');
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @return Loader\YamlFileLoader
-     */
     protected function loadYamlFile(ContainerBuilder $container): Loader\YamlFileLoader
     {
         return new Loader\YamlFileLoader(

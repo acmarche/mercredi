@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Pdf;
-
 
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;

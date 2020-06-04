@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\User\Password;
-
 
 use Symfony\Component\String\ByteString;
 
@@ -12,5 +10,4 @@ class PasswordUtils
     {
         return ByteString::fromRandom(6, '0123456789');
     }
-
 }

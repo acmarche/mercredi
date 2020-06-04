@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Message\Repository;
-
 
 use AcMarche\Mercredi\Entity\Message;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

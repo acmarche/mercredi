@@ -20,13 +20,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    use IdTrait,
-        EmailTrait,
-        NomTrait,
-        PrenomTrait,
-        RoleTrait,
-        EnabledTrait,
-        PlainPasswordTrait;
+    use IdTrait;
+    use EmailTrait;
+    use NomTrait;
+    use PrenomTrait;
+    use RoleTrait;
+    use EnabledTrait;
+    use PlainPasswordTrait;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
@@ -51,7 +51,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
@@ -59,7 +59,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -85,5 +85,4 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
 }

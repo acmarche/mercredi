@@ -15,14 +15,14 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
  */
 class Note implements TimestampableInterface
 {
-    use IdTrait,
-        RemarqueTrait,
-        TimestampableTrait,
-        ArchiveTrait,
-        UserAddTrait;
+    use IdTrait;
+    use RemarqueTrait;
+    use TimestampableTrait;
+    use ArchiveTrait;
+    use UserAddTrait;
 
     public function __toString()
     {
-        return 'Note '.(string)$this->id;
+        return 'Note '.(string) $this->id;
     }
 }

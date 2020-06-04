@@ -14,12 +14,8 @@ class TuteurDeleted
         $this->tuteurId = $tuteurId;
     }
 
-    /**
-     * @return int
-     */
     public function getTuteurId(): int
     {
         return $this->tuteurId;
     }
-
 }

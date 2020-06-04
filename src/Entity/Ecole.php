@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
@@ -9,7 +8,6 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,12 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ecole
 {
-    use IdTrait,
-        NomTrait,
-        AdresseTrait,
-        TelephonieTrait,
-        EmailTrait,
-        RemarqueTrait;
+    use IdTrait;
+    use NomTrait;
+    use AdresseTrait;
+    use TelephonieTrait;
+    use EmailTrait;
+    use RemarqueTrait;
 
     public function __toString()
     {

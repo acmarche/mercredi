@@ -1,10 +1,8 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Security;
-
 
 class MercrediSecurity
 {
-    const ROLES = ['MERCREDI','MERCREDI_ADMIN'];
+    const ROLES = ['MERCREDI', 'MERCREDI_ADMIN'];
 }

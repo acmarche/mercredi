@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Enfant\Utils;
 
-
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 
@@ -48,7 +47,6 @@ class EnfantUtils
             },
             $enfants
         );
-
 
         return $tuteurs;
     }

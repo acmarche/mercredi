@@ -13,9 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Reduction
 {
-    use IdTrait,
-        NomTrait,
-        RemarqueTrait;
+    use IdTrait;
+    use NomTrait;
+    use RemarqueTrait;
 
     /**
      * @var float|null
@@ -34,20 +34,13 @@ class Reduction
         return $this->getNom().' ('.$this->pourcentage.'%)';
     }
 
-    /**
-     * @return float|null
-     */
     public function getPourcentage(): ?float
     {
         return $this->pourcentage;
     }
 
-    /**
-     * @param float|null $pourcentage
-     */
     public function setPourcentage(?float $pourcentage): void
     {
         $this->pourcentage = $pourcentage;
     }
-
 }

@@ -14,9 +14,6 @@ class UserDeleted
         $this->userId = $userId;
     }
 
-    /**
-     * @return int
-     */
     public function getUserId(): int
     {
         return $this->userId;

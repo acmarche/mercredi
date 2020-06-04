@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
-use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Form\RelationType;

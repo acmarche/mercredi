@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Security;
 
 class PasswordGenerator
 {
-    public function generatePassword():string
+    public function generatePassword(): string
     {
         $password = '';
 

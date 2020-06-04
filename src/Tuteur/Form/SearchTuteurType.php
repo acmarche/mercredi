@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Tuteur\Form;
-
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
@@ -22,5 +20,4 @@ class SearchTuteurType extends AbstractType
                 ]
             );
     }
-
 }

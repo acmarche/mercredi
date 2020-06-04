@@ -48,5 +48,4 @@ class MercrediExtension extends AbstractExtension
 
         return isset($months[$number]) ? $months[$number] : $number;
     }
-
 }

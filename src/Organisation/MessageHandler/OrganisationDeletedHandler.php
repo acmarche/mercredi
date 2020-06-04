@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Organisation\MessageHandler;
 
 use AcMarche\Mercredi\Organisation\Message\OrganisationDeleted;
@@ -29,5 +28,4 @@ class OrganisationDeletedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'organisation a bien été supprimée");
     }
-
 }

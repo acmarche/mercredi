@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Organisation\Message;
 
 class OrganisationUpdated
@@ -15,9 +14,6 @@ class OrganisationUpdated
         $this->organisationId = $organisationId;
     }
 
-    /**
-     * @return int
-     */
     public function getOrganisationId(): int
     {
         return $this->organisationId;

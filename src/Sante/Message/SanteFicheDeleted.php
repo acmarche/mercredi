@@ -14,9 +14,6 @@ class SanteFicheDeleted
         $this->santeFicheId = $santeFicheId;
     }
 
-    /**
-     * @return int
-     */
     public function getSanteFicheId(): int
     {
         return $this->santeFicheId;

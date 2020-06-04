@@ -25,20 +25,20 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
  */
 class Tuteur implements SluggableInterface, TimestampableInterface
 {
-    use IdTrait,
-        NomTrait,
-        PrenomTrait,
-        AdresseTrait,
-        EmailTrait,
-        ConjointTrait,
-        RemarqueTrait,
-        SexeTrait,
-        TelephonieTrait,
-        SluggableTrait,
-        ArchiveTrait,
-        RelationTrait,
-        TimestampableTrait,
-        UserAddTrait;
+    use IdTrait;
+    use NomTrait;
+    use PrenomTrait;
+    use AdresseTrait;
+    use EmailTrait;
+    use ConjointTrait;
+    use RemarqueTrait;
+    use SexeTrait;
+    use TelephonieTrait;
+    use SluggableTrait;
+    use ArchiveTrait;
+    use RelationTrait;
+    use TimestampableTrait;
+    use UserAddTrait;
 
     /**
      * @var Relation[]
@@ -47,7 +47,8 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     private $relations;
 
     /**
-     * J'ai mis la definition pour pouvoir mettre le cascade
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
      * @var Presence[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="tuteur", cascade={"remove"})
      */

@@ -14,9 +14,6 @@ class RelationDeleted
         $this->relationId = $relationId;
     }
 
-    /**
-     * @return int
-     */
     public function getRelationId(): int
     {
         return $this->relationId;

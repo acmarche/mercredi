@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Note\MessageHandler;
-
 
 use AcMarche\Mercredi\Note\Message\NoteCreated;
 use AcMarche\Mercredi\Note\Repository\NoteRepository;
@@ -30,5 +28,4 @@ class NoteCreatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'école a bien été ajoutée");
     }
-
 }

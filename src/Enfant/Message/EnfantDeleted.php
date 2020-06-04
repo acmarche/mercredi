@@ -14,12 +14,8 @@ class EnfantDeleted
         $this->enfantId = $enfantId;
     }
 
-    /**
-     * @return int
-     */
     public function getEnfantId(): int
     {
         return $this->enfantId;
     }
-
 }

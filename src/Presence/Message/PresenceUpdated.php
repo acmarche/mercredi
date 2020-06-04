@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Message;
 
 class PresenceUpdated
@@ -15,9 +14,6 @@ class PresenceUpdated
         $this->presenceId = $presenceId;
     }
 
-    /**
-     * @return int
-     */
     public function getPresenceId(): int
     {
         return $this->presenceId;

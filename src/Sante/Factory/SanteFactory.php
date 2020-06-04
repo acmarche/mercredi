@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\Factory;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
@@ -13,7 +11,6 @@ use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
 class SanteFactory
 {
-
     /**
      * @var SanteFicheRepository
      */
@@ -31,9 +28,6 @@ class SanteFactory
         $this->santeReponseRepository = $santeReponseRepository;
     }
 
-    /**
-     * @return SanteFiche
-     */
     public function getSanteFicheByEnfant(Enfant $enfant): SanteFiche
     {
         if (!$santeFiche = $this->santeFicheRepository->findOneBy(['enfant' => $enfant])) {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,20 +14,13 @@ trait OrdreTrait
      */
     private $ordre = 0;
 
-    /**
-     * @return int
-     */
     public function getOrdre(): int
     {
         return $this->ordre;
     }
 
-    /**
-     * @param int $ordre
-     */
     public function setOrdre(int $ordre): void
     {
         $this->ordre = $ordre;
     }
-
 }

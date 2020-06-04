@@ -1,11 +1,10 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
 
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 trait PhotoTrait
 {
@@ -55,44 +54,28 @@ trait PhotoTrait
         }
     }
 
-    /**
-     * @return File|null
-     */
     public function getPhoto(): ?File
     {
         return $this->photo;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPhotoName(): ?string
     {
         return $this->photoName;
     }
 
-    /**
-     * @param string|null $photoName
-     */
     public function setPhotoName(?string $photoName): void
     {
         $this->photoName = $photoName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getMime(): ?string
     {
         return $this->mime;
     }
 
-    /**
-     * @param string|null $mime
-     */
     public function setMime(?string $mime): void
     {
         $this->mime = $mime;
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\Message;
 
 class EnfantCreated
@@ -15,14 +14,8 @@ class EnfantCreated
         $this->enfantId = $enfantId;
     }
 
-    /**
-     * @return int
-     */
     public function getEnfantId(): int
     {
         return $this->enfantId;
     }
-
-
-
 }

@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Spreadsheet\SpreadsheetFactory;
@@ -10,13 +9,11 @@ use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class DefaultController
- * @package AcMarche\Mercredi\Controller
+ * Class DefaultController.
  *
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/export")
@@ -74,7 +71,6 @@ class ExportController extends AbstractController
      *
      * @param $mois
      * @param bool $one Office de l'enfance
-     *
      */
     public function presenceByMonthXls(bool $one): Response
     {

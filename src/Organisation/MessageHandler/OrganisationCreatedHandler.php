@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Organisation\MessageHandler;
-
 
 use AcMarche\Mercredi\Organisation\Message\OrganisationCreated;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -30,5 +28,4 @@ class OrganisationCreatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'organisation a bien été ajoutée");
     }
-
 }

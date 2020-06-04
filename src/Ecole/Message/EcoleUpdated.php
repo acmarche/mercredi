@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Ecole\Message;
 
 class EcoleUpdated
@@ -15,9 +14,6 @@ class EcoleUpdated
         $this->ecoleId = $ecoleId;
     }
 
-    /**
-     * @return int
-     */
     public function getEcoleId(): int
     {
         return $this->ecoleId;

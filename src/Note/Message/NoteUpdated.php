@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Note\Message;
 
 class NoteUpdated
@@ -15,9 +14,6 @@ class NoteUpdated
         $this->noteId = $noteId;
     }
 
-    /**
-     * @return int
-     */
     public function getNoteId(): int
     {
         return $this->noteId;

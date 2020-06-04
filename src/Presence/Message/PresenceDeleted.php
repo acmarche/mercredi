@@ -14,9 +14,6 @@ class PresenceDeleted
         $this->presenceId = $presenceId;
     }
 
-    /**
-     * @return int
-     */
     public function getPresenceId(): int
     {
         return $this->presenceId;

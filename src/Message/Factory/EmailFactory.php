@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Message\Factory;
-
 
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Organisation;
@@ -40,7 +38,7 @@ class EmailFactory
                 ]
             );
 
-        /**
+        /*
          * Pieces jointes.
          */
         if ($file = $message->getFile()) {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\MessageHandler;
 
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
@@ -27,7 +26,6 @@ class SanteFicheUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(SanteFicheUpdated $santeFicheUpdated)
     {
-        $this->flashBag->add('success', "Le formulaire santé a bien été enregistré");
+        $this->flashBag->add('success', 'Le formulaire santé a bien été enregistré');
     }
-
 }

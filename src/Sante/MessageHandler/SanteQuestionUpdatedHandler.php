@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\MessageHandler;
 
 use AcMarche\Mercredi\Sante\Message\SanteQuestionUpdated;
@@ -27,7 +26,6 @@ class SanteQuestionUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(SanteQuestionUpdated $santeQuestionUpdated)
     {
-        $this->flashBag->add('success', "La question a bien été modifiée");
+        $this->flashBag->add('success', 'La question a bien été modifiée');
     }
-
 }

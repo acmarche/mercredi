@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait AgeTrait
 {
@@ -33,5 +31,4 @@ trait AgeTrait
 
         return $date->format('%y');
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\Handler;
-
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -27,12 +25,12 @@ class EnfantHandler
         $this->relationRepository = $relationRepository;
     }
 
-    public function newHandle(Enfant $enfant, Tuteur $tuteur) {
+    public function newHandle(Enfant $enfant, Tuteur $tuteur)
+    {
         $this->enfantRepository->persist($enfant);
         $relation = new Relation($tuteur, $enfant);
         $this->relationRepository->persist($relation);
         $this->enfantRepository->flush();
         $this->relationRepository->flush();
     }
-
 }

@@ -10,15 +10,15 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class MessageController
- * @package AcMarche\Mercredi\Controller
+ * Class MessageController.
+ *
  * @IsGranted("ROLE_ADMINISTRATOR")
  */
 class MessageController extends AbstractController
 {
     /**
-     * @param MessageBusInterface $bus
      * @Route("/message", name="message_home")
+     *
      * @return Response
      */
     public function index(MessageBusInterface $bus)
@@ -39,10 +39,7 @@ class MessageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediFront/default/index.html.twig',
             [
-
             ]
         );
     }
-
-
 }

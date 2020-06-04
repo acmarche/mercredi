@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Tuteur\Message;
 
 class TuteurCreated
@@ -15,12 +14,8 @@ class TuteurCreated
         $this->tuteurId = $tuteurId;
     }
 
-    /**
-     * @return int
-     */
     public function getTuteurId(): int
     {
         return $this->tuteurId;
     }
-
 }

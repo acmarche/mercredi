@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Spreadsheet;
-
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
@@ -13,7 +11,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 abstract class AbstractSpreadsheetDownloader
 {
-
     public function downloadXls(Spreadsheet $phpExcelObject, string $fileName): Response
     {
         $writer = new Xlsx($phpExcelObject);
@@ -33,5 +30,4 @@ abstract class AbstractSpreadsheetDownloader
 
         return $response;
     }
-
 }

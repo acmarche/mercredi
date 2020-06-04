@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Note;
+use AcMarche\Mercredi\Note\Form\NoteType;
 use AcMarche\Mercredi\Note\Message\NoteCreated;
 use AcMarche\Mercredi\Note\Message\NoteDeleted;
 use AcMarche\Mercredi\Note\Message\NoteUpdated;
-use AcMarche\Mercredi\Entity\Note;
-use AcMarche\Mercredi\Note\Form\NoteType;
 use AcMarche\Mercredi\Note\Repository\NoteRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -12,8 +12,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class PublishController extends AbstractController
 {
     /**
-     * @param PublisherInterface $publisher
-     * @return Response
      * @Route("/publish")
      */
     public function publish(PublisherInterface $publisher): Response
@@ -28,5 +26,4 @@ class PublishController extends AbstractController
 
         return new Response('published!');
     }
-
 }

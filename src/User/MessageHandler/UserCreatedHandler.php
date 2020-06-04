@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\User\MessageHandler;
-
 
 use AcMarche\Mercredi\User\Message\UserCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -30,5 +28,4 @@ class UserCreatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'école a bien été ajoutée");
     }
-
 }

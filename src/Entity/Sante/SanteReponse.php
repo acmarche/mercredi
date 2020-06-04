@@ -51,65 +51,41 @@ class SanteReponse
         $this->question = $santeQuestion;
     }
 
-    /**
-     * @return SanteQuestion
-     */
     public function getQuestion(): SanteQuestion
     {
         return $this->question;
     }
 
-    /**
-     * @param SanteQuestion $question
-     */
     public function setQuestion(SanteQuestion $question): void
     {
         $this->question = $question;
     }
 
-    /**
-     * @return SanteFiche
-     */
     public function getSanteFiche(): SanteFiche
     {
         return $this->sante_fiche;
     }
 
-    /**
-     * @param SanteFiche $sante_fiche
-     */
     public function setSanteFiche(SanteFiche $sante_fiche): void
     {
         $this->sante_fiche = $sante_fiche;
     }
 
-    /**
-     * @return bool
-     */
     public function isReponse(): bool
     {
         return $this->reponse;
     }
 
-    /**
-     * @param bool $reponse
-     */
     public function setReponse(bool $reponse): void
     {
         $this->reponse = $reponse;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRemarque(): ?string
     {
         return $this->remarque;
     }
 
-    /**
-     * @param string|null $remarque
-     */
     public function setRemarque(?string $remarque): void
     {
         $this->remarque = $remarque;
@@ -119,5 +95,4 @@ class SanteReponse
     {
         return $this->reponse;
     }
-
 }

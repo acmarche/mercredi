@@ -14,9 +14,6 @@ class PresenceCreated
         $this->presenceId = $presenceId;
     }
 
-    /**
-     * @return int
-     */
     public function getPresenceId(): int
     {
         return $this->presenceId;

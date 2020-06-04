@@ -14,9 +14,6 @@ class ReductionCreated
         $this->ecoleId = $reductionId;
     }
 
-    /**
-     * @return int
-     */
     public function getReductionId(): int
     {
         return $this->ecoleId;

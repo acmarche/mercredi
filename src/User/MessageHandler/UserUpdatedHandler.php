@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\User\MessageHandler;
 
 use AcMarche\Mercredi\User\Message\UserUpdated;
@@ -29,5 +28,4 @@ class UserUpdatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'école a bien été modifiée");
     }
-
 }

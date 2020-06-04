@@ -27,10 +27,13 @@ class SanteFiche implements TimestampableInterface
 {
     use TimestampableTrait;
 
-    use IdTrait,
-        EnfantTrait,
-        AccompagnateursTrait,
-        RemarqueTrait;
+    use IdTrait;
+
+    use EnfantTrait;
+
+    use AccompagnateursTrait;
+
+    use RemarqueTrait;
 
     /**
      * @ORM\Column(type="text", nullable=false)

@@ -1,8 +1,8 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Security\Authenticator;
 
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgrade
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
-use AcMarche\Mercredi\User\Repository\UserRepository;
 
 class FormAuthenticator implements AuthenticatorInterface
 {

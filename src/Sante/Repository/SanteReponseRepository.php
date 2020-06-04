@@ -42,8 +42,8 @@ class SanteReponseRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param SanteFiche $santeFiche
      * @return SanteReponse[]
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getResponses(SanteFiche $santeFiche): array

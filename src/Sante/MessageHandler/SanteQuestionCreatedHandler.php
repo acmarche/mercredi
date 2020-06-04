@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Sante\MessageHandler;
-
 
 use AcMarche\Mercredi\Sante\Message\SanteQuestionCreated;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
@@ -28,7 +26,6 @@ class SanteQuestionCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(SanteQuestionCreated $santeQuestionCreated)
     {
-        $this->flashBag->add('success', "La question a bien été ajoutée");
+        $this->flashBag->add('success', 'La question a bien été ajoutée');
     }
-
 }

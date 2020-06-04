@@ -103,8 +103,6 @@ class RelationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
-     * @param Tuteur $tuteur
      * @return Enfant[]
      */
     public function findFrateries(Enfant $enfant, Tuteur $tuteur)
@@ -143,7 +141,6 @@ class RelationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Relation[]
      */
     public function findEnfantsActifs(Tuteur $tuteur): array
@@ -158,9 +155,9 @@ class RelationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
     /**
      * @param Tuteur $tuteur
+     *
      * @return Relation[]
      */
     public function findTuteursActifs(): array

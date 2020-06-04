@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\MessageHandler;
 
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
@@ -29,5 +28,4 @@ class EnfantUpdatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'enfant a bien été modifié");
     }
-
 }

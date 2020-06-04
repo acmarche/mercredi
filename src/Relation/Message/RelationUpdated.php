@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation\Message;
 
 class RelationUpdated
@@ -15,9 +14,6 @@ class RelationUpdated
         $this->relationId = $relationId;
     }
 
-    /**
-     * @return int
-     */
     public function getRelationId(): int
     {
         return $this->relationId;

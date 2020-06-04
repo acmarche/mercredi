@@ -14,9 +14,6 @@ class OrganisationCreated
         $this->organisationId = $organisationId;
     }
 
-    /**
-     * @return int
-     */
     public function getOrganisationId(): int
     {
         return $this->organisationId;

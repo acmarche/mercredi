@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
-use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -24,7 +23,6 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Jour[]
      */
     public function findDaysRegisteredByEnfant(Enfant $enfant): array
@@ -39,7 +37,6 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPresencesByEnfant(Enfant $enfant): array
@@ -53,9 +50,8 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
-     * @param Jour $jour
      * @return Presence
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function exist(Enfant $enfant, Jour $jour): ?Presence
@@ -70,6 +66,7 @@ class PresenceRepository extends ServiceEntityRepository
 
     /**
      * @param \DateTimeInterface $date mm/YYYY
+     *
      * @return Presence[]
      */
     public function findByMonth(\DateTimeInterface $date): array
@@ -84,9 +81,9 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-
     /**
      * @param $jour
+     *
      * @return Presence[]
      */
     public function findByDay($jour)
@@ -101,8 +98,9 @@ class PresenceRepository extends ServiceEntityRepository
 
     /**
      * @param string $nom
-     * @param Ecole $ecole
+     * @param Ecole  $ecole
      * @param string $annee_scolaire
+     *
      * @return Presence[]
      */
     public function findPresencesByJourAndEcole(Jour $jour, ?Ecole $ecole): array
@@ -125,9 +123,6 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $nom
-     * @param Ecole $ecole
-     * @param string $annee_scolaire
      * @return Presence[]
      */
     public function search(string $nom, Ecole $ecole, string $annee_scolaire): array

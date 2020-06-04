@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait TelephonesTrait
 {
@@ -11,9 +9,6 @@ trait TelephonesTrait
      */
     protected $telephones;
 
-    /**
-     * @return string|null
-     */
     public function getTelephones(): ?string
     {
         return $this->telephones;
@@ -26,5 +21,4 @@ trait TelephonesTrait
     {
         $this->telephones = $telephones;
     }
-
 }

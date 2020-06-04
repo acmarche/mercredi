@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Form\Type;
-
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,6 +22,4 @@ class RemarqueType extends AbstractType
     {
         return TextareaType::class;
     }
-
-
 }

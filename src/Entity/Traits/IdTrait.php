@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait IdTrait
 {
@@ -17,5 +15,4 @@ trait IdTrait
     {
         return $this->id;
     }
-
 }

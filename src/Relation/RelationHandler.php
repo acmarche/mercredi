@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation;
-
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Relation;
@@ -27,8 +25,6 @@ class RelationHandler
     }
 
     /**
-     * @param Tuteur $tuteur
-     * @param int|null $enfantId
      * @throws \Exception
      */
     public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): ?Relation

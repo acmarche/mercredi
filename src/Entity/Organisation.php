@@ -12,8 +12,8 @@ use AcMarche\Mercredi\Entity\Traits\SiteWebTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Organisation\Repository\OrganisationRepository")
@@ -21,14 +21,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Organisation
 {
-    use IdTrait,
-        NomTrait,
-        EmailTrait,
-        AdresseTrait,
-        SiteWebTrait,
-        TelephonieTrait,
-        RemarqueTrait,
-        PhotoTrait;
+    use IdTrait;
+    use NomTrait;
+    use EmailTrait;
+    use AdresseTrait;
+    use SiteWebTrait;
+    use TelephonieTrait;
+    use RemarqueTrait;
+    use PhotoTrait;
 
     /**
      * @var string|null
@@ -53,20 +53,13 @@ class Organisation
         return $this->nom;
     }
 
-    /**
-     * @return string|null
-     */
     public function getInitiale(): ?string
     {
         return $this->initiale;
     }
 
-    /**
-     * @param string|null $initiale
-     */
     public function setInitiale(?string $initiale): void
     {
         $this->initiale = $initiale;
     }
-
 }

@@ -15,7 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Message implements TimestampableInterface
 {
-    use IdTrait, TimestampableTrait;
+    use IdTrait;
+    use TimestampableTrait;
 
     /**
      * @var string|null

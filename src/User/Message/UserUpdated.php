@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\User\Message;
 
 class UserUpdated
@@ -15,9 +14,6 @@ class UserUpdated
         $this->userId = $userId;
     }
 
-    /**
-     * @return int
-     */
     public function getUserId(): int
     {
         return $this->userId;

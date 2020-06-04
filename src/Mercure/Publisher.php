@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Mercure;
 
 use Symfony\Component\Mercure\PublisherInterface;

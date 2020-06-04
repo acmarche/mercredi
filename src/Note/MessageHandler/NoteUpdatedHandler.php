@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Note\MessageHandler;
 
 use AcMarche\Mercredi\Note\Message\NoteUpdated;
@@ -29,5 +28,4 @@ class NoteUpdatedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'école a bien été modifiée");
     }
-
 }

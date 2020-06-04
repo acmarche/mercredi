@@ -23,8 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class DefaultController
- * @package AcMarche\Mercredi\Controller
+ * Class DefaultController.
  *
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/message")
@@ -246,6 +245,4 @@ class MessageController extends AbstractController
             ]
         );
     }
-
-
 }

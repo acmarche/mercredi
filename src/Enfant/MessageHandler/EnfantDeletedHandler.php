@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\MessageHandler;
 
 use AcMarche\Mercredi\Enfant\Message\EnfantDeleted;
@@ -29,5 +28,4 @@ class EnfantDeletedHandler implements MessageHandlerInterface
     {
         $this->flashBag->add('success', "L'enfant a bien été supprimé");
     }
-
 }

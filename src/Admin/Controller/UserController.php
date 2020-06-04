@@ -3,12 +3,12 @@
 namespace AcMarche\Mercredi\Admin\Controller;
 
 use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\User\Form\UserEditType;
+use AcMarche\Mercredi\User\Form\UserType;
 use AcMarche\Mercredi\User\Message\UserCreated;
 use AcMarche\Mercredi\User\Message\UserDeleted;
 use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use AcMarche\Mercredi\User\Form\UserEditType;
-use AcMarche\Mercredi\User\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +40,6 @@ class UserController extends AbstractController
      * Lists all User entities.
      *
      * @Route("/", name="mercredi_admin_user_index", methods={"GET"})
-     *
      */
     public function index()
     {
@@ -48,9 +47,9 @@ class UserController extends AbstractController
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/index.html.twig',
-            array(
+            [
                 'users' => $users,
-            )
+            ]
         );
     }
 
@@ -58,7 +57,6 @@ class UserController extends AbstractController
      * Displays a form to create a new User utilisateur.
      *
      * @Route("/new", name="mercredi_admin_user_new", methods={"GET","POST"})
-     *
      */
     public function new(Request $request)
     {
@@ -80,10 +78,10 @@ class UserController extends AbstractController
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/new.html.twig',
-            array(
+            [
                 'user' => $user,
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -91,15 +89,14 @@ class UserController extends AbstractController
      * Finds and displays a User utilisateur.
      *
      * @Route("/{id}", name="mercredi_admin_user_show", methods={"GET"})
-     *
      */
     public function show(User $user)
     {
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
-            array(
+            [
                 'user' => $user,
-            )
+            ]
         );
     }
 
@@ -107,7 +104,6 @@ class UserController extends AbstractController
      * Displays a form to edit an existing User utilisateur.
      *
      * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET","POST"})
-     *
      */
     public function edit(Request $request, User $user)
     {
@@ -124,10 +120,10 @@ class UserController extends AbstractController
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/edit.html.twig',
-            array(
+            [
                 'user' => $user,
                 'form' => $editForm->createView(),
-            )
+            ]
         );
     }
 
@@ -147,5 +143,4 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('mercredi_admin_user_index');
     }
-
 }

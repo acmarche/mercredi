@@ -13,54 +13,47 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add(
                 'nom',
                 TextType::class,
-                array(
+                [
                     'required' => true,
-                )
+                ]
             )
             ->add(
                 'prenom',
                 TextType::class,
-                array(
+                [
                     'required' => true,
-                )
+                ]
             )
             ->add('email', EmailType::class)
             ->add('username', TextType::class)
             ->add(
                 'plainPassword',
                 RepeatedType::class,
-                array(
+                [
                     'type' => PasswordType::class,
-                    'options' => array(
-                        'attr' => array(
+                    'options' => [
+                        'attr' => [
                             'autocomplete' => 'new-password',
-                        ),
-                    ),
-                    'first_options' => array('label' => 'Mot de passe'),
-                    'second_options' => array('label' => 'Répéter le mot de passe'),
-                )
+                        ],
+                    ],
+                    'first_options' => ['label' => 'Mot de passe'],
+                    'second_options' => ['label' => 'Répéter le mot de passe'],
+                ]
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => User::class,
-            )
+            ]
         );
     }
 }
