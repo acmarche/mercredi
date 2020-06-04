@@ -27,7 +27,7 @@ class SanteFicheUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(SanteFicheUpdated $santeFicheUpdated)
     {
-        $this->flashBag->add('success', "La question a bien été modifiée");
+        $this->flashBag->add('success', "Le formulaire santé a bien été enregistré");
     }
 
 }

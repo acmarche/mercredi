@@ -11,24 +11,24 @@
                 {% include '@AcMarcheMercredi/commun/_archive.html.twig' with {'entity':enfant} %}
             </div>
         </h3>
+        <div class="card-body">
+            {% include '@AcMarcheMercrediAdmin/enfant/_actions.html.twig' %}
 
-        <div class="row no-gutters pl-1">
-            <div class="col-md-3 mt-4">
-                {% include '@AcMarcheMercrediAdmin/enfant/_photo.html.twig' %}
-            </div>
-            <div class="col-md-9">
-                <div class="card-body">
-                    {% include '@AcMarcheMercrediAdmin/enfant/_actions.html.twig' %}
+            <div class="row pl-1">
+                <div class="col-md-3 mt-2">
+                    {% include '@AcMarcheMercrediAdmin/enfant/_photo.html.twig' %}
+                </div>
+                <div class="col-md-9">
                     {% include '@AcMarcheMercrediAdmin/enfant/_identite.html.twig' %}
-                    {% include '@AcMarcheMercrediAdmin/enfant/_accompagnateurs.html.twig' %}
+
                 </div>
             </div>
-        </div>
 
-        <br />
-        <div class="pl-1">
-            {% include '@AcMarcheMercrediAdmin/enfant/_tuteurs.html.twig' %}
-            {% include '@AcMarcheMercrediAdmin/enfant/_presences.html.twig' %}
+            <br/>
+            <div class="pl-1">
+                {% include '@AcMarcheMercrediAdmin/enfant/_tuteurs.html.twig' %}
+                {% include '@AcMarcheMercrediAdmin/enfant/_presences.html.twig' %}
+            </div>
         </div>
         <div class="card-footer text-muted mt-3">
             Crée le {{ enfant.createdAt | format_date('full') }} par {{ enfant.userAdd }}. Mis à jour

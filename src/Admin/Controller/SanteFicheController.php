@@ -2,8 +2,9 @@
 
 namespace AcMarche\Mercredi\Admin\Controller;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Sante\Form\SanteFicheType;
-use AcMarche\Mercredi\Sante\Message\SanteFicheCreated;
+use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Message\SanteFicheDeleted;
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
@@ -24,60 +25,34 @@ class SanteFicheController extends AbstractController
      * @var SanteFicheRepository
      */
     private $santeFicheRepository;
+    /**
+     * @var SanteHandler
+     */
+    private $santeHandler;
 
-    public function __construct(SanteFicheRepository $santeFicheRepository)
+    public function __construct(SanteFicheRepository $santeFicheRepository, SanteHandler $santeHandler)
     {
         $this->santeFicheRepository = $santeFicheRepository;
-    }
-
-    /**
-     * @Route("/", name="mercredi_admin_sante_fiche_index", methods={"GET"})
-     */
-    public function index(): Response
-    {
-        return $this->render(
-            '@AcMarcheMercrediAdmin/sante_fiche/index.html.twig',
-            [
-                'sante_fiches' => $this->santeFicheRepository->findAll(),
-            ]
-        );
-    }
-
-    /**
-     * @Route("/new", name="mercredi_admin_sante_fiche_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $santeFiche = new SanteFiche();
-        $form = $this->createForm(SanteFicheType::class, $santeFiche);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->santeFicheRepository->persist($santeFiche);
-            $this->santeFicheRepository->flush();
-
-            $this->dispatchMessage(new SanteFicheCreated($santeFiche->getId()));
-
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $santeFiche->getId()]);
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediAdmin/sante_fiche/new.html.twig',
-            [
-                'sante_fiche' => $santeFiche,
-                'form' => $form->createView(),
-            ]
-        );
+        $this->santeHandler = $santeHandler;
     }
 
     /**
      * @Route("/{id}", name="mercredi_admin_sante_fiche_show", methods={"GET"})
      */
-    public function show(SanteFiche $santeFiche): Response
+    public function show(Enfant $enfant): Response
     {
+        $santeFiche = $this->santeFicheRepository->findByEnfant($enfant);
+
+        if (!$santeFiche) {
+            $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
+
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', ['id' => $enfant->getId()]);
+        }
+
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_fiche/show.html.twig',
             [
+                'enfant' => $enfant,
                 'sante_fiche' => $santeFiche,
             ]
         );
@@ -86,17 +61,20 @@ class SanteFicheController extends AbstractController
     /**
      * @Route("/{id}/edit", name="mercredi_admin_sante_fiche_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, SanteFiche $santeFiche): Response
+    public function edit(Request $request, Enfant $enfant): Response
     {
+        $santeFiche = $this->santeHandler->init($enfant);
+
         $form = $this->createForm(SanteFicheType::class, $santeFiche);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->santeFicheRepository->flush();
+            $questions = $form->getData()->getQuestions();
+            $this->santeHandler->handle($santeFiche, $questions);
 
             $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $santeFiche->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $enfant->getId()]);
         }
 
         return $this->render(
@@ -115,11 +93,12 @@ class SanteFicheController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$santeFiche->getId(), $request->request->get('_token'))) {
             $id = $santeFiche->getId();
+            $enfant = $santeFiche->getEnfant();
             $this->santeFicheRepository->remove($santeFiche);
             $this->santeFicheRepository->flush();
             $this->dispatchMessage(new SanteFicheDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_sante_fiche_index');
+        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
     }
 }

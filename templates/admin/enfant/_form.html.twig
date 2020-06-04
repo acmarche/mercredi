@@ -40,30 +40,8 @@
 </div>
 <br/>
 
-<div class="row">
-    <div class="col-6">
+<button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+    Sauvegarder
+</button>
 
-        <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
-            Sauvegarder
-        </button>
-    </div>
-    <div class="col-6">
-        {{ form_label(form.accompagnateurs) }}
-        <ul class="list-group" id="accompagnateurs-list"
-            data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}">
-            {% for accompagnateurField in form.accompagnateurs %}
-                <li class="list-group-item">
-                    {{ form_errors(accompagnateurField) }}
-                    {{ form_widget(accompagnateurField) }}
-                </li>
-            {% endfor %}
-        </ul>
-        <div class="col-offset-8">
-            <a href="#" id="add-another-accompagnateur" class="btn btn-success btn-xs">
-                <i class="fas fa-plus"></i> Ajouter un accompagnateur
-            </a>
-        </div>
-        <br/>
-    </div>
-</div>
 {{ form_end(form) }}

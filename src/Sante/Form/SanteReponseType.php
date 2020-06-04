@@ -1,36 +1,36 @@
 <?php
-
 namespace AcMarche\Mercredi\Sante\Form;
+
 
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SanteQuestionType extends AbstractType
+class SanteReponseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $choices = array_flip(['Non', 'Oui']);
         $builder
-            ->add('nom')
             ->add(
-                'complement',
-                CheckboxType::class,
+                'reponse',
+                ChoiceType::class,
                 [
-                    'label' => 'Un complément d\'information est-il nécessaire ?',
-                    'help' => 'Si oui cochez la case',
+                    'choices' => $choices,
+                    'placeholder' => false,
+                    'multiple' => false,
+                    'expanded' => true,
+                    'label' => false,
                     'required' => false,
-                    'label_attr'=> ['class' => 'switch-custom']
                 ]
             )
             ->add(
-                'complement_label',
+                'remarque',
                 TextType::class,
                 [
-                    'label' => 'Texte d\'aide pour le complément',
-                    'help' => 'Par ex: Date de vaccin, quel type de médicaments...',
                     'required' => false,
                 ]
             );

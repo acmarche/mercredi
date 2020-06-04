@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Sante\Repository;
 
+use AcMarche\Mercredi\Entity\Sante\SanteFiche;
+use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Entity\Sante\SanteReponse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -27,6 +29,29 @@ class SanteReponseRepository extends ServiceEntityRepository
             ->setParameter('fiches', $santeFiches);
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function getResponse(SanteFiche $santeFiche, SanteQuestion $santeQuestion): ?SanteReponse
+    {
+        return $this->createQueryBuilder('reponse')
+            ->andWhere('reponse.sante_fiche = :fiche')
+            ->setParameter('fiche', $santeFiche)
+            ->andWhere('reponse.question = :question')
+            ->setParameter('question', $santeQuestion)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param SanteFiche $santeFiche
+     * @return SanteReponse[]
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getResponses(SanteFiche $santeFiche): array
+    {
+        return $this->createQueryBuilder('reponse')
+            ->andWhere('reponse.sante_fiche = :fiche')
+            ->setParameter('fiche', $santeFiche)
+            ->getQuery()->getOneOrNullResult();
     }
 
     public function persist(SanteReponse $santeReponse)

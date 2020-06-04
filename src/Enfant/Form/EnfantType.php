@@ -116,19 +116,6 @@ class EnfantType extends AbstractType
                 ]
             )
             ->add(
-                'accompagnateurs',
-                CollectionType::class,
-                [
-                    'entry_type' => TextType::class,
-                    'entry_options' => [],
-                    'prototype' => true,
-                    'required' => false,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                ]
-            )
-            ->add(
                 'photo',
                 VichImageType::class,
                 [

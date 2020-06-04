@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Sante\Repository;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -42,5 +43,12 @@ class SanteFicheRepository extends ServiceEntityRepository
     public function flush()
     {
         $this->_em->flush();
+    }
+
+    public function findByEnfant(Enfant $enfant): ?SanteFiche
+    {
+        return $this->createQueryBuilder('sante_fiche')->andWhere('sante_fiche.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->getQuery()->getOneOrNullResult();
     }
 }

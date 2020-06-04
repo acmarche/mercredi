@@ -3,27 +3,54 @@
 
 <div class="row">
     <div class="col-6">
-        {{ form_row(form.medecinNom) }}
+        {{ form_row(form.medecin_nom) }}
     </div>
     <div class="col-6">
-        {{ form_row(form.medecinTelephone) }}
+        {{ form_row(form.medecin_telephone) }}
     </div>
 
 </div>
 
-{{ form_row(form.personneUrgence) }}
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.personne_urgence) }}
+    </div>
+    <div class="col-6">
+        {{ form_label(form.accompagnateurs) }}
+        <ul class="list-group" id="accompagnateurs-list"
+            data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}">
+            {% for accompagnateurField in form.accompagnateurs %}
+                <li class="list-group-item">
+                    {{ form_errors(accompagnateurField) }}
+                    {{ form_widget(accompagnateurField) }}
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="col-offset-8">
+            <a href="#" id="add-another-accompagnateur" class="btn btn-success btn-xs">
+                <i class="fas fa-plus"></i> Ajouter un accompagnateur
+            </a>
+        </div>
+    </div>
+</div>
+
+<br/>
 
 <h4 class="text-success">Questions</h4>
 
 {% for question in form.questions %}
-    <h4 class="text-warning"><strong>{{ question.vars.data.nom }}</strong></h4>
+    <h5 class="text-warning"><strong>{{ question.vars.data.nom }}</strong></h5>
     <hr/>
     <div class="row">
         <div class="col-md-4 col-sm-4">
             {{ form_row(question.reponse) }}
         </div>
         <div class="col-md-8 col-sm-8">
+
             {{ form_row(question.remarque) }}
+            {% if question.vars.data.complementLabel %}
+                <span class="text-muted">Si oui, {{ question.vars.data.complementLabel }}</span>
+            {% endif %}
         </div>
     </div>
 {% endfor %}

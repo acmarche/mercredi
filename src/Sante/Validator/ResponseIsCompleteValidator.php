@@ -1,22 +1,22 @@
 <?php
 
-namespace AcMarche\Mercredi\Validator;
+namespace AcMarche\Mercredi\Sante\Validator;
 
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
-use AcMarche\Mercredi\Sante\SanteManager;
+use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class ResponseIsCompleteValidator extends ConstraintValidator
 {
     /**
-     * @var SanteManager
+     * @var SanteChecker
      */
-    private $santeManager;
+    private $santeChecker;
 
-    public function __construct(SanteManager $santeManager)
+    public function __construct(SanteChecker $santeChecker)
     {
-        $this->santeManager = $santeManager;
+        $this->santeChecker = $santeChecker;
     }
 
     /**
@@ -29,27 +29,13 @@ class ResponseIsCompleteValidator extends ConstraintValidator
     public function validate($questions, Constraint $constraint)
     {
         foreach ($questions as $question) {
-            if (!$this->santeManager->checkQuestionOk($question)) {
+            if (!$this->santeChecker->checkQuestionOk($question)) {
                 $order = $question->getDisplayOrder() ? $question->getDisplayOrder() : 0;
                 $this->context->buildViolation($constraint->message_question)
                     ->atPath('sante_fiche[questions]['.$order.'][remarque]')
-                    ->setParameter('{{ string }}', $question->getIntitule().' : '.$question->getComplementLabel())
+                    ->setParameter('{{ string }}', $question->getNom().' : '.$question->getComplementLabel())
                     ->addViolation();
             }
         }
-    }
-
-    public function validate22($value, Constraint $constraint)
-    {
-        /* @var $constraint \AcMarche\Mercredi\Validator\ResponseIsComplete */
-
-        if (null === $value || '' === $value) {
-            return;
-        }
-
-        // TODO: implement the validation here
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ value }}', $value)
-            ->addViolation();
     }
 }

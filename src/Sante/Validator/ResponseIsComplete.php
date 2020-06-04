@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Validator;
+namespace AcMarche\Mercredi\Sante\Validator;
 
 use Symfony\Component\Validator\Constraint;
 

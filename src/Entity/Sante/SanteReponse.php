@@ -4,10 +4,14 @@ namespace AcMarche\Mercredi\Entity\Sante;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table("sante_reponse")
- * @ORM\Entity()
+ * @ORM\Table("sante_reponse", uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
+ * }))
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteReponseRepository")
+ * @UniqueEntity(fields={"sante_fiche", "question"}, message="Une réponse existe déjà")
  */
 class SanteReponse
 {
@@ -15,13 +19,15 @@ class SanteReponse
 
     /**
      * @var SanteQuestion
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion" )
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $question;
 
     /**
      * @var SanteFiche
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", inversedBy="reponses", cascade={"remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $sante_fiche;
 
@@ -38,6 +44,12 @@ class SanteReponse
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $remarque;
+
+    public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
+    {
+        $this->sante_fiche = $santeFiche;
+        $this->question = $santeQuestion;
+    }
 
     /**
      * @return SanteQuestion

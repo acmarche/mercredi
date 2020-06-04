@@ -3,20 +3,25 @@
 namespace AcMarche\Mercredi\Entity\Sante;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
-use AcMarche\Mercredi\Validator as AcMarcheAssert;
+use AcMarche\Mercredi\Sante\Validator as AcMarcheSanteAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table("sante_fiche")
+ * @ORM\Table("sante_fiche", uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"enfant_id"})
+ * }))
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteFicheRepository")
+ * @UniqueEntity(fields={"enfant"}, message="L'enfant a déjà une fiche santé")
  */
 class SanteFiche implements TimestampableInterface
 {
@@ -24,6 +29,7 @@ class SanteFiche implements TimestampableInterface
 
     use IdTrait,
         EnfantTrait,
+        AccompagnateursTrait,
         RemarqueTrait;
 
     /**
@@ -51,6 +57,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @var Enfant
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $enfant;
 
@@ -62,12 +69,13 @@ class SanteFiche implements TimestampableInterface
 
     /**
      * @var SanteQuestion[]|ArrayCollection
-     * @AcMarcheAssert\ResponseIsComplete()
+     * @AcMarcheSanteAssert\ResponseIsComplete()
      */
     protected $questions;
 
-    public function __construct()
+    public function __construct(Enfant $enfant)
     {
+        $this->enfant = $enfant;
         $this->reponses = new ArrayCollection();
         $this->questions = new ArrayCollection();
     }

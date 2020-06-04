@@ -41,7 +41,6 @@ class Enfant implements SluggableInterface, TimestampableInterface
         RemarqueTrait,
         OrdreTrait,
         PhotoTrait,
-        AccompagnateursTrait,
         UserAddTrait,
         SluggableTrait,
         EcoleTrait,
