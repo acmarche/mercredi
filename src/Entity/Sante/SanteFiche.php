@@ -65,6 +65,8 @@ class SanteFiche implements TimestampableInterface
     protected $enfant;
 
     /**
+     * Pour le cascade.
+     *
      * @var SanteReponse[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="sante_fiche", cascade={"remove"})
      */
@@ -154,51 +156,5 @@ class SanteFiche implements TimestampableInterface
     public function setQuestions($questions): void
     {
         $this->questions = $questions;
-    }
-
-    public function addSanteQuestion(SanteQuestion $santeQuestion): self
-    {
-        if (!$this->questions->contains($santeQuestion)) {
-            $this->questions[] = $santeQuestion;
-            $santeQuestion->setSanteFiche($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSanteQuestion(SanteQuestion $santeQuestion): self
-    {
-        if ($this->questions->contains($santeQuestion)) {
-            $this->questions->removeElement($santeQuestion);
-            // set the owning side to null (unless already changed)
-            // if ($santeQuestion->getEnfant() === $this) {
-            //   $santeQuestion->setEnfant(null);
-            // }
-        }
-
-        return $this;
-    }
-
-    public function addReponse(SanteReponse $reponse): self
-    {
-        if (!$this->reponses->contains($reponse)) {
-            $this->reponses[] = $reponse;
-            $reponse->setSanteFiche($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReponse(SanteReponse $reponse): self
-    {
-        if ($this->reponses->contains($reponse)) {
-            $this->reponses->removeElement($reponse);
-            // set the owning side to null (unless already changed)
-            if ($reponse->getSanteFiche() === $this) {
-                $reponse->setSanteFiche(null);
-            }
-        }
-
-        return $this;
     }
 }

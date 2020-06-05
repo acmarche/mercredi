@@ -1,9 +1,9 @@
-<a href="{{ path('mercredi_admin_sante_fiche_edit', { 'id': sante_fiche.id }) }}" role="button"
+<a href="{{ path('mercredi_admin_sante_fiche_edit', { 'id': enfant.id }) }}" role="button"
    class="btn btn-primary"><i
             class="far fa-edit"></i> Editer</a>
 
-<a href="{{ path('mercredi_admin_sante_fiche_index') }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
-    Retour à la Liste</a>
+<a href="{{ path('mercredi_admin_enfant_show',{'id': enfant.id}) }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
+    Retour</a>
 
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
     <i class="fas fa-trash"></i> Supprimer

@@ -1,0 +1,6 @@
+AcMarche\Mercredi\Entity\Sante\SanteFiche:
+  sante_merlin:
+    __construct: ['@enfant_merlin']
+    personne_urgence: 'Papa et maman'
+    medecin_nom: 'Docteur Ledoux'
+    medecin_telephone: '084 44 55 66'

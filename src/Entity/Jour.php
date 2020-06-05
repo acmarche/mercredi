@@ -39,6 +39,14 @@ class Jour implements TimestampableInterface
      */
     private $date_jour;
 
+    /**
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
+     * @var Presence[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="jour", cascade={"remove"})
+     */
+    private $presences;
+
     public function __construct()
     {
         $this->prix1 = 0.0;

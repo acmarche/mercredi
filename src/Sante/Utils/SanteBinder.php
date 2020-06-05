@@ -37,13 +37,12 @@ class SanteBinder
 
             return $questions;
         }
+
         foreach ($questions as $question) {
+            $question->setReponseTxt(null);
             if ($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) {
-                $reponse->getQuestion();
-                $question->setReponse($reponse->getReponse());
+                $question->setReponseTxt($reponse->getReponse());
                 $question->setRemarque($reponse->getRemarque());
-            } else {
-                $question->setReponse(null);
             }
         }
 

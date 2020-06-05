@@ -37,7 +37,7 @@ class Presence implements TimestampableInterface
     use TimestampableTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
      */
     protected $jour;
 

@@ -21,7 +21,7 @@ class SanteReponseRepository extends ServiceEntityRepository
         parent::__construct($registry, SanteReponse::class);
     }
 
-    public function getBySanteFiche(iterable $santeFiches)
+    public function findBySanteFiches(iterable $santeFiches)
     {
         $qb = $this->createQueryBuilder('sante_reponse');
 
@@ -46,12 +46,12 @@ class SanteReponseRepository extends ServiceEntityRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getResponses(SanteFiche $santeFiche): array
+    public function findBySanteFiche(SanteFiche $santeFiche): array
     {
         return $this->createQueryBuilder('reponse')
             ->andWhere('reponse.sante_fiche = :fiche')
             ->setParameter('fiche', $santeFiche)
-            ->getQuery()->getOneOrNullResult();
+            ->getQuery()->getResult();
     }
 
     public function persist(SanteReponse $santeReponse)

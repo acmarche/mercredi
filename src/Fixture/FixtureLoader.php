@@ -44,6 +44,8 @@ class FixtureLoader
             $path.'presence.yaml',
             $path.'reduction.yaml',
             $path.'question.yaml',
+            $path.'reponse.yaml',
+            $path.'sante_fiche.yaml',
         ];
 
         $this->loader->load($files);

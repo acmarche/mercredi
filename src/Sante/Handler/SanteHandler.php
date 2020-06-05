@@ -52,23 +52,24 @@ class SanteHandler
     /**
      * Si pas de reponse ou remarque on ne cree pas la reponse.
      *
+     * @param SanteFiche $santeFiche
      * @param SanteQuestion[] $questions
      *
      * @return void|null
      */
     public function handle(SanteFiche $santeFiche, array $questions)
     {
+        $this->santeFicheRepository->flush();
         foreach ($questions as $question) {
-            if (null === $question->getReponse() && !$question->getRemarque()) {
+            if (null === $question->getReponseTxt() && !$question->getRemarque()) {
                 return null;
             }
             if (!$reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) {
                 $reponse = $this->santeFactory->createSanteReponse($santeFiche, $question);
             }
-            $reponse->setReponse($question->getReponse());
+            $reponse->setReponse($question->getReponseTxt());
             $reponse->setRemarque($question->getRemarque());
             $this->santeReponseRepository->flush();
         }
-        $this->santeFicheRepository->flush();
     }
 }

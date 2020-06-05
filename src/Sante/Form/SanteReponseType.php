@@ -16,7 +16,7 @@ class SanteReponseType extends AbstractType
         $choices = array_flip(['Non', 'Oui']);
         $builder
             ->add(
-                'reponse',
+                'reponseTxt',
                 ChoiceType::class,
                 [
                     'choices' => $choices,

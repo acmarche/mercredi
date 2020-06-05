@@ -19,7 +19,7 @@ class SanteReponse
 
     /**
      * @var SanteQuestion
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion", inversedBy="reponse")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $question;

@@ -4,7 +4,7 @@
 
     <div class="card bg-light mb-3">
         <div class="card-header">
-            <h3>{{ sante_fiche }}</h3>
+            <h3>Fiche santé de {{ enfant }}</h3>
         </div>
         <div class="card-body">
 
@@ -12,44 +12,7 @@
 
             <br/>
 
-            <table class="table table-bordered">
-                <tr>
-                    <td>
-                        <h4 class="text-warning">Personne(s) à joindre en cas d'urgence</h4>
-                        {% if sante_fiche %}
-                            {{ sante_fiche.personneUrgence | nl2br }}
-                        {% endif %}
-                        <h4 class="text-warning">Médecin traitant</h4>
-                        {% if sante_fiche %}
-                            {{ sante_fiche.medecinNom }}
-                            {{ sante_fiche.medecinTelephone }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <h4 class="text-warning">Accompagnateurs</h4>
-                        <ul class="list-group">
-                            {% for accompagnateur in sante_fiche.accompagnateurs %}
-                                <li class="list-group-item">{{ accompagnateur }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Accompagnateurs</th>
-                    <td>
-                        {% include '@AcMarcheMercrediAdmin/sante_fiche/_accompagnateurs.html.twig' %}
-                    </td>
-                </tr>
-            </table>
-            {% if fiche %}
-                {% if sante_fiche.remarque %}
-                    <br/>
-                    {{ sante_fiche.remarque | nl2br }}
-                    <br/>
-                {% endif %}
-            {% endif %}
-
-
+            {% include '@AcMarcheMercredi/sante/_detail.html.twig' %}
         </div>
     </div>
 

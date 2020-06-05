@@ -2,8 +2,10 @@
 
 namespace AcMarche\Mercredi\Entity\Sante;
 
+use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +16,7 @@ class SanteQuestion
 {
     use IdTrait;
     use NomTrait;
+    use RemarqueTrait;
 
     /**
      * Information complementaire necessaire.
@@ -39,20 +42,16 @@ class SanteQuestion
     protected $display_order;
 
     /**
-     * @var int|null
-     *               0 => Non, 1 => Oui, -1 => Pas de reponse
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
+     * @var Presence[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="question", cascade={"remove"})
      */
     protected $reponse;
 
-    /**
-     * @var string|null
-     */
-    protected $remarque;
+    protected $reponseTxt;
 
-    /**
-     * @var SanteFiche|null
-     */
-    protected $sante_fiche;
+    private $remarque;
 
     public function __toString()
     {
@@ -89,38 +88,25 @@ class SanteQuestion
         $this->display_order = $display_order;
     }
 
-    public function getReponse(): ?int
-    {
-        return $this->reponse;
-    }
-
-    public function setReponse(?int $reponse): void
-    {
-        $this->reponse = $reponse;
-    }
-
-    public function getRemarque(): ?string
-    {
-        return $this->remarque;
-    }
-
-    public function setRemarque(?string $remarque): void
-    {
-        $this->remarque = $remarque;
-    }
-
-    public function getSanteFiche(): ?SanteFiche
-    {
-        return $this->sante_fiche;
-    }
-
-    public function setSanteFiche(?SanteFiche $sante_fiche): void
-    {
-        $this->sante_fiche = $sante_fiche;
-    }
-
     public function getComplement(): ?bool
     {
         return $this->complement;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReponseTxt()
+    {
+        return $this->reponseTxt;
+    }
+
+    /**
+     * @param mixed $reponseTxt
+     */
+    public function setReponseTxt($reponseTxt): void
+    {
+        $this->reponseTxt = $reponseTxt;
+    }
+
 }

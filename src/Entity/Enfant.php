@@ -31,8 +31,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Enfant implements SluggableInterface, TimestampableInterface
 {
-    use
-        IdTrait;
+    use        IdTrait;
     use NomTrait;
     use PrenomTrait;
     use BirthdayTrait;

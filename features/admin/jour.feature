@@ -1,4 +1,4 @@
-Feature: Gestion des dates de garde
+Feature: Gestion des dates d'accueil
   Je suis connecté
   J' ajoute une date"
   J' édite une date
@@ -8,9 +8,9 @@ Feature: Gestion des dates de garde
   Background:
     Given I am logged in as an admin
     Given I am on "/admin/jour/"
-    Then I should see "Liste des jours de garde"
+    Then I should see "Liste des jours d'accueil"
 
-  Scenario: Ajout un jour de garde
+  Scenario: Ajouter une date d'accueil
     Then I follow "Ajouter une date"
     And I fill in "jour[date_jour]" with "2020-05-02"
     And I fill in "jour[prix1]" with "4"
@@ -20,7 +20,7 @@ Feature: Gestion des dates de garde
     Then I should see "4 €"
     Then I should see "Samedi 2 mai 2020"
 
-  Scenario: Modifier un jour de garde
+  Scenario: Modifier une date
     Then I follow "Mercredi 9 Septembre 2020"
     Then I follow "Editer"
     And I fill in "jour[prix1]" with "3.66"
