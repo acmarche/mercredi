@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/pdf.css')) }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link href="{{ asset('bundles/acmarchemercredi/css/print.css') }}" rel="stylesheet" media="print">
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/bootstrap/css/bootstrap.min.css')) }}" rel="stylesheet">
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/print.css')) }}" rel="stylesheet" media="print">
     <title>Fiche santé</title>
     <style type="text/css">
         table {
@@ -28,7 +27,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     {% include '@AcMarcheMercredi/sante/_detail.html.twig' %}
 </div>
 </body>

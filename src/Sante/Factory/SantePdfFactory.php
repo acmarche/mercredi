@@ -51,7 +51,7 @@ class SantePdfFactory extends AbstractPdfDownloader
         $this->environment = $environment;
     }
 
-    public function ficheSante(SanteFiche $santeFiche): Response
+    public function santeFiche(SanteFiche $santeFiche): Response
     {
         $isComplete = $this->santeChecker->isComplete($santeFiche);
         $questions = $this->santeQuestionRepository->findAll();
@@ -68,6 +68,7 @@ class SantePdfFactory extends AbstractPdfDownloader
             ]
         );
 
+        //return new Response($html);
         return $this->downloadPdf($html, $enfant->getSlug().'-sante.pdf');
     }
 }
