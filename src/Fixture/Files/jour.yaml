@@ -1,6 +1,6 @@
 AcMarche\Mercredi\Entity\Jour:
   jour{1..10}:
-    date_jour: <dateTimeBetween('-2 years', '+ 6 months')>
+    date_jour: <dateTimeBetween('-2 years', '-1 years')>
     color: '<hexcolor()>'
     prix1: '<randomFloat(2, 2, 7)>'
     prix2: '<randomFloat(2, 2, 7)>'
@@ -19,6 +19,18 @@ AcMarche\Mercredi\Entity\Jour:
     prix3: '<randomFloat(2, 2, 7)>'
   jour_2020_09_16:
     date_jour: '<carbonDateTime(2020,9,16,9,0)>'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
+  jour_2020_10_07:
+    date_jour: '<carbonDateTime(2020,10,7,9,0)>'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
+  jour_2020_10_14:
+    date_jour: '<carbonDateTime(2020,10,14,9,0)>'
     color: '<hexcolor()>'
     prix1: '<randomFloat(2, 2, 7)>'
     prix2: '<randomFloat(2, 2, 7)>'
