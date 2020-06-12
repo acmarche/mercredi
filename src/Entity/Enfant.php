@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
@@ -31,7 +32,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Enfant implements SluggableInterface, TimestampableInterface
 {
-    use        IdTrait;
+    use IdTrait;
     use NomTrait;
     use PrenomTrait;
     use BirthdayTrait;
@@ -47,6 +48,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
     use TimestampableTrait;
     use TelephonesTrait;
     use AgeTrait;
+    use SanteFicheTrait;
 
     /**
      * @var string|null

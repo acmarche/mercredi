@@ -31,8 +31,8 @@
                 <td>{{ enfant.anneescolaire }}</td>
                 <td>{{ enfant.ecole }}</td>
                 <td>
-                    {% if enfant.accompagnateurs %}
-                        <strong>Accompagnateurs: </strong><br/> {{ enfant.accompagnateurs | join(', ') }}
+                    {% if enfant.santeFiche and enfant.santeFiche.accompagnateurs %}
+                        <strong>Accompagnateurs: </strong><br/> {{ enfant.santeFiche.accompagnateurs | join(', ') }}
                     {% endif %}
                 </td>
                 <td style="text-align: center">

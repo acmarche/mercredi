@@ -182,7 +182,7 @@ class MessageController extends AbstractController
         $jour = $args['jour'];
         $ecole = $args['ecole'];
 
-        $data = $this->presenceHandler->handleForGroupe($jour, $ecole, false);
+        $data = $this->presenceHandler->handleForGrouping($jour, $ecole, false);
         $enfants = $data[$groupe] ?? [];
 
         $tuteurs = EnfantUtils::extractTuteurs($enfants);

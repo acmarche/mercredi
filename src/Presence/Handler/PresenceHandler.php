@@ -40,12 +40,12 @@ class PresenceHandler
         $this->presenceRepository->flush();
     }
 
-    public function handleForGroupe(Jour $jour, ?Ecole $ecole, bool $displayRemarque): array
+    public function handleForGrouping(Jour $jour, ?Ecole $ecole, bool $displayRemarque): array
     {
         $presences = $this->presenceRepository->findPresencesByJourAndEcole($jour, $ecole);
 
         $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
-        $this->presenceUtils->addTelephonesOnEnfant($enfants);
+        $this->presenceUtils->addTelephonesOnEnfants($enfants);
         $data = PresenceUtils::groupByGroupScolaire($enfants);
 
         return $data;

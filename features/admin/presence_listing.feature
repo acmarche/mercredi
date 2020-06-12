@@ -15,12 +15,15 @@ Feature: Gestion des présences
     Then I should see "FERNANDEL Yves"
     Then I should see "SIMPSON Lisa"
     Then I should see "02/09/2020"
-    Then I should see "03/05/2016"
+    Then I should see "09/09/2020"
+    Then I should see "16/09/2020"
+    Then I should see "PERET Merlin"
+    Then I should see "FERNANDEL Yves"
+    Then I should see "SIMPSON Lisa"
     And I follow "Par défaut"
-
+  #todo export tests
   #  Then the "content-length" response header exists
   #  Then the "content-type" response header is "xls"
-
 
   Scenario: Rechercher par mois mauvaise date
     Then I fill in "search_presence_by_month[mois]" with "09 2020"
@@ -28,13 +31,13 @@ Feature: Gestion des présences
     Then I should see "Mauvais format de date"
 
   Scenario: Rechercher présences
-    Given I am on "/admin/presence"
+    Given I am on "/admin/presence/"
     Then I should see "Liste des présences"
     Then I select "16-09-2020" from "search_presence[jour]"
-    Then I select "Aye" from "search_presence[jour]"
-    Then I fill in "search_presence_by_month[mois]" with "09/2020"
+    Then I select "Aye" from "search_presence[ecole]"
     And I press "Rechercher"
     Then I should see "PERET Merlin"
-    Then I should see "FERNANDEL Yves"
-    Then I should see "SIMPSON Lisa"
+    Then I should see "Moyens"
+    Then I should not see "FERNANDEL Yves"
+    Then I should not see "SIMPSON Lisa"
     Then I should see "16 septembre 2020"

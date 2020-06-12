@@ -59,7 +59,7 @@ class SanteFiche implements TimestampableInterface
 
     /**
      * @var Enfant
-     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
+     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="sante_fiche")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $enfant;

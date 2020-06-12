@@ -60,7 +60,7 @@ class PresenceUtils
      */
     public static function extractEnfants(array $presences, bool $registerRemarques = false): array
     {
-        return array_unique(
+        $enfants =
             array_map(
                 function ($presence) use ($registerRemarques) {
                     $enfant = $presence->getEnfant();
@@ -71,11 +71,14 @@ class PresenceUtils
                         }
                         $enfant->setRemarque($remarques);
                     }
+
+                    return $enfant;
                 },
                 $presences
-            ),
-            SORT_REGULAR
-        );
+            );
+        $enfants = array_unique($enfants, SORT_REGULAR);
+
+        return $enfants;
     }
 
     /**
@@ -91,7 +94,10 @@ class PresenceUtils
         return $groups;
     }
 
-    public function addTelephonesOnEnfant(array $enfants)
+    /**
+     * @param Enfant[] $enfants
+     */
+    public function addTelephonesOnEnfants(array $enfants)
     {
         foreach ($enfants as $enfant) {
             $telephones = '';

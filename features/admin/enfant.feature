@@ -50,7 +50,7 @@ Feature: Gestion des enfants
    # Then print last response
     Then I should see "L'enfant a bien été supprimé"
 
-  Scenario: Supprimer un enfant avec tuteur
+  Scenario: Supprimer un enfant avec tuteur et sante fiche
     Given I am on "/admin/enfant/"
     Then I should see "Liste des enfants"
     Then I fill in "search_enfant[nom]" with "Peret"
