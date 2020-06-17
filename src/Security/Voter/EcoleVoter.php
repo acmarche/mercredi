@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Ecole;
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

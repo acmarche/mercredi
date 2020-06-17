@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

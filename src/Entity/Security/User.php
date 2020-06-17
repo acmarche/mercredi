@@ -1,10 +1,11 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity;
+namespace AcMarche\Mercredi\Entity\Security;
 
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\EnabledTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\IsRoleTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PlainPasswordTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
@@ -27,11 +28,17 @@ class User implements UserInterface
     use RoleTrait;
     use EnabledTrait;
     use PlainPasswordTrait;
+    use IsRoleTrait;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", length=50, unique=true)
+     */
+    private $username;
 
     /**
      * @var string The hashed password
@@ -51,7 +58,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -84,5 +91,12 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 }

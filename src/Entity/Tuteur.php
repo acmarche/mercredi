@@ -14,6 +14,8 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use AcMarche\Mercredi\Entity\Traits\UserAddTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -67,10 +69,42 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     public function __construct()
     {
         $this->relations = [];
+        $this->presences = new ArrayCollection();
     }
 
     public function __toString()
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+    }
+
+    /**
+     * @return Collection|Presence[]
+     */
+    public function getPresences(): Collection
+    {
+        return $this->presences;
+    }
+
+    public function addPresence(Presence $presence): self
+    {
+        if (!$this->presences->contains($presence)) {
+            $this->presences[] = $presence;
+            $presence->setTuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresence(Presence $presence): self
+    {
+        if ($this->presences->contains($presence)) {
+            $this->presences->removeElement($presence);
+            // set the owning side to null (unless already changed)
+            if ($presence->getTuteur() === $this) {
+                $presence->setTuteur(null);
+            }
+        }
+
+        return $this;
     }
 }

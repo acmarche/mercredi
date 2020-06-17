@@ -6,6 +6,8 @@ use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,6 +54,11 @@ class SanteQuestion
     protected $reponseTxt;
 
     private $remarque;
+
+    public function __construct()
+    {
+        $this->reponse = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -107,6 +114,37 @@ class SanteQuestion
     public function setReponseTxt($reponseTxt): void
     {
         $this->reponseTxt = $reponseTxt;
+    }
+
+    /**
+     * @return Collection|SanteReponse[]
+     */
+    public function getReponse(): Collection
+    {
+        return $this->reponse;
+    }
+
+    public function addReponse(SanteReponse $reponse): self
+    {
+        if (!$this->reponse->contains($reponse)) {
+            $this->reponse[] = $reponse;
+            $reponse->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReponse(SanteReponse $reponse): self
+    {
+        if ($this->reponse->contains($reponse)) {
+            $this->reponse->removeElement($reponse);
+            // set the owning side to null (unless already changed)
+            if ($reponse->getQuestion() === $this) {
+                $reponse->setQuestion(null);
+            }
+        }
+
+        return $this;
     }
 
 }

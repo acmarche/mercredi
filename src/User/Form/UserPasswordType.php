@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Form;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;

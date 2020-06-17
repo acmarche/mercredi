@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Fixture;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use Fidry\AliceDataFixtures\ProcessorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

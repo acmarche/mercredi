@@ -2,8 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
+use AcMarche\Mercredi\User\Form\UserSearchType;
 use AcMarche\Mercredi\User\Form\UserType;
 use AcMarche\Mercredi\User\Message\UserCreated;
 use AcMarche\Mercredi\User\Message\UserDeleted;
@@ -39,16 +40,28 @@ class UserController extends AbstractController
     /**
      * Lists all User entities.
      *
-     * @Route("/", name="mercredi_admin_user_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_user_index", methods={"GET","POST"})
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
+        $form = $this->createForm(UserSearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $nom = $data['nom'];
+            $role = $data['role'];
+
+            $users = $this->userRepository->findByNameOrRoles($nom, $role);
+        } else {
+            $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
+        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/index.html.twig',
             [
                 'users' => $users,
+                'form' => $form->createView(),
             ]
         );
     }

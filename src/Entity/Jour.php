@@ -7,6 +7,8 @@ use AcMarche\Mercredi\Entity\Traits\ColorTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
@@ -52,6 +54,7 @@ class Jour implements TimestampableInterface
         $this->prix1 = 0.0;
         $this->prix2 = 0.0;
         $this->prix3 = 0.0;
+        $this->presences = new ArrayCollection();
     }
 
     public function __toString()
@@ -67,5 +70,36 @@ class Jour implements TimestampableInterface
     public function setDateJour(?\DateTime $date_jour): void
     {
         $this->date_jour = $date_jour;
+    }
+
+    /**
+     * @return Collection|Presence[]
+     */
+    public function getPresences(): Collection
+    {
+        return $this->presences;
+    }
+
+    public function addPresence(Presence $presence): self
+    {
+        if (!$this->presences->contains($presence)) {
+            $this->presences[] = $presence;
+            $presence->setJour($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresence(Presence $presence): self
+    {
+        if ($this->presences->contains($presence)) {
+            $this->presences->removeElement($presence);
+            // set the owning side to null (unless already changed)
+            if ($presence->getJour() === $this) {
+                $presence->setJour(null);
+            }
+        }
+
+        return $this;
     }
 }

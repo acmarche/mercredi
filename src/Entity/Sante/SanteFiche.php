@@ -157,4 +157,27 @@ class SanteFiche implements TimestampableInterface
     {
         $this->questions = $questions;
     }
+
+    public function addReponse(SanteReponse $reponse): self
+    {
+        if (!$this->reponses->contains($reponse)) {
+            $this->reponses[] = $reponse;
+            $reponse->setSanteFiche($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReponse(SanteReponse $reponse): self
+    {
+        if ($this->reponses->contains($reponse)) {
+            $this->reponses->removeElement($reponse);
+            // set the owning side to null (unless already changed)
+            if ($reponse->getSanteFiche() === $this) {
+                $reponse->setSanteFiche(null);
+            }
+        }
+
+        return $this;
+    }
 }

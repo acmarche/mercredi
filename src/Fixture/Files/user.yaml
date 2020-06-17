@@ -1,12 +1,14 @@
-AcMarche\Mercredi\Entity\User:
+AcMarche\Mercredi\Entity\Security\User:
   user0:
     email: jf@marche.be
+    username: jf@marche.be
     nom: Simpson
     prenom: Jf
     password: homer
     roles: ["ROLE_MERCREDI_ADMIN"]
   user_{alice, bob, fred, raoul, joseph, kevin, charle, brenda, jules, lisa}:
     email: '<current()>\@domain.be'
+    username: '<current()>\@domain.be'
     nom: '<lastName()>'
     prenom: '<current()>'
     password: homer

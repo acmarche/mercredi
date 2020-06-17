@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -35,27 +35,27 @@ class PasswordController extends AbstractController
     /**
      * Displays a form to edit an existing Utilisateur utilisateur.
      *
-     * @Route("/{id}/password", name="mercredi_admin_utilisateur_password", methods={"GET","POST"})
+     * @Route("/{id}/password", name="mercredi_admin_user_password", methods={"GET","POST"})
      */
-    public function passord(Request $request, User $utilisateur)
+    public function passord(Request $request, User $user)
     {
-        $form = $this->createForm(UserPasswordType::class, $utilisateur);
+        $form = $this->createForm(UserPasswordType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->userPasswordEncoder->encodePassword($utilisateur, $form->getData()->getPlainPassword());
-            $utilisateur->setPassword($password);
+            $password = $this->passwordEncoder->encodePassword($user, $form->getData()->getPlainPassword());
+            $user->setPassword($password);
             $this->userRepository->flush();
             $this->addFlash('success', 'Le mot de passe a bien été modifié');
 
-            return $this->redirectToRoute('mercredi_admin_utilisateur_show', ['id' => $utilisateur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/utilisateur/password.html.twig',
+            '@AcMarcheMercrediAdmin/user/password.html.twig',
             [
-                'utilisateur' => $utilisateur,
+                'user' => $user,
                 'form' => $form->createView(),
             ]
         );

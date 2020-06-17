@@ -1,6 +1,6 @@
 security:
     encoders:
-      AcMarche\Mercredi\Entity\User:
+      AcMarche\Mercredi\Entity\Security\User:
             algorithm: auto
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
@@ -8,7 +8,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         mercredi_user_provider:
             entity:
-                class: AcMarche\Mercredi\Entity\User
+                class: AcMarche\Mercredi\Entity\Security\User
                 property: username
     firewalls:
         main:

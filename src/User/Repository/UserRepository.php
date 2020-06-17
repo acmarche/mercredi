@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Repository;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -64,5 +64,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function remove(User $user)
     {
         $this->_em->remove($user);
+    }
+
+    /**
+     * @param string $name
+     * @param string $role
+     * @return User[]
+     */
+    public function findByNameOrRoles(?string $name, ?string $role): array
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        if ($name) {
+            $qb->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
+                ->setParameter('nom', '%'.$name.'%');
+        }
+
+        if ($role) {
+            $qb->andWhere('user.roles LIKE :role')
+                ->setParameter('role', $role);
+        }
+
+        return $qb
+            ->addOrderBy('user.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

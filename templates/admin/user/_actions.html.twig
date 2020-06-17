@@ -1,6 +1,23 @@
 <a href="{{ path('mercredi_admin_user_edit', { 'id': user.id }) }}" role="button"
    class="btn btn-primary"><i
             class="far fa-edit"></i> Editer</a>
+<a id="edit_user" href="{{ path('utilisateur_associate_parent', { 'id': user.id }) }}"
+   class="btn btn-primary"
+   role="button" {% if not user.isParent == true %} disabled title="Donnez le droit de parent" {% endif %}>
+    <i class="fas fa-link"></i> Associer un parent</a>
+
+<a id="edit_user" href="{{ path('utilisateur_associate_ecole', {'id': user.id }) }}"
+   class="btn btn-primary"
+   role="button" {% if not user.isEcole == true %} disabled title="Donnez le droit d'école" {% endif %}>
+    <i class="fas fa-link"></i> Associer une école</a>
+
+<a id="edit_user" href="{{ path('utilisateur_associate_animateur', { 'id': user.id }) }}"
+   class="btn btn-primary"
+   role="button" {% if not user.isAnimateur == true %} disabled title="Donnez le droit de animateur" {% endif %}>
+    <i class="fas fa-link"></i> Associer un animateur</a>
+
+<a id="edit_user" href="{{ path('admin_user_change_password', { 'id': user.id }) }}"
+   class="btn btn-primary" role="button"><i class="far fa-user"></i> Changer le mot de passe</a>
 
 <a href="{{ path('mercredi_admin_user_password', { 'id': user.id }) }}" role="button"
    class="btn btn-primary"><i
@@ -13,4 +30,4 @@
     <i class="fas fa-trash"></i> Supprimer
 </button>
 
-<br /><br />
+<br/><br/>

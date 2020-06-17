@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Command;
 
-use AcMarche\Mercredi\Entity\User;
+use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

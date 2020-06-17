@@ -19,6 +19,12 @@
                 {{ user.email }}
             </td>
         </tr>
+        <tr>
+            <th>Rôles</th>
+            <td>
+                {{ user.roles|join(', ') }}
+            </td>
+        </tr>
         </tbody>
     </table>
     </div>

@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Tuteur\Repository;
 
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,6 +48,27 @@ class TuteurRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function findForAssociateParent(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('tuteur');
+        $qb->andWhere('tuteur.user IS NULL');
+        $qb->orderBy('tuteur.nom');
+
+        return $qb;
+    }
+
+    public function findOneByEmail(string $email): ?Tuteur
+    {
+        return $this->createQueryBuilder('tuteur')
+            ->andWhere('tuteur.email = :email or tuteur.email_conjoint = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function remove(Tuteur $tuteur)
     {
         $this->_em->remove($tuteur);
@@ -61,4 +83,5 @@ class TuteurRepository extends ServiceEntityRepository
     {
         $this->_em->persist($tuteur);
     }
+
 }
