@@ -13,7 +13,7 @@ use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
-use AcMarche\Mercredi\Entity\Traits\UserAddTrait;
+use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

@@ -5,11 +5,11 @@ namespace AcMarche\Mercredi\Entity\Security;
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\EnabledTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
-use AcMarche\Mercredi\Entity\Traits\IsRoleTrait;
+use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
-use AcMarche\Mercredi\Entity\Traits\PlainPasswordTrait;
+use AcMarche\Mercredi\Entity\Security\Traits\PlainPasswordTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use AcMarche\Mercredi\Entity\Traits\RoleTrait;
+use AcMarche\Mercredi\Entity\Security\Traits\RoleTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +45,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    private $id;
+
+    private $nom;
+
+    private $prenom;
+
+    private $roles = [];
+
+    private $enabled;
 
     public function __toString()
     {
@@ -96,6 +106,71 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(?string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

@@ -1,6 +1,8 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity\Traits;
+namespace AcMarche\Mercredi\Entity\Security\Traits;
+
+use Doctrine\ORM\Mapping as ORM;
 
 trait RoleTrait
 {

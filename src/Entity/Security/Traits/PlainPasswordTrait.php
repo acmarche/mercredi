@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity\Traits;
+namespace AcMarche\Mercredi\Entity\Security\Traits;
 
 trait PlainPasswordTrait
 {
