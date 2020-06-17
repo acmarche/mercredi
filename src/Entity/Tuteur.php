@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\ConjointTrait;
@@ -9,6 +10,8 @@ use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\PresencesTuteurTrait;
+use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
@@ -41,21 +44,13 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use RelationTrait;
     use TimestampableTrait;
     use UserAddTrait;
-
+    //use UsersTrait;
+    use PresencesTuteurTrait;
+    use RelationsTrait;
     /**
-     * @var Relation[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="tuteur", cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="tuteurs" )
      */
-    private $relations;
-
-    /**
-     * J'ai mis la definition pour pouvoir mettre le cascade.
-     *
-     * @var Presence[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="tuteur", cascade={"remove"})
-     */
-    private $presences;
-
+    private $users;
     public function getSluggableFields(): array
     {
         return ['nom', 'prenom'];
@@ -70,6 +65,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     {
         $this->relations = [];
         $this->presences = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function __toString()
@@ -77,34 +73,5 @@ class Tuteur implements SluggableInterface, TimestampableInterface
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
-    /**
-     * @return Collection|Presence[]
-     */
-    public function getPresences(): Collection
-    {
-        return $this->presences;
-    }
 
-    public function addPresence(Presence $presence): self
-    {
-        if (!$this->presences->contains($presence)) {
-            $this->presences[] = $presence;
-            $presence->setTuteur($this);
-        }
-
-        return $this;
-    }
-
-    public function removePresence(Presence $presence): self
-    {
-        if ($this->presences->contains($presence)) {
-            $this->presences->removeElement($presence);
-            // set the owning side to null (unless already changed)
-            if ($presence->getTuteur() === $this) {
-                $presence->setTuteur(null);
-            }
-        }
-
-        return $this;
-    }
 }

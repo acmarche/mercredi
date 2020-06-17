@@ -48,16 +48,10 @@ class TuteurRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
     public function findForAssociateParent(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('tuteur');
-        $qb->andWhere('tuteur.user IS NULL');
-        $qb->orderBy('tuteur.nom');
-
-        return $qb;
+        return $this->createQueryBuilder('tuteur')
+        ->orderBy('tuteur.nom');
     }
 
     public function findOneByEmail(string $email): ?Tuteur
@@ -83,5 +77,4 @@ class TuteurRepository extends ServiceEntityRepository
     {
         $this->_em->persist($tuteur);
     }
-
 }

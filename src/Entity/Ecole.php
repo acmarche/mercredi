@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -21,6 +22,7 @@ class Ecole
     use TelephonieTrait;
     use EmailTrait;
     use RemarqueTrait;
+    use UsersTrait;
 
     public function __toString()
     {

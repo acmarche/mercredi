@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait UsersTrait
 {
     /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Security\Entity\User" )
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="tuteurs" )
      */
-    protected $users;
+    private $users;
 
     /**
      * @return Collection|User[]

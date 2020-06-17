@@ -37,6 +37,14 @@ class Organisation
     private $initiale;
 
     /**
+     * overload pour nullable false
+     * @var string|null
+     * @Assert\Email()
+     * @ORM\Column(name="email", type="string", length=50, nullable=false)
+     */
+    private $email;
+
+    /**
      * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
      *
      * note This is not a mapped field of entity metadata, just a simple property.
