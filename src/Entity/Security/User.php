@@ -13,6 +13,8 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteursTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,12 +35,7 @@ class User implements UserInterface
     use PlainPasswordTrait;
     use IsRoleTrait;
     use UserNameTrait;
-   // use TuteursTrait;
-    /**
-     * @var Tuteur[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="users")
-     */
-    private $tuteurs = []; //va pas dans construct
+    use TuteursTrait;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
@@ -53,7 +50,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->tuteurs = [];
+        $this->tuteurs = new ArrayCollection();
     }
 
     public function __toString()

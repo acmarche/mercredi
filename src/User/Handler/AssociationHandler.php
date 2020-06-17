@@ -58,12 +58,19 @@ class AssociationHandler
         }
     }
 
+    public function handleDissociateParent(User $user, int $tuteurId)
+    {
+        $tuteur = $this->tuteurRepository->find($tuteurId);
+        $user->removeTuteur($tuteur);
+
+        $this->tuteurRepository->flush();
+        $this->flashBag->add('success', 'Le parent a bien été dissocié.');
+    }
+
     private function dissociateParent(User $user, Tuteur $tuteur)
     {
         $tuteur->removeUser($user);
         $this->userRepository->save();
         $this->addFlash('success', 'L\'utilisateur a bien été dissocié.');
     }
-
-
 }

@@ -26,6 +26,7 @@ trait UsersTrait
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
+            $user->addTuteur($this);
         }
 
         return $this;
@@ -35,10 +36,10 @@ trait UsersTrait
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
+            $user->removeTuteur($this);
         }
 
         return $this;
     }
-
 
 }

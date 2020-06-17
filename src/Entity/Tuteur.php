@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
@@ -16,9 +17,7 @@ use AcMarche\Mercredi\Entity\Traits\RelationTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
-use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -44,13 +43,10 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use RelationTrait;
     use TimestampableTrait;
     use UserAddTrait;
-    //use UsersTrait;
+    use UsersTrait;
     use PresencesTuteurTrait;
     use RelationsTrait;
-    /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="tuteurs" )
-     */
-    private $users;
+
     public function getSluggableFields(): array
     {
         return ['nom', 'prenom'];
@@ -72,6 +68,4 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
-
-
 }

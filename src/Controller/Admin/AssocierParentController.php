@@ -40,14 +40,8 @@ class AssocierParentController extends AbstractController
     private $associationHandler;
 
     public function __construct(
-        UserRepository $userRepository,
-        PresenceRepository $presenceRepository,
-        TuteurRepository $tuteurRepository,
         AssociationHandler $associationHandler
     ) {
-        $this->userRepository = $userRepository;
-        $this->presenceRepository = $presenceRepository;
-        $this->tuteurRepository = $tuteurRepository;
         $this->associationHandler = $associationHandler;
     }
 
@@ -69,7 +63,6 @@ class AssocierParentController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->associationHandler->handleAssociateParent($dto);
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
@@ -82,5 +75,23 @@ class AssocierParentController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
+    }
+
+    /**
+     * @Route("/{id}", name="mercredi_user_dissociate_parent", methods={"DELETE"})
+     */
+    public function dissociate(Request $request, User $user)
+    {
+        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
+            $tuteurId = (int)$request->request->get('tuteur');
+            if (!$tuteurId) {
+                $this->addFlash('danger', 'Le parent n\'a pas été trouvé');
+
+                return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            }
+            $this->associationHandler->handleDissociateParent($user, $tuteurId);
+        }
+
+        return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
     }
 }

@@ -2,40 +2,66 @@
 
 {% block body %}
 
-<div class="card bg-light mb-3">
-    <div class="card-header">
-        <h3>{{ user }}</h3>
-    </div>
-    <div class="card-body">
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ user }}</h3>
+        </div>
+        <div class="card-body">
 
-    {% include '@AcMarcheMercrediAdmin/user/_actions.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/user/_actions.html.twig' %}
 
-    <br />
-    <table class="table table-bordered table-hover">
-        <tbody>
-        <tr>
-            <th>Email</th>
-            <td>
-                {{ user.email }}
-            </td>
-        </tr>
-        <tr>
-            <th>Rôles</th>
-            <td>
-                {{ user.roles|join(', ') }}
-            </td>
-        </tr>
-        <tr>
-            <th>Parent(s) associé(s)</th>
-            <td>
-                {{ user.tuteurs|join(', ') }}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            <br/>
+            <table class="table table-bordered table-h2over">
+                <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Rôles</th>
+                    <td>
+                        {{ user.roles|join(', ') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Parent(s) associé(s)</th>
+                    <td>
+                        <table class="table table-hover">
+
+                        {% for tuteur in user.tuteurs %}
+                       <tr>
+                           <td><a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">{{ tuteur }}</a></td>
+                           <td> <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
+                                        data-id="{{ tuteur.id }}" data-target="#dissocierModal">
+                                   <i class="fas fa-unlink"></i> Dissocier
+                               </button></td>
+                       </tr>
+
+                        {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
     {% include '@AcMarcheMercrediAdmin/user/_delete.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_dissocier.html.twig' %}
 
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $('#dissocierModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var tuteurId = button.data('id'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        modal.find('#modal-tuteur').val(tuteurId)
+    })
+</script>
 {% endblock %}
