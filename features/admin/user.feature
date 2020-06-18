@@ -5,6 +5,7 @@ Feature: Gestion des utilisateurs
   J'associe un parent avec les bons droits
   Je change le mot de passe et je me connecte avec le nouveau mot de passe
   Je supprime un utilisateur
+  Je recherche l'utilisateur jf qui est admin
 
   Background:
     Given I am logged in as an admin
@@ -65,3 +66,9 @@ Feature: Gestion des utilisateurs
    # Then print last response
     Then I should see "L'utilisateur a bien été supprimé"
 
+  Scenario: Je recherche l'utilisateur jf qui est admin
+    When I fill in "user_search[nom]" with "Jf"
+    And I select "Administrateur" from "user_search_role"
+    And I press "Rechercher"
+    Then I should see "Simpson Jf"
+    Then I should not see "Cohen Albert"

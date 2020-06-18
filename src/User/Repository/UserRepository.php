@@ -45,6 +45,32 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getOneOrNullResult();
     }
 
+    /**
+     * @param string $name
+     * @param string $role
+     *
+     * @return User[]
+     */
+    public function findByNameOrRoles(?string $name, ?string $role): array
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        if ($name) {
+            $qb->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
+                ->setParameter('nom', '%'.$name.'%');
+        }
+
+        if ($role) {
+            $qb->andWhere('user.roles LIKE :role')
+                ->setParameter('role', '%'.$role.'%');
+        }
+
+        return $qb
+            ->addOrderBy('user.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function persist(User $user)
     {
         $this->getEntityManager()->persist($user);
@@ -64,30 +90,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function remove(User $user)
     {
         $this->_em->remove($user);
-    }
-
-    /**
-     * @param string $name
-     * @param string $role
-     * @return User[]
-     */
-    public function findByNameOrRoles(?string $name, ?string $role): array
-    {
-        $qb = $this->createQueryBuilder('user');
-
-        if ($name) {
-            $qb->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
-                ->setParameter('nom', '%'.$name.'%');
-        }
-
-        if ($role) {
-            $qb->andWhere('user.roles LIKE :role')
-                ->setParameter('role', $role);
-        }
-
-        return $qb
-            ->addOrderBy('user.nom', 'ASC')
-            ->getQuery()
-            ->getResult();
     }
 }

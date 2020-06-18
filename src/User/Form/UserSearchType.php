@@ -13,7 +13,7 @@ class UserSearchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $roles = MercrediSecurity::ROLES;
+        $roles = array_flip(MercrediSecurity::ROLES);
         $builder
             ->add(
                 'nom',
@@ -27,7 +27,7 @@ class UserSearchType extends AbstractType
                 'role',
                 ChoiceType::class,
                 [
-                    'choices' => array_combine($roles, $roles),
+                    'choices' => $roles,
                     'required' => false,
                     'placeholder' => 'Type de compte',
                 ]
