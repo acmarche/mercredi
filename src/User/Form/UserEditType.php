@@ -13,18 +13,8 @@ class UserEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $roles = MercrediSecurity::ROLES;
         $builder
-            ->remove('plainPassword')
-            ->add(
-                'roles',
-                ChoiceType::class,
-                [
-                    'choices' => array_combine($roles, $roles),
-                    'multiple' => true,
-                    'expanded' => true,
-                ]
-            );
+            ->remove('plainPassword');
     }
 
     public function getParent()

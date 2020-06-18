@@ -21,3 +21,6 @@ security:
                 path: app_logout
     role_hierarchy:
         ROLE_MERCREDI_ADMIN: [ROLE_MERCREDI]
+        ROLE_MERCREDI_PARENT: [ROLE_MERCREDI]
+        ROLE_MERCREDI_ECOLE: [ROLE_MERCREDI]
+        ROLE_MERCREDI_ANIMATEUR: [ROLE_MERCREDI]

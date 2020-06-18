@@ -40,12 +40,17 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use TelephonieTrait;
     use SluggableTrait;
     use ArchiveTrait;
-    use RelationTrait;
     use TimestampableTrait;
     use UserAddTrait;
     use UsersTrait;
     use PresencesTuteurTrait;
     use RelationsTrait;
+
+    /**
+     * @var Relation[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="tuteur", cascade={"remove"})
+     */
+    private $relations;
 
     public function getSluggableFields(): array
     {

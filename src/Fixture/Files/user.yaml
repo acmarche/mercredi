@@ -12,3 +12,17 @@ AcMarche\Mercredi\Entity\Security\User:
     nom: '<lastName()>'
     prenom: '<current()>'
     password: homer
+  user1:
+    email: albert@marche.be
+    username: albert@marche.be
+    nom: Cohen
+    prenom: Albert
+    password: homer
+    roles: ["ROLE_MERCREDI_PARENT"]
+  user2:
+    email: leonard@marche.be
+    username: leonard@marche.be
+    nom: Cohen
+    prenom: Leonard
+    password: homer
+

@@ -3,7 +3,9 @@
 namespace AcMarche\Mercredi\User\Form;
 
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -15,6 +17,7 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $roles = array_flip(MercrediSecurity::ROLES);
         $builder
             ->add(
                 'nom',
@@ -44,6 +47,15 @@ class UserType extends AbstractType
                     ],
                     'first_options' => ['label' => 'Mot de passe'],
                     'second_options' => ['label' => 'Répéter le mot de passe'],
+                ]
+            )
+            ->add(
+                'roles',
+                ChoiceType::class,
+                [
+                    'choices' => $roles,
+                    'multiple' => true,
+                    'expanded' => true,
                 ]
             );
     }

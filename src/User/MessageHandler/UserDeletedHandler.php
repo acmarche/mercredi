@@ -26,6 +26,6 @@ class UserDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(UserDeleted $userDeleted)
     {
-        $this->flashBag->add('success', "L'école a bien été supprimée");
+        $this->flashBag->add('success', "L'utilisateur a bien été supprimé");
     }
 }

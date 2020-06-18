@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/utilisateur")
+ * @Route("/user")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
 class UserController extends AbstractController
@@ -92,7 +92,6 @@ class UserController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
-                'user' => $user,
                 'form' => $form->createView(),
             ]
         );

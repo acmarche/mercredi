@@ -12,19 +12,19 @@
     <div class="dropdown-menu">
         <a class="dropdown-item" href="{{ path('mercredi_user_associate_parent', { 'id': user.id }) }}"
            role="button" {% if not user.isParent == true %} disabled title="Donnez le droit de parent"{% endif %}>
-            Un parent</a>
+            Associer un parent</a>
         <a class="dropdown-item" href="#"
            role="button" {% if not user.isEcole == true %} disabled title="Donnez le droit d'école" {% endif %}>
-            Une école</a>
+            Associer une école</a>
         <a class="dropdown-item"
            href="#" {% if not user.isAnimateur == true %} disabled title="Donnez le droit de animateur" {% endif %}>
-            Un animateur</a>
+            Associer un animateur</a>
     </div>
 </div>
 
 <a href="{{ path('mercredi_admin_user_password', { 'id': user.id }) }}" role="button"
    class="btn btn-primary"><i
-            class="fas fa-lock"></i> Changer mot de passe</a>
+            class="fas fa-lock"></i> Changer le mot de passe</a>
 
 <a href="{{ path('mercredi_admin_user_index') }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
     Retour à la Liste</a>

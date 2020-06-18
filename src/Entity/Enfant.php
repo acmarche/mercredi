@@ -12,7 +12,7 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use AcMarche\Mercredi\Entity\Traits\RelationTrait;
+use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
@@ -44,7 +44,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
     use UserAddTrait;
     use SluggableTrait;
     use EcoleTrait;
-    use RelationTrait;
+    use RelationsTrait;
     use ArchiveTrait;
     use TimestampableTrait;
     use TelephonesTrait;

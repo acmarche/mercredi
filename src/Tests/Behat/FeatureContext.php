@@ -32,16 +32,27 @@ class FeatureContext extends RawMinkContext
     }
 
     /**
-     * iven I am logged in as user :username.
+     * Given I am logged in as user :username.
      *
      * @Given /^I am logged in as user "([^"]*)"$/
      */
     public function iAmLoggedInAsUser(string $username): void
     {
-        $this->visitPath('/fr/login');
+        $this->visitPath('/login');
         $this->fillField('username', $username);
         $this->fillField('password', 'homer');
-        $this->pressButton('S\'identifier');
+        $this->pressButton('Me connecter');
+    }
+
+    /**
+     * @When /^I am login with user "([^"]*)" and password "([^"]*)"$/
+     */
+    public function iAmLoginWithUserAndPassword(string $email, string $password)
+    {
+        $this->visitPath('/login');
+        $this->fillField('username', $email);
+        $this->fillField('password', $password);
+        $this->pressButton('Me connecter');
     }
 
     /**
