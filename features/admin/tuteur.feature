@@ -30,7 +30,7 @@ Feature: Gestion des tuteurs
 
   Scenario: Modifier un tuteur
     Then I follow "Peret"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "tuteur[gsm]" with "0476 22 66 99"
     And I select "Masculin" from "tuteur_sexe"
     And I press "Sauvegarder"

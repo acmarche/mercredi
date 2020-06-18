@@ -22,7 +22,7 @@ Feature: Gestion des écoles
 
   Scenario: Modifier une école
     Then I follow "Aye"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "ecole[telephone]" with "084 55 66 99"
     And I press "Sauvegarder"
     Then I should see "084 55 66 99"

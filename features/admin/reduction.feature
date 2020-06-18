@@ -18,7 +18,7 @@ Feature: Gestion des réductions
 
   Scenario: Modifier une réduction
     Then I follow "Cpas"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "reduction[pourcentage]" with "88"
     And I press "Sauvegarder"
     Then I should see "88%"

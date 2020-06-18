@@ -22,7 +22,7 @@ Feature: Gestion des dates d'accueil
 
   Scenario: Modifier une date
     Then I follow "Mercredi 9 Septembre 2020"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "jour[prix1]" with "3.66"
     And I press "Sauvegarder"
     Then I should see "3.66 €"

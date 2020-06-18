@@ -10,7 +10,7 @@ Feature: Gestion de l' organisation
     Then I should see "Espace enfance jeunesse"
 
   Scenario: Modifier une organisation
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "organisation[telephone]" with "084 55 66 99"
     And I press "Sauvegarder"
     Then I should see "084 55 66 99"

@@ -33,7 +33,7 @@ Feature: Gestion des fiches santés
     Then I should see "Peret"
     Then I follow "Peret"
     Then I follow "Fiche santé"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "sante_fiche[medecin_nom]" with "Docteur maboulle"
    # And I follow "Ajouter un accompagnateur"
    # Then print last response

@@ -34,7 +34,7 @@ Feature: Gestion des enfants
     And I press "Rechercher"
     Then I should see "Peret"
     Then I follow "Peret"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I fill in "enfant[numero_national]" with "781004199"
     And I press "Sauvegarder"
     Then I should see "781004199"

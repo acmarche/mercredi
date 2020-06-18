@@ -2,7 +2,7 @@ Feature: Gestion des présences
   Ajouter une présence avec un tuteur
   Ajouter une présence sans tuteur
   Ajouter une présence avec 2 tuteurs
-  Editer une présence
+  Modifier une présence
   Supprimer une présence
 
   Background:
@@ -43,7 +43,7 @@ Feature: Gestion des présences
     Then I follow "Peret"
     Then I follow "Mercredi 16 septembre 2020"
     Then I should see "Détail de la présence de PERET Merlin"
-    Then I follow "Editer"
+    Then I follow "Modifier"
     And I select "Oui avec certificat" from "presence_absent"
     And I press "Sauvegarder"
     Then I should see "La présence a bien été modifiée"
