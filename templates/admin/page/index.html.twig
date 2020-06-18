@@ -1,0 +1,28 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <h3>Liste des pages</h3>
+
+    <a class="btn btn-primary m-2" role="button"
+       href="{{ path('mercredi_admin_page_new') }}"><i class="fas fa-plus"></i> Ajouter une page</a>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nom</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for page in pages %}
+            <tr>
+                <td>
+                    <a href="{{ path('mercredi_admin_page_show', { 'id': page.id }) }}">
+                        {{ page }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+AcMarche\Mercredi\Entity\Page:
+  page_{Accueil, Contact, Modalité}:
+    nom: '<current()>'
+    content: '<email()>'
+    system: 'true'
