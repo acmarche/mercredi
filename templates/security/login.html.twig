@@ -10,7 +10,8 @@
     <div class="text-center">
 
         <form class="form-signin" method="post" action="{{ path('app_login') }}">
-            <img class="mb-4 img-fluid" title="Adl" src="{{ asset('bundles/acmarchemercredi/images/favicon/favicon-96x96.png') }}"
+            <img class="mb-4 img-fluid" title="Adl"
+                 src="{{ asset('bundles/acmarchemercredi/images/favicon/favicon-96x96.png') }}"
                  alt="logo" width="72">
             <h1 class="h3 mb-3 font-weight-normal">Authentification</h1>
             {% if error %}
@@ -32,6 +33,9 @@
                     type="submit"><i class="fas fa-sign-in-alt"></i> Me connecter
             </button>
         </form>
+        <div class="row">
+            <div class="col-6"><a href="{{ path('mercredi_front_register') }}">M'enregister</a></div>
+        </div>
     </div>
 
 {% endblock %}

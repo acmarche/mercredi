@@ -1,0 +1,22 @@
+{% extends '@AcMarcheMercredi/layout.html.twig' %}
+
+{% block title %}M'enregistrer{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    <div class="card bg-lig2ht mb-3">
+        <div class="card-header">
+            <h3>M'enregistrer</h3>
+        </div>
+
+        <div class="card-body">
+
+            {% include '@AcMarcheMercredi/front/registration/_form.html.twig' %}
+        </div>
+    </div>
+
+
+{% endblock %}
