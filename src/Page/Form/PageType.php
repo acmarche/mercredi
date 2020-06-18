@@ -3,13 +3,9 @@
 namespace AcMarche\Mercredi\Page\Form;
 
 use AcMarche\Mercredi\Entity\Page;
-use AcMarche\Mercredi\Form\Type\ArchivedType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,10 +16,9 @@ class PageType extends AbstractType
         $builder
             ->add(
                 'nom',
-                DateType::class,
+                TextType::class,
                 [
-                    'label' => 'Date du page de garde',
-                    'widget' => 'single_text',
+                    'label' => 'Titre',
                     'required' => true,
                     'attr' => ['autocomplete' => 'off'],
                 ]

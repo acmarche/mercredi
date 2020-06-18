@@ -114,7 +114,11 @@ class PageController extends AbstractController
     public function delete(Request $request, Page $page): Response
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
-         //   if($page->get)
+            if ($page->getSystem()) {
+                $this->addFlash('danger', 'Cette page ne peut pas être supprimée');
+
+                return $this->redirectToRoute('mercredi_admin_page_index');
+            }
             $pageId = $page->getId();
             $this->pageRepository->remove($page);
             $this->pageRepository->flush();
@@ -122,5 +126,37 @@ class PageController extends AbstractController
         }
 
         return $this->redirectToRoute('mercredi_admin_page_index');
+    }
+
+    /**
+     * @Route("/s/sort", name="mercredi_admin_page_sort", methods={"GET","POST"})
+     */
+    public function trier(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $pages = $request->request->get('pages');
+            if (is_array($pages)) {
+                foreach ($pages as $position => $pageId) {
+                    $santeQuestion = $this->pageRepository->find($pageId);
+                    if ($santeQuestion) {
+                        $santeQuestion->setPosition($position);
+                    }
+                }
+                $this->pageRepository->flush();
+
+                return new Response('<div class="alert alert-success">Tri enregistré</div>');
+            }
+
+            return new Response('<div class="alert alert-error">Erreur</div>');
+        }
+
+        $pages = $this->pageRepository->findAll();
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/page/sort.html.twig',
+            [
+                'pages' => $pages,
+            ]
+        );
     }
 }

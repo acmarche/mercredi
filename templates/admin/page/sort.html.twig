@@ -1,34 +1,34 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
 {% block body %}
 
-    <div class="page-header">
-        <h3>Trier les questions</h3>
-    </div>
+    <h3>Ordre d'affichage des pages</h3>
 
-<a href="{{ path('mercredi_admin_sante_question_index') }}" class="btn btn-primary" role="button">
-    <i class="fas fa-list"></i>
+    <a href="{{ path('mercredi_admin_page_index') }}" class="btn btn-primary" role="button"><i
+                class="fas fa-list"></i>
         Retour à la liste</a>
 
     <br/> <br/>
     <div class="alert alert-info">
-        Pour changer l'ordre d'appariation des questions, glissez en maintenant la souris sur l'icône
-        <i                class="fas fa-sort"></i>
+        Pour changer l'ordre d'appariation des pages, glissez en maintenant la souris sur l'icône <i
+                class="fas fa-sort"></i>
     </div>
 
     <div class="" id="success"></div>
 
     <ul class="list-group" id="sortable">
-        {% for question in questions %}
-            <li id="questions-{{ question.id }}" class="list-group-item">
-                <i class="fas fa-sort" style="margin-right: 0.3em;"></i>{{ question }}
+        {% for page in pages %}
+            <li id="pages-{{ page.id }}" class="list-group-item">
+                <i class="fas fa-sort" style="margin-right: 0.3em;"></i>{{ page }}
             </li>
         {% endfor %}
     </ul>
 
 {% endblock %}
 
-{% block scripts %}
-    <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.min.js') }}"></script>
+{% block javascripts %}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -40,7 +40,7 @@
                     serial = $(this).sortable('serialize');
                     // Appelle une action en ajax
                     $.ajax({
-                        url: '{{ path('question_trier') }}',
+                        url: '{{ path('mercredi_admin_page_sort') }}',
                         type: "post",
                         data: serial,
                         success: function (html) {

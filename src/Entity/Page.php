@@ -25,6 +25,12 @@ class Page implements SluggableInterface
      */
     private $system;
 
+    /**
+     * @var int|null
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $position;
+
     public function __construct()
     {
         $this->system = false;
@@ -37,7 +43,7 @@ class Page implements SluggableInterface
 
     public function getSluggableFields(): array
     {
-        return [$this->nom];
+        return ['nom'];
     }
 
     public function shouldGenerateUniqueSlugs(): bool
@@ -45,5 +51,27 @@ class Page implements SluggableInterface
         return true;
     }
 
+    public function getSystem(): ?bool
+    {
+        return $this->system;
+    }
 
+    public function setSystem(bool $system): self
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?int $position): self
+    {
+        $this->position = $position;
+
+        return $this;
+    }
 }

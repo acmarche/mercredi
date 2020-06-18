@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
  * @method Page|null findOneBy(array $criteria, array $orderBy = null)
- * @method Page[]    findAll()
+ * method Page[]    findAll()
  * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PageRepository extends ServiceEntityRepository
@@ -17,6 +17,14 @@ class PageRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Page::class);
+    }
+
+    /**
+     * @return Page[]|array
+     */
+    public function findAll()
+    {
+        return $this->findBy([], ['position' => 'ASC']);
     }
 
     public function remove(Page $page)
