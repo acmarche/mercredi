@@ -1,8 +1,0 @@
-{% set action = app.request.attributes.get("_route") %}
-
-
-<li class="nav-item{% if action == 'mercredi_tuteur_new' %} active {% endif %}">
-    <a class="nav-link"
-       href="{{ path('mercredi_parent_home') }}"><i class="fas fa-plus"></i> Contact</a>
-</li>
-

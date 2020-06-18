@@ -20,7 +20,7 @@
 <!-- Top nav bar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top border-bottom shadow-sm">
     {% block brand %}
-        <i class="fas fa-store icon-rose"></i> <a class="navbar-brand" href="{{ path('mercredi_home') }}">Mercredi</a>
+        <i class="fas fa-store icon-rose"></i> <a class="navbar-brand" href="{{ path('mercredi_front_home') }}">Mercredi</a>
     {% endblock %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,11 +29,9 @@
 
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto ml-auto">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {% block menu_top %}
-                    {% include '@AcMarcheMercredi/_menu.html.twig' %}
-                {% endblock %}
-            {% endif %}
+            {% block menu_top %}
+
+            {% endblock %}
         </ul>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <ul class="navbar-nav">
@@ -73,7 +71,7 @@
     <div class="container">
         {% block footer %}
             <span class="text-muted">
-                {{ render(path('mercredi_show_organisation')) }}
+                {{ render(path('mercredi_organisation_show')) }}
             </span>
         {% endblock %}
     </div>

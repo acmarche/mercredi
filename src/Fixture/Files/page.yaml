@@ -1,10 +1,22 @@
 AcMarche\Mercredi\Entity\Page:
-  page_{Accueil, Contact, Modalité}:
-    nom: '<current()>'
-    content: 'blablra'
-    system: '1'
+  page_home:
+    nom: 'Accueil'
+    content: 'Bienvenue sur mon site'
+    slug_system: 'home'
+    position: '1'
+
+  page_modalite:
+    nom: 'Modalités pratiques'
+    content: 'Les prix et autres infos'
+    position: '2'
 
   page_0:
     nom: 'Page temporaire'
-    content: 'blabla'
-    system: '0'
+    content: 'contenu temporaire'
+    position: '3'
+
+  page_contact:
+    nom: 'Nous contacter'
+    content: 'Plus de contacts'
+    slug_system: 'contact'
+    position: '4'

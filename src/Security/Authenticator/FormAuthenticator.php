@@ -87,11 +87,11 @@ class FormAuthenticator implements AuthenticatorInterface
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return new RedirectResponse($this->urlGenerator->generate('mercredi_home'));
+        return new RedirectResponse($this->urlGenerator->generate('mercredi_front_home'));
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new RedirectResponse($this->urlGenerator->generate('mercredi_home'));
+        return new RedirectResponse($this->urlGenerator->generate('mercredi_front_home'));
     }
 }

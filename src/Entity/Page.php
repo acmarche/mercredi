@@ -20,10 +20,10 @@ class Page implements SluggableInterface
     use SluggableTrait;
 
     /**
-     * @var bool
-     * @ORM\Column(type="boolean")
+     * @var string|null
+     * @ORM\Column(type="text", length=100, nullable=true)
      */
-    private $system;
+    private $slug_system;
 
     /**
      * @var int|null
@@ -51,18 +51,6 @@ class Page implements SluggableInterface
         return true;
     }
 
-    public function getSystem(): ?bool
-    {
-        return $this->system;
-    }
-
-    public function setSystem(bool $system): self
-    {
-        $this->system = $system;
-
-        return $this;
-    }
-
     public function getPosition(): ?int
     {
         return $this->position;
@@ -71,6 +59,18 @@ class Page implements SluggableInterface
     public function setPosition(?int $position): self
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getSlugSystem(): ?string
+    {
+        return $this->slug_system;
+    }
+
+    public function setSlugSystem(?string $slug_system): self
+    {
+        $this->slug_system = $slug_system;
 
         return $this;
     }

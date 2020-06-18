@@ -114,11 +114,6 @@ class PageController extends AbstractController
     public function delete(Request $request, Page $page): Response
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
-            if ($page->getSystem()) {
-                $this->addFlash('danger', 'Cette page ne peut pas être supprimée');
-
-                return $this->redirectToRoute('mercredi_admin_page_index');
-            }
             $pageId = $page->getId();
             $this->pageRepository->remove($page);
             $this->pageRepository->flush();

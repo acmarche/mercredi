@@ -27,6 +27,16 @@ class PageRepository extends ServiceEntityRepository
         return $this->findBy([], ['position' => 'ASC']);
     }
 
+    public function findHomePage(): ?Page
+    {
+        return $this->findOneBy(['slug_system' => 'home']);
+    }
+
+    public function findContactPage(): ?Page
+    {
+        return $this->findOneBy(['slug_system' => 'contact']);
+    }
+
     public function remove(Page $page)
     {
         $this->_em->remove($page);

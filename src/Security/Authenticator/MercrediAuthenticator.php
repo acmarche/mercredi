@@ -94,7 +94,7 @@ class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements Pa
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('mercredi_home'));
+        return new RedirectResponse($this->urlGenerator->generate('mercredi_front_home'));
     }
 
     protected function getLoginUrl()

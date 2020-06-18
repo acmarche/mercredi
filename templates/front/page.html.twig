@@ -1,16 +1,15 @@
 {% extends '@AcMarcheMercredi/layout.html.twig' %}
 
-{% block title %}Error Mercredi{% endblock %}
+{% block title %}{{ page.nom }}{% endblock %}
 
 {% block body -%}
 
     <div class="card bg-lig2ht mb-3">
         <div class="card-header">
-            <h3>Erreur 500 survenue</h3>
+            <h3>{{ page.nom }}</h3>
         </div>
         <div class="card-body">
-            <br/><br/>
-            <a href="{{ path('mercredi_front_home') }}">Retour à l'accueil</a>
+           {{ page.content|raw }}
         </div>
     </div>
 

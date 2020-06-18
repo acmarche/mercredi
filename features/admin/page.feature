@@ -25,12 +25,6 @@ Feature: Gestion des pages
     And I press "Sauvegarder"
     Then I should see "Accueil nouveau"
 
-  Scenario: Supprimer une page systeme
-    Then I follow "Contact"
-    Then I press "Supprimer la page"
-   # Then print last response
-    Then I should see "Cette page ne peut pas être supprimée"
-
   Scenario: Supprimer une page non system
     Then I follow "Page temporaire"
     Then I press "Supprimer la page"

@@ -1,0 +1,5 @@
+{% for page in pages %}
+    <li class="nav-link">
+        <a href="{{ path('mercredi_front_page_show', {'slug': page.slug}) }}">{{ page.nom }}</a>
+    </li>
+{% endfor %}
