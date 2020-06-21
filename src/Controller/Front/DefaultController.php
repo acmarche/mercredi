@@ -4,9 +4,12 @@ namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Contact\Form\ContactType;
 use AcMarche\Mercredi\Contact\Mailer\ContactMailer;
+use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
+use AcMarche\Mercredi\Security\MercrediSecurity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -51,6 +54,35 @@ class DefaultController extends AbstractController
      */
     public function index()
     {
+        /**
+         * @var User
+         */
+        $user = $this->getUser();
+
+        if ($user) {
+            $roles = MercrediSecurity::getRolesForProfile($user);
+
+            if (count($roles) > 1) {
+                return $this->redirectToRoute('mercredi_front_select_profile');
+            }
+
+            if ($user->hasRole('ROLE_MERCREDI_PARENT')) {
+                return $this->redirectToRoute('mercredi_parent_home');
+            }
+
+            if ($user->hasRole('ROLE_MERCREDI_ECOLE')) {
+                //return $this->redirectToRoute('mercredi_ecole_home');
+            }
+
+            if ($user->hasRole('ROLE_MERCREDI_ANIMATEUR')) {
+                //  return $this->redirectToRoute('home_animateur');
+            }
+
+            if ($user->hasRole('ROLE_MERCREDI_ADMIN') or $user->hasRole('ROLE_MERCREDI_READ')) {
+                return $this->redirectToRoute('mercredi_admin_home');
+            }
+        }
+
         $homePage = $this->pageRepository->findHomePage();
         if (!$homePage) {
             $homePage = $this->pageFactory->createHomePage();
@@ -100,6 +132,19 @@ class DefaultController extends AbstractController
                 'page' => $page,
                 'organisation' => $this->organisationRepository->getOrganisation(),
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/select/profile", name="mercredi_front_select_profile")
+     * @IsGranted("ROLE_MERCREDI")
+     */
+    public function selectProfile()
+    {
+        return $this->render(
+            '@AcMarcheMercredi/front/select_profile.html.twig',
+            [
             ]
         );
     }
