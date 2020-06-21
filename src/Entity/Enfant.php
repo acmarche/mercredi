@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
+use AcMarche\Mercredi\Entity\Traits\FicheSanteIsComplete;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
@@ -22,8 +23,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -31,7 +34,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Enfant\Repository\EnfantRepository")
  * @Vich\Uploadable
  */
-class Enfant implements SluggableInterface, TimestampableInterface
+class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface
 {
     use IdTrait;
     use NomTrait;
@@ -50,6 +53,8 @@ class Enfant implements SluggableInterface, TimestampableInterface
     use TelephonesTrait;
     use AgeTrait;
     use SanteFicheTrait;
+    use FicheSanteIsComplete;
+    use UuidableTrait;
 
     /**
      * @var string|null
@@ -104,6 +109,7 @@ class Enfant implements SluggableInterface, TimestampableInterface
     {
         $this->relations = new ArrayCollection();
         $this->presences = new ArrayCollection();
+        $this->ficheSanteIsComplete = false;
     }
 
     public function __toString()

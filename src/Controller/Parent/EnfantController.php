@@ -14,31 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class DefaultController.
+ * @Route("/enfant")
  */
-class DefaultController extends AbstractController
+class EnfantController extends AbstractController
 {
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-
-    public function __construct(OrganisationRepository $organisationRepository, RelationRepository $relationRepository)
+    public function __construct()
     {
-        $this->organisationRepository = $organisationRepository;
-        $this->organisation = $organisationRepository->getOrganisation();
-        $this->relationRepository = $relationRepository;
     }
 
     /**
-     * @Route("/", name="mercredi_parent_home")
+     * @Route("/", name="mercredi_parent_enfant_index")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
     public function default(Request $request)
@@ -61,7 +46,6 @@ class DefaultController extends AbstractController
             '@AcMarcheMercrediParent/default/index.html.twig',
             [
                 'enfants' => $enfants,
-                'tuteur' => $tuteur,
                 'tuteurIsComplete' => $tuteurIsComplete,
                 'year' => date('Y'),
             ]
@@ -69,15 +53,21 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/nouveau", name="mercredi_parent_nouveau")
+     * @Route("/{uuid}", name="mercredi_parent_enfant_show")
+     * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function nouveau()
+    public function show(Request $request)
     {
-        return $this->render(
-            '@AcMarcheMercrediParent/default/nouveau.html.twig',
-            [
-                'organisation' => $this->organisation,
-            ]
-        );
+
     }
+
+    /**
+     * @Route("/{uuid}", name="mercredi_parent_enfant_edit")
+     * @IsGranted("ROLE_MERCREDI_PARENT")
+     */
+    public function edit(Request $request)
+    {
+
+    }
+
 }

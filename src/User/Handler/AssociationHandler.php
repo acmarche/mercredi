@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\User\Handler;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use AcMarche\Mercredi\User\Dto\UserTuteurDto;
+use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -32,7 +32,7 @@ class AssociationHandler
         $this->flashBag = $flashBag;
     }
 
-    public function suggestTuteur(User $user, UserTuteurDto $dto)
+    public function suggestTuteur(User $user, AssociateUserTuteurDto $dto)
     {
         $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
         if ($tuteur) {
@@ -40,10 +40,15 @@ class AssociationHandler
         }
     }
 
-    public function handleAssociateParent(UserTuteurDto $dto)
+    public function handleAssociateParent(AssociateUserTuteurDto $dto)
     {
         $tuteur = $dto->getTuteur();
         $user = $dto->getUser();
+
+        if (count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
+            $user->getTuteurs()->clear(); //remove old tuteur
+        }
+
         $tuteur->addUser($dto->getUser());
         $this->tuteurRepository->flush();
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
@@ -70,7 +75,14 @@ class AssociationHandler
     private function dissociateParent(User $user, Tuteur $tuteur)
     {
         $tuteur->removeUser($user);
-        $this->userRepository->save();
-        $this->addFlash('success', 'L\'utilisateur a bien été dissocié.');
+        $this->tuteurRepository->flush();
+        $this->flashBag->add('success', 'L\'utilisateur a bien été dissocié.');
+    }
+
+    private function removeCurrentTuteurs(User $user, array $tuteurs)
+    {
+        foreach ($tuteurs as $tuteur) {
+            $user->removeTuteur($tuteur);
+        }
     }
 }

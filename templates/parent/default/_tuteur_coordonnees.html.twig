@@ -1,0 +1,48 @@
+<div class="card bg-lig2ht mb-3">
+    <div class="card-header">
+        <h3>Vos coordonnées</h3>
+    </div>
+    <div class="card-body">
+
+        <a href="{{ path('mercredi_parent_tuteur_edit') }}" class="btn btn-primary" role="button">
+            <i class="far fa-edit"></i>
+            Modifier mes coordonnées
+        </a>
+
+        <div class="page-header">
+            {{ tuteur }} {% include '@AcMarcheMercredi/commun/_sexe.html.twig' with {'entity': tuteur } %}
+
+            <span class="fas fa-map-marker-alt"></span>
+            {{ tuteur.rue }} <br/>
+            {{ tuteur.codepostal }} {{ tuteur.localite }}
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <table class='table table-bordered table-hover'>
+                    <tbody>
+                    <tr>
+                        <th><span class="fas fa-phone"></span> Téléphone</th>
+                        <td>{{ tuteur.telephone }}</td>
+                    </tr>
+                    <tr>
+                        <th><span class="fas fa-phone"></span> Téléphone bureau</th>
+                        <td>{{ tuteur.telephonebureau }}</td>
+                    </tr>
+                    <tr>
+                        <th><span class="fas fa-mobile-alt"></span> Gsm</th>
+                        <td>{{ tuteur.gsm }}</td>
+                    </tr>
+                    <tr>
+                        <th><span class="far fa-envelope"></span> Email</th>
+                        <td><a href='mailto:{{ tuteur.email }}'>{{ tuteur.email }}</a></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                {% include '@AcMarcheMercrediParent/tuteur/_conjoint.html.twig' %}
+            </div>
+        </div>
+
+    </div>
+</div>

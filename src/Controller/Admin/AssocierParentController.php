@@ -3,12 +3,9 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use AcMarche\Mercredi\User\Dto\UserTuteurDto;
+use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Form\AssociateParentType;
 use AcMarche\Mercredi\User\Handler\AssociationHandler;
-use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,18 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AssocierParentController extends AbstractController
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
     /**
      * @var AssociationHandler
      */
@@ -56,7 +41,7 @@ class AssocierParentController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
-        $dto = new UserTuteurDto($user);
+        $dto = new AssociateUserTuteurDto($user);
         $this->associationHandler->suggestTuteur($user, $dto);
 
         $form = $this->createForm(AssociateParentType::class, $dto);

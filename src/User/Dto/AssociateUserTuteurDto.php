@@ -7,7 +7,7 @@ namespace AcMarche\Mercredi\User\Dto;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 
-class UserTuteurDto
+class AssociateUserTuteurDto
 {
     /**
      * @var User

@@ -1,0 +1,14 @@
+{% extends '@AcMarcheMercrediParent/layout.html.twig' %}
+
+{% block body %}
+    <div class="card bg-lig2ht mb-3">
+        <div class="card-header">
+            <h3>{{ tuteur }}</h3>
+        </div>
+
+        <div class="card-body">
+            {% include '@AcMarcheMercrediParent/default/_tuteur_coordonnees.html.twig' %}
+        </div>
+
+    </div>
+{% endblock %}

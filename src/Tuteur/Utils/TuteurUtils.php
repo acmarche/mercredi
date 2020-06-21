@@ -38,6 +38,35 @@ class TuteurUtils
         return $telephones;
     }
 
+    public static function coordonneesIsComplete(Tuteur $tuteur)
+    {
+        if (0 === strlen(self::getTelephones($tuteur))) {
+            return false;
+        }
+
+        if (!$tuteur->getNom()) {
+            return false;
+        }
+
+        if (!$tuteur->getPrenom()) {
+            return false;
+        }
+
+        if (!$tuteur->getRue()) {
+            return false;
+        }
+
+        if (!$tuteur->getCodePostal()) {
+            return false;
+        }
+
+        if (!$tuteur->getLocalite()) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Retourne un tableau de string contentant les emails.
      *
@@ -72,10 +101,13 @@ class TuteurUtils
             $emails[] = $tuteur->getEmail();
         }
 
-        //todo user
-        /*   if (filter_var($tuteur->getUser()->getEmail(), FILTER_VALIDATE_EMAIL)) {
-               $emails[] = $tuteur->getUser()->getEmail();
-           }*/
+        if (count($tuteur->getUsers()) > 0) {
+            $users = $tuteur->getUsers();
+            $user = $users[0];
+            if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+                $emails[] = $user->getEmail();
+            }
+        }
 
         if (filter_var($tuteur->getEmailConjoint(), FILTER_VALIDATE_EMAIL)) {
             $emails[] = $tuteur->getEmailConjoint();

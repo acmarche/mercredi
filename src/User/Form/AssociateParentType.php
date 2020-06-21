@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\User\Form;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use AcMarche\Mercredi\User\Dto\UserTuteurDto;
+use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -45,7 +45,7 @@ class AssociateParentType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => UserTuteurDto::class,
+                'data_class' => AssociateUserTuteurDto::class,
             ]
         );
     }
