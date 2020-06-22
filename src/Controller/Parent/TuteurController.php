@@ -33,7 +33,7 @@ class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/show", name="mercredi_parent_tuteur_show", methods={"GET"})
+     * @Route("/", name="mercredi_parent_tuteur_show", methods={"GET"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
     public function show()

@@ -56,7 +56,6 @@ Feature: Gestion des utilisateurs
     And I press "Sauvegarder"
     Then I should see "Le mot de passe a bien été modifié"
     Given I am on "/logout"
-
     When I am login with user "albert@marche.be" and password "lisa"
     Then I should see "Front du Mercredi"
 

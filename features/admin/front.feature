@@ -1,12 +1,5 @@
 Feature: Front view
-  Je test la home page
-  Je test la vue par mois
-  Je test la vue par semaine
-
-  Scenario: Homepage
-    Given I am on homepage
-    Then the response status code should be 200
-    Then I should see "Front du Mercredi"
+  Je meloggue
 
   Scenario: Je me loggue
     Given I am on homepage

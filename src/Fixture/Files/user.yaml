@@ -19,6 +19,7 @@ AcMarche\Mercredi\Entity\Security\User:
     prenom: Albert
     password: homer
     roles: ["ROLE_MERCREDI_PARENT"]
+    tuteurs: ["@tuteur_Simpson"]
   user2:
     email: leonard@marche.be
     username: leonard@marche.be
