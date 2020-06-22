@@ -1,0 +1,35 @@
+{% extends '@AcMarcheMercrediParent/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+
+        <h3 class="card-header">{{ enfant }}
+            <div class="float-right">
+                {% include '@AcMarcheMercredi/commun/_archive.html.twig' with {'entity':enfant} %}
+            </div>
+        </h3>
+        <div class="card-body">
+            {% include '@AcMarcheMercrediParent/enfant/_actions.html.twig' %}
+
+            <div class="row pl-1">
+                <div class="col-md-3 mt-2">
+                    {% include '@AcMarcheMercrediParent/enfant/_photo.html.twig' %}
+                </div>
+                <div class="col-md-9">
+                    {% include '@AcMarcheMercrediParent/enfant/_identite.html.twig' %}
+                </div>
+            </div>
+
+            <br/>
+            <div class="pl-1">
+
+
+            </div>
+        </div>
+        <div class="card-footer text-muted mt-3">
+            Crée le {{ enfant.createdAt | format_date('full') }} par {{ enfant.userAdd }}. Mis à jour
+            le {{ enfant.updatedAt | format_date('full') }}
+        </div>
+    </div>
+
+{% endblock %}

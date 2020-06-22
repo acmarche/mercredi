@@ -28,7 +28,7 @@ AcMarche\Mercredi\Entity\Enfant:
     nom: Fernandel
     prenom: Yves
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
-    annee_scolaire: 6M
+    annee_scolaire: 6P
     sexe: Masculin
     ordre: 1
     ecole: '@ecole_Champlon'

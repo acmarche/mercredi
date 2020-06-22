@@ -3,11 +3,14 @@
 {% block body %}
     <div class="card bg-lig2ht mb-3">
         <div class="card-header">
-            <h3>{{ tuteur }}</h3>
+            <h3 class="w-50 d-inline">{{ tuteur }}</h3>
+            <a href="{{ path('mercredi_parent_tuteur_edit') }}" class="float-right" role="button">
+                <i class="far fa-edit"></i>
+                Modifier
+            </a>
         </div>
-
         <div class="card-body">
-            {% include '@AcMarcheMercrediParent/default/_tuteur_coordonnees.html.twig' %}
+            {% include '@AcMarcheMercrediParent/tuteur/_coordonnees.html.twig' %}
         </div>
 
     </div>

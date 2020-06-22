@@ -33,7 +33,7 @@ class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/show", name="mercredi_parent_tuteur_show")
+     * @Route("/show", name="mercredi_parent_tuteur_show", methods={"GET"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
     public function show()
@@ -58,7 +58,7 @@ class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/edit", name="mercredi_parent_tuteur_edit")
+     * @Route("/edit", name="mercredi_parent_tuteur_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
     public function edit(Request $request)
@@ -80,7 +80,7 @@ class TuteurController extends AbstractController
 
             $this->dispatchMessage(new TuteurUpdated($tuteur->getId()));
 
-            return $this->redirectToRoute('mercredi_parent_tuteur_show', ['uuid' => $tuteur->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_tuteur_show');
         }
 
         return $this->render(
