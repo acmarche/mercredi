@@ -50,6 +50,10 @@ class SanteChecker
 
     public function isComplete(SanteFiche $santeFiche): bool
     {
+        if (!$santeFiche->getId()) {
+            return false;
+        }
+
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
         $questions = $this->santeQuestionRepository->findAll();
 

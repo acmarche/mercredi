@@ -44,3 +44,13 @@ AcMarche\Mercredi\Entity\Enfant:
     ecole: '@ecole_Hollogne'
     photo_autorisation: true
     userAdd: administrator
+  enfant_bart:
+    nom: Simpson
+    prenom: Bart
+    birthday: '<dateTimeBetween("-10 years", "-10 months")>'
+    annee_scolaire: 2M
+    sexe: Masculin
+    ordre: 2
+    ecole: '@ecole_Champlon'
+    photo_autorisation: true
+    userAdd: administrator

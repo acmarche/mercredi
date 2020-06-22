@@ -2,9 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use AcMarche\Mercredi\Entity\Organisation;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,12 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class DefaultController.
+ *
  * @Route("/attestation")
  */
 class AttestationController extends AbstractController
 {
     public function __construct()
     {
+
     }
 
     /**

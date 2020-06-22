@@ -15,3 +15,7 @@ AcMarche\Mercredi\Entity\Relation:
     __construct: ['@tuteur_Simpson','@enfant_lisa']
     type: 'Père'
     ordre: '0'
+  relation_simpson_bart:
+    __construct: ['@tuteur_Simpson','@enfant_bart']
+    type: 'Père'
+    ordre: '0'

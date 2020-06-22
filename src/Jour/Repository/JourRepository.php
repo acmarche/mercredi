@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Jour\Repository;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -55,21 +56,6 @@ class JourRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function remove(Jour $jour)
-    {
-        $this->_em->remove($jour);
-    }
-
-    public function flush()
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Jour $jour)
-    {
-        $this->_em->persist($jour);
-    }
-
     public function findActifs()
     {
         $qb = $this->createQueryBuilder('jour')
@@ -86,5 +72,41 @@ class JourRepository extends ServiceEntityRepository
             ->orderBy('jour.date_jour', 'DESC');
 
         return $qb;
+    }
+
+    /**
+     * @param Enfant $enfant
+     * @return QueryBuilder
+     *
+     */
+    public function getQbForParent(Enfant $enfant): QueryBuilder
+    {
+        $qb = $this->getQbDaysNotRegisteredByEnfant($enfant);
+
+        /**
+         * je ne propose pas les dates passees.
+         */
+        $date_time = new \DateTime();
+        $today = $date_time->format('Y-m-d');
+
+        $qb->andWhere('jour.date_jour >= :today')
+            ->setParameter('today', $today);
+
+        return $qb;
+    }
+
+    public function remove(Jour $jour)
+    {
+        $this->_em->remove($jour);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
+    public function persist(Jour $jour)
+    {
+        $this->_em->persist($jour);
     }
 }

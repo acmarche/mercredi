@@ -21,16 +21,6 @@ class SanteReponseRepository extends ServiceEntityRepository
         parent::__construct($registry, SanteReponse::class);
     }
 
-    public function findBySanteFiches(iterable $santeFiches)
-    {
-        $qb = $this->createQueryBuilder('sante_reponse');
-
-        $qb->andWhere('sante_reponse.sante_fiche IN (:fiches)')
-            ->setParameter('fiches', $santeFiches);
-
-        return $qb->getQuery()->getResult();
-    }
-
     public function getResponse(SanteFiche $santeFiche, SanteQuestion $santeQuestion): ?SanteReponse
     {
         return $this->createQueryBuilder('reponse')

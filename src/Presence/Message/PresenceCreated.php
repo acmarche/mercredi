@@ -5,17 +5,21 @@ namespace AcMarche\Mercredi\Presence\Message;
 class PresenceCreated
 {
     /**
-     * @var int
+     * @var array
      */
-    private $presenceId;
+    private $days;
 
-    public function __construct(int $presenceId)
+    public function __construct(array $days)
     {
-        $this->presenceId = $presenceId;
+        $this->days = $days;
     }
 
-    public function getPresenceId(): int
+    /**
+     * @return array
+     */
+    public function getDays(): array
     {
-        return $this->presenceId;
+        return $this->days;
     }
+
 }
