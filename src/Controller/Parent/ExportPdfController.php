@@ -34,7 +34,8 @@ class ExportPdfController extends AbstractController
     }
 
     /**
-     * @Route("/santefiche/{uuid}", name="mercredi_parent_export_sante_fiche_pdf")
+     * @Route("/santefiche/{uuid}", name="mercredi_parent_export_sante_fiche_pdf", methods={"GET"})
+     * @IsGranted("enfant_show", subject="enfant")
      */
     public function default(Enfant $enfant): Response
     {

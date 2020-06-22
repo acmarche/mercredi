@@ -2,8 +2,10 @@
 
 namespace AcMarche\Mercredi\Tuteur\Utils;
 
+use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TuteurUtils
 {
@@ -91,6 +93,21 @@ class TuteurUtils
     public function tuteurIsActif(Tuteur $tuteur): bool
     {
         return count($this->relationRepository->findEnfantsActifs($tuteur)) > 0;
+    }
+
+    /**
+     * @param UserInterface|User $user
+     * @return Tuteur|null
+     */
+    public function getTuteurByUser(UserInterface $user): ?Tuteur
+    {
+        $tuteurs = $user->getTuteurs();
+
+        if (0 == count($tuteurs)) {
+            return null;
+        }
+
+        return $tuteurs[0];
     }
 
     public static function getEmailsOfOneTuteur(Tuteur $tuteur): array

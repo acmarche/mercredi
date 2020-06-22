@@ -61,6 +61,7 @@ class SanteFicheController extends AbstractController
 
     /**
      * @Route("/{uuid}", name="mercredi_parent_sante_fiche_show", methods={"GET"})
+     * @IsGranted("enfant_show", subject="enfant")
      */
     public function show(Enfant $enfant): Response
     {
@@ -90,6 +91,7 @@ class SanteFicheController extends AbstractController
 
     /**
      * @Route("/{uuid}/edit", name="mercredi_parent_sante_fiche_edit", methods={"GET","POST"})
+     * @IsGranted("enfant_edit", subject="enfant")
      */
     public function edit(Request $request, Enfant $enfant): Response
     {

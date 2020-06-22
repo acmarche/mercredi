@@ -2,11 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use AcMarche\Mercredi\Entity\Organisation;
-use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Tuteur\Form\TuteurType;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
@@ -15,9 +10,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DefaultController.
+ *
  * @Route("/tuteur")
  */
 class TuteurController extends AbstractController
@@ -26,10 +23,20 @@ class TuteurController extends AbstractController
      * @var TuteurRepository
      */
     private $tuteurRepository;
+    /**
+     * @var TuteurUtils
+     */
+    private $tuteurUtils;
+    /**
+     * @var Security
+     */
+    private $security;
 
-    public function __construct(TuteurRepository $tuteurRepository)
+    public function __construct(TuteurRepository $tuteurRepository, TuteurUtils $tuteurUtils, Security $security)
     {
         $this->tuteurRepository = $tuteurRepository;
+        $this->tuteurUtils = $tuteurUtils;
+        $this->security = $security;
     }
 
     /**
@@ -39,13 +46,14 @@ class TuteurController extends AbstractController
     public function show()
     {
         $user = $this->getUser();
-        $tuteurs = $user->getTuteurs();
+        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
 
-        if (0 == count($tuteurs)) {
+        if (!$tuteur) {
             return $this->redirectToRoute('mercredi_parent_nouveau');
         }
 
-        $tuteur = $tuteurs[0];
+        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
+
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
 
         return $this->render(
@@ -64,13 +72,13 @@ class TuteurController extends AbstractController
     public function edit(Request $request)
     {
         $user = $this->getUser();
-        $tuteurs = $user->getTuteurs();
+        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
 
-        if (0 == count($tuteurs)) {
+        if (!$tuteur) {
             return $this->redirectToRoute('mercredi_parent_nouveau');
         }
 
-        $tuteur = $tuteurs[0];
+        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
 
         $form = $this->createForm(TuteurType::class, $tuteur);
         $form->handleRequest($request);

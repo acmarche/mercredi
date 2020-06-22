@@ -4,12 +4,10 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,35 +24,39 @@ class DefaultController extends AbstractController
      */
     private $organisation;
     /**
-     * @var RelationRepository
+     * @var TuteurUtils
      */
-    private $relationRepository;
+    private $tuteurUtils;
+    /**
+     * @var RelationUtils
+     */
+    private $relationUtils;
 
-    public function __construct(OrganisationRepository $organisationRepository, RelationRepository $relationRepository)
-    {
+    public function __construct(
+        OrganisationRepository $organisationRepository,
+        TuteurUtils $tuteurUtils,
+        RelationUtils $relationUtils
+    ) {
         $this->organisationRepository = $organisationRepository;
         $this->organisation = $organisationRepository->getOrganisation();
-        $this->relationRepository = $relationRepository;
+        $this->tuteurUtils = $tuteurUtils;
+        $this->relationUtils = $relationUtils;
     }
 
     /**
      * @Route("/", name="mercredi_parent_home")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function default(Request $request)
+    public function default()
     {
         $user = $this->getUser();
-        $tuteurs = $user->getTuteurs();
+        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
 
-        if (0 == count($tuteurs)) {
+        if (!$tuteur) {
             return $this->redirectToRoute('mercredi_parent_nouveau');
         }
 
-        $tuteur = $tuteurs[0];
-
-        $relations = $this->relationRepository->findByTuteur($tuteur);
-        $enfants = RelationUtils::extractEnfants($relations);
-
+        $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
 
         return $this->render(

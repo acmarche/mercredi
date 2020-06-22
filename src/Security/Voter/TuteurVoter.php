@@ -2,12 +2,12 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Security\User;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -15,10 +15,15 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * See http://symfony.com/doc/current/security/voters.html
  *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
+ *
  */
 class TuteurVoter extends Voter
 {
+    const ADD = 'tuteur_new';
+    const SHOW = 'tuteur_show';
+    const EDIT = 'tuteur_edit';
+    const DELETE = 'tuteur_delete';
+
     /**
      * @var User
      */
@@ -33,25 +38,20 @@ class TuteurVoter extends Voter
      * @var Tuteur
      */
     private $tuteurToCheck;
-    /**
-     * @var TokenInterface
-     */
-    private $token;
-    const INDEX = 'index_tuteur';
-    const ADD = 'new';
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
-    private $decisionManager;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager, FlashBagInterface $flashBag)
+    /**
+     * @var Security
+     */
+    private $security;
+    /**
+     * @var TuteurUtils
+     */
+    private $tuteurUtils;
+
+    public function __construct(Security $security, TuteurUtils $tuteurUtils)
     {
-        $this->decisionManager = $decisionManager;
-        $this->flashBag = $flashBag;
+        $this->security = $security;
+        $this->tuteurUtils = $tuteurUtils;
     }
 
     /**
@@ -59,7 +59,6 @@ class TuteurVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        //pour tester si tuteur associe a compte
         if ($subject) {
             if (!$subject instanceof Tuteur) {
                 return false;
@@ -68,7 +67,7 @@ class TuteurVoter extends Voter
 
         return in_array(
             $attribute,
-            [self::INDEX, self::ADD, self::SHOW, self::EDIT, self::DELETE]
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE]
         );
     }
 
@@ -83,17 +82,15 @@ class TuteurVoter extends Voter
             return false;
         }
 
-        $this->token = $token;
         $this->tuteurToCheck = $tuteur;
-        $this->tuteurOfUser = $this->user->getTuteur();
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ADMIN'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             return true;
         }
 
+        $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
+
         switch ($attribute) {
-            case self::INDEX:
-                return $this->canIndex();
             case self::SHOW:
                 return $this->canShow();
             case self::ADD:
@@ -107,30 +104,13 @@ class TuteurVoter extends Voter
         return false;
     }
 
-    /**
-     * Utiliser par parent car tuteur pas en parametre
-     * mais via user->getTuteur.
-     *
-     * @return bool
-     */
-    private function canIndex()
-    {
-        if (!$this->tuteurOfUser instanceof Tuteur) {
-            $this->flashBag->add('danger', 'Aucun parent associé à votre compte');
-
-            return false;
-        }
-
-        return true;
-    }
-
     private function canShow()
     {
-        if ($this->decisionManager->decide($this->token, ['ROLE_MERCREDI_READ'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
             return true;
         }
 
-        if ($this->decisionManager->decide($this->token, ['ROLE_MERCREDI_ANIMATEUR'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ANIMATEUR')) {
             return true;
         }
 
@@ -139,7 +119,7 @@ class TuteurVoter extends Voter
 
     private function canEdit()
     {
-        return $this->checkTuteur();
+        return $this->checkOwnTuteur();
     }
 
     private function canAdd()
@@ -160,9 +140,9 @@ class TuteurVoter extends Voter
         return false;
     }
 
-    private function checkTuteur()
+    private function checkOwnTuteur()
     {
-        if (!$this->decisionManager->decide($this->token, ['ROLE_MERCREDI_PARENT'])) {
+        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
@@ -174,7 +154,7 @@ class TuteurVoter extends Voter
             return false;
         }
 
-        if ($this->tuteurOfUser === $this->tuteurToCheck) {
+        if ($this->tuteurOfUser->getId() === $this->tuteurToCheck->getId()) {
             return true;
         }
 

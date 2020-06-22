@@ -3,25 +3,28 @@
 namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Security\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Routing\RouterInterface;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
  * showing, editing and deleting posts).
  *
  * See http://symfony.com/doc/current/security/voters.html
- *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
 class EnfantVoter extends Voter
 {
+    const ADD = 'enfant_new';
+    const ADD_PRESENCE = 'add_presence';
+    const SHOW = 'enfant_show';
+    const EDIT = 'enfant_edit';
+    const DELETE = 'enfant_delete';
+
     /**
      * @var User
      */
@@ -34,35 +37,27 @@ class EnfantVoter extends Voter
      * @var Tuteur
      */
     private $tuteurOfUser;
-
     /**
-     * @var TokenInterface
+     * @var TuteurUtils
      */
-    private $token;
-    const INDEX = 'index_enfant';
-    const ADD = 'new';
-    const ADD_PRESENCE = 'add_presence';
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
-    private $decisionManager;
+    private $tuteurUtils;
     /**
-     * @var FlashBagInterface
+     * @var Security
      */
-    private $flashBag;
+    private $security;
     /**
-     * @var RouterInterface
+     * @var RelationRepository
      */
-    private $router;
+    private $relationRepository;
 
     public function __construct(
-        AccessDecisionManagerInterface $decisionManager,
-        FlashBagInterface $flashBag,
-        RouterInterface $router
+        RelationRepository $relationRepository,
+        TuteurUtils $tuteurUtils,
+        Security $security
     ) {
-        $this->decisionManager = $decisionManager;
-        $this->flashBag = $flashBag;
-        $this->router = $router;
+        $this->tuteurUtils = $tuteurUtils;
+        $this->security = $security;
+        $this->relationRepository = $relationRepository;
     }
 
     /**
@@ -70,7 +65,6 @@ class EnfantVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        //pour tester si tuteur associe a compte
         if ($subject) {
             if (!$subject instanceof Enfant) {
                 return false;
@@ -79,7 +73,7 @@ class EnfantVoter extends Voter
 
         return in_array(
             $attribute,
-            [self::INDEX, self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE]
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE]
         );
     }
 
@@ -89,22 +83,19 @@ class EnfantVoter extends Voter
     protected function voteOnAttribute($attribute, $enfant, TokenInterface $token)
     {
         $this->user = $token->getUser();
-        $this->token = $token;
         $this->enfant = $enfant;
 
         if (!$this->user instanceof User) {
             return false;
         }
 
-        $this->tuteurOfUser = $this->user->getTuteur();
-
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ADMIN'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             return true;
         }
 
+        $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
+
         switch ($attribute) {
-            case self::INDEX:
-                return $this->canIndex();
             case self::SHOW:
                 return $this->canView();
             case self::ADD:
@@ -120,28 +111,17 @@ class EnfantVoter extends Voter
         return false;
     }
 
-    private function canIndex()
-    {
-        if (!$this->tuteurOfUser instanceof Tuteur) {
-            $this->flashBag->add('danger', 'Aucun parent associé à votre compte');
-
-            return false;
-        }
-
-        return true;
-    }
-
     private function canView()
     {
-        if ($this->decisionManager->decide($this->token, ['ROLE_MERCREDI_READ'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
             return true;
         }
 
-        if ($this->decisionManager->decide($this->token, ['ROLE_MERCREDI_ANIMATEUR'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ANIMATEUR')) {
             return true;
         }
 
-        if ($this->decisionManager->decide($this->token, ['ROLE_MERCREDI_ECOLE'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ECOLE')) {
             return false;
         }
 
@@ -170,34 +150,27 @@ class EnfantVoter extends Voter
 
     /**
      * @return bool
-     *
-     * @throws RedirectException
      */
     private function checkTuteur()
     {
-        if (!$this->decisionManager->decide($this->token, ['ROLE_MERCREDI_PARENT'])) {
+        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
-        $tuteur = $this->user->getTuteur();
-
-        if (!$tuteur) {
-            $this->flashBag->add('danger', 'Aucun parent associé à votre compte');
-            throw new RedirectException(new RedirectResponse($this->router->generate('parent_nouveau')));
+        if (!$this->tuteurOfUser) {
+            return false;
         }
 
-        /**
-         * @var EnfantTuteur[]
-         */
-        $enfant_tuteurs = $tuteur->getEnfants();
-        $enfants = [];
+        $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
-        foreach ($enfant_tuteurs as $enfant_tuteur) {
-            $enfants[] = $enfant_tuteur->getEnfant()->getId();
-        }
+        $enfants = array_map(
+            function ($relation) {
+                return $relation->getEnfant()->getId();
+            },
+            $relations
+        );
 
-        $enfant_id = $this->enfant->getId();
-        if (in_array($enfant_id, $enfants)) {
+        if (in_array($this->enfant->getId(), $enfants)) {
             return true;
         }
 
