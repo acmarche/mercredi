@@ -15,17 +15,31 @@
 
             {% include '@AcMarcheMercrediAdmin/animateur/_actions.html.twig' %}
 
-            <div class="row">
-                <div class="col-6">
-                    <i class="fas fa-map-marked-alt"></i>
-                    {{ animateur.rue }} <br/>
-                    {{ animateur.codepostal }} {{ animateur.localite }}
+            <i class="fas fa-map-marked-alt"></i>
+            {{ animateur.rue }} <br/>
+            {{ animateur.codepostal }} {{ animateur.localite }}
 
-                    <br/>
-                </div>
-                <div class="col-6">
-                </div>
-            </div>
+            <br/>
+
+            <table class='table table-bordered table-hover'>
+                <tbody>
+                <tr>
+                    <th><span class="fas fa-phone"></span> Téléphone</th>
+                    <td>{{ animateur.telephone }}</td>
+                </tr>
+                <tr>
+                    <th><span class="fas fa-phone"></span> Téléphone bureau</th>
+                    <td>{{ animateur.telephonebureau }}</td>
+                </tr>
+                <tr>
+                    <th><span class="fas fa-mobile-alt"></span> Gsm</th>
+                    <td>{{ animateur.gsm }}</td>
+                </tr>
+                <tr>
+                    <th><span class="far fa-envelope"></span> Email</th>
+                    <td><a href='mailto:{{ animateur.email }}'>{{ animateur.email }}</a></td>
+                </tr>
+            </table>
 
             {% if animateur.remarque %}
                 <p class="text-muted">
