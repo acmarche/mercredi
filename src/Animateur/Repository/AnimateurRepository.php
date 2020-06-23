@@ -20,6 +20,20 @@ class AnimateurRepository extends ServiceEntityRepository
         parent::__construct($registry, Animateur::class);
     }
 
+    /**
+     * @param $keyword
+     *
+     * @return Animateur[]
+     */
+    public function search(?string $keyword): array
+    {
+        return $this->createQueryBuilder('animateur')
+            ->andWhere('animateur.nom LIKE :keyword OR animateur.prenom LIKE :keyword')
+            ->setParameter('keyword', '%'.$keyword.'%')
+            ->addOrderBy('animateur.nom', 'ASC')
+            ->getQuery()->getResult();
+    }
+
     public function remove(Animateur $animateur)
     {
         $this->_em->remove($animateur);
