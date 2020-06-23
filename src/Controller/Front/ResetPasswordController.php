@@ -5,13 +5,12 @@ namespace AcMarche\Mercredi\Controller\Front;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
 use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use AcMarche\Mercredi\ResetPassword\Mailer\ResetPasswordMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -26,10 +25,23 @@ class ResetPasswordController extends AbstractController
     use ResetPasswordControllerTrait;
 
     private $resetPasswordHelper;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+    /**
+     * @var ResetPasswordMailer
+     */
+    private $resetPasswordMailer;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
-    {
+    public function __construct(
+        ResetPasswordHelperInterface $resetPasswordHelper,
+        UserPasswordEncoderInterface $passwordEncoder,
+        ResetPasswordMailer $resetPasswordMailer
+    ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->resetPasswordMailer = $resetPasswordMailer;
     }
 
     /**
@@ -84,7 +96,6 @@ class ResetPasswordController extends AbstractController
      */
     public function reset(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
         string $token = null
     ): Response {
         if ($token) {
@@ -123,7 +134,7 @@ class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword(
+            $encodedPassword = $this->passwordEncoder->encodePassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
@@ -175,19 +186,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('mailer@your-domain.com', 'Enfance jeunesse'))
-            ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('@AcMarcheMercredi/front/reset_password/email.html.twig')
-            ->context(
-                [
-                    'resetToken' => $resetToken,
-                    'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-                ]
-            );
-
-        $mailer->send($email);
+        $this->resetPasswordMailer->sendLink($user, $resetToken, $this->resetPasswordHelper->getTokenLifetime());
 
         return $this->redirectToRoute('mercredi_front_check_email');
     }

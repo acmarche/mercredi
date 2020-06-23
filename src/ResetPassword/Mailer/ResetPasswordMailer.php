@@ -1,0 +1,43 @@
+<?php
+
+
+namespace AcMarche\Mercredi\ResetPassword\Mailer;
+
+
+use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+
+class ResetPasswordMailer
+{
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    public function __construct(MailerInterface $mailer, OrganisationRepository $organisationRepository)
+    {
+        $this->mailer = $mailer;
+        $this->organisation = $organisationRepository->getOrganisation();
+    }
+
+    public function sendLink(User $user, string $resetToken, int $tokenLifeTime)
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
+            ->to($user->getEmail())
+            ->subject('Votre demande de changement de mot de passe')
+            ->htmlTemplate('@AcMarcheMercredi/front/reset_password/email.html.twig')
+            ->context(
+                [
+                    'resetToken' => $resetToken,
+                    'tokenLifetime' => $tokenLifeTime,
+                ]
+            );
+
+        $this->mailer->send($email);
+    }
+}

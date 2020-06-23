@@ -1,6 +1,6 @@
 {% extends '@AcMarcheMercredi/layout.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block title %}Demande de changement de mot de passe{% endblock %}
 
 {% block body %}
     <div class="card bg-lig2ht mb-3">
@@ -11,12 +11,13 @@
         <div class="card-body">
 
             <p>
-                An email has been sent that contains a link that you can click to reset your password. This link will
-                expire in {{ tokenLifetime|date('g') }} hour(s).
+                Un email vous a été envoyé, il contient un lien qui vous permettra de changer votre mot de passe.
+                <br />
+                Ce lien est valable pendant {{ tokenLifetime|date('g') }} heure(s).
             </p>
             <p>
-                If you don't receive an email please check your spam folder or <a
-                        href="{{ path('mercredi_front_forgot_password_request') }}">try again</a>.
+                Si vous ne recevez pas l'email, merci de vérifier votre dossier de spam ou <a
+                        href="{{ path('mercredi_front_contact') }}">contactez nous</a>.
             </p>
 
         </div>
