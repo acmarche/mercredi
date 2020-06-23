@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
+use AcMarche\Mercredi\User\Factory\UserFactory;
 use AcMarche\Mercredi\User\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -24,12 +25,21 @@ class AssociationHandler
      * @var FlashBagInterface
      */
     private $flashBag;
+    /**
+     * @var UserFactory
+     */
+    private $userFactory;
 
-    public function __construct(TuteurRepository $tuteurRepository, UserMailer $userMailer, FlashBagInterface $flashBag)
-    {
+    public function __construct(
+        TuteurRepository $tuteurRepository,
+        UserMailer $userMailer,
+        UserFactory $userFactory,
+        FlashBagInterface $flashBag
+    ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->userMailer = $userMailer;
         $this->flashBag = $flashBag;
+        $this->userFactory = $userFactory;
     }
 
     public function suggestTuteur(User $user, AssociateUserTuteurDto $dto)
@@ -72,6 +82,15 @@ class AssociationHandler
         $this->flashBag->add('success', 'Le parent a bien été dissocié.');
     }
 
+    public function handleCreateUserFromTuteur(Tuteur $tuteur): User
+    {
+        $user = $this->userFactory->newFromTuteur($tuteur);
+        $password = $user->getPlainPassword();
+        $this->userMailer->sendNewAccountToParent($user, $tuteur, $password);
+
+        return $user;
+    }
+
     private function dissociateParent(User $user, Tuteur $tuteur)
     {
         $tuteur->removeUser($user);
@@ -79,10 +98,5 @@ class AssociationHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été dissocié.');
     }
 
-    private function removeCurrentTuteurs(User $user, array $tuteurs)
-    {
-        foreach ($tuteurs as $tuteur) {
-            $user->removeTuteur($tuteur);
-        }
-    }
+
 }
