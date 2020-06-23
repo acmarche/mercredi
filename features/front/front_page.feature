@@ -4,7 +4,7 @@ Feature: Test des pages front
 
   Background:
     Given I am on "/"
-    Then I should see "Bienvenue sur mon site"
+    Then I should see "Bienvenue"
 
   Scenario:
     Then I follow "Modalités pratiques"
@@ -12,7 +12,7 @@ Feature: Test des pages front
 
   Scenario:
     Then I follow "Accueil"
-    Then I should see "Bienvenue sur mon site"
+    Then I should see "Bienvenue"
 
   Scenario:
     Then I follow "Nous contacter"

@@ -5,12 +5,12 @@ namespace AcMarche\Mercredi\Controller\Front;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Registration\EmailVerifier;
 use AcMarche\Mercredi\Registration\Form\RegistrationFormType;
+use AcMarche\Mercredi\Registration\Handler\RegistrationHandler;
+use AcMarche\Mercredi\Registration\Mailer\RegistrationMailerFactory;
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -26,15 +26,27 @@ class RegistrationController extends AbstractController
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var RegistrationMailerFactory
+     */
+    private $registrationMailerFactory;
+    /**
+     * @var RegistrationHandler
+     */
+    private $registrationHandler;
 
     public function __construct(
         EmailVerifier $emailVerifier,
         UserPasswordEncoderInterface $passwordEncoder,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        RegistrationMailerFactory $registrationMailerFactory,
+        RegistrationHandler $registrationHandler
     ) {
         $this->emailVerifier = $emailVerifier;
         $this->passwordEncoder = $passwordEncoder;
         $this->userRepository = $userRepository;
+        $this->registrationMailerFactory = $registrationMailerFactory;
+        $this->registrationHandler = $registrationHandler;
     }
 
     /**
@@ -64,14 +76,10 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->sendEmailConfirmation(
                 'app_verify_email',
                 $user,
-                (new TemplatedEmail())
-                    ->from(new Address('info@marche.be', 'Enfance jeunesse'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('@AcMarcheMercredi/front/registration/confirmation_email.html.twig')
+                $this->registrationMailerFactory->generateMessagToVerifyEmail($user)
             );
 
-            // do anything else you need here, like send an email
+            $this->addFlash('success', 'Votre compte a bien été créé, consultez votre boite mail');
 
             return $this->redirectToRoute('mercredi_front_home');
         }
@@ -89,8 +97,6 @@ class RegistrationController extends AbstractController
      */
     public function verifyUserEmail(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
@@ -100,7 +106,6 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('mercredi_front_register');
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('mercredi_front_register');

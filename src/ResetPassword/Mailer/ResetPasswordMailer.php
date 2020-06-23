@@ -4,6 +4,7 @@
 namespace AcMarche\Mercredi\ResetPassword\Mailer;
 
 
+use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -17,6 +18,10 @@ class ResetPasswordMailer
      * @var MailerInterface
      */
     private $mailer;
+    /**
+     * @var Organisation|null
+     */
+    private $organisation;
 
     public function __construct(MailerInterface $mailer, OrganisationRepository $organisationRepository)
     {

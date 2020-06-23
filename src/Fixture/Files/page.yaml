@@ -11,7 +11,7 @@ AcMarche\Mercredi\Entity\Page:
     position: '2'
 
   page_0:
-    nom: 'Page temporaire'
+    nom: 'Page exemple'
     content: 'contenu temporaire'
     position: '3'
 
