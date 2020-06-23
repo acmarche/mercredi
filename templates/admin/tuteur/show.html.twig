@@ -83,7 +83,7 @@
                 source: tuteurs,
                 templates: {
                     suggestion: function (data) {
-                        var value = data.nom + ' ' + data.birthday;
+                        var value = data.nom + ' '+ data.prenom + ' ' + data.birthday;
                         return '<p>' + value + ' </p>';
                     }
                 }

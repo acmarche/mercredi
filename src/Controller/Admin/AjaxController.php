@@ -65,7 +65,8 @@ class AjaxController extends AbstractController
         $i = 0;
         foreach ($enfants as $enfant) {
             $data[$i]['id'] = $enfant->getId();
-            $data[$i]['nom'] = $enfant->getNom().' '.$enfant->getPrenom();
+            $data[$i]['nom'] = $enfant->getNom();
+            $data[$i]['prenom'] = $enfant->getPrenom();
             $data[$i]['value'] = $enfant->getNom().' '.$enfant->getPrenom();
             $data[$i]['label'] = $enfant->getNom().' '.$enfant->getPrenom();
             $birthday = '';
