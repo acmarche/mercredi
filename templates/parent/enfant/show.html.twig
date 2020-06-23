@@ -9,6 +9,11 @@
             </div>
         </h3>
         <div class="card-body">
+            {% if ficheSanteComplete == false %}
+                <div class="alert alert-danger">
+                    Attention la fiche santé n'est pas complète, veuillez la remplir.
+                </div>
+            {% endif %}
             {% include '@AcMarcheMercrediParent/enfant/_actions.html.twig' %}
 
             <div class="row pl-1">
@@ -23,7 +28,6 @@
             <br/>
             <div class="pl-1">
 
-
             </div>
         </div>
         <div class="card-footer text-muted mt-3">
@@ -31,5 +35,7 @@
             le {{ enfant.updatedAt | format_date('full') }}
         </div>
     </div>
+    <br />
+    {% include '@AcMarcheMercrediParent/enfant/_presences.html.twig' %}
 
 {% endblock %}

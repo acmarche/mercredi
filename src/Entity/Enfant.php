@@ -2,12 +2,12 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
-use AcMarche\Mercredi\Entity\Traits\FicheSanteIsComplete;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
@@ -53,7 +53,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use TelephonesTrait;
     use AgeTrait;
     use SanteFicheTrait;
-    use FicheSanteIsComplete;
+    use FicheSanteIsCompleteTrait;
     use UuidableTrait;
 
     /**

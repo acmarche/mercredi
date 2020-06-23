@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Sante\Utils;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
+use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
@@ -18,16 +19,22 @@ class SanteChecker
      * @var SanteReponseRepository
      */
     private $santeReponseRepository;
+    /**
+     * @var SanteHandler
+     */
+    private $santeHandler;
 
     public function __construct(
         SanteQuestionRepository $santeQuestionRepository,
-        SanteReponseRepository $santeReponseRepository
+        SanteReponseRepository $santeReponseRepository,
+        SanteHandler $santeHandler
     ) {
         $this->santeQuestionRepository = $santeQuestionRepository;
         $this->santeReponseRepository = $santeReponseRepository;
+        $this->santeHandler = $santeHandler;
     }
 
-    public function identiteEnfantIsComplete(Enfant $enfant)
+    public function identiteEnfantIsComplete(Enfant $enfant): bool
     {
         if (!$enfant->getNom()) {
             return false;
@@ -93,9 +100,8 @@ class SanteChecker
     public function isCompleteForEnfants(array $enfants)
     {
         foreach ($enfants as $enfant) {
-            if ($this->isComplete($enfant)) {
-                $enfant->setSanteFicheComplete(true);
-            }
+            $santeFiche = $this->santeHandler->init($enfant);
+            $enfant->setFicheSanteIsComplete($this->isComplete($santeFiche));
         }
     }
 }

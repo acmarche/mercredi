@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
+use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,16 +32,22 @@ class DefaultController extends AbstractController
      * @var RelationUtils
      */
     private $relationUtils;
+    /**
+     * @var SanteChecker
+     */
+    private $santeChecker;
 
     public function __construct(
         OrganisationRepository $organisationRepository,
         TuteurUtils $tuteurUtils,
-        RelationUtils $relationUtils
+        RelationUtils $relationUtils,
+        SanteChecker $santeChecker
     ) {
         $this->organisationRepository = $organisationRepository;
         $this->organisation = $organisationRepository->getOrganisation();
         $this->tuteurUtils = $tuteurUtils;
         $this->relationUtils = $relationUtils;
+        $this->santeChecker = $santeChecker;
     }
 
     /**
@@ -57,6 +64,7 @@ class DefaultController extends AbstractController
         }
 
         $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
+        $this->santeChecker->isCompleteForEnfants($enfants);
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
 
         return $this->render(

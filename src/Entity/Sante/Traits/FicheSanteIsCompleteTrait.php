@@ -1,8 +1,8 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity\Traits;
+namespace AcMarche\Mercredi\Entity\Sante\Traits;
 
-trait FicheSanteIsComplete
+trait FicheSanteIsCompleteTrait
 {
     /**
      * @var bool

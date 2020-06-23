@@ -11,3 +11,6 @@ AcMarche\Mercredi\Entity\Presence:
   presence_lisa_02_09:
     __construct: ['@tuteur_Simpson','@enfant_lisa', '@jour_2020_09_02']
     userAdd: 'administrateur'
+  presence_bart_06_05:
+    __construct: ['@tuteur_Simpson','@enfant_bart', '@jour_2020_05_06']
+    userAdd: 'administrateur'

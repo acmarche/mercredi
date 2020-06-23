@@ -14,13 +14,13 @@
             <td>
                 {% if enfant.isFicheSanteIsComplete == false %}
                     <i class="fas fa-exclamation-triangle"
-                       title="Données non complètes"></i>
+                       title="Données non complètes"></i> <span class="text-danger">Non complète</span>
                     <a href="{{ path('mercredi_parent_enfant_edit', {'uuid': enfant.uuid}) }}"
                        style="margin-left: 0.9em;">
-                        <i class="fas fa-edit" title="Editer"></i>
+                        <i class="fas fa-edit" title="Modifier"></i> Remplir
                     </a>
                 {% else %}
-                    <i class="fas fa-check" title="OK"></i>
+                    <i class="fas fa-check" title="Complète"></i> <span class="text-success">Complète</span>
                 {% endif %}
             </td>
             <td>

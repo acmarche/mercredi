@@ -27,10 +27,6 @@
                     <th>Réduction</th>
                     <td>{{ presence.reduction }} </td>
                 </tr>
-                <tr>
-                    <th>Ordre</th>
-                    <td>{{ presence.ordre }} </td>
-                </tr>
             </table>
 
             {% if presence.remarque %}
@@ -47,6 +43,6 @@
         </div>
     </div>
 
-    {% include '@AcMarcheMercrediAdmin/presence/_delete_form.html.twig' %}
+    {% include '@AcMarcheMercrediParent/presence/_delete_form.html.twig' %}
 
 {% endblock %}

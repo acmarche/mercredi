@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Constraint\DateConstraint;
+use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
@@ -249,13 +250,19 @@ class PresenceController extends AbstractController
      */
     public function delete(Request $request, Presence $presence): Response
     {
+        $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
+            if (!DeleteConstraint::canBeDeleted($presence)) {
+                $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
+
+                return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+            }
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
             $this->presenceRepository->flush();
             $this->dispatchMessage(new PresenceDeleted($presenceId));
         }
 
-        return $this->redirectToRoute('mercredi_parent_presence_index');
+        return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
     }
 }

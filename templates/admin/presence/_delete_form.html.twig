@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Supprimer {{ presence }} ?
+                Supprimer la présence de {{ enfant}} le {{ presence.jour.dateJour | format_date('full') }} ?
             </div>
             <div class="modal-footer">
                 <form method="post" action="{{ path('mercredi_admin_presence_delete', {'id': presence.id}) }}">

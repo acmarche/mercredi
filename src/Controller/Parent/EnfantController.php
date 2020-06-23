@@ -6,7 +6,10 @@ use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
+use AcMarche\Mercredi\Sante\Handler\SanteHandler;
+use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,15 +35,33 @@ class EnfantController extends AbstractController
      * @var RelationUtils
      */
     private $relationUtils;
+    /**
+     * @var SanteHandler
+     */
+    private $santeHandler;
+    /**
+     * @var SanteChecker
+     */
+    private $santeChecker;
+    /**
+     * @var PresenceRepository
+     */
+    private $presenceRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         TuteurUtils $tuteurUtils,
-        RelationUtils $relationUtils
+        SanteHandler $santeHandler,
+        RelationUtils $relationUtils,
+        SanteChecker $santeChecker,
+        PresenceRepository $presenceRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurUtils = $tuteurUtils;
         $this->relationUtils = $relationUtils;
+        $this->santeHandler = $santeHandler;
+        $this->santeChecker = $santeChecker;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -57,6 +78,7 @@ class EnfantController extends AbstractController
         }
 
         $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
+        $this->santeChecker->isCompleteForEnfants($enfants);
 
         return $this->render(
             '@AcMarcheMercrediParent/enfant/index.html.twig',
@@ -73,10 +95,16 @@ class EnfantController extends AbstractController
      */
     public function show(Enfant $enfant)
     {
+        $santeFiche = $this->santeHandler->init($enfant);
+        $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
+        $presences = $this->presenceRepository->findPresencesByEnfant($enfant);
+
         return $this->render(
             '@AcMarcheMercrediParent/enfant/show.html.twig',
             [
                 'enfant' => $enfant,
+                'presences' => $presences,
+                'ficheSanteComplete' => $ficheSanteComplete,
             ]
         );
     }

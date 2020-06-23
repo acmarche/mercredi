@@ -4,16 +4,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Supprimer</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Supprimer ?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Supprimer {{ presence }} ?
+                Supprimer la présence de {{ enfant}} le {{ presence.jour.dateJour | format_date('full') }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('mercredi_admin_presence_delete', {'id': presence.id}) }}">
+                <form method="post" action="{{ path('mercredi_parent_presence_delete', {'id': presence.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ presence.id) }}">
                     <button type="button" class="btn btn-secondary"

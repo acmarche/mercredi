@@ -1,6 +1,8 @@
 Feature: Test des pages parents
   Je suis sur la page d'accueil
-  Je suis sur la page contact et j'envoie le formulaire
+  J'affiche un enfant
+  En vue détail, Lisa n'a pas sa fiche santé complète
+  En vue détail, Bart a sa fiche santé complète
 
   Background:
     Given I am login with user "albert@marche.be" and password "homer"
@@ -35,3 +37,11 @@ Feature: Test des pages parents
     Then I should see "084 32 55 66"
     Then I should see "Papa et maman"
     Then I should see "Ledoux"
+
+  Scenario: Lisa n'a pas sa fiche santé complète
+    Then I follow "SIMPSON Lisa"
+    Then I should see "Attention la fiche santé n'est pas complète, veuillez la remplir."
+
+  Scenario: Bart a sa fiche santé complète
+    Then I follow "SIMPSON Bart"
+    Then I should not see "Attention la fiche santé n'est pas complète, veuillez la remplir."
