@@ -12,5 +12,10 @@
 
 <li class="nav-item{% if action == 'mercredi_parent_tuteur_show' %} active {% endif %}">
     <a class="nav-link"
+       href="{{ path('mercredi_parent_facture_index') }}"><i class="fas fa-list-alt"></i> Mes factures</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_parent_tuteur_show' %} active {% endif %}">
+    <a class="nav-link"
        href="{{ path('mercredi_parent_tuteur_show') }}"><i class="fas fa-list-alt"></i> Mes coordonnées</a>
 </li>

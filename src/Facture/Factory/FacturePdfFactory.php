@@ -14,19 +14,23 @@ class FacturePdfFactory extends AbstractPdfDownloader
      * @var Environment
      */
     private $environment;
+    /**
+     * @var FactureFactory
+     */
+    private $factureFactory;
 
-    public function __construct(Pdf $pdf, Environment $environment)
+    public function __construct(Pdf $pdf, FactureFactory $factureFactory)
     {
         parent::__construct($pdf);
-        $this->environment = $environment;
+        $this->factureFactory = $factureFactory;
     }
 
     public function generate(Facture $facture): Response
     {
         $date = $facture->getFactureLe();
-        $html = '';
+        $html = $this->factureFactory->generateHtml($facture);
 
-        return new Response($html);
+       // return new Response($html);
 
         return $this->downloadPdf($html, 'facture_'.$date->format('d-m-Y').'.pdf');
     }

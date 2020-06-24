@@ -110,6 +110,10 @@ class TuteurUtils
         return $tuteurs[0];
     }
 
+    /**
+     * @param Tuteur $tuteur
+     * @return string[]
+     */
     public static function getEmailsOfOneTuteur(Tuteur $tuteur): array
     {
         $emails = [];
