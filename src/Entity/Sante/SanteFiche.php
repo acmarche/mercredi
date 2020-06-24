@@ -39,7 +39,7 @@ class SanteFiche implements TimestampableInterface
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
-    protected $personne_urgence;
+    private $personne_urgence;
 
     /**
      * @var string|null
@@ -47,7 +47,7 @@ class SanteFiche implements TimestampableInterface
      * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
-    protected $medecin_nom;
+    private $medecin_nom;
 
     /**
      * @var string|null
@@ -55,14 +55,14 @@ class SanteFiche implements TimestampableInterface
      * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
-    protected $medecin_telephone;
+    private $medecin_telephone;
 
     /**
      * @var Enfant
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="sante_fiche")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $enfant;
+    private $enfant;
 
     /**
      * Pour le cascade.
@@ -70,13 +70,13 @@ class SanteFiche implements TimestampableInterface
      * @var SanteReponse[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="sante_fiche", cascade={"remove"})
      */
-    protected $reponses;
+    private $reponses;
 
     /**
      * @var SanteQuestion[]|ArrayCollection
      * @AcMarcheSanteAssert\ResponseIsComplete()
      */
-    protected $questions;
+    private $questions;
 
     public function __construct(Enfant $enfant)
     {

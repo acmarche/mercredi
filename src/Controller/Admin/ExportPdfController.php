@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Sante\Factory\SantePdfFactory;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -39,6 +40,16 @@ class ExportPdfController extends AbstractController
     public function default(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
+
+        return $this->santePdfFactory->santeFiche($santeFiche);
+    }
+
+    /**
+     * @Route("/facture/{id}", name="mercredi_admin_export_facture_pdf")
+     */
+    public function facture(Facture $facture): Response
+    {
+
 
         return $this->santePdfFactory->santeFiche($santeFiche);
     }

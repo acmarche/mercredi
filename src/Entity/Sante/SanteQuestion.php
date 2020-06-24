@@ -26,7 +26,7 @@ class SanteQuestion
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    protected $complement = false;
+    private $complement = false;
 
     /**
      * Texte d'aide pour le complement.
@@ -35,13 +35,13 @@ class SanteQuestion
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $complement_label;
+    private $complement_label;
 
     /**
      * @var int|null
      * @ORM\Column(type="integer",nullable=true)
      */
-    protected $display_order;
+    private $display_order;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -49,9 +49,9 @@ class SanteQuestion
      * @var Presence[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="question", cascade={"remove"})
      */
-    protected $reponse;
+    private $reponse;
 
-    protected $reponseTxt;
+    private $reponseTxt;
 
     private $remarque;
 

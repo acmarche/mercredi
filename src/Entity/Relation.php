@@ -28,7 +28,7 @@ class Relation
      *
      * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "pere,mere,beau pere.."})
      */
-    protected $type;
+    private $type;
 
     /**
      * @var Enfant
@@ -36,7 +36,7 @@ class Relation
      * @ORM\JoinColumn(nullable=false)
      *
      * */
-    protected $enfant;
+    private $enfant;
 
     /**
      * @var Tuteur
@@ -44,7 +44,7 @@ class Relation
      * @ORM\JoinColumn(nullable=false)
      *
      * */
-    protected $tuteur;
+    private $tuteur;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant)
     {

@@ -1,0 +1,52 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-lig2ht mb-3">
+        <div class="card-header">
+            <h3>Liste des factures de {{ tuteur }}</h3>
+        </div>
+
+        <div class="card-body">
+
+            <a class="btn btn-primary m-2" role="button"
+               href="{{ path('mercredi_admin_facture_new', {'id': tuteur.id}) }}">
+                <i class="fas fa-plus"></i> Créer une facture</a>
+
+            <a  class="btn btn-primary m-2" role="button" href="{{ path('mercredi_admin_tuteur_show',{'id':tuteur.id}) }}">
+                <i class="fas fa-long-arrow-alt-left"></i> Retour au tuteur
+            </a>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Facturé le</th>
+                    <th>Payé le</th>
+                    <th>Nbre de présences</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for facture in factures %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
+                                {{ facture.id }}
+                            </a>
+                        </td>
+                        <td>{{ facture.factureLe | format_date('full') | title }}</td>
+                        <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') }}</td>
+                        <td>{{ facture.facturePresences | length }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">Aucune</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

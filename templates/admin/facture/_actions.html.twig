@@ -1,0 +1,21 @@
+
+<a href="{{ path('mercredi_admin_facture_edit', { 'id': facture.id }) }}" role="button"
+   class="btn btn-primary"><i
+            class="far fa-edit"></i> Modifier</a>
+
+<a href="{{ path('mercredi_admin_export_facture_pdf', {'id': facture.id}) }}" class="btn btn-primary" role='button'>
+     <i class="fas fa-file-pdf"></i>
+    Exporter en pdf</a>
+
+<a href="{{ path('mercredi_admin_facture_send', {'id': facture.id}) }}" class="btn btn-primary" role='button'>
+     <i class="fas fa-envelope"></i>
+    Envoyer par mail</a>
+
+<a href="{{ path('mercredi_admin_facture_index', {'id': tuteur.id}) }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
+    Retour à la Liste</a>
+
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+    <i class="fas fa-trash"></i> Supprimer
+</button>
+
+<br/><br/>

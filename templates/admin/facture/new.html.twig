@@ -1,0 +1,61 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-lig2ht mb-3">
+        <div class="card-header">
+            <h3>Nouvelle facture pour <a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">
+                    {{ tuteur }}</a>
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <h4 class="text-success">Les présences suivantes n'ont pas été facturées</h4>
+            <hr>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Date</th>
+                    <th>Enfant</th>
+                    <th>Remarque</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for presence in presences %}
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="{{ presence.id }}" name="presences[]" checked="checked">
+                            </label>
+                        </td>
+                        <td>
+                            <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                                {{ (presence.jour.dateJour | format_date('full'))|capitalize }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ presence.enfant }}
+                        </td>
+                        <td class="text-muted">
+                            {{ presence.remarque }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {{ form_row(form.factureLe) }}
+
+            <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Générer la facture
+            </button>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

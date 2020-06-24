@@ -9,7 +9,7 @@ trait TuteurTrait
     /**
      * @var Tuteur
      */
-    protected $tuteur;
+    private $tuteur;
 
     public function getTuteur(): Tuteur
     {

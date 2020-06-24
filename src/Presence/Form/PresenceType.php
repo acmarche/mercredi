@@ -20,12 +20,11 @@ class PresenceType extends AbstractType
                 'absent',
                 ChoiceType::class,
                 [
-                    'choices' => MercrediConstantes::getAbsenceTxt(),
+                    'choices' => array_flip(MercrediConstantes::getListAbsences()),
                 ]
             )
             ->add('ordre', OrdreType::class)
             ->add('remarque', RemarqueType::class)
-//            ->add('tuteur')
             ->add('reduction');
     }
 

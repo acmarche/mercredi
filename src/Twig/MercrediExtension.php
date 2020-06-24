@@ -24,7 +24,7 @@ class MercrediExtension extends AbstractExtension
         ];
     }
 
-    public function absenceFilter($number)
+    public function absenceFilter($number):string
     {
         return MercrediConstantes::getAbsenceTxt($number);
     }

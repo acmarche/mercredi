@@ -22,28 +22,28 @@ class SanteReponse
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion", inversedBy="reponse")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $question;
+    private $question;
 
     /**
      * @var SanteFiche
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", inversedBy="reponses", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $sante_fiche;
+    private $sante_fiche;
 
     /**
      * @var bool
      *
      * @ORM\Column(type="boolean")
      */
-    protected $reponse = false;
+    private $reponse = false;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $remarque;
+    private $remarque;
 
     public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
     {

@@ -22,7 +22,7 @@ class Message implements TimestampableInterface
      * @var string|null
      * @Assert\NotBlank()
      */
-    protected $from;
+    private $from;
 
     /**
      * @var string|null
@@ -30,7 +30,7 @@ class Message implements TimestampableInterface
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
-    protected $sujet;
+    private $sujet;
 
     /**
      * @var string|null
@@ -38,19 +38,19 @@ class Message implements TimestampableInterface
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
-    protected $texte;
+    private $texte;
 
     /**
      * @var UploadedFile|null
      */
-    protected $file;
+    private $file;
 
     /**
      * @var array|null
      *
      * @ORM\Column(type="array", nullable=false)
      */
-    protected $destinataires;
+    private $destinataires;
 
     public function getFrom(): ?string
     {

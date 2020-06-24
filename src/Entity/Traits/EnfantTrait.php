@@ -9,7 +9,7 @@ trait EnfantTrait
     /**
      * @var Enfant
      */
-    protected $enfant;
+    private $enfant;
 
     public function getEnfant(): Enfant
     {

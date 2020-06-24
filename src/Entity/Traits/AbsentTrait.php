@@ -9,9 +9,9 @@ trait AbsentTrait
     /**
      * @var int
      *
-     * @see MercrediConstantes::ABSENT_AVEC_CERTIF
+     * @see MercrediConstantes::ABSENCE_AVEC_CERTIF
      */
-    protected $absent = 0;
+    private $absent;
 
     public function getAbsent(): int
     {

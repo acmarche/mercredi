@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -42,11 +43,32 @@ class PresenceRepository extends ServiceEntityRepository
     public function findPresencesByEnfant(Enfant $enfant): array
     {
         return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')
             ->addSelect('enfant')
+            ->addSelect('tuteur')
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findPresencesByTuteur(Tuteur $tuteur): array
+    {
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant', 'tuteur')
+            ->andWhere('presence.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->getQuery()->getResult();
+    }
+
+    public function findPresencesNonPayes(Tuteur $tuteur)
+    {
+        $this->findPresencesByTuteur($tuteur);
     }
 
     /**
@@ -54,7 +76,7 @@ class PresenceRepository extends ServiceEntityRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function exist(Enfant $enfant, Jour $jour): ?Presence
+    public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
     {
         return $this->createQueryBuilder('presence')
             ->andWhere('presence.enfant = :enfant')

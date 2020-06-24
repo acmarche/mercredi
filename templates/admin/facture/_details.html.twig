@@ -1,0 +1,27 @@
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>Facturé le</th>
+        <td>{{ facture.factureLe | format_date('full') }}</td>
+    </tr>
+    <tr>
+        <th>Payé le</th>
+        <td>{{ facture.payeLe ? facture.payeLe | format_date('full') }}</td>
+    </tr>
+    <tr>
+        <th>Au nom de</th>
+        <td>
+            {{ facture.tuteurNom }} {{ facture.tuteurPrenom }}<br>
+            <i class="fas fa-map-marked-alt"></i>
+            {{ facture.rue }} <br/>
+            {{ facture.codepostal }} {{ facture.localite }}
+        </td>
+    </tr>
+    </thead>
+</table>
+
+{% if facture.remarque %}
+    <p class="text-muted">
+        {{ facture.remarque | nl2br }}
+    </p>
+{% endif %}

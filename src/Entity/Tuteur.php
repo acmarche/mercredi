@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
@@ -44,12 +46,19 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use UsersTrait;
     use PresencesTuteurTrait;
     use RelationsTrait;
+    use FacturesTrait;
 
     /**
      * @var Relation[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="tuteur", cascade={"remove"})
      */
     private $relations;
+
+     /**
+     * @var Facture[]
+      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur")
+     */
+    private $factures;
 
     public function getSluggableFields(): array
     {

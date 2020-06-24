@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Facture\FactureTrait;
 use AcMarche\Mercredi\Entity\Traits\AbsentTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -11,6 +12,7 @@ use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
+use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
@@ -23,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Presence\Repository\PresenceRepository")
  * @UniqueEntity(fields={"jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
  */
-class Presence implements TimestampableInterface
+class Presence implements TimestampableInterface, PresenceInterface
 {
     use IdTrait;
     use EnfantTrait;
@@ -39,33 +41,34 @@ class Presence implements TimestampableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
      */
-    protected $jour;
+    private $jour;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
      */
-    protected $enfant;
+    private $enfant;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
      */
-    protected $tuteur;
+    private $tuteur;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")
      */
-    protected $reduction;
+    private $reduction;
 
     /**
      * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
      */
-    protected $absent = 0;
+    private $absent;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
     {
         $this->tuteur = $tuteur;
         $this->enfant = $enfant;
         $this->jour = $jour;
+        $this->absent = 0;
     }
 
     public function __toString()
