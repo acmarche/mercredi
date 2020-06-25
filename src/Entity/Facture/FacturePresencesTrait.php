@@ -13,7 +13,7 @@ trait FacturePresencesTrait
 
     /**
      * @var FacturePresence[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\FacturePresence", mappedBy="facture")
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\FacturePresence", mappedBy="facture", cascade={"remove"})
      */
     private $facturePresences;
 

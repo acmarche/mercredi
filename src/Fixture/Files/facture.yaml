@@ -1,0 +1,10 @@
+AcMarche\Mercredi\Entity\Facture\Facture:
+  facture_simpson:
+    __construct: ['@tuteur_Simpson']
+    nom: 'Simpson'
+    prenom: 'Homer'
+    rue: '<streetName()>'
+    code_postal: '<postcode()>'
+    localite: '<city()>'
+    facture_le: '<carbonDateTime(2020,10,06,9,0)>'
+    userAdd: 'administrateur'

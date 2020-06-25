@@ -5,6 +5,8 @@ namespace AcMarche\Mercredi\Entity\Facture;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -21,6 +23,8 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 class Facture implements TimestampableInterface, UuidableInterface
 {
     use IdTrait;
+    use NomTrait;
+    use PrenomTrait;
     use TuteurTrait;
     use AdresseTrait;
     use TimestampableTrait;
@@ -28,18 +32,6 @@ class Facture implements TimestampableInterface, UuidableInterface
     use UuidableTrait;
     use FacturePresencesTrait;
     use UserAddTrait;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=150, nullable=false)
-     */
-    private $tuteurNom;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=150, nullable=false)
-     */
-    private $tuteurPrenom;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="factures")
@@ -77,30 +69,6 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function setPayeLe(?\DateTimeInterface $payeLe): self
     {
         $this->payeLe = $payeLe;
-
-        return $this;
-    }
-
-    public function getTuteurNom(): ?string
-    {
-        return $this->tuteurNom;
-    }
-
-    public function setTuteurNom(string $tuteurNom): self
-    {
-        $this->tuteurNom = $tuteurNom;
-
-        return $this;
-    }
-
-    public function getTuteurPrenom(): ?string
-    {
-        return $this->tuteurPrenom;
-    }
-
-    public function setTuteurPrenom(string $tuteurPrenom): self
-    {
-        $this->tuteurPrenom = $tuteurPrenom;
 
         return $this;
     }

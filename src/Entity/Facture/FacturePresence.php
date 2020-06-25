@@ -4,6 +4,8 @@ namespace AcMarche\Mercredi\Entity\Facture;
 
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\PresenceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,6 +20,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class FacturePresence
 {
     use IdTrait;
+    use NomTrait;
+    use PrenomTrait;
     use FactureTrait;
     use PresenceTrait;
 
@@ -30,21 +34,8 @@ class FacturePresence
     /**
      * @var Presence
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Presence")
-     *
      */
     private $presence;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=150, nullable=false)
-     */
-    private $enfantNom;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=150, nullable=false)
-     */
-    private $enfantPrenom;
 
     /**
      * @var \DateTime
@@ -62,30 +53,6 @@ class FacturePresence
     {
         $this->facture = $facture;
         $this->presence = $presence;
-    }
-
-    public function getEnfantNom(): ?string
-    {
-        return $this->enfantNom;
-    }
-
-    public function setEnfantNom(string $enfantNom): self
-    {
-        $this->enfantNom = $enfantNom;
-
-        return $this;
-    }
-
-    public function getEnfantPrenom(): ?string
-    {
-        return $this->enfantPrenom;
-    }
-
-    public function setEnfantPrenom(string $enfantPrenom): self
-    {
-        $this->enfantPrenom = $enfantPrenom;
-
-        return $this;
     }
 
     public function getPresenceDate(): ?\DateTimeInterface

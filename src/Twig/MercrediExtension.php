@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Twig;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class MercrediExtension extends AbstractExtension
 {
@@ -17,14 +16,7 @@ class MercrediExtension extends AbstractExtension
         ];
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('function_name', [$this, 'doSomething']),
-        ];
-    }
-
-    public function absenceFilter($number):string
+    public function absenceFilter($number): string
     {
         return MercrediConstantes::getAbsenceTxt($number);
     }

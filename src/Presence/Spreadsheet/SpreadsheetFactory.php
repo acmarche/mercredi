@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
 use AcMarche\Mercredi\Spreadsheet\AbstractSpreadsheetDownloader;
-use AcMarche\Mercredi\Utils\DateProvider;
 use AcMarche\Mercredi\Utils\DateUtils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -18,7 +17,7 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $dateInterval = DateProvider::getDatePeriod($date);
+        $dateInterval = DateUtils::getDatePeriod($date);
 
         /**
          * titre de la feuille.

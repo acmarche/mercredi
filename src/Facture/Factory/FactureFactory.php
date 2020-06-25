@@ -22,8 +22,8 @@ class FactureFactory
     {
         $facture = new Facture($tuteur);
         $facture->setFactureLe(new \DateTime());
-        $facture->setTuteurNom($tuteur->getNom());
-        $facture->setTuteurPrenom($tuteur->getPrenom());
+        $facture->setNom($tuteur->getNom());
+        $facture->setPrenom($tuteur->getPrenom());
         $facture->setRue($tuteur->getRue());
         $facture->setCodePostal($tuteur->getCodePostal());
         $facture->setLocalite($tuteur->getLocalite());

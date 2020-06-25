@@ -65,8 +65,8 @@ class FactureHandler
             $facturePresence = new FacturePresence($facture, $presence);
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
-            $facturePresence->setEnfantNom($enfant->getNom());
-            $facturePresence->setEnfantPrenom($enfant->getPrenom());
+            $facturePresence->setNom($enfant->getNom());
+            $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCout($this->presenceCalculator->calculate($presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);

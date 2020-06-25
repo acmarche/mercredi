@@ -3,8 +3,6 @@
 namespace AcMarche\Mercredi\Facture\Mailer;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactory;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -58,8 +56,6 @@ class FactureMailer
     }
 
     /**
-     * @param Facture $facture
-     * @param array $data
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function sendFacture(Facture $facture, array $data)
@@ -78,7 +74,7 @@ class FactureMailer
 
         $date = $facture->getFactureLe();
         $html = $this->factureFactory->generateFullHtml($facture);
-        $message->attach($html, 'facture_'.$date->format('d-m-Y').'.pdf');
+        $message->attach($html, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
 
         $this->mailer->send($message);
     }

@@ -4,18 +4,15 @@
 
     <div class="card bg-lig2ht mb-3">
         <div class="card-header">
-            <h3>Facture {{ facture.id }}</h3>
+            <h3>Facture n° {{ facture.id }}</h3>
         </div>
         <div class="card-body">
-
-            {{ form_start(form) }}
-            {{ form_errors(form) }}
-            {{ form_row(form.factureLe) }}
-
-            <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
-                Sauvegarder
-            </button>
-            {{ form_end(form) }}
+            {% include '@AcMarcheMercrediAdmin/facture/_form.html.twig' %}
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('mercredi_admin_facture_show',{'id':facture.id}) }}" class="mt-4">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
         </div>
     </div>
 

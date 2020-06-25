@@ -13,7 +13,8 @@
                href="{{ path('mercredi_admin_facture_new', {'id': tuteur.id}) }}">
                 <i class="fas fa-plus"></i> Créer une facture</a>
 
-            <a  class="btn btn-primary m-2" role="button" href="{{ path('mercredi_admin_tuteur_show',{'id':tuteur.id}) }}">
+            <a class="btn btn-primary m-2" role="button"
+               href="{{ path('mercredi_admin_tuteur_show',{'id':tuteur.id}) }}">
                 <i class="fas fa-long-arrow-alt-left"></i> Retour au tuteur
             </a>
 
@@ -30,11 +31,13 @@
                 {% for facture in factures %}
                     <tr>
                         <td>
+                             N° {{ facture.id }}
+                        </td>
+                        <td>
                             <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
-                                {{ facture.id }}
+                                {{ facture.factureLe | format_date('full') | title }}
                             </a>
                         </td>
-                        <td>{{ facture.factureLe | format_date('full') | title }}</td>
                         <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') }}</td>
                         <td>{{ facture.facturePresences | length }}</td>
                     </tr>
