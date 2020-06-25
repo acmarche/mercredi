@@ -5,6 +5,7 @@
         <th>Enfant</th>
         <th>Date</th>
         <th>Coût</th>
+        <th>Détails</th>
     </tr>
     </thead>
     {% for presence in facture.facturePresences %}
@@ -12,6 +13,7 @@
             <td>{{ presence.nom }} {{ presence.prenom }}</td>
             <td>{{ presence.presenceDate | format_date('full') }}</td>
             <td>{{ presence.cout }} €</td>
+            <td><a href="{{ path('mercredi_admin_facture_presence_show', {'id': presence.id}) }}">Détails</a> </td>
         </tr>
     {% endfor %}
 </table>

@@ -1,0 +1,37 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-lig2ht mb-3">
+        <div class="card-header">
+            <h3>Détails de la présence du {{ facturePresence.presenceDate | format_date('full') }} facturée</h3>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Enfant</th>
+                    <td>{{ facturePresence.nom }} {{ facturePresence.prenom }}</td>
+                </tr>
+                <tr>
+                    <th>Coût</th>
+                    <td>{{ facturePresence.cout }} €</td>
+                </tr>
+            </table>
+
+            <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteModal">
+                <i class="fas fa-trash"></i> Détacher de la facture
+            </button>
+
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('mercredi_admin_facture_show',{'id':facture.id}) }}" class="mt-4">
+                <i class="fas fa-long-arrow-alt-left"></i> Retour à la facture
+            </a>
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/facture_presence/_delete_form.html.twig' %}
+
+
+{% endblock %}

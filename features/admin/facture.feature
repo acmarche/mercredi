@@ -63,3 +63,14 @@ Feature: Gestion des factures
     Then I should see "La facture a bien été crée"
     Then I should see "Simpson Lisa"
     Then I should see "mercredi 2 septembre 2020"
+
+  Scenario: Je détache une présence
+    Then I follow "Simpson"
+    Then I follow "Ses factures"
+    Then I should see "Mardi 6 Octobre 2020"
+    Then I follow "Mardi 6 Octobre 2020"
+    Then I follow "Détails"
+    Then I should see "Simpson Bart"
+    Then I should see "25 €"
+    And I press "Détacher la présence"
+    Then I should see "La présence a bien été détachée"
