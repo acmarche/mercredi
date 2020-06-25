@@ -11,6 +11,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 
 class ResetPasswordMailer
 {
@@ -29,7 +30,7 @@ class ResetPasswordMailer
         $this->organisation = $organisationRepository->getOrganisation();
     }
 
-    public function sendLink(User $user, string $resetToken, int $tokenLifeTime)
+    public function sendLink(User $user, ResetPasswordToken $resetToken, int $tokenLifeTime)
     {
         $email = (new TemplatedEmail())
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
