@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Organisation;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
@@ -36,18 +37,24 @@ class DefaultController extends AbstractController
      * @var SanteChecker
      */
     private $santeChecker;
+    /**
+     * @var FactureRepository
+     */
+    private $factureRepository;
 
     public function __construct(
         OrganisationRepository $organisationRepository,
         TuteurUtils $tuteurUtils,
         RelationUtils $relationUtils,
-        SanteChecker $santeChecker
+        SanteChecker $santeChecker,
+        FactureRepository $factureRepository
     ) {
         $this->organisationRepository = $organisationRepository;
         $this->organisation = $organisationRepository->getOrganisation();
         $this->tuteurUtils = $tuteurUtils;
         $this->relationUtils = $relationUtils;
         $this->santeChecker = $santeChecker;
+        $this->factureRepository = $factureRepository;
     }
 
     /**
@@ -66,12 +73,14 @@ class DefaultController extends AbstractController
         $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
         $this->santeChecker->isCompleteForEnfants($enfants);
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
+        $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/default/index.html.twig',
             [
                 'enfants' => $enfants,
                 'tuteur' => $tuteur,
+                'factures' => $factures,
                 'tuteurIsComplete' => $tuteurIsComplete,
                 'year' => date('Y'),
             ]

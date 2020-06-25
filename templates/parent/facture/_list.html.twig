@@ -12,16 +12,16 @@
     {% for facture in factures %}
         <tr>
             <td>
-                <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
-                    {{ facture.id }}
-                </a>
+                  N° {{ facture.id }}
             </td>
-            <td>{{ facture.factureLe | format_date('full') | title }}</td>
+            <td>
+                {{ facture.factureLe | format_date('full') | title }}
+            </td>
             <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') }}</td>
             <td>{{ facture.facturePresences | length }}</td>
             <td>
                 <a href="{{ path('mercredi_parent_facture_pdf', {'uuid': facture.uuid}) }}">
-                    <i class="fa fa-download">Télécharger</i>
+                    <i class="fas fa-download"></i> Télécharger
                 </a>
             </td>
         </tr>

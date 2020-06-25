@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactory;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class FactureController.
  *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
+ * @IsGranted("ROLE_MERCREDI_PARENT")
  * @Route("/facture")
  */
 class FactureController extends AbstractController
@@ -78,7 +77,14 @@ class FactureController extends AbstractController
      */
     public function facture(Facture $facture): Response
     {
+        $user = $this->getUser();
+        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
+
+        if (!$tuteur) {
+            return $this->redirectToRoute('mercredi_parent_nouveau');
+        }
+        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
+
         return $this->facturePdfFactory->generate($facture);
     }
-
 }

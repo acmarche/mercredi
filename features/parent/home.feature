@@ -10,6 +10,7 @@ Feature: Test des pages parents
     Then I should see "Votre (Vos) enfant(s)"
     Then I should see "SIMPSON Lisa"
     Then I should see "SIMPSON Homer"
+    Then I should see "Mardi 6 Octobre 2020"
 
   Scenario: Fiche santé complète pour bart mais pas pour lisa
     Then I should see "Complète"
