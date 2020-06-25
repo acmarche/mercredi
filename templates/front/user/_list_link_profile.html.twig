@@ -1,0 +1,22 @@
+<ul class="list-group">
+    {% if is_granted('ROLE_MERCREDI_ADMIN') %}
+        <li class="list-group-item">
+            <a href="{{ path('mercredi_admin_home') }}">Accès en tant que administrateur</a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_MERCREDI_ANIMATEUR') %}
+        <li class="list-group-item">
+            <a href="">Accès en tant que animateur</a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_MERCREDI_PARENT') %}
+        <li class="list-group-item">
+            <a href="{{ path('mercredi_parent_home') }}">Accès en tant que parent</a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_MERCREDI_ECOLE') %}
+        <li class="list-group-item">
+            <a href="">Accès en tant que école</a>
+        </li>
+    {% endif %}
+</ul>

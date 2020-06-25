@@ -1,0 +1,14 @@
+{% extends '@AcMarcheMercredi/front/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card bg-lig2ht mb-3">
+        <div class="card-header">
+            <h3>Sélectionnez sur quel profil vous souhaitez travailler</h3>
+        </div>
+        <div class="card-body">
+            {% include '@AcMarcheMercredi/front/user/_list_link_profile.html.twig' %}
+        </div>
+    </div>
+
+{% endblock %}
