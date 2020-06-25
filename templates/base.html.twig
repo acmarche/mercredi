@@ -19,10 +19,12 @@
 <body class="d-flex flex-column h-100 {% block body_class %}{% endblock %}">
 <!-- Top nav bar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top border-bottom shadow-sm">
+
+    <i class="fas fa-frog icon-rose"></i>
     {% block brand %}
-        <i class="fas fa-store icon-rose"></i> <a class="navbar-brand"
-                                                  href="{{ path('mercredi_front_home') }}">Mercredi</a>
+        <a class="navbar-brand" href="{{ path('mercredi_front_home') }}">Mercredi</a>
     {% endblock %}
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
