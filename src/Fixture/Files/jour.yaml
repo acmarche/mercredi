@@ -1,10 +1,4 @@
 AcMarche\Mercredi\Entity\Jour:
-  jour{1..10}:
-    date_jour: <dateTimeBetween('-4 years', '-3 years')>
-    color: '<hexcolor()>'
-    prix1: '<randomFloat(2, 2, 7)>'
-    prix2: '<randomFloat(2, 2, 7)>'
-    prix3: '<randomFloat(2, 2, 7)>'
   jour_2020_09_02:
     date_jour: '<carbonDateTime(2020,9,2,9,0)>'
     color: '<hexcolor()>'

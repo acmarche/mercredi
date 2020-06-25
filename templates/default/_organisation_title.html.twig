@@ -1,1 +1,3 @@
-{{ organisation.nom }}
+{% if organisation is not null %}
+    {{ organisation.nom }}
+{% endif %}
