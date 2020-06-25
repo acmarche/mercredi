@@ -6,15 +6,15 @@ Feature: Test des pages front
     Given I am on "/"
     Then I should see "Bienvenue"
 
-  Scenario:
+  Scenario: Test d'une page
     Then I follow "Modalités pratiques"
     Then I should see "Les prix et autres infos"
 
-  Scenario:
+  Scenario: Page d'accueil
     Then I follow "Accueil"
     Then I should see "Bienvenue"
 
-  Scenario:
+  Scenario: Je contact avec le formulaire
     Then I follow "Nous contacter"
     Then I should see "Plus de contacts"
     And I fill in "contact[nom]" with "Jfs"
