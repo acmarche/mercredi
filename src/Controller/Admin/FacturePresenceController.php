@@ -4,8 +4,11 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
+use AcMarche\Mercredi\Facture\Form\FactureAttachType;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
+use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +27,58 @@ class FacturePresenceController extends AbstractController
      * @var FacturePresenceRepository
      */
     private $facturePresenceRepository;
+    /**
+     * @var PresenceRepository
+     */
+    private $presenceRepository;
+    /**
+     * @var FactureHandler
+     */
+    private $factureHandler;
 
     public function __construct(
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        PresenceRepository $presenceRepository,
+        FactureHandler $factureHandler
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->presenceRepository = $presenceRepository;
+        $this->factureHandler = $factureHandler;
+    }
+
+    /**
+     * @Route("/{id}/attach", name="mercredi_admin_facture_presence_attach", methods={"GET","POST"}).
+     */
+    public function attach(Request $request, Facture $facture): Response
+    {
+        $tuteur = $facture->getTuteur();
+        $presencesAll = $this->presenceRepository->findPresencesByTuteur($tuteur);
+        $presences = [];
+        foreach ($presencesAll as $presence) {
+            if (!$this->facturePresenceRepository->findByPresence($presence)) {
+                $presences[] = $presence;
+            }
+        }
+
+        $form = $this->createForm(FactureAttachType::class, $facture);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->factureHandler->handleNew($facture, $request->request->get('presences'), false);
+
+            $this->addFlash('success', 'Les présences ont bien été attachées');
+
+            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture_presence/attach.html.twig',
+            [
+                'facture' => $facture,
+                'presences' => $presences,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**

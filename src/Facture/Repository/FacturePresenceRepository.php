@@ -61,4 +61,5 @@ class FacturePresenceRepository extends ServiceEntityRepository
     {
         $this->_em->persist($facturePresence);
     }
+
 }

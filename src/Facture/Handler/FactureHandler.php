@@ -56,10 +56,13 @@ class FactureHandler
     /**
      * @param int[] $presencesId
      */
-    public function handleNew(Facture $facture, array $presencesId): Facture
+    public function handleNew(Facture $facture, array $presencesId, bool $persist = true): Facture
     {
         foreach ($presencesId as $presenceId) {
             if (!$presence = $this->presenceRepository->find($presenceId)) {
+                continue;
+            }
+            if ($this->facturePresenceRepository->findByPresence($presence)) {
                 continue;
             }
             $facturePresence = new FacturePresence($facture, $presence);
@@ -71,10 +74,13 @@ class FactureHandler
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }
-        $this->factureRepository->persist($facture);
+        if ($persist) {
+            $this->factureRepository->persist($facture);
+        }
         $this->factureRepository->flush();
         $this->facturePresenceRepository->flush();
 
         return $facture;
     }
+
 }

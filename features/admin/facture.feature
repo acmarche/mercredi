@@ -5,6 +5,7 @@ Feature: Gestion des factures
   Je modifie une facture
   Je supprime une facture
   Je crée une facture
+  J'attache des présences
 
   Background:
     Given I am logged in as an admin
@@ -74,3 +75,13 @@ Feature: Gestion des factures
     Then I should see "25 €"
     And I press "Détacher la présence"
     Then I should see "La présence a bien été détachée"
+
+  Scenario: J'attache des présences
+    Then I follow "Simpson"
+    Then I follow "Ses factures"
+    Then I should see "Mardi 6 Octobre 2020"
+    Then I follow "Mardi 6 Octobre 2020"
+    Then I follow "Attacher des présences"
+    Then I should see "Mercredi 2 septembre 2020"
+    And I press "Attacher à la facture"
+    Then I should see "Les présences ont bien été attachées"
