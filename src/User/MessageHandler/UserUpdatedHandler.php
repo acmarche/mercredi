@@ -26,6 +26,6 @@ class UserUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(UserUpdated $userUpdated)
     {
-        $this->flashBag->add('success', "L'école a bien été modifiée");
+        $this->flashBag->add('success', "L'utilisateur a bien été modifié");
     }
 }

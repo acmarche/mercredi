@@ -26,7 +26,7 @@ Feature: Gestion des pages
     Then I should see "Accueil nouveau"
 
   Scenario: Supprimer une page non system
-    Then I follow "Page temporaire"
+    Then I follow "Page exemple"
     Then I press "Supprimer la page"
     Then I should see "La page a bien été supprimée"
 

@@ -64,6 +64,7 @@ class UserType extends AbstractType
                 'roles',
                 ChoiceType::class,
                 [
+                    'label' => 'Rôles',
                     'choices' => $roles,
                     'multiple' => true,
                     'expanded' => true,

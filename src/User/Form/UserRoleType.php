@@ -9,18 +9,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserEditType extends AbstractType
+class UserRoleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $roles = array_flip(MercrediSecurity::ROLES);
         $builder
-            ->remove('plainPassword')
-            ->remove('roles');
-    }
-
-    public function getParent()
-    {
-        return UserType::class;
+            ->add('roles',
+                ChoiceType::class,
+                [
+                    'choices' => $roles,
+                    'multiple' => true,
+                    'expanded' => true,
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

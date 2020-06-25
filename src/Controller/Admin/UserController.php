@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
+use AcMarche\Mercredi\User\Form\UserRoleType;
 use AcMarche\Mercredi\User\Form\UserSearchType;
 use AcMarche\Mercredi\User\Form\UserType;
 use AcMarche\Mercredi\User\Message\UserCreated;
@@ -83,6 +84,7 @@ class UserController extends AbstractController
             $user->setPassword(
                 $this->passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData())
             );
+            $user->setUsername($user->getEmail());
             $this->userRepository->insert($user);
             $this->dispatchMessage(new UserCreated($user->getId()));
 
@@ -135,6 +137,33 @@ class UserController extends AbstractController
             [
                 'user' => $user,
                 'form' => $editForm->createView(),
+            ]
+        );
+    }
+
+    /**
+     * Displays a form to edit an existing User utilisateur.
+     *
+     * @Route("/{id}/roles", name="mercredi_admin_user_roles", methods={"GET","POST"})
+     */
+    public function roles(Request $request, User $user)
+    {
+        $form = $this->createForm(UserRoleType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->userRepository->flush();
+            $this->dispatchMessage(new UserUpdated($user->getId()));
+
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/user/roles.html.twig',
+            [
+                'user' => $user,
+                'form' => $form->createView(),
             ]
         );
     }

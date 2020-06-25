@@ -26,6 +26,6 @@ class UserCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(UserCreated $userCreated)
     {
-        $this->flashBag->add('success', "L'école a bien été ajoutée");
+        $this->flashBag->add('success', "L'utilisateur a bien été ajouté");
     }
 }
