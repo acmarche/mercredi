@@ -49,12 +49,13 @@ class Jour implements TimestampableInterface
      */
     private $presences;
 
-    public function __construct()
+    public function __construct(?\DateTime $date_jour = null)
     {
         $this->prix1 = 0.0;
         $this->prix2 = 0.0;
         $this->prix3 = 0.0;
         $this->presences = new ArrayCollection();
+        $this->date_jour = $date_jour;
     }
 
     public function __toString()

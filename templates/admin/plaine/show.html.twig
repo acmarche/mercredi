@@ -1,0 +1,26 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h3>{{ plaine }}</h3>
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheMercrediAdmin/plaine/_actions.html.twig' %}
+
+            {% if plaine.remarque %}
+                <p class="text-muted">
+                    {{ plaine.remarque | nl2br }}
+                </p>
+            {% endif %}
+            <br/>
+            {% include '@AcMarcheMercrediAdmin/plaine/_list_dates.html.twig' %}
+
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/plaine/_delete_form.html.twig' %}
+
+{% endblock %}

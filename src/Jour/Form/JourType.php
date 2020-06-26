@@ -4,9 +4,9 @@ namespace AcMarche\Mercredi\Jour\Form;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Form\Type\ArchivedType;
+use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,12 +19,9 @@ class JourType extends AbstractType
         $builder
             ->add(
                 'date_jour',
-                DateType::class,
+                DateWidgetType::class,
                 [
                     'label' => 'Date du jour de garde',
-                    'widget' => 'single_text',
-                    'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
                 ]
             )
             ->add(
