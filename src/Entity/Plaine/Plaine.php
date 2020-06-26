@@ -1,7 +1,8 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity;
+namespace AcMarche\Mercredi\Entity\Plaine;
 
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\JoursTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -18,16 +19,18 @@ class Plaine
     use NomTrait;
     use RemarqueTrait;
     use JoursTrait;
+    use InscriptionOpen;
 
     /**
      * @var Jour[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour")
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", cascade={"persist", "remove"})
      */
     private $jours;
 
     public function __construct()
     {
         $this->jours = new ArrayCollection();
+        $this->inscriptionOpen = false;
     }
 
     public function __toString()

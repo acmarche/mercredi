@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Plaine\Form;
 
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use AcMarche\Mercredi\Jour\Form\JourDateType;
 use Symfony\Component\Form\AbstractType;

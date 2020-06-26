@@ -2,13 +2,14 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Plaine\Dto\PlaineInscriptionDto;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
 use AcMarche\Mercredi\Plaine\Message\PlaineCreated;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/plaine")
+ * @Route("/plaine_inscription")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PlaineController extends AbstractController
+class PlaineInscriptionController extends AbstractController
 {
     /**
      * @var PlaineRepository
@@ -37,7 +38,7 @@ class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_plaine_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_plaine_inscription_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -50,10 +51,13 @@ class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_plaine_new", methods={"GET","POST"})
+     * @Route("/new/{id}", name="mercredi_admin_plaine_inscription_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Plaine $plaine): Response
     {
+        $dto = new PlaineInscriptionDto($plaine);
+        $enfants = $this->enfantRepository->findAll();
+
         $plaine = new Plaine();
         $form = $this->createForm(PlaineType::class, $plaine);
         $form->handleRequest($request);
@@ -68,8 +72,9 @@ class PlaineController extends AbstractController
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/plaine/new.html.twig',
+            '@AcMarcheMercrediAdmin/plaine_inscription/new.html.twig',
             [
+                'enfants' => $enfants,
                 'form' => $form->createView(),
             ]
         );

@@ -10,19 +10,12 @@
 
             {% include '@AcMarcheMercrediAdmin/plaine/_actions.html.twig' %}
 
-            {% if plaine.inscriptionOpen %}
-                <div class="alert alert-warning">Les inscriptions sont ouvertes</div>
-            {% else %}
-                <p class="card-text">Les inscriptions ne sont pas ouvertes</p>
-            {% endif %}
-
             {% if plaine.remarque %}
                 <p class="text-muted">
                     {{ plaine.remarque | nl2br }}
                 </p>
             {% endif %}
             <br/>
-            {% include '@AcMarcheMercrediAdmin/plaine/_list_jours.html.twig' %}
 
         </div>
     </div>

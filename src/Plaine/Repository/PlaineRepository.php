@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Repository;
 
-use AcMarche\Mercredi\Entity\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -18,6 +18,14 @@ class PlaineRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Plaine::class);
+    }
+
+    public function findPlaineOpen(): ?Plaine
+    {
+        return $this->createQueryBuilder('plaine')
+            ->andWhere('plaine.inscriptionOpen = 1')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function remove(Plaine $plaine)

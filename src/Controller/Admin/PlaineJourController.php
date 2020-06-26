@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Form\PlaineJourType;
 use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;

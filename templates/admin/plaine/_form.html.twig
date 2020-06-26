@@ -1,10 +1,10 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 <div class="row">
-    <div class="col-4">
+    <div class="col-12">
         {{ form_row(form.nom) }}
+        {{ form_row(form.inscriptionOpen) }}
     </div>
-
 </div>
 {{ form_row(form.remarque) }}
 <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
