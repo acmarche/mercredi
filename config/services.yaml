@@ -25,6 +25,9 @@ services:
     AcMarche\Mercredi\Namer\DirectoryNamer:
         public: true
 
+    AcMarche\Mercredi\Jour\Tarification\Form\TarificationFormGeneratorInterface:
+        alias: AcMarche\Mercredi\Jour\Tarification\Form\TarificationHottonFormGenerator
+
     Fidry\AliceDataFixtures\LoaderInterface:
         #alias: 'fidry_alice_data_fixtures.doctrine.persister_loader' //ne purge pas
         alias: 'fidry_alice_data_fixtures.loader.doctrine'

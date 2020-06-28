@@ -10,9 +10,7 @@
         <thead>
         <tr>
             <th>Date</th>
-            <th>Prix 1</th>
-            <th>Prix 2</th>
-            <th>Prix suivant</th>
+            <th>Pédagogique</th>
         </tr>
         </thead>
         <tbody>
@@ -23,9 +21,9 @@
                         {{ (jour.dateJour|format_date('full'))|title }}
                     </a>
                 </td>
-                <td>{{ jour.prix1 }} €</td>
-                <td>{{ jour.prix2 }} €</td>
-                <td>{{ jour.prix3 }} €</td>
+                <td>
+                    {{ jour.pedagogique ? '<i class="fas fa-check"></i>' }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

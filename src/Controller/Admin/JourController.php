@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Jour\Message\JourCreated;
 use AcMarche\Mercredi\Jour\Message\JourDeleted;
 use AcMarche\Mercredi\Jour\Message\JourUpdated;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Jour\Tarification\Form\TarificationFormGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,10 +25,17 @@ class JourController extends AbstractController
      * @var JourRepository
      */
     private $jourRepository;
+    /**
+     * @var TarificationFormGeneratorInterface
+     */
+    private $tarificationFormGenerator;
 
-    public function __construct(JourRepository $jourRepository)
-    {
+    public function __construct(
+        JourRepository $jourRepository,
+        TarificationFormGeneratorInterface $tarificationFormGenerator
+    ) {
         $this->jourRepository = $jourRepository;
+        $this->tarificationFormGenerator = $tarificationFormGenerator;
     }
 
     /**
@@ -58,7 +66,7 @@ class JourController extends AbstractController
 
             $this->dispatchMessage(new JourCreated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_tarif', ['id' => $jour->getId()]);
         }
 
         return $this->render(
@@ -71,14 +79,44 @@ class JourController extends AbstractController
     }
 
     /**
+     * @Route("/tarif/{id}", name="mercredi_admin_jour_tarif", methods={"GET","POST"})
+     */
+    public function tarif(Request $request, Jour $jour): Response
+    {
+        $form = $this->tarificationFormGenerator->generate($jour);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->jourRepository->persist($jour);
+            $this->jourRepository->flush();
+
+            $this->dispatchMessage(new JourCreated($jour->getId()));
+
+            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/jour/tarif.html.twig',
+            [
+                'jour' => $jour,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
      * @Route("/{id}", name="mercredi_admin_jour_show", methods={"GET"})
      */
     public function show(Jour $jour): Response
     {
+        $tarifs = $this->tarificationFormGenerator->generateTarifsHtml($jour);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/show.html.twig',
             [
                 'jour' => $jour,
+                'tarifs' => $tarifs,
             ]
         );
     }

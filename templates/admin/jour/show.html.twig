@@ -1,7 +1,5 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
-{% block title %}Enfant{% endblock %}
-
 {% block body %}
 
     <div class="card bg-light mb-3">
@@ -12,21 +10,14 @@
 
             {% include '@AcMarcheMercrediAdmin/jour/_actions.html.twig' %}
 
+            {% if jour.pedagogique %}
+                <div class="alert alert-info">
+                    Journée pédagogique
+                </div>
+            {% endif %}
+
             <br/>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Prix 1</th>
-                    <td>{{ jour.prix1 }} €</td>
-                </tr>
-                <tr>
-                    <th>Prix 2</th>
-                    <td>{{ jour.prix2 }} €</td>
-                </tr>
-                <tr>
-                    <th>Prix suivant</th>
-                    <td>{{ jour.prix3 }} €</td>
-                </tr>
-            </table>
+            {{ tarifs|raw }}
 
             {{ jour.remarque|nl2br }}
         </div>
