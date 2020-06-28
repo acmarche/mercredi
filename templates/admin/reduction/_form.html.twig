@@ -1,11 +1,12 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
+        {{ form_row(form.nom) }}
 <div class="row">
     <div class="col-6">
-        {{ form_row(form.nom) }}
+        {{ form_row(form.pourcentage) }}
     </div>
     <div class="col-6">
-        {{ form_row(form.pourcentage) }}
+        {{ form_row(form.forfait) }}
     </div>
 </div>
 {{ form_row(form.remarque) }}

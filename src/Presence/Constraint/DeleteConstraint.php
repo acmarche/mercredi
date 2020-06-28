@@ -5,6 +5,11 @@ namespace AcMarche\Mercredi\Presence\Constraint;
 use AcMarche\Mercredi\Entity\Presence;
 use DateTime;
 
+/**
+ * Pour les parents ne peuvent supprimer une date passée
+ * Class DeleteConstraint
+ * @package AcMarche\Mercredi\Presence\Constraint
+ */
 class DeleteConstraint
 {
     public static function canBeDeleted(Presence $presence)

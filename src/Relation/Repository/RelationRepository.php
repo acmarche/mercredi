@@ -97,7 +97,7 @@ class RelationRepository extends ServiceEntityRepository
         return $enfants;
     }
 
-    public function checkExist(Tuteur $tuteur, $enfant): ?Relation
+    public function findOneByTuteurAndEnfant(Tuteur $tuteur, Enfant $enfant): ?Relation
     {
         return $this->findOneBy(['tuteur' => $tuteur, 'enfant' => $enfant]);
     }
@@ -105,13 +105,18 @@ class RelationRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function findFrateries(Enfant $enfant, Tuteur $tuteur)
+    public function findFrateries(Enfant $enfant, array $tuteurs = [])
     {
+        $enfants = [];
+        if (0 == count($tuteurs)) {
+            $tuteurs = $this->findTuteursByEnfant($enfant);
+        }
+
         $relations = $this->createQueryBuilder('relation')
             ->leftJoin('relation.enfant', 'enfant', 'WITH')
             ->addSelect('enfant')
-            ->andWhere('relation.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
+            ->andWhere('relation.tuteur IN (:tuteurs)')
+            ->setParameter('tuteurs', $tuteurs)
             ->andWhere('relation.enfant != :enfant')
             ->setParameter('enfant', $enfant)
             ->orderBy('enfant.prenom', 'ASC')
@@ -119,25 +124,10 @@ class RelationRepository extends ServiceEntityRepository
             ->getResult();
 
         foreach ($relations as $relation) {
-            $enfants[] = $relation->getTuteur();
+            $enfants[] = $relation->getEnfant();
         }
 
         return $enfants;
-    }
-
-    public function remove(Relation $relation)
-    {
-        $this->_em->remove($relation);
-    }
-
-    public function flush()
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Relation $relation)
-    {
-        $this->_em->persist($relation);
     }
 
     /**
@@ -169,5 +159,20 @@ class RelationRepository extends ServiceEntityRepository
             ->andwhere('enfant.archived != 1')
             ->getQuery()
             ->getResult();
+    }
+
+    public function remove(Relation $relation)
+    {
+        $this->_em->remove($relation);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
+    public function persist(Relation $relation)
+    {
+        $this->_em->persist($relation);
     }
 }

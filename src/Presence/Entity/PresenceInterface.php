@@ -33,6 +33,10 @@ interface PresenceInterface
 
     public function setReduction(?Reduction $reduction): void;
 
+    public function isHalf(): bool;
+
+    public function setHalf(bool $half): void;
+
     public function getRemarque(): ?string;
 
     public function setRemarque(?string $remarque): void;

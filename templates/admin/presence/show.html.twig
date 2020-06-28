@@ -20,6 +20,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>Pédagogique</th>
+                    <td>{{ presence.jour.pedagogique ? 'Oui' : 'Non' }}</td>
+                </tr>
+                <tr>
                     <th>Absent</th>
                     <td>{{ presence.absent|mercredi_absence_text }}</td>
                 </tr>
@@ -30,6 +34,10 @@
                 <tr>
                     <th>Ordre</th>
                     <td>{{ presence.ordre }} </td>
+                </tr>
+                <tr>
+                    <th>Coût</th>
+                    <td>{{ cout }} </td>
                 </tr>
             </table>
 

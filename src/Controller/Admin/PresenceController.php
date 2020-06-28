@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
@@ -59,6 +60,10 @@ class PresenceController extends AbstractController
      * @var PresenceUtils
      */
     private $presenceUtils;
+    /**
+     * @var PresenceCalculatorInterface
+     */
+    private $presenceCalculator;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -66,7 +71,8 @@ class PresenceController extends AbstractController
         PresenceHandler $presenceHandler,
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
-        PresenceUtils $presenceUtils
+        PresenceUtils $presenceUtils,
+        PresenceCalculatorInterface $presenceCalculator
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -74,6 +80,7 @@ class PresenceController extends AbstractController
         $this->jourRepository = $jourRepository;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->presenceUtils = $presenceUtils;
+        $this->presenceCalculator = $presenceCalculator;
     }
 
     /**
@@ -194,10 +201,13 @@ class PresenceController extends AbstractController
      */
     public function show(Presence $presence): Response
     {
+        $cout = $this->presenceCalculator->calculate($presence);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/show.html.twig',
             [
                 'presence' => $presence,
+                'cout' => $cout,
                 'enfant' => $presence->getEnfant(),
             ]
         );

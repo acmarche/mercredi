@@ -38,7 +38,7 @@ class RelationHandler
             throw new \Exception('Enfant non trouvé');
         }
 
-        if ($this->relationRepository->checkExist($tuteur, $enfant)) {
+        if ($this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant)) {
             throw new \Exception('L\'enfant est déjà lié à cet enfant');
         }
 

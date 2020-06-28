@@ -1,0 +1,11 @@
+<br/>
+<strong>Frateries: </strong>
+{% if frateries|length > 0 %}
+    {% for fraterie in frateries %}
+        <a href="{{ path('mercredi_admin_enfant_show', {'id': fraterie.id}) }}">
+            {{ fraterie }}
+        </a>
+    {% endfor %}
+{% else %}
+    Aucune
+{% endif %}

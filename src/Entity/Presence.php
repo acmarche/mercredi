@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use AcMarche\Mercredi\Entity\Facture\FactureTrait;
 use AcMarche\Mercredi\Entity\Traits\AbsentTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
+use AcMarche\Mercredi\Entity\Traits\HalfTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\JourTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
@@ -37,6 +37,7 @@ class Presence implements TimestampableInterface, PresenceInterface
     use RemarqueTrait;
     use UserAddTrait;
     use TimestampableTrait;
+    use HalfTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")

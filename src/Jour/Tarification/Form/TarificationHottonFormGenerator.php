@@ -35,7 +35,7 @@ class TarificationHottonFormGenerator implements TarificationFormGeneratorInterf
 
     private function generateDegressifType(Jour $jour): FormInterface
     {
-        return $this->formFactory->create(JourTarificationDegressiveType::class, $jour);
+        return $this->formFactory->create(JourTarificationDegressiveWithForfaitType::class, $jour);
     }
 
     private function generateFullDayType(Jour $jour): FormInterface
@@ -55,8 +55,10 @@ class TarificationHottonFormGenerator implements TarificationFormGeneratorInterf
         }
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/jour/tarif/_detail_progressif.html.twig',
-            ['jour' => $jour]
+            '@AcMarcheMercrediAdmin/jour/tarif/_detail_progressif_forfait.html.twig',
+            [
+                'jour' => $jour,
+            ]
         );
     }
 

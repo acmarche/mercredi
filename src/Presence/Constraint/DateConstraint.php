@@ -30,7 +30,7 @@ class DateConstraint
      * Et pour les jours journees pedagogiques c'est une semaine.
      *
      * @param \DateTime $datePresence
-     * @param null $today
+     * @param null      $today
      *
      * @throws \Exception
      */
@@ -80,8 +80,8 @@ class DateConstraint
             //la veille ?
             if ($lendemain->format('d-m-Y') == $datePresence->format('d-m-Y')) {
                 //si après 10h
-                $heure = (int)$today->format('G');
-                $minute = (int)$today->format('i');
+                $heure = (int) $today->format('G');
+                $minute = (int) $today->format('i');
                 if ($heure > 10) {
                     return false;
                 }

@@ -10,6 +10,8 @@
 
             {{ include('@AcMarcheMercrediAdmin/presence/_form.html.twig') }}
             <br/>
+        </div>
+        <div class="card-footer">
             <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
                 <i class="fas fa-long-arrow-alt-left"></i> Annuler
             </a>
