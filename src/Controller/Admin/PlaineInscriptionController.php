@@ -3,13 +3,15 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Dto\PlaineInscriptionDto;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
-use AcMarche\Mercredi\Plaine\Message\PlaineCreated;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Search\Form\SearchNameType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,29 +57,41 @@ class PlaineInscriptionController extends AbstractController
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        $dto = new PlaineInscriptionDto($plaine);
-        $enfants = $this->enfantRepository->findAll();
-
-        $plaine = new Plaine();
-        $form = $this->createForm(PlaineType::class, $plaine);
+        $nom = null;
+        $form = $this->createForm(SearchNameType::class, null);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->plaineRepository->persist($plaine);
-            $this->plaineRepository->flush();
+            $nom = $form->get('nom')->getData();
+        }
 
-            $this->dispatchMessage(new PlaineCreated($plaine->getId()));
-
-            return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
+        if ($nom) {
+            $enfants = $this->enfantRepository->findByName($nom);
+        } else {
+            $enfants = $this->enfantRepository->findAll();
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_inscription/new.html.twig',
             [
                 'enfants' => $enfants,
+                'plaine' => $plaine,
                 'form' => $form->createView(),
             ]
         );
+    }
+
+    /**
+     * @Route("/confirmation/{plaine}/{enfant}", name="mercredi_admin_plaine_inscription_confirmation", methods={"GET","POST"})
+     *
+     * @Entity("plaine", expr="repository.find(plaine)")
+     * @Entity("enfant", expr="repository.find(enfant)")
+     */
+    public function confirmation(Request $request, Plaine $plaine, Enfant $enfant): Response
+    {
+        $dto = new PlaineInscriptionDto($plaine);
+
+        return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
     }
 
     /**

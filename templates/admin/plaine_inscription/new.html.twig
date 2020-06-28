@@ -7,6 +7,17 @@
             <h3>Nouvelle inscription à {{ plaine }}</h3>
         </div>
         <div class="card-body">
+
+            {{ form_start(form, { 'attr': {'class': 'form-inline hidden-print'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.nom, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+
+            <button class="btn btn-primary mr-1" type="submit"><i class="fas fa-search"></i> Rechercher</button>
+
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+            <br/>
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -19,7 +30,7 @@
                 {% for enfant in enfants %}
                     <tr>
                         <td>
-                            <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
+                            <a href="{{ path('mercredi_admin_plaine_inscription_confirmation', { 'plaine': plaine.id,'enfant': enfant.id }) }}">
                                 {{ enfant.nom }}
                             </a>
                         </td>

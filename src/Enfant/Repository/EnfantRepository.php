@@ -25,12 +25,17 @@ class EnfantRepository extends ServiceEntityRepository
      *
      * @return Enfant[]
      */
-    public function findByName(string $keyword): array
+    public function findByName(string $keyword, bool $actif = true): array
     {
-        return $this->createQueryBuilder('enfant')
+        $qb = $this->createQueryBuilder('enfant')
             ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-            ->setParameter('keyword', '%'.$keyword.'%')
-            ->addOrderBy('enfant.nom', 'ASC')
+            ->setParameter('keyword', '%'.$keyword.'%');
+
+        if ($actif) {
+            $qb->andWhere('enfant.archived = 0');
+        }
+
+        return $qb->addOrderBy('enfant.nom', 'ASC')
             ->getQuery()->getResult();
     }
 
