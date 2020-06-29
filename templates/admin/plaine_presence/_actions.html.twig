@@ -2,6 +2,10 @@
    class="btn btn-primary"><i
             class="far fa-calendar"></i> Changer ses dates</a>
 
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+    <i class="fas fa-trash"></i> Retirer l'enfant de la plaine
+</button>
+
 <a href="{{ path('mercredi_admin_plaine_show', {'id': plaine.id}) }}" class="btn btn-primary" role='button'><i
             class="fas fa-list"></i>
     Retour à la plaine</a>

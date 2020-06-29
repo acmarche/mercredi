@@ -223,6 +223,7 @@ class PlainePresenceController extends AbstractController
             $tuteur = $presences[0]->getTuteur(); //todo bad
 
             $this->plainePresenceHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
+            $this->addFlash('success', 'Les présences ont bien été modifiées');
 
             return $this->redirectToRoute(
                 'mercredi_admin_plaine_presence_show',
@@ -249,7 +250,7 @@ class PlainePresenceController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int) $request->request->get('presence');
+            $presenceId = (int)$request->request->get('presence');
             if (!$presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
 
@@ -271,5 +272,18 @@ class PlainePresenceController extends AbstractController
             'mercredi_admin_plaine_presence_show',
             ['plaine' => $plaine->getId(), 'enfant' => $enfant->getId()]
         );
+    }
+
+    /**
+     * @Route("/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_remove_enfant", methods={"DELETE"})
+     */
+    public function remove(Request $request, Plaine $plaine, Enfant $enfant): Response
+    {
+        if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
+            $this->plainePresenceHandler->removeEnfant($plaine, $enfant);
+            $this->addFlash('success','L\'enfant a été retiré de la plaine');
+        }
+
+        return $this->redirectToRoute('mercredi_admin_plaine_show', ['id'=>$plaine->getId()]);
     }
 }

@@ -88,4 +88,13 @@ class PlainePresenceHandler
 
         $this->presenceRepository->flush();
     }
+
+    public function removeEnfant(Plaine $plaine, Enfant $enfant)
+    {
+        $presences = $this->findPresencesByPlaineEnfant($plaine, $enfant);
+        foreach ($presences as $presence) {
+            $this->presenceRepository->remove($presence);
+        }
+        $this->presenceRepository->flush();
+    }
 }
