@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Presence\Repository;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -37,7 +38,7 @@ class PresenceRepository extends ServiceEntityRepository
         return $jours;
     }
 
-    public function findByEnfantAndJour(Enfant $enfant, Jour $jour): Presence
+    public function findPresencesByEnfantAndJour(Enfant $enfant, Jour $jour): Presence
     {
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.jour', 'jour', 'WITH')
@@ -79,9 +80,35 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findPresencesNonPayes(Tuteur $tuteur)
+    /**
+     * @return Presence[]
+     */
+    public function findPresencesByPlaine(Plaine $plaine): array
     {
-        $this->findPresencesByTuteur($tuteur);
+        $jours = $plaine->getJours();
+
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour')
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours)
+            ->getQuery()->getResult();
+    }
+
+    public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant)
+    {
+        $jours = $plaine->getJours();
+
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour')
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours)
+            ->andWhere('presence.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->getQuery()->getResult();
     }
 
     /**

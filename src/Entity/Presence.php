@@ -70,6 +70,7 @@ class Presence implements TimestampableInterface, PresenceInterface
         $this->enfant = $enfant;
         $this->jour = $jour;
         $this->absent = 0;
+        $this->half = 0;
     }
 
     public function __toString()

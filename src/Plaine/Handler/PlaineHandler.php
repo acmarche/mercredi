@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 
 class PlaineHandler
 {
@@ -17,37 +18,27 @@ class PlaineHandler
      * @var JourRepository
      */
     private $jourRepository;
+    /**
+     * @var PresenceRepository
+     */
+    private $presenceRepository;
 
-    public function __construct(PlaineRepository $plaineRepository, JourRepository $jourRepository)
-    {
+    public function __construct(
+        PlaineRepository $plaineRepository,
+        JourRepository $jourRepository,
+        PresenceRepository $presenceRepository
+    ) {
         $this->plaineRepository = $plaineRepository;
         $this->jourRepository = $jourRepository;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
-     * @param Jour[] $jours
+     *
      */
-    public function handleJours(Plaine $plaine, iterable $jours)
+    public function handleEditJours()
     {
         $this->jourRepository->flush();
-        $this->plaineRepository->flush();
-
-        return;
-        foreach ($jours as $jour) {
-            if (null === $jour) {
-                continue;
-            }
-            $jour = $this->jourRepository->findOneBy(['date_jour' => $date]);
-            if ($jour) {
-            } else {
-                $jour = new Jour();
-                $jour->setDateJour($date);
-
-                $this->jourRepository->persist($jour);
-                $this->jourRepository->flush();
-            }
-            $plaine->addJour($jour);
-        }
         $this->plaineRepository->flush();
     }
 
@@ -64,4 +55,5 @@ class PlaineHandler
             $plaine->addJour($tomorrow);
         }
     }
+
 }

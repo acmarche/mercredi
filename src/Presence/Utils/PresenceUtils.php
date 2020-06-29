@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Presence\Utils;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -79,6 +80,24 @@ class PresenceUtils
         $enfants = array_unique($enfants, SORT_REGULAR);
 
         return $enfants;
+    }
+
+    /**
+     * @param Presence[] $presences
+     *
+     * @return Jour[]
+     */
+    public static function extractJours(array $presences): array
+    {
+        return array_unique(
+            array_map(
+                function ($presence) {
+                    return $presence->getJour();
+                },
+                $presences
+            ),
+            SORT_REGULAR
+        );
     }
 
     /**

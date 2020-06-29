@@ -3,9 +3,11 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
+use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
 use AcMarche\Mercredi\Plaine\Message\PlaineCreated;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -29,11 +31,23 @@ class PlaineController extends AbstractController
      * @var EnfantRepository
      */
     private $enfantRepository;
+    /**
+     * @var PlaineHandler
+     */
+    private $plaineHandler;
+    /**
+     * @var PlainePresenceRepository
+     */
+    private $plainePresenceRepository;
 
-    public function __construct(PlaineRepository $plaineRepository, EnfantRepository $enfantRepository)
-    {
+    public function __construct(
+        PlaineRepository $plaineRepository,
+        EnfantRepository $enfantRepository,
+        PlainePresenceRepository $plainePresenceRepository
+    ) {
         $this->plaineRepository = $plaineRepository;
         $this->enfantRepository = $enfantRepository;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -64,7 +78,7 @@ class PlaineController extends AbstractController
 
             $this->dispatchMessage(new PlaineCreated($plaine->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
+            return $this->redirectToRoute('mercredi_admin_plaine_jour_edit', ['id' => $plaine->getId()]);
         }
 
         return $this->render(
@@ -80,10 +94,13 @@ class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine): Response
     {
+        $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',
             [
                 'plaine' => $plaine,
+                'enfants' => $enfants,
             ]
         );
     }

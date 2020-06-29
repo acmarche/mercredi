@@ -12,6 +12,7 @@
             <th>Nom</th>
             <th>Nbre de jours</th>
             <th>Nbre enfants</th>
+            <th>Inscription ouverte</th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
                 </td>
                 <td>{{ plaine.jours | length }}</td>
                 <td></td>
+                <td>{{ plaine.inscriptionOpen ? 'Oui' }}</td>
             </tr>
         {% endfor %}
         </tbody>

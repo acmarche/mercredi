@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div class="card bg-light mb-3">
+    <div class="card mb-3">
         <div class="card-header">
             <h3>Nouvelle inscription à {{ plaine }}</h3>
         </div>
@@ -30,7 +30,7 @@
                 {% for enfant in enfants %}
                     <tr>
                         <td>
-                            <a href="{{ path('mercredi_admin_plaine_inscription_confirmation', { 'plaine': plaine.id,'enfant': enfant.id }) }}">
+                            <a href="{{ path('mercredi_admin_plaine_presence_select_tuteur', { 'plaine': plaine.id,'enfant': enfant.id }) }}">
                                 {{ enfant.nom }}
                             </a>
                         </td>

@@ -1,0 +1,72 @@
+<?php
+
+namespace AcMarche\Mercredi\Plaine\Handler;
+
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+
+class PlainePresenceHandler
+{
+    /**
+     * @var PlaineRepository
+     */
+    private $plaineRepository;
+    /**
+     * @var JourRepository
+     */
+    private $jourRepository;
+    /**
+     * @var PresenceRepository
+     */
+    private $presenceRepository;
+
+    public function __construct(
+        PlaineRepository $plaineRepository,
+        JourRepository $jourRepository,
+        PresenceRepository $presenceRepository
+    ) {
+        $this->plaineRepository = $plaineRepository;
+        $this->jourRepository = $jourRepository;
+        $this->presenceRepository = $presenceRepository;
+    }
+
+    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant)
+    {
+        foreach ($plaine->getJours() as $jour) {
+            $presence = new Presence($tuteur, $enfant, $jour);
+            $this->presenceRepository->persist($presence);
+        }
+        $this->presenceRepository->flush();
+    }
+
+    public function findPresence(int $presenceId): ?Presence
+    {
+        return $this->presenceRepository->find($presenceId);
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findPresencesByPlaineEnfant(Plaine $plaine, Enfant $enfant): array
+    {
+        return $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
+    }
+
+    public function remove(Presence $presence)
+    {
+        $this->presenceRepository->remove($presence);
+        $this->presenceRepository->flush();
+    }
+
+    public function handleEditPresence(Presence $presence)
+    {
+        $this->presenceRepository->flush();
+    }
+}

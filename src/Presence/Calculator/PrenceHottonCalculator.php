@@ -54,8 +54,9 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
         if ($jour->isPedagogique()) {
             if ($presence->isHalf()) {
                 $prix = $jour->getPrix2();
+            } else {
+                $prix = $jour->getPrix1();
             }
-            $prix = $jour->getPrix1();
         } else {
             $ordre = $this->getOrder($presence);
             $prix = $this->getPrixByOrdre($jour, $ordre);
@@ -92,7 +93,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
             [$tuteur]
         );
 
-        if (0 == count($fratries)) {
+        if (0 == count($fratries)) {//pas de fraterie ce jour là
             return $ordreBase;
         }
 
@@ -100,7 +101,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
 
         $presents = [];
         foreach ($fratries as $fratry) {
-            if ($this->presenceRepository->findByEnfantAndJour($fratry, $jour)) {
+            if ($this->presenceRepository->findPresencesByEnfantAndJour($fratry, $jour)) {
                 $presents[] = $fratry;
             }
         }
@@ -109,7 +110,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
             return $ordreBase;
         }
 
-        return $ordreBase - count($presents);
+        return $ordreBase - count($presents); //todo verifier calcul
 
         //lisa = 2, si marie en 1 reste 2
         //lisa = 3, si marie en 1 devient 2

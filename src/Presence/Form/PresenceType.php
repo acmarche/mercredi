@@ -27,7 +27,13 @@ class PresenceType extends AbstractType
                     'choices' => array_flip(MercrediConstantes::getListAbsences()),
                 ]
             )
-            ->add('ordre', OrdreType::class)
+            ->add(
+                'ordre',
+                OrdreType::class,
+                [
+                    'help' => 'En forçant l\ordre, la fraterie présente ne sera pas tenu en compte',
+                ]
+            )
             ->add('remarque', RemarqueType::class)
             ->add('reduction');
 

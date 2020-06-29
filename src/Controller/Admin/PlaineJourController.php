@@ -66,9 +66,8 @@ class PlaineJourController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $jours = $data->getJours();
-            $this->plaineHandler->handleJours($plaine, $jours);
+
+            $this->plaineHandler->handleEditJours();
 
             $this->addFlash('success', 'les dates ont bien été enregistrées');
 

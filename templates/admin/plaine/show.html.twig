@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div class="card bg-light mb-3">
+    <div class="card mb-3">
         <div class="card-header">
             <h3>{{ plaine }}</h3>
         </div>
@@ -11,9 +11,7 @@
             {% include '@AcMarcheMercrediAdmin/plaine/_actions.html.twig' %}
 
             {% if plaine.inscriptionOpen %}
-                <div class="alert alert-warning">Les inscriptions sont ouvertes</div>
-            {% else %}
-                <p class="card-text">Les inscriptions ne sont pas ouvertes</p>
+                <div class="alert alert-warning">Les inscriptions sont ouvertes aux parents</div>
             {% endif %}
 
             {% if plaine.remarque %}
@@ -23,6 +21,7 @@
             {% endif %}
             <br/>
             {% include '@AcMarcheMercrediAdmin/plaine/_list_jours.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/plaine/_enfants.html.twig' %}
 
         </div>
     </div>
