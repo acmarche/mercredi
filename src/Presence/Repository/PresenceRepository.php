@@ -158,9 +158,21 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    public function findOneByEnfantJour(Enfant $enfant, $jour): ?Presence
+    {
+        return $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->andWhere('presence.jour = :jour')
+            ->setParameter('jour', $jour)
+            ->andWhere('presence.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * @param string $nom
-     * @param Ecole  $ecole
+     * @param Ecole $ecole
      * @param string $annee_scolaire
      *
      * @return Presence[]

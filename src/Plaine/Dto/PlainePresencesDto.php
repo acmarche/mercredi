@@ -5,26 +5,26 @@ namespace AcMarche\Mercredi\Plaine\Dto;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 class PlainePresencesDto
 {
     private $plaine;
-
     private $enfant;
-
     private $jours;
 
-    private $presences;
+    /**
+     * @var Jour[]|ArrayCollection
+     */
+    public $daysOfPlaine;
 
-    public function __construct(Plaine $plaine, Enfant $enfant)
+    public function __construct(Plaine $plaine, Enfant $enfant, iterable $daysOfPlaine)
     {
         $this->plaine = $plaine;
-        $this->presences = new ArrayCollection();
-        $this->jours = new ArrayCollection();
         $this->enfant = $enfant;
+        $this->jours = new ArrayCollection();
+        $this->daysOfPlaine = $daysOfPlaine;
     }
 
     /**
@@ -35,22 +35,9 @@ class PlainePresencesDto
         return $this->enfant;
     }
 
-    /**
-     * @param mixed $enfant
-     */
-    public function setEnfant($enfant): void
-    {
-        $this->enfant = $enfant;
-    }
-
     public function getPlaine(): Plaine
     {
         return $this->plaine;
-    }
-
-    public function setPlaine(Plaine $plaine): void
-    {
-        $this->plaine = $plaine;
     }
 
     /**
@@ -61,40 +48,6 @@ class PlainePresencesDto
         foreach ($jours as $jour) {
             $this->addJour($jour);
         }
-    }
-
-    /**
-     * @param mixed $presences
-     */
-    public function setPresences($presences): void
-    {
-        $this->presences = $presences;
-    }
-
-    /**
-     * @return Collection|Presence[]
-     */
-    public function getPresences(): Collection
-    {
-        return $this->presences;
-    }
-
-    public function addPresence(Presence $presence): self
-    {
-        if (!$this->presences->contains($presence)) {
-            $this->presences[] = $presence;
-        }
-
-        return $this;
-    }
-
-    public function removePresence(Presence $presence): self
-    {
-        if ($this->presences->contains($presence)) {
-            $this->presences->removeElement($presence);
-        }
-
-        return $this;
     }
 
     /**

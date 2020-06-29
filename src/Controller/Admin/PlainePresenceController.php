@@ -208,19 +208,21 @@ class PlainePresenceController extends AbstractController
      */
     public function jours(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
-        $plaineDto = new PlainePresencesDto($plaine, $enfant);
+        $plaineDto = new PlainePresencesDto($plaine, $enfant, $plaine->getJours());
 
         $presences = $this->plainePresenceHandler->findPresencesByPlaineEnfant($plaine, $enfant);
-        $jours = PresenceUtils::extractJours($presences);
-        $alljours = $plaine->getJours();
-
-        $plaineDto->setJours($alljours);
+        $currentJours = PresenceUtils::extractJours($presences);
+        $plaineDto->setJours($currentJours);
 
         $form = $this->createForm(PlainePresencesEditType::class, $plaineDto);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->plainePresenceHandler->handleEditPresences($jours);
+            $new = $plaineDto->getJours();
+            $tuteur = $presences[0]->getTuteur(); //todo bad
+
+            $this->plainePresenceHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
 
             return $this->redirectToRoute(
                 'mercredi_admin_plaine_presence_show',

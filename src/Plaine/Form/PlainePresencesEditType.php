@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Plaine\Form;
 
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -11,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
 
 class PlainePresencesEditType extends AbstractType
 {
@@ -21,10 +21,10 @@ class PlainePresencesEditType extends AbstractType
             function (FormEvent $event) {
                 $form = $event->getForm();
                 /**
-                 * @var Plaine $plaine
+                 * @var PlainePresencesDto $dto
                  */
-                $plaine = $event->getData();
-                $jours = $plaine->getJours();
+                $dto = $event->getData();
+                $jours = $dto->daysOfPlaine;
 
                 $form->add(
                     'jours',
@@ -35,6 +35,7 @@ class PlainePresencesEditType extends AbstractType
                         'required' => false,
                         'multiple' => true,
                         'expanded' => true,
+                        'constraints' => [new Count(['min' => 1])],
                     ]
                 );
             }

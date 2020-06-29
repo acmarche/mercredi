@@ -3,14 +3,13 @@
 namespace AcMarche\Mercredi\Plaine\Handler;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use Doctrine\Common\Collections\Collection;
 
 class PlainePresenceHandler
 {
@@ -67,6 +66,26 @@ class PlainePresenceHandler
 
     public function handleEditPresence(Presence $presence)
     {
+        $this->presenceRepository->flush();
+    }
+
+    public function handleEditPresences(Tuteur $tuteur, Enfant $enfant, array $currentJours, Collection $new)
+    {
+        $enMoins = array_diff($currentJours, $new->toArray());
+        $enPlus = array_diff($new->toArray(), $currentJours);
+
+        foreach ($enPlus as $jour) {
+            $presence = new Presence($tuteur, $enfant, $jour);
+            $this->presenceRepository->persist($presence);
+        }
+
+        foreach ($enMoins as $jour) {
+            $presence = $this->presenceRepository->findOneByEnfantJour($enfant, $jour);
+            if ($presence) {
+                $this->presenceRepository->remove($presence);
+            }
+        }
+
         $this->presenceRepository->flush();
     }
 }
