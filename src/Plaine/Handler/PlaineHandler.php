@@ -34,10 +34,28 @@ class PlaineHandler
     }
 
     /**
-     *
+     * @param Jour[] $jours
      */
-    public function handleEditJours()
+    public function handleEditJours(Plaine $plaine, array $jours, iterable $currentJours)
     {
+        $enMoins = array_diff( $jours,$currentJours->toArray());
+
+        foreach ($jours as $jour) {
+            $date = $jour->getDateJour();
+            if ($jourExistant = $this->jourRepository->findOneBy(['date_jour' => $date])) {
+                $jourExistant->setPlaine($plaine);
+                $plaine->removeJour($jour);
+                $plaine->addJour($jourExistant);
+            } else {
+                $jour->setPlaine($plaine);
+                $this->jourRepository->persist($jour);
+            }
+        }
+
+        foreach ($enMoins as $jour) {
+            $plaine->removeJour($jour);
+        }
+
         $this->jourRepository->flush();
         $this->plaineRepository->flush();
     }
@@ -47,13 +65,20 @@ class PlaineHandler
      */
     public function initJours(Plaine $plaine): void
     {
-        $jours = $plaine->getJours();
-        if (0 == $jours->count()) {
-            $today = new Jour(new \DateTime());
-            $tomorrow = new Jour(new \DateTime('+1day'));
-            $plaine->addJour($today);
-            $plaine->addJour($tomorrow);
-        }
+        $today = new Jour(new \DateTime());
+        $today->setPlaine($plaine);
+        $tomorrow = new Jour(new \DateTime('+1day'));
+        $tomorrow->setPlaine($plaine);
+        $plaine->addJour($today);
+        $plaine->addJour($tomorrow);
+    }
+
+    /**
+     * @return Jour[]
+     */
+    public function findJoursByPlaine(Plaine $plaine): array
+    {
+        return $this->jourRepository->findBy(['plaine' => $plaine]);
     }
 
 }

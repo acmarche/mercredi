@@ -35,3 +35,11 @@ AcMarche\Mercredi\Entity\Jour:
     prix1: '<randomFloat(2, 2, 7)>'
     prix2: '<randomFloat(2, 2, 7)>'
     prix3: '<randomFloat(2, 2, 7)>'
+  jour_2020_09_30:
+    date_jour: '<carbonDateTime(2020,09,30,9,0)>'
+    pedagogique: '1'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
+    forfait: '1'

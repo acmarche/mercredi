@@ -23,7 +23,7 @@ class Plaine
 
     /**
      * @var Jour[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", mappedBy="plaine", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", mappedBy="plaine", cascade={"remove"})
      */
     private $jours;
 
@@ -37,6 +37,4 @@ class Plaine
     {
         return $this->nom;
     }
-
-
 }

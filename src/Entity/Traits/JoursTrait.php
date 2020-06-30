@@ -26,6 +26,7 @@ trait JoursTrait
     {
         if (!$this->jours->contains($jour)) {
             $this->jours[] = $jour;
+            $jour->setPlaine($this);
         }
 
         return $this;
@@ -35,8 +36,13 @@ trait JoursTrait
     {
         if ($this->jours->contains($jour)) {
             $this->jours->removeElement($jour);
+            // set the owning side to null (unless already changed)
+            if ($jour->getPlaine() === $this) {
+                $jour->setPlaine(null);
+            }
         }
 
         return $this;
     }
+
 }

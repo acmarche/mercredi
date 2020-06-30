@@ -61,13 +61,17 @@ class PlaineJourController extends AbstractController
      */
     public function edit(Request $request, Plaine $plaine): Response
     {
-        $this->plaineHandler->initJours($plaine);
+        $currentJours = $this->plaineHandler->findJoursByPlaine($plaine);
+        if (count($currentJours) == 0) {
+            $this->plaineHandler->initJours($plaine);
+        }
+
         $form = $this->createForm(PlaineJourType::class, $plaine);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->plaineHandler->handleEditJours();
+            $jours = $form->get('jours')->getData();
+            $this->plaineHandler->handleEditJours($plaine, $currentJours, $jours);
 
             $this->addFlash('success', 'les dates ont bien été enregistrées');
 

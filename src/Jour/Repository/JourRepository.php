@@ -39,6 +39,8 @@ class JourRepository extends ServiceEntityRepository
         $qb->andwhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC');
 
+        $this->filterPlaine($qb);
+
         return $qb;
     }
 
@@ -49,11 +51,14 @@ class JourRepository extends ServiceEntityRepository
      */
     public function findDaysByMonth(\DateTimeInterface $date): array
     {
-        return $this->createQueryBuilder('jour')
+        $qb = $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')
             ->setParameter('date', $date->format('Y-m').'%')
-            ->addOrderBy('jour.date_jour', 'ASC')
-            ->getQuery()->getResult();
+            ->addOrderBy('jour.date_jour', 'ASC');
+
+        $this->filterPlaine($qb);
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findActifs()
@@ -61,6 +66,8 @@ class JourRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('jour')
             ->andWhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC');
+
+        $this->filterPlaine($qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -71,14 +78,11 @@ class JourRepository extends ServiceEntityRepository
             ->andWhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC');
 
+        $this->filterPlaine($qb);
+
         return $qb;
     }
 
-    /**
-     * @param Enfant $enfant
-     * @return QueryBuilder
-     *
-     */
     public function getQbForParent(Enfant $enfant): QueryBuilder
     {
         $qb = $this->getQbDaysNotRegisteredByEnfant($enfant);
@@ -93,6 +97,11 @@ class JourRepository extends ServiceEntityRepository
             ->setParameter('today', $today);
 
         return $qb;
+    }
+
+    private function filterPlaine(QueryBuilder $queryBuilder)
+    {
+        $queryBuilder->andWhere('jour.plaine IS NULL');
     }
 
     public function remove(Jour $jour)
