@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Form\AssociateParentType;
 use AcMarche\Mercredi\User\Handler\AssociationHandler;
@@ -23,11 +24,17 @@ class AssocierParentController extends AbstractController
      * @var AssociationHandler
      */
     private $associationHandler;
+    /**
+     * @var TuteurRepository
+     */
+    private $tuteurRepository;
 
     public function __construct(
-        AssociationHandler $associationHandler
+        AssociationHandler $associationHandler,
+        TuteurRepository $tuteurRepository
     ) {
         $this->associationHandler = $associationHandler;
+        $this->tuteurRepository = $tuteurRepository;
     }
 
     /**
@@ -64,17 +71,22 @@ class AssocierParentController extends AbstractController
 
     /**
      * @Route("/{id}", name="mercredi_user_dissociate_parent", methods={"DELETE"})
+     *
      */
     public function dissociate(Request $request, User $user)
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
-            $tuteurId = (int)$request->request->get('tuteur');
+            $tuteurId = (int) $request->request->get('tuteur');
             if (!$tuteurId) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');
 
                 return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
             }
-            $this->associationHandler->handleDissociateParent($user, $tuteurId);
+
+            $tuteur = $this->tuteurRepository->find($tuteurId);
+            $this->associationHandler->handleDissociateParent($user, $tuteur);
+
+            return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
 
         return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);

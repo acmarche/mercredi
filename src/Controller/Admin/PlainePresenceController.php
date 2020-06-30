@@ -87,7 +87,7 @@ class PlainePresenceController extends AbstractController
         if ($nom) {
             $enfants = $this->enfantRepository->findByName($nom);
         } else {
-            $enfants = $this->enfantRepository->findAll();
+            $enfants = $this->enfantRepository->findAllActif();
         }
 
         return $this->render(

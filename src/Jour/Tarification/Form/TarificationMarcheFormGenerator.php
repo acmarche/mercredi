@@ -24,7 +24,7 @@ class TarificationMarcheFormGenerator implements TarificationFormGeneratorInterf
         $this->environment = $environment;
     }
 
-    public function generate(Jour $jour): FormInterface
+    public function generateForm(Jour $jour): FormInterface
     {
         return $this->formFactory->create(JourTarificationDegressiveType::class, $jour);
     }

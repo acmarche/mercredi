@@ -83,7 +83,7 @@ class JourController extends AbstractController
      */
     public function tarif(Request $request, Jour $jour): Response
     {
-        $form = $this->tarificationFormGenerator->generate($jour);
+        $form = $this->tarificationFormGenerator->generateForm($jour);
 
         $form->handleRequest($request);
 

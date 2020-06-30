@@ -2,8 +2,10 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Plaine\PlaineTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\ColorTrait;
+use AcMarche\Mercredi\Entity\Traits\ForfaitTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\PedagogiqueTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -29,6 +31,8 @@ class Jour implements TimestampableInterface
     use RemarqueTrait;
     use ArchiveTrait;
     use PedagogiqueTrait;
+    use ForfaitTrait;
+    use PlaineTrait;
 
     /**
      * @var \DateTime|null
@@ -46,11 +50,17 @@ class Jour implements TimestampableInterface
      */
     private $presences;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="jours")
+     */
+    private $plaine;
+
     public function __construct(?\DateTime $date_jour = null)
     {
-        $this->prix1 = 0.0;
-        $this->prix2 = 0.0;
-        $this->prix3 = 0.0;
+        $this->prix1 = 0;
+        $this->prix2 = 0;
+        $this->prix3 = 0;
+        $this->forfait = 0;
         $this->pedagogique = false;
         $this->presences = new ArrayCollection();
         $this->date_jour = $date_jour;

@@ -38,7 +38,7 @@ class PresenceRepository extends ServiceEntityRepository
         return $jours;
     }
 
-    public function findPresencesByEnfantAndJour(Enfant $enfant, Jour $jour): Presence
+    public function findPresencesByEnfantAndJour(Enfant $enfant, Jour $jour): ?Presence
     {
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.jour', 'jour', 'WITH')

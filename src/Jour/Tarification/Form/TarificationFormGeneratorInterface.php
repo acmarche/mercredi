@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormInterface;
 
 interface TarificationFormGeneratorInterface
 {
-    public function generate(Jour $jour): FormInterface;
+    public function generateForm(Jour $jour): FormInterface;
 
     public function generateTarifsHtml(Jour $jour): string;
 }

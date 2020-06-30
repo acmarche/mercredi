@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Doctrine\Common\Collections\Collection;
 
@@ -25,24 +26,26 @@ class PlainePresenceHandler
      * @var PresenceRepository
      */
     private $presenceRepository;
+    /**
+     * @var PresenceHandler
+     */
+    private $presenceHandler;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         JourRepository $jourRepository,
-        PresenceRepository $presenceRepository
+        PresenceRepository $presenceRepository,
+        PresenceHandler $presenceHandler
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->jourRepository = $jourRepository;
         $this->presenceRepository = $presenceRepository;
+        $this->presenceHandler = $presenceHandler;
     }
 
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant)
     {
-        foreach ($plaine->getJours() as $jour) {
-            $presence = new Presence($tuteur, $enfant, $jour);
-            $this->presenceRepository->persist($presence);
-        }
-        $this->presenceRepository->flush();
+        $this->presenceHandler->handleNew($tuteur, $enfant, $plaine->getJours());
     }
 
     public function findPresence(int $presenceId): ?Presence

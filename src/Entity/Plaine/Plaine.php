@@ -23,7 +23,7 @@ class Plaine
 
     /**
      * @var Jour[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", mappedBy="plaine", cascade={"persist", "remove"})
      */
     private $jours;
 

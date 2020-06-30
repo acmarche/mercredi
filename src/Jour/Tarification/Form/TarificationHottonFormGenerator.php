@@ -24,21 +24,21 @@ class TarificationHottonFormGenerator implements TarificationFormGeneratorInterf
         $this->environment = $environment;
     }
 
-    public function generate(Jour $jour): FormInterface
+    public function generateForm(Jour $jour): FormInterface
     {
         if ($jour->isPedagogique()) {
-            return $this->generateFullDayType($jour);
+            return $this->generateFullDayFormType($jour);
         }
 
-        return $this->generateDegressifType($jour);
+        return $this->generateDegressifFormType($jour);
     }
 
-    private function generateDegressifType(Jour $jour): FormInterface
+    private function generateDegressifFormType(Jour $jour): FormInterface
     {
         return $this->formFactory->create(JourTarificationDegressiveWithForfaitType::class, $jour);
     }
 
-    private function generateFullDayType(Jour $jour): FormInterface
+    private function generateFullDayFormType(Jour $jour): FormInterface
     {
         return $this->formFactory->create(JourTarificationFullDayType::class, $jour);
     }

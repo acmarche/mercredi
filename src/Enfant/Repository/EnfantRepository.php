@@ -21,6 +21,17 @@ class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Enfant[]
+     */
+    public function findAllActif(): array
+    {
+        return $this->createQueryBuilder('enfant')
+            ->andWhere('enfant.archived = 0')
+            ->addOrderBy('enfant.nom', 'ASC')
+            ->getQuery()->getResult();
+    }
+
+    /**
      * @param $keyword
      *
      * @return Enfant[]

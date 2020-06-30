@@ -43,7 +43,7 @@ class PresenceHandler
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function handleNew(Tuteur $tuteur, Enfant $enfant, array $days)
+    public function handleNew(Tuteur $tuteur, Enfant $enfant, iterable $days)
     {
         foreach ($days as $jour) {
             if ($this->presenceRepository->isRegistered($enfant, $jour)) {
@@ -57,7 +57,7 @@ class PresenceHandler
             $presence = new Presence($tuteur, $enfant, $jour);
             $this->presenceRepository->persist($presence);
         }
-             $this->presenceRepository->flush();
+        $this->presenceRepository->flush();
     }
 
     public function handleForGrouping(Jour $jour, ?Ecole $ecole, bool $displayRemarque): array
@@ -76,6 +76,7 @@ class PresenceHandler
         foreach ($this->constraints as $constraint) {
             if (!$constraint->check($jour->getDateJour())) {
                 $constraint->addFlashError($jour);
+
                 return false;
             }
         }
