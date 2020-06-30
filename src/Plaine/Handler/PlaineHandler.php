@@ -38,7 +38,9 @@ class PlaineHandler
      */
     public function handleEditJours(Plaine $plaine, array $jours, iterable $currentJours)
     {
-        $enMoins = array_diff( $jours,$currentJours->toArray());
+        $enMoins = array_diff($jours, $currentJours->toArray());
+        dump($currentJours);
+        dump($jours);
 
         foreach ($jours as $jour) {
             $date = $jour->getDateJour();
@@ -46,8 +48,10 @@ class PlaineHandler
                 $jourExistant->setPlaine($plaine);
                 $plaine->removeJour($jour);
                 $plaine->addJour($jourExistant);
+                dump($jourExistant);
             } else {
                 $jour->setPlaine($plaine);
+                dump($jour);
                 $this->jourRepository->persist($jour);
             }
         }
@@ -67,8 +71,10 @@ class PlaineHandler
     {
         $today = new Jour(new \DateTime());
         $today->setPlaine($plaine);
+        $this->jourRepository->persist($today);
         $tomorrow = new Jour(new \DateTime('+1day'));
         $tomorrow->setPlaine($plaine);
+        $this->jourRepository->persist($tomorrow);
         $plaine->addJour($today);
         $plaine->addJour($tomorrow);
     }
@@ -80,5 +86,4 @@ class PlaineHandler
     {
         return $this->jourRepository->findBy(['plaine' => $plaine]);
     }
-
 }

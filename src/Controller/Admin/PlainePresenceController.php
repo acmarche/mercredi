@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
@@ -50,19 +51,25 @@ class PlainePresenceController extends AbstractController
      * @var PlainePresenceRepository
      */
     private $plainePresenceRepository;
+    /**
+     * @var PlaineCalculatorInterface
+     */
+    private $plaineCalculator;
 
     public function __construct(
         PlainePresenceHandler $plainePresenceHandler,
         PlaineRepository $plaineRepository,
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
-        PlainePresenceRepository $plainePresenceRepository
+        PlainePresenceRepository $plainePresenceRepository,
+        PlaineCalculatorInterface $plaineCalculator
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->enfantRepository = $enfantRepository;
         $this->plainePresenceHandler = $plainePresenceHandler;
         $this->relationRepository = $relationRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
+        $this->plaineCalculator = $plaineCalculator;
     }
 
     /**
@@ -158,6 +165,7 @@ class PlainePresenceController extends AbstractController
     public function show(Plaine $plaine, Enfant $enfant): Response
     {
         $presences = $this->plainePresenceRepository->findPrecencesByPlaineAndEnfant($plaine, $enfant);
+        $cout = $this->plaineCalculator->calculate($plaine, $enfant);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/show.html.twig',
@@ -165,6 +173,7 @@ class PlainePresenceController extends AbstractController
                 'plaine' => $plaine,
                 'enfant' => $enfant,
                 'presences' => $presences,
+                'cout' => $cout,
             ]
         );
     }
@@ -281,9 +290,9 @@ class PlainePresenceController extends AbstractController
     {
         if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
             $this->plainePresenceHandler->removeEnfant($plaine, $enfant);
-            $this->addFlash('success','L\'enfant a été retiré de la plaine');
+            $this->addFlash('success', 'L\'enfant a été retiré de la plaine');
         }
 
-        return $this->redirectToRoute('mercredi_admin_plaine_show', ['id'=>$plaine->getId()]);
+        return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
     }
 }

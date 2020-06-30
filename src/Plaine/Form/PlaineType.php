@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Plaine\Form;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,6 +16,24 @@ class PlaineType extends AbstractType
     {
         $builder
             ->add('nom')
+            ->add(
+                'prix1',
+                MoneyType::class,
+                [
+                    'required' => true,
+                    'label' => 'Prix 1er enfant',
+                    'help' => 'Uniquement les chiffres',
+                ]
+            )
+            ->add(
+                'prix2',
+                MoneyType::class,
+                [
+                    'required' => true,
+                    'label' => 'Prix 2iem enfant et suivant',
+                    'help' => 'Uniquement les chiffres',
+                ]
+            )
             ->add(
                 'inscriptionOpen',
                 CheckboxType::class,

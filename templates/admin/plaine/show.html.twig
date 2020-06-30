@@ -14,6 +14,18 @@
                 <div class="alert alert-warning">Les inscriptions sont ouvertes aux parents</div>
             {% endif %}
 
+            <h4 class="text-success">Tarifs</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Prix premier enfant</th>
+                    <td>{{ plaine.prix1 }} €</td>
+                </tr>
+                <tr>
+                    <th>Prix enfants suivants</th>
+                    <td>{{ plaine.prix2 }} €</td>
+                </tr>
+            </table>
+
             {% if plaine.remarque %}
                 <p class="text-muted">
                     {{ plaine.remarque | nl2br }}

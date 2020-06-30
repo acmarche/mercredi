@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\JoursTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\PrixTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,7 @@ class Plaine
     use RemarqueTrait;
     use JoursTrait;
     use InscriptionOpen;
+    use PrixTrait;
 
     /**
      * @var Jour[]
@@ -31,6 +33,9 @@ class Plaine
     {
         $this->jours = new ArrayCollection();
         $this->inscriptionOpen = false;
+        $this->prix1 = 0;
+        $this->prix2 = 0;
+        $this->prix3 = 0;
     }
 
     public function __toString()
