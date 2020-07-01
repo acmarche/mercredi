@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Plaine\Form;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,6 +33,23 @@ class PlaineType extends AbstractType
                     'required' => true,
                     'label' => 'Prix 2iem enfant et suivant',
                     'help' => 'Uniquement les chiffres',
+                ]
+            )
+
+            ->add(
+                'max',
+                CollectionType::class,
+                [
+                    'entry_type' => PlaineMaxType::class,
+                    'label' => 'Maximum par groupe',
+                ]
+            )
+            ->add(
+                'prematernelle',
+                CheckboxType::class,
+                [
+                    'required' => false,
+                    'label' => 'Distinguer les prématernelles pour le listing ?',
                 ]
             )
             ->add(

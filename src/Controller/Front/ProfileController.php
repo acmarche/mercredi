@@ -12,6 +12,7 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -68,7 +69,7 @@ class ProfileController extends AbstractController
     /**
      * @Route("/redirect", name="mercredi_front_profile_redirect")
      */
-    public function redirectByProfile()
+    public function redirectByProfile(): Response
     {
         /**
          * @var User
@@ -76,7 +77,7 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
 
         if ($user) {
-            $roles = MercrediSecurity::getRolesForProfile($user);
+            $roles = $user->getRoles();
 
             if (count($roles) > 1) {
                 return $this->redirectToRoute('mercredi_front_select_profile');
@@ -99,7 +100,7 @@ class ProfileController extends AbstractController
             }
         }
 
-        $this->addFlash('warning', 'Aucun rôle ne vous a été trouvé');
+        $this->addFlash('warning', 'Aucun rôle ne vous a été attribué');
 
         return $this->redirectToRoute('mercredi_front_home');
     }

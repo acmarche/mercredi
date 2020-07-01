@@ -31,15 +31,15 @@ class JourRepository extends ServiceEntityRepository
             ->findDaysRegisteredByEnfant($enfant);
 
         $qb = $this->createQueryBuilder('jour');
+
         if (count($joursRegistered) > 0) {
             $qb
                 ->andWhere('jour.id NOT IN (:jours)')
                 ->setParameter('jours', $joursRegistered);
         }
+
         $qb->andwhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC');
-
-        $this->filterPlaine($qb);
 
         return $qb;
     }
@@ -51,36 +51,26 @@ class JourRepository extends ServiceEntityRepository
      */
     public function findDaysByMonth(\DateTimeInterface $date): array
     {
-        $qb = $this->createQueryBuilder('jour')
+        return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')
             ->setParameter('date', $date->format('Y-m').'%')
-            ->addOrderBy('jour.date_jour', 'ASC');
-
-        $this->filterPlaine($qb);
-
-        return $qb->getQuery()->getResult();
+            ->addOrderBy('jour.date_jour', 'ASC')
+            ->getQuery()->getResult();
     }
 
     public function findActifs()
     {
-        $qb = $this->createQueryBuilder('jour')
+        return $this->createQueryBuilder('jour')
             ->andWhere('jour.archived = 0')
-            ->orderBy('jour.date_jour', 'DESC');
-
-        $this->filterPlaine($qb);
-
-        return $qb->getQuery()->getResult();
+            ->orderBy('jour.date_jour', 'DESC')
+            ->getQuery()->getResult();
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('jour')
+        return $this->createQueryBuilder('jour')
             ->andWhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC');
-
-        $this->filterPlaine($qb);
-
-        return $qb;
     }
 
     public function getQbForParent(Enfant $enfant): QueryBuilder
@@ -99,9 +89,12 @@ class JourRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    private function filterPlaine(QueryBuilder $queryBuilder)
+    public function findOneByDateJour(\DateTime $date): ?Jour
     {
-        $queryBuilder->andWhere('jour.plaine IS NULL');
+        return $this->createQueryBuilder('jour')
+            ->andWhere('jour.date_jour LIKE :date')
+            ->setParameter('date', $date->format('Y-m-d').'%')
+            ->getQuery()->getOneOrNullResult();
     }
 
     public function remove(Jour $jour)

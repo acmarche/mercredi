@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity\Traits;
+namespace AcMarche\Mercredi\Entity\Plaine;
 
 use AcMarche\Mercredi\Entity\Jour;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,11 +14,20 @@ trait JoursTrait
      * */
     private $jours;
 
+    public function initJours()
+    {
+        $this->jours = new ArrayCollection();
+    }
+
     /**
      * @return Collection|Jour[]
      */
     public function getJours(): Collection
     {
+        if (!$this->jours) {
+            $this->jours = new ArrayCollection();
+        }
+
         return $this->jours;
     }
 
@@ -26,7 +35,6 @@ trait JoursTrait
     {
         if (!$this->jours->contains($jour)) {
             $this->jours[] = $jour;
-            $jour->setPlaine($this);
         }
 
         return $this;
@@ -36,10 +44,6 @@ trait JoursTrait
     {
         if ($this->jours->contains($jour)) {
             $this->jours->removeElement($jour);
-            // set the owning side to null (unless already changed)
-            if ($jour->getPlaine() === $this) {
-                $jour->setPlaine(null);
-            }
         }
 
         return $this;

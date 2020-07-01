@@ -21,6 +21,12 @@ class SanteQuestion
     use RemarqueTrait;
 
     /**
+     * @var string|null
+     * @ORM\Column(type="string", length=200)
+     */
+    private $nom;
+
+    /**
      * Information complementaire necessaire.
      *
      * @var bool

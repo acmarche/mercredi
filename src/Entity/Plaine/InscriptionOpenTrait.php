@@ -7,7 +7,7 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait InscriptionOpen
+trait InscriptionOpenTrait
 {
     /**
      * @var bool

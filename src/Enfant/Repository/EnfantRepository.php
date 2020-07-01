@@ -69,8 +69,9 @@ class EnfantRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('enfant')
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
             ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->addSelect('ecole', 'relations');
+            ->addSelect('ecole', 'relations','sante_fiche');
 
         if ($nom) {
             $qb->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
