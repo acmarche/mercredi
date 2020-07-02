@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Repository;
 
+use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -65,13 +66,14 @@ class EnfantRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function search(?string $nom, ?Ecole $ecole, ?string $annee_scolaire, bool $archive = false): array
+    public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $annee_scolaire, bool $archive = false): array
     {
         $qb = $this->createQueryBuilder('enfant')
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
             ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
             ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->addSelect('ecole', 'relations','sante_fiche');
+            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire');
 
         if ($nom) {
             $qb->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
