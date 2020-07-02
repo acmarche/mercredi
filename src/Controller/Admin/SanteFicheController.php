@@ -104,7 +104,7 @@ class SanteFicheController extends AbstractController
 
             $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $enfant->getId()]);
         }
 
         return $this->render(

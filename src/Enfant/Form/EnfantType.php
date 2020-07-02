@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Enfant\Form;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
 use AcMarche\Mercredi\Scolaire\ScolaireData;
@@ -88,9 +89,9 @@ class EnfantType extends AbstractType
             )
             ->add(
                 'groupe_scolaire',
-                ChoiceType::class,
+                EntityType::class,
                 [
-                    'choices' => ScolaireData::GROUPES_SCOLAIRES,
+                    'class' => GroupeScolaire::class,
                     'required' => false,
                     'label' => 'Forcer le groupe scolaire',
                     'placeholder' => 'Choisissez un groupe',

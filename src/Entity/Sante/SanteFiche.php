@@ -26,13 +26,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SanteFiche implements TimestampableInterface
 {
     use TimestampableTrait;
-
     use IdTrait;
-
     use EnfantTrait;
-
     use AccompagnateursTrait;
-
     use RemarqueTrait;
 
     /**

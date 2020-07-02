@@ -20,7 +20,7 @@ class RelationType extends AbstractType
                 TextType::class,
                 [
                     'label' => '',
-                    'help' => 'Papa, maman, oncle, Belle-maman...)',
+                    'help' => 'Papa, maman, oncle, belle-maman...)',
                     'required' => false,
                 ]
             )
@@ -30,7 +30,7 @@ class RelationType extends AbstractType
                 [
                     'required' => false,
                     'choices' => MercrediConstantes::ORDRES,
-                    'help' => 'L\'enfant est le quantième',
+                    'help' => 'Permet de forcer l\'ordre si celui est différent (Famille recomposée)',
                 ]
             );
     }

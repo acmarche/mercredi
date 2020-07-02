@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
+use AcMarche\Mercredi\Entity\Traits\GroupeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
@@ -55,6 +56,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use SanteFicheTrait;
     use FicheSanteIsCompleteTrait;
     use UuidableTrait;
+    use GroupeScolaireTrait;
 
     /**
      * @var string|null
@@ -79,9 +81,9 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     private $annee_scolaire;
 
     /**
-     * @var string|null
-     *                  Forcer le groupe scolaire
-     * @ORM\Column(type="string", length=200, nullable=true)
+     * @var GroupeScolaire
+     *
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="enfants")
      */
     private $groupe_scolaire;
 
@@ -157,16 +159,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         $this->annee_scolaire = $annee_scolaire;
     }
 
-    public function getGroupeScolaire(): ?string
-    {
-        return $this->groupe_scolaire;
-    }
-
-    public function setGroupeScolaire(?string $groupe_scolaire): void
-    {
-        $this->groupe_scolaire = $groupe_scolaire;
-    }
-
     public function getPhotoAutorisation(): ?bool
     {
         return $this->photo_autorisation;
@@ -202,4 +194,5 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
 
         return $this;
     }
+
 }

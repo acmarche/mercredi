@@ -21,9 +21,11 @@ trait AccompagnateursTrait
         return $this->accompagnateurs;
     }
 
-    public function addAccompagnateur(string $accompagnateur)
+    public function addAccompagnateur(?string $accompagnateur)
     {
-        $this->accompagnateurs[] = $accompagnateur;
+        if (null != $accompagnateur) {
+            $this->accompagnateurs[] = $accompagnateur;
+        }
 
         return $this;
     }

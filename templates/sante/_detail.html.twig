@@ -1,7 +1,7 @@
 <table class="table table-bordered">
     <tr>
         <td>
-            {% if organisation.photoName %}
+            {% if organisation and organisation.photoName %}
                 <img class="img-thumbnail"
                      src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
             {% endif %}

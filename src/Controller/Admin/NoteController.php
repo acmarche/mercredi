@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Note;
 use AcMarche\Mercredi\Note\Form\NoteType;
 use AcMarche\Mercredi\Note\Message\NoteCreated;
@@ -49,6 +50,34 @@ class NoteController extends AbstractController
     public function new(Request $request): Response
     {
         $note = new Note();
+        $form = $this->createForm(NoteType::class, $note);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->noteRepository->persist($note);
+            $this->noteRepository->flush();
+
+            $this->dispatchMessage(new NoteCreated($note->getId()));
+
+            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/note/new.html.twig',
+            [
+                'note' => $note,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/new/enfant/{id}", name="mercredi_admin_note_new_enfant", methods={"GET","POST"})
+     */
+    public function newForEnfant(Request $request, Enfant $enfant): Response
+    {
+        $note = new Note();
+        $enfant->addNote($note);//todo
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
 

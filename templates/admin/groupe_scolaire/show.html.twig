@@ -1,0 +1,36 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>{{ groupe_scolaire }}</h3>
+        </div>
+        <div class="card-body">
+
+            {% include '@AcMarcheMercrediAdmin/groupe_scolaire/_actions.html.twig' %}
+
+            <br/>
+            {% if groupe_scolaire.remarque %}
+                <p class="text-muted">
+                    {{ groupe_scolaire.remarque | nl2br }}
+                </p>
+            {% endif %}
+            <br/>
+            <table class='table table-bordered table-hover table-condensed'>
+                <tbody>
+                <tr>
+                    <th><span class="fas fa-magic"></span> Age minimum</th>
+                    <td>{{ groupe_scolaire.ageMinimum }}</td>
+                </tr>
+                <tr>
+                    <th><span class="fas fa-mobile-alt"></span> Age maximum</th>
+                    <td>{{ groupe_scolaire.ageMaximum }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/groupe_scolaire/_delete_form.html.twig' %}
+
+{% endblock %}
