@@ -21,7 +21,6 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Scolaire\ScolaireData;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -117,9 +116,6 @@ class PresenceController extends AbstractController
             $search = true;
             $data = $this->presenceHandler->handleForGrouping($jour, $dataForm['ecole'], $displayRemarque);
         }
-
-        $groupes = ScolaireData::GROUPES_SCOLAIRES;
-        unset($groupes[0]);
 
         return $this->render(
             '@AcMarcheMercrediParent/presence/index.html.twig',

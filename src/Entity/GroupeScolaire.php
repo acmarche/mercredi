@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity;
-
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -37,9 +35,16 @@ class GroupeScolaire
      */
     private $enfants;
 
+    /**
+     * @var AnneeScolaire[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", mappedBy="groupe_scolaire")
+     */
+    private $annees_scolaires;
+
     public function __construct()
     {
         $this->enfants = new ArrayCollection();
+        $this->annees_scolaires = new ArrayCollection();
     }
 
     public function __toString()
@@ -101,4 +106,36 @@ class GroupeScolaire
 
         return $this;
     }
+
+    /**
+     * @return Collection|AnneeScolaire[]
+     */
+    public function getAnneesScolaires(): Collection
+    {
+        return $this->annees_scolaires;
+    }
+
+    public function addAnneesScolaire(AnneeScolaire $anneesScolaire): self
+    {
+        if (!$this->annees_scolaires->contains($anneesScolaire)) {
+            $this->annees_scolaires[] = $anneesScolaire;
+            $anneesScolaire->setGroupeScolaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnneesScolaire(AnneeScolaire $anneesScolaire): self
+    {
+        if ($this->annees_scolaires->contains($anneesScolaire)) {
+            $this->annees_scolaires->removeElement($anneesScolaire);
+            // set the owning side to null (unless already changed)
+            if ($anneesScolaire->getGroupeScolaire() === $this) {
+                $anneesScolaire->setGroupeScolaire(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

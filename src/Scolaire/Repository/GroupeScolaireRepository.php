@@ -22,16 +22,15 @@ class GroupeScolaireRepository extends ServiceEntityRepository
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder('jour')
-            ->andWhere('jour.archived = 0')
-            ->orderBy('jour.date_jour', 'DESC');
+        return $this->createQueryBuilder('groupe_scolaire')
+            ->orderBy('groupe_scolaire.nom', 'DESC');
     }
 
-    public function findOneByDateGroupeScolaire(\DateTime $date): ?GroupeScolaire
+    public function findByAnneeScolaire(?string $annee_scolaire): ?GroupeScolaire
     {
-        return $this->createQueryBuilder('jour')
-            ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $date->format('Y-m-d').'%')
+        return $this->createQueryBuilder('groupe_scolaire')
+            ->andWhere(':annee MEMBER OF groupe_scolaire.annees_scolaires')
+            ->setParameter('annee', $annee_scolaire)
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -49,4 +48,5 @@ class GroupeScolaireRepository extends ServiceEntityRepository
     {
         $this->_em->persist($groupeScolaire);
     }
+
 }

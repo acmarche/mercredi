@@ -20,7 +20,7 @@ use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
-use AcMarche\Mercredi\Scolaire\ScolaireData;
+use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -64,6 +64,10 @@ class PresenceController extends AbstractController
      * @var PresenceCalculatorInterface
      */
     private $presenceCalculator;
+    /**
+     * @var GroupeScolaireRepository
+     */
+    private $groupeScolaireRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -105,9 +109,6 @@ class PresenceController extends AbstractController
             $search = true;
             $data = $this->presenceHandler->handleForGrouping($jour, $dataForm['ecole'], $displayRemarque);
         }
-
-        $groupes = ScolaireData::GROUPES_SCOLAIRES;
-        unset($groupes[0]);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index.html.twig',

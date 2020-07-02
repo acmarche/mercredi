@@ -2,11 +2,10 @@
 
 namespace AcMarche\Mercredi\Enfant\Form;
 
+use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
-use AcMarche\Mercredi\Scolaire\ScolaireData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -35,13 +34,13 @@ class SearchEnfantType extends AbstractType
             )
             ->add(
                 'annee_scolaire',
-                ChoiceType::class,
+                EntityType::class,
                 [
-                    'choices' => array_combine(ScolaireData::ANNEES_SCOLAIRES, ScolaireData::ANNEES_SCOLAIRES),
-                    'required' => false,
+                    'class' => AnneeScolaire::class,
                     'label' => 'Année scolaire',
                     'placeholder' => 'Choisissez son année scolaire',
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'required' => false,
                 ]
             );
     }

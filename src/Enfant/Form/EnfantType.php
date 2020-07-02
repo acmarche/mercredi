@@ -3,12 +3,12 @@
 namespace AcMarche\Mercredi\Enfant\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
+use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
-use AcMarche\Mercredi\Scolaire\ScolaireData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -80,9 +80,9 @@ class EnfantType extends AbstractType
             )
             ->add(
                 'annee_scolaire',
-                ChoiceType::class,
+                EntityType::class,
                 [
-                    'choices' => array_combine(ScolaireData::ANNEES_SCOLAIRES, ScolaireData::ANNEES_SCOLAIRES),
+                    'class' => AnneeScolaire::class,
                     'label' => 'Année scolaire',
                     'placeholder' => 'Choisissez son année scolaire',
                 ]

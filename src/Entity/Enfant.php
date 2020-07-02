@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity;
 use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Traits\AgeTrait;
+use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
@@ -57,6 +58,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use FicheSanteIsCompleteTrait;
     use UuidableTrait;
     use GroupeScolaireTrait;
+    use AnneeScolaireTrait;
 
     /**
      * @var string|null
@@ -75,8 +77,8 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=200, nullable=false)
-     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", inversedBy="enfants")
+     *
      */
     private $annee_scolaire;
 

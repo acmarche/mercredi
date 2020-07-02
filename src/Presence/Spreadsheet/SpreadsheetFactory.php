@@ -5,13 +5,23 @@ namespace AcMarche\Mercredi\Presence\Spreadsheet;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
-use AcMarche\Mercredi\Scolaire\ScolaireData;
+use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Spreadsheet\AbstractSpreadsheetDownloader;
 use AcMarche\Mercredi\Utils\DateUtils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class SpreadsheetFactory extends AbstractSpreadsheetDownloader
 {
+    /**
+     * @var ScolaireUtils
+     */
+    private $scolaireUtils;
+
+    public function __construct(ScolaireUtils $scolaireUtils)
+    {
+        $this->scolaireUtils = $scolaireUtils;
+    }
+
     public function createXlsByMonthForOne(\DateTime $date, ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
@@ -41,12 +51,13 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
             $colonne = 'A';
 
             $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
+            $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
 
             $sheet
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
                 ->setCellValue(++$colonne.$ligne, $neLe)
-                ->setCellValue(++$colonne.$ligne, ScolaireData::getGroupeScolaire($enfant));
+                ->setCellValue(++$colonne.$ligne, $groupe->getNom());
 
             foreach ($dateInterval as $date) {
                 //$presence = $this->plaineService->getPresenceByDateAndEnfant($date, $enfant);

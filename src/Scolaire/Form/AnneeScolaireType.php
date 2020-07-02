@@ -9,20 +9,18 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GroupeScolaireType extends AbstractType
+class AnneeScolaireType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('nom')
-            ->add('age_minimum')
-            ->add('age_maximum')
             ->add(
-                'annees_scolaires',
+                'groupe_scolaire',
                 EntityType::class,
                 [
-                    'class' => AnneeScolaire::class,
-                    'multiple' => true,
+                    'class' => GroupeScolaire::class,
+                    'required' => false,
                 ]
             )
             ->add('remarque');
@@ -32,7 +30,7 @@ class GroupeScolaireType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => GroupeScolaire::class,
+                'data_class' => AnneeScolaire::class,
             ]
         );
     }

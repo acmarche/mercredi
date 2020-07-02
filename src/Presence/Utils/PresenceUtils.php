@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Scolaire\ScolaireData;
+use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 
 class PresenceUtils
@@ -16,10 +16,15 @@ class PresenceUtils
      * @var RelationRepository
      */
     private $relationRepository;
+    /**
+     * @var ScolaireUtils
+     */
+    private $scolaireUtils;
 
-    public function __construct(RelationRepository $relationRepository)
+    public function __construct(RelationRepository $relationRepository, ScolaireUtils $scolaireUtils)
     {
         $this->relationRepository = $relationRepository;
+        $this->scolaireUtils = $scolaireUtils;
     }
 
     /**
@@ -103,11 +108,12 @@ class PresenceUtils
     /**
      * @param Enfant[] $enfants
      */
-    public static function groupByGroupScolaire(array $enfants): array
+    public function groupByGroupScolaire(array $enfants): array
     {
         $groups = [];
         foreach ($enfants as $enfant) {
-            $groups[ScolaireData::getGroupeScolaire($enfant)][] = $enfant;
+            $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
+            $groups[$groupe->getNom()][] = $enfant;
         }
 
         return $groups;

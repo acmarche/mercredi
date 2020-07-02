@@ -10,7 +10,6 @@
 
             {% include '@AcMarcheMercrediAdmin/groupe_scolaire/_actions.html.twig' %}
 
-            <br/>
             {% if groupe_scolaire.remarque %}
                 <p class="text-muted">
                     {{ groupe_scolaire.remarque | nl2br }}
@@ -28,6 +27,9 @@
                     <td>{{ groupe_scolaire.ageMaximum }}</td>
                 </tr>
             </table>
+
+            <h4 class="text-success">Années scolaires</h4>
+            {{ groupe_scolaire.anneesScolaires  | join(',') }}
         </div>
     </div>
 
