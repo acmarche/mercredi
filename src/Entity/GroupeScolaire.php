@@ -20,12 +20,12 @@ class GroupeScolaire
 
     /**
      * @var int
-     * @ORM\Column(type="integer", length=10, nullable=false)
+     * @ORM\Column(type="integer", length=10, nullable=true)
      */
     private $age_minimum;
     /**
      * @var int
-     * @ORM\Column(type="integer", length=10, nullable=false)
+     * @ORM\Column(type="integer", length=10, nullable=true)
      */
     private $age_maximum;
 

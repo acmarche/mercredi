@@ -23,6 +23,7 @@ class GroupeScolaireType extends AbstractType
                 [
                     'class' => AnneeScolaire::class,
                     'multiple' => true,
+                    'required' => false,
                 ]
             )
             ->add('remarque');
