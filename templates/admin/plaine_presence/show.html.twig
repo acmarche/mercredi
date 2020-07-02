@@ -10,7 +10,7 @@
 
             {% include '@AcMarcheMercrediAdmin/plaine_presence/_actions.html.twig' %}
 
-            <p>Coût: {{ cout }} €</p>
+            <p>Coût: {{ cout|format_currency('euro') }}</p>
 
             <h4 class="text-success">Inscrits aux dates</h4>
             <table class="table table-bordered table-hover">
