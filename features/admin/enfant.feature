@@ -35,9 +35,9 @@ Feature: Gestion des enfants
     Then I should see "Peret"
     Then I follow "Peret"
     Then I follow "Modifier"
-    And I fill in "enfant[numero_national]" with "781004199"
+    And I fill in "enfant[birthday]" with "2015-03-15"
     And I press "Sauvegarder"
-    Then I should see "781004199"
+    Then I should see "15 mars 2015"
 
   Scenario: Supprimer un enfant sans tuteur
     Given I am on "/admin/enfant/"

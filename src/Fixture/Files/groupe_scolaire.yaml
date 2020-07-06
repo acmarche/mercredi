@@ -1,0 +1,7 @@
+AcMarche\Mercredi\Entity\GroupeScolaire:
+  groupe_Petits:
+    nom: 'Petits'
+  groupe_Moyens:
+    nom: 'Moyens'
+  groupe_Grands:
+    nom: 'Grands'

@@ -3,7 +3,7 @@ AcMarche\Mercredi\Entity\Enfant:
     nom: Peret
     prenom: Merlin
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
-    annee_scolaire: 1P
+    annee_scolaire: '@annee_1P'
     sexe: Masculin
     ordre: 1
     ecole: '@ecole_Aye'
@@ -18,7 +18,7 @@ AcMarche\Mercredi\Entity\Enfant:
     nom: Gauthie
     prenom: Peeter
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
-    annee_scolaire: 2M
+    annee_scolaire: '@annee_2M'
     sexe: Masculin
     ordre: 2
     ecole: '@ecole_Aye'
@@ -28,7 +28,7 @@ AcMarche\Mercredi\Entity\Enfant:
     nom: Fernandel
     prenom: Yves
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
-    annee_scolaire: 6P
+    annee_scolaire: '@annee_6P'
     sexe: Masculin
     ordre: 1
     ecole: '@ecole_Champlon'
@@ -38,7 +38,7 @@ AcMarche\Mercredi\Entity\Enfant:
     nom: Simpson
     prenom: Lisa
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
-    annee_scolaire: 2M
+    annee_scolaire: '@annee_2M'
     sexe: Masculin
     ordre: 1
     ecole: '@ecole_Hollogne'
@@ -48,7 +48,7 @@ AcMarche\Mercredi\Entity\Enfant:
     nom: Simpson
     prenom: Bart
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
-    annee_scolaire: 2M
+    annee_scolaire: '@annee_2M'
     sexe: Masculin
     ordre: 2
     ecole: '@ecole_Champlon'

@@ -28,9 +28,10 @@ class ScolaireUtils
 
         $annee_scolaire = $enfant->getAnneeScolaire();
 
-        if ($groupeScolaire = $this->groupeScolaireRepository->findByAnneeScolaire($annee_scolaire)) {
+        if($groupeScolaire = $annee_scolaire->getGroupeScolaire()) {
             return $groupeScolaire;
         }
+
         $groupes = $this->groupeScolaireRepository->findAll();
 
         return $groupes[0];

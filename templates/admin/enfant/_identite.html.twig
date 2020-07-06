@@ -2,10 +2,6 @@
 <span class="fas fa-birthday-cake"></span>
 Né le {{ enfant.birthday ? enfant.birthday|format_datetime('full', 'none') }}
 (Âge : {{ enfant.age }} ans)
-{% if enfant.numeronational %}
-    <br/>
-    <i class="far fa-address-card"></i> Registre national: {{ enfant.numeronational }}
-{% endif %}
 
 <br/>
 <i class="fas fa-university"></i> Scolarisé à <strong>{{ enfant.ecole }}</strong> en

@@ -61,13 +61,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use AnneeScolaireTrait;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $numero_national;
-
-    /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)
@@ -75,7 +68,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     private $photo_autorisation = false;
 
     /**
-     * @var string|null
+     * @var AnneeScolaire|null
      *
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", inversedBy="enfants")
      *
@@ -83,7 +76,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     private $annee_scolaire;
 
     /**
-     * @var GroupeScolaire
+     * @var GroupeScolaire|null
      *
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="enfants")
      */
@@ -131,16 +124,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         return true;
     }
 
-    public function getNumeroNational(): ?string
-    {
-        return $this->numero_national;
-    }
-
-    public function setNumeroNational(?string $numero_national): void
-    {
-        $this->numero_national = $numero_national;
-    }
-
     public function isPhotoAutorisation(): bool
     {
         return $this->photo_autorisation;
@@ -149,16 +132,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     public function setPhotoAutorisation(bool $photo_autorisation): void
     {
         $this->photo_autorisation = $photo_autorisation;
-    }
-
-    public function getAnneeScolaire(): ?string
-    {
-        return $this->annee_scolaire;
-    }
-
-    public function setAnneeScolaire(?string $annee_scolaire): void
-    {
-        $this->annee_scolaire = $annee_scolaire;
     }
 
     public function getPhotoAutorisation(): ?bool

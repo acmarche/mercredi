@@ -44,7 +44,7 @@ class AnneeScolaireController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/annee_scolaire/index.html.twig',
             [
-                'annees' => $this->anneeScolaireRepository->findAll(),
+                'annees' => $this->anneeScolaireRepository->findAllOrderByNom(),
             ]
         );
     }

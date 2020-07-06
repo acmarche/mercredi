@@ -63,6 +63,8 @@ Feature: Gestion des utilisateurs
     Then I should see "Le mot de passe a bien été modifié"
     Given I am on "/logout"
     When I am login with user "albert@marche.be" and password "lisa"
+    Then I should see "Accès en tant que parent"
+    Then I follow "Accès en tant que parent"
     Then I should see "Vos coordonnées"
 
   Scenario: Supprimer une école

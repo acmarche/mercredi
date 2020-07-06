@@ -34,6 +34,8 @@ class FixtureLoader
         $path = $this->getPath();
 
         $files = [
+            $path.'groupe_scolaire.yaml',
+            $path.'annee_scolaire.yaml',
             $path.'ecole.yaml',
             $path.'tuteur.yaml',
             $path.'animateur.yaml',

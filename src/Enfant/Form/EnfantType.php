@@ -48,13 +48,6 @@ class EnfantType extends AbstractType
                 ]
             )
             ->add(
-                'numero_national',
-                TextType::class,
-                [
-                    'required' => false,
-                ]
-            )
-            ->add(
                 'sexe',
                 ChoiceType::class,
                 [

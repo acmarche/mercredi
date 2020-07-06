@@ -20,6 +20,15 @@ class AnneeScolaireRepository extends ServiceEntityRepository
         parent::__construct($registry, AnneeScolaire::class);
     }
 
+    /**
+     * @return AnneeScolaire[]
+     */
+    public function findAllOrderByNom():array
+    {
+        return $this->createQueryBuilder('annee_scolaire')
+            ->orderBy('annee_scolaire.nom', 'ASC')->getQuery()->getResult();
+    }
+
     public function getQbForListing(): QueryBuilder
     {
         return $this->createQueryBuilder('jour')

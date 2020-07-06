@@ -131,6 +131,7 @@ class JourController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->jourRepository->flush();
+            //todo switch pedagogique
 
             $this->dispatchMessage(new JourUpdated($jour->getId()));
 

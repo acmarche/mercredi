@@ -66,7 +66,7 @@ class PresenceHandler
 
         $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
         $this->presenceUtils->addTelephonesOnEnfants($enfants);
-        $data = PresenceUtils::groupByGroupScolaire($enfants);
+        $data = $this->presenceUtils->groupByGroupScolaire($enfants);
 
         return $data;
     }

@@ -1,0 +1,31 @@
+AcMarche\Mercredi\Entity\AnneeScolaire:
+  annee_PM:
+    nom: 'PM'
+    groupe_scolaire: '@groupe_Petits'
+  annee_1M:
+    nom: '1M'
+    groupe_scolaire: '@groupe_Petits'
+  annee_2M:
+    nom: '2M'
+    groupe_scolaire: '@groupe_Petits'
+  annee_3M:
+    nom: '3M'
+    groupe_scolaire: '@groupe_Moyens'
+  annee_1P:
+    nom: '1P'
+    groupe_scolaire: '@groupe_Moyens'
+  annee_2P:
+    nom: '2P'
+    groupe_scolaire: '@groupe_Moyens'
+  annee_3P:
+    nom: '3P'
+    groupe_scolaire: '@groupe_Grands'
+  annee_4P:
+    nom: '4P'
+    groupe_scolaire: '@groupe_Grands'
+  annee_5P:
+    nom: '5P'
+    groupe_scolaire: '@groupe_Grands'
+  annee_6P:
+    nom: '6P'
+    groupe_scolaire: '@groupe_Grands'
