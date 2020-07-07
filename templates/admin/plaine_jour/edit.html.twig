@@ -23,11 +23,11 @@
     <script type="text/javascript">
         // setup an "add a tag" link
         var $addTagLink = $('<a href="#" class="btn btn-primary add_tag_link float-right"><i class="fas fa-plus"></i> Ajouter une date</a>');
-        var $newLinkLi = $('<li class="list-group-item"></li>').append($addTagLink);
+        var $newLinkLi = $('#lolo').after($addTagLink);
 
         jQuery(document).ready(function () {
             // Get the ul that holds the collection of tags
-            var $collectionHolder = $('ul.tags');
+            var $collectionHolder = $('div.tags');
 
             // add the "add a tag" anchor and li to the tags ul
             $collectionHolder.append($newLinkLi);
@@ -39,16 +39,16 @@
             $addTagLink.on('click', function (e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
-
                 // add a new tag form (see code block below)
                 addTagForm($collectionHolder, $newLinkLi);
             });
 
-// handle the removal, just for this example
+            // handle the removal, just for this example
             $('.remove-tag').click(function (e) {
                 e.preventDefault();
-
-                $(this).parent().remove();
+                var className = $(this).parent()[0].className; //get "class:col-4 remove"+index
+                var ret = className.replace('col-4 ', '');
+                $('.' + ret).remove();
 
                 return false;
             });
@@ -71,22 +71,22 @@
             $collectionHolder.data('index', index + 1);
 
             // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<li class="list-group-item"></li>').append(newForm);
+            var $newFormLi = $('#lolo').append('<div class="col-6 remove' + (index + 1) + '">' + newForm + '</div>');
 
             // also add a remove button, just for this example
-            $newFormLi.append('<a href="#" class="btn btn-danger remove-tag float-right"><i class="fas fa-trash"></i></a>');
+            $newFormLi.append('<div class="col-4 remove' + (index + 1) + '"><a href="#" class="btn btn-danger remove-tag"><i class="fas fa-trash"></i></a></div>');
 
             $newLinkLi.before($newFormLi);
 
             // handle the removal, just for this example
             $('.remove-tag').click(function (e) {
                 e.preventDefault();
-
-                $(this).parent().remove();
+                var className = $(this).parent()[0].className; //get "class:col-4 remove"+index
+                var ret = className.replace('col-4 ', '');
+                $('.' + ret).remove();
 
                 return false;
             });
-
         }
     </script>
 {% endblock %}

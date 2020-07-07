@@ -25,7 +25,8 @@ class PlaineJour
     private $plaine;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
+     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="plaine_jour")
+     *
      */
     private $jour;
 
@@ -33,6 +34,11 @@ class PlaineJour
     {
         $this->plaine = $plaine;
         $this->jour = $jour;
+    }
+
+    public function __toString()
+    {
+        return $this->jour->getDateJour()->format('Y-m-d');
     }
 
     public function getPlaine(): ?Plaine

@@ -8,13 +8,12 @@
     </tr>
     </thead>
     <tbody>
-    {% for jour in plaine.jours %}
+    {% for plaineJour in plaine.plaineJours %}
         <tr>
-            <td>{{ jour.dateJour|format_date('full') }}</td>
+            <td>{{ plaineJour.jour.dateJour|format_date('full') }}</td>
             <td></td>
             <td></td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-{{ dump(plaine) }}

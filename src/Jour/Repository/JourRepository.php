@@ -30,7 +30,9 @@ class JourRepository extends ServiceEntityRepository
         $joursRegistered = $this->getEntityManager()->getRepository(Presence::class)
             ->findDaysRegisteredByEnfant($enfant);
 
-        $qb = $this->createQueryBuilder('jour');
+        $qb = $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
+            ->addSelect('plaineJour');
 
         if (count($joursRegistered) > 0) {
             $qb
@@ -38,7 +40,9 @@ class JourRepository extends ServiceEntityRepository
                 ->setParameter('jours', $joursRegistered);
         }
 
-        $qb->andwhere('jour.archived = 0')
+        $qb
+            ->andwhere('jour.archived = 0')
+            ->andWhere('plaineJour IS NULL')
             ->orderBy('jour.date_jour', 'DESC');
 
         return $qb;
@@ -52,24 +56,33 @@ class JourRepository extends ServiceEntityRepository
     public function findDaysByMonth(\DateTimeInterface $date): array
     {
         return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
+            ->addSelect('plaineJour')
             ->andWhere('jour.date_jour LIKE :date')
             ->setParameter('date', $date->format('Y-m').'%')
             ->addOrderBy('jour.date_jour', 'ASC')
+            ->andWhere('plaineJour IS NULL')
             ->getQuery()->getResult();
     }
 
     public function findActifs()
     {
         return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
+            ->addSelect('plaineJour')
             ->andWhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC')
+            ->andWhere('plaineJour IS NULL')
             ->getQuery()->getResult();
     }
 
     public function getQbForListing(): QueryBuilder
     {
         return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
+            ->addSelect('plaineJour')
             ->andWhere('jour.archived = 0')
+            ->andWhere('plaineJour IS NULL')
             ->orderBy('jour.date_jour', 'DESC');
     }
 
@@ -83,8 +96,10 @@ class JourRepository extends ServiceEntityRepository
         $date_time = new \DateTime();
         $today = $date_time->format('Y-m-d');
 
-        $qb->andWhere('jour.date_jour >= :today')
-            ->setParameter('today', $today);
+        $qb
+            ->andWhere('jour.date_jour >= :today')
+            ->setParameter('today', $today)
+            ->andWhere('plaineJour IS NULL');
 
         return $qb;
     }
