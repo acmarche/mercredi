@@ -25,7 +25,7 @@ class PlaineJour
     private $plaine;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
      */
     private $jour;
 

@@ -1,4 +1,4 @@
-Feature: Gestion des écoles
+Feature: Gestion des plaines
   Je suis connecté
   J' ajoute l'école "Springfield"
   J' édite l'école
@@ -7,20 +7,25 @@ Feature: Gestion des écoles
 
   Background:
     Given I am logged in as an admin
-    Given I am on "/admin/ecole/"
-    Then I should see "Liste des écoles"
+    Given I am on "/admin/plaine/"
+    Then I should see "Liste des plaines"
 
-  Scenario: Ajout une école
-    Then I follow "Ajouter une école"
-    And I fill in "ecole[nom]" with "Springfield"
-    And I fill in "ecole[rue]" with "Rue des Armoiries"
-    And I fill in "ecole[code_postal]" with "6900"
-    And I fill in "ecole[localite]" with "Hargimont"
+  Scenario: Ajout une plaine
+    Then I follow "Ajouter une plaine"
+    And I fill in "plaine[nom]" with "Carnaval 2020"
+    And I fill in "plaine[prix1]" with "8"
+    And I fill in "plaine[prix1]" with "5"
+    And I fill in "plaine[plaine_groupes][0][inscription_maximum]" with "20"
+    And I fill in "plaine[plaine_groupes][1][inscription_maximum]" with "15"
+    And I fill in "plaine[plaine_groupes][2][inscription_maximum]" with "12"
     And I press "Sauvegarder"
-    Then I should see "Springfield"
+    Then I should see "Dates pour Carnaval 2020"
+    Then I fill in "plaine_jour[jours][0][date_jour]" with "20"
+    Then I fill in "plaine_jour[jours][1][date_jour]" with "20"
+    And I press "Sauvegarder"
     Then I should see "Rue des Armoiries"
 
-  Scenario: Modifier une école
+  Scenario: Modifier une plaine
     Then I follow "Aye"
     Then I follow "Modifier"
     And I fill in "ecole[telephone]" with "084 55 66 99"

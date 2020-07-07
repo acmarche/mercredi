@@ -10,14 +10,14 @@ trait PlaineMaxTrait
 {
 
     /**
-     * @return Collection|PlaineMax[]
+     * @return Collection|PlaineGroupe[]
      */
-    public function getMax(): Collection
+    public function getPlaineGroupes(): Collection
     {
         return $this->max;
     }
 
-    public function addMax(PlaineMax $max): self
+    public function addMax(PlaineGroupe $max): self
     {
         if (!$this->max->contains($max)) {
             $this->max[] = $max;
@@ -27,7 +27,7 @@ trait PlaineMaxTrait
         return $this;
     }
 
-    public function removeMax(PlaineMax $max): self
+    public function removeMax(PlaineGroupe $max): self
     {
         if ($this->max->contains($max)) {
             $this->max->removeElement($max);

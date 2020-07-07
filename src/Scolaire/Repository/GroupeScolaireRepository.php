@@ -20,6 +20,15 @@ class GroupeScolaireRepository extends ServiceEntityRepository
         parent::__construct($registry, GroupeScolaire::class);
     }
 
+    /**
+     * @return GroupeScolaire[]
+     */
+    public function findAllOrderByNom(): array
+    {
+        return $this->createQueryBuilder('groupe_scolaire')
+            ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
+    }
+
     public function getQbForListing(): QueryBuilder
     {
         return $this->createQueryBuilder('groupe_scolaire')

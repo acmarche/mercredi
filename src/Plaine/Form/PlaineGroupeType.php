@@ -2,14 +2,15 @@
 
 namespace AcMarche\Mercredi\Plaine\Form;
 
-use AcMarche\Mercredi\Entity\Plaine\PlaineMax;
+use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PlaineMaxType extends AbstractType
+class PlaineGroupeType extends AbstractType
 {
     protected $label = false;
 
@@ -17,20 +18,22 @@ class PlaineMaxType extends AbstractType
     {
         $builder
             ->add(
-                'groupe',
-                TextType::class,
+                'groupeScolaire',
+                EntityType::class,
                 [
+                    'class' => GroupeScolaire::class,
                     'attr' => ['readonly' => true],
+                    'label' => false,
                 ]
             )
-            ->add('maximum', IntegerType::class);
+            ->add('inscription_maximum', IntegerType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [
-                'data_class' => PlaineMax::class,
+                'data_class' => PlaineGroupe::class,
             ]
         );
     }

@@ -2,25 +2,25 @@
 
 namespace AcMarche\Mercredi\Plaine\Repository;
 
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * @method Plaine|null find($id, $lockMode = null, $lockVersion = null)
- * @method Plaine|null findOneBy(array $criteria, array $orderBy = null)
- * @method Plaine[]    findAll()
- * @method Plaine[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PlaineGroupe|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PlaineGroupe|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PlaineGroupe[]    findAll()
+ * @method PlaineGroupe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlaineMaxRepository extends ServiceEntityRepository
+class PlaineGroupeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Plaine::class);
+        parent::__construct($registry, PlaineGroupe::class);
     }
 
-    public function findPlaineOpen(): ?Plaine
+    public function findPlaineOpen(): ?PlaineGroupe
     {
         return $this->createQueryBuilder('plaine')
             ->andWhere('plaine.inscriptionOpen = 1')
@@ -28,9 +28,9 @@ class PlaineMaxRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function remove(Plaine $plaine)
+    public function remove(PlaineGroupe $plaineGroupe)
     {
-        $this->_em->remove($plaine);
+        $this->_em->remove($plaineGroupe);
     }
 
     public function flush()
@@ -38,9 +38,9 @@ class PlaineMaxRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-    public function persist(Plaine $plaine)
+    public function persist(PlaineGroupe $plaineGroupe)
     {
-        $this->_em->persist($plaine);
+        $this->_em->persist($plaineGroupe);
     }
 
     public function getQbForListing(): QueryBuilder

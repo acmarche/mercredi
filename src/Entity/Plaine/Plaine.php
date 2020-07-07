@@ -27,26 +27,27 @@ class Plaine
     use PlaineMaxTrait;
 
     /**
-     * @var Jour[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="plaine", cascade={"persist","remove"})
+     * @var PlaineJour[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="plaine", cascade={"remove"})
      */
     private $plaine_jours;
 
     /**
-     * @var PlaineMax[]|null
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineMax", mappedBy="plaine", cascade={"remove","persist"})
+     * @var PlaineGroupe[]|null
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="plaine", cascade={"remove","persist"})
      */
-    private $max;
+    private $plaine_groupes;
 
     public function __construct()
     {
         $this->jours = new ArrayCollection();
-        $this->max = new ArrayCollection();
+        $this->plaine_groupes = new ArrayCollection();
+        $this->plaine_jours = new ArrayCollection();
         $this->inscriptionOpen = false;
         $this->prix1 = 0;
         $this->prix2 = 0;
         $this->prix3 = 0;
-        $this->plaine_jours = new ArrayCollection();
+      //  $this->plaine_jours = new ArrayCollection();
     }
 
     public function __toString()
@@ -55,35 +56,34 @@ class Plaine
     }
 
     /**
-     * @return Collection|PlaineMax[]
+     * @return Collection|PlaineGroupe[]
      */
-    public function getMax(): Collection
+    public function getPlaineGroupes(): Collection
     {
-        return $this->max;
+        return $this->plaine_groupes;
     }
 
-    public function addMax(PlaineMax $max): self
+    public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if (!$this->max->contains($max)) {
-            $this->max[] = $max;
-            $max->setPlaine($this);
+        if (!$this->plaine_groupes->contains($plaineGroupe)) {
+            $this->plaine_groupes[] = $plaineGroupe;
+            $plaineGroupe->setPlaine($this);
         }
 
         return $this;
     }
 
-    public function removeMax(PlaineMax $max): self
+    public function removePlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if ($this->max->contains($max)) {
-            $this->max->removeElement($max);
+        if ($this->plaine_groupes->contains($plaineGroupe)) {
+            $this->plaine_groupes->removeElement($plaineGroupe);
             // set the owning side to null (unless already changed)
-            if ($max->getPlaine() === $this) {
-                $max->setPlaine(null);
+            if ($plaineGroupe->getPlaine() === $this) {
+                $plaineGroupe->setPlaine(null);
             }
         }
 
         return $this;
     }
-
 
 }

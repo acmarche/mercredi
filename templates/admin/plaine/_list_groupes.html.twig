@@ -1,0 +1,17 @@
+<h4 class="text-success">Les groupes</h4>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Maximum inscrits</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for groupe in plaine.plaineGroupes %}
+        <tr>
+            <td>{{ groupe.groupeScolaire.nom }}</td>
+            <td>{{ groupe.inscriptionMaximum }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

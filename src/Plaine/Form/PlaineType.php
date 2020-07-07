@@ -37,10 +37,10 @@ class PlaineType extends AbstractType
             )
 
             ->add(
-                'max',
+                'plaine_groupes',
                 CollectionType::class,
                 [
-                    'entry_type' => PlaineMaxType::class,
+                    'entry_type' => PlaineGroupeType::class,
                     'label' => 'Maximum par groupe',
                 ]
             )

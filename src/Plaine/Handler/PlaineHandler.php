@@ -43,32 +43,46 @@ class PlaineHandler
     }
 
     /**
-     * @param array $currentsJours
-     * @param iterable|ArrayCollection $newJours
+     *
+     * @param Jour[]|ArrayCollection $newJours
      */
-    public function handleEditJours(Plaine $plaine, array $currentJours, iterable $newJours)
+    public function handleEditJours(Plaine $plaine, iterable $newJours)
     {
-        $enMoins = array_diff($currentJours, $newJours->toArray());
+        $enMoins = $this->getEnMoins($plaine, $newJours);
 
-        foreach ($newJours as $jour) {
-            $date = $jour->getDateJour();
-            if ($jourExistant = $this->jourRepository->findOneByDateJour($date)) {
-                $plaineJour = new PlaineJour($plaine, $jourExistant);
+        foreach ($newJours as $plaineJour) {
+            if ($jourExistant = $this->jourExist($plaineJour)) {
+                if (!$this->plaineJourExist($plaine, $jourExistant)) {
+                    $plaineJour = new PlaineJour($plaine, $jourExistant);
+                    $plaine->addPlaineJour($plaineJour);
+                }
             } else {
-                $this->jourRepository->persist($jour);
-                $plaineJour = new PlaineJour($plaine, $jour);
+                $this->jourRepository->persist($plaineJour);
+                $plaineJour = new PlaineJour($plaine, $plaineJour);
+                $this->plaineJourRepository->persist($plaineJour);
+                $plaine->addPlaineJour($plaineJour);
             }
-            $this->plaineJourRepository->persist($plaineJour);
-            $plaine->addPlaineJour($plaineJour);
         }
 
-        foreach ($enMoins as $jour) {
-            //     $plaine->removePlaineJour($jour);
+        foreach ($enMoins as $plaineJour) {
+            $this->plaineJourRepository->remove($plaineJour);
         }
 
         $this->jourRepository->flush();
         $this->plaineJourRepository->flush();
         $this->plaineRepository->flush();
+    }
+
+    private function jourExist(Jour $jour): ?Jour
+    {
+        $date = $jour->getDateJour();
+
+        return $this->jourRepository->findOneByDateJour($date);
+    }
+
+    private function plaineJourExist(Plaine $plaine, Jour $jour): ?PlaineJour
+    {
+        return $this->plaineJourRepository->findByPlaineAndJour($plaine, $jour);
     }
 
     /**
@@ -77,17 +91,49 @@ class PlaineHandler
     public function initJours(Plaine $plaine): void
     {
         $plaine->initJours();
-        $today = new Jour(new \DateTime('first day of january this year'));
-        $tomorrow = new Jour(new \DateTime('+1day'));
-        $plaine->addJour($today);
-        $plaine->addJour($tomorrow);
+        $currentJours = $this->findPlaineJoursByPlaine($plaine);
+        if (count($currentJours) == 0) {
+            $today = new Jour(new \DateTime('first day of january this year'));
+            $tomorrow = new Jour(new \DateTime('+1day'));
+            $plaine->addJour($today);
+            $plaine->addJour($tomorrow);
+        } else {
+            foreach ($currentJours as $jour) {
+                $plaine->addJour($jour->getJour());
+            }
+        }
     }
 
     /**
-     * @return Jour[]
+     * @return PlaineJour[]
      */
-    public function findJoursByPlaine(Plaine $plaine): array
+    public function findPlaineJoursByPlaine(Plaine $plaine): array
     {
-        return $this->plaineJourRepository->findBy(['plaine' => $plaine]);
+        return $this->plaineJourRepository->findByPlaine($plaine);
+    }
+
+    /**
+     * @param Plaine $plaine
+     * @param Jour[] $newJours
+     * @return PlaineJour[]
+     */
+    private function getEnMoins(Plaine $plaine, iterable $newJours): array
+    {
+        $currentJours = $this->findPlaineJoursByPlaine($plaine);
+        $enMoins = [];
+        foreach ($currentJours as $plaineJour) {
+            $found = false;
+            $jourExistant = $plaineJour->getJour();
+            foreach ($newJours as $newJour) {
+                if ($jourExistant->getDateJour()->format('Y-m-d') == $newJour->getDateJour()->format('Y-m-d')) {
+                    $found= true;
+                    break;
+                }
+            }
+            if($found===false) {
+                $enMoins[] = $plaineJour;
+            }
+        }
+        return $enMoins;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Repository;
 
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -20,12 +21,31 @@ class PlaineJourRepository extends ServiceEntityRepository
         parent::__construct($registry, PlaineJour::class);
     }
 
+    /**
+     * @param Plaine $plaine
+     * @return PlaineJour[]
+     */
     public function findByPlaine(Plaine $plaine): array
     {
-        return $this->createQueryBuilder('plaine')
-            ->andWhere('plaine.inscriptionOpen = 1')
+        return $this->createQueryBuilder('plaine_jour')
+            ->leftJoin('plaine_jour.jour', 'jour', 'WITH')
+            ->addSelect('jour')
+            ->andWhere('plaine_jour.plaine = :plaine')
+            ->setParameter('plaine', $plaine)
+            ->addOrderBy('jour.date_jour', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findByPlaineAndJour(Plaine $plaine, ?Jour $jour): ?PlaineJour
+    {
+        return $this->createQueryBuilder('plaine_jour')
+            ->andWhere('plaine_jour.plaine = :plaine')
+            ->setParameter('plaine', $plaine)
+            ->andWhere('plaine_jour.jour = :jour')
+            ->setParameter('jour', $jour)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function remove(PlaineJour $plaine)
@@ -42,5 +62,6 @@ class PlaineJourRepository extends ServiceEntityRepository
     {
         $this->_em->persist($plaine);
     }
+
 
 }

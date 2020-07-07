@@ -37,6 +37,8 @@ class FixtureLoader
             $path.'groupe_scolaire.yaml',
             $path.'annee_scolaire.yaml',
             $path.'ecole.yaml',
+            $path.'plaine.yaml',
+            $path.'plaine_max.yaml',
             $path.'tuteur.yaml',
             $path.'animateur.yaml',
             $path.'enfant.yaml',

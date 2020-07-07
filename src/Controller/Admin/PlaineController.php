@@ -4,12 +4,14 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
 use AcMarche\Mercredi\Plaine\Message\PlaineCreated;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,15 +36,21 @@ class PlaineController extends AbstractController
      * @var PlainePresenceRepository
      */
     private $plainePresenceRepository;
+    /**
+     * @var GroupeScolaireRepository
+     */
+    private $groupeScolaireRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         EnfantRepository $enfantRepository,
-        PlainePresenceRepository $plainePresenceRepository
+        PlainePresenceRepository $plainePresenceRepository,
+        GroupeScolaireRepository $groupeScolaireRepository
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->enfantRepository = $enfantRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
+        $this->groupeScolaireRepository = $groupeScolaireRepository;
     }
 
     /**
@@ -64,6 +72,11 @@ class PlaineController extends AbstractController
     public function new(Request $request): Response
     {
         $plaine = new Plaine();
+        foreach ($this->groupeScolaireRepository->findAllOrderByNom() as $groupe) {
+            $plaineGroupe = new PlaineGroupe($plaine, $groupe);
+            $plaine->addPlaineGroupe($plaineGroupe);
+        }
+
         $form = $this->createForm(PlaineType::class, $plaine);
         $form->handleRequest($request);
 
@@ -105,6 +118,11 @@ class PlaineController extends AbstractController
      */
     public function edit(Request $request, Plaine $plaine): Response
     {
+        foreach ($this->groupeScolaireRepository->findAllOrderByNom() as $groupe) {
+            $plaineGroupe = new PlaineGroupe($plaine, $groupe);
+            $plaine->addPlaineGroupe($plaineGroupe);
+        }
+
         $form = $this->createForm(PlaineType::class, $plaine);
         $form->handleRequest($request);
 
