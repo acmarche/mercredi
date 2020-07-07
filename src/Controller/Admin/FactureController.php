@@ -89,10 +89,10 @@ class FactureController extends AbstractController
         $facture = $this->factureHandler->newInstance($tuteur);
 
         $presencesAll = $this->presenceRepository->findPresencesByTuteur($tuteur);
-        $presences = [];
+        $presencesNonFacturees = [];
         foreach ($presencesAll as $presence) {
             if (!$this->facturePresenceRepository->findByPresence($presence)) {
-                $presences[] = $presence;
+                $presencesNonFacturees[] = $presence;
             }
         }
 
@@ -111,7 +111,7 @@ class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/new.html.twig',
             [
                 'tuteur' => $tuteur,
-                'presences' => $presences,
+                'presences' => $presencesNonFacturees,
                 'form' => $form->createView(),
             ]
         );

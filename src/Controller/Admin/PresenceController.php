@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Utils\FacturePresenceUtils;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
@@ -64,10 +65,6 @@ class PresenceController extends AbstractController
      * @var PresenceCalculatorInterface
      */
     private $presenceCalculator;
-    /**
-     * @var GroupeScolaireRepository
-     */
-    private $groupeScolaireRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,

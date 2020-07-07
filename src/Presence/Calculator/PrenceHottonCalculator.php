@@ -51,15 +51,46 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
             return 0;
         }
         $jour = $presence->getJour();
+        if ($jour->getPlaineJour()) {
+            return $this->calculatePlaine($presence, $jour);
+        }
         if ($jour->isPedagogique()) {
-            if ($presence->isHalf()) {
-                $prix = $jour->getPrix2();
-            } else {
-                $prix = $jour->getPrix1();
-            }
+            return $this->calculatePedagogique($presence, $jour);
+        }
+
+        return $this->calculatePresence($presence, $jour);
+    }
+
+    private function calculatePresence(PresenceInterface $presence, Jour $jour): float
+    {
+        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $prix = $this->getPrixByOrdre($jour, $ordre);
+        $cout = $this->reductionApplicate($presence, $prix);
+
+        return $cout;
+    }
+
+    private function calculatePedagogique(PresenceInterface $presence, Jour $jour): float
+    {
+        if ($presence->isHalf()) {
+            $prix = $jour->getPrix2();
         } else {
-            $ordre = $this->ordreService->getOrdreOnPresence($presence);
-            $prix = $this->getPrixByOrdre($jour, $ordre);
+            $prix = $jour->getPrix1();
+        }
+        $cout = $this->reductionApplicate($presence, $prix);
+
+        return $cout;
+    }
+
+    private function calculatePlaine(PresenceInterface $presence, Jour $jour): float
+    {
+        $plaineJour = $jour->getPlaineJour();
+        $plaine = $plaineJour->getPlaine();
+        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $prix = $plaine->getPrix1();
+
+        if ($ordre > 1) {
+            $prix = $plaine->getPrix1();
         }
 
         $cout = $this->reductionApplicate($presence, $prix);
@@ -87,4 +118,5 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
                 return $jour->getPrix1();
         }
     }
+
 }

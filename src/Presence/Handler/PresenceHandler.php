@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,12 +26,20 @@ class PresenceHandler
      * @var PresenceUtils
      */
     private $presenceUtils;
+    /**
+     * @var FacturePresenceRepository
+     */
+    private $facturePresenceRepository;
 
-    public function __construct(PresenceRepository $presenceRepository, PresenceUtils $presenceUtils)
-    {
+    public function __construct(
+        PresenceRepository $presenceRepository,
+        PresenceUtils $presenceUtils,
+        FacturePresenceRepository $facturePresenceRepository
+    ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceUtils = $presenceUtils;
         $this->constraints = new ArrayCollection();
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     public function addConstraint(object $constraint)
@@ -86,7 +95,10 @@ class PresenceHandler
 
     public function isFactured(Presence $presence): bool
     {
+        if ($this->facturePresenceRepository->findByPresence($presence)) {
+            return true;
+        }
 
-
+        return false;
     }
 }
