@@ -1,0 +1,7 @@
+AcMarche\Mercredi\Entity\Plaine\PlaineGroupe:
+  groupe_carnaval1:
+    __construct: ['@plaine_noel','@groupe_Petits']
+    inscription_maximum: '10'
+  groupe_carnaval2:
+    __construct: ['@plaine_noel','@groupe_Moyens']
+    inscription_maximum: '10'

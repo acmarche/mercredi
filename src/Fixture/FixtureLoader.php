@@ -37,8 +37,6 @@ class FixtureLoader
             $path.'groupe_scolaire.yaml',
             $path.'annee_scolaire.yaml',
             $path.'ecole.yaml',
-            $path.'plaine.yaml',
-            $path.'plaine_max.yaml',
             $path.'tuteur.yaml',
             $path.'animateur.yaml',
             $path.'enfant.yaml',
@@ -55,6 +53,9 @@ class FixtureLoader
             $path.'sante_reponse.yaml',
             $path.'facture.yaml',
             $path.'facture_presence.yaml',
+            $path.'plaine.yaml',
+            $path.'plaine_groupe.yaml',
+            $path.'plaine_jour.yaml',
         ];
 
         $this->loader->load($files);

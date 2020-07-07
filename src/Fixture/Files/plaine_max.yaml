@@ -1,5 +1,0 @@
-AcMarche\Mercredi\Entity\Plaine\PlaineMax:
-  plaine_carnaval:
-    nom: 'Plaine de carnaval'
-    prix1: '<randomFloat(2, 2, 7)>'
-    prix2: '<randomFloat(2, 2, 7)>'

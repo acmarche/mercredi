@@ -118,11 +118,6 @@ class PlaineController extends AbstractController
      */
     public function edit(Request $request, Plaine $plaine): Response
     {
-        foreach ($this->groupeScolaireRepository->findAllOrderByNom() as $groupe) {
-            $plaineGroupe = new PlaineGroupe($plaine, $groupe);
-            $plaine->addPlaineGroupe($plaineGroupe);
-        }
-
         $form = $this->createForm(PlaineType::class, $plaine);
         $form->handleRequest($request);
 
@@ -149,11 +144,6 @@ class PlaineController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
-            if (count($this->enfantRepository->findBy(['plaine' => $plaine])) > 0) {
-                $this->addFlash('danger', 'La plaine contient des enfants et ne peut être supprimée');
-
-                return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
-            }
             $plaineId = $plaine->getId();
             $this->plaineRepository->remove($plaine);
             $this->plaineRepository->flush();

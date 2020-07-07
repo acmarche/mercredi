@@ -1,0 +1,7 @@
+AcMarche\Mercredi\Entity\Plaine\PlaineJour:
+  jour_carnaval1:
+    __construct: ['@plaine_noel','@jour_2020_12_21']
+  jour_carnaval2:
+    __construct: ['@plaine_noel','@jour_2020_12_22']
+  jour_carnaval3:
+    __construct: ['@plaine_noel','@jour_2020_12_23']
