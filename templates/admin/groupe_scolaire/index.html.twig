@@ -22,8 +22,8 @@
                         {{ groupe_scolaire.nom }}
                     </a>
                 </td>
-                <td>{{ groupe_scolaire.ageMinimum }} ans</td>
-                <td>{{ groupe_scolaire.ageMaximum }} ans</td>
+                <td>{{ groupe_scolaire.ageMinimum ? groupe_scolaire.ageMinimum ~ ' ans' }}</td>
+                <td>{{ groupe_scolaire.ageMaximum ? groupe_scolaire.ageMaximum ~ ' ans' }}</td>
             </tr>
         {% endfor %}
         </tbody>

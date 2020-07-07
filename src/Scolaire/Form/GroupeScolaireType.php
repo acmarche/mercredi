@@ -17,15 +17,6 @@ class GroupeScolaireType extends AbstractType
             ->add('nom')
             ->add('age_minimum')
             ->add('age_maximum')
-            ->add(
-                'annees_scolaires',
-                EntityType::class,
-                [
-                    'class' => AnneeScolaire::class,
-                    'multiple' => true,
-                    'required' => false,
-                ]
-            )
             ->add('remarque');
     }
 

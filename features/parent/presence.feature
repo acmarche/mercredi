@@ -28,4 +28,3 @@ Feature: Test de la gestion des présences
     Then I should see "Détail de la présence de SIMPSON Bart du mercredi 6 mai 2020"
     Then I press "Supprimer la présence"
     Then I should see "Une présence passée ne peut être supprimée"
-

@@ -219,6 +219,12 @@ class PresenceController extends AbstractController
      */
     public function edit(Request $request, Presence $presence): Response
     {
+        if ($this->presenceHandler->isFactured($presence)) {
+            $this->addFlash('danger', 'Une présence déjà facturée ne peut être editée');
+
+            return $this->redirectToRoute('mercredi_admin_plaine_presence_show', ['id' => $presence->getId()]);
+        }
+
         $form = $this->createForm(PresenceType::class, $presence);
         $form->handleRequest($request);
 

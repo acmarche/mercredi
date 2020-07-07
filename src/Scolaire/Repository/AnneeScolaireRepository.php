@@ -23,10 +23,10 @@ class AnneeScolaireRepository extends ServiceEntityRepository
     /**
      * @return AnneeScolaire[]
      */
-    public function findAllOrderByNom():array
+    public function findAllOrderByOrdre():array
     {
         return $this->createQueryBuilder('annee_scolaire')
-            ->orderBy('annee_scolaire.nom', 'ASC')->getQuery()->getResult();
+            ->orderBy('annee_scolaire.ordre', 'ASC')->getQuery()->getResult();
     }
 
     public function getQbForListing(): QueryBuilder

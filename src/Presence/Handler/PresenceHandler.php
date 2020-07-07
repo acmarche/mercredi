@@ -83,4 +83,10 @@ class PresenceHandler
 
         return true;
     }
+
+    public function isFactured(Presence $presence): bool
+    {
+
+
+    }
 }

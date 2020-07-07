@@ -44,7 +44,7 @@ class AnneeScolaireController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/annee_scolaire/index.html.twig',
             [
-                'annees' => $this->anneeScolaireRepository->findAllOrderByNom(),
+                'annees' => $this->anneeScolaireRepository->findAllOrderByOrdre(),
             ]
         );
     }
@@ -120,6 +120,12 @@ class AnneeScolaireController extends AbstractController
     public function delete(Request $request, AnneeScolaire $anneeScolaire): Response
     {
         if ($this->isCsrfTokenValid('delete'.$anneeScolaire->getId(), $request->request->get('_token'))) {
+            if (count($anneeScolaire->getEnfants()) > 0) {
+                $this->addFlash('danger', "Une année scolaire contenant des enfants ne peux pas être supprimée");
+
+                return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+            }
+
             $ecoleId = $anneeScolaire->getId();
             $this->anneeScolaireRepository->remove($anneeScolaire);
             $this->anneeScolaireRepository->flush();

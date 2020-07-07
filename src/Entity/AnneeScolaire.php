@@ -19,6 +19,19 @@ class AnneeScolaire
     use RemarqueTrait;
 
     /**
+     * @var AnneeScolaire
+     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire")
+     * @ORM\JoinColumn(onDelete="SET NULL", unique=true)
+     */
+    private $annee_suivante;
+
+    /**
+     * @var integer
+     * @ORM\Column(type="integer")
+     */
+    private $ordre;
+
+    /**
      * @var Enfant[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Enfant", mappedBy="annee_scolaire")
      */
@@ -79,6 +92,30 @@ class AnneeScolaire
     public function setGroupeScolaire(?GroupeScolaire $groupe_scolaire): self
     {
         $this->groupe_scolaire = $groupe_scolaire;
+
+        return $this;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(int $ordre): self
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    public function getAnneeSuivante(): ?self
+    {
+        return $this->annee_suivante;
+    }
+
+    public function setAnneeSuivante(?self $annee_suivante): self
+    {
+        $this->annee_suivante = $annee_suivante;
 
         return $this;
     }

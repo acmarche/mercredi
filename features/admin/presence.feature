@@ -3,6 +3,7 @@ Feature: Gestion des présences
   Ajouter une présence sans tuteur
   Ajouter une présence avec 2 tuteurs
   Modifier une présence
+  J'édite une présence déjà facturée
   Supprimer une présence
 
   Background:
@@ -48,6 +49,16 @@ Feature: Gestion des présences
     And I press "Sauvegarder"
     Then I should see "La présence a bien été modifiée"
     Then I should see "Oui avec certificat"
+
+  Scenario: J'édite une présence déjà facturée
+    Then I fill in "search_enfant[nom]" with "Peret"
+    And I press "Rechercher"
+    Then I should see "Peret"
+    Then I follow "Peret"
+    Then I follow "Mercredi 16 septembre 2020"
+    Then I should see "Détail de la présence de PERET Merlin"
+    Then I follow "Modifier"
+    Then I should see "Une présence déjà facturée ne peut être editée"
 
   Scenario: Je supprime une présence
     Then I fill in "search_enfant[nom]" with "Peret"

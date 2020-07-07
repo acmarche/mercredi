@@ -26,6 +26,6 @@ class AnneeScolaireUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(AnneeScolaireUpdated $anneeScolaireDeleted)
     {
-        $this->flashBag->add('success', "L'année a bien été supprimée");
+        $this->flashBag->add('success', "L'année a bien été modifiée");
     }
 }
