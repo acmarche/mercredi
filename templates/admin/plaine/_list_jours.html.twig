@@ -3,16 +3,12 @@
     <thead>
     <tr>
         <th>Date</th>
-        <th></th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
     {% for plaineJour in plaine.plaineJours %}
         <tr>
             <td>{{ plaineJour.jour.dateJour|format_date('full') }}</td>
-            <td></td>
-            <td></td>
         </tr>
     {% endfor %}
     </tbody>

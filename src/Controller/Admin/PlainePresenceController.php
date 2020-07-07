@@ -14,6 +14,7 @@ use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -77,7 +78,7 @@ class PlainePresenceController extends AbstractController
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        if (0 == count($plaine->getJours())) {
+        if (0 == count($plaine->getPlaineJours())) {
             $this->addFlash('danger', 'La plaine n\'a aucune date');
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
@@ -217,7 +218,8 @@ class PlainePresenceController extends AbstractController
      */
     public function jours(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
-        $plaineDto = new PlainePresencesDto($plaine, $enfant, $plaine->getJours());
+        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $plaineDto = new PlainePresencesDto($plaine, $enfant, $jours);
 
         $presences = $this->plainePresenceHandler->findPresencesByPlaineEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
@@ -229,7 +231,12 @@ class PlainePresenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $new = $plaineDto->getJours();
-            $tuteur = $presences[0]->getTuteur(); //todo bad
+            if (count($presences) === 0) {
+                $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
+                $tuteur = $tuteurs[0];
+            } else {
+                $tuteur = $presences[0]->getTuteur(); //todo bad
+            }
 
             $this->plainePresenceHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
             $this->addFlash('success', 'Les présences ont bien été modifiées');

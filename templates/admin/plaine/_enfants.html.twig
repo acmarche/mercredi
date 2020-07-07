@@ -20,6 +20,10 @@
                 <a href="{{ path('mercredi_admin_plaine_presence_show', {'plaine': plaine.id, 'enfant': enfant.id}) }}">Détails</a>
             </td>
         </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">Aucun</td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>

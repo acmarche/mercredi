@@ -14,3 +14,12 @@ AcMarche\Mercredi\Entity\Presence:
   presence_bart_06_05:
     __construct: ['@tuteur_Simpson','@enfant_bart', '@jour_2020_05_06']
     userAdd: 'administrateur'
+  presence_plaine_bart_21_12:
+    __construct: ['@tuteur_Simpson','@enfant_bart', '@jour_2020_12_21']
+    userAdd: 'administrateur'
+  presence_plaine_bart_22_12:
+    __construct: ['@tuteur_Simpson','@enfant_bart', '@jour_2020_12_22']
+    userAdd: 'administrateur'
+  presence_plaine_bart_23_12:
+    __construct: ['@tuteur_Simpson','@enfant_bart', '@jour_2020_12_23']
+    userAdd: 'administrateur'

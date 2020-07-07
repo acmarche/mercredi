@@ -31,6 +31,7 @@ class PlainePresencesEditType extends AbstractType
                     EntityType::class,
                     [
                         'class' => Jour::class,
+                        'label' => 'Sélectionnez les dates',
                         'choices' => $jours,
                         'required' => false,
                         'multiple' => true,

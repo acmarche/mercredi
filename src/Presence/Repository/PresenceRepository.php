@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -85,7 +86,7 @@ class PresenceRepository extends ServiceEntityRepository
      */
     public function findPresencesByPlaine(Plaine $plaine): array
     {
-        $jours = $plaine->getJours();
+        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')
@@ -98,7 +99,7 @@ class PresenceRepository extends ServiceEntityRepository
 
     public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant)
     {
-        $jours = $plaine->getJours();
+        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')

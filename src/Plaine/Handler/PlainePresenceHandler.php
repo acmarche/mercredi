@@ -3,11 +3,13 @@
 namespace AcMarche\Mercredi\Plaine\Handler;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Doctrine\Common\Collections\Collection;
@@ -45,7 +47,8 @@ class PlainePresenceHandler
 
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant)
     {
-        $this->presenceHandler->handleNew($tuteur, $enfant, $plaine->getJours());
+        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
     }
 
     public function findPresence(int $presenceId): ?Presence
