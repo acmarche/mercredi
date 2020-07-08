@@ -1,0 +1,19 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>{{ document }}</h3>
+        </div>
+        <div class="card-body">
+
+            {{ include('@AcMarcheMercrediAdmin/document/_form.html.twig') }}
+
+            <a href="{{ path('mercredi_admin_document_show',{'id':document.id}) }}" class="mt-4">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

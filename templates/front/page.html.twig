@@ -9,7 +9,9 @@
             <h3>{{ page.nom }}</h3>
         </div>
         <div class="card-body">
-           {{ page.content|raw }}
+            {{ page.content|raw }}
+
+            {% include '@AcMarcheMercredi/front/_documents.html.twig' %}
         </div>
     </div>
 

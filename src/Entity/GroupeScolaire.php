@@ -53,6 +53,7 @@ class GroupeScolaire
     {
         $this->enfants = new ArrayCollection();
         $this->annees_scolaires = new ArrayCollection();
+        $this->plaine_groupes = new ArrayCollection();
     }
 
     public function __toString()
@@ -140,6 +141,37 @@ class GroupeScolaire
             // set the owning side to null (unless already changed)
             if ($anneesScolaire->getGroupeScolaire() === $this) {
                 $anneesScolaire->setGroupeScolaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlaineGroupe[]
+     */
+    public function getPlaineGroupes(): Collection
+    {
+        return $this->plaine_groupes;
+    }
+
+    public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
+    {
+        if (!$this->plaine_groupes->contains($plaineGroupe)) {
+            $this->plaine_groupes[] = $plaineGroupe;
+            $plaineGroupe->setGroupeScolaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlaineGroupe(PlaineGroupe $plaineGroupe): self
+    {
+        if ($this->plaine_groupes->contains($plaineGroupe)) {
+            $this->plaine_groupes->removeElement($plaineGroupe);
+            // set the owning side to null (unless already changed)
+            if ($plaineGroupe->getGroupeScolaire() === $this) {
+                $plaineGroupe->setGroupeScolaire(null);
             }
         }
 

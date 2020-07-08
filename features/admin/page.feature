@@ -4,7 +4,7 @@ Feature: Gestion des pages
   J' édite une page
   Je supprime une page system
   Je supprime une page non system
-  Je trie les questions
+  Je trie les pages
 
   Background:
     Given I am logged in as an admin
@@ -30,6 +30,6 @@ Feature: Gestion des pages
     Then I press "Supprimer la page"
     Then I should see "La page a bien été supprimée"
 
-  Scenario: Je trie les questions
+  Scenario: Je trie les pages
     Then I follow "Ordre d'affichage"
     Then I should see "Ordre d'affichage des pages"
