@@ -33,6 +33,36 @@ class FactureRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * @param string|null $tuteur
+     * @param bool|null $paye
+     * @return Facture[]
+     */
+    public function search(?string $tuteur, ?bool $paye): array
+    {
+        $qb = $this->createQueryBuilder('facture')
+            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
+            ->addSelect('tuteur');
+
+        if ($tuteur) {
+            $qb->andWhere('tuteur.nom LIKE :tuteur')
+                ->setParameter('tuteur', '%'.$tuteur.'%');
+        }
+
+        switch ($paye) {
+            case true:
+                $qb->andWhere('facture.payeLe IS NOT NULL');
+                break;
+            case false:
+                $qb->andWhere('facture.payeLe IS NULL');
+                break;
+            default:
+                break;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function remove(Facture $facture)
     {
         $this->_em->remove($facture);
@@ -47,4 +77,5 @@ class FactureRepository extends ServiceEntityRepository
     {
         $this->_em->persist($facture);
     }
+
 }

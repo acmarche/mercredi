@@ -3,8 +3,10 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
+use AcMarche\Mercredi\Facture\Form\FactureSearchType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
 use AcMarche\Mercredi\Facture\Form\FactureType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
@@ -14,7 +16,9 @@ use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,6 +81,29 @@ class FactureController extends AbstractController
             [
                 'factures' => $factures,
                 'tuteur' => $tuteur,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/search", name="mercredi_admin_facture_search", methods={"GET","POST"})
+     */
+    public function search(Request $request): Response
+    {
+        $factures = [];
+        $form = $this->createForm(FactureSearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dataForm = $form->getData();
+            $factures = $this->factureRepository->search($dataForm['tuteur'], $dataForm['paye']);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/search.html.twig',
+            [
+                'factures' => $factures,
+                'form' => $form->createView(),
             ]
         );
     }

@@ -40,6 +40,11 @@
        href="{{ path('mercredi_admin_plaine_index') }}">Les plaines</a>
 </li>
 
+<li class="nav-item{% if action == 'mercredi_admin_facture_search' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('mercredi_admin_facture_search') }}">Les factures</a>
+</li>
+
 {% if is_granted('ROLE_MERCREDI_ADMIN') %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"

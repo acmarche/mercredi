@@ -6,6 +6,7 @@ Feature: Gestion des factures
   Je supprime une facture
   Je crée une facture
   J'attache des présences
+  Je cherche une facture
 
   Background:
     Given I am logged in as an admin
@@ -85,3 +86,11 @@ Feature: Gestion des factures
     Then I should see "Mercredi 2 septembre 2020"
     And I press "Attacher à la facture"
     Then I should see "Les présences ont bien été attachées"
+
+  Scenario: Je cherche une facture
+    Given I am on "/admin/facture/search"
+    And I fill in "facture_search[tuteur]" with "simps"
+    And I select "Non payée" from "facture_search[paye]"
+    And I press "Rechercher"
+    Then I should see "Mardi 6 Octobre 2020"
+    Then I should see "SIMPSON Homer"
