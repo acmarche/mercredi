@@ -23,7 +23,7 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_font_document_download")
+     * @Route("/{id}", name="mercredi_font_document_download")
      */
     public function index(Document $document)
     {
