@@ -23,7 +23,7 @@ class AnneeScolaireRepository extends ServiceEntityRepository
     /**
      * @return AnneeScolaire[]
      */
-    public function findAllOrderByOrdre():array
+    public function findAllOrderByOrdre(): array
     {
         return $this->createQueryBuilder('annee_scolaire')
             ->orderBy('annee_scolaire.ordre', 'ASC')->getQuery()->getResult();

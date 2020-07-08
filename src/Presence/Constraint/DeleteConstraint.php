@@ -7,8 +7,7 @@ use DateTime;
 
 /**
  * Pour les parents ne peuvent supprimer une date passée
- * Class DeleteConstraint
- * @package AcMarche\Mercredi\Presence\Constraint
+ * Class DeleteConstraint.
  */
 class DeleteConstraint
 {

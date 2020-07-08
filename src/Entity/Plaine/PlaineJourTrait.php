@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Plaine;
-
 
 trait PlaineJourTrait
 {
@@ -28,6 +26,4 @@ trait PlaineJourTrait
 
         return $this;
     }
-
-
 }

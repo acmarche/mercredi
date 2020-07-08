@@ -48,5 +48,4 @@ trait JoursTrait
 
         return $this;
     }
-
 }

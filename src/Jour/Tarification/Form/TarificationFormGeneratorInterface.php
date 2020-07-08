@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Jour\Tarification\Form;
-
 
 use AcMarche\Mercredi\Entity\Jour;
 use Symfony\Component\Form\FormInterface;

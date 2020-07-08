@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Presence\Calculator;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -118,5 +117,4 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
                 return $jour->getPrix1();
         }
     }
-
 }

@@ -20,7 +20,6 @@ class RelationUtils
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Enfant[]
      */
     public function findEnfantsByTuteur(Tuteur $tuteur): array

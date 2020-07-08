@@ -22,7 +22,6 @@ class PlaineJourRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Plaine $plaine
      * @return PlaineJour[]
      */
     public function findByPlaine(Plaine $plaine): array
@@ -62,6 +61,4 @@ class PlaineJourRepository extends ServiceEntityRepository
     {
         $this->_em->persist($plaine);
     }
-
-
 }

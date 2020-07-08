@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- *
  * @ORM\Table("plaine_jour", uniqueConstraints={
  *     @ORM\UniqueConstraint(columns={"jour_id", "plaine_id"})
  * }))
@@ -26,7 +25,6 @@ class PlaineJour
 
     /**
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="plaine_jour")
-     *
      */
     private $jour;
 

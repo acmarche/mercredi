@@ -71,7 +71,7 @@ class EnfantVoter extends Voter
             }
         }
 
-        return in_array(
+        return \in_array(
             $attribute,
             [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE]
         );
@@ -170,7 +170,7 @@ class EnfantVoter extends Voter
             $relations
         );
 
-        if (in_array($this->enfant->getId(), $enfants)) {
+        if (\in_array($this->enfant->getId(), $enfants)) {
             return true;
         }
 

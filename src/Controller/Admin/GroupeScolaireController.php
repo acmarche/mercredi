@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\GroupeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireCreated;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireDeleted;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireUpdated;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\GroupeScolaire;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

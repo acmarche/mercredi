@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Presence\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;

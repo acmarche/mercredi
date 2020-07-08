@@ -130,7 +130,7 @@ class PageController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $pages = $request->request->get('pages');
-            if (is_array($pages)) {
+            if (\is_array($pages)) {
                 foreach ($pages as $position => $pageId) {
                     $santeQuestion = $this->pageRepository->find($pageId);
                     if ($santeQuestion) {

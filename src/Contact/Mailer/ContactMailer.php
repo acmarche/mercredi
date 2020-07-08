@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Contact\Mailer;
-
 
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -29,9 +27,6 @@ class ContactMailer
     }
 
     /**
-     * @param string $email
-     * @param string $nom
-     * @param string $body
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function sendContactForm(string $email, string $nom, string $body): void

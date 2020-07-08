@@ -138,6 +138,7 @@ class PresenceUtils
 
     /**
      * @param Presence[] $presences
+     *
      * @return ArrayCollection|Plaine[]
      */
     public static function extractPlainesFromPresences(array $presences): iterable

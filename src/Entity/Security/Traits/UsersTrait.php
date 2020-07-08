@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Security\Traits;
 
 use AcMarche\Mercredi\Entity\Security\User;
@@ -41,5 +40,4 @@ trait UsersTrait
 
         return $this;
     }
-
 }

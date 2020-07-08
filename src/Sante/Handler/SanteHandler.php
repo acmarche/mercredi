@@ -52,7 +52,6 @@ class SanteHandler
     /**
      * Si pas de reponse ou remarque on ne cree pas la reponse.
      *
-     * @param SanteFiche $santeFiche
      * @param SanteQuestion[] $questions
      *
      * @return void|null

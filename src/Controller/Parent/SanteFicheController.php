@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Sante\Form\SanteFicheType;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
-use AcMarche\Mercredi\Sante\Message\SanteFicheDeleted;
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
@@ -118,5 +117,4 @@ class SanteFicheController extends AbstractController
             ]
         );
     }
-
 }

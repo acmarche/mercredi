@@ -61,7 +61,7 @@ class EcoleVoter extends Voter
             }
         }
 
-        return in_array($attribute, [self::INDEX, self::SHOW, self::ADD, self::EDIT, self::DELETE], true);
+        return \in_array($attribute, [self::INDEX, self::SHOW, self::ADD, self::EDIT, self::DELETE], true);
     }
 
     /**
@@ -155,7 +155,7 @@ class EcoleVoter extends Voter
     {
         if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
             $ecoles = $this->user->getEcoles();
-            if (count($ecoles) > 0) {
+            if (\count($ecoles) > 0) {
                 return true;
             }
         }

@@ -50,7 +50,7 @@ class FactureMailer
         $data['from'] = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
         $tuteur = $facture->getTuteur();
         $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
-        $data['to'] = count($emails) > 0 ? $emails[0] : null;
+        $data['to'] = \count($emails) > 0 ? $emails[0] : null;
 
         return $data;
     }

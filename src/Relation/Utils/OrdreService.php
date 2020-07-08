@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation\Utils;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence;
@@ -31,10 +29,7 @@ class OrdreService
     /**
      * Ordre de l'enfant par importance decroissante.
      *
-     * @param Enfant $enfant
-     * @param Tuteur $tuteur
      * @param Presence $presence
-     * @return int
      */
     public function getOrdreEnfant(Enfant $enfant, Tuteur $tuteur): int
     {
@@ -74,7 +69,7 @@ class OrdreService
             [$tuteur]
         );
 
-        if (0 == count($fratries)) {//pas de fraterie ce jour là
+        if (0 == \count($fratries)) {//pas de fraterie ce jour là
             return $ordreBase;
         }
 
@@ -87,11 +82,11 @@ class OrdreService
             }
         }
 
-        if (0 == count($presents)) {
+        if (0 == \count($presents)) {
             return $ordreBase;
         }
 
-        return $ordreBase - count($presents); //todo verifier calcul
+        return $ordreBase - \count($presents); //todo verifier calcul
 
         //lisa = 2, si marie en 1 reste 2
         //lisa = 3, si marie en 1 devient 2
@@ -113,5 +108,4 @@ class OrdreService
 
         return $ordreBase;
     }
-
 }

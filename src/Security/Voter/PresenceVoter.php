@@ -3,12 +3,10 @@
 namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Presence;
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
@@ -57,7 +55,7 @@ class PresenceVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $subject instanceof Presence && in_array(
+        return $subject instanceof Presence && \in_array(
                 $attribute,
                 [self::ADD, self::SHOW, self::EDIT, self::DELETE]
             );
@@ -75,7 +73,7 @@ class PresenceVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ADMIN'])) {
+        if ($this->security->isGranted( 'ROLE_MERCREDI_ADMIN')) {
             return true;
         }
 
@@ -99,11 +97,11 @@ class PresenceVoter extends Voter
             return true;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_READ'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
             return true;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_PARENT'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return $this->checkTuteur();
         }
 
@@ -117,6 +115,9 @@ class PresenceVoter extends Voter
      */
     private function canEdit(Presence $presence, TokenInterface $token)
     {
+        if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+            return $this->checkTuteur();
+        }
         return false;
     }
 
@@ -135,7 +136,7 @@ class PresenceVoter extends Voter
             return true;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_PARENT'])) {
+        if ($this->security->isGranted( 'ROLE_MERCREDI_PARENT')) {
             return $this->checkTuteur();
         }
 
@@ -166,12 +167,10 @@ class PresenceVoter extends Voter
             $relations
         );
 
-        if (in_array($this->enfant->getId(), $enfants)) {
+        if (\in_array($this->enfant->getId(), $enfants)) {
             return true;
         }
 
         return false;
     }
-
-
 }

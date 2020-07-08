@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AbsentTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\HalfTrait;
@@ -11,7 +12,6 @@ use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
-use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;

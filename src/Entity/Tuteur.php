@@ -54,9 +54,9 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      */
     private $relations;
 
-     /**
+    /**
      * @var Facture[]
-      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur")
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur")
      */
     private $factures;
 

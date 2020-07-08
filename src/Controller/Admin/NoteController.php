@@ -77,7 +77,7 @@ class NoteController extends AbstractController
     public function newForEnfant(Request $request, Enfant $enfant): Response
     {
         $note = new Note();
-        $enfant->addNote($note);//todo
+        $enfant->addNote($note); //todo
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
 

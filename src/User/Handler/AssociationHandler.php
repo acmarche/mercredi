@@ -55,7 +55,7 @@ class AssociationHandler
         $tuteur = $dto->getTuteur();
         $user = $dto->getUser();
 
-        if (count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
+        if (\count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
             $user->getTuteurs()->clear(); //remove old tuteur
         }
 
@@ -79,6 +79,7 @@ class AssociationHandler
 
         $this->tuteurRepository->flush();
         $this->flashBag->add('success', 'Le parent a bien été dissocié.');
+
         return $tuteur;
     }
 
@@ -97,6 +98,4 @@ class AssociationHandler
         $this->tuteurRepository->flush();
         $this->flashBag->add('success', 'L\'utilisateur a bien été dissocié.');
     }
-
-
 }

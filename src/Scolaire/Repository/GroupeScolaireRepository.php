@@ -57,5 +57,4 @@ class GroupeScolaireRepository extends ServiceEntityRepository
     {
         $this->_em->persist($groupeScolaire);
     }
-
 }

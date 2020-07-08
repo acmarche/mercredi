@@ -1,18 +1,13 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Plaine\Utils;
-
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class PlaineUtils
 {
     /**
-     * @param Plaine $plaine
      * @return Jour[]
      */
     public static function extractJoursFromPlaine(Plaine $plaine)
@@ -25,6 +20,4 @@ class PlaineUtils
 
         return $jours;
     }
-
-
 }

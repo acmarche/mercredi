@@ -30,7 +30,7 @@ class FacturePdfFactory extends AbstractPdfDownloader
         $date = $facture->getFactureLe();
         $html = $this->factureFactory->generateHtml($facture);
 
-       // return new Response($html);
+        // return new Response($html);
 
         return $this->downloadPdf($html, 'facture_'.$date->format('d-m-Y').'.pdf');
     }

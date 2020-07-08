@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Twig\Environment;
 
 class UserMailer
 {
@@ -34,9 +33,6 @@ class UserMailer
     }
 
     /**
-     * @param User $user
-     * @param Tuteur $tuteur
-     * @param string|null $password
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function sendNewAccountToParent(User $user, Tuteur $tuteur, string $password = null)

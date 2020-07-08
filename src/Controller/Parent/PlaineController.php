@@ -11,7 +11,6 @@ use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -126,7 +125,6 @@ class PlaineController extends AbstractController
 
     /**
      * @Route("/confirmation/{uuid}", name="mercredi_parent_plaine_presence_confirmation", methods={"GET","POST"})
-     *
      */
     public function confirmation(Enfant $enfant): Response
     {
@@ -153,6 +151,4 @@ class PlaineController extends AbstractController
             ]
         );
     }
-
-
 }

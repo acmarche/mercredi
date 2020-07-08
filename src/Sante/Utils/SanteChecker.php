@@ -64,7 +64,7 @@ class SanteChecker
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
         $questions = $this->santeQuestionRepository->findAll();
 
-        if (count($reponses) < count($questions)) {
+        if (\count($reponses) < \count($questions)) {
             return false;
         }
 

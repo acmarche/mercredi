@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Facture;
-
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait FacturePresencesTrait
 {
-
     /**
      * @var FacturePresence[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\FacturePresence", mappedBy="facture", cascade={"remove"})

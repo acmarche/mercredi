@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Controller\Parent;
-
 
 use AcMarche\Mercredi\Entity\Tuteur;
 use Symfony\Component\HttpFoundation\Response;

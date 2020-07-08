@@ -20,7 +20,6 @@ class AnneeScolaireType extends AbstractType
                 'ordre',
                 IntegerType::class,
                 [
-
                 ]
             )
             ->add(

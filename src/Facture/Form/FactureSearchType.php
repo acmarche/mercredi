@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -37,9 +36,7 @@ class FactureSearchType extends AbstractType
     {
         $resolver->setDefaults(
             [
-
             ]
         );
     }
-
 }

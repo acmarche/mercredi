@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Facture;
-
 
 trait FacturesTrait
 {
@@ -26,6 +24,4 @@ trait FacturesTrait
     {
         $this->factures = $factures;
     }
-
-
 }

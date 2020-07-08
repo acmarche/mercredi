@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
@@ -40,6 +41,13 @@ class GroupeScolaire
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", mappedBy="groupe_scolaire")
      */
     private $annees_scolaires;
+
+    /**
+     * Pour le cascade
+     * @var PlaineGroupe[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="groupe_scolaire", cascade={"remove"})
+     */
+    private $plaine_groupes;
 
     public function __construct()
     {
@@ -137,5 +145,4 @@ class GroupeScolaire
 
         return $this;
     }
-
 }

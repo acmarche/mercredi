@@ -103,7 +103,7 @@ class PlaineJourController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
-            if (count($this->enfantRepository->findBy(['plaine' => $plaine])) > 0) {
+            if (\count($this->enfantRepository->findBy(['plaine' => $plaine])) > 0) {
                 $this->addFlash('danger', 'La plaine contient des enfants et ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);

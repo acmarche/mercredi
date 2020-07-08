@@ -5,9 +5,9 @@ namespace AcMarche\Mercredi\Entity;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Reduction\Validator as AcMarcheReductionAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use AcMarche\Mercredi\Reduction\Validator as AcMarcheReductionAssert;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Reduction\Repository\ReductionRepository")
@@ -28,7 +28,6 @@ class Reduction
      *      min = 0,
      *      max = 100
      *     )
-     *
      */
     private $pourcentage;
 
@@ -58,20 +57,13 @@ class Reduction
         $this->pourcentage = $pourcentage;
     }
 
-    /**
-     * @return float|null
-     */
     public function getForfait(): ?float
     {
         return $this->forfait;
     }
 
-    /**
-     * @param float|null $forfait
-     */
     public function setForfait(?float $forfait): void
     {
         $this->forfait = $forfait;
     }
-
 }

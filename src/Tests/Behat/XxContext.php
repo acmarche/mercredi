@@ -160,7 +160,7 @@ class XxContext
         $table = $this->getPage()->find('css', 'table.table');
         assertNotNull($table, 'Cannot find a table!');
 
-        assertCount(intval($count), $table->findAll('css', 'tbody tr'));
+        assertCount((int) $count, $table->findAll('css', 'tbody tr'));
     }
 
     /**

@@ -2,15 +2,14 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Entity\Animateur;
-use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Search\SearchHelper;
-use AcMarche\Mercredi\Animateur\Form\SearchAnimateurType;
 use AcMarche\Mercredi\Animateur\Form\AnimateurType;
+use AcMarche\Mercredi\Animateur\Form\SearchAnimateurType;
 use AcMarche\Mercredi\Animateur\Message\AnimateurCreated;
 use AcMarche\Mercredi\Animateur\Message\AnimateurDeleted;
 use AcMarche\Mercredi\Animateur\Message\AnimateurUpdated;
 use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
+use AcMarche\Mercredi\Entity\Animateur;
+use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -51,12 +51,11 @@ Feature: Gestion des présences
     Then I should see "Oui avec certificat"
 
   Scenario: J'édite une présence déjà facturée
-    Then I fill in "search_enfant[nom]" with "Peret"
+    Then I fill in "search_enfant[nom]" with "Bart"
     And I press "Rechercher"
-    Then I should see "Peret"
-    Then I follow "Peret"
-    Then I follow "Mercredi 16 septembre 2020"
-    Then I should see "Détail de la présence de PERET Merlin"
+    Then I follow "Simpson"
+    Then I follow "Mercredi 6 mai 2020"
+    Then I should see "Détail de la présence de SIMPSON Bart du mercredi 6 mai 2020"
     Then I follow "Modifier"
     Then I should see "Une présence déjà facturée ne peut être editée"
 

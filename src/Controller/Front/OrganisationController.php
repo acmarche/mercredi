@@ -1,16 +1,14 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Controller\Front;
-
 
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class OrganisationController
- * @package AcMarche\Mercredi\Controller\Front
+ * Class OrganisationController.
+ *
  * @Route("/organisation")
  */
 class OrganisationController extends AbstractController
@@ -55,5 +53,4 @@ class OrganisationController extends AbstractController
             ]
         );
     }
-
 }

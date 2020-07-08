@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\User\Form;
 
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

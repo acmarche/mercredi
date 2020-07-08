@@ -98,8 +98,6 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Plaine $plaine
-     * @param Tuteur $tuteur
      * @return Presence[]
      */
     public function findPresencesByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
@@ -133,7 +131,6 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPlainesByEnfant(Enfant $enfant): array
@@ -210,7 +207,7 @@ class PresenceRepository extends ServiceEntityRepository
 
     /**
      * @param string $nom
-     * @param Ecole $ecole
+     * @param Ecole  $ecole
      * @param string $annee_scolaire
      *
      * @return Presence[]
@@ -275,5 +272,4 @@ class PresenceRepository extends ServiceEntityRepository
     {
         $this->_em->persist($presence);
     }
-
 }

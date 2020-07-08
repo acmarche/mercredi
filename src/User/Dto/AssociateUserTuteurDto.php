@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\User\Dto;
-
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -29,9 +27,6 @@ class AssociateUserTuteurDto
         $this->user = $user;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
@@ -45,25 +40,16 @@ class AssociateUserTuteurDto
         return $this->tuteur;
     }
 
-    /**
-     * @param Tuteur $tuteur
-     */
     public function setTuteur(Tuteur $tuteur): void
     {
         $this->tuteur = $tuteur;
     }
 
-    /**
-     * @return bool
-     */
     public function isSendEmail(): bool
     {
         return $this->sendEmail;
     }
 
-    /**
-     * @param bool $sendEmail
-     */
     public function setSendEmail(bool $sendEmail): void
     {
         $this->sendEmail = $sendEmail;

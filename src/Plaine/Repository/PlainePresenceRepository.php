@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Plaine\Repository;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -25,7 +23,6 @@ class PlainePresenceRepository
     }
 
     /**
-     * @param Plaine $plaine
      * @return Enfant[]
      */
     public function findEnfantsByPlaine(Plaine $plaine): array
@@ -36,7 +33,6 @@ class PlainePresenceRepository
     }
 
     /**
-     * @param Plaine $plaine
      * @return Enfant[]
      */
     public function findEnfantsByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
@@ -47,7 +43,6 @@ class PlainePresenceRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Plaine[]|ArrayCollection
      */
     public function findPlainesByEnfant(Enfant $enfant): iterable
@@ -58,8 +53,6 @@ class PlainePresenceRepository
     }
 
     /**
-     * @param Plaine $plaine
-     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPrecencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant)

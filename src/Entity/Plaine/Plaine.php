@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -24,7 +23,7 @@ class Plaine
     use InscriptionOpenTrait;
     use PrixTrait;
     use PrematernelleTrait;
-    use PlaineMaxTrait;
+    use PlaineGroupesTrait;
 
     /**
      * @var PlaineJour[]
@@ -47,7 +46,7 @@ class Plaine
         $this->prix1 = 0;
         $this->prix2 = 0;
         $this->prix3 = 0;
-      //  $this->plaine_jours = new ArrayCollection();
+        //  $this->plaine_jours = new ArrayCollection();
     }
 
     public function __toString()
@@ -55,35 +54,5 @@ class Plaine
         return $this->nom;
     }
 
-    /**
-     * @return Collection|PlaineGroupe[]
-     */
-    public function getPlaineGroupes(): Collection
-    {
-        return $this->plaine_groupes;
-    }
-
-    public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
-    {
-        if (!$this->plaine_groupes->contains($plaineGroupe)) {
-            $this->plaine_groupes[] = $plaineGroupe;
-            $plaineGroupe->setPlaine($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlaineGroupe(PlaineGroupe $plaineGroupe): self
-    {
-        if ($this->plaine_groupes->contains($plaineGroupe)) {
-            $this->plaine_groupes->removeElement($plaineGroupe);
-            // set the owning side to null (unless already changed)
-            if ($plaineGroupe->getPlaine() === $this) {
-                $plaineGroupe->setPlaine(null);
-            }
-        }
-
-        return $this;
-    }
 
 }

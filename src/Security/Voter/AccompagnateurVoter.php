@@ -62,7 +62,7 @@ class AccompagnateurVoter extends Voter
             }
         }
 
-        return in_array($attribute, [self::INDEX, self::SHOW, self::EDIT, self::DELETE], true);
+        return \in_array($attribute, [self::INDEX, self::SHOW, self::EDIT, self::DELETE], true);
     }
 
     /**
@@ -154,7 +154,7 @@ class AccompagnateurVoter extends Voter
     private function checkEcoles($token)
     {
         if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
-            if (count($this->ecoles) > 0) {
+            if (\count($this->ecoles) > 0) {
                 return true;
             }
         }

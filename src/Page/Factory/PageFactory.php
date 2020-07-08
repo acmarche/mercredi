@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Page\Factory;
-
 
 use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Page\Repository\PageRepository;

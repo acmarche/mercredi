@@ -78,7 +78,7 @@ class PlainePresenceController extends AbstractController
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        if (0 == count($plaine->getPlaineJours())) {
+        if (0 == \count($plaine->getPlaineJours())) {
             $this->addFlash('danger', 'La plaine n\'a aucune date');
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
@@ -117,7 +117,7 @@ class PlainePresenceController extends AbstractController
     public function selectTuteur(Plaine $plaine, Enfant $enfant): Response
     {
         $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
-        if (1 === count($tuteurs)) {
+        if (1 === \count($tuteurs)) {
             $tuteur = $tuteurs[0];
 
             return $this->redirectToRoute(
@@ -231,7 +231,7 @@ class PlainePresenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $new = $plaineDto->getJours();
-            if (count($presences) === 0) {
+            if (0 === \count($presences)) {
                 $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
                 $tuteur = $tuteurs[0];
             } else {
@@ -266,7 +266,7 @@ class PlainePresenceController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int)$request->request->get('presence');
+            $presenceId = (int) $request->request->get('presence');
             if (!$presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
 

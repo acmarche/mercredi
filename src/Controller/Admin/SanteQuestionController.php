@@ -130,7 +130,7 @@ class SanteQuestionController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $questions = $request->request->get('questions');
-            if (is_array($questions)) {
+            if (\is_array($questions)) {
                 foreach ($questions as $position => $questionId) {
                     $santeQuestion = $this->santeQuestionRepository->find($questionId);
                     if ($santeQuestion) {

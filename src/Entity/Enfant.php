@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
+use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
@@ -19,7 +20,6 @@ use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
-use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +29,6 @@ use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -71,7 +70,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      * @var AnneeScolaire|null
      *
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", inversedBy="enfants")
-     *
      */
     private $annee_scolaire;
 
@@ -169,5 +167,4 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
 
         return $this;
     }
-
 }

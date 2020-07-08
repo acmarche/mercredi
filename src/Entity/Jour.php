@@ -54,7 +54,6 @@ class Jour implements TimestampableInterface
     /**
      * @var PlaineJour
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="jour")
-     *
      */
     private $plaine_jour;
 
@@ -114,5 +113,4 @@ class Jour implements TimestampableInterface
 
         return $this;
     }
-
 }

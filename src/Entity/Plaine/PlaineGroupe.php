@@ -27,7 +27,7 @@ class PlaineGroupe
     /**
      * @var GroupeScolaire|null
      *
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="plaine_groupes")
      */
     private $groupe_scolaire;
 
@@ -88,6 +88,4 @@ class PlaineGroupe
 
         return $this;
     }
-
-
 }

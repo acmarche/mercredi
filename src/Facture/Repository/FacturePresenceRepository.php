@@ -34,9 +34,6 @@ class FacturePresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    /**
-     * @return FacturePresence|null
-     */
     public function findByPresence(Presence $presence): ?FacturePresence
     {
         return $this->createQueryBuilder('facture_presence')
@@ -61,5 +58,4 @@ class FacturePresenceRepository extends ServiceEntityRepository
     {
         $this->_em->persist($facturePresence);
     }
-
 }

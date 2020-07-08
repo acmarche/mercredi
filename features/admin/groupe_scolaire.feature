@@ -30,4 +30,4 @@ Feature: Gestion des groupes scolaires
     Then I follow "Moyens"
     Then I press "Supprimer le groupe scolaire"
    # Then print last response
-    Then I should see "Le groupe scolaire a bien été supprimé"
+    Then I should see "Le groupe a bien été supprimé"

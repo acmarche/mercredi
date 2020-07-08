@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
  * @method Page|null findOneBy(array $criteria, array $orderBy = null)
- * method Page[]    findAll()
+ *                                                                                                 method Page[]    findAll()
  * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PageRepository extends ServiceEntityRepository

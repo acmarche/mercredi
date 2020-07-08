@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Message\UserUpdated;
@@ -79,7 +78,7 @@ class ProfileController extends AbstractController
         if ($user) {
             $roles = $user->getRoles();
 
-            if (count($roles) > 1) {
+            if (\count($roles) > 1) {
                 return $this->redirectToRoute('mercredi_front_select_profile');
             }
 
@@ -172,5 +171,4 @@ class ProfileController extends AbstractController
             ]
         );
     }
-
 }

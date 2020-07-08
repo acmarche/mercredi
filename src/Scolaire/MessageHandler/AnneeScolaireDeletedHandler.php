@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Scolaire\MessageHandler;
 
 use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireDeleted;
-use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireDeleted;
 use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

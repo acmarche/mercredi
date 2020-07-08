@@ -14,12 +14,8 @@ class PresenceCreated
         $this->days = $days;
     }
 
-    /**
-     * @return array
-     */
     public function getDays(): array
     {
         return $this->days;
     }
-
 }

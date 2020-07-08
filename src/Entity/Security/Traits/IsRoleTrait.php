@@ -6,7 +6,7 @@ trait IsRoleTrait
 {
     public function isParent()
     {
-        if (in_array('ROLE_MERCREDI_PARENT', $this->getRoles())) {
+        if (\in_array('ROLE_MERCREDI_PARENT', $this->getRoles())) {
             return true;
         }
 
@@ -15,7 +15,7 @@ trait IsRoleTrait
 
     public function isAnimateur()
     {
-        if (in_array('ROLE_MERCREDI_ANIMATEUR', $this->getRoles())) {
+        if (\in_array('ROLE_MERCREDI_ANIMATEUR', $this->getRoles())) {
             return true;
         }
 
@@ -24,7 +24,7 @@ trait IsRoleTrait
 
     public function isEcole()
     {
-        if (in_array('ROLE_MERCREDI_ECOLE', $this->getRoles())) {
+        if (\in_array('ROLE_MERCREDI_ECOLE', $this->getRoles())) {
             return true;
         }
 

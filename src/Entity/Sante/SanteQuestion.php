@@ -152,5 +152,4 @@ class SanteQuestion
 
         return $this;
     }
-
 }

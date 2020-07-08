@@ -126,15 +126,15 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
          * Total enfants et total enfants par jour.
          */
         $colonne = 'A';
-        $sheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getEnfants()).' enfants');
+        $sheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getEnfants()).' enfants');
         $colonne = 'D';
 
         foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
-            $sheet->setCellValue($colonne.$ligne, count($jourListing->getEnfants()));
+            $sheet->setCellValue($colonne.$ligne, \count($jourListing->getEnfants()));
             ++$colonne;
         }
 
-        $sheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getPresences()));
+        $sheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getPresences()));
 
         return $spreadsheet;
     }

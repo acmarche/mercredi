@@ -175,7 +175,7 @@ class MessageController extends AbstractController
     public function groupeScolaire(Request $request, string $groupe): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
-        if (count($args) < 1) {
+        if (\count($args) < 1) {
             return $this->redirectToRoute('mercredi_admin_presence_index');
         }
 

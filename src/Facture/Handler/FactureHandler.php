@@ -82,5 +82,4 @@ class FactureHandler
 
         return $facture;
     }
-
 }

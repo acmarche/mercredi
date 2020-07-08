@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Registration\Mailer;
-
 
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Entity\Security\User;

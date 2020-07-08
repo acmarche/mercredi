@@ -14,6 +14,7 @@ class PourcentageOrForfait extends Constraint
      * Then, use these in your validator class.
      */
     public $message_only_one = 'Vous devez appliquer un pourcentage ou une réduction';
+
     /**
      * @return array|string
      */

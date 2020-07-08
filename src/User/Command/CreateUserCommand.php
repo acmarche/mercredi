@@ -57,7 +57,7 @@ class CreateUserCommand extends Command
             return 1;
         }
 
-        if (strlen($name) < 1) {
+        if (\strlen($name) < 1) {
             $io->error('Name minium 1');
 
             return 1;

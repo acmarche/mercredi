@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactory;
 use AcMarche\Mercredi\Sante\Factory\SantePdfFactory;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;

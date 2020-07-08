@@ -26,6 +26,6 @@ class GroupeScolaireCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(GroupeScolaireCreated $groupeScolaireCreated)
     {
-        $this->flashBag->add('success', "Le groupe a bien été ajouté");
+        $this->flashBag->add('success', 'Le groupe a bien été ajouté');
     }
 }

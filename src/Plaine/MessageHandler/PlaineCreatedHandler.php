@@ -26,6 +26,6 @@ class PlaineCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(PlaineCreated $plaineCreated)
     {
-        $this->flashBag->add('success', "La plaine a bien été ajoutée");
+        $this->flashBag->add('success', 'La plaine a bien été ajoutée');
     }
 }

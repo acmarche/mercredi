@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
@@ -12,7 +11,6 @@ class FactureAttachType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -23,5 +21,4 @@ class FactureAttachType extends AbstractType
             ]
         );
     }
-
 }

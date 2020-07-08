@@ -34,8 +34,6 @@ class FactureRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string|null $tuteur
-     * @param bool|null $paye
      * @return Facture[]
      */
     public function search(?string $tuteur, ?bool $paye): array
@@ -77,5 +75,4 @@ class FactureRepository extends ServiceEntityRepository
     {
         $this->_em->persist($facture);
     }
-
 }

@@ -100,7 +100,7 @@ class PlaineHandler
     {
         $plaine->initJours();
         $currentJours = $this->findPlaineJoursByPlaine($plaine);
-        if (count($currentJours) == 0) {
+        if (0 == \count($currentJours)) {
             $today = new Jour(new \DateTime('today'));
             $tomorrow = new Jour(new \DateTime('+1day'));
             $plaine->addJour($today);
@@ -121,7 +121,6 @@ class PlaineHandler
     }
 
     /**
-     * @param Plaine $plaine
      * @param Jour[] $newJours
      */
     private function removePlaineJours(Plaine $plaine, iterable $newJours)
@@ -137,7 +136,7 @@ class PlaineHandler
                     break;
                 }
             }
-            if ($found === false) {
+            if (false === $found) {
                 $this->jourRepository->remove($jourEntity);
                 $this->plaineJourRepository->remove($plaineJour);
             }

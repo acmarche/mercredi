@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
@@ -16,9 +15,7 @@ use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -34,7 +34,7 @@ class JourRepository extends ServiceEntityRepository
             ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
             ->addSelect('plaineJour');
 
-        if (count($joursRegistered) > 0) {
+        if (\count($joursRegistered) > 0) {
             $qb
                 ->andWhere('jour.id NOT IN (:jours)')
                 ->setParameter('jours', $joursRegistered);
@@ -88,9 +88,7 @@ class JourRepository extends ServiceEntityRepository
 
     /**
      * Retourne la liste des jours d'accueils pour les parents
-     * pour qu'ils inscrivent leurs enfants
-     * @param Enfant $enfant
-     * @return QueryBuilder
+     * pour qu'ils inscrivent leurs enfants.
      */
     public function getQbForParent(Enfant $enfant): QueryBuilder
     {

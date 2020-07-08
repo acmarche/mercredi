@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Utils\FacturePresenceUtils;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
@@ -21,7 +21,6 @@ use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
-use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -65,6 +64,10 @@ class PresenceController extends AbstractController
      * @var PresenceCalculatorInterface
      */
     private $presenceCalculator;
+    /**
+     * @var FacturePresenceRepository
+     */
+    private $facturePresenceRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -73,7 +76,8 @@ class PresenceController extends AbstractController
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
         PresenceUtils $presenceUtils,
-        PresenceCalculatorInterface $presenceCalculator
+        PresenceCalculatorInterface $presenceCalculator,
+        FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -82,6 +86,7 @@ class PresenceController extends AbstractController
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->presenceUtils = $presenceUtils;
         $this->presenceCalculator = $presenceCalculator;
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     /**
@@ -200,11 +205,13 @@ class PresenceController extends AbstractController
     public function show(Presence $presence): Response
     {
         $cout = $this->presenceCalculator->calculate($presence);
+        $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/show.html.twig',
             [
                 'presence' => $presence,
+                'facturePresence'=>$facturePresence,
                 'cout' => $cout,
                 'enfant' => $presence->getEnfant(),
             ]
@@ -219,7 +226,7 @@ class PresenceController extends AbstractController
         if ($this->presenceHandler->isFactured($presence)) {
             $this->addFlash('danger', 'Une présence déjà facturée ne peut être editée');
 
-            return $this->redirectToRoute('mercredi_admin_plaine_presence_show', ['id' => $presence->getId()]);
+            return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
         }
 
         $form = $this->createForm(PresenceType::class, $presence);

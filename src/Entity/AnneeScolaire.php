@@ -26,7 +26,7 @@ class AnneeScolaire
     private $annee_suivante;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(type="integer")
      */
     private $ordre;
@@ -40,6 +40,7 @@ class AnneeScolaire
     /**
      * @var GroupeScolaire
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="annees_scolaires")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $groupe_scolaire;
 

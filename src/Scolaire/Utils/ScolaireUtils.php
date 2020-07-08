@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Scolaire\Utils;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
@@ -28,7 +26,7 @@ class ScolaireUtils
 
         $annee_scolaire = $enfant->getAnneeScolaire();
 
-        if($groupeScolaire = $annee_scolaire->getGroupeScolaire()) {
+        if ($groupeScolaire = $annee_scolaire->getGroupeScolaire()) {
             return $groupeScolaire;
         }
 

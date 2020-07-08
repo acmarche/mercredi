@@ -26,6 +26,6 @@ class GroupeScolaireUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(GroupeScolaireUpdated $groupeScolaireUpdated)
     {
-        $this->flashBag->add('success', "Le groupe a bien été modifié");
+        $this->flashBag->add('success', 'Le groupe a bien été modifié');
     }
 }

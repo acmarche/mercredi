@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Utils;
-
 
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence;

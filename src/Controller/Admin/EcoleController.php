@@ -120,7 +120,7 @@ class EcoleController extends AbstractController
     public function delete(Request $request, Ecole $ecole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
-            if (count($this->enfantRepository->findBy(['ecole' => $ecole])) > 0) {
+            if (\count($this->enfantRepository->findBy(['ecole' => $ecole])) > 0) {
                 $this->addFlash('danger', 'L\'école contient des enfants et ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);

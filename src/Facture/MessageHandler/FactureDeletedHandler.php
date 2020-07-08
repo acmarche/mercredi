@@ -26,6 +26,6 @@ class FactureDeletedHandler implements MessageHandlerInterface
 
     public function __invoke(FactureDeleted $factureDeleted)
     {
-        $this->flashBag->add('success', "La facture a bien été supprimée");
+        $this->flashBag->add('success', 'La facture a bien été supprimée');
     }
 }

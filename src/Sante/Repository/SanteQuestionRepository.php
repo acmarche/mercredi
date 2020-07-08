@@ -32,7 +32,7 @@ class SanteQuestionRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('santeQuestion');
 
-        if (count($questionsRepondues) > 0) {
+        if (\count($questionsRepondues) > 0) {
             $qb->andWhere('santeQuestion.id NOT IN (:questions) ')
                 ->setParameter('questions', $questionsRepondues);
         }

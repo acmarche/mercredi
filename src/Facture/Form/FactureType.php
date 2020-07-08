@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
@@ -46,5 +45,4 @@ class FactureType extends AbstractType
             ]
         );
     }
-
 }

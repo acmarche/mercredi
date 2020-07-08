@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Relation\Dto;
-
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;

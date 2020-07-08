@@ -71,7 +71,6 @@ class AssocierParentController extends AbstractController
 
     /**
      * @Route("/{id}", name="mercredi_user_dissociate_parent", methods={"DELETE"})
-     *
      */
     public function dissociate(Request $request, User $user)
     {

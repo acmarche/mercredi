@@ -14,8 +14,6 @@ use Symfony\Component\Security\Core\Security;
  * showing, editing and deleting posts).
  *
  * See http://symfony.com/doc/current/security/voters.html
- *
- *
  */
 class TuteurVoter extends Voter
 {
@@ -65,7 +63,7 @@ class TuteurVoter extends Voter
             }
         }
 
-        return in_array(
+        return \in_array(
             $attribute,
             [self::ADD, self::SHOW, self::EDIT, self::DELETE]
         );
