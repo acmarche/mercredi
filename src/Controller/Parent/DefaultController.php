@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DefaultController extends AbstractController
 {
+    use GetTuteurTrait;
+
     /**
      * @var OrganisationRepository
      */
@@ -63,23 +65,18 @@ class DefaultController extends AbstractController
      */
     public function default()
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
+        $this->hasTuteur();
 
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
+        $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
         $this->santeChecker->isCompleteForEnfants($enfants);
-        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
-        $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
+        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
+        $factures = $this->factureRepository->findFacturesByTuteur($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/default/index.html.twig',
             [
                 'enfants' => $enfants,
-                'tuteur' => $tuteur,
+                'tuteur' => $this->tuteur,
                 'factures' => $factures,
                 'tuteurIsComplete' => $tuteurIsComplete,
                 'year' => date('Y'),

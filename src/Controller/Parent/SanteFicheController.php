@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SanteFicheController extends AbstractController
 {
+    use GetTuteurTrait;
     /**
      * @var SanteFicheRepository
      */

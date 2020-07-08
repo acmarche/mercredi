@@ -86,6 +86,12 @@ class JourRepository extends ServiceEntityRepository
             ->orderBy('jour.date_jour', 'DESC');
     }
 
+    /**
+     * Retourne la liste des jours d'accueils pour les parents
+     * pour qu'ils inscrivent leurs enfants
+     * @param Enfant $enfant
+     * @return QueryBuilder
+     */
     public function getQbForParent(Enfant $enfant): QueryBuilder
     {
         $qb = $this->getQbDaysNotRegisteredByEnfant($enfant);

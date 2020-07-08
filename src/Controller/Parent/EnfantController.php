@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
@@ -23,6 +24,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class EnfantController extends AbstractController
 {
+    use GetTuteurTrait;
+
     /**
      * @var EnfantRepository
      */
@@ -47,6 +50,10 @@ class EnfantController extends AbstractController
      * @var PresenceRepository
      */
     private $presenceRepository;
+    /**
+     * @var PlainePresenceRepository
+     */
+    private $plainePresenceRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -54,7 +61,8 @@ class EnfantController extends AbstractController
         SanteHandler $santeHandler,
         RelationUtils $relationUtils,
         SanteChecker $santeChecker,
-        PresenceRepository $presenceRepository
+        PresenceRepository $presenceRepository,
+        PlainePresenceRepository $plainePresenceRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurUtils = $tuteurUtils;
@@ -62,6 +70,7 @@ class EnfantController extends AbstractController
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;
         $this->presenceRepository = $presenceRepository;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -70,14 +79,9 @@ class EnfantController extends AbstractController
      */
     public function index()
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
+        $this->hasTuteur();
 
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
+        $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
         $this->santeChecker->isCompleteForEnfants($enfants);
 
         return $this->render(
@@ -98,12 +102,14 @@ class EnfantController extends AbstractController
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
         $presences = $this->presenceRepository->findPresencesByEnfant($enfant);
+        $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
 
         return $this->render(
             '@AcMarcheMercrediParent/enfant/show.html.twig',
             [
                 'enfant' => $enfant,
                 'presences' => $presences,
+                'plaines' => $plaines,
                 'ficheSanteComplete' => $ficheSanteComplete,
             ]
         );

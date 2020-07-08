@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class FactureController extends AbstractController
 {
+    use GetTuteurTrait;
+
     /**
      * @var FactureRepository
      */
@@ -53,21 +55,14 @@ class FactureController extends AbstractController
      */
     public function index(): Response
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
-
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
-        $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
+        $this->hasTuteur();
+        $factures = $this->factureRepository->findFacturesByTuteur($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/facture/index.html.twig',
             [
                 'factures' => $factures,
-                'tuteur' => $tuteur,
+                'tuteur' => $this->tuteur,
             ]
         );
     }
@@ -77,13 +72,8 @@ class FactureController extends AbstractController
      */
     public function facture(Facture $facture): Response
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
-
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
+        $this->hasTuteur();
+        $this->denyAccessUnlessGranted('tuteur_show', $this->tuteur);
 
         return $this->facturePdfFactory->generate($facture);
     }

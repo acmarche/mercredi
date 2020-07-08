@@ -16,10 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AttestationController extends AbstractController
 {
-    public function __construct()
-    {
-
-    }
+    use GetTuteurTrait;
 
     /**
      * @Route("/", name="mercredi_parent_attestation")
@@ -27,19 +24,12 @@ class AttestationController extends AbstractController
      */
     public function default(Request $request)
     {
-        $user = $this->getUser();
-        $tuteurs = $user->getTuteurs();
+        $this->hasTuteur();
 
-        if (0 == count($tuteurs)) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $tuteur = $tuteurs[0];
-
-        $relations = $this->relationRepository->findByTuteur($tuteur);
+        $relations = $this->relationRepository->findByTuteur($this->tuteur);
         $enfants = RelationUtils::extractEnfants($relations);
 
-        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
+        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/default/index.html.twig',

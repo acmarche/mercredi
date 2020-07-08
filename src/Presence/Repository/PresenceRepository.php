@@ -97,6 +97,26 @@ class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @return Presence[]
+     */
+    public function findPresencesByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
+    {
+        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour')
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours)
+            ->andWhere('presence.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->getQuery()->getResult();
+    }
+
     public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant)
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
@@ -107,6 +127,23 @@ class PresenceRepository extends ServiceEntityRepository
             ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
             ->setParameter('jours', $jours)
+            ->andWhere('presence.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @param Enfant $enfant
+     * @return Presence[]
+     */
+    public function findPlainesByEnfant(Enfant $enfant): array
+    {
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->leftJoin('jour.plaine_jour', 'plaine_jour', 'WITH')
+            ->addSelect('enfant', 'jour', 'plaine_jour')
+            ->andWhere('plaine_jour IS NOT NULL')
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
@@ -238,4 +275,5 @@ class PresenceRepository extends ServiceEntityRepository
     {
         $this->_em->persist($presence);
     }
+
 }

@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ExportPdfController extends AbstractController
 {
+    use GetTuteurTrait;
     /**
      * @var SantePdfFactory
      */

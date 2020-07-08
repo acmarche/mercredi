@@ -5,13 +5,11 @@ namespace AcMarche\Mercredi\Controller\Parent;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Constraint\DateConstraint;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
-use AcMarche\Mercredi\Presence\Form\PresenceNewType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
@@ -22,7 +20,6 @@ use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PresenceController extends AbstractController
 {
+    use GetTuteurTrait;
+
     /**
      * @var PresenceRepository
      */
@@ -136,14 +135,9 @@ class PresenceController extends AbstractController
      */
     public function selectEnfant()
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
+        $this->hasTuteur();
 
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
+        $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/presence/select_enfant.html.twig',
@@ -161,6 +155,7 @@ class PresenceController extends AbstractController
      */
     public function selectJours(Request $request, Enfant $enfant)
     {
+        $this->hasTuteur();
         $santeFiche = $this->santeHandler->init($enfant);
 
         if (!$this->santeChecker->isComplete($santeFiche)) {
@@ -176,11 +171,9 @@ class PresenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $days = $form->getData()->getJours();
-            $user = $this->getUser();
-            $tuteur = $this->tuteurUtils->getTuteurByUser($user);
 
             $this->presenceHandler->addConstraint($this->dateConstraint);
-            $this->presenceHandler->handleNew($tuteur, $enfant, $days);
+            $this->presenceHandler->handleNew($this->tuteur, $enfant, $days);
 
             $this->dispatchMessage(new PresenceCreated($days));
 
@@ -197,38 +190,8 @@ class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_parent_presence_new2", methods={"GET","POST"})
-     * @Entity("tuteur", expr="repository.find(tuteur)")
-     * @Entity("enfant", expr="repository.find(enfant)")
-     */
-    public function new2(Request $request, Tuteur $tuteur, Enfant $enfant): Response
-    {
-        $dto = new PresenceSelectDays($enfant);
-        $form = $this->createForm(PresenceNewType::class, $dto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $days = $form->getData()->getJours();
-
-            $this->presenceHandler->handleNew($tuteur, $enfant, $days);
-
-            $this->dispatchMessage(new PresenceCreated($days));
-
-            return $this->redirectToRoute('mercredi_parent_enfant_show', ['id' => $enfant->getId()]);
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediParent/presence/new.html.twig',
-            [
-                'enfant' => $enfant,
-                'tuteur' => $tuteur,
-                'form' => $form->createView(),
-            ]
-        );
-    }
-
-    /**
      * @Route("/{id}", name="mercredi_parent_presence_show", methods={"GET"})
+     * @IsGranted("presence_show", subject="presence")
      */
     public function show(Presence $presence): Response
     {
@@ -243,6 +206,7 @@ class PresenceController extends AbstractController
 
     /**
      * @Route("/{id}", name="mercredi_parent_presence_delete", methods={"DELETE"})
+     * @IsGranted("presence_edit", subject="presence")
      */
     public function delete(Request $request, Presence $presence): Response
     {

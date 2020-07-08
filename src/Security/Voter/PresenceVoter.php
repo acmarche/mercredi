@@ -5,9 +5,12 @@ namespace AcMarche\Mercredi\Security\Voter;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -19,15 +22,34 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class PresenceVoter extends Voter
 {
-    const ADD = 'new';
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
+    const ADD = 'presence_new';
+    const SHOW = 'presence_show';
+    const EDIT = 'presence_edit';
+    const DELETE = 'presence_delete';
     private $decisionManager;
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
+    /**
+     * @var TuteurUtils
+     */
+    private $tuteurUtils;
+    /**
+     * @var Security
+     */
+    private $security;
+    private $user;
+    private $enfant;
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager)
-    {
-        $this->decisionManager = $decisionManager;
+    public function __construct(
+        RelationRepository $relationRepository,
+        TuteurUtils $tuteurUtils,
+        Security $security
+    ) {
+        $this->relationRepository = $relationRepository;
+        $this->tuteurUtils = $tuteurUtils;
+        $this->security = $security;
     }
 
     /**
@@ -46,9 +68,10 @@ class PresenceVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $presence, TokenInterface $token)
     {
-        $user = $token->getUser();
+        $this->user = $token->getUser();
+        $this->enfant = $presence->getEnfant();
 
-        if (!$user instanceof User) {
+        if (!$this->user instanceof User) {
             return false;
         }
 
@@ -81,7 +104,7 @@ class PresenceVoter extends Voter
         }
 
         if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_PARENT'])) {
-            return $this->checkTuteur($presence, $token);
+            return $this->checkTuteur();
         }
 
         return false;
@@ -113,28 +136,42 @@ class PresenceVoter extends Voter
         }
 
         if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_PARENT'])) {
-            return $this->checkTuteur($presence, $token);
+            return $this->checkTuteur();
         }
 
         return false;
     }
 
-    private function checkTuteur(Presence $presence, TokenInterface $token)
+    /**
+     * @return bool
+     */
+    private function checkTuteur()
     {
-        $user = $token->getUser();
-        /**
-         * @var Tuteur
-         */
-        $tuteur = $user->getTuteur();
-        $tuteurPresence = $presence->getTuteur();
-        if (!$tuteurPresence) {
+        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
-        if ($tuteur === $tuteurPresence) {
+        $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
+
+        if (!$this->tuteurOfUser) {
+            return false;
+        }
+
+        $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
+
+        $enfants = array_map(
+            function ($relation) {
+                return $relation->getEnfant()->getId();
+            },
+            $relations
+        );
+
+        if (in_array($this->enfant->getId(), $enfants)) {
             return true;
         }
 
         return false;
     }
+
+
 }

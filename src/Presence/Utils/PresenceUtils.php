@@ -4,11 +4,13 @@ namespace AcMarche\Mercredi\Presence\Utils;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class PresenceUtils
 {
@@ -132,5 +134,33 @@ class PresenceUtils
             }
             $enfant->setTelephones($telephones);
         }
+    }
+
+    /**
+     * @param Presence[] $presences
+     * @return ArrayCollection|Plaine[]
+     */
+    public static function extractPlainesFromPresences(array $presences): iterable
+    {
+        $plaines = new ArrayCollection();
+        array_map(
+            function ($presence) use ($plaines) {
+                $jour = $presence->getJour();
+                if (!$jour) {
+                    return null;
+                }
+                $plaineJour = $jour->getPlaineJour();
+                if (!$plaineJour) {
+                    return null;
+                }
+                $plaine = $plaineJour->getPlaine();
+                if (!$plaines->contains($plaine)) {
+                    $plaines->add($plaine);
+                }
+            },
+            $presences
+        );
+
+        return $plaines;
     }
 }

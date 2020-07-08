@@ -17,7 +17,7 @@
             <td>
                 {{ facture.factureLe | format_date('full') | title }}
             </td>
-            <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') }}</td>
+            <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') : '<span class="text-danger">Non payé</span>' }}</td>
             <td>{{ facture.facturePresences | length }}</td>
             <td>
                 <a href="{{ path('mercredi_parent_facture_pdf', {'uuid': facture.uuid}) }}">

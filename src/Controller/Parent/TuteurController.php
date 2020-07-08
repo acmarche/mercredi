@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class TuteurController extends AbstractController
 {
+    use GetTuteurTrait;
     /**
      * @var TuteurRepository
      */
@@ -45,22 +46,15 @@ class TuteurController extends AbstractController
      */
     public function show()
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
+        $this->hasTuteur();
 
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
-
-        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($tuteur);
+        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/tuteur/show.html.twig',
             [
                 'tuteurIsComplete' => $tuteurIsComplete,
-                'tuteur' => $tuteur,
+                'tuteur' => $this->tuteur,
             ]
         );
     }
@@ -71,22 +65,15 @@ class TuteurController extends AbstractController
      */
     public function edit(Request $request)
     {
-        $user = $this->getUser();
-        $tuteur = $this->tuteurUtils->getTuteurByUser($user);
+        $this->hasTuteur();
 
-        if (!$tuteur) {
-            return $this->redirectToRoute('mercredi_parent_nouveau');
-        }
-
-        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
-
-        $form = $this->createForm(TuteurType::class, $tuteur);
+        $form = $this->createForm(TuteurType::class, $this->tuteur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tuteurRepository->flush();
 
-            $this->dispatchMessage(new TuteurUpdated($tuteur->getId()));
+            $this->dispatchMessage(new TuteurUpdated($this->tuteur->getId()));
 
             return $this->redirectToRoute('mercredi_parent_tuteur_show');
         }
@@ -94,7 +81,7 @@ class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/tuteur/edit.html.twig',
             [
-                'tuteur' => $tuteur,
+                'tuteur' => $this->tuteur,
                 'form' => $form->createView(),
             ]
         );
