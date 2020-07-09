@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilParentType;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Accueil;
@@ -57,6 +58,10 @@ class AccueilController extends AbstractController
      * @var SanteHandler
      */
     private $santeHandler;
+    /**
+     * @var AccueilCalculatorInterface
+     */
+    private $accueilCalculator;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -65,7 +70,8 @@ class AccueilController extends AbstractController
         JourRepository $jourRepository,
         AccueilHandler $accueilHandler,
         SanteChecker $santeChecker,
-        SanteHandler $santeHandler
+        SanteHandler $santeHandler,
+        AccueilCalculatorInterface $accueilCalculator
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
@@ -74,6 +80,7 @@ class AccueilController extends AbstractController
         $this->tuteurUtils = $tuteurUtils;
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
+        $this->accueilCalculator = $accueilCalculator;
     }
 
     /**
@@ -112,14 +119,13 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
         }
 
-        $accueil = new Accueil($this->tuteur,$enfant);
+        $accueil = new Accueil($this->tuteur, $enfant);
         $form = $this->createForm(AccueilParentType::class, $accueil);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-          //  $this->accueilHandler->handleNew($this->tuteur, $enfant, $days);
+            //  $this->accueilHandler->handleNew($this->tuteur, $enfant, $days);
 
             $this->dispatchMessage(new AccueilCreated($accueil->getId()));
 
@@ -141,10 +147,13 @@ class AccueilController extends AbstractController
      */
     public function show(Accueil $accueil): Response
     {
+        $cout = $this->accueilCalculator->calculate($accueil);
+
         return $this->render(
             '@AcMarcheMercrediParent/accueil/show.html.twig',
             [
                 'accueil' => $accueil,
+                'cout' => $cout,
                 'enfant' => $accueil->getEnfant(),
             ]
         );
