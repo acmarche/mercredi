@@ -1,8 +1,9 @@
 {% if organisation is not null %}
 
     {% if organisation.photoName %}
-        <img class="img-thumbnail"
+     {#   <img class="img-thumbnail"
              src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
+             #}
     {% endif %}
 
     <div class="row">
