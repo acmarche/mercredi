@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
@@ -54,6 +55,10 @@ class EnfantController extends AbstractController
      * @var PlainePresenceRepository
      */
     private $plainePresenceRepository;
+    /**
+     * @var AccueilRepository
+     */
+    private $accueilRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -62,7 +67,8 @@ class EnfantController extends AbstractController
         RelationUtils $relationUtils,
         SanteChecker $santeChecker,
         PresenceRepository $presenceRepository,
-        PlainePresenceRepository $plainePresenceRepository
+        PlainePresenceRepository $plainePresenceRepository,
+        AccueilRepository $accueilRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurUtils = $tuteurUtils;
@@ -71,6 +77,7 @@ class EnfantController extends AbstractController
         $this->santeChecker = $santeChecker;
         $this->presenceRepository = $presenceRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
+        $this->accueilRepository = $accueilRepository;
     }
 
     /**
@@ -103,6 +110,7 @@ class EnfantController extends AbstractController
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
         $presences = $this->presenceRepository->findPresencesByEnfant($enfant);
         $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
+        $accueils = $this->accueilRepository->findByEnfant($enfant);
 
         return $this->render(
             '@AcMarcheMercrediParent/enfant/show.html.twig',
@@ -110,6 +118,7 @@ class EnfantController extends AbstractController
                 'enfant' => $enfant,
                 'presences' => $presences,
                 'plaines' => $plaines,
+                'accueils' => $accueils,
                 'ficheSanteComplete' => $ficheSanteComplete,
             ]
         );

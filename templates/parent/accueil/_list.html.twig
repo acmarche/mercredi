@@ -1,0 +1,26 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Tuteur</th>
+        <th>Remarque</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for accueil in accueils %}
+        <tr>
+            <td>
+            <a href="{{ path('mercredi_parent_accueil_show', {'id': accueil.id}) }}">
+                {{ (accueil.jour.dateJour | format_date('full'))|capitalize }}
+            </a>
+            </td>
+            <td>
+                {{ accueil.tuteur }}
+            </td>
+            <td class="text-muted">
+                {{ accueil.remarque }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
