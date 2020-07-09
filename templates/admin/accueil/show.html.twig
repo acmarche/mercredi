@@ -1,0 +1,29 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card mb-3">
+
+        <h3 class="card-header">{{ accueil.dateJour|format_date('full') }}</h3>
+
+        <div class="card-body">
+
+            {% include '@AcMarcheMercrediAdmin/accueil/_actions.html.twig' %}
+
+            {% if accueil.remarque %}
+                <p class="text-muted">
+                    {{ accueil.remarque | nl2br }}
+                </p>
+            {% endif %}
+
+            <br/>
+        </div>
+        <div class="card-footer text-muted mt-3">
+            Crée le {{ accueil.createdAt | format_date('full') }} par {{ accueil.userAdd }}. Mis à jour
+            le {{ accueil.updatedAt | format_date('full') }}
+        </div>
+    </div>
+
+    {% include '@AcMarcheMercrediAdmin/accueil/_delete_form.html.twig' %}
+
+{% endblock %}

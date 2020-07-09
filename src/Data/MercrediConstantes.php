@@ -44,4 +44,8 @@ class MercrediConstantes
                 break;
         }
     }
+
+    public static function getMatinApresMidi(): array {
+        return ['Matin'=>'Matin','Après-midi'=>'Après-midi'];
+    }
 }

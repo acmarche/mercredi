@@ -1,0 +1,17 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Nouvel accueil pour {{ enfant }}</h3>
+        </div>
+        <div class="card-body">
+
+            {{ include('@AcMarcheMercrediAdmin/accueil/_form.html.twig') }}
+
+            <a href="{{ path('mercredi_admin_enfant_show', {'id': enfant.id}) }}">
+                <span class="fas fa-list"></span> Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %}

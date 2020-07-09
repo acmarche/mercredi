@@ -11,6 +11,7 @@ class SearchHelper
     const PRESENCE_LIST = 'presence_list';
     const PRESENCE_LIST_BY_MONTH = 'presence_list_by_month';
     const MESSAGE_INDEX = 'message_index';
+    const ACCUEIL_INDEX = 'accueil_index';
 
     /**
      * @var SessionInterface
