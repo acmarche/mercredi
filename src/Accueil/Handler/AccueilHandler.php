@@ -3,11 +3,9 @@
 
 namespace AcMarche\Mercredi\Accueil\Handler;
 
-
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Search\SearchHelper;
 
 class AccueilHandler
 {
@@ -25,8 +23,8 @@ class AccueilHandler
     public function handleNew(Enfant $enfant, Accueil $accueilSubmited)
     {
         if ($accueil = $this->accueilRepository->findOneByDateEnfant($accueilSubmited->getDateJour(), $enfant)) {
-            $accueil->setMatinApresMidi($accueilSubmited->getMatinApresMidi());
-            $accueil->setNbDemiHeure($accueilSubmited->getNbDemiHeure());
+            $accueil->setMatinSoir($accueilSubmited->getMatinSoir());
+            $accueil->setDuree($accueilSubmited->getDuree());
             $accueil->setRemarque($accueilSubmited->getRemarque());
             $this->accueilRepository->flush();
 

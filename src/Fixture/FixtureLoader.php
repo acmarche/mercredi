@@ -56,6 +56,7 @@ class FixtureLoader
             $path.'plaine.yaml',
             $path.'plaine_groupe.yaml',
             $path.'plaine_jour.yaml',
+            $path.'accueil.yaml',
         ];
 
         $this->loader->load($files);

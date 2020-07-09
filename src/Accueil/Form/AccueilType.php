@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Form;
 
+use AcMarche\Mercredi\Accueil\Service\AccueilService;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
@@ -29,10 +30,11 @@ class AccueilType extends AbstractType
                 ]
             )
             ->add(
-                'matin_apres_midi',
+                'matin_soir',
                 ChoiceType::class,
                 [
-                    'choices' => MercrediConstantes::getMatinApresMidi(),
+                    'label' => 'Quand',
+                    'choices' => AccueilService::getMatinSoir(),
                     'multiple' => true,
                     'expanded' => true,
                     'constraints' => new Count(
@@ -43,7 +45,7 @@ class AccueilType extends AbstractType
                 ]
             )
             ->add(
-                'nb_demi_heure',
+                'duree',
                 IntegerType::class,
                 [
                     'label' => 'Temps resté',

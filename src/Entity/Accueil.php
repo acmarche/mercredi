@@ -12,12 +12,16 @@ use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Accueil
- * @package AcMarche\Mercredi\Entity
+ * * @ORM\Table("accueil", uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id"})
+ * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
+ * @UniqueEntity(fields={"date_jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
  */
 class Accueil implements TimestampableInterface
 {
@@ -31,7 +35,7 @@ class Accueil implements TimestampableInterface
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="date_jour", type="date", unique=true)
+     * @ORM\Column(name="date_jour", type="date")
      * @Assert\Type("datetime")
      */
     private $date_jour;
@@ -40,28 +44,30 @@ class Accueil implements TimestampableInterface
      * @var int
      * @ORM\Column(type="smallint")
      */
-    private $nb_demi_heure;
+    private $duree;
 
     /**
      * @var array
      * @ORM\Column(type="json")
      */
-    private $matin_apres_midi = [];
+    private $matin_soir = [];
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $enfant;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $tuteur;
 
-    public function __construct(Enfant $enfant)
+    public function __construct(Tuteur $tuteur, Enfant $enfant)
     {
         $this->enfant = $enfant;
-        //$this->tuteur = $tuteur;
+        $this->tuteur = $tuteur;
     }
 
     public function __toString()
@@ -81,42 +87,42 @@ class Accueil implements TimestampableInterface
         return $this;
     }
 
-    public function getNbDemiHeure(): ?int
+    public function getDuree(): ?int
     {
-        return $this->nb_demi_heure;
+        return $this->duree;
     }
 
-    public function setNbDemiHeure(int $nb_demi_heure): self
+    public function setDuree(int $duree): self
     {
-        $this->nb_demi_heure = $nb_demi_heure;
+        $this->duree = $duree;
 
         return $this;
     }
 
-    public function getMatinApresMidi(): ?array
+    public function getMatinSoir(): ?array
     {
-        return $this->matin_apres_midi;
+        return $this->matin_soir;
     }
 
-    public function setMatinApresMidi(array $matin_apres_midi): self
+    public function setMatinSoir(array $matin_soir): self
     {
-        $this->matin_apres_midi = $matin_apres_midi;
+        $this->matin_soir = $matin_soir;
 
         return $this;
     }
 
-    public function addMatinApresMidi(string $role): void
+    public function addMatinSoir(string $matin_soir): void
     {
-        if (!\in_array($role, $this->matin_apres_midi, true)) {
-            $this->matin_apres_midi[] = $role;
+        if (!\in_array($matin_soir, $this->matin_soir, true)) {
+            $this->matin_soir[] = $matin_soir;
         }
     }
 
-    public function removeMatinApresMidi(string $matin_apres_midi): void
+    public function removeMatinSoir(string $matin_soir): void
     {
-        if (\in_array($matin_apres_midi, $this->matin_apres_midi, true)) {
-            $index = array_search($matin_apres_midi, $this->matin_apres_midi);
-            unset($this->matin_apres_midi[$index]);
+        if (\in_array($matin_soir, $this->matin_soir, true)) {
+            $index = array_search($matin_soir, $this->matin_soir);
+            unset($this->matin_soir[$index]);
         }
     }
 

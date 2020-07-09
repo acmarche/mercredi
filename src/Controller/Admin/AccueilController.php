@@ -2,8 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
-use AcMarche\Mercredi\Accueil\Form\SearchAccueilType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
@@ -11,7 +11,10 @@ use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,57 +39,61 @@ class AccueilController extends AbstractController
      * @var AccueilHandler
      */
     private $accueilHandler;
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
+    /**
+     * @var AccueilCalculatorInterface
+     */
+    private $accueilCalculator;
 
     public function __construct(
         AccueilRepository $accueilRepository,
         AccueilHandler $accueilHandler,
-        SearchHelper $searchHelper
+        RelationRepository $relationRepository,
+        AccueilCalculatorInterface $accueilCalculator
     ) {
-        $this->searchHelper = $searchHelper;
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
+        $this->relationRepository = $relationRepository;
+        $this->accueilCalculator = $accueilCalculator;
     }
 
     /**
-     * @Route("/", name="mercredi_admin_accueil_index", methods={"GET","POST"})
+     * @Route("/list/{id}", name="mercredi_admin_accueil_index", methods={"GET","POST"})
      */
-    public function index(Request $request): Response
+    public function index(Enfant $enfant): Response
     {
-        $form = $this->createForm(SearchAccueilType::class);
-        $form->handleRequest($request);
-        $search = false;
-        $accueils = [];
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $this->searchHelper->saveSearch(SearchHelper::ACCUEIL_INDEX, $data);
-            $search = true;
-            $accueils = $this->accueilRepository->search($data['nom']);
-        }
+        $accueils = $this->accueilRepository->findByEnfant($enfant);
+        $relations = $this->relationRepository->findByEnfant($enfant);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/index.html.twig',
             [
                 'accueils' => $accueils,
-                'form' => $form->createView(),
-                'search' => $search,
+                'relations' => $relations,
+                'enfant' => $enfant,
             ]
         );
     }
 
     /**
-     * @Route("/new/{id}", name="mercredi_admin_accueil_new", methods={"GET","POST"})
+     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_accueil_new", methods={"GET","POST"})
+     * @Entity("tuteur", expr="repository.find(tuteur)")
+     * @Entity("enfant", expr="repository.find(enfant)")
      */
-    public function new(Request $request, Enfant $enfant): Response
+    public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
-        $accueilNew = new Accueil($enfant);
+        $accueilNew = new Accueil($tuteur, $enfant);
         $form = $this->createForm(AccueilType::class, $accueilNew);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-          $result =  $this->accueilHandler->handleNew($enfant, $accueilNew);
+            $result = $this->accueilHandler->handleNew($enfant, $accueilNew);
             $this->dispatchMessage(new AccueilCreated($result->getId()));
-                return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+
+            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $result->getId()]);
         }
 
         return $this->render(
@@ -104,11 +111,13 @@ class AccueilController extends AbstractController
     public function show(Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
+        $cout = $this->accueilCalculator->calculate($accueil);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/show.html.twig',
             [
                 'accueil' => $accueil,
+                'cout' => $cout,
                 'enfant' => $enfant,
             ]
         );

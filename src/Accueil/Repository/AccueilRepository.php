@@ -21,6 +21,36 @@ class AccueilRepository extends ServiceEntityRepository
         parent::__construct($registry, Accueil::class);
     }
 
+    public function getQbForListing(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('accueil')
+            ->orderBy('accueil.date_jour', 'ASC');
+
+        return $qb;
+    }
+
+    public function findOneByDateEnfant(\DateTimeInterface $date, Enfant $enfant): ?Accueil
+    {
+        return $this->createQueryBuilder('accueil')
+            ->andWhere('accueil.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->andWhere('accueil.date_jour = :date')
+            ->setParameter('date', $date)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Enfant $enfant
+     * @return Accueil[]
+     */
+    public function findByEnfant(Enfant $enfant): array
+    {
+        return $this->createQueryBuilder('accueil')
+            ->andWhere('accueil.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->getQuery()->getResult();
+    }
+
     public function remove(Accueil $accueil)
     {
         $this->_em->remove($accueil);
@@ -36,21 +66,4 @@ class AccueilRepository extends ServiceEntityRepository
         $this->_em->persist($accueil);
     }
 
-    public function getQbForListing(): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('accueil')
-            ->orderBy('accueil.nom', 'ASC');
-
-        return $qb;
-    }
-
-    public function findOneByDateEnfant(\DateTime $date, Enfant $enfant): ?Accueil
-    {
-        return $this->createQueryBuilder('accueil')
-            ->andWhere('accueil.enfant = :enfant')
-            ->setParameter('enfant', $enfant)
-            ->andWhere('accueil.date_jour = :date')
-            ->setParameter('date', $date)
-            ->getQuery()->getOneOrNullResult();
-    }
 }
