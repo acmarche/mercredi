@@ -19,14 +19,14 @@ Feature: Gestion des acceuils
     Then I follow "Ses accueils"
     Then I follow "Ajouter un accueil"
     Then I should see "Nouvel accueil pour PERET Merlin"
-    And I fill in "accueil[date_jour]" with "2020-07-09"
+    And I fill in "accueil[date_jour]" with "2020-07-10"
     And I fill in "accueil[duree]" with "2"
     And I check "Matin"
     And I press "Sauvegarder"
     Then I should see "L'acceuil a bien été ajouté"
     Then I should see "Matin"
     Then I should see "1,00 €"
-    Then I should see "jeudi 9 juillet 2020"
+    Then I should see "vendredi 10 juillet 2020"
 
   Scenario: Ajout un acceuil 2 tuteurs
     Then I fill in "search_enfant[nom]" with "Fernandel"

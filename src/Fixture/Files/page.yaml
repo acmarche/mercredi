@@ -20,3 +20,4 @@ AcMarche\Mercredi\Entity\Page:
     content: 'Plus de contacts'
     slug_system: 'contact'
     position: '4'
+    documents: ['@document_1']

@@ -53,13 +53,13 @@ class Accueil implements TimestampableInterface
     private $matin_soir = [];
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
      */
     private $enfant;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
      */
     private $tuteur;

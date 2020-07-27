@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity;
 use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
+use AcMarche\Mercredi\Entity\Traits\AccueilsTrait;
 use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
@@ -14,14 +15,15 @@ use AcMarche\Mercredi\Entity\Traits\GroupeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
+use AcMarche\Mercredi\Entity\Traits\PhotoAutorisationTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\PresencesTrait;
 use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -42,6 +44,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use PrenomTrait;
     use BirthdayTrait;
     use SexeTrait;
+    use PhotoAutorisationTrait;
     use RemarqueTrait;
     use OrdreTrait;
     use PhotoTrait;
@@ -58,6 +61,8 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use UuidableTrait;
     use GroupeScolaireTrait;
     use AnneeScolaireTrait;
+    use PresencesTrait;
+    use AccueilsTrait;
 
     /**
      * @var bool
@@ -100,9 +105,18 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      */
     private $presences;
 
+    /**
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
+     * @var Accueil[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="enfant", cascade={"remove"})
+     */
+    private $accueils;
+
     public function __construct()
     {
         $this->relations = new ArrayCollection();
+        $this->accueils = new ArrayCollection();
         $this->presences = new ArrayCollection();
         $this->ficheSanteIsComplete = false;
     }
@@ -122,49 +136,4 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         return true;
     }
 
-    public function isPhotoAutorisation(): bool
-    {
-        return $this->photo_autorisation;
-    }
-
-    public function setPhotoAutorisation(bool $photo_autorisation): void
-    {
-        $this->photo_autorisation = $photo_autorisation;
-    }
-
-    public function getPhotoAutorisation(): ?bool
-    {
-        return $this->photo_autorisation;
-    }
-
-    /**
-     * @return Collection|Presence[]
-     */
-    public function getPresences(): Collection
-    {
-        return $this->presences;
-    }
-
-    public function addPresence(Presence $presence): self
-    {
-        if (!$this->presences->contains($presence)) {
-            $this->presences[] = $presence;
-            $presence->setEnfant($this);
-        }
-
-        return $this;
-    }
-
-    public function removePresence(Presence $presence): self
-    {
-        if ($this->presences->contains($presence)) {
-            $this->presences->removeElement($presence);
-            // set the owning side to null (unless already changed)
-            if ($presence->getEnfant() === $this) {
-                $presence->setEnfant(null);
-            }
-        }
-
-        return $this;
-    }
 }

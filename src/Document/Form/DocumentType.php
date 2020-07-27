@@ -27,7 +27,7 @@ class DocumentType extends AbstractType
                 [
                     'label' => 'Fichier',
                     'help' => 'Uniquement images ou pdf',
-                    'required' => true,
+                    'required' => false,
                 ]
             );
     }

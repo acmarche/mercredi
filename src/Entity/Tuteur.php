@@ -55,6 +55,14 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     private $relations;
 
     /**
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
+     * @var Accueil[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="tuteur", cascade={"remove"})
+     */
+    private $accueils;
+
+    /**
      * @var Facture[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur")
      */

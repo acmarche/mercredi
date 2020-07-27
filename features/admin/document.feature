@@ -18,8 +18,7 @@ Feature: Gestion des documents
     Then I should see "Règlement"
 
   Scenario: Modifier un document
-    Given I am on "/admin/document/"
-    Then I should see "Liste des documents"
+    Then I follow "Nous contacter"
     Then I follow "Règlement"
     Then I follow "Modifier"
     And I fill in "document[nom]" with "Règlementation"
@@ -27,8 +26,7 @@ Feature: Gestion des documents
     Then I should see "Règlementation"
 
   Scenario: Supprimer un document
-    Given I am on "/admin/document/"
-    Then I should see "Liste des documents"
+    Then I follow "Nous contacter"
     Then I follow "Règlement"
     Then I press "Supprimer le document"
     Then I should see "Le document a bien été supprimé"

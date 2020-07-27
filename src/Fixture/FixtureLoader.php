@@ -36,6 +36,7 @@ class FixtureLoader
         $files = [
             $path.'groupe_scolaire.yaml',
             $path.'annee_scolaire.yaml',
+            $path.'document.yaml',
             $path.'ecole.yaml',
             $path.'tuteur.yaml',
             $path.'animateur.yaml',
