@@ -4,13 +4,14 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilParentType;
-use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Accueil;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
@@ -125,15 +126,14 @@ class AccueilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //  $this->accueilHandler->handleNew($this->tuteur, $enfant, $days);
+            $result = $this->accueilHandler->handleNew($enfant, $accueil);
+            $this->dispatchMessage(new AccueilCreated($result->getId()));
 
-            $this->dispatchMessage(new AccueilCreated($accueil->getId()));
-
-            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_accueil_show', ['uuid' => $result->getUuid()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediParent/accueil/select_jours.html.twig',
+            '@AcMarcheMercrediParent/accueil/new.html.twig',
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
@@ -142,7 +142,7 @@ class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_parent_accueil_show", methods={"GET"})
+     * @Route("/{uuid}", name="mercredi_parent_accueil_show", methods={"GET"})
      * @IsGranted("accueil_show", subject="accueil")
      */
     public function show(Accueil $accueil): Response
@@ -168,7 +168,7 @@ class AccueilController extends AbstractController
         $enfant = $accueil->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
             if (!DeleteConstraint::accueilCanBeDeleted($accueil)) {
-                $this->addFlash('danger', 'Un accueil passée ne peut être supprimé');
+                $this->addFlash('danger', 'Un accueil passé ne peut être supprimé');
 
                 return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
             }

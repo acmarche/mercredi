@@ -190,7 +190,7 @@ class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_parent_presence_show", methods={"GET"})
+     * @Route("/{uuid}", name="mercredi_parent_presence_show", methods={"GET"})
      * @IsGranted("presence_show", subject="presence")
      */
     public function show(Presence $presence): Response

@@ -1,19 +1,11 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 <div class="row">
-    {% if form.tuteur is defined %}
-        <div class="col-12">
-            {{ form_row(form.tuteur) }}
-        </div>
-    {% endif %}
-    <div class="col-4">
-        {{ form_row(form.absent) }}
+    <div class="col-6">
+        {{ form_row(form.date_jour) }}
     </div>
-    <div class="col-8">
-        {{ form_row(form.reduction) }}
-    </div>
-    <div class="col-8">
-        {{ form_row(form.ordre) }}
+    <div class="col-6">
+        {{ form_row(form.matin_soir) }}
     </div>
 </div>
 {{ form_row(form.remarque) }}

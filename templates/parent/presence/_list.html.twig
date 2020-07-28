@@ -10,7 +10,7 @@
     {% for presence in presences %}
         <tr>
             <td>
-            <a href="{{ path('mercredi_parent_presence_show', {'id': presence.id}) }}">
+            <a href="{{ path('mercredi_parent_presence_show', {'uuid': presence.uuid}) }}">
                 {{ (presence.jour.dateJour | format_date('full'))|capitalize }}
             </a>
             </td>

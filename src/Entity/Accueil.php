@@ -11,7 +11,9 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,10 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
  * @UniqueEntity(fields={"date_jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
  */
-class Accueil implements TimestampableInterface
+class Accueil implements TimestampableInterface, UuidableInterface
 {
     use TimestampableTrait;
     use IdTrait;
+    use UuidableTrait;
     use EnfantTrait;
     use TuteurTrait;
     use RemarqueTrait;
@@ -68,6 +71,7 @@ class Accueil implements TimestampableInterface
     {
         $this->enfant = $enfant;
         $this->tuteur = $tuteur;
+        $this->duree = 0;
     }
 
     public function __toString()
