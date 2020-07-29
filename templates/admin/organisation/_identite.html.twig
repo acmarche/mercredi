@@ -2,6 +2,7 @@
     {% if organisation.photoName %}
         <img class="img-thumbnail"
              src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
+        <br/>
     {% endif %}
 
     <i class="fas fa-map-marked-alt"></i>
