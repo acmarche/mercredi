@@ -1,8 +1,7 @@
 {% if organisation %}
     {% if organisation.photoName %}
-     {#   <img class="img-thumbnail"
+        <img class="img-thumbnail"
              src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
-               #}
     {% endif %}
 
     <i class="fas fa-map-marked-alt"></i>
@@ -15,7 +14,9 @@
     {% endif %}
 
     {% if organisation.siteWeb %}
-        <i class="fas fa-globe-europe"></i> {{ organisation.siteWeb }}<br/>
+        <i class="fas fa-globe-europe"></i> <a href="{{ organisation.siteWeb }}">
+        {{ organisation.siteWeb }}</a>
+        <br/>
     {% endif %}
 
     {% if organisation.gsm %}
