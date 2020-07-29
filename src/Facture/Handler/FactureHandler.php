@@ -2,10 +2,14 @@
 
 namespace AcMarche\Mercredi\Facture\Handler;
 
+use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
+use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
@@ -33,19 +37,37 @@ class FactureHandler
      * @var PresenceRepository
      */
     private $presenceRepository;
+    /**
+     * @var AccueilRepository
+     */
+    private $accueilRepository;
+    /**
+     * @var FactureAccueilRepository
+     */
+    private $factureAccueilRepository;
+    /**
+     * @var AccueilCalculatorInterface
+     */
+    private $accueilCalculator;
 
     public function __construct(
         FactureRepository $factureRepository,
         FacturePresenceRepository $facturePresenceRepository,
         FactureFactory $factureFactory,
         PresenceCalculatorInterface $presenceCalculator,
-        PresenceRepository $presenceRepository
+        PresenceRepository $presenceRepository,
+        AccueilRepository $accueilRepository,
+        FactureAccueilRepository $factureAccueilRepository,
+        AccueilCalculatorInterface $accueilCalculator
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureFactory = $factureFactory;
         $this->presenceCalculator = $presenceCalculator;
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->presenceRepository = $presenceRepository;
+        $this->accueilRepository = $accueilRepository;
+        $this->factureAccueilRepository = $factureAccueilRepository;
+        $this->accueilCalculator = $accueilCalculator;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -56,7 +78,20 @@ class FactureHandler
     /**
      * @param int[] $presencesId
      */
-    public function handleNew(Facture $facture, array $presencesId, bool $persist = true): Facture
+    public function handleNew(Facture $facture, array $presencesId, array $accueilsId): Facture
+    {
+        $this->handlePresences($presencesId, $facture);
+        $this->handleAccueils($accueilsId, $facture);
+        if (!$facture->getId()) {
+            $this->factureRepository->persist($facture);
+        }
+        $this->factureRepository->flush();
+        $this->facturePresenceRepository->flush();
+
+        return $facture;
+    }
+
+    private function handlePresences(array $presencesId, Facture $facture)
     {
         foreach ($presencesId as $presenceId) {
             if (!$presence = $this->presenceRepository->find($presenceId)) {
@@ -74,12 +109,25 @@ class FactureHandler
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }
-        if ($persist) {
-            $this->factureRepository->persist($facture);
-        }
-        $this->factureRepository->flush();
-        $this->facturePresenceRepository->flush();
+    }
 
-        return $facture;
+    private function handleAccueils(array $accueilsId, Facture $facture)
+    {
+        foreach ($accueilsId as $accueilId) {
+            if (!$accueil = $this->accueilRepository->find($accueilId)) {
+                continue;
+            }
+            if ($this->factureAccueilRepository->findByAccueil($accueil)) {
+                continue;
+            }
+            $factureAccueil = new FactureAccueil($facture, $accueil);
+            $factureAccueil->setAccueilDate($accueil->getDateJour());
+            $enfant = $accueil->getEnfant();
+            $factureAccueil->setNom($enfant->getNom());
+            $factureAccueil->setPrenom($enfant->getPrenom());
+            $factureAccueil->setCout($this->accueilCalculator->calculate($accueil));
+            $this->factureAccueilRepository->persist($factureAccueil);
+            $facture->addFactureAccueil($factureAccueil);
+        }
     }
 }

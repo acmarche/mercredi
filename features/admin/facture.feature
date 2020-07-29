@@ -5,7 +5,10 @@ Feature: Gestion des factures
   Je modifie une facture
   Je supprime une facture
   Je crée une facture
+  Je détache une présence
   J'attache des présences
+  Je détache un accueil
+  J'attache des accueils
   Je cherche une facture
 
   Background:
@@ -59,19 +62,22 @@ Feature: Gestion des factures
     Then I follow "Ses factures"
     Then I follow "Créer une facture"
     Then I should see "Mercredi 2 septembre 2020"
+    Then I should see "Lundi 21 décembre 2020"
+    Then I should see "Jeudi 9 juillet 2020"
     Then I should not see "Mardi 6 Octobre 2020"
     And I fill in "facture[remarque]" with "Vous avez 3 jours pour payer"
     And I press "Générer la facture"
     Then I should see "La facture a bien été crée"
     Then I should see "Simpson Lisa"
     Then I should see "mercredi 2 septembre 2020"
+    Then I should see "jeudi 9 juillet 2020"
 
   Scenario: Je détache une présence
     Then I follow "Simpson"
     Then I follow "Ses factures"
     Then I should see "Mardi 6 Octobre 2020"
     Then I follow "Mardi 6 Octobre 2020"
-    Then I follow "Détails"
+    Then I follow "mercredi 6 mai 2020"
     Then I should see "Simpson Bart"
     Then I should see "25 €"
     And I press "Détacher la présence"
@@ -86,6 +92,28 @@ Feature: Gestion des factures
     Then I should see "Mercredi 2 septembre 2020"
     And I press "Attacher à la facture"
     Then I should see "Les présences ont bien été attachées"
+
+  Scenario: Je détache un accueil
+    Then I follow "Simpson"
+    Then I follow "Ses factures"
+    Then I should see "Mardi 6 Octobre 2020"
+    Then I follow "Mardi 6 Octobre 2020"
+    Then I follow "mercredi 9 décembre 2020"
+    Then I should see "Simpson Bart"
+    Then I should see "0.5 €"
+    And I press "Détacher l'accueil"
+    Then I should see "L'accueil a bien été détaché"
+
+  Scenario: J'attache des accueils
+    Then I follow "Simpson"
+    Then I follow "Ses factures"
+    Then I should see "Mardi 6 Octobre 2020"
+    Then I follow "Mardi 6 Octobre 2020"
+    Then I follow "Attacher des accueils"
+    Then I should see "Jeudi 9 juillet 2020"
+    Then I should see "Lundi 21 septembre 2020"
+    And I press "Attacher à la facture"
+    Then I should see "Les accueils ont bien été attachés"
 
   Scenario: Je cherche une facture
     Given I am on "/admin/facture/search"

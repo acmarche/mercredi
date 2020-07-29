@@ -12,6 +12,18 @@
 
             <table class="table table-bordered">
                  <tr>
+                    <th>Facturé</th>
+                    <td>
+                        {% if facture %}
+                            <a href="{{ path('mercredi_admin_facture_show', {'id': facture.facture.id}) }}">
+                                {{ facture.facture }}
+                            </a>
+                        {% else %}
+                            Non
+                        {% endif %}
+                    </td>
+                </tr>
+                 <tr>
                     <th>Sous la garde de</th>
                     <td>
                         <a href="{{ path('mercredi_parent_tuteur_show', {'id': accueil.tuteur.id}) }}">

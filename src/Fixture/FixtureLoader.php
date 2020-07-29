@@ -52,12 +52,13 @@ class FixtureLoader
             $path.'sante_fiche.yaml',
             $path.'page.yaml',
             $path.'sante_reponse.yaml',
-            $path.'facture.yaml',
-            $path.'facture_presence.yaml',
             $path.'plaine.yaml',
             $path.'plaine_groupe.yaml',
             $path.'plaine_jour.yaml',
             $path.'accueil.yaml',
+            $path.'facture.yaml',
+            $path.'facture_presence.yaml',
+            $path.'facture_accueil.yaml',
         ];
 
         $this->loader->load($files);

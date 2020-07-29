@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -47,17 +48,23 @@ class AccueilController extends AbstractController
      * @var AccueilCalculatorInterface
      */
     private $accueilCalculator;
+    /**
+     * @var FactureAccueilRepository
+     */
+    private $factureAccueilRepository;
 
     public function __construct(
         AccueilRepository $accueilRepository,
         AccueilHandler $accueilHandler,
         RelationRepository $relationRepository,
-        AccueilCalculatorInterface $accueilCalculator
+        AccueilCalculatorInterface $accueilCalculator,
+        FactureAccueilRepository $factureAccueilRepository
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
         $this->relationRepository = $relationRepository;
         $this->accueilCalculator = $accueilCalculator;
+        $this->factureAccueilRepository = $factureAccueilRepository;
     }
 
     /**
@@ -112,6 +119,7 @@ class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         $cout = $this->accueilCalculator->calculate($accueil);
+        $facture = $this->factureAccueilRepository->findByAccueil($accueil);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/show.html.twig',
@@ -119,6 +127,7 @@ class AccueilController extends AbstractController
                 'accueil' => $accueil,
                 'cout' => $cout,
                 'enfant' => $enfant,
+                'facture' => $facture,
             ]
         );
     }

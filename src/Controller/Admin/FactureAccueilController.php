@@ -3,13 +3,13 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Entity\Facture\FacturePresence;
+use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
-use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,18 +20,18 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class FactureController.
  *
  * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/facture_presence")
+ * @Route("/facture_accueil")
  */
-class FacturePresenceController extends AbstractController
+class FactureAccueilController extends AbstractController
 {
     /**
-     * @var FacturePresenceRepository
+     * @var FactureAccueilRepository
      */
-    private $facturePresenceRepository;
+    private $factureAccueilRepository;
     /**
-     * @var PresenceRepository
+     * @var AccueilRepository
      */
-    private $presenceRepository;
+    private $accueilRepository;
     /**
      * @var FactureHandler
      */
@@ -42,65 +42,65 @@ class FacturePresenceController extends AbstractController
     private $factureUtils;
 
     public function __construct(
-        FacturePresenceRepository $facturePresenceRepository,
-        PresenceRepository $presenceRepository,
+        FactureAccueilRepository $factureAccueilRepository,
+        AccueilRepository $accueilRepository,
         FactureHandler $factureHandler,
         FactureUtils $factureUtils
     ) {
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->presenceRepository = $presenceRepository;
+        $this->factureAccueilRepository = $factureAccueilRepository;
+        $this->accueilRepository = $accueilRepository;
         $this->factureHandler = $factureHandler;
         $this->factureUtils = $factureUtils;
     }
 
     /**
-     * @Route("/{id}/attach", name="mercredi_admin_facture_presence_attach", methods={"GET","POST"}).
+     * @Route("/{id}/attach", name="mercredi_admin_facture_accueil_attach", methods={"GET","POST"}).
      */
     public function attach(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
+        $accueils = $this->factureUtils->getAccueilsNonPayes($tuteur);
 
         $form = $this->createForm(FactureAttachType::class, $facture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = $request->request->get('presences', []);
-            $this->factureHandler->handleNew($facture, $presencesF, []);
+            $accueilsF = $request->request->get('accueils', []);
+            $this->factureHandler->handleNew($facture, [], $accueilsF);
 
-            $this->addFlash('success', 'Les présences ont bien été attachées');
+            $this->addFlash('success', 'Les accueils ont bien été attachés');
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/facture_presence/attach.html.twig',
+            '@AcMarcheMercrediAdmin/facture_accueil/attach.html.twig',
             [
                 'facture' => $facture,
-                'presences' => $presences,
+                'accueils' => $accueils,
                 'form' => $form->createView(),
             ]
         );
     }
 
     /**
-     * @Route("/{id}/show", name="mercredi_admin_facture_presence_show", methods={"GET"})
+     * @Route("/{id}/show", name="mercredi_admin_facture_accueil_show", methods={"GET"})
      */
-    public function show(FacturePresence $facturePresence): Response
+    public function show(FactureAccueil $factureAccueil): Response
     {
-        $facture = $facturePresence->getFacture();
+        $facture = $factureAccueil->getFacture();
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/facture_presence/show.html.twig',
+            '@AcMarcheMercrediAdmin/facture_accueil/show.html.twig',
             [
                 'facture' => $facture,
-                'facturePresence' => $facturePresence,
+                'factureAccueil' => $factureAccueil,
             ]
         );
     }
 
     /**
-     * Route("/{id}/edit", name="mercredi_admin_facture_presence_edit", methods={"GET","POST"}).
+     * Route("/{id}/edit", name="mercredi_admin_facture_accueil_edit", methods={"GET","POST"}).
      */
     public function edit(Request $request, Facture $facture): Response
     {
@@ -120,16 +120,16 @@ class FacturePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_facture_presence_delete", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_admin_facture_accueil_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, FacturePresence $facturePresence): Response
+    public function delete(Request $request, FactureAccueil $factureAccueil): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$facturePresence->getId(), $request->request->get('_token'))) {
-            $facture = $facturePresence->getFacture();
-            $this->facturePresenceRepository->remove($facturePresence);
-            $this->facturePresenceRepository->flush();
+        if ($this->isCsrfTokenValid('delete'.$factureAccueil->getId(), $request->request->get('_token'))) {
+            $facture = $factureAccueil->getFacture();
+            $this->factureAccueilRepository->remove($factureAccueil);
+            $this->factureAccueilRepository->flush();
 
-            $this->addFlash('success', 'La présence a bien été détachée');
+            $this->addFlash('success', 'L\'accueil a bien été détaché');
         }
 
         return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);

@@ -8,12 +8,12 @@ Feature: Test de la gestion des présences
     Given I am on "/parent"
 
   Scenario: J' ajoute une présence pour un enfant qui n'a pas de fiche santé
-    When I follow "Ajouter une présence"
+    When I follow "Jour d'accueil"
     Then I follow "SIMPSON Lisa"
     Then I should see "La fiche santé de votre enfant doit être complétée"
 
   Scenario: J' ajoute une présence pour un enfant qui a une fiche santé
-    When I follow "Ajouter une présence"
+    When I follow "Jour d'accueil"
     Then I follow "SIMPSON Bart"
     Then I should see "Sélectionnez des jours d'accueil"
     When I select "Mercredi 7 octobre 2020" from "presence_new_for_parent_jours"

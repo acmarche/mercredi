@@ -31,6 +31,7 @@ class Facture implements TimestampableInterface, UuidableInterface
     use RemarqueTrait;
     use UuidableTrait;
     use FacturePresencesTrait;
+    use FactureAccueilsTrait;
     use UserAddTrait;
 
     /**
@@ -54,6 +55,7 @@ class Facture implements TimestampableInterface, UuidableInterface
     {
         $this->tuteur = $tuteur;
         $this->facturePresences = new ArrayCollection();
+        $this->factureAccueils = new ArrayCollection();
     }
 
     public function __toString()

@@ -15,6 +15,7 @@ use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,19 +52,25 @@ class FactureController extends AbstractController
      * @var FactureMailer
      */
     private $factureMailer;
+    /**
+     * @var FactureUtils
+     */
+    private $factureUtils;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
         PresenceRepository $presenceRepository,
         FacturePresenceRepository $facturePresenceRepository,
-        FactureMailer $factureMailer
+        FactureMailer $factureMailer,
+        FactureUtils $factureUtils
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
         $this->presenceRepository = $presenceRepository;
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureMailer = $factureMailer;
+        $this->factureUtils = $factureUtils;
     }
 
     /**
@@ -112,19 +119,17 @@ class FactureController extends AbstractController
     {
         $facture = $this->factureHandler->newInstance($tuteur);
 
-        $presencesAll = $this->presenceRepository->findPresencesByTuteur($tuteur);
-        $presencesNonFacturees = [];
-        foreach ($presencesAll as $presence) {
-            if (!$this->facturePresenceRepository->findByPresence($presence)) {
-                $presencesNonFacturees[] = $presence;
-            }
-        }
+        $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
+        $accueils = $this->factureUtils->getAccueilsNonPayes($tuteur);
+        //  $plaines = $this->factureUtils->getPlainesNonPayes($tuteur);
 
         $form = $this->createForm(FactureType::class, $facture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->factureHandler->handleNew($facture, $request->request->get('presences'));
+            $presencesF = $request->request->get('presences', []);
+            $accueilsF = $request->request->get('accueils', []);
+            $this->factureHandler->handleNew($facture, $presencesF, $accueilsF);
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
 
@@ -135,7 +140,9 @@ class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/new.html.twig',
             [
                 'tuteur' => $tuteur,
-                'presences' => $presencesNonFacturees,
+                'presences' => $presences,
+                'accueils' => $accueils,
+                //   'plaines'=>$plaines,
                 'form' => $form->createView(),
             ]
         );

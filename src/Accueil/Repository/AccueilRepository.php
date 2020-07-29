@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Accueil\Repository;
 
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -51,6 +52,18 @@ class AccueilRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * @param Tuteur $tuteur
+     * @return Accueil[]
+     */
+    public function findByTuteur(Tuteur $tuteur): array
+    {
+        return $this->createQueryBuilder('accueil')
+            ->andWhere('accueil.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->getQuery()->getResult();
+    }
+
     public function remove(Accueil $accueil)
     {
         $this->_em->remove($accueil);
@@ -64,6 +77,11 @@ class AccueilRepository extends ServiceEntityRepository
     public function persist(Accueil $accueil)
     {
         $this->_em->persist($accueil);
+    }
+
+    public function findAccueilsByTuteur(Tuteur $tuteur)
+    {
+
     }
 
 }
