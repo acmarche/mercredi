@@ -1,5 +1,10 @@
 {% set action = app.request.attributes.get("_route") %}
 
+<li class="nav-item{% if action == 'mercredi_parent_presence_select_enfant' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('mercredi_parent_presence_select_enfant') }}"><i class="fas fa-plus"></i> Ajouter une présence</a>
+</li>
+
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
        aria-haspopup="true"

@@ -6,9 +6,8 @@
 
 {% block menu_top %}
     {% include '@AcMarcheMercrediParent/_menu.html.twig' %}
-    {{ render(path('mercredi_front_menu_page')) }}
 {% endblock %}
 
-        {% block notifications %}
-            {{ render(path('mercredi_parent_plaine_open')) }}
-        {% endblock %}
+{% block notifications %}
+    {{ render(path('mercredi_parent_plaine_open')) }}
+{% endblock %}
