@@ -22,6 +22,12 @@
                 <tr>
                     <th>Rôles</th>
                     <td>
+                        {{ user.niceRoles|join(', ') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Rôles techniques</th>
+                    <td>
                         {{ user.roles|join(', ') }}
                     </td>
                 </tr>
