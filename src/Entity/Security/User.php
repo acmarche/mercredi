@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteursTrait;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -34,6 +35,13 @@ class User implements UserInterface
     use IsRoleTrait;
     use UserNameTrait;
     use TuteursTrait;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=150, nullable=true)
+     */
+    private $telephone;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
@@ -61,12 +69,17 @@ class User implements UserInterface
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
+    public function getNiceRoles(): array
+    {
+        return MercrediSecurity::niceName($this->getRoles());
+    }
+
     /**
      * @see UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -108,5 +121,17 @@ class User implements UserInterface
     public function getIsVerified(): ?bool
     {
         return $this->isVerified;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): self
+    {
+        $this->telephone = $telephone;
+
+        return $this;
     }
 }

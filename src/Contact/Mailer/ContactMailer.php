@@ -29,15 +29,14 @@ class ContactMailer
     /**
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function sendContactForm(string $email, string $nom, string $body): void
+    public function sendContactForm(string $from, string $nom, string $body): void
     {
-        $from = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $to = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         $message = (new TemplatedEmail())
-            ->subject('[Mercredi] '.$nom.' vous contact via le site du mercredi')
-            ->from($email)
-            ->cc($email)
-            ->to($from)
+            ->subject('[Mercredi] '.$nom.' vous contact via le site')
+            ->from($from)
+            ->to($to)
             ->text($body);
 
         $this->mailer->send($message);

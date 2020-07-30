@@ -15,4 +15,18 @@ class MercrediSecurity
         self::ROLE_ECOLE => 'Ecole',
         self::ROLE_ANIMATEUR => 'Animateur',
     ];
+
+    public static function niceName(array $roles): array
+    {
+        $nices = [];
+        foreach ($roles as $role) {
+            if(isset(self::ROLES[$role])) {
+                $nice = self::ROLES[$role];
+                dump($nice);
+                $nices[] = $nice;
+            }
+        }
+dump($nices);
+        return $nices;
+    }
 }

@@ -28,7 +28,7 @@ class FacturePdfFactory extends AbstractPdfDownloader
     public function generate(Facture $facture): Response
     {
         $date = $facture->getFactureLe();
-        $html = $this->factureFactory->generateHtml($facture);
+        $html = $this->factureFactory->generateFullHtml($facture);
 
         // return new Response($html);
 
