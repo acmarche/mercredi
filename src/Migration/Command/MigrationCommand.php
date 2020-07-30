@@ -37,6 +37,7 @@ class MigrationCommand extends Command
 
         foreach ($this->enfantRepository->findAll() as $enfant) {
             $enfant->generateUuid();
+            $enfant->generateSlug();
         }
 
         $this->enfantRepository->flush();
