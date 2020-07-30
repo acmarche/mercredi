@@ -5,16 +5,6 @@
        href="{{ path('mercredi_parent_presence_select_enfant') }}"><i class="fas fa-plus"></i> Ajouter une présence</a>
 </li>
 
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-       aria-haspopup="true"
-       aria-expanded="false"><i class="fas fa-plus"></i> Ajouter une présence</a>
-    <div class="dropdown-menu" aria-labelledby="dropdown01">
-        <a class="dropdown-item" href="{{ path('mercredi_parent_presence_select_enfant') }}">Jour d'accueil</a>
-        <a class="dropdown-item" href="{{ path('mercredi_parent_accueil_select_enfant') }}">Accueil matin/soir</a>
-    </div>
-</li>
-
 <li class="nav-item{% if action == 'mercredi_parent_enfant_index' %} active {% endif %}">
     <a class="nav-link"
        href="{{ path('mercredi_parent_enfant_index') }}"><i class="fas fa-list"></i> Mes enfants</a>
@@ -28,4 +18,9 @@
 <li class="nav-item{% if action == 'mercredi_parent_tuteur_show' %} active {% endif %}">
     <a class="nav-link"
        href="{{ path('mercredi_parent_tuteur_show') }}"><i class="fas fa-list-alt"></i> Mes coordonnées</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_front_home' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('mercredi_front_home') }}"><i class="fas fa-home"></i> Accueil</a>
 </li>
