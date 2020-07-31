@@ -36,12 +36,10 @@ class Animateur implements TimestampableInterface
 
     public function __construct()
     {
-        $this->relations = [];
-        $this->presences = new ArrayCollection();
-        $this->users = new ArrayCollection();
+
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
