@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Accueil\Form;
 
 use AcMarche\Mercredi\Accueil\Service\AccueilService;
-use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Component\Form\AbstractType;
@@ -12,10 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Count;
-use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\GreaterThan;
-use Symfony\Component\Validator\Constraints\LessThan;
 
 class AccueilType extends AbstractType
 {
@@ -30,18 +26,15 @@ class AccueilType extends AbstractType
                 ]
             )
             ->add(
-                'matin_soir',
+                'heure',
                 ChoiceType::class,
                 [
                     'label' => 'Quand',
+                    'placeholder' => 'Matin ou soir',
                     'choices' => AccueilService::getMatinSoir(),
-                    'multiple' => true,
-                    'expanded' => true,
-                    'constraints' => new Count(
-                        [
-                            'min' => 1,
-                        ]
-                    ),
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
                 ]
             )
             ->add(

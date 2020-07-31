@@ -29,10 +29,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class AccueilController extends AbstractController
 {
     /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
-    /**
      * @var AccueilRepository
      */
     private $accueilRepository;

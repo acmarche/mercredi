@@ -30,13 +30,6 @@ class AccueilParentType extends AbstractType
                 [
                     'label' => 'Quand',
                     'choices' => AccueilService::getMatinSoir(),
-                    'multiple' => true,
-                    'expanded' => true,
-                    'constraints' => new Count(
-                        [
-                            'min' => 1,
-                        ]
-                    ),
                 ]
             )
             ->add(

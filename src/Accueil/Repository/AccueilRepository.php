@@ -30,13 +30,15 @@ class AccueilRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function findOneByDateEnfant(\DateTimeInterface $date, Enfant $enfant): ?Accueil
+    public function isRegistered(Accueil $accueil, Enfant $enfant): ?Accueil
     {
         return $this->createQueryBuilder('accueil')
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour = :date')
-            ->setParameter('date', $date)
+            ->setParameter('date', $accueil->getDateJour())
+            ->andWhere('accueil.heure = :heure')
+            ->setParameter('heure', $accueil->getHeure())
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -81,7 +83,6 @@ class AccueilRepository extends ServiceEntityRepository
 
     public function findAccueilsByTuteur(Tuteur $tuteur)
     {
-
     }
 
 }

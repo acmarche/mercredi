@@ -87,7 +87,7 @@ class AccueilController extends AbstractController
     /**
      * Etape 1 select enfant.
      *
-     * @Route("/select/enfant", name="mercredi_parent_accueil_select_enfant", methods={"GET"})
+     * Route("/select/enfant", name="mercredi_parent_accueil_select_enfant", methods={"GET"})
      */
     public function selectEnfant()
     {
@@ -106,7 +106,7 @@ class AccueilController extends AbstractController
     /**
      * Etape 2.
      *
-     * @Route("/select/jour/{uuid}", name="mercredi_parent_accueil_select_jours", methods={"GET","POST"})
+     * Route("/select/jour/{uuid}", name="mercredi_parent_accueil_select_jours", methods={"GET","POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function selectJours(Request $request, Enfant $enfant)
@@ -160,7 +160,7 @@ class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_parent_accueil_delete", methods={"DELETE"})
+     * Route("/{id}", name="mercredi_parent_accueil_delete", methods={"DELETE"})
      * @IsGranted("accueil_edit", subject="accueil")
      */
     public function delete(Request $request, Accueil $accueil): Response

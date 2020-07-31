@@ -20,10 +20,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class Accueil
  * * @ORM\Table("accueil", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id"})
+ *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
  * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
- * @UniqueEntity(fields={"date_jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
+ * @UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
  */
 class Accueil implements TimestampableInterface, UuidableInterface
 {
@@ -50,10 +50,10 @@ class Accueil implements TimestampableInterface, UuidableInterface
     private $duree;
 
     /**
-     * @var array
-     * @ORM\Column(type="json")
+     * @var string
+     * @ORM\Column(type="string", nullable=false)
      */
-    private $matin_soir = [];
+    private $heure;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
@@ -103,32 +103,19 @@ class Accueil implements TimestampableInterface, UuidableInterface
         return $this;
     }
 
-    public function getMatinSoir(): ?array
+    public function getHeure(): ?string
     {
-        return $this->matin_soir;
+        return $this->heure;
     }
 
-    public function setMatinSoir(array $matin_soir): self
+    public function setHeure(string $heure): self
     {
-        $this->matin_soir = $matin_soir;
+        $this->heure = $heure;
 
         return $this;
     }
 
-    public function addMatinSoir(string $matin_soir): void
-    {
-        if (!\in_array($matin_soir, $this->matin_soir, true)) {
-            $this->matin_soir[] = $matin_soir;
-        }
-    }
 
-    public function removeMatinSoir(string $matin_soir): void
-    {
-        if (\in_array($matin_soir, $this->matin_soir, true)) {
-            $index = array_search($matin_soir, $this->matin_soir);
-            unset($this->matin_soir[$index]);
-        }
-    }
 
 
 }

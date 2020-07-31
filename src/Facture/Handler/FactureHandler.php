@@ -122,6 +122,7 @@ class FactureHandler
             }
             $factureAccueil = new FactureAccueil($facture, $accueil);
             $factureAccueil->setAccueilDate($accueil->getDateJour());
+            $factureAccueil->setHeure($accueil->getHeure());
             $enfant = $accueil->getEnfant();
             $factureAccueil->setNom($enfant->getNom());
             $factureAccueil->setPrenom($enfant->getPrenom());

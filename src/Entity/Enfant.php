@@ -136,4 +136,5 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     {
         return true;
     }
+
 }

@@ -44,6 +44,12 @@ class FactureAccueil
     private $accueilDate;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $heure;
+
+    /**
      * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      */
@@ -75,6 +81,18 @@ class FactureAccueil
     public function setCout(float $cout): self
     {
         $this->cout = $cout;
+
+        return $this;
+    }
+
+    public function getHeure(): ?string
+    {
+        return $this->heure;
+    }
+
+    public function setHeure(string $heure): self
+    {
+        $this->heure = $heure;
 
         return $this;
     }
