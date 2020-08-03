@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
@@ -33,11 +32,6 @@ class Animateur implements TimestampableInterface
     use ArchiveTrait;
     use TimestampableTrait;
     use UserAddTrait;
-
-    public function __construct()
-    {
-
-    }
 
     public function __toString(): string
     {

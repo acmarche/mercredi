@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Accueil
- * * @ORM\Table("accueil", uniqueConstraints={
+ * @ORM\Table("accueil", uniqueConstraints={
  *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
  * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
@@ -58,12 +58,14 @@ class Accueil implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
+     * @var \AcMarche\Mercredi\Entity\Enfant
      */
     private $enfant;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
+     * @var \AcMarche\Mercredi\Entity\Tuteur
      */
     private $tuteur;
 
@@ -74,7 +76,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
         $this->duree = 0;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->date_jour->format('Y-m-d');
     }
@@ -91,7 +93,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
         return $this;
     }
 
-    public function getDuree(): ?int
+    public function getDuree(): int
     {
         return $this->duree;
     }
@@ -103,7 +105,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
         return $this;
     }
 
-    public function getHeure(): ?string
+    public function getHeure(): string
     {
         return $this->heure;
     }
