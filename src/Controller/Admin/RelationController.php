@@ -43,8 +43,7 @@ class RelationController extends AbstractController
     public function attachEnfant(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
-            $enfantId = $request->request->get('enfantId');
-
+            $enfantId = (int)$request->request->get('enfantId');
             try {
                 $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
                 $this->dispatchMessage(new RelationCreated($relation->getId()));
