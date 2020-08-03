@@ -3,5 +3,6 @@ AcMarche\Mercredi\Entity\Facture\FactureAccueil:
     __construct: ['@facture_simpson','@acceuil__bart_09_12']
     nom: 'Simpson'
     prenom: 'Bart'
+    heure: 'Soir'
     accueilDate: '<carbonDateTime(2020,12,9,9,0)>'
     cout: '0.50'
