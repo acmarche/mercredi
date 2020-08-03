@@ -14,11 +14,3 @@ Feature: Test de la gestion des accueils
     Then I follow "jeudi 9 juillet 2020"
     Then I should see "Accueil de SIMPSON Bart le jeudi 9 juillet 2020"
     And I should see "0,50 €"
-
-  Scenario: Je ne peux pas supprimer un accueil passée
-    Then I follow "SIMPSON Bart"
-    Then I should see "jeudi 9 juillet 2020"
-    Then I follow "jeudi 9 juillet 2020"
-    Then I should see "Accueil de SIMPSON Bart le jeudi 9 juillet 2020"
-    Then I press "Supprimer l'accueil"
-    Then I should see "Un accueil passé ne peut être supprimé"
