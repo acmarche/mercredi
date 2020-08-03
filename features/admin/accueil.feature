@@ -40,7 +40,7 @@ Feature: Gestion des acceuils
     Then I should see "Nouvel accueil pour FERNANDEL Yves"
     And I fill in "accueil[date_jour]" with "2020-07-09"
     And I fill in "accueil[duree]" with "3"
-    And I select "Soir" from "accueil_heure"
+    And I select "Matin" from "accueil_heure"
     And I press "Sauvegarder"
     Then I should see "L'acceuil a bien été ajouté"
     Then I should see "Matin"

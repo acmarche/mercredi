@@ -11,7 +11,7 @@ Feature: Gestion des enfants
 
   Scenario: Ajout un enfant
     Given I am on "/admin/tuteur/"
-    Then I should see "Liste des tuteurs"
+    Then I should see "Liste des parents"
     Then I fill in "search_tuteur[nom]" with "Peret"
     And I press "Rechercher"
     Then I should see "Peret"

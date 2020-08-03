@@ -18,7 +18,7 @@
                 </label>
             </td>
             <td>
-                <a href="{{ path('mercredi_admin_accueil_show', {'uuid': accueil.uuid}) }}">
+                <a href="{{ path('mercredi_admin_accueil_show', {'id': accueil.id}) }}">
                     {{ (accueil.dateJour | format_date('full'))|capitalize }}
                 </a>
             </td>
@@ -26,7 +26,7 @@
                 {{ accueil.enfant }}
             </td>
             <td class="text-muted">
-                {{ accueil.matinSoir|join(',') }}
+                {{ accueil.heure }}
             </td>
         </tr>
         {% else %}

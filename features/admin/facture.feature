@@ -14,7 +14,7 @@ Feature: Gestion des factures
   Background:
     Given I am logged in as an admin
     Given I am on "/admin/tuteur/"
-    Then I should see "Liste des tuteurs"
+    Then I should see "Liste des parents"
     Then I fill in "search_tuteur[nom]" with "Simpson"
     And I press "Rechercher"
     Then I should see "Simpson"

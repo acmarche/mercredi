@@ -8,7 +8,7 @@ Feature: Gestion des tuteurs
   Background:
     Given I am logged in as an admin
     Given I am on "/admin/tuteur/"
-    Then I should see "Liste des tuteurs"
+    Then I should see "Liste des parents"
     Then I fill in "search_tuteur[nom]" with "Peret"
     And I press "Rechercher"
     Then I should see "Peret"
@@ -50,5 +50,5 @@ Feature: Gestion des tuteurs
     Then I press "Supprimer le tuteur"
     Then I should see "Le tuteur a bien été supprimé"
     Given I am on "/admin/checkup/orphelin/"
-    Then I should see "Les enfants sans tuteur"
+    Then I should see "Les enfants sans parents"
     Then I should see "Merlin"
