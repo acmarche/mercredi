@@ -32,7 +32,7 @@ class OrganisationController extends AbstractController
         $organisation = $this->organisationRepository->getOrganisation();
 
         return $this->render(
-            '@AcMarcheMercredi/default/_organisation.html.twig',
+            '@AcMarcheMercredi/organisation/_organisation.html.twig',
             [
                 'organisation' => $organisation,
             ]
@@ -47,7 +47,22 @@ class OrganisationController extends AbstractController
         $organisation = $this->organisationRepository->getOrganisation();
 
         return $this->render(
-            '@AcMarcheMercredi/default/_organisation_title.html.twig',
+            '@AcMarcheMercredi/organisation/_organisation_title.html.twig',
+            [
+                'organisation' => $organisation,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/short", name="mercredi_organisation_short")
+     */
+    public function organisationShort()
+    {
+        $organisation = $this->organisationRepository->getOrganisation();
+
+        return $this->render(
+            '@AcMarcheMercredi/organisation/_organisation_short.html.twig',
             [
                 'organisation' => $organisation,
             ]

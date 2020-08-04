@@ -5,22 +5,43 @@ namespace AcMarche\Mercredi\Registration\Form;
 use AcMarche\Mercredi\User\Form\UserType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
 class RegistrationFormType extends AbstractType
 {
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $url = $this->router->generate('mercredi_front_modalite');
+
         $builder
             ->remove('roles')
+            ->add(
+                'telephone',
+                TextType::class,
+                [
+                    'label' => 'Téléphone',
+                ]
+            )
             ->add(
                 'agreeTerms',
                 CheckboxType::class,
                 [
                     'label' => 'Conditions d\'utilisation',
                     'help_html' => true,
-                    'help' => '<a href="#" target="_blank">Lire les conditions</a>',
+                    'help' => '<a href="'.$url.'" target="_blank">Lire les conditions</a>',
                     'mapped' => false,
                     'constraints' => [
                         new IsTrue(

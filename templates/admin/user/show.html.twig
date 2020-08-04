@@ -20,6 +20,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>Téléphone</th>
+                    <td>
+                        {{ user.telephone }}
+                    </td>
+                </tr>
+                <tr>
                     <th>Rôles</th>
                     <td>
                         {{ user.niceRoles|join(', ') }}
@@ -36,16 +42,20 @@
                     <td>
                         <table class="table table-hover">
 
-                        {% for tuteur in user.tuteurs %}
-                       <tr>
-                           <td><a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">{{ tuteur }}</a></td>
-                           <td> <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
-                                        data-id="{{ tuteur.id }}" data-target="#dissocierModal">
-                                   <i class="fas fa-unlink"></i> Dissocier
-                               </button></td>
-                       </tr>
+                            {% for tuteur in user.tuteurs %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">{{ tuteur }}</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
+                                                data-id="{{ tuteur.id }}" data-target="#dissocierModal">
+                                            <i class="fas fa-unlink"></i> Dissocier
+                                        </button>
+                                    </td>
+                                </tr>
 
-                        {% endfor %}
+                            {% endfor %}
                         </table>
                     </td>
                 </tr>
@@ -60,14 +70,14 @@
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript">
-    $('#dissocierModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var tuteurId = button.data('id'); // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this);
-        modal.find('#modal-tuteur').val(tuteurId)
-    })
-</script>
+    <script type="text/javascript">
+        $('#dissocierModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var tuteurId = button.data('id'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            modal.find('#modal-tuteur').val(tuteurId)
+        })
+    </script>
 {% endblock %}

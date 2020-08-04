@@ -4,7 +4,9 @@
     </li>
 {% endfor %}
 
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ path('mercredi_front_register') }}">M'enregistrer</a>
-</li>
+{% if is_granted('IS_AUTHENTICATED_FULLY') != true %}
+    <li class="nav-item">
+        <a class="nav-link"
+           href="{{ path('mercredi_front_register') }}">M'enregistrer</a>
+    </li>
+{% endif %}

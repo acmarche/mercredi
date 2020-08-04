@@ -8,6 +8,7 @@ AcMarche\Mercredi\Entity\Page:
   page_modalite:
     nom: 'Modalités pratiques'
     content: 'Les prix et autres infos'
+    slug_system: 'modalites-pratiques'
     position: '2'
 
   page_0:

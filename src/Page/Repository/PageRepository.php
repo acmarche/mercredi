@@ -37,6 +37,11 @@ class PageRepository extends ServiceEntityRepository
         return $this->findOneBy(['slug_system' => 'contact']);
     }
 
+    public function findModalitePage(): ?Page
+    {
+        return $this->findOneBy(['slug_system' => 'modalites-pratiques']);
+    }
+
     public function remove(Page $page)
     {
         $this->_em->remove($page);

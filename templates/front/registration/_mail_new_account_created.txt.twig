@@ -1,0 +1,10 @@
+Le nouveau compte a été crée : {{ user.username }}
+
+Nom: {{ user.nom }}
+Prénom: {{ user.prenom }}
+Téléphone: {{ user.telephone }}
+
+Allez dans la gestion des utilisateurs pour donner les droits "parent" et associer le compte à
+une fiche "parent"
+
+Gesion des utilisateurs: {{ absolute_url(path('mercredi_admin_user_show', {'id': user.id})) }}

@@ -42,4 +42,17 @@ class PageFactory
 
         return $page;
     }
+
+    public function createModalitePage(): ?Page
+    {
+        $page = new Page();
+        $page->setNom('Modalités pratiques');
+        $page->setContent('Contenu à modifier');
+        $page->setSlugSystem('modalites-pratiques');
+
+        $this->pageRepository->persist($page);
+        $this->pageRepository->flush();
+
+        return $page;
+    }
 }

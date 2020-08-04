@@ -61,6 +61,7 @@ class AssociationHandler
 
         $tuteur->addUser($dto->getUser());
         $this->tuteurRepository->flush();
+
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($dto->isSendEmail()) {

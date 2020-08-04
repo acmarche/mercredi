@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Registration\EmailVerifier;
 use AcMarche\Mercredi\Registration\Form\RegistrationFormType;
 use AcMarche\Mercredi\Registration\Handler\RegistrationHandler;
 use AcMarche\Mercredi\Registration\Mailer\RegistrationMailerFactory;
+use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,18 +69,12 @@ class RegistrationController extends AbstractController
             );
 
             $user->setUsername($user->getEmail());
+            $user->setEnabled(true);
 
             $this->userRepository->persist($user);
             $this->userRepository->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                $this->registrationMailerFactory->generateMessagToVerifyEmail($user)
-            );
-
-            $this->addFlash('success', 'Votre compte a bien été créé, consultez votre boite mail');
+            $this->dispatchMessage(new RegisterCreated($user->getId()));
 
             return $this->redirectToRoute('mercredi_front_home');
         }

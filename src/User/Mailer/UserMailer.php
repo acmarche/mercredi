@@ -40,10 +40,10 @@ class UserMailer
         $from = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         $message = (new TemplatedEmail())
-            ->subject('Votre compte pour le site du mercredi')
+            ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
             ->to($user->getEmail())
-            ->textTemplate('@AcMarcheMercrediAdmin/account/_new_account_parent.txt.twig')
+            ->htmlTemplate('@AcMarcheMercredi/front/mail/_mail_welcome_parent.html.twig')
             ->context(
                 [
                     'tuteur' => $tuteur,

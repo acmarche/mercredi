@@ -75,7 +75,7 @@ class AssocierParentController extends AbstractController
     public function dissociate(Request $request, User $user)
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
-            $tuteurId = (int) $request->request->get('tuteur');
+            $tuteurId = (int)$request->request->get('tuteur');
             if (!$tuteurId) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');
 
