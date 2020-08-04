@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -17,12 +18,25 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EnfantType extends AbstractType
 {
+    /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security  $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
+
         $builder
             ->add(
                 'nom',
@@ -44,14 +58,14 @@ class EnfantType extends AbstractType
                 [
                     'label' => 'Né le',
                     'widget' => 'single_text',
-                    'required' => false,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    'required' => false,
+                    'required' => $isAdmin,
                     'choices' => MercrediConstantes::SEXES,
                     'placeholder' => 'Choisissez son sexe',
                 ]
@@ -67,7 +81,7 @@ class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'required' => false,
+                    'required' => $isAdmin,
                     'placeholder' => 'Choisissez son école',
                 ]
             )

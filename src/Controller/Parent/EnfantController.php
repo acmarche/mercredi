@@ -4,9 +4,13 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
+use AcMarche\Mercredi\Enfant\Form\EnfantType;
+use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
+use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Notification\Mailer\NotifcationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
@@ -16,6 +20,7 @@ use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -59,6 +64,14 @@ class EnfantController extends AbstractController
      * @var AccueilRepository
      */
     private $accueilRepository;
+    /**
+     * @var EnfantHandler
+     */
+    private $enfantHandler;
+    /**
+     * @var NotifcationMailer
+     */
+    private $notifcationMailer;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -68,7 +81,9 @@ class EnfantController extends AbstractController
         SanteChecker $santeChecker,
         PresenceRepository $presenceRepository,
         PlainePresenceRepository $plainePresenceRepository,
-        AccueilRepository $accueilRepository
+        AccueilRepository $accueilRepository,
+        EnfantHandler $enfantHandler,
+        NotifcationMailer $notifcationMailer
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurUtils = $tuteurUtils;
@@ -78,6 +93,8 @@ class EnfantController extends AbstractController
         $this->presenceRepository = $presenceRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->accueilRepository = $accueilRepository;
+        $this->enfantHandler = $enfantHandler;
+        $this->notifcationMailer = $notifcationMailer;
     }
 
     /**
@@ -96,6 +113,35 @@ class EnfantController extends AbstractController
             [
                 'enfants' => $enfants,
                 'year' => date('Y'),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/new", name="mercredi_parent_enfant_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_MERCREDI_PARENT")
+     */
+    public function new(Request $request): Response
+    {
+        $this->hasTuteur();
+        $enfant = new Enfant();
+        $form = $this->createForm(EnfantEditForParentType::class, $enfant);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->enfantHandler->newHandle($enfant, $this->tuteur);
+            $this->dispatchMessage(new EnfantCreated($enfant->getId()));
+
+            $this->notifcationMailer->sendMessagEnfantCreated($this->getUser(), $enfant);
+
+            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediParent/enfant/new.html.twig',
+            [
+                'enfant' => $enfant,
+                'form' => $form->createView(),
             ]
         );
     }
