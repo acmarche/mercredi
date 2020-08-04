@@ -1,6 +1,7 @@
 Feature: Test des pages parents
   Je suis sur la page d'accueil
   J'affiche un enfant
+  J' ajoute un enfant
   En vue détail, Lisa n'a pas sa fiche santé complète
   En vue détail, Bart a sa fiche santé complète
 
@@ -12,6 +13,19 @@ Feature: Test des pages parents
   Scenario: J'affiche un enfant
     Then I follow "SIMPSON Lisa"
     Then I should see "SIMPSON Lisa"
+
+  Scenario: J' ajoute un enfant
+    Then I follow "Ajouter un enfant"
+    Then I should see "Nouvel enfant"
+    And I fill in "enfant_edit_for_parent[nom]" with "Funes"
+    And I fill in "enfant_edit_for_parent[prenom]" with "Jules"
+    And I fill in "enfant_edit_for_parent[birthday]" with "2015-12-06"
+    And I select "Waha" from "enfant_edit_for_parent[ecole]"
+    And I select "Masculin" from "enfant_edit_for_parent[sexe]"
+    And I select "3M" from "enfant_edit_for_parent[annee_scolaire]"
+    And I press "Sauvegarder"
+    Then I should see "FUNES Jules"
+    Then I should see "Waha"
 
   Scenario: Je modifie un enfant sans fiche santé
     Then I follow "SIMPSON Lisa"
