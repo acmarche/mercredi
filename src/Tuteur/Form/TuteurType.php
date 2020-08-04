@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Tuteur\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -12,11 +13,24 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class TuteurType extends AbstractType
 {
+    /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security  $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
+
         $builder
             ->add(
                 'nom',
@@ -36,35 +50,35 @@ class TuteurType extends AbstractType
                 'rue',
                 TextType::class,
                 [
-                    'required' => false,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => false,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => false,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    'required' => false,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    'required' => false,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
