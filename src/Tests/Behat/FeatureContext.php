@@ -3,6 +3,8 @@
 namespace AcMarche\Mercredi\Tests\Behat;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Utils\DateUtils;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Carbon\Carbon;
 use Exception;
@@ -53,6 +55,54 @@ class FeatureContext extends RawMinkContext
         $this->fillField('username', $email);
         $this->fillField('password', $password);
         $this->pressButton('Me connecter');
+    }
+
+    /**
+     * @When /^I select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
+     */
+    public function iSelectDayPlusFrom($nbDays, $select)
+    {
+        $today = Carbon::today();
+        $today->addDays($nbDays);
+        $today = ucfirst(DateUtils::formatFr($today));
+        $select = $this->fixStepArgument($select);
+        $option = $this->fixStepArgument($today);
+        $this->getSession()->getPage()->selectFieldOption($select, $option);
+    }
+
+    /**
+     * @When /^I additionally select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
+     */
+    public function iAdditionallySelectDayPlusFrom($nbDays, $select)
+    {
+        $today = Carbon::today();
+        $today->addDays($nbDays);
+        $today = ucfirst(DateUtils::formatFr($today));
+        $select = $this->fixStepArgument($select);
+        $option = $this->fixStepArgument($today);
+        $this->getSession()->getPage()->selectFieldOption($select, $option, true);
+    }
+
+    /**
+     * Selects additional option in select field with specified id|name|label|value
+     * Example: When I additionally select "Deceased" from "parents_alive_status"
+     * Example: And I additionally select "Deceased" from "parents_alive_status"
+     *
+     * @When /^(?:|I )ad222ditionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
+     */
+    public function additionallySelectOption($select, $option)
+    {
+    }
+
+    /**
+     * Selects option in select field with specified id|name|label|value
+     * Example: When I select "Bats" from "user_fears"
+     * Example: And I select "Bats" from "user_fears"
+     *
+     * @When /^(?:|I )sel222ect date "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
+     */
+    public function selectOption($select, $nbDays)
+    {
     }
 
     /**
@@ -204,4 +254,6 @@ class FeatureContext extends RawMinkContext
     {
         return str_replace('\\"', '"', $argument);
     }
+
+
 }

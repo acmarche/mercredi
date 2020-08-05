@@ -66,7 +66,7 @@ class PlaineHandler
             return $jour;
         }
 
-        if (!$newJour = $this->jourRepository->findOneByDateJour($jour->getDateJour())) {
+        if (!$newJour = $this->jourRepository->findOneByDate($jour->getDateJour())) {
             $newJour = new Jour($jour->getDateJour());
             $this->jourRepository->persist($newJour);
         }

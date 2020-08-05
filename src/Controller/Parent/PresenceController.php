@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Constraint\DateConstraint;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
+use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
@@ -70,6 +71,10 @@ class PresenceController extends AbstractController
      * @var DateConstraint
      */
     private $dateConstraint;
+    /**
+     * @var PresenceConstraints
+     */
+    private $presenceConstraints;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -79,8 +84,7 @@ class PresenceController extends AbstractController
         PresenceHandler $presenceHandler,
         PresenceUtils $presenceUtils,
         SanteChecker $santeChecker,
-        SanteHandler $santeHandler,
-        DateConstraint $dateConstraint
+        SanteHandler $santeHandler
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -90,11 +94,10 @@ class PresenceController extends AbstractController
         $this->tuteurUtils = $tuteurUtils;
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
-        $this->dateConstraint = $dateConstraint;
     }
 
     /**
-     * @Route("/", name="mercredi_parent_presence_index", methods={"GET","POST"})
+     * Route("/", name="mercredi_parent_presence_index", methods={"GET","POST"})
      */
     public function index(Request $request): Response
     {
@@ -172,7 +175,6 @@ class PresenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $days = $form->getData()->getJours();
 
-            $this->presenceHandler->addConstraint($this->dateConstraint);
             $this->presenceHandler->handleNew($this->tuteur, $enfant, $days);
 
             $this->dispatchMessage(new PresenceCreated($days));

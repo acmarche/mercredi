@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Presence\Form;
 
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
+use AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -13,6 +13,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PresenceNewForParentType extends AbstractType
 {
+    /**
+     * @var PresenceDaysProviderInterface
+     */
+    private $presenceDaysProvider;
+
+    public function __construct(PresenceDaysProviderInterface $presenceDaysProvider)
+    {
+        $this->presenceDaysProvider = $presenceDaysProvider;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $enfant = $builder->getData()->getEnfant();
@@ -23,10 +33,8 @@ class PresenceNewForParentType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Jour::class,
+                    'choices' => $this->presenceDaysProvider->getAllDaysToSubscribe($enfant),
                     'multiple' => true,
-                    'query_builder' => function (JourRepository $cr) use ($enfant) {
-                        return $cr->getQbForParent($enfant);
-                    },
                     'label' => 'Sélectionnez une ou plusieurs dates',
                     'choice_label' => function (Jour $jour) {
                         $peda = '';

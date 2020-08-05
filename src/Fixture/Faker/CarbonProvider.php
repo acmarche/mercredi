@@ -38,4 +38,12 @@ class CarbonProvider extends BaseProvider
 
         return $today;
     }
+
+    public function carbonAddDays(int $nbDays): Carbon
+    {
+        $today = Carbon::today();
+        $today->addDays($nbDays);
+
+        return $today;
+    }
 }

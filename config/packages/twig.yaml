@@ -5,3 +5,6 @@ twig:
     '%kernel.project_dir%/src/AcMarche/Mercredi/templates/parent': AcMarcheMercrediParent
     '%kernel.project_dir%/src/AcMarche/Mercredi/templates/animateur': AcMarcheMercrediAnimateur
     '%kernel.project_dir%/src/AcMarche/Mercredi/templates/ecole': AcMarcheMercrediAnimateur
+  globals:
+    presence_nb_days: "%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%"
+    pedagogique_nb_days: "%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%"

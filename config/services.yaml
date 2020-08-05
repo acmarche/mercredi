@@ -2,7 +2,9 @@
 # https://symfony.com/doc/current/service_container.html
 parameters:
   mercredi.email_sender: '%env(MERCREDI_FROM)%'
-  mercredi.accueil_prix: '0.5'
+  mercredi.accueil_prix: '%env(MERCREDI_ACCUEIL_PRIX)%'
+  mercredi.presence_deadline_days: '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%'
+  mercredi.pedagogique_deadline_days: '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%'
 
 services:
   # default configuration for services in *this* file
@@ -42,7 +44,13 @@ services:
   _instanceof:
     AcMarche\Mercredi\ServiceIterator\AfterUserRegistration:
       tags: ['app.user.after_registration'] # add this tag to all classes implementing this interface
+    AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface:
+      tags: ['mercredi.presence_constraint'] # add this tag to all classes implementing this interface
 
   AcMarche\Mercredi\ServiceIterator\Register:
     arguments:
       $secondaryFlows: !tagged_iterator 'app.user.after_registration' # grab all services tagged with this tag
+
+  AcMarche\Mercredi\Presence\Constraint\PresenceConstraints:
+    arguments:
+      $constraints: !tagged_iterator 'mercredi.presence_constraint' # grab all services tagged with this tag

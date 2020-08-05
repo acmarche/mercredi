@@ -7,10 +7,14 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use AcMarche\Mercredi\Utils\SortUtils;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PresenceUtils
 {
@@ -22,15 +26,48 @@ class PresenceUtils
      * @var ScolaireUtils
      */
     private $scolaireUtils;
+    /**
+     * @var ParameterBagInterface
+     */
+    private $parameterBag;
+    /**
+     * @var JourRepository
+     */
+    private $jourRepository;
 
-    public function __construct(RelationRepository $relationRepository, ScolaireUtils $scolaireUtils)
-    {
+    public function __construct(
+        ParameterBagInterface $parameterBag,
+        RelationRepository $relationRepository,
+        JourRepository $jourRepository,
+        ScolaireUtils $scolaireUtils
+    ) {
         $this->relationRepository = $relationRepository;
         $this->scolaireUtils = $scolaireUtils;
+        $this->parameterBag = $parameterBag;
+        $this->jourRepository = $jourRepository;
     }
+
+    public function getDeadLineDatePresence(): \DateTimeInterface
+    {
+        $today = Carbon::today();
+        $today->addDays($this->parameterBag->get('mercredi.presence_deadline_days'));
+
+        return $today;
+    }
+
+    public function getDeadLineDatePedagogique(): \DateTimeInterface
+    {
+        $today = Carbon::today();
+        $today->addDays($this->parameterBag->get('mercredi.pedagogique_deadline_days'));
+
+        return $today;
+    }
+
+
 
     /**
      * @param Presence[] $presences
+     * @return array
      */
     public function groupByYear(array $presences): array
     {

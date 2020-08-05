@@ -46,7 +46,7 @@ class JourController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/index.html.twig',
             [
-                'jours' => $this->jourRepository->findActifs(),
+                'jours' => $this->jourRepository->findNotArchived(),
             ]
         );
     }

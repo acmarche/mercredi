@@ -16,8 +16,8 @@ Feature: Test de la gestion des présences
     When I follow "Ajouter une présence"
     Then I follow "SIMPSON Bart"
     Then I should see "Sélectionnez des jours d'accueil"
-    When I select "Mercredi 7 octobre 2020" from "presence_new_for_parent_jours"
-    When I additionally select "Mercredi 16 septembre 2020" from "presence_new_for_parent_jours"
+    When I select day plus "16" from "presence_new_for_parent_jours"
+    When I additionally select day plus "20" from "presence_new_for_parent_jours"
     And I press "Sauvegarder"
     Then I should see "La présence a bien été ajoutée"
 

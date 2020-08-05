@@ -65,7 +65,7 @@ class JourRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findActifs()
+    public function findNotArchived()
     {
         return $this->createQueryBuilder('jour')
             ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
@@ -87,28 +87,38 @@ class JourRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retourne la liste des jours d'accueils pour les parents
-     * pour qu'ils inscrivent leurs enfants.
+     * @param \DateTime $date
+     * @return Jour[]
      */
-    public function getQbForParent(Enfant $enfant): QueryBuilder
+    public function findPedagogiqueByDateGreatherOrEqual(\DateTimeInterface $date, Enfant $enfant): array
     {
         $qb = $this->getQbDaysNotRegisteredByEnfant($enfant);
 
-        /**
-         * je ne propose pas les dates passees.
-         */
-        $date_time = new \DateTime();
-        $today = $date_time->format('Y-m-d');
-
-        $qb
-            ->andWhere('jour.date_jour >= :today')
-            ->setParameter('today', $today)
-            ->andWhere('plaineJour IS NULL');
-
-        return $qb;
+        return $qb
+            ->andWhere('jour.date_jour >= :date')
+            ->setParameter('date', $date->format('Y-m-d').'%')
+            ->andWhere('jour.pedagogique = 1')
+            ->orderBy('jour.date_jour', 'DESC')
+            ->getQuery()->getResult();
     }
 
-    public function findOneByDateJour(\DateTime $date): ?Jour
+    /**
+     * @param \DateTime $date
+     * @return Jour[]
+     */
+    public function findJourByDateGreatherOrEqual(\DateTimeInterface $date, Enfant $enfant): array
+    {
+        $qb = $this->getQbDaysNotRegisteredByEnfant($enfant);
+
+        return $qb
+            ->andWhere('jour.date_jour >= :date')
+            ->setParameter('date', $date->format('Y-m-d').'%')
+            ->andWhere('jour.pedagogique = 0')
+            ->orderBy('jour.date_jour', 'DESC')
+            ->getQuery()->getResult();
+    }
+
+    public function findOneByDate(\DateTime $date): ?Jour
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')

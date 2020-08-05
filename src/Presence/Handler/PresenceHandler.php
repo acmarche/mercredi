@@ -8,16 +8,13 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class PresenceHandler
 {
-    /**
-     * @var ArrayCollection
-     */
-    private $constraints;
     /**
      * @var PresenceRepository
      */
@@ -30,21 +27,21 @@ class PresenceHandler
      * @var FacturePresenceRepository
      */
     private $facturePresenceRepository;
+    /**
+     * @var PresenceConstraints
+     */
+    private $presenceConstraints;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         PresenceUtils $presenceUtils,
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        PresenceConstraints $presenceConstraints
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceUtils = $presenceUtils;
-        $this->constraints = new ArrayCollection();
         $this->facturePresenceRepository = $facturePresenceRepository;
-    }
-
-    public function addConstraint(object $constraint)
-    {
-        $this->constraints->add($constraint);
+        $this->presenceConstraints = $presenceConstraints;
     }
 
     /**
@@ -82,8 +79,10 @@ class PresenceHandler
 
     public function checkConstraints(Jour $jour): bool
     {
-        foreach ($this->constraints as $constraint) {
-            if (!$constraint->check($jour->getDateJour())) {
+        $this->presenceConstraints->execute($jour);
+        foreach ($this->presenceConstraints as $constraint) {
+            dump($constraint);
+            if (!$constraint->check($jour)) {
                 $constraint->addFlashError($jour);
 
                 return false;
