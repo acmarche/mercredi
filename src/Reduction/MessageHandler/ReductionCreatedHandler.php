@@ -24,7 +24,7 @@ class ReductionCreatedHandler implements MessageHandlerInterface
         $this->reductionRepository = $reductionRepository;
     }
 
-    public function __invoke(ReductionCreated $reductionCreated)
+    public function __invoke(ReductionCreated $reductionCreated): void
     {
         $this->flashBag->add('success', 'La réduction a bien été ajoutée');
     }

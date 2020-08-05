@@ -24,7 +24,7 @@ class EnfantUpdatedHandler implements MessageHandlerInterface
         $this->enfantRepository = $enfantRepository;
     }
 
-    public function __invoke(EnfantUpdated $enfantUpdated)
+    public function __invoke(EnfantUpdated $enfantUpdated): void
     {
         $this->flashBag->add('success', "L'enfant a bien été modifié");
     }

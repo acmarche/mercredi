@@ -35,7 +35,7 @@ class UserMailer
     /**
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function sendNewAccountToParent(User $user, Tuteur $tuteur, string $password = null)
+    public function sendNewAccountToParent(User $user, Tuteur $tuteur, ?string $password = null): void
     {
         $from = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 

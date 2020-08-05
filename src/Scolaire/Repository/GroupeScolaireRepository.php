@@ -43,17 +43,17 @@ class GroupeScolaireRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function remove(GroupeScolaire $groupeScolaire)
+    public function remove(GroupeScolaire $groupeScolaire): void
     {
         $this->_em->remove($groupeScolaire);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(GroupeScolaire $groupeScolaire)
+    public function persist(GroupeScolaire $groupeScolaire): void
     {
         $this->_em->persist($groupeScolaire);
     }

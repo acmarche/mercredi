@@ -24,7 +24,7 @@ class SanteQuestionUpdatedHandler implements MessageHandlerInterface
         $this->santeQuestionRepository = $santeQuestionRepository;
     }
 
-    public function __invoke(SanteQuestionUpdated $santeQuestionUpdated)
+    public function __invoke(SanteQuestionUpdated $santeQuestionUpdated): void
     {
         $this->flashBag->add('success', 'La question a bien été modifiée');
     }

@@ -20,6 +20,7 @@ use Symfony\Component\Security\Core\Security;
 class TuteurController extends AbstractController
 {
     use GetTuteurTrait;
+
     /**
      * @var TuteurRepository
      */

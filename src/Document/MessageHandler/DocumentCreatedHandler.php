@@ -24,7 +24,7 @@ class DocumentCreatedHandler implements MessageHandlerInterface
         $this->documentRepository = $documentRepository;
     }
 
-    public function __invoke(DocumentCreated $documentCreated)
+    public function __invoke(DocumentCreated $documentCreated): void
     {
         $this->flashBag->add('success', 'Le document a bien été ajouté');
     }

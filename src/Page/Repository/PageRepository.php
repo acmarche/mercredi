@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
  * @method Page|null findOneBy(array $criteria, array $orderBy = null)
- *                                                                                                 method Page[]    findAll()
+ *                                                                                                 method Page[] findAll()
  * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PageRepository extends ServiceEntityRepository
@@ -20,7 +20,7 @@ class PageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Page[]|array
+     * @return Page[]
      */
     public function findAll()
     {
@@ -42,17 +42,17 @@ class PageRepository extends ServiceEntityRepository
         return $this->findOneBy(['slug_system' => 'modalites-pratiques']);
     }
 
-    public function remove(Page $page)
+    public function remove(Page $page): void
     {
         $this->_em->remove($page);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Page $page)
+    public function persist(Page $page): void
     {
         $this->_em->persist($page);
     }

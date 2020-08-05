@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("relation", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"tuteur_id", "enfant_id"})
+ * @ORM\UniqueConstraint(columns={"tuteur_id", "enfant_id"})
  * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Relation\Repository\RelationRepository")
  * @UniqueEntity(fields={"tuteur", "enfant"}, message="Cet enfant est déjà lié à ce parent")

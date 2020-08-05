@@ -24,7 +24,7 @@ class GroupeScolaireDeletedHandler implements MessageHandlerInterface
         $this->groupeScolaireRepository = $groupeScolaireRepository;
     }
 
-    public function __invoke(GroupeScolaireDeleted $groupeScolaireDeleted)
+    public function __invoke(GroupeScolaireDeleted $groupeScolaireDeleted): void
     {
         $this->flashBag->add('success', 'Le groupe a bien été supprimé');
     }

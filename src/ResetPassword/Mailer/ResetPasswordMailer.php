@@ -27,7 +27,7 @@ class ResetPasswordMailer
         $this->organisation = $organisationRepository->getOrganisation();
     }
 
-    public function sendLink(User $user, ResetPasswordToken $resetToken, int $tokenLifeTime)
+    public function sendLink(User $user, ResetPasswordToken $resetToken, int $tokenLifeTime): void
     {
         $email = (new TemplatedEmail())
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))

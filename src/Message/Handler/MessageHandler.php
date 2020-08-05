@@ -40,12 +40,13 @@ class MessageHandler
         $this->flashBag = $flashBag;
     }
 
-    public function handle(Message $message)
+    public function handle(Message $message): void
     {
         $email = $this->emailFactory->create($message);
 
         foreach ($message->getDestinataires() as $addressEmail) {
             $email->to($addressEmail);
+
             try {
                 $this->mailer->send($email);
             } catch (TransportExceptionInterface $e) {

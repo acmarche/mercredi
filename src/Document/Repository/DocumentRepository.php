@@ -34,26 +34,24 @@ class DocumentRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function remove(Document $document)
+    public function remove(Document $document): void
     {
         $this->_em->remove($document);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Document $document)
+    public function persist(Document $document): void
     {
         $this->_em->persist($document);
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('document')
+        return $this->createQueryBuilder('document')
             ->orderBy('document.nom', 'ASC');
-
-        return $qb;
     }
 }

@@ -31,7 +31,7 @@ class NotifcationMailer
         $this->organisation = $organisationRepository->getOrganisation();
     }
 
-    public function sendMessagEnfantCreated(User $user, Enfant $enfant)
+    public function sendMessagEnfantCreated(User $user, Enfant $enfant): void
     {
         $email = (new TemplatedEmail())
             ->from($user->getEmail())

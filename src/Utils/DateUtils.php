@@ -14,6 +14,7 @@ class DateUtils
         if ($date = \DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
             return $date;
         }
+
         throw new \Exception('Mauvais format de date: '.$mois);
     }
 

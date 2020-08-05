@@ -47,17 +47,17 @@ class PlaineJourRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function remove(PlaineJour $plaine)
+    public function remove(PlaineJour $plaine): void
     {
         $this->_em->remove($plaine);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(PlaineJour $plaine)
+    public function persist(PlaineJour $plaine): void
     {
         $this->_em->persist($plaine);
     }

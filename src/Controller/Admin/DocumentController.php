@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Document\Form\DocumentType;
-use AcMarche\Mercredi\Document\Form\SearchDocumentType;
 use AcMarche\Mercredi\Document\Message\DocumentCreated;
 use AcMarche\Mercredi\Document\Message\DocumentDeleted;
 use AcMarche\Mercredi\Document\Message\DocumentUpdated;
@@ -129,8 +128,6 @@ class DocumentController extends AbstractController
     }
 
     /**
-     *
-     *
      * @Route("/{id}", name="mercredi_admin_document_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Document $document): Response

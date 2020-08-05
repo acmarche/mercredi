@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 trait PlaineGroupesTrait
 {
     /**
-     * @var PlaineGroupe[]|null|ArrayCollection
+     * @var PlaineGroupe[]|ArrayCollection|null
      */
     private $plaine_groupes;
 
@@ -22,7 +22,7 @@ trait PlaineGroupesTrait
 
     public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if (!$this->plaine_groupes->contains($plaineGroupe)) {
+        if (! $this->plaine_groupes->contains($plaineGroupe)) {
             $this->plaine_groupes[] = $plaineGroupe;
             $plaineGroupe->setPlaine($this);
         }

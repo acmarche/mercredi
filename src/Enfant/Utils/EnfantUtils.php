@@ -41,13 +41,11 @@ class EnfantUtils
      */
     public static function extractTuteurs(array $enfants): array
     {
-        $tuteurs = array_map(
+        return array_map(
             function ($enfant) {
                 return $enfant->getTuteur();
             },
             $enfants
         );
-
-        return $tuteurs;
     }
 }

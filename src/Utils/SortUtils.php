@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Utils;
 
-
 use AcMarche\Mercredi\Entity\Jour;
 
 class SortUtils
@@ -12,18 +11,18 @@ class SortUtils
      *
      * @return Jour[]
      */
-    public static function sortJoursByDateTime(array $data):array
+    public static function sortJoursByDateTime(array $data): array
     {
         usort(
             $data,
             function ($jourA, $jourB) {
-                $dateA =  $jourA->getDateJour();
+                $dateA = $jourA->getDateJour();
                 $dateA->format('Y-m-d');
 
-                $dateB =  $jourB->getDateJour();
+                $dateB = $jourB->getDateJour();
                 $dateB->format('Y-m-d');
 
-                if ($dateA == $dateB) {
+                if ($dateA === $dateB) {
                     return 0;
                 }
 

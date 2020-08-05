@@ -25,7 +25,7 @@ class EnfantHandler
         $this->relationRepository = $relationRepository;
     }
 
-    public function newHandle(Enfant $enfant, Tuteur $tuteur)
+    public function newHandle(Enfant $enfant, Tuteur $tuteur): void
     {
         $this->enfantRepository->persist($enfant);
         $relation = new Relation($tuteur, $enfant);

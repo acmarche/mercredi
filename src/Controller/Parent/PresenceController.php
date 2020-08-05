@@ -97,7 +97,7 @@ class PresenceController extends AbstractController
     }
 
     /**
-     * Route("/", name="mercredi_parent_presence_index", methods={"GET","POST"})
+     * Route("/", name="mercredi_parent_presence_index", methods={"GET","POST"}).
      */
     public function index(Request $request): Response
     {
@@ -109,9 +109,7 @@ class PresenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
-            /**
-             * @var Jour $jour
-             */
+            /** @var Jour $jour */
             $jour = $dataForm['jour'];
             $displayRemarque = $dataForm['displayRemarque'];
 
@@ -161,7 +159,7 @@ class PresenceController extends AbstractController
         $this->hasTuteur();
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$this->santeChecker->isComplete($santeFiche)) {
+        if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
@@ -214,7 +212,7 @@ class PresenceController extends AbstractController
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
-            if (!DeleteConstraint::canBeDeleted($presence)) {
+            if (! DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);

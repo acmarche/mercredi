@@ -12,7 +12,7 @@ class ReductionCalculator
             return $montant - $forfait;
         }
         if ($pourcentage = $reduction->getPourcentage()) {
-            return $montant - (($montant / 100) * $pourcentage);
+            return $montant - ($montant / 100 * $pourcentage);
         }
 
         return $montant;

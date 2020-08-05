@@ -42,11 +42,9 @@ class TuteurRepository extends ServiceEntityRepository
      */
     public function findSansEnfants()
     {
-        $qb = $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder('tuteur')
             ->andWhere('tuteur.relations IS EMPTY')
             ->getQuery()->getResult();
-
-        return $qb;
     }
 
     public function findForAssociateParent(): QueryBuilder
@@ -74,17 +72,17 @@ class TuteurRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function remove(Tuteur $tuteur)
+    public function remove(Tuteur $tuteur): void
     {
         $this->_em->remove($tuteur);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Tuteur $tuteur)
+    public function persist(Tuteur $tuteur): void
     {
         $this->_em->persist($tuteur);
     }

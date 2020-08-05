@@ -102,9 +102,7 @@ class PresenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
-            /**
-             * @var Jour $jour
-             */
+            /** @var Jour $jour */
             $jour = $dataForm['jour'];
             $displayRemarque = $dataForm['displayRemarque'];
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $dataForm);
@@ -211,7 +209,7 @@ class PresenceController extends AbstractController
             '@AcMarcheMercrediAdmin/presence/show.html.twig',
             [
                 'presence' => $presence,
-                'facturePresence'=>$facturePresence,
+                'facturePresence' => $facturePresence,
                 'cout' => $cout,
                 'enfant' => $presence->getEnfant(),
             ]

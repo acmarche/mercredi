@@ -44,6 +44,7 @@ class SantePdfFactory extends AbstractPdfDownloader
         Environment $environment
     ) {
         parent::__construct($pdf);
+
         $this->santeFicheRepository = $santeFicheRepository;
         $this->santeQuestionRepository = $santeQuestionRepository;
         $this->organisationRepository = $organisationRepository;

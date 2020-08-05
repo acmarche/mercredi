@@ -56,11 +56,9 @@ class EnfantRepository extends ServiceEntityRepository
      */
     public function findOrphelins()
     {
-        $qb = $this->createQueryBuilder('enfant')
+        return $this->createQueryBuilder('enfant')
             ->andWhere('enfant.relations IS EMPTY')
             ->getQuery()->getResult();
-
-        return $qb;
     }
 
     /**
@@ -100,17 +98,17 @@ class EnfantRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function remove(Enfant $enfant)
+    public function remove(Enfant $enfant): void
     {
         $this->_em->remove($enfant);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Enfant $enfant)
+    public function persist(Enfant $enfant): void
     {
         $this->_em->persist($enfant);
     }

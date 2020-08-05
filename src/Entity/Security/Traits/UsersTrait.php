@@ -23,7 +23,7 @@ trait UsersTrait
 
     public function addUser(User $user): self
     {
-        if (!$this->users->contains($user)) {
+        if (! $this->users->contains($user)) {
             $this->users[] = $user;
             $user->addTuteur($this);
         }

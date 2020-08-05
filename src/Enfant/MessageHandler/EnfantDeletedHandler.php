@@ -24,7 +24,7 @@ class EnfantDeletedHandler implements MessageHandlerInterface
         $this->enfantRepository = $enfantRepository;
     }
 
-    public function __invoke(EnfantDeleted $enfantDeleted)
+    public function __invoke(EnfantDeleted $enfantDeleted): void
     {
         $this->flashBag->add('success', "L'enfant a bien été supprimé");
     }

@@ -9,6 +9,8 @@ use AcMarche\Mercredi\Entity\Tuteur;
 
 interface PresenceInterface
 {
+    public function __toString();
+
     public function getAbsent(): int;
 
     public function setAbsent(int $absent): void;
@@ -26,8 +28,6 @@ interface PresenceInterface
     public function getOrdre(): int;
 
     public function setOrdre(int $ordre): void;
-
-    public function __toString();
 
     public function getReduction(): ?Reduction;
 

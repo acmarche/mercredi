@@ -11,7 +11,6 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class PresenceHandler
 {
@@ -49,14 +48,14 @@ class PresenceHandler
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function handleNew(Tuteur $tuteur, Enfant $enfant, iterable $days)
+    public function handleNew(Tuteur $tuteur, Enfant $enfant, iterable $days): void
     {
         foreach ($days as $jour) {
             if ($this->presenceRepository->isRegistered($enfant, $jour)) {
                 continue;
             }
 
-            if (!$this->checkConstraints($jour)) {
+            if (! $this->checkConstraints($jour)) {
                 continue;
             }
 
@@ -72,9 +71,8 @@ class PresenceHandler
 
         $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
         $this->presenceUtils->addTelephonesOnEnfants($enfants);
-        $data = $this->presenceUtils->groupByGroupScolaire($enfants);
 
-        return $data;
+        return $this->presenceUtils->groupByGroupScolaire($enfants);
     }
 
     public function checkConstraints(Jour $jour): bool
@@ -82,7 +80,7 @@ class PresenceHandler
         $this->presenceConstraints->execute($jour);
         foreach ($this->presenceConstraints as $constraint) {
             dump($constraint);
-            if (!$constraint->check($jour)) {
+            if (! $constraint->check($jour)) {
                 $constraint->addFlashError($jour);
 
                 return false;

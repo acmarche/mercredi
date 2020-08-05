@@ -24,7 +24,7 @@ class PageDeletedHandler implements MessageHandlerInterface
         $this->pageRepository = $pageRepository;
     }
 
-    public function __invoke(PageDeleted $pageDeleted)
+    public function __invoke(PageDeleted $pageDeleted): void
     {
         $this->flashBag->add('success', 'La page a bien été supprimée');
     }

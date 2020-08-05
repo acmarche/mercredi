@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table("sante_fiche", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"enfant_id"})
+ * @ORM\UniqueConstraint(columns={"enfant_id"})
  * }))
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteFicheRepository")
  * @UniqueEntity(fields={"enfant"}, message="L'enfant a déjà une fiche santé")
@@ -156,7 +156,7 @@ class SanteFiche implements TimestampableInterface
 
     public function addReponse(SanteReponse $reponse): self
     {
-        if (!$this->reponses->contains($reponse)) {
+        if (! $this->reponses->contains($reponse)) {
             $this->reponses[] = $reponse;
             $reponse->setSanteFiche($this);
         }

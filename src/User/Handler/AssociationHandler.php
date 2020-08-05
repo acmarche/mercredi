@@ -42,7 +42,7 @@ class AssociationHandler
         $this->userFactory = $userFactory;
     }
 
-    public function suggestTuteur(User $user, AssociateUserTuteurDto $dto)
+    public function suggestTuteur(User $user, AssociateUserTuteurDto $dto): void
     {
         $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
         if ($tuteur) {
@@ -50,13 +50,14 @@ class AssociationHandler
         }
     }
 
-    public function handleAssociateParent(AssociateUserTuteurDto $dto)
+    public function handleAssociateParent(AssociateUserTuteurDto $dto): void
     {
         $tuteur = $dto->getTuteur();
         $user = $dto->getUser();
 
         if (\count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
-            $user->getTuteurs()->clear(); //remove old tuteur
+            //remove old tuteur
+            $user->getTuteurs()->clear();
         }
 
         $tuteur->addUser($dto->getUser());
@@ -93,7 +94,7 @@ class AssociationHandler
         return $user;
     }
 
-    private function dissociateParent(User $user, Tuteur $tuteur)
+    private function dissociateParent(User $user, Tuteur $tuteur): void
     {
         $tuteur->removeUser($user);
         $this->tuteurRepository->flush();

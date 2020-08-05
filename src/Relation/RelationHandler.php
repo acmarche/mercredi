@@ -29,12 +29,12 @@ class RelationHandler
      */
     public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): ?Relation
     {
-        if (!$enfantId) {
+        if (! $enfantId) {
             throw new \Exception('Enfant non trouvé');
         }
 
         $enfant = $this->enfantRepository->find($enfantId);
-        if (!$enfant) {
+        if (! $enfant) {
             throw new \Exception('Enfant non trouvé');
         }
 

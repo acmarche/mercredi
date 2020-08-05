@@ -24,7 +24,7 @@ class AnneeScolaireDeletedHandler implements MessageHandlerInterface
         $this->anneeScolaireRepository = $anneeScolaireRepository;
     }
 
-    public function __invoke(AnneeScolaireDeleted $anneeScolaireDeleted)
+    public function __invoke(AnneeScolaireDeleted $anneeScolaireDeleted): void
     {
         $this->flashBag->add('success', "L'année a bien été supprimée");
     }

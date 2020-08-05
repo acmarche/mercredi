@@ -14,15 +14,13 @@ use Symfony\Component\Validator\Constraints\Count;
 
 class PlainePresencesEditType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 $form = $event->getForm();
-                /**
-                 * @var PlainePresencesDto $dto
-                 */
+                /** @var PlainePresencesDto $dto */
                 $dto = $event->getData();
                 $jours = $dto->daysOfPlaine;
 
@@ -43,7 +41,7 @@ class PlainePresencesEditType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

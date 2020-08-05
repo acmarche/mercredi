@@ -13,7 +13,7 @@ class PourcentageOrForfaitValidator extends ConstraintValidator
      *
      * @param reduction $reduction
      */
-    public function validate($reduction, Constraint $constraint)
+    public function validate($reduction, Constraint $constraint): void
     {
         if ($reduction->getPourcentage() && $reduction->getForfait()) {
             $this->context->buildViolation($constraint->message_only_one)

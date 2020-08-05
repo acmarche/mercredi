@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("plaine_jour", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"jour_id", "plaine_id"})
+ * @ORM\UniqueConstraint(columns={"jour_id", "plaine_id"})
  * }))
  * @UniqueEntity({"jour", "plaine"})
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Plaine\Repository\PlaineJourRepository")

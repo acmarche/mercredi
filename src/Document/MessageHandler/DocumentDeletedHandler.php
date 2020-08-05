@@ -24,7 +24,7 @@ class DocumentDeletedHandler implements MessageHandlerInterface
         $this->documentRepository = $documentRepository;
     }
 
-    public function __invoke(DocumentDeleted $documentDeleted)
+    public function __invoke(DocumentDeleted $documentDeleted): void
     {
         $this->flashBag->add('success', 'Le document a bien été supprimé');
     }

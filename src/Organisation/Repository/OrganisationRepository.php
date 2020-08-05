@@ -21,21 +21,21 @@ class OrganisationRepository extends ServiceEntityRepository
 
     public function getOrganisation(): ?Organisation
     {
-        return  $this->createQueryBuilder('organisation')
+        return $this->createQueryBuilder('organisation')
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function remove(Organisation $organisation)
+    public function remove(Organisation $organisation): void
     {
         $this->_em->remove($organisation);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Organisation $organisation)
+    public function persist(Organisation $organisation): void
     {
         $this->_em->persist($organisation);
     }

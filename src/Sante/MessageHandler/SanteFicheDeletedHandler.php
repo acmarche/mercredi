@@ -24,7 +24,7 @@ class SanteFicheDeletedHandler implements MessageHandlerInterface
         $this->santeFicheRepository = $santeFicheRepository;
     }
 
-    public function __invoke(SanteFicheDeleted $santeFicheDeleted)
+    public function __invoke(SanteFicheDeleted $santeFicheDeleted): void
     {
         $this->flashBag->add('success', 'La question a bien été supprimée');
     }

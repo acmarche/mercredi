@@ -43,7 +43,8 @@ class RelationController extends AbstractController
     public function attachEnfant(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
-            $enfantId = (int)$request->request->get('enfantId');
+            $enfantId = (int) $request->request->get('enfantId');
+
             try {
                 $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
                 $this->dispatchMessage(new RelationCreated($relation->getId()));
@@ -91,13 +92,13 @@ class RelationController extends AbstractController
     {
         $relationId = $request->request->get('relationid');
 
-        if (!$relationId) {
+        if (! $relationId) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
-        if (!$relation) {
+        if (! $relation) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');

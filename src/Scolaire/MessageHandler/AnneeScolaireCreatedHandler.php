@@ -24,7 +24,7 @@ class AnneeScolaireCreatedHandler implements MessageHandlerInterface
         $this->anneeScolaireRepository = $anneeScolaireRepository;
     }
 
-    public function __invoke(AnneeScolaireCreated $groupeScolaireCreated)
+    public function __invoke(AnneeScolaireCreated $groupeScolaireCreated): void
     {
         $this->flashBag->add('success', "L'année a bien été ajoutée");
     }

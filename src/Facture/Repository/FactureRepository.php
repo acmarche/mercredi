@@ -50,9 +50,11 @@ class FactureRepository extends ServiceEntityRepository
         switch ($paye) {
             case true:
                 $qb->andWhere('facture.payeLe IS NOT NULL');
+
                 break;
             case false:
                 $qb->andWhere('facture.payeLe IS NULL');
+
                 break;
             default:
                 break;
@@ -61,17 +63,17 @@ class FactureRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function remove(Facture $facture)
+    public function remove(Facture $facture): void
     {
         $this->_em->remove($facture);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Facture $facture)
+    public function persist(Facture $facture): void
     {
         $this->_em->persist($facture);
     }

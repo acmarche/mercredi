@@ -58,7 +58,7 @@ class FactureMailer
     /**
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function sendFacture(Facture $facture, array $data)
+    public function sendFacture(Facture $facture, array $data): void
     {
         $message = (new TemplatedEmail())
             ->subject($data['sujet'])

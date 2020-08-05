@@ -88,6 +88,7 @@ class JourRepository extends ServiceEntityRepository
 
     /**
      * @param \DateTime $date
+     *
      * @return Jour[]
      */
     public function findPedagogiqueByDateGreatherOrEqual(\DateTimeInterface $date, Enfant $enfant): array
@@ -104,6 +105,7 @@ class JourRepository extends ServiceEntityRepository
 
     /**
      * @param \DateTime $date
+     *
      * @return Jour[]
      */
     public function findJourByDateGreatherOrEqual(\DateTimeInterface $date, Enfant $enfant): array
@@ -126,17 +128,17 @@ class JourRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function remove(Jour $jour)
+    public function remove(Jour $jour): void
     {
         $this->_em->remove($jour);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Jour $jour)
+    public function persist(Jour $jour): void
     {
         $this->_em->persist($jour);
     }

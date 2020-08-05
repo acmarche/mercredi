@@ -34,26 +34,24 @@ class AnimateurRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function remove(Animateur $animateur)
+    public function remove(Animateur $animateur): void
     {
         $this->_em->remove($animateur);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Animateur $animateur)
+    public function persist(Animateur $animateur): void
     {
         $this->_em->persist($animateur);
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('animateur')
+        return $this->createQueryBuilder('animateur')
             ->orderBy('animateur.nom', 'ASC');
-
-        return $qb;
     }
 }

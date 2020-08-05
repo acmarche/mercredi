@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Constraint;
-
 
 final class PresenceConstraints
 {
@@ -16,7 +14,7 @@ final class PresenceConstraints
         $this->constraints = $constraints;
     }
 
-    public function execute($jour):void
+    public function execute($jour): void
     {
         foreach ($this->constraints as $constraint) {
             dump(123);

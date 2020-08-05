@@ -107,7 +107,7 @@ class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if (!$jour && !$ecole) {
+            if (! $jour && ! $ecole) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }

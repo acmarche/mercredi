@@ -52,9 +52,7 @@ class ProfileController extends AbstractController
      */
     public function show()
     {
-        /**
-         * @var User
-         */
+        /** @var User */
         $user = $this->getUser();
 
         return $this->render(
@@ -70,9 +68,7 @@ class ProfileController extends AbstractController
      */
     public function redirectByProfile(): Response
     {
-        /**
-         * @var User
-         */
+        /** @var User */
         $user = $this->getUser();
 
         if ($user) {

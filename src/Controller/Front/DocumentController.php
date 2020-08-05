@@ -29,5 +29,4 @@ class DocumentController extends AbstractController
     {
         return $this->downloadHandler->downloadObject($document, 'file');
     }
-
 }

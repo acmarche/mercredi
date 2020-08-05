@@ -28,26 +28,24 @@ class PlaineRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function remove(Plaine $plaine)
+    public function remove(Plaine $plaine): void
     {
         $this->_em->remove($plaine);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Plaine $plaine)
+    public function persist(Plaine $plaine): void
     {
         $this->_em->persist($plaine);
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('plaine')
+        return $this->createQueryBuilder('plaine')
             ->orderBy('plaine.nom', 'ASC');
-
-        return $qb;
     }
 }

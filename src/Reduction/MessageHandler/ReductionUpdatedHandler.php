@@ -24,7 +24,7 @@ class ReductionUpdatedHandler implements MessageHandlerInterface
         $this->reductionRepository = $reductionRepository;
     }
 
-    public function __invoke(ReductionUpdated $reductionUpdated)
+    public function __invoke(ReductionUpdated $reductionUpdated): void
     {
         $this->flashBag->add('success', 'La réduction a bien été modifiée');
     }

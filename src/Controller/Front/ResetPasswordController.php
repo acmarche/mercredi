@@ -77,7 +77,7 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
-        if (!$this->canCheckEmail()) {
+        if (! $this->canCheckEmail()) {
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
@@ -96,7 +96,7 @@ class ResetPasswordController extends AbstractController
      */
     public function reset(
         Request $request,
-        string $token = null
+        ?string $token = null
     ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -168,7 +168,7 @@ class ResetPasswordController extends AbstractController
         $this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
-        if (!$user) {
+        if (! $user) {
             return $this->redirectToRoute('mercredi_front_check_email');
         }
 

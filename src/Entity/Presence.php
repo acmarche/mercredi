@@ -22,7 +22,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("presence", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"jour_id", "enfant_id"})
+ * @ORM\UniqueConstraint(columns={"jour_id", "enfant_id"})
  * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Presence\Repository\PresenceRepository")
  * @UniqueEntity(fields={"jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")

@@ -28,26 +28,24 @@ class PlaineGroupeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function remove(PlaineGroupe $plaineGroupe)
+    public function remove(PlaineGroupe $plaineGroupe): void
     {
         $this->_em->remove($plaineGroupe);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(PlaineGroupe $plaineGroupe)
+    public function persist(PlaineGroupe $plaineGroupe): void
     {
         $this->_em->persist($plaineGroupe);
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('plaine')
+        return $this->createQueryBuilder('plaine')
             ->orderBy('plaine.nom', 'ASC');
-
-        return $qb;
     }
 }

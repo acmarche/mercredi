@@ -3,17 +3,17 @@
 namespace AcMarche\Mercredi\Entity\Facture;
 
 use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Traits\AccueilTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use AcMarche\Mercredi\Entity\Traits\AccueilTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository")
  * @ORM\Table("facture_accueil", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"accueil_id"})
+ * @ORM\UniqueConstraint(columns={"accueil_id"})
  * })
  * @UniqueEntity(fields={"accueil"}, message="Accueil déjà payé")
  */

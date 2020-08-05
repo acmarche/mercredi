@@ -69,7 +69,6 @@ class ExportController extends AbstractController
      * @Route("/presence/mois/{one}", name="mercredi_admin_export_presence_mois_xls", requirements={"mois"=".+"}, methods={"GET"})
      * Requirement a cause du format "mois/annee"
      *
-     * @param $mois
      * @param bool $one Office de l'enfance
      */
     public function presenceByMonthXls(bool $one): Response

@@ -24,7 +24,7 @@ class TuteurUpdatedHandler implements MessageHandlerInterface
         $this->tuteurRepository = $tuteurRepository;
     }
 
-    public function __invoke(TuteurUpdated $tuteurUpdated)
+    public function __invoke(TuteurUpdated $tuteurUpdated): void
     {
         $this->flashBag->add('success', 'Le tuteur a bien été modifié');
     }

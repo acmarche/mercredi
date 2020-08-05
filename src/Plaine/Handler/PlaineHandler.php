@@ -45,7 +45,7 @@ class PlaineHandler
     /**
      * @param Jour[]|ArrayCollection $newJours
      */
-    public function handleEditJours(Plaine $plaine, iterable $newJours)
+    public function handleEditJours(Plaine $plaine, iterable $newJours): void
     {
         foreach ($newJours as $jour) {
             $jourEntity = $this->getJourEntityByJour($jour);
@@ -60,39 +60,6 @@ class PlaineHandler
         $this->plaineRepository->flush();
     }
 
-    private function getJourEntityByJour(Jour $jour): Jour
-    {
-        if ($jour->getId()) {
-            return $jour;
-        }
-
-        if (!$newJour = $this->jourRepository->findOneByDate($jour->getDateJour())) {
-            $newJour = new Jour($jour->getDateJour());
-            $this->jourRepository->persist($newJour);
-        }
-
-        return $newJour;
-    }
-
-    private function getPlaineJourByPlaineAndJour(Plaine $plaine, Jour $jour): PlaineJour
-    {
-        if (!$jour->getId()) {
-            $plaineJour = new PlaineJour($plaine, $jour);
-            $this->plaineJourRepository->persist($plaineJour);
-
-            return $plaineJour;
-        }
-
-        if ($plaineJour = $this->plaineJourRepository->findByPlaineAndJour($plaine, $jour)) {
-            return $plaineJour;
-        }
-
-        $plaineJour = new PlaineJour($plaine, $jour);
-        $this->plaineJourRepository->persist($plaineJour);
-
-        return $plaineJour;
-    }
-
     /**
      * Ajoute au moins deux dates a la plaine.
      */
@@ -100,7 +67,7 @@ class PlaineHandler
     {
         $plaine->initJours();
         $currentJours = $this->findPlaineJoursByPlaine($plaine);
-        if (0 == \count($currentJours)) {
+        if (0 === \count($currentJours)) {
             $today = new Jour(new \DateTime('today'));
             $tomorrow = new Jour(new \DateTime('+1day'));
             $plaine->addJour($today);
@@ -120,10 +87,43 @@ class PlaineHandler
         return $this->plaineJourRepository->findByPlaine($plaine);
     }
 
+    private function getJourEntityByJour(Jour $jour): Jour
+    {
+        if ($jour->getId()) {
+            return $jour;
+        }
+
+        if (! $newJour = $this->jourRepository->findOneByDate($jour->getDateJour())) {
+            $newJour = new Jour($jour->getDateJour());
+            $this->jourRepository->persist($newJour);
+        }
+
+        return $newJour;
+    }
+
+    private function getPlaineJourByPlaineAndJour(Plaine $plaine, Jour $jour): PlaineJour
+    {
+        if (! $jour->getId()) {
+            $plaineJour = new PlaineJour($plaine, $jour);
+            $this->plaineJourRepository->persist($plaineJour);
+
+            return $plaineJour;
+        }
+
+        if ($plaineJour = $this->plaineJourRepository->findByPlaineAndJour($plaine, $jour)) {
+            return $plaineJour;
+        }
+
+        $plaineJour = new PlaineJour($plaine, $jour);
+        $this->plaineJourRepository->persist($plaineJour);
+
+        return $plaineJour;
+    }
+
     /**
      * @param Jour[] $newJours
      */
-    private function removePlaineJours(Plaine $plaine, iterable $newJours)
+    private function removePlaineJours(Plaine $plaine, iterable $newJours): void
     {
         $currentPlaineJours = $this->findPlaineJoursByPlaine($plaine);
 
@@ -131,8 +131,9 @@ class PlaineHandler
             $found = false;
             $jourEntity = $plaineJour->getJour();
             foreach ($newJours as $newJour) {
-                if ($jourEntity->getDateJour()->format('Y-m-d') == $newJour->getDateJour()->format('Y-m-d')) {
+                if ($jourEntity->getDateJour()->format('Y-m-d') === $newJour->getDateJour()->format('Y-m-d')) {
                     $found = true;
+
                     break;
                 }
             }

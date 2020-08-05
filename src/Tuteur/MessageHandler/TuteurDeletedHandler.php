@@ -24,7 +24,7 @@ class TuteurDeletedHandler implements MessageHandlerInterface
         $this->tuteurRepository = $tuteurRepository;
     }
 
-    public function __invoke(TuteurDeleted $tuteurDeleted)
+    public function __invoke(TuteurDeleted $tuteurDeleted): void
     {
         $this->flashBag->add('success', 'Le tuteur a bien été supprimé');
     }

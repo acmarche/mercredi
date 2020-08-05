@@ -10,14 +10,13 @@ use Doctrine\Common\Collections\Collection;
 
 class PlainePresencesDto
 {
-    private $plaine;
-    private $enfant;
-    private $jours;
-
     /**
      * @var Jour[]|ArrayCollection
      */
     public $daysOfPlaine;
+    private $plaine;
+    private $enfant;
+    private $jours;
 
     public function __construct(Plaine $plaine, Enfant $enfant, iterable $daysOfPlaine)
     {
@@ -60,7 +59,7 @@ class PlainePresencesDto
 
     public function addJour(Jour $jour): self
     {
-        if (!$this->jours->contains($jour)) {
+        if (! $this->jours->contains($jour)) {
             $this->jours[] = $jour;
         }
 

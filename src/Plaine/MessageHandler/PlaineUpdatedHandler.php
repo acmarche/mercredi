@@ -24,7 +24,7 @@ class PlaineUpdatedHandler implements MessageHandlerInterface
         $this->plaineRepository = $plaineRepository;
     }
 
-    public function __invoke(PlaineUpdated $plaineUpdated)
+    public function __invoke(PlaineUpdated $plaineUpdated): void
     {
         $this->flashBag->add('success', 'La plaine a bien été modifiée');
     }

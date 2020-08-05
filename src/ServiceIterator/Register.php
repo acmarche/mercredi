@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\ServiceIterator;
-
 
 final class Register
 {
@@ -16,7 +14,7 @@ final class Register
         $this->secondaryFlows = $secondaryFlows;
     }
 
-    public function exe()
+    public function exe(): void
     {
         dump(123);
         foreach ($this->secondaryFlows as $flow) {

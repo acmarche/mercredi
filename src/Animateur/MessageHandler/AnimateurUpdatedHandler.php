@@ -24,7 +24,7 @@ class AnimateurUpdatedHandler implements MessageHandlerInterface
         $this->animateurRepository = $animateurRepository;
     }
 
-    public function __invoke(AnimateurUpdated $animateurUpdated)
+    public function __invoke(AnimateurUpdated $animateurUpdated): void
     {
         $this->flashBag->add('success', 'L\' animateur a bien été modifié');
     }

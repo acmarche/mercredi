@@ -27,14 +27,15 @@ class CreateUserCommand extends Command
     public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
+
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Création d\'un utilisateur')
@@ -51,7 +52,7 @@ class CreateUserCommand extends Command
         $name = $input->getArgument('name');
         $password = $input->getArgument('password');
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $io->error('Adresse email non valide');
 
             return 1;

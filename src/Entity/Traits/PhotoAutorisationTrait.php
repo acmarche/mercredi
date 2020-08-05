@@ -1,12 +1,9 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 trait PhotoAutorisationTrait
 {
-
     /**
      * @var bool
      */
@@ -26,5 +23,4 @@ trait PhotoAutorisationTrait
     {
         return $this->photo_autorisation;
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Utils;
-
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
@@ -44,7 +42,6 @@ class FactureUtils
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Presence[]
      */
     public function getPresencesNonPayees(Tuteur $tuteur): array
@@ -52,7 +49,7 @@ class FactureUtils
         $presencesAll = $this->presenceRepository->findPresencesByTuteur($tuteur);
         $presencesNonFacturees = [];
         foreach ($presencesAll as $presence) {
-            if (!$this->facturePresenceRepository->findByPresence($presence)) {
+            if (! $this->facturePresenceRepository->findByPresence($presence)) {
                 $presencesNonFacturees[] = $presence;
             }
         }
@@ -61,7 +58,6 @@ class FactureUtils
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Accueil[]
      */
     public function getAccueilsNonPayes(Tuteur $tuteur): array
@@ -69,7 +65,7 @@ class FactureUtils
         $all = $this->accueilRepository->findByTuteur($tuteur);
         $nonFacturees = [];
         foreach ($all as $accueil) {
-            if (!$this->factureAccueilRepository->findByAccueil($accueil)) {
+            if (! $this->factureAccueilRepository->findByAccueil($accueil)) {
                 $nonFacturees[] = $accueil;
             }
         }
@@ -77,8 +73,7 @@ class FactureUtils
         return $nonFacturees;
     }
 
-    public function getPlainesNonPayes(Tuteur $tuteur)
+    public function getPlainesNonPayes(Tuteur $tuteur): void
     {
     }
-
 }

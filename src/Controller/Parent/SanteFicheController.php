@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SanteFicheController extends AbstractController
 {
     use GetTuteurTrait;
+
     /**
      * @var SanteFicheRepository
      */
@@ -67,7 +68,7 @@ class SanteFicheController extends AbstractController
     {
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_edit', ['uuid' => $enfant->getUuid()]);

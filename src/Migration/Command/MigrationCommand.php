@@ -16,16 +16,16 @@ class MigrationCommand extends Command
      */
     private $enfantRepository;
 
-
     public function __construct(
         EnfantRepository $enfantRepository,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
+
         $this->enfantRepository = $enfantRepository;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Migration uuid');

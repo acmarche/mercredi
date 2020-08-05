@@ -23,7 +23,7 @@ trait AccompagnateursTrait
 
     public function addAccompagnateur(?string $accompagnateur)
     {
-        if (null != $accompagnateur) {
+        if (null !== $accompagnateur) {
             $this->accompagnateurs[] = $accompagnateur;
         }
 
@@ -32,7 +32,7 @@ trait AccompagnateursTrait
 
     public function removeAccompagnateur(string $accompagnateur)
     {
-        $key = array_search($accompagnateur, $this->accompagnateurs);
+        $key = array_search($accompagnateur, $this->accompagnateurs, true);
         if (isset($this->accompagnateurs[$key])) {
             unset($this->accompagnateurs[$key]);
         }

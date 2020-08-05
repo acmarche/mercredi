@@ -36,19 +36,19 @@ class SanteChecker
 
     public function identiteEnfantIsComplete(Enfant $enfant): bool
     {
-        if (!$enfant->getNom()) {
+        if (! $enfant->getNom()) {
             return false;
         }
 
-        if (!$enfant->getPrenom()) {
+        if (! $enfant->getPrenom()) {
             return false;
         }
 
-        if (!$enfant->getEcole()) {
+        if (! $enfant->getEcole()) {
             return false;
         }
 
-        if (!$enfant->getAnneeScolaire()) {
+        if (! $enfant->getAnneeScolaire()) {
             return false;
         }
 
@@ -57,7 +57,7 @@ class SanteChecker
 
     public function isComplete(SanteFiche $santeFiche): bool
     {
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             return false;
         }
 
@@ -70,7 +70,7 @@ class SanteChecker
 
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
-            if (!$this->checkQuestionOk($question)) {
+            if (! $this->checkQuestionOk($question)) {
                 return false;
             }
         }
@@ -85,7 +85,7 @@ class SanteChecker
     {
         if ($question->getComplement()) {
             if ($question->getReponseTxt()) {
-                if (trim('' == $question->getRemarque())) {
+                if (trim('' === $question->getRemarque())) {
                     return false;
                 }
             }
@@ -97,7 +97,7 @@ class SanteChecker
     /**
      * @param Enfant[] $enfants
      */
-    public function isCompleteForEnfants(array $enfants)
+    public function isCompleteForEnfants(array $enfants): void
     {
         foreach ($enfants as $enfant) {
             $santeFiche = $this->santeHandler->init($enfant);

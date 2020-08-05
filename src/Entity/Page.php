@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Traits\DocumentsTraits;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -85,5 +84,4 @@ class Page implements SluggableInterface
 
         return $this;
     }
-
 }

@@ -27,7 +27,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
@@ -71,23 +71,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function persist(User $user)
+    public function persist(User $user): void
     {
         $this->getEntityManager()->persist($user);
     }
 
-    public function insert(User $user)
+    public function insert(User $user): void
     {
         $this->persist($user);
         $this->flush();
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->getEntityManager()->flush();
     }
 
-    public function remove(User $user)
+    public function remove(User $user): void
     {
         $this->_em->remove($user);
     }

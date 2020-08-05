@@ -24,7 +24,7 @@ class PlaineDeletedHandler implements MessageHandlerInterface
         $this->plaineRepository = $plaineRepository;
     }
 
-    public function __invoke(PlaineDeleted $plaineDeleted)
+    public function __invoke(PlaineDeleted $plaineDeleted): void
     {
         $this->flashBag->add('success', 'La plaine a bien été supprimée');
     }

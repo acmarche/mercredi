@@ -66,7 +66,7 @@ class SanteFicheController extends AbstractController
     {
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
             return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', ['id' => $enfant->getId()]);

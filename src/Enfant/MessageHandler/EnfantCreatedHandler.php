@@ -24,7 +24,7 @@ class EnfantCreatedHandler implements MessageHandlerInterface
         $this->enfantRepository = $enfantRepository;
     }
 
-    public function __invoke(EnfantCreated $enfantCreated)
+    public function __invoke(EnfantCreated $enfantCreated): void
     {
         $this->flashBag->add('success', "L'enfant a bien été ajouté");
     }

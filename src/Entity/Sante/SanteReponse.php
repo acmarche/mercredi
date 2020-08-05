@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("sante_reponse", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
+ * @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
  * }))
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteReponseRepository")
  * @UniqueEntity(fields={"sante_fiche", "question"}, message="Une réponse existe déjà")

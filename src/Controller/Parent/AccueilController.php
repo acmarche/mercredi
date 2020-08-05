@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilParentType;
-use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
@@ -107,6 +106,7 @@ class AccueilController extends AbstractController
      * Etape 2.
      *
      * Route("/select/jour/{uuid}", name="mercredi_parent_accueil_select_jours", methods={"GET","POST"})
+     *
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function selectJours(Request $request, Enfant $enfant)
@@ -114,7 +114,7 @@ class AccueilController extends AbstractController
         $this->hasTuteur();
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$this->santeChecker->isComplete($santeFiche)) {
+        if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
@@ -160,14 +160,15 @@ class AccueilController extends AbstractController
     }
 
     /**
-     * Route("/{id}", name="mercredi_parent_accueil_delete", methods={"DELETE"})
+     * Route("/{id}", name="mercredi_parent_accueil_delete", methods={"DELETE"}).
+     *
      * @IsGranted("accueil_edit", subject="accueil")
      */
     public function delete(Request $request, Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
-            if (!DeleteConstraint::accueilCanBeDeleted($accueil)) {
+            if (! DeleteConstraint::accueilCanBeDeleted($accueil)) {
                 $this->addFlash('danger', 'Un accueil passé ne peut être supprimé');
 
                 return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);

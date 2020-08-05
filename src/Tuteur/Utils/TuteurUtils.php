@@ -46,23 +46,23 @@ class TuteurUtils
             return false;
         }
 
-        if (!$tuteur->getNom()) {
+        if (! $tuteur->getNom()) {
             return false;
         }
 
-        if (!$tuteur->getPrenom()) {
+        if (! $tuteur->getPrenom()) {
             return false;
         }
 
-        if (!$tuteur->getRue()) {
+        if (! $tuteur->getRue()) {
             return false;
         }
 
-        if (!$tuteur->getCodePostal()) {
+        if (! $tuteur->getCodePostal()) {
             return false;
         }
 
-        if (!$tuteur->getLocalite()) {
+        if (! $tuteur->getLocalite()) {
             return false;
         }
 
@@ -102,7 +102,7 @@ class TuteurUtils
     {
         $tuteurs = $user->getTuteurs();
 
-        if (0 == \count($tuteurs)) {
+        if (0 === \count($tuteurs)) {
             return null;
         }
 
@@ -147,7 +147,7 @@ class TuteurUtils
         $data = [];
         foreach ($tuteurs as $tuteur) {
             if ($this->tuteurIsActif($tuteur)) {
-                if (0 == \count(self::getEmailsOfOneTuteur($tuteur))) {
+                if (0 === \count(self::getEmailsOfOneTuteur($tuteur))) {
                     $data[] = $tuteur;
                 }
             }

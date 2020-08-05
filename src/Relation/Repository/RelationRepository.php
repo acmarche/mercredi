@@ -108,7 +108,7 @@ class RelationRepository extends ServiceEntityRepository
     public function findFrateries(Enfant $enfant, array $tuteurs = [])
     {
         $enfants = [];
-        if (0 == \count($tuteurs)) {
+        if (0 === \count($tuteurs)) {
             $tuteurs = $this->findTuteursByEnfant($enfant);
         }
 
@@ -146,8 +146,6 @@ class RelationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Tuteur $tuteur
-     *
      * @return Relation[]
      */
     public function findTuteursActifs(): array
@@ -161,17 +159,17 @@ class RelationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function remove(Relation $relation)
+    public function remove(Relation $relation): void
     {
         $this->_em->remove($relation);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Relation $relation)
+    public function persist(Relation $relation): void
     {
         $this->_em->persist($relation);
     }

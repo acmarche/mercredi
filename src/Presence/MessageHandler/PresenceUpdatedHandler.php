@@ -24,7 +24,7 @@ class PresenceUpdatedHandler implements MessageHandlerInterface
         $this->presenceRepository = $presenceRepository;
     }
 
-    public function __invoke(PresenceUpdated $presenceUpdated)
+    public function __invoke(PresenceUpdated $presenceUpdated): void
     {
         $this->flashBag->add('success', 'La présence a bien été modifiée');
     }

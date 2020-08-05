@@ -22,7 +22,7 @@ trait PlaineJoursTrait
 
     public function addPlaineJour(PlaineJour $plaineJour): self
     {
-        if (!$this->plaine_jours->contains($plaineJour)) {
+        if (! $this->plaine_jours->contains($plaineJour)) {
             $this->plaine_jours[] = $plaineJour;
             $plaineJour->setPlaine($this);
         }

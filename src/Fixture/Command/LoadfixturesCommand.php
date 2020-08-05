@@ -26,14 +26,15 @@ class LoadfixturesCommand extends Command
     public function __construct(
         FixtureLoader $fixtureLoader,
         EntityManagerInterface $entityManager,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
+
         $this->entityManager = $entityManager;
         $this->fixtureLoader = $fixtureLoader;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Chargment des fixtures');

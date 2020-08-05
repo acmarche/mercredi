@@ -18,21 +18,15 @@ class UserProcessor implements ProcessorInterface
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function preProcess(string $fixtureId, $user): void
     {
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             return;
         }
 
         $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function postProcess(string $fixtureId, $user): void
     {
         // do nothing

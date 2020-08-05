@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\ServiceIterator;
-
 
 class NotifyUser implements AfterUserRegistration
 {

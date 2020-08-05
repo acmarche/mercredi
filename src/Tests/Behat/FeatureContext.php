@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Tests\Behat;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Carbon\Carbon;
 use Exception;
@@ -49,7 +48,7 @@ class FeatureContext extends RawMinkContext
     /**
      * @When /^I am login with user "([^"]*)" and password "([^"]*)"$/
      */
-    public function iAmLoginWithUserAndPassword(string $email, string $password)
+    public function iAmLoginWithUserAndPassword(string $email, string $password): void
     {
         $this->visitPath('/login');
         $this->fillField('username', $email);
@@ -60,7 +59,7 @@ class FeatureContext extends RawMinkContext
     /**
      * @When /^I select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
      */
-    public function iSelectDayPlusFrom($nbDays, $select)
+    public function iSelectDayPlusFrom($nbDays, $select): void
     {
         $today = Carbon::today();
         $today->addDays($nbDays);
@@ -73,7 +72,7 @@ class FeatureContext extends RawMinkContext
     /**
      * @When /^I additionally select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
      */
-    public function iAdditionallySelectDayPlusFrom($nbDays, $select)
+    public function iAdditionallySelectDayPlusFrom($nbDays, $select): void
     {
         $today = Carbon::today();
         $today->addDays($nbDays);
@@ -86,22 +85,22 @@ class FeatureContext extends RawMinkContext
     /**
      * Selects additional option in select field with specified id|name|label|value
      * Example: When I additionally select "Deceased" from "parents_alive_status"
-     * Example: And I additionally select "Deceased" from "parents_alive_status"
+     * Example: And I additionally select "Deceased" from "parents_alive_status".
      *
      * @When /^(?:|I )ad222ditionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
      */
-    public function additionallySelectOption($select, $option)
+    public function additionallySelectOption($select, $option): void
     {
     }
 
     /**
      * Selects option in select field with specified id|name|label|value
      * Example: When I select "Bats" from "user_fears"
-     * Example: And I select "Bats" from "user_fears"
+     * Example: And I select "Bats" from "user_fears".
      *
      * @When /^(?:|I )sel222ect date "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
      */
-    public function selectOption($select, $nbDays)
+    public function selectOption($select, $nbDays): void
     {
     }
 
@@ -211,7 +210,7 @@ class FeatureContext extends RawMinkContext
     {
         $sContent = $this->getSession()->getPage()->getText();
         $iFound = substr_count($sContent, $sText);
-        if ($iExpected != $iFound) {
+        if ($iExpected !== $iFound) {
             throw new Exception('Found '.$iFound.' occurences of "'.$sText.'" when expecting '.$iExpected);
         }
     }
@@ -236,6 +235,14 @@ class FeatureContext extends RawMinkContext
         $this->visitPath($path);
     }
 
+    /**
+     * @return mixed[]|string
+     */
+    protected function fixStepArgument($argument)
+    {
+        return str_replace('\\"', '"', $argument);
+    }
+
     private function fillField(string $field, string $value): void
     {
         $this->getSession()->getPage()->fillField($field, $value);
@@ -246,14 +253,4 @@ class FeatureContext extends RawMinkContext
         $button = $this->fixStepArgument($button);
         $this->getSession()->getPage()->pressButton($button);
     }
-
-    /**
-     * @return mixed[]|string
-     */
-    protected function fixStepArgument($argument)
-    {
-        return str_replace('\\"', '"', $argument);
-    }
-
-
 }

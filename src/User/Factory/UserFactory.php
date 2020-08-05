@@ -28,11 +28,11 @@ class UserFactory
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function getInstance(string $email = null): User
+    public function getInstance(?string $email = null): User
     {
         $user = new User();
         if ($email) {
-            if (!$user = $this->userRepository->findOneByEmailOrUserName($email)) {
+            if (! $user = $this->userRepository->findOneByEmailOrUserName($email)) {
                 $user = new User();
                 $user->setEmail($email);
                 $user->setUsername($email);
@@ -44,9 +44,9 @@ class UserFactory
         return $user;
     }
 
-    public function newFromAnimateur(Animateur $animateur, User $user = null): User
+    public function newFromAnimateur(Animateur $animateur, ?User $user = null): User
     {
-        if (!$user) {
+        if (! $user) {
             $user = $this->getInstance($animateur->getEmail());
             $user->setNom($animateur->getNom());
             $user->setPrenom($animateur->getPreNom());
@@ -67,9 +67,9 @@ class UserFactory
         return $user;
     }
 
-    public function newFromTuteur(Tuteur $tuteur, User $user = null): User
+    public function newFromTuteur(Tuteur $tuteur, ?User $user = null): User
     {
-        if (!$user) {
+        if (! $user) {
             $user = $this->getInstance($tuteur->getEmail());
             $user->setNom($tuteur->getNom());
             $user->setPrenom($tuteur->getPreNom());

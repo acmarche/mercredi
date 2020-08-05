@@ -24,7 +24,7 @@ class UserUpdatedHandler implements MessageHandlerInterface
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(UserUpdated $userUpdated)
+    public function __invoke(UserUpdated $userUpdated): void
     {
         $this->flashBag->add('success', "L'utilisateur a bien été modifié");
     }

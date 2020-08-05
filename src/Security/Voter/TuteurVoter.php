@@ -17,10 +17,10 @@ use Symfony\Component\Security\Core\Security;
  */
 class TuteurVoter extends Voter
 {
-    const ADD = 'tuteur_new';
-    const SHOW = 'tuteur_show';
-    const EDIT = 'tuteur_edit';
-    const DELETE = 'tuteur_delete';
+    public const ADD = 'tuteur_new';
+    public const SHOW = 'tuteur_show';
+    public const EDIT = 'tuteur_edit';
+    public const DELETE = 'tuteur_delete';
 
     /**
      * @var User
@@ -52,31 +52,25 @@ class TuteurVoter extends Voter
         $this->tuteurUtils = $tuteurUtils;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject)
     {
         if ($subject) {
-            if (!$subject instanceof Tuteur) {
+            if (! $subject instanceof Tuteur) {
                 return false;
             }
         }
 
         return \in_array(
             $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE]
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE], true
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $tuteur, TokenInterface $token)
     {
         $this->user = $token->getUser();
 
-        if (!$this->user instanceof User) {
+        if (! $this->user instanceof User) {
             return false;
         }
 
@@ -140,15 +134,15 @@ class TuteurVoter extends Voter
 
     private function checkOwnTuteur()
     {
-        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (! $this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
-        if (!$this->tuteurOfUser instanceof Tuteur) {
+        if (! $this->tuteurOfUser instanceof Tuteur) {
             return false;
         }
 
-        if (!$this->tuteurToCheck instanceof Tuteur) {
+        if (! $this->tuteurToCheck instanceof Tuteur) {
             return false;
         }
 

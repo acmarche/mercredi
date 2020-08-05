@@ -24,7 +24,7 @@ class DocumentUpdatedHandler implements MessageHandlerInterface
         $this->documentRepository = $documentRepository;
     }
 
-    public function __invoke(DocumentUpdated $documentUpdated)
+    public function __invoke(DocumentUpdated $documentUpdated): void
     {
         $this->flashBag->add('success', 'Le document a bien été modifié');
     }

@@ -24,7 +24,7 @@ trait FactureAccueilsTrait
 
     public function addFactureAccueil(FactureAccueil $factureAccueil): self
     {
-        if (!$this->factureAccueils->contains($factureAccueil)) {
+        if (! $this->factureAccueils->contains($factureAccueil)) {
             $this->factureAccueils[] = $factureAccueil;
             $factureAccueil->setFacture($this);
         }

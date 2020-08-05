@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
-
 
 use AcMarche\Mercredi\Entity\Accueil;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,7 +25,7 @@ trait AccueilsTrait
 
     public function addAccueil(Accueil $accueil): self
     {
-        if (!$this->accueils->contains($accueil)) {
+        if (! $this->accueils->contains($accueil)) {
             $this->accueils[] = $accueil;
             $accueil->setEnfant($this);
         }
@@ -47,5 +45,4 @@ trait AccueilsTrait
 
         return $this;
     }
-
 }

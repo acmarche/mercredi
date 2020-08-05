@@ -32,7 +32,7 @@ trait GetTuteurTrait
         $user = $this->getUser();
         $this->tuteur = $this->tuteurUtils->getTuteurByUser($user);
 
-        if (!$this->tuteur) {
+        if (! $this->tuteur) {
             return $this->redirectToRoute('mercredi_parent_nouveau');
         }
 

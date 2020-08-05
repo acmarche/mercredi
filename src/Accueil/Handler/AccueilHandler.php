@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Accueil\Handler;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;

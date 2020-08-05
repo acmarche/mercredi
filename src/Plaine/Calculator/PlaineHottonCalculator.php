@@ -40,7 +40,7 @@ class PlaineHottonCalculator implements PlaineCalculatorInterface
         $presences = $this->plainePresenceHandler->findPresencesByPlaineEnfant($plaine, $enfant);
         $total = 0;
         foreach ($presences as $presence) {
-            if (MercrediConstantes::ABSENCE_AVEC_CERTIF == $presence->getAbsent()) {
+            if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
                 continue;
             }
 
@@ -48,7 +48,7 @@ class PlaineHottonCalculator implements PlaineCalculatorInterface
             $prix = $this->getPrixByOrdre($plaine, $ordre);
             $cout = $this->reductionApplicate($presence, $prix);
 
-            $total = $total + $cout;
+            $total += $cout;
         }
 
         return $total;

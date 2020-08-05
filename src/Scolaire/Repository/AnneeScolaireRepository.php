@@ -44,17 +44,17 @@ class AnneeScolaireRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function remove(AnneeScolaire $anneeScolaire)
+    public function remove(AnneeScolaire $anneeScolaire): void
     {
         $this->_em->remove($anneeScolaire);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(AnneeScolaire $anneeScolaire)
+    public function persist(AnneeScolaire $anneeScolaire): void
     {
         $this->_em->persist($anneeScolaire);
     }

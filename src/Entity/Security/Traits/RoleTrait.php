@@ -13,7 +13,7 @@ trait RoleTrait
 
     public function addRole(string $role): void
     {
-        if (!\in_array($role, $this->roles, true)) {
+        if (! \in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
     }
@@ -21,7 +21,7 @@ trait RoleTrait
     public function removeRole(string $role): void
     {
         if (\in_array($role, $this->roles, true)) {
-            $index = array_search($role, $this->roles);
+            $index = array_search($role, $this->roles, true);
             unset($this->roles[$index]);
         }
     }

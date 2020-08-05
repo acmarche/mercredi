@@ -206,9 +206,7 @@ class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $nom
-     * @param Ecole  $ecole
-     * @param string $annee_scolaire
+     * @param Ecole $ecole
      *
      * @return Presence[]
      */
@@ -258,17 +256,17 @@ class PresenceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function remove(Presence $presence)
+    public function remove(Presence $presence): void
     {
         $this->_em->remove($presence);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Presence $presence)
+    public function persist(Presence $presence): void
     {
         $this->_em->persist($presence);
     }

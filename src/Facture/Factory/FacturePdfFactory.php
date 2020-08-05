@@ -22,6 +22,7 @@ class FacturePdfFactory extends AbstractPdfDownloader
     public function __construct(Pdf $pdf, FactureFactory $factureFactory)
     {
         parent::__construct($pdf);
+
         $this->factureFactory = $factureFactory;
     }
 

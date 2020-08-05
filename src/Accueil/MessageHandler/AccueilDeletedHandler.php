@@ -24,7 +24,7 @@ class AccueilDeletedHandler implements MessageHandlerInterface
         $this->accueilRepository = $accueilRepository;
     }
 
-    public function __invoke(AccueilDeleted $accueilDeleted)
+    public function __invoke(AccueilDeleted $accueilDeleted): void
     {
         $this->flashBag->add('success', "L'acceuil a bien été supprimé");
     }

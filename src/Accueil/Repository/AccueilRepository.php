@@ -24,10 +24,8 @@ class AccueilRepository extends ServiceEntityRepository
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('accueil')
+        return $this->createQueryBuilder('accueil')
             ->orderBy('accueil.date_jour', 'ASC');
-
-        return $qb;
     }
 
     public function isRegistered(Accueil $accueil, Enfant $enfant): ?Accueil
@@ -43,7 +41,6 @@ class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Accueil[]
      */
     public function findByEnfant(Enfant $enfant): array
@@ -55,7 +52,6 @@ class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Accueil[]
      */
     public function findByTuteur(Tuteur $tuteur): array
@@ -66,23 +62,22 @@ class AccueilRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function remove(Accueil $accueil)
+    public function remove(Accueil $accueil): void
     {
         $this->_em->remove($accueil);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Accueil $accueil)
+    public function persist(Accueil $accueil): void
     {
         $this->_em->persist($accueil);
     }
 
-    public function findAccueilsByTuteur(Tuteur $tuteur)
+    public function findAccueilsByTuteur(Tuteur $tuteur): void
     {
     }
-
 }

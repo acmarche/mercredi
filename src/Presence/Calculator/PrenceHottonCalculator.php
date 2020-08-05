@@ -46,7 +46,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
         /*
          * Absence.avec certificat
          */
-        if (MercrediConstantes::ABSENCE_AVEC_CERTIF == $presence->getAbsent()) {
+        if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
             return 0;
         }
         $jour = $presence->getJour();
@@ -64,9 +64,8 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
     {
         $ordre = $this->ordreService->getOrdreOnPresence($presence);
         $prix = $this->getPrixByOrdre($jour, $ordre);
-        $cout = $this->reductionApplicate($presence, $prix);
 
-        return $cout;
+        return $this->reductionApplicate($presence, $prix);
     }
 
     private function calculatePedagogique(PresenceInterface $presence, Jour $jour): float
@@ -76,9 +75,8 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
         } else {
             $prix = $jour->getPrix1();
         }
-        $cout = $this->reductionApplicate($presence, $prix);
 
-        return $cout;
+        return $this->reductionApplicate($presence, $prix);
     }
 
     private function calculatePlaine(PresenceInterface $presence, Jour $jour): float
@@ -92,9 +90,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
             $prix = $plaine->getPrix1();
         }
 
-        $cout = $this->reductionApplicate($presence, $prix);
-
-        return $cout;
+        return $this->reductionApplicate($presence, $prix);
     }
 
     private function reductionApplicate(PresenceInterface $presence, float $cout)

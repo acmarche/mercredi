@@ -82,7 +82,7 @@ class FactureHandler
     {
         $this->handlePresences($presencesId, $facture);
         $this->handleAccueils($accueilsId, $facture);
-        if (!$facture->getId()) {
+        if (! $facture->getId()) {
             $this->factureRepository->persist($facture);
         }
         $this->factureRepository->flush();
@@ -91,10 +91,10 @@ class FactureHandler
         return $facture;
     }
 
-    private function handlePresences(array $presencesId, Facture $facture)
+    private function handlePresences(array $presencesId, Facture $facture): void
     {
         foreach ($presencesId as $presenceId) {
-            if (!$presence = $this->presenceRepository->find($presenceId)) {
+            if (! $presence = $this->presenceRepository->find($presenceId)) {
                 continue;
             }
             if ($this->facturePresenceRepository->findByPresence($presence)) {
@@ -111,10 +111,10 @@ class FactureHandler
         }
     }
 
-    private function handleAccueils(array $accueilsId, Facture $facture)
+    private function handleAccueils(array $accueilsId, Facture $facture): void
     {
         foreach ($accueilsId as $accueilId) {
-            if (!$accueil = $this->accueilRepository->find($accueilId)) {
+            if (! $accueil = $this->accueilRepository->find($accueilId)) {
                 continue;
             }
             if ($this->factureAccueilRepository->findByAccueil($accueil)) {

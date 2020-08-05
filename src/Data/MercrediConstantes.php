@@ -4,12 +4,12 @@ namespace AcMarche\Mercredi\Data;
 
 class MercrediConstantes
 {
-    const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
-    const ORDRES = ['' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
+    public const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
+    public const ORDRES = ['' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
 
-    const ABSENCE_NON = 0;
-    const ABSENCE_AVEC_CERTIF = 1;
-    const ABSENCE_SANS_CERTIF = -1;
+    public const ABSENCE_NON = 0;
+    public const ABSENCE_AVEC_CERTIF = 1;
+    public const ABSENCE_SANS_CERTIF = -1;
 
     public static function getListAbsences(): array
     {
@@ -23,7 +23,7 @@ class MercrediConstantes
     public static function getAbsenceTxt($number = false): string
     {
         $absences = self::getListAbsences();
-        if (!$number) {
+        if (! $number) {
             return '';
         }
 
@@ -35,12 +35,15 @@ class MercrediConstantes
         switch ($sexe) {
             case 'Masculin':
                 return 'Monsieur';
+
                 break;
             case 'Féminin':
                 return 'Madame';
+
                 break;
             default:
                 return '';
+
                 break;
         }
     }

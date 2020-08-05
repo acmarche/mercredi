@@ -24,7 +24,7 @@ class SanteQuestionCreatedHandler implements MessageHandlerInterface
         $this->santeQuestionRepository = $santeQuestionRepository;
     }
 
-    public function __invoke(SanteQuestionCreated $santeQuestionCreated)
+    public function __invoke(SanteQuestionCreated $santeQuestionCreated): void
     {
         $this->flashBag->add('success', 'La question a bien été ajoutée');
     }

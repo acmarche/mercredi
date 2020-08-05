@@ -24,7 +24,7 @@ class AccueilUpdatedHandler implements MessageHandlerInterface
         $this->accueilRepository = $accueilRepository;
     }
 
-    public function __invoke(AccueilUpdated $accueilUpdated)
+    public function __invoke(AccueilUpdated $accueilUpdated): void
     {
         $this->flashBag->add('success', "L'accueil a bien été modifié");
     }

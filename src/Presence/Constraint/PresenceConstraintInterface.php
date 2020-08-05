@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Presence\Constraint;
-
 
 use AcMarche\Mercredi\Entity\Jour;
 

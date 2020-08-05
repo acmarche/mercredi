@@ -44,17 +44,17 @@ class SanteReponseRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function persist(SanteReponse $santeReponse)
+    public function persist(SanteReponse $santeReponse): void
     {
         $this->_em->persist($santeReponse);
     }
 
-    public function remove(SanteReponse $santeReponse)
+    public function remove(SanteReponse $santeReponse): void
     {
         $this->_em->remove($santeReponse);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }

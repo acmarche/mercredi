@@ -19,14 +19,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class AccompagnateurVoter extends Voter
 {
+    public const INDEX = 'index_accompagnateur';
+    public const SHOW = 'show';
+    public const EDIT = 'edit';
+    public const DELETE = 'delete';
     /**
      * @var User
      */
     private $user;
-    const INDEX = 'index_accompagnateur';
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
 
     private $decisionManager;
 
@@ -50,14 +50,11 @@ class AccompagnateurVoter extends Voter
         $this->flashBag = $flashBag;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject)
     {
         //a cause de index pas d'ecole defini
         if ($subject) {
-            if (!$subject instanceof Accompagnateur) {
+            if (! $subject instanceof Accompagnateur) {
                 return false;
             }
         }
@@ -65,14 +62,11 @@ class AccompagnateurVoter extends Voter
         return \in_array($attribute, [self::INDEX, self::SHOW, self::EDIT, self::DELETE], true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $accompagnateur, TokenInterface $token)
     {
         $this->user = $token->getUser();
 
-        if (!$this->user instanceof User) {
+        if (! $this->user instanceof User) {
             return false;
         }
 
@@ -118,7 +112,7 @@ class AccompagnateurVoter extends Voter
             return true;
         }
 
-        if (!$this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
+        if (! $this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
             return false;
         }
 
@@ -131,7 +125,7 @@ class AccompagnateurVoter extends Voter
 
     private function canEdit(TokenInterface $token)
     {
-        if (!$this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
+        if (! $this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
             return false;
         }
 

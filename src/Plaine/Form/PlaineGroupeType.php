@@ -14,7 +14,7 @@ class PlaineGroupeType extends AbstractType
 {
     protected $label = false;
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -29,7 +29,7 @@ class PlaineGroupeType extends AbstractType
             ->add('inscription_maximum', IntegerType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

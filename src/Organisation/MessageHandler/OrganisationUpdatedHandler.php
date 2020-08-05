@@ -24,7 +24,7 @@ class OrganisationUpdatedHandler implements MessageHandlerInterface
         $this->organisationRepository = $organisationRepository;
     }
 
-    public function __invoke(OrganisationUpdated $organisationUpdated)
+    public function __invoke(OrganisationUpdated $organisationUpdated): void
     {
         $this->flashBag->add('success', "L'organisation a bien été modifiée");
     }

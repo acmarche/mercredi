@@ -24,7 +24,7 @@ class NoteUpdatedHandler implements MessageHandlerInterface
         $this->noteRepository = $noteRepository;
     }
 
-    public function __invoke(NoteUpdated $noteUpdated)
+    public function __invoke(NoteUpdated $noteUpdated): void
     {
         $this->flashBag->add('success', "L'école a bien été modifiée");
     }

@@ -60,10 +60,10 @@ class SanteHandler
     {
         $this->santeFicheRepository->flush();
         foreach ($questions as $question) {
-            if (null === $question->getReponseTxt() && !$question->getRemarque()) {
+            if (null === $question->getReponseTxt() && ! $question->getRemarque()) {
                 return null;
             }
-            if (!$reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) {
+            if (! $reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) {
                 $reponse = $this->santeFactory->createSanteReponse($santeFiche, $question);
             }
             $reponse->setReponse($question->getReponseTxt());

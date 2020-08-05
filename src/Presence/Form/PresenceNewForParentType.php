@@ -23,7 +23,7 @@ class PresenceNewForParentType extends AbstractType
         $this->presenceDaysProvider = $presenceDaysProvider;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $enfant = $builder->getData()->getEnfant();
 
@@ -49,7 +49,7 @@ class PresenceNewForParentType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

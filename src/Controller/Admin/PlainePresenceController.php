@@ -78,7 +78,7 @@ class PlainePresenceController extends AbstractController
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        if (0 == \count($plaine->getPlaineJours())) {
+        if (0 === \count($plaine->getPlaineJours())) {
             $this->addFlash('danger', 'La plaine n\'a aucune date');
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
@@ -235,7 +235,8 @@ class PlainePresenceController extends AbstractController
                 $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
                 $tuteur = $tuteurs[0];
             } else {
-                $tuteur = $presences[0]->getTuteur(); //todo bad
+                //todo bad
+                $tuteur = $presences[0]->getTuteur();
             }
 
             $this->plainePresenceHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
@@ -267,13 +268,13 @@ class PlainePresenceController extends AbstractController
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
             $presenceId = (int) $request->request->get('presence');
-            if (!$presenceId) {
+            if (! $presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
             $presence = $this->plainePresenceHandler->findPresence($presenceId);
-            if (!$presence) {
+            if (! $presence) {
                 $this->addFlash('danger', 'Présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');

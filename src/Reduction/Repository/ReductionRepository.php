@@ -19,17 +19,17 @@ class ReductionRepository extends ServiceEntityRepository
         parent::__construct($registry, Reduction::class);
     }
 
-    public function remove(Reduction $reduction)
+    public function remove(Reduction $reduction): void
     {
         $this->_em->remove($reduction);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Reduction $reduction)
+    public function persist(Reduction $reduction): void
     {
         $this->_em->persist($reduction);
     }

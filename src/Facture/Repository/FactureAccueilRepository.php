@@ -2,8 +2,8 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
-use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -44,17 +44,17 @@ class FactureAccueilRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function remove(FactureAccueil $factureAccueil)
+    public function remove(FactureAccueil $factureAccueil): void
     {
         $this->_em->remove($factureAccueil);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(FactureAccueil $factureAccueil)
+    public function persist(FactureAccueil $factureAccueil): void
     {
         $this->_em->persist($factureAccueil);
     }

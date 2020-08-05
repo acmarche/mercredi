@@ -24,7 +24,7 @@ class JourUpdatedHandler implements MessageHandlerInterface
         $this->jourRepository = $jourRepository;
     }
 
-    public function __invoke(JourUpdated $jourUpdated)
+    public function __invoke(JourUpdated $jourUpdated): void
     {
         $this->flashBag->add('success', 'La date a bien été modifiée');
     }

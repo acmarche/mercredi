@@ -20,10 +20,10 @@ use Symfony\Component\Security\Core\Security;
  */
 class AccueilVoter extends Voter
 {
-    const ADD = 'accueil_new';
-    const SHOW = 'accueil_show';
-    const EDIT = 'accueil_edit';
-    const DELETE = 'accueil_delete';
+    public const ADD = 'accueil_new';
+    public const SHOW = 'accueil_show';
+    public const EDIT = 'accueil_edit';
+    public const DELETE = 'accueil_delete';
     private $decisionManager;
     /**
      * @var RelationRepository
@@ -50,30 +50,24 @@ class AccueilVoter extends Voter
         $this->security = $security;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject)
     {
         return $subject instanceof Accueil && \in_array(
                 $attribute,
-                [self::ADD, self::SHOW, self::EDIT, self::DELETE]
+                [self::ADD, self::SHOW, self::EDIT, self::DELETE], true
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token)
     {
         $this->user = $token->getUser();
         $this->enfant = $accueil->getEnfant();
 
-        if (!$this->user instanceof User) {
+        if (! $this->user instanceof User) {
             return false;
         }
 
-        if ($this->security->isGranted( 'ROLE_MERCREDI_ADMIN')) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             return true;
         }
 
@@ -118,6 +112,7 @@ class AccueilVoter extends Voter
         if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return $this->checkTuteur();
         }
+
         return false;
     }
 
@@ -136,7 +131,7 @@ class AccueilVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted( 'ROLE_MERCREDI_PARENT')) {
+        if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return $this->checkTuteur();
         }
 
@@ -148,13 +143,13 @@ class AccueilVoter extends Voter
      */
     private function checkTuteur()
     {
-        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (! $this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if (!$this->tuteurOfUser) {
+        if (! $this->tuteurOfUser) {
             return false;
         }
 
@@ -167,7 +162,7 @@ class AccueilVoter extends Voter
             $relations
         );
 
-        if (\in_array($this->enfant->getId(), $enfants)) {
+        if (\in_array($this->enfant->getId(), $enfants, true)) {
             return true;
         }
 

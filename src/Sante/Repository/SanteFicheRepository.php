@@ -30,17 +30,17 @@ class SanteFicheRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function persist(SanteFiche $enfant)
+    public function persist(SanteFiche $enfant): void
     {
         $this->_em->persist($enfant);
     }
 
-    public function remove(SanteFiche $enfant)
+    public function remove(SanteFiche $enfant): void
     {
         $this->_em->remove($enfant);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }

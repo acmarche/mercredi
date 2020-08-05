@@ -24,7 +24,7 @@ class EcoleCreatedHandler implements MessageHandlerInterface
         $this->ecoleRepository = $ecoleRepository;
     }
 
-    public function __invoke(EcoleCreated $ecoleCreated)
+    public function __invoke(EcoleCreated $ecoleCreated): void
     {
         $this->flashBag->add('success', "L'école a bien été ajoutée");
     }

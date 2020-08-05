@@ -9,11 +9,11 @@ trait AgeTrait
      */
     private $birthday;
 
-    public function getAge(\DateTime $date_reference = null, $month = false): string
+    public function getAge(?\DateTime $date_reference = null, $month = false): string
     {
         $birthday = $this->birthday;
 
-        if (!$birthday) {
+        if (! $birthday) {
             return '';
         }
 

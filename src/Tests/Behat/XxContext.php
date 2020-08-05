@@ -34,7 +34,7 @@ class XxContext
     /**
      * @BeforeScenario
      */
-    public function clearData()
+    public function clearData(): void
     {
         $purger = new ORMPurger($this->entityManager);
         $purger->purge();
@@ -43,7 +43,7 @@ class XxContext
     /**
      * @BeforeScenario @fixtures
      */
-    public function loadFixtures()
+    public function loadFixtures(): void
     {
         $loader = new ContainerAwareLoader($this->getContainer());
         $loader->loadFromDirectory(__DIR__.'/../../src/AppBundle/DataFixtures');
@@ -70,7 +70,7 @@ class XxContext
     /**
      * @When I fill in the search box with :term
      */
-    public function iFillInTheSearchBoxWith($term)
+    public function iFillInTheSearchBoxWith($term): void
     {
         $searchBox = $this->assertSession()
             ->elementExists('css', 'input[name="searchTerm"]');
@@ -81,7 +81,7 @@ class XxContext
     /**
      * @When I press the search button
      */
-    public function iPressTheSearchButton()
+    public function iPressTheSearchButton(): void
     {
         $button = $this->assertSession()
             ->elementExists('css', '#search_submit');
@@ -92,7 +92,7 @@ class XxContext
     /**
      * @Given there is/are :count product(s)
      */
-    public function thereAreProducts($count)
+    public function thereAreProducts($count): void
     {
         $this->createProducts($count);
     }
@@ -100,7 +100,7 @@ class XxContext
     /**
      * @Given I author :count products
      */
-    public function iAuthorProducts($count)
+    public function iAuthorProducts($count): void
     {
         $this->createProducts($count, $this->currentUser);
     }
@@ -108,7 +108,7 @@ class XxContext
     /**
      * @Given the following product(s) exist(s):
      */
-    public function theFollowingProductsExist(TableNode $table)
+    public function theFollowingProductsExist(TableNode $table): void
     {
         foreach ($table as $row) {
             $product = new Product();
@@ -116,7 +116,7 @@ class XxContext
             $product->setPrice(rand(10, 1000));
             $product->setDescription('lorem');
 
-            if (isset($row['is published']) && 'yes' == $row['is published']) {
+            if (isset($row['is published']) && 'yes' === $row['is published']) {
                 $product->setIsPublished(true);
             }
 
@@ -129,7 +129,7 @@ class XxContext
     /**
      * @Then the :rowText row should have a check mark
      */
-    public function theProductRowShouldShowAsPublished($rowText)
+    public function theProductRowShouldShowAsPublished($rowText): void
     {
         $row = $this->findRowByText($rowText);
 
@@ -139,7 +139,7 @@ class XxContext
     /**
      * @When I press :linkText in the :rowText row
      */
-    public function iClickInTheRow($linkText, $rowText)
+    public function iClickInTheRow($linkText, $rowText): void
     {
         $this->findRowByText($rowText)->pressButton($linkText);
     }
@@ -147,7 +147,7 @@ class XxContext
     /**
      * @When I click :linkName
      */
-    public function iClick($linkName)
+    public function iClick($linkName): void
     {
         $this->getPage()->clickLink($linkName);
     }
@@ -155,7 +155,7 @@ class XxContext
     /**
      * @Then I should see :count products
      */
-    public function iShouldSeeProducts($count)
+    public function iShouldSeeProducts($count): void
     {
         $table = $this->getPage()->find('css', 'table.table');
         assertNotNull($table, 'Cannot find a table!');
@@ -166,7 +166,7 @@ class XxContext
     /**
      * @Given I am logged in as an admin
      */
-    public function iAmLoggedInAsAnAdmin()
+    public function iAmLoggedInAsAnAdmin(): void
     {
         $this->currentUser = $this->thereIsAnAdminUserWithPassword('admin', 'admin');
 
@@ -179,7 +179,7 @@ class XxContext
     /**
      * @When I wait for the modal to load
      */
-    public function iWaitForTheModalToLoad()
+    public function iWaitForTheModalToLoad(): void
     {
         $this->getSession()->wait(
             5000,
@@ -192,10 +192,10 @@ class XxContext
      *
      * @Then (I )break
      */
-    public function iPutABreakpoint()
+    public function iPutABreakpoint(): void
     {
         fwrite(STDOUT, "\033[s    \033[93m[Breakpoint] Press \033[1;93m[RETURN]\033[0;93m to continue...\033[0m");
-        while ('' == fgets(STDIN, 1024)) {
+        while ('' === fgets(STDIN, 1024)) {
         }
         fwrite(STDOUT, "\033[u");
 
@@ -207,7 +207,7 @@ class XxContext
      *
      * @When I save a screenshot to :filename
      */
-    public function iSaveAScreenshotIn($filename)
+    public function iSaveAScreenshotIn($filename): void
     {
         sleep(1);
         $this->saveScreenshot($filename, __DIR__.'/../sallessf');
@@ -229,7 +229,7 @@ class XxContext
         return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
 
-    private function createProducts($count, User $author = null)
+    private function createProducts($count, ?User $author = null): void
     {
         for ($i = 0; $i < $count; ++$i) {
             $product = new Product();

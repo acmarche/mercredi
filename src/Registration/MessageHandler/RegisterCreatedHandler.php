@@ -40,7 +40,7 @@ class RegisterCreatedHandler implements MessageHandlerInterface
         $this->registrationMailerFactory = $registrationMailerFactory;
     }
 
-    public function __invoke(RegisterCreated $registerCreated)
+    public function __invoke(RegisterCreated $registerCreated): void
     {
         $userId = $registerCreated->getUserId();
         $user = $this->userRepository->find($userId);
@@ -64,6 +64,6 @@ class RegisterCreatedHandler implements MessageHandlerInterface
             $this->registrationMailerFactory->generateMessageToAdminAccountCreated($user)
         );
 
-        $this->flashBag->add('success', "Votre compte a bien été créé, consultez votre boite mail");
+        $this->flashBag->add('success', 'Votre compte a bien été créé, consultez votre boite mail');
     }
 }

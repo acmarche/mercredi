@@ -24,7 +24,7 @@ class SanteFicheUpdatedHandler implements MessageHandlerInterface
         $this->santeFicheRepository = $santeFicheRepository;
     }
 
-    public function __invoke(SanteFicheUpdated $santeFicheUpdated)
+    public function __invoke(SanteFicheUpdated $santeFicheUpdated): void
     {
         $this->flashBag->add('success', 'Le formulaire santé a bien été enregistré');
     }

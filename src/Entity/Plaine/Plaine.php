@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,6 +52,4 @@ class Plaine
     {
         return $this->nom;
     }
-
-
 }

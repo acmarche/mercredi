@@ -24,7 +24,7 @@ class PresenceDeletedHandler implements MessageHandlerInterface
         $this->presenceRepository = $presenceRepository;
     }
 
-    public function __invoke(PresenceDeleted $presenceDeleted)
+    public function __invoke(PresenceDeleted $presenceDeleted): void
     {
         $this->flashBag->add('success', 'La présence a bien été supprimée');
     }

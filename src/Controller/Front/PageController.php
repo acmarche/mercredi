@@ -75,7 +75,7 @@ class PageController extends AbstractController
     public function contact(Request $request)
     {
         $page = $this->pageRepository->findContactPage();
-        if (!$page) {
+        if (! $page) {
             $page = $this->pageFactory->createContactPage();
         }
 
@@ -115,7 +115,7 @@ class PageController extends AbstractController
     public function modalite()
     {
         $page = $this->pageRepository->findModalitePage();
-        if (!$page) {
+        if (! $page) {
             $page = $this->pageFactory->createModalitePage();
         }
 
@@ -126,5 +126,4 @@ class PageController extends AbstractController
             ]
         );
     }
-
 }

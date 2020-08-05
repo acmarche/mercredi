@@ -11,7 +11,6 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use AcMarche\Mercredi\Utils\SortUtils;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -63,11 +62,8 @@ class PresenceUtils
         return $today;
     }
 
-
-
     /**
      * @param Presence[] $presences
-     * @return array
      */
     public function groupByYear(array $presences): array
     {
@@ -121,9 +117,8 @@ class PresenceUtils
                 },
                 $presences
             );
-        $enfants = array_unique($enfants, SORT_REGULAR);
 
-        return $enfants;
+        return array_unique($enfants, SORT_REGULAR);
     }
 
     /**
@@ -161,7 +156,7 @@ class PresenceUtils
     /**
      * @param Enfant[] $enfants
      */
-    public function addTelephonesOnEnfants(array $enfants)
+    public function addTelephonesOnEnfants(array $enfants): void
     {
         foreach ($enfants as $enfant) {
             $telephones = '';
@@ -184,15 +179,15 @@ class PresenceUtils
         array_map(
             function ($presence) use ($plaines) {
                 $jour = $presence->getJour();
-                if (!$jour) {
+                if (! $jour) {
                     return null;
                 }
                 $plaineJour = $jour->getPlaineJour();
-                if (!$plaineJour) {
+                if (! $plaineJour) {
                     return null;
                 }
                 $plaine = $plaineJour->getPlaine();
-                if (!$plaines->contains($plaine)) {
+                if (! $plaines->contains($plaine)) {
                     $plaines->add($plaine);
                 }
             },

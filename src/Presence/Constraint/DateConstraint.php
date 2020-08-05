@@ -37,10 +37,6 @@ class DateConstraint implements PresenceConstraintInterface
      * la date de presence choisie n'est pas plus tard
      * que la veille a 12h00
      * Et pour les jours journees pedagogiques c'est une semaine.
-     *
-     * @param Jour $jour
-     *
-     * @return bool
      */
     public function check(Jour $jour): bool
     {
@@ -49,7 +45,7 @@ class DateConstraint implements PresenceConstraintInterface
         $deadLinePedagogique = $this->presenceUtils->getDeadLineDatePedagogique();
         $deadLinePresence = $this->presenceUtils->getDeadLineDatePresence();
 
-        /**
+        /*
          * Si journee pedagogique
          */
         if ($jour->isPedagogique()) {
@@ -60,7 +56,7 @@ class DateConstraint implements PresenceConstraintInterface
             return true;
         }
 
-        /**
+        /*
          * Pas pédagogique
          */
         if ($deadLinePresence->format('Y-m-d') > $datePresence->format('Y-m-d')) {
@@ -70,7 +66,7 @@ class DateConstraint implements PresenceConstraintInterface
         return true;
     }
 
-    public function addFlashError(Jour $jour)
+    public function addFlashError(Jour $jour): void
     {
         $content = $this->environment->render(
             '@AcMarcheMercrediParent/presence/_error_delais.txt.twig',

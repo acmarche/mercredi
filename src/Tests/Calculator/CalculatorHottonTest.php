@@ -6,27 +6,27 @@ use PHPUnit\Framework\TestCase;
 
 class CalculatorHottonTest extends TestCase
 {
-    public function testSettingCustomerFirstName()
+    public function testSettingCustomerFirstName(): void
     {
         $customer = new Customer();
         $firstName = 'John';
 
         $customer->setFirstName($firstName);
 
-        $this->assertEquals($firstName, $customer->getFirstName());
+        $this->assertSame($firstName, $customer->getFirstName());
     }
 
-    public function testSettingCustomerLastName()
+    public function testSettingCustomerLastName(): void
     {
         $customer = new Customer();
         $lastName = 'Doe';
 
         $customer->setLastName($lastName);
 
-        $this->assertEquals($lastName, $customer->getLastName());
+        $this->assertSame($lastName, $customer->getLastName());
     }
 
-    public function testReturnsCustomerFullName()
+    public function testReturnsCustomerFullName(): void
     {
         $customer = new Customer();
         $customer->setFirstName('John');

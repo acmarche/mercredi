@@ -22,7 +22,7 @@ class RegistrationFormType extends AbstractType
         $this->router = $router;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $url = $this->router->generate('mercredi_front_modalite');
 

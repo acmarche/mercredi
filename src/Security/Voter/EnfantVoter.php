@@ -19,11 +19,11 @@ use Symfony\Component\Security\Core\Security;
  */
 class EnfantVoter extends Voter
 {
-    const ADD = 'enfant_new';
-    const ADD_PRESENCE = 'add_presence';
-    const SHOW = 'enfant_show';
-    const EDIT = 'enfant_edit';
-    const DELETE = 'enfant_delete';
+    public const ADD = 'enfant_new';
+    public const ADD_PRESENCE = 'add_presence';
+    public const SHOW = 'enfant_show';
+    public const EDIT = 'enfant_edit';
+    public const DELETE = 'enfant_delete';
 
     /**
      * @var User
@@ -60,32 +60,26 @@ class EnfantVoter extends Voter
         $this->relationRepository = $relationRepository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject)
     {
         if ($subject) {
-            if (!$subject instanceof Enfant) {
+            if (! $subject instanceof Enfant) {
                 return false;
             }
         }
 
         return \in_array(
             $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE]
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE], true
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $enfant, TokenInterface $token)
     {
         $this->user = $token->getUser();
         $this->enfant = $enfant;
 
-        if (!$this->user instanceof User) {
+        if (! $this->user instanceof User) {
             return false;
         }
 
@@ -153,11 +147,11 @@ class EnfantVoter extends Voter
      */
     private function checkTuteur()
     {
-        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (! $this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
-        if (!$this->tuteurOfUser) {
+        if (! $this->tuteurOfUser) {
             return false;
         }
 
@@ -170,7 +164,7 @@ class EnfantVoter extends Voter
             $relations
         );
 
-        if (\in_array($this->enfant->getId(), $enfants)) {
+        if (\in_array($this->enfant->getId(), $enfants, true)) {
             return true;
         }
 

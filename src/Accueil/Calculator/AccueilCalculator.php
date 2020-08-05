@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Accueil\Calculator;
-
 
 use AcMarche\Mercredi\Entity\Accueil;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

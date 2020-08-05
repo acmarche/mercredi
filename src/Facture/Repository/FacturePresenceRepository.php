@@ -44,17 +44,17 @@ class FacturePresenceRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function remove(FacturePresence $facturePresence)
+    public function remove(FacturePresence $facturePresence): void
     {
         $this->_em->remove($facturePresence);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(FacturePresence $facturePresence)
+    public function persist(FacturePresence $facturePresence): void
     {
         $this->_em->persist($facturePresence);
     }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity;
-
 
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
@@ -18,9 +16,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Accueil
+ * Class Accueil.
+ *
  * @ORM\Table("accueil", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
+ * @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
  * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
  * @UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
@@ -58,6 +57,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
+     *
      * @var Enfant
      */
     private $enfant;
@@ -65,6 +65,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
+     *
      * @var Tuteur
      */
     private $tuteur;
@@ -116,8 +117,4 @@ class Accueil implements TimestampableInterface, UuidableInterface
 
         return $this;
     }
-
-
-
-
 }

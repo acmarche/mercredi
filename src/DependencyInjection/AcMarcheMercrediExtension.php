@@ -15,10 +15,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class AcMarcheMercrediExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
@@ -27,7 +24,7 @@ class AcMarcheMercrediExtension extends Extension implements PrependExtensionInt
     /**
      * Allow an extension to prepend the extension configurations.
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         // get all bundles
         $bundles = $container->getParameter('kernel.bundles');
@@ -37,18 +34,23 @@ class AcMarcheMercrediExtension extends Extension implements PrependExtensionInt
                 switch ($name) {
                     case 'doctrine':
                         $this->loadConfig($container, 'doctrine');
+
                         break;
                     case 'twig':
                         $this->loadConfig($container, 'twig');
+
                         break;
                     case 'liip_imagine':
                         $this->loadConfig($container, 'liip_imagine');
+
                         break;
                     case 'framework':
                         $this->loadConfig($container, 'security');
+
                         break;
                     case 'vich_uploader':
                         $this->loadConfig($container, 'vich_uploader');
+
                         break;
                     case 'api_platform':
                         //$this->loadConfig($container, 'api_platform');
@@ -58,7 +60,7 @@ class AcMarcheMercrediExtension extends Extension implements PrependExtensionInt
         }
     }
 
-    protected function loadConfig(ContainerBuilder $container, string $name)
+    protected function loadConfig(ContainerBuilder $container, string $name): void
     {
         $configs = $this->loadYamlFile($container);
 

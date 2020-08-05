@@ -112,8 +112,6 @@ class ListingPresenceByMonth
             $this->presences
         );
 
-        $enfants = array_unique($enfants);
-
-        return $enfants;
+        return array_unique($enfants);
     }
 }

@@ -24,7 +24,7 @@ class PageCreatedHandler implements MessageHandlerInterface
         $this->pageRepository = $pageRepository;
     }
 
-    public function __invoke(PageCreated $pageCreated)
+    public function __invoke(PageCreated $pageCreated): void
     {
         $this->flashBag->add('success', 'La page a bien été ajoutée');
     }

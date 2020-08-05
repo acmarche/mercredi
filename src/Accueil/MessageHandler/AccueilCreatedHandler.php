@@ -24,7 +24,7 @@ class AccueilCreatedHandler implements MessageHandlerInterface
         $this->accueilRepository = $accueilRepository;
     }
 
-    public function __invoke(AccueilCreated $accueilCreated)
+    public function __invoke(AccueilCreated $accueilCreated): void
     {
         $this->flashBag->add('success', "L'acceuil a bien été ajouté");
     }

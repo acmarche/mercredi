@@ -54,7 +54,7 @@ class FormAuthenticator implements AuthenticatorInterface
     {
         // find a user based on an "email" form field
         $user = $this->userRepository->findOneByEmailOrUserName($request->get('email'));
-        if (!$user) {
+        if (! $user) {
             throw new UsernameNotFoundException();
         }
 
@@ -80,9 +80,7 @@ class FormAuthenticator implements AuthenticatorInterface
     {
         $credential = $passport->getBadge(PasswordCredentials::class);
 
-        $token = new UsernamePasswordToken($passport->getUser(), $credential->getPassword(), $firewallName);
-
-        return $token;
+        return new UsernamePasswordToken($passport->getUser(), $credential->getPassword(), $firewallName);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

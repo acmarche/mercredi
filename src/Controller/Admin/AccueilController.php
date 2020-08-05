@@ -14,7 +14,6 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -154,7 +153,6 @@ class AccueilController extends AbstractController
     }
 
     /**
-     *
      * @Route("/{id}", name="mercredi_admin_accueil_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Accueil $accueil): Response

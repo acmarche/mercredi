@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class DemoContext implements Context
 {
-    /** @var Response|null */
+    /**
+     * @var Response|null
+     */
     private $response;
     /**
      * @var RequestStack
@@ -32,7 +34,7 @@ final class DemoContext implements Context
     /**
      * @Then /^the "([^"]*)" response header exists$/
      */
-    public function theResponseHeaderExists($arg1)
+    public function theResponseHeaderExists($arg1): void
     {
         $headers = $this->requestStack->getMasterRequest();
         var_dump($headers);
@@ -47,9 +49,10 @@ final class DemoContext implements Context
     /**
      * @Then /^the "([^"]*)" response header is "([^"]*)"$/
      */
-    public function theResponseHeaderIs($arg1, $arg2)
+    public function theResponseHeaderIs($arg1, $arg2): void
     {
         var_dump($arg1, $arg2);
+
         throw new PendingException();
     }
 }

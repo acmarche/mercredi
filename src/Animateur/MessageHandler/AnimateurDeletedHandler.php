@@ -24,7 +24,7 @@ class AnimateurDeletedHandler implements MessageHandlerInterface
         $this->animateurRepository = $animateurRepository;
     }
 
-    public function __invoke(AnimateurDeleted $animateurDeleted)
+    public function __invoke(AnimateurDeleted $animateurDeleted): void
     {
         $this->flashBag->add('success', 'L\' animateur a bien été supprimé');
     }

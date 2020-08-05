@@ -24,7 +24,7 @@ class FactureUpdatedHandler implements MessageHandlerInterface
         $this->factureRepository = $factureRepository;
     }
 
-    public function __invoke(FactureUpdated $factureUpdated)
+    public function __invoke(FactureUpdated $factureUpdated): void
     {
         $this->flashBag->add('success', 'La facture a bien été modifiée');
     }

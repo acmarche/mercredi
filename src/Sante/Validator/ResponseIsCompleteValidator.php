@@ -26,11 +26,11 @@ class ResponseIsCompleteValidator extends ConstraintValidator
      *
      * @param SanteQuestion[] $questions
      */
-    public function validate($questions, Constraint $constraint)
+    public function validate($questions, Constraint $constraint): void
     {
         foreach ($questions as $question) {
-            if (!$this->santeChecker->checkQuestionOk($question)) {
-                $order = $question->getDisplayOrder() ? $question->getDisplayOrder() : 0;
+            if (! $this->santeChecker->checkQuestionOk($question)) {
+                $order = $question->getDisplayOrder() ?: 0;
                 $this->context->buildViolation($constraint->message_question)
                     ->atPath('sante_fiche[questions]['.$order.'][remarque]')
                     ->setParameter('{{ string }}', $question->getNom().' : '.$question->getComplementLabel())

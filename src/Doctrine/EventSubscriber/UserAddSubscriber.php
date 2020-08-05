@@ -33,17 +33,17 @@ class UserAddSubscriber implements EventSubscriber
         ];
     }
 
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
-        if (!$this->propertyUtil->getPropertyAccessor()->isWritable($entity, 'userAdd')) {
+        if (! $this->propertyUtil->getPropertyAccessor()->isWritable($entity, 'userAdd')) {
             return;
         }
 
         $this->setUserAdd($entity);
     }
 
-    private function setUserAdd(object $entity)
+    private function setUserAdd(object $entity): void
     {
         //for loading fixtures
         if ($entity->getUserAdd()) {
@@ -52,7 +52,7 @@ class UserAddSubscriber implements EventSubscriber
 
         $user = $this->security->getUser();
 
-        if (!$user) {
+        if (! $user) {
             throw new \Exception('You must be login');
         }
 

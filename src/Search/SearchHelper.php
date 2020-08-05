@@ -6,12 +6,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SearchHelper
 {
-    const ENFANT_LIST = 'enfant_list';
-    const TUTEUR_LIST = 'tuteur_list';
-    const PRESENCE_LIST = 'presence_list';
-    const PRESENCE_LIST_BY_MONTH = 'presence_list_by_month';
-    const MESSAGE_INDEX = 'message_index';
-    const ACCUEIL_INDEX = 'accueil_index';
+    public const ENFANT_LIST = 'enfant_list';
+    public const TUTEUR_LIST = 'tuteur_list';
+    public const PRESENCE_LIST = 'presence_list';
+    public const PRESENCE_LIST_BY_MONTH = 'presence_list_by_month';
+    public const MESSAGE_INDEX = 'message_index';
+    public const ACCUEIL_INDEX = 'accueil_index';
 
     /**
      * @var SessionInterface

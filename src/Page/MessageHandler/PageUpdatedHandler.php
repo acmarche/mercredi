@@ -24,7 +24,7 @@ class PageUpdatedHandler implements MessageHandlerInterface
         $this->pageRepository = $pageRepository;
     }
 
-    public function __invoke(PageUpdated $pageUpdated)
+    public function __invoke(PageUpdated $pageUpdated): void
     {
         $this->flashBag->add('success', 'La page a bien été modifiée');
     }

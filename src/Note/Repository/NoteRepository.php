@@ -19,17 +19,17 @@ class NoteRepository extends ServiceEntityRepository
         parent::__construct($registry, Note::class);
     }
 
-    public function remove(Note $note)
+    public function remove(Note $note): void
     {
         $this->_em->remove($note);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Note $note)
+    public function persist(Note $note): void
     {
         $this->_em->persist($note);
     }

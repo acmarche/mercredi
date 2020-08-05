@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity;
-
 
 use AcMarche\Mercredi\Entity\Traits\FileTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -37,6 +35,7 @@ class Document implements TimestampableInterface, UuidableInterface
      *     mimeTypes = {"application/pdf", "application/x-pdf", "image/*"},
      *     mimeTypesMessage = "Uniquement des images ou Pdf"
      * )
+     *
      * @var UploadedFile
      */
     private $file;

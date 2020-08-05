@@ -20,26 +20,24 @@ class EcoleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ecole::class);
     }
 
-    public function remove(Ecole $ecole)
+    public function remove(Ecole $ecole): void
     {
         $this->_em->remove($ecole);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Ecole $ecole)
+    public function persist(Ecole $ecole): void
     {
         $this->_em->persist($ecole);
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('ecole')
+        return $this->createQueryBuilder('ecole')
             ->orderBy('ecole.nom', 'ASC');
-
-        return $qb;
     }
 }

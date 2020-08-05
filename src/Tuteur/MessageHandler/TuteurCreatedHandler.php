@@ -24,7 +24,7 @@ class TuteurCreatedHandler implements MessageHandlerInterface
         $this->tuteurRepository = $tuteurRepository;
     }
 
-    public function __invoke(TuteurCreated $tuteurCreated)
+    public function __invoke(TuteurCreated $tuteurCreated): void
     {
         $this->flashBag->add('success', 'Le tuteur a bien été ajouté');
     }

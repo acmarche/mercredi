@@ -24,7 +24,7 @@ class FactureCreatedHandler implements MessageHandlerInterface
         $this->factureRepository = $factureRepository;
     }
 
-    public function __invoke(FactureCreated $factureCreated)
+    public function __invoke(FactureCreated $factureCreated): void
     {
         $this->flashBag->add('success', 'La facture a bien été crée');
     }

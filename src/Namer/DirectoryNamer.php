@@ -9,19 +9,6 @@ use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
 
 class DirectoryNamer implements DirectoryNamerInterface
 {
-    protected function getExtension(UploadedFile $file)
-    {
-        $originalName = $file->getClientOriginalName();
-        if ($extension = pathinfo($originalName, PATHINFO_EXTENSION)) {
-            return $extension;
-        }
-        if ($extension = $file->guessExtension()) {
-            return $extension;
-        }
-
-        return null;
-    }
-
     /**
      * Creates a directory name for the file being uploaded.
      *
@@ -35,5 +22,18 @@ class DirectoryNamer implements DirectoryNamerInterface
         return '';
         //todo bug getId() empty
         return (string) $object->getId();
+    }
+
+    protected function getExtension(UploadedFile $file)
+    {
+        $originalName = $file->getClientOriginalName();
+        if ($extension = pathinfo($originalName, PATHINFO_EXTENSION)) {
+            return $extension;
+        }
+        if ($extension = $file->guessExtension()) {
+            return $extension;
+        }
+
+        return null;
     }
 }

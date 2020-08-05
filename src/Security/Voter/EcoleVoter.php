@@ -20,15 +20,15 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class EcoleVoter extends Voter
 {
+    public const INDEX = 'index_ecole';
+    public const SHOW = 'show';
+    public const ADD = 'add';
+    public const EDIT = 'edit';
+    public const DELETE = 'delete';
     /**
      * @var User
      */
     private $user;
-    const INDEX = 'index_ecole';
-    const SHOW = 'show';
-    const ADD = 'add';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
     private $decisionManager;
     /**
      * @var FlashBagInterface
@@ -49,14 +49,11 @@ class EcoleVoter extends Voter
         $this->flashBag = $flashBag;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject)
     {
         //a cause de index pas d'ecole defini
         if ($subject) {
-            if (!$subject instanceof Ecole) {
+            if (! $subject instanceof Ecole) {
                 return false;
             }
         }
@@ -64,14 +61,11 @@ class EcoleVoter extends Voter
         return \in_array($attribute, [self::INDEX, self::SHOW, self::ADD, self::EDIT, self::DELETE], true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $ecole, TokenInterface $token)
     {
         $this->user = $token->getUser();
 
-        if (!$this->user instanceof User) {
+        if (! $this->user instanceof User) {
             return false;
         }
 
