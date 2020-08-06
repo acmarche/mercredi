@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
-use AcMarche\Mercredi\Facture\Factory\FacturePdfFactory;
+use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_PARENT")
  * @Route("/facture")
  */
-class FactureController extends AbstractController
+final class FactureController extends AbstractController
 {
     use GetTuteurTrait;
 
@@ -26,13 +26,8 @@ class FactureController extends AbstractController
      * @var FactureRepository
      */
     private $factureRepository;
-
     /**
-     * @var FactureFactory
-     */
-    private $factureFactory;
-    /**
-     * @var FacturePdfFactory
+     * @var FacturePdfFactoryTrait
      */
     private $facturePdfFactory;
     /**
@@ -43,7 +38,7 @@ class FactureController extends AbstractController
     public function __construct(
         TuteurUtils $tuteurUtils,
         FactureRepository $factureRepository,
-        FacturePdfFactory $facturePdfFactory
+        FacturePdfFactoryTrait $facturePdfFactory
     ) {
         $this->factureRepository = $factureRepository;
         $this->facturePdfFactory = $facturePdfFactory;

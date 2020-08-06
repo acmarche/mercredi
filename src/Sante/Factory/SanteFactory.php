@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Entity\Sante\SanteReponse;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
-class SanteFactory
+final class SanteFactory
 {
     /**
      * @var SanteFicheRepository
@@ -30,7 +30,7 @@ class SanteFactory
 
     public function getSanteFicheByEnfant(Enfant $enfant): SanteFiche
     {
-        if (! $santeFiche = $this->santeFicheRepository->findOneBy(['enfant' => $enfant])) {
+        if (($santeFiche = $this->repository->findOneBy(['enfant' => $enfant])) === null) {
             $santeFiche = new SanteFiche($enfant);
             $this->santeFicheRepository->persist($santeFiche);
         }

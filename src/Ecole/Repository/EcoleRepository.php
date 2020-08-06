@@ -13,11 +13,11 @@ use Doctrine\ORM\QueryBuilder;
  * @method Ecole[]    findAll()
  * @method Ecole[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EcoleRepository extends ServiceEntityRepository
+final class EcoleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Ecole::class);
+        parent::__construct($managerRegistry, Ecole::class);
     }
 
     public function remove(Ecole $ecole): void

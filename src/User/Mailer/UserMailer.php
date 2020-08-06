@@ -4,42 +4,25 @@ namespace AcMarche\Mercredi\User\Mailer;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class UserMailer
+final class UserMailer
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var \AcMarche\Mercredi\Entity\Organisation|null
-     */
-    private $organisation;
-
-    public function __construct(
-        MailerInterface $mailer,
-        OrganisationRepository $organisationRepository
-    ) {
-        $this->mailer = $mailer;
-        $this->organisationRepository = $organisationRepository;
-        $this->organisation = $organisationRepository->getOrganisation();
-    }
+    use InitMailerTrait;
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @param User $user
+     * @param Tuteur $tuteur
+     * @param string|null $password
+     * @throws TransportExceptionInterface
      */
     public function sendNewAccountToParent(User $user, Tuteur $tuteur, ?string $password = null): void
     {
-        $from = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $from = $this->organisation !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
 
-        $message = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
             ->to($user->getEmail())
@@ -53,6 +36,6 @@ class UserMailer
                 ]
             );
 
-        $this->mailer->send($message);
+        $this->sendMail($templatedEmail);
     }
 }

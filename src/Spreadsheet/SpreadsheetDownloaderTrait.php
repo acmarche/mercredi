@@ -9,25 +9,25 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-abstract class AbstractSpreadsheetDownloader
+trait SpreadsheetDownloaderTrait
 {
-    public function downloadXls(Spreadsheet $phpExcelObject, string $fileName): Response
+    public function downloadXls(Spreadsheet $spreadsheet, string $fileName): Response
     {
-        $writer = new Xlsx($phpExcelObject);
+        $xlsx = new Xlsx($spreadsheet);
         $temp_file = tempnam(sys_get_temp_dir(), $fileName);
 
         // Create the excel file in the tmp directory of the system
         try {
-            $writer->save($temp_file);
+            $xlsx->save($temp_file);
         } catch (Exception $e) {
         }
 
-        $response = new BinaryFileResponse($temp_file);
-        $response->setContentDisposition(
+        $binaryFileResponse = new BinaryFileResponse($temp_file);
+        $binaryFileResponse->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_INLINE,
-            null === $fileName ? $response->getFile()->getFilename() : $fileName
+            null === $fileName ? $binaryFileResponse->getFile()->getFilename() : $fileName
         );
 
-        return $response;
+        return $binaryFileResponse;
     }
 }

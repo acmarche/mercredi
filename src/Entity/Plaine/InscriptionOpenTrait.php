@@ -12,7 +12,7 @@ trait InscriptionOpenTrait
      * @ORM\Column(type="boolean")
      * Assert\Type() //todo my constraint only one
      */
-    private $inscriptionOpen;
+    private $inscriptionOpen = false;
 
     public function isInscriptionOpen(): bool
     {

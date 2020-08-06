@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Accueil\Calculator;
 use AcMarche\Mercredi\Entity\Accueil;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class AccueilCalculator implements AccueilCalculatorInterface
+final class AccueilCalculator implements AccueilCalculatorInterface
 {
     /**
      * @var ParameterBagInterface

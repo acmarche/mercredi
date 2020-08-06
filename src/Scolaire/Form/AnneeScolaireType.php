@@ -10,11 +10,11 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AnneeScolaireType extends AbstractType
+final class AnneeScolaireType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('nom')
             ->add(
                 'ordre',
@@ -43,9 +43,9 @@ class AnneeScolaireType extends AbstractType
             ->add('remarque');
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => AnneeScolaire::class,
             ]

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Message;
 
-class UserDeleted
+final class UserDeleted
 {
     /**
      * @var int

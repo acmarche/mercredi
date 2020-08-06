@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Security\User;
 use Fidry\AliceDataFixtures\ProcessorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserProcessor implements ProcessorInterface
+final class UserProcessor implements ProcessorInterface
 {
     /**
      * @var UserPasswordEncoderInterface

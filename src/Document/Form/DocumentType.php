@@ -9,11 +9,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
-class DocumentType extends AbstractType
+final class DocumentType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
@@ -32,9 +32,9 @@ class DocumentType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Document::class,
             ]

@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Relation\Message\RelationDeleted;
 use AcMarche\Mercredi\Relation\Message\RelationUpdated;
 use AcMarche\Mercredi\Relation\RelationHandler;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/relation")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class RelationController extends AbstractController
+final class RelationController extends AbstractController
 {
     /**
      * @var RelationRepository
@@ -30,6 +31,14 @@ class RelationController extends AbstractController
      * @var RelationHandler
      */
     private $relationHandler;
+    /**
+     * @var string
+     */
+    private const DANGER = 'danger';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
 
     public function __construct(RelationRepository $relationRepository, RelationHandler $relationHandler)
     {
@@ -43,21 +52,21 @@ class RelationController extends AbstractController
     public function attachEnfant(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
-            $enfantId = (int) $request->request->get('enfantId');
+            $enfantId = (int)$request->request->get('enfantId');
 
             try {
                 $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
                 $this->dispatchMessage(new RelationCreated($relation->getId()));
-            } catch (\Exception $e) {
-                $this->addFlash('danger', $e->getMessage());
+            } catch (Exception $e) {
+                $this->addFlash(self::DANGER, $e->getMessage());
 
-                return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+                return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
             }
         } else {
-            $this->addFlash('danger', 'Formulaire non valide');
+            $this->addFlash(self::DANGER, 'Formulaire non valide');
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
     }
 
     /**
@@ -73,7 +82,7 @@ class RelationController extends AbstractController
 
             $this->dispatchMessage(new RelationUpdated($relation->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $relation->getEnfant()->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $relation->getEnfant()->getId()]);
         }
 
         return $this->render(
@@ -92,14 +101,14 @@ class RelationController extends AbstractController
     {
         $relationId = $request->request->get('relationid');
 
-        if (! $relationId) {
-            $this->addFlash('danger', 'Relation non trouvée');
+        if (!$relationId) {
+            $this->addFlash(self::DANGER, 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
-        if (! $relation) {
-            $this->addFlash('danger', 'Relation non trouvée');
+        if ($relation === null) {
+            $this->addFlash(self::DANGER, 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
@@ -112,6 +121,6 @@ class RelationController extends AbstractController
             $this->dispatchMessage(new RelationDeleted($relationId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $tuteur->getId()]);
     }
 }

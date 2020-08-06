@@ -7,11 +7,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OrdreType extends AbstractType
+final class OrdreType extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'required' => true,
                 'choices' => MercrediConstantes::ORDRES,

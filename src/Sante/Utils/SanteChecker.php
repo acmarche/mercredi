@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
-class SanteChecker
+final class SanteChecker
 {
     /**
      * @var SanteQuestionRepository
@@ -44,15 +44,10 @@ class SanteChecker
             return false;
         }
 
-        if (! $enfant->getEcole()) {
+        if ($enfant->getEcole() === null) {
             return false;
         }
-
-        if (! $enfant->getAnneeScolaire()) {
-            return false;
-        }
-
-        return true;
+        return (bool) $enfant->getAnneeScolaire();
     }
 
     public function isComplete(SanteFiche $santeFiche): bool
@@ -62,7 +57,7 @@ class SanteChecker
         }
 
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->repository->findAll();
 
         if (\count($reponses) < \count($questions)) {
             return false;
@@ -81,16 +76,17 @@ class SanteChecker
     /**
      * @return bool
      */
-    public function checkQuestionOk(SanteQuestion $question)
+    public function checkQuestionOk(SanteQuestion $santeQuestion)
     {
-        if ($question->getComplement()) {
-            if ($question->getReponseTxt()) {
-                if (trim('' === $question->getRemarque())) {
-                    return false;
-                }
-            }
+        if (!$santeQuestion->getComplement()) {
+            return true;
         }
-
+        if (!$santeQuestion->getReponseTxt()) {
+            return true;
+        }
+        if (trim('' === $santeQuestion->getRemarque()) !== '') {
+            return false;
+        }
         return true;
     }
 

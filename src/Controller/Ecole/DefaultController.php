@@ -11,24 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class DefaultController.
  */
-class DefaultController extends AbstractController
+final class DefaultController extends AbstractController
 {
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
-
-    public function __construct(
-        OrganisationRepository $organisationRepository
-    ) {
-        $this->organisationRepository = $organisationRepository;
-        $this->organisation = $organisationRepository->getOrganisation();
+    public function __construct()
+    {
+        $organisationRepository->getOrganisation();
     }
-
     /**
      * @Route("/", name="mercredi_ecole_home")
      * @IsGranted("ROLE_MERCREDI_PARENT")

@@ -14,11 +14,27 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Enfant[]    findAll()
  * @method Enfant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EnfantRepository extends ServiceEntityRepository
+final class EnfantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
+    /**
+     * @var string
+     */
+    private const ASC = 'ASC';
+    /**
+     * @var string
+     */
+    private const ECOLE = 'ecole';
+    /**
+     * @var string
+     */
+    private const WITH = 'WITH';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Enfant::class);
+        parent::__construct($managerRegistry, Enfant::class);
     }
 
     /**
@@ -26,9 +42,9 @@ class EnfantRepository extends ServiceEntityRepository
      */
     public function findAllActif(): array
     {
-        return $this->createQueryBuilder('enfant')
+        return $this->createQueryBuilder(self::ENFANT)
             ->andWhere('enfant.archived = 0')
-            ->addOrderBy('enfant.nom', 'ASC')
+            ->addOrderBy('enfant.nom', self::ASC)
             ->getQuery()->getResult();
     }
 
@@ -39,15 +55,15 @@ class EnfantRepository extends ServiceEntityRepository
      */
     public function findByName(string $keyword, bool $actif = true): array
     {
-        $qb = $this->createQueryBuilder('enfant')
+        $queryBuilder = $this->createQueryBuilder(self::ENFANT)
             ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%');
 
         if ($actif) {
-            $qb->andWhere('enfant.archived = 0');
+            $queryBuilder->andWhere('enfant.archived = 0');
         }
 
-        return $qb->addOrderBy('enfant.nom', 'ASC')
+        return $queryBuilder->addOrderBy('enfant.nom', self::ASC)
             ->getQuery()->getResult();
     }
 
@@ -56,7 +72,7 @@ class EnfantRepository extends ServiceEntityRepository
      */
     public function findOrphelins()
     {
-        return $this->createQueryBuilder('enfant')
+        return $this->createQueryBuilder(self::ENFANT)
             ->andWhere('enfant.relations IS EMPTY')
             ->getQuery()->getResult();
     }
@@ -64,37 +80,37 @@ class EnfantRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $annee_scolaire, bool $archive = false): array
+    public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $anneeScolaire, bool $archive = false): array
     {
-        $qb = $this->createQueryBuilder('enfant')
-            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
-            ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire');
+        $queryBuilder = $this->createQueryBuilder(self::ENFANT)
+            ->leftJoin('enfant.ecole', self::ECOLE, self::WITH)
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', self::WITH)
+            ->leftJoin('enfant.relations', 'relations', self::WITH)
+            ->addSelect(self::ECOLE, 'relations', 'sante_fiche', 'annee_scolaire');
 
         if ($nom) {
-            $qb->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
+            $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
                 ->setParameter('keyword', '%'.$nom.'%');
         }
 
-        if ($ecole) {
-            $qb->andWhere('ecole = :ecole')
-                ->setParameter('ecole', $ecole);
+        if ($ecole !== null) {
+            $queryBuilder->andWhere('ecole = :ecole')
+                ->setParameter(self::ECOLE, $ecole);
         }
 
-        if ($annee_scolaire) {
-            $qb->andWhere('enfant.annee_scolaire = :annee')
-                ->setParameter('annee', $annee_scolaire);
+        if ($anneeScolaire) {
+            $queryBuilder->andWhere('enfant.annee_scolaire = :annee')
+                ->setParameter('annee', $anneeScolaire);
         }
 
         if ($archive) {
-            $qb->andWhere('enfant.archived = 1');
+            $queryBuilder->andWhere('enfant.archived = 1');
         } else {
-            $qb->andWhere('enfant.archived = 0');
+            $queryBuilder->andWhere('enfant.archived = 0');
         }
 
-        return $qb->addOrderBy('enfant.nom', 'ASC')
+        return $queryBuilder->addOrderBy('enfant.nom', self::ASC)
             ->getQuery()->getResult();
     }
 

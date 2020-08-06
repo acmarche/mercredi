@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Relation\Message;
 
-class RelationCreated
+final class RelationCreated
 {
     /**
      * @var int

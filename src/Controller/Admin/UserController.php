@@ -17,25 +17,45 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @Route("/user")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class UserController extends AbstractController
+final class UserController extends AbstractController
 {
+    /**
+     * @var UserRepository
+     */
     private $userRepository;
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $passwordEncoder;
+    private $userPasswordEncoder;
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
+     * @var string
+     */
+    private const USER = 'user';
 
     public function __construct(
-        UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder
+        PasswordUpgraderInterface $userRepository,
+        UserPasswordEncoderInterface $userPasswordEncoder
     ) {
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
@@ -62,7 +82,7 @@ class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/index.html.twig',
             [
                 'users' => $users,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -82,19 +102,19 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
-                $this->passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData())
+                $this->userPasswordEncoder->encodePassword($user, $form->get('plainPassword')->getData())
             );
             $user->setUsername($user->getEmail());
             $this->userRepository->insert($user);
             $this->dispatchMessage(new UserCreated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -109,7 +129,7 @@ class UserController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
             [
-                'user' => $user,
+                self::USER => $user,
             ]
         );
     }
@@ -129,14 +149,14 @@ class UserController extends AbstractController
             $this->userRepository->flush();
             $this->dispatchMessage(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/edit.html.twig',
             [
-                'user' => $user,
-                'form' => $editForm->createView(),
+                self::USER => $user,
+                self::FORM => $editForm->createView(),
             ]
         );
     }
@@ -156,14 +176,14 @@ class UserController extends AbstractController
             $this->userRepository->flush();
             $this->dispatchMessage(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/roles.html.twig',
             [
-                'user' => $user,
-                'form' => $form->createView(),
+                self::USER => $user,
+                self::FORM => $form->createView(),
             ]
         );
     }

@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Page\Factory;
 use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 
-class PageFactory
+final class PageFactory
 {
     /**
      * @var PageRepository

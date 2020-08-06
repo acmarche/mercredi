@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Message;
 
-class PlaineCreated
+final class PlaineCreated
 {
     /**
      * @var int

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Organisation\Message;
 
-class OrganisationCreated
+final class OrganisationCreated
 {
     /**
      * @var int

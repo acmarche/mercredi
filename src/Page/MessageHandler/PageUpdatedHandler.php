@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class PageUpdatedHandler implements MessageHandlerInterface
+final class PageUpdatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
 
-    public function __construct(PageRepository $pageRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->pageRepository = $pageRepository;
     }
 
     public function __invoke(PageUpdated $pageUpdated): void

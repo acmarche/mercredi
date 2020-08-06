@@ -9,11 +9,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table("plaine_groupe", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"plaine_id", "groupe_scolaire_id"})
- * }))
- * @UniqueEntity({"plaine", "groupe_scolaire"})
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository")
+ * })
  */
-class PlaineGroupe
+final class PlaineGroupe
 {
     /**
      * @var int|null
@@ -27,13 +25,13 @@ class PlaineGroupe
     /**
      * @var GroupeScolaire|null
      *
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="plaine_groupes")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire")
      */
-    private $groupe_scolaire;
+    private $groupeScolaire;
 
     /**
      * @var Plaine|null
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_groupes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $plaine;
@@ -44,10 +42,10 @@ class PlaineGroupe
      */
     private $inscription_maximum;
 
-    public function __construct(Plaine $plaine, GroupeScolaire $groupe_scolaire)
+    public function __construct(Plaine $plaine, GroupeScolaire $groupeScolaire)
     {
         $this->plaine = $plaine;
-        $this->groupe_scolaire = $groupe_scolaire;
+        $this->groupeScolaire = $groupeScolaire;
     }
 
     public function getId(): ?int
@@ -79,12 +77,12 @@ class PlaineGroupe
 
     public function getGroupeScolaire(): ?GroupeScolaire
     {
-        return $this->groupe_scolaire;
+        return $this->groupeScolaire;
     }
 
-    public function setGroupeScolaire(?GroupeScolaire $groupe_scolaire): self
+    public function setGroupeScolaire(?GroupeScolaire $groupeScolaire): self
     {
-        $this->groupe_scolaire = $groupe_scolaire;
+        $this->groupeScolaire = $groupeScolaire;
 
         return $this;
     }

@@ -13,7 +13,6 @@ use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -30,12 +29,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/plaine/presence")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PlainePresenceController extends AbstractController
+final class PlainePresenceController extends AbstractController
 {
-    /**
-     * @var PlaineRepository
-     */
-    private $plaineRepository;
     /**
      * @var EnfantRepository
      */
@@ -56,16 +51,38 @@ class PlainePresenceController extends AbstractController
      * @var PlaineCalculatorInterface
      */
     private $plaineCalculator;
+    /**
+     * @var string
+     */
+    private const DANGER = 'danger';
+    /**
+     * @var string
+     */
+    private const PLAINE = 'plaine';
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
+    /**
+     * @var string
+     */
+    private const MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW = 'mercredi_admin_plaine_presence_show';
+    /**
+     * @var string
+     */
+    private const SUCCESS = 'success';
 
     public function __construct(
         PlainePresenceHandler $plainePresenceHandler,
-        PlaineRepository $plaineRepository,
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
         PlainePresenceRepository $plainePresenceRepository,
         PlaineCalculatorInterface $plaineCalculator
     ) {
-        $this->plaineRepository = $plaineRepository;
         $this->enfantRepository = $enfantRepository;
         $this->plainePresenceHandler = $plainePresenceHandler;
         $this->relationRepository = $relationRepository;
@@ -78,8 +95,8 @@ class PlainePresenceController extends AbstractController
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        if (0 === \count($plaine->getPlaineJours())) {
-            $this->addFlash('danger', 'La plaine n\'a aucune date');
+        if (0 === count($plaine->getPlaineJours())) {
+            $this->addFlash(self::DANGER, 'La plaine n\'a aucune date');
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
         }
@@ -92,18 +109,14 @@ class PlainePresenceController extends AbstractController
             $nom = $form->get('nom')->getData();
         }
 
-        if ($nom) {
-            $enfants = $this->enfantRepository->findByName($nom);
-        } else {
-            $enfants = $this->enfantRepository->findAllActif();
-        }
+        $enfants = $nom ? $this->enfantRepository->findByName($nom) : $this->enfantRepository->findAllActif();
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/new.html.twig',
             [
                 'enfants' => $enfants,
-                'plaine' => $plaine,
-                'form' => $form->createView(),
+                self::PLAINE => $plaine,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -117,15 +130,15 @@ class PlainePresenceController extends AbstractController
     public function selectTuteur(Plaine $plaine, Enfant $enfant): Response
     {
         $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
-        if (1 === \count($tuteurs)) {
+        if (1 === count($tuteurs)) {
             $tuteur = $tuteurs[0];
 
             return $this->redirectToRoute(
                 'mercredi_admin_plaine_presence_confirmation',
                 [
-                    'plaine' => $plaine->getId(),
+                    self::PLAINE => $plaine->getId(),
                     'tuteur' => $tuteur->getId(),
-                    'enfant' => $enfant->getId(),
+                    self::ENFANT => $enfant->getId(),
                 ]
             );
         }
@@ -133,8 +146,8 @@ class PlainePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/select_tuteur.html.twig',
             [
-                'enfant' => $enfant,
-                'plaine' => $plaine,
+                self::ENFANT => $enfant,
+                self::PLAINE => $plaine,
                 'tuteurs' => $tuteurs,
             ]
         );
@@ -152,10 +165,10 @@ class PlainePresenceController extends AbstractController
         $this->plainePresenceHandler->handleAddEnfant($plaine, $tuteur, $enfant);
 
         return $this->redirectToRoute(
-            'mercredi_admin_plaine_presence_show',
+            self::MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW,
             [
-                'plaine' => $plaine->getId(),
-                'enfant' => $enfant->getId(),
+                self::PLAINE => $plaine->getId(),
+                self::ENFANT => $enfant->getId(),
             ]
         );
     }
@@ -171,8 +184,8 @@ class PlainePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/show.html.twig',
             [
-                'plaine' => $plaine,
-                'enfant' => $enfant,
+                self::PLAINE => $plaine,
+                self::ENFANT => $enfant,
                 'presences' => $presences,
                 'cout' => $cout,
             ]
@@ -189,15 +202,15 @@ class PlainePresenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->plainePresenceHandler->handleEditPresence($presence);
+            $this->plainePresenceHandler->handleEditPresence();
 
             $this->dispatchMessage(new PresenceUpdated($presence->getId()));
 
             return $this->redirectToRoute(
-                'mercredi_admin_plaine_presence_show',
+                self::MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW,
                 [
-                    'plaine' => $plaine->getId(),
-                    'enfant' => $enfant->getId(),
+                    self::PLAINE => $plaine->getId(),
+                    self::ENFANT => $enfant->getId(),
                 ]
             );
         }
@@ -205,10 +218,10 @@ class PlainePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/edit.html.twig',
             [
-                'plaine' => $plaine,
+                self::PLAINE => $plaine,
                 'presence' => $presence,
-                'enfant' => $enfant,
-                'form' => $form->createView(),
+                self::ENFANT => $enfant,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -219,19 +232,19 @@ class PlainePresenceController extends AbstractController
     public function jours(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
-        $plaineDto = new PlainePresencesDto($plaine, $enfant, $jours);
+        $plainePresencesDto = new PlainePresencesDto($plaine, $enfant, $jours);
 
         $presences = $this->plainePresenceHandler->findPresencesByPlaineEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
-        $plaineDto->setJours($currentJours);
+        $plainePresencesDto->setJours($currentJours);
 
-        $form = $this->createForm(PlainePresencesEditType::class, $plaineDto);
+        $form = $this->createForm(PlainePresencesEditType::class, $plainePresencesDto);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $new = $plaineDto->getJours();
-            if (0 === \count($presences)) {
+            $new = $plainePresencesDto->getJours();
+            if (0 === count($presences)) {
                 $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
                 $tuteur = $tuteurs[0];
             } else {
@@ -240,13 +253,13 @@ class PlainePresenceController extends AbstractController
             }
 
             $this->plainePresenceHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
-            $this->addFlash('success', 'Les présences ont bien été modifiées');
+            $this->addFlash(self::SUCCESS, 'Les présences ont bien été modifiées');
 
             return $this->redirectToRoute(
-                'mercredi_admin_plaine_presence_show',
+                self::MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW,
                 [
-                    'plaine' => $plaine->getId(),
-                    'enfant' => $enfant->getId(),
+                    self::PLAINE => $plaine->getId(),
+                    self::ENFANT => $enfant->getId(),
                 ]
             );
         }
@@ -254,9 +267,9 @@ class PlainePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/edit_presences.html.twig',
             [
-                'plaine' => $plaine,
-                'enfant' => $enfant,
-                'form' => $form->createView(),
+                self::PLAINE => $plaine,
+                self::ENFANT => $enfant,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -267,27 +280,27 @@ class PlainePresenceController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int) $request->request->get('presence');
-            if (! $presenceId) {
-                $this->addFlash('danger', 'Référence à la présence non trouvée');
+            $presenceId = (int)$request->request->get('presence');
+            if ($presenceId === 0) {
+                $this->addFlash(self::DANGER, 'Référence à la présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
             $presence = $this->plainePresenceHandler->findPresence($presenceId);
-            if (! $presence) {
-                $this->addFlash('danger', 'Présence non trouvée');
+            if ($presence === null) {
+                $this->addFlash(self::DANGER, 'Présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
             $enfant = $presence->getEnfant();
             $this->plainePresenceHandler->remove($presence);
 
-            $this->addFlash('success', 'La présence à bien été supprimée');
+            $this->addFlash(self::SUCCESS, 'La présence à bien été supprimée');
         }
 
         return $this->redirectToRoute(
-            'mercredi_admin_plaine_presence_show',
-            ['plaine' => $plaine->getId(), 'enfant' => $enfant->getId()]
+            self::MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW,
+            [self::PLAINE => $plaine->getId(), self::ENFANT => $enfant->getId()]
         );
     }
 
@@ -298,7 +311,7 @@ class PlainePresenceController extends AbstractController
     {
         if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
             $this->plainePresenceHandler->removeEnfant($plaine, $enfant);
-            $this->addFlash('success', 'L\'enfant a été retiré de la plaine');
+            $this->addFlash(self::SUCCESS, 'L\'enfant a été retiré de la plaine');
         }
 
         return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);

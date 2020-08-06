@@ -20,21 +20,46 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+final class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
 
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
     private $entityManager;
+    /**
+     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
+     */
     private $urlGenerator;
+    /**
+     * @var \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface
+     */
     private $csrfTokenManager;
+    /**
+     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
+    /**
+     * @var string
+     */
+    private const EMAIL = 'email';
+    /**
+     * @var string
+     */
+    private const PASSWORD = 'password';
+    /**
+     * @var \AcMarche\Mercredi\Repository\Security\UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $userPasswordEncoder, \AcMarche\Mercredi\Repository\Security\UserRepository $userRepository)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordEncoder = $userPasswordEncoder;
+        $this->userRepository = $userRepository;
     }
 
     public function supports(Request $request)
@@ -46,13 +71,13 @@ class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements Pa
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email' => $request->request->get('username'),
-            'password' => $request->request->get('password'),
+            self::EMAIL => $request->request->get('username'),
+            self::PASSWORD => $request->request->get(self::PASSWORD),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            $credentials['email']
+            $credentials[self::EMAIL]
         );
 
         return $credentials;
@@ -60,12 +85,12 @@ class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements Pa
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
-        if (! $this->csrfTokenManager->isTokenValid($token)) {
+        $csrfToken = new CsrfToken('authenticate', $credentials['csrf_token']);
+        if (! $this->csrfTokenManager->isTokenValid($csrfToken)) {
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->userRepository->findOneBy([self::EMAIL => $credentials[self::EMAIL]]);
 
         if (! $user) {
             // fail authentication with a custom error
@@ -77,7 +102,7 @@ class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements Pa
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        return $this->passwordEncoder->isPasswordValid($user, $credentials[self::PASSWORD]);
     }
 
     /**
@@ -85,7 +110,7 @@ class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements Pa
      */
     public function getPassword($credentials): ?string
     {
-        return $credentials['password'];
+        return $credentials[self::PASSWORD];
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

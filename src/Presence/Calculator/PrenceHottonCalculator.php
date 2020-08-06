@@ -5,12 +5,10 @@ namespace AcMarche\Mercredi\Presence\Calculator;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
-use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
-class PrenceHottonCalculator implements PresenceCalculatorInterface
+final class PrenceHottonCalculator implements PresenceCalculatorInterface
 {
     /**
      * @var OrdreService
@@ -20,25 +18,13 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
      * @var ReductionCalculator
      */
     private $reductionCalculator;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
 
     public function __construct(
         OrdreService $ordreService,
-        ReductionCalculator $reductionCalculator,
-        RelationRepository $relationRepository,
-        PresenceRepository $presenceRepository
+        ReductionCalculator $reductionCalculator
     ) {
         $this->ordreService = $ordreService;
         $this->reductionCalculator = $reductionCalculator;
-        $this->relationRepository = $relationRepository;
-        $this->presenceRepository = $presenceRepository;
     }
 
     public function calculate(PresenceInterface $presence): float
@@ -50,7 +36,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
             return 0;
         }
         $jour = $presence->getJour();
-        if ($jour->getPlaineJour()) {
+        if ($jour->getPlaineJour() !== null) {
             return $this->calculatePlaine($presence, $jour);
         }
         if ($jour->isPedagogique()) {
@@ -70,11 +56,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
 
     private function calculatePedagogique(PresenceInterface $presence, Jour $jour): float
     {
-        if ($presence->isHalf()) {
-            $prix = $jour->getPrix2();
-        } else {
-            $prix = $jour->getPrix1();
-        }
+        $prix = $presence->isHalf() ? $jour->getPrix2() : $jour->getPrix1();
 
         return $this->reductionApplicate($presence, $prix);
     }
@@ -95,7 +77,7 @@ class PrenceHottonCalculator implements PresenceCalculatorInterface
 
     private function reductionApplicate(PresenceInterface $presence, float $cout)
     {
-        if ($reduction = $presence->getReduction()) {
+        if (($reduction = $presence->getReduction()) !== null) {
             return $this->reductionCalculator->applicate($reduction, $cout);
         }
 

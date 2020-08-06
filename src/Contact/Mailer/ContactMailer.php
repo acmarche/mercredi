@@ -2,43 +2,29 @@
 
 namespace AcMarche\Mercredi\Contact\Mailer;
 
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
 
-class ContactMailer
+final class ContactMailer
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
 
-    public function __construct(
-        MailerInterface $mailer,
-        OrganisationRepository $organisationRepository
-    ) {
-        $this->mailer = $mailer;
-        $this->organisationRepository = $organisationRepository;
-        $this->organisation = $organisationRepository->getOrganisation();
+    use InitMailerTrait;
+
+    public function __invoke()
+    {
+        $this->organisation = $this->organisationRepository->getOrganisation();
     }
 
-    /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
-     */
     public function sendContactForm(string $from, string $nom, string $body): void
     {
-        $to = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $to = $this->organisationRepository->getOrganisation() ? $this->organisation->getEmail() : 'nomail@domain.be';
 
-        $message = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->subject('[Mercredi] '.$nom.' vous contact via le site')
             ->from($from)
             ->to($to)
             ->text($body);
 
-        $this->mailer->send($message);
+        $this->sendMail($templatedEmail);
     }
 }

@@ -12,11 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Organisation[]    findAll()
  * @method Organisation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrganisationRepository extends ServiceEntityRepository
+final class OrganisationRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Organisation::class);
+        parent::__construct($managerRegistry, Organisation::class);
     }
 
     public function getOrganisation(): ?Organisation

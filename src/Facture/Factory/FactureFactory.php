@@ -4,9 +4,10 @@ namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
+use DateTime;
 use Twig\Environment;
 
-class FactureFactory
+final class FactureFactory
 {
     /**
      * @var Environment
@@ -21,7 +22,7 @@ class FactureFactory
     public function newInstance(Tuteur $tuteur): Facture
     {
         $facture = new Facture($tuteur);
-        $facture->setFactureLe(new \DateTime());
+        $facture->setFactureLe(new DateTime());
         $facture->setNom($tuteur->getNom());
         $facture->setPrenom($tuteur->getPrenom());
         $facture->setRue($tuteur->getRue());

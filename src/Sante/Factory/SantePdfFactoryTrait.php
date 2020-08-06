@@ -4,20 +4,16 @@ namespace AcMarche\Mercredi\Sante\Factory;
 
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Pdf\AbstractPdfDownloader;
-use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
+use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-class SantePdfFactory extends AbstractPdfDownloader
+final class SantePdfFactoryTrait
 {
-    /**
-     * @var SanteFicheRepository
-     */
-    private $santeFicheRepository;
+    use PdfDownloaderTrait;
+
     /**
      * @var SanteQuestionRepository
      */
@@ -36,16 +32,11 @@ class SantePdfFactory extends AbstractPdfDownloader
     private $environment;
 
     public function __construct(
-        Pdf $pdf,
-        SanteFicheRepository $santeFicheRepository,
         SanteQuestionRepository $santeQuestionRepository,
         OrganisationRepository $organisationRepository,
         SanteChecker $santeChecker,
         Environment $environment
     ) {
-        parent::__construct($pdf);
-
-        $this->santeFicheRepository = $santeFicheRepository;
         $this->santeQuestionRepository = $santeQuestionRepository;
         $this->organisationRepository = $organisationRepository;
         $this->santeChecker = $santeChecker;

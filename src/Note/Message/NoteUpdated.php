@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Note\Message;
 
-class NoteUpdated
+final class NoteUpdated
 {
     /**
      * @var int

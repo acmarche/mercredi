@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/enfant")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class EnfantController extends AbstractController
+final class EnfantController extends AbstractController
 {
     /**
      * @var EnfantRepository
@@ -51,6 +51,14 @@ class EnfantController extends AbstractController
      * @var SearchHelper
      */
     private $searchHelper;
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -90,7 +98,7 @@ class EnfantController extends AbstractController
             '@AcMarcheMercrediAdmin/enfant/index.html.twig',
             [
                 'enfants' => $enfants,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
                 'search' => $search,
             ]
         );
@@ -115,8 +123,8 @@ class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/new.html.twig',
             [
-                'enfant' => $enfant,
-                'form' => $form->createView(),
+                self::ENFANT => $enfant,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -134,7 +142,7 @@ class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/show.html.twig',
             [
-                'enfant' => $enfant,
+                self::ENFANT => $enfant,
                 'frateries' => $frateries,
                 'relations' => $relations,
                 'prensencesGrouped' => $presencesGrouped,
@@ -161,8 +169,8 @@ class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/edit.html.twig',
             [
-                'enfant' => $enfant,
-                'form' => $form->createView(),
+                self::ENFANT => $enfant,
+                self::FORM => $form->createView(),
             ]
         );
     }

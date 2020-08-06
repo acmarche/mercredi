@@ -12,11 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Note[]    findAll()
  * @method Note[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NoteRepository extends ServiceEntityRepository
+final class NoteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Note::class);
+        parent::__construct($managerRegistry, Note::class);
     }
 
     public function remove(Note $note): void
@@ -33,33 +33,4 @@ class NoteRepository extends ServiceEntityRepository
     {
         $this->_em->persist($note);
     }
-
-    // /**
-    //  * @return Note[] Returns an array of Note objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Note
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

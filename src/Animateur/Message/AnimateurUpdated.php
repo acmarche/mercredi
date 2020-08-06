@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Animateur\Message;
 
-class AnimateurUpdated
+final class AnimateurUpdated
 {
     /**
      * @var int

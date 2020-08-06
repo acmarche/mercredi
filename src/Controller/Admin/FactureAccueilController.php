@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
@@ -22,16 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/facture_accueil")
  */
-class FactureAccueilController extends AbstractController
+final class FactureAccueilController extends AbstractController
 {
     /**
      * @var FactureAccueilRepository
      */
     private $factureAccueilRepository;
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
     /**
      * @var FactureHandler
      */
@@ -40,21 +35,23 @@ class FactureAccueilController extends AbstractController
      * @var FactureUtils
      */
     private $factureUtils;
+    /**
+     * @var string
+     */
+    private const FACTURE = 'facture';
 
     public function __construct(
         FactureAccueilRepository $factureAccueilRepository,
-        AccueilRepository $accueilRepository,
         FactureHandler $factureHandler,
         FactureUtils $factureUtils
     ) {
         $this->factureAccueilRepository = $factureAccueilRepository;
-        $this->accueilRepository = $accueilRepository;
         $this->factureHandler = $factureHandler;
         $this->factureUtils = $factureUtils;
     }
 
     /**
-     * @Route("/{id}/attach", name="mercredi_admin_facture_accueil_attach", methods={"GET","POST"}).
+     * @Route("/{id}/attach", name="mercredi_admin_facture_accueil_attach", methods={"GET", "POST"})
      */
     public function attach(Request $request, Facture $facture): Response
     {
@@ -76,7 +73,7 @@ class FactureAccueilController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_accueil/attach.html.twig',
             [
-                'facture' => $facture,
+                self::FACTURE => $facture,
                 'accueils' => $accueils,
                 'form' => $form->createView(),
             ]
@@ -93,7 +90,7 @@ class FactureAccueilController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_accueil/show.html.twig',
             [
-                'facture' => $facture,
+                self::FACTURE => $facture,
                 'factureAccueil' => $factureAccueil,
             ]
         );
@@ -108,12 +105,14 @@ class FactureAccueilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //todo ?
+            echo '';
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/edit.html.twig',
             [
-                'facture' => $facture,
+                self::FACTURE => $facture,
                 'form' => $form->createView(),
             ]
         );

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\ServiceIterator;
 
-class NotifyUser implements AfterUserRegistration
+final class NotifyUser implements AfterUserRegistration
 {
     public function afterUserRegistrationSuccessful(): void
     {

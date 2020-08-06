@@ -15,91 +15,95 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
-class TuteurType extends AbstractType
+final class TuteurType extends AbstractType
 {
     /**
      * @var Security
      */
     private $security;
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $isAdmin = ! $this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
 
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                 ]
             )
             ->add(
                 'telephone_bureau',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'gsm',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'choices' => MercrediConstantes::SEXES,
                     'placeholder' => 'Choisissez son sexe',
                 ]
@@ -108,7 +112,7 @@ class TuteurType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'attr' => ['rows' => 8],
                 ]
             )
@@ -121,9 +125,9 @@ class TuteurType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Tuteur::class,
             ]

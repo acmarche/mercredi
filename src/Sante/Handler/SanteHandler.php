@@ -10,7 +10,7 @@ use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteBinder;
 
-class SanteHandler
+final class SanteHandler
 {
     /**
      * @var SanteFicheRepository
@@ -63,7 +63,7 @@ class SanteHandler
             if (null === $question->getReponseTxt() && ! $question->getRemarque()) {
                 return null;
             }
-            if (! $reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) {
+            if (($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) === null) {
                 $reponse = $this->santeFactory->createSanteReponse($santeFiche, $question);
             }
             $reponse->setReponse($question->getReponseTxt());

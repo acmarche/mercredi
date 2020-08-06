@@ -13,79 +13,83 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AnimateurType extends AbstractType
+final class AnimateurType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'telephone_bureau',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'gsm',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'choices' => MercrediConstantes::SEXES,
                     'placeholder' => 'Choisissez son sexe',
                 ]
@@ -94,15 +98,15 @@ class AnimateurType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'attr' => ['rows' => 8],
                 ]
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Animateur::class,
             ]

@@ -11,44 +11,48 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FactureEditType extends AbstractType
+final class FactureEditType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
@@ -57,7 +61,7 @@ class FactureEditType extends AbstractType
                 [
                     'label' => 'Date de la facture',
                     'widget' => 'single_text',
-                    'required' => true,
+                    self::REQUIRED => true,
                     'attr' => ['autocomplete' => 'off'],
                 ]
             )
@@ -65,7 +69,7 @@ class FactureEditType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'label' => 'Remarques',
                     'attr' => [
                         'rows' => 5,
@@ -74,9 +78,9 @@ class FactureEditType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Facture::class,
             ]

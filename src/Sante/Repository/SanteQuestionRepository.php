@@ -11,16 +11,16 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method SanteQuestion|null findOneBy(array $criteria, array $orderBy = null)
  * @method SanteQuestion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SanteQuestionRepository extends ServiceEntityRepository
+final class SanteQuestionRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, SanteQuestion::class);
+        parent::__construct($managerRegistry, SanteQuestion::class);
     }
 
     public function findAll()
     {
-        return $this->findBy([], ['display_order' => 'ASC']);
+        return $this->repository->findBy([], ['display_order' => 'ASC']);
     }
 
     /**
@@ -30,16 +30,16 @@ class SanteQuestionRepository extends ServiceEntityRepository
      */
     public function getQuestionsNonRepondues($questionsRepondues)
     {
-        $qb = $this->createQueryBuilder('santeQuestion');
+        $queryBuilder = $this->repository->createQueryBuilder('santeQuestion');
 
         if (\count($questionsRepondues) > 0) {
-            $qb->andWhere('santeQuestion.id NOT IN (:questions) ')
+            $queryBuilder->andWhere('santeQuestion.id NOT IN (:questions) ')
                 ->setParameter('questions', $questionsRepondues);
         }
 
-        $qb->addOrderBy('santeQuestion.display_order');
+        $queryBuilder->addOrderBy('santeQuestion.display_order');
 
-        $query = $qb->getQuery();
+        $query = $queryBuilder->getQuery();
 
         return $query->getResult();
     }

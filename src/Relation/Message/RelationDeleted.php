@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Relation\Message;
 
-class RelationDeleted
+final class RelationDeleted
 {
     /**
      * @var int

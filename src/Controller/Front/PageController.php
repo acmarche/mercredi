@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class DefaultController.
  */
-class PageController extends AbstractController
+final class PageController extends AbstractController
 {
     /**
      * @var OrganisationRepository
@@ -35,6 +35,10 @@ class PageController extends AbstractController
      * @var ContactMailer
      */
     private $contactMailer;
+    /**
+     * @var string
+     */
+    private const PAGE = 'page';
 
     public function __construct(
         OrganisationRepository $organisationRepository,
@@ -64,7 +68,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/page.html.twig',
             [
-                'page' => $page,
+                self::PAGE => $page,
             ]
         );
     }
@@ -75,7 +79,7 @@ class PageController extends AbstractController
     public function contact(Request $request)
     {
         $page = $this->pageRepository->findContactPage();
-        if (! $page) {
+        if ($page === null) {
             $page = $this->pageFactory->createContactPage();
         }
 
@@ -102,7 +106,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/contact.html.twig',
             [
-                'page' => $page,
+                self::PAGE => $page,
                 'organisation' => $this->organisationRepository->getOrganisation(),
                 'form' => $form->createView(),
             ]
@@ -115,14 +119,14 @@ class PageController extends AbstractController
     public function modalite()
     {
         $page = $this->pageRepository->findModalitePage();
-        if (! $page) {
+        if ($page === null) {
             $page = $this->pageFactory->createModalitePage();
         }
 
         return $this->render(
             '@AcMarcheMercredi/front/page.html.twig',
             [
-                'page' => $page,
+                self::PAGE => $page,
             ]
         );
     }

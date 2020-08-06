@@ -13,11 +13,23 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method FacturePresence[]    findAll()
  * @method FacturePresence[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FacturePresenceRepository extends ServiceEntityRepository
+final class FacturePresenceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const FACTURE = 'facture';
+    /**
+     * @var string
+     */
+    private const WITH = 'WITH';
+    /**
+     * @var string
+     */
+    private const PRESENCE = 'presence';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, FacturePresence::class);
+        parent::__construct($managerRegistry, FacturePresence::class);
     }
 
     /**
@@ -26,9 +38,9 @@ class FacturePresenceRepository extends ServiceEntityRepository
     public function findPaye(array $presences): array
     {
         return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->leftJoin('facture_presence.presence', 'presence', 'WITH')
-            ->addSelect('facture', 'presence')
+            ->leftJoin('facture_presence.facture', self::FACTURE, self::WITH)
+            ->leftJoin('facture_presence.presence', self::PRESENCE, self::WITH)
+            ->addSelect(self::FACTURE, self::PRESENCE)
             ->andWhere('facture_presence.presence IN (:presences)')
             ->setParameter('presences', $presences)
             ->getQuery()->getResult();
@@ -37,10 +49,10 @@ class FacturePresenceRepository extends ServiceEntityRepository
     public function findByPresence(Presence $presence): ?FacturePresence
     {
         return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->addSelect('facture')
+            ->leftJoin('facture_presence.facture', self::FACTURE, self::WITH)
+            ->addSelect(self::FACTURE)
             ->andWhere('facture_presence.presence = :presence')
-            ->setParameter('presence', $presence)
+            ->setParameter(self::PRESENCE, $presence)
             ->getQuery()->getOneOrNullResult();
     }
 

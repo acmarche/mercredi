@@ -10,7 +10,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class PlainePresenceRepository
+final class PlainePresenceRepository
 {
     /**
      * @var PresenceRepository
@@ -55,7 +55,7 @@ class PlainePresenceRepository
     /**
      * @return Presence[]
      */
-    public function findPrecencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant)
+    public function findPrecencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant): iterable
     {
         return $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
     }

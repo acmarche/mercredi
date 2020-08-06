@@ -14,11 +14,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PresenceType extends AbstractType
+final class PresenceType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'absent',
                 ChoiceType::class,
@@ -36,7 +36,7 @@ class PresenceType extends AbstractType
             ->add('remarque', RemarqueType::class)
             ->add('reduction');
 
-        $builder->addEventListener(
+        $formBuilder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event): void {
                 $form = $event->getForm();
@@ -58,9 +58,9 @@ class PresenceType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Presence::class,
             ]

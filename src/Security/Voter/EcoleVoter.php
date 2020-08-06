@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class EcoleVoter extends Voter
+final class EcoleVoter extends Voter
 {
     public const INDEX = 'index_ecole';
     public const SHOW = 'show';
@@ -29,6 +29,9 @@ class EcoleVoter extends Voter
      * @var User
      */
     private $user;
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
+     */
     private $decisionManager;
     /**
      * @var FlashBagInterface
@@ -43,19 +46,17 @@ class EcoleVoter extends Voter
      */
     private $ecole;
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager, FlashBagInterface $flashBag)
+    public function __construct(AccessDecisionManagerInterface $accessDecisionManager, FlashBagInterface $flashBag)
     {
-        $this->decisionManager = $decisionManager;
+        $this->decisionManager = $accessDecisionManager;
         $this->flashBag = $flashBag;
     }
 
     protected function supports($attribute, $subject)
     {
         //a cause de index pas d'ecole defini
-        if ($subject) {
-            if (! $subject instanceof Ecole) {
-                return false;
-            }
+        if ($subject && ! $subject instanceof Ecole) {
+            return false;
         }
 
         return \in_array($attribute, [self::INDEX, self::SHOW, self::ADD, self::EDIT, self::DELETE], true);
@@ -124,22 +125,18 @@ class EcoleVoter extends Voter
         return $this->checkEcoles($token);
     }
 
-    private function canEdit(TokenInterface $token)
+    private function canEdit()
     {
-        if ($this->ecoles->contains($this->ecole)) {
-            return true;
-        }
-
-        return false;
+        return $this->ecoles->contains($this->ecole);
     }
 
-    private function canAdd(TokenInterface $token)
+    private function canAdd()
     {
         //only mercredi admin
         return false;
     }
 
-    private function canDelete(TokenInterface $token)
+    private function canDelete()
     {
         //only mercredi admin
         return false;

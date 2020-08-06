@@ -19,12 +19,28 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/note")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class NoteController extends AbstractController
+final class NoteController extends AbstractController
 {
     /**
      * @var NoteRepository
      */
     private $noteRepository;
+    /**
+     * @var string
+     */
+    private const MERCREDI_ADMIN_NOTE_SHOW = 'mercredi_admin_note_show';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
+     * @var string
+     */
+    private const NOTE = 'note';
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
 
     public function __construct(NoteRepository $noteRepository)
     {
@@ -59,14 +75,14 @@ class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_NOTE_SHOW, [self::ID => $note->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/note/new.html.twig',
             [
-                'note' => $note,
-                'form' => $form->createView(),
+                self::NOTE => $note,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -77,7 +93,7 @@ class NoteController extends AbstractController
     public function newForEnfant(Request $request, Enfant $enfant): Response
     {
         $note = new Note();
-        //todo
+        //todo note enfant
         $enfant->addNote($note);
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
@@ -88,14 +104,14 @@ class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_NOTE_SHOW, [self::ID => $note->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/note/new.html.twig',
             [
-                'note' => $note,
-                'form' => $form->createView(),
+                self::NOTE => $note,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -108,7 +124,7 @@ class NoteController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/note/show.html.twig',
             [
-                'note' => $note,
+                self::NOTE => $note,
             ]
         );
     }
@@ -126,14 +142,14 @@ class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteUpdated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_NOTE_SHOW, [self::ID => $note->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/note/edit.html.twig',
             [
-                'note' => $note,
-                'form' => $form->createView(),
+                self::NOTE => $note,
+                self::FORM => $form->createView(),
             ]
         );
     }

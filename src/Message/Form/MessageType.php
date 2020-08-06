@@ -11,11 +11,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MessageType extends AbstractType
+final class MessageType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'from',
                 EmailType::class,
@@ -27,14 +31,14 @@ class MessageType extends AbstractType
                 'sujet',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'texte',
                 TextareaType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                     'attr' => ['rows' => 10, 'cols' => 50],
                 ]
             )
@@ -43,14 +47,14 @@ class MessageType extends AbstractType
                 FileType::class,
                 [
                     'label' => 'Pièce jointe',
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Message::class,
             ]

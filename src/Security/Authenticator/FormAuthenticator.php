@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 
-class FormAuthenticator implements AuthenticatorInterface
+final class FormAuthenticator implements AuthenticatorInterface
 {
     /**
      * @var UserRepository
@@ -29,19 +29,13 @@ class FormAuthenticator implements AuthenticatorInterface
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
-    /**
-     * @var CsrfTokenManagerInterface
-     */
-    private $csrfTokenManager;
 
     public function __construct(
-        UserRepository $userRepository,
-        UrlGeneratorInterface $urlGenerator,
-        CsrfTokenManagerInterface $csrfTokenManager
+        \Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
-        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     public function supports(Request $request): ?bool
@@ -54,7 +48,7 @@ class FormAuthenticator implements AuthenticatorInterface
     {
         // find a user based on an "email" form field
         $user = $this->userRepository->findOneByEmailOrUserName($request->get('email'));
-        if (! $user) {
+        if ($user === null) {
             throw new UsernameNotFoundException();
         }
 
@@ -88,7 +82,7 @@ class FormAuthenticator implements AuthenticatorInterface
         return new RedirectResponse($this->urlGenerator->generate('mercredi_front_home'));
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $authenticationException): ?Response
     {
         return new RedirectResponse($this->urlGenerator->generate('mercredi_front_home'));
     }

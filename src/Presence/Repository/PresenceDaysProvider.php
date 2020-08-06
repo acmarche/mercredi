@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Utils\SortUtils;
 
-class PresenceDaysProvider implements PresenceDaysProviderInterface
+final class PresenceDaysProvider implements PresenceDaysProviderInterface
 {
     /**
      * @var JourRepository
@@ -26,6 +26,7 @@ class PresenceDaysProvider implements PresenceDaysProviderInterface
     }
 
     /**
+     * @param Enfant $enfant
      * @return Jour[]
      */
     public function getAllDaysToSubscribe(Enfant $enfant): array

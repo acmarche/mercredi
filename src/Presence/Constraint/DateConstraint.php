@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Twig\Environment;
 
-class DateConstraint implements PresenceConstraintInterface
+final class DateConstraint implements PresenceConstraintInterface
 {
     /**
      * @var FlashBagInterface
@@ -21,6 +21,10 @@ class DateConstraint implements PresenceConstraintInterface
      * @var PresenceUtils
      */
     private $presenceUtils;
+    /**
+     * @var string
+     */
+    private const FORMAT = 'Y-m-d';
 
     public function __construct(
         FlashBagInterface $flashBag,
@@ -49,21 +53,12 @@ class DateConstraint implements PresenceConstraintInterface
          * Si journee pedagogique
          */
         if ($jour->isPedagogique()) {
-            if ($deadLinePedagogique->format('Y-m-d') > $datePresence->format('Y-m-d')) {
-                return false;
-            }
-
-            return true;
+            return $deadLinePedagogique->format(self::FORMAT) <= $datePresence->format(self::FORMAT);
         }
-
         /*
          * Pas pédagogique
          */
-        if ($deadLinePresence->format('Y-m-d') > $datePresence->format('Y-m-d')) {
-            return false;
-        }
-
-        return true;
+        return $deadLinePresence->format(self::FORMAT) <= $datePresence->format(self::FORMAT);
     }
 
     public function addFlashError(Jour $jour): void

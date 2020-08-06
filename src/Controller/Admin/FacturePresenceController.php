@@ -9,7 +9,6 @@ use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,16 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/facture_presence")
  */
-class FacturePresenceController extends AbstractController
+final class FacturePresenceController extends AbstractController
 {
     /**
      * @var FacturePresenceRepository
      */
     private $facturePresenceRepository;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
     /**
      * @var FactureHandler
      */
@@ -40,21 +35,23 @@ class FacturePresenceController extends AbstractController
      * @var FactureUtils
      */
     private $factureUtils;
+    /**
+     * @var string
+     */
+    private const FACTURE = 'facture';
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
-        PresenceRepository $presenceRepository,
         FactureHandler $factureHandler,
         FactureUtils $factureUtils
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->presenceRepository = $presenceRepository;
         $this->factureHandler = $factureHandler;
         $this->factureUtils = $factureUtils;
     }
 
     /**
-     * @Route("/{id}/attach", name="mercredi_admin_facture_presence_attach", methods={"GET","POST"}).
+     * @Route("/{id}/attach", name="mercredi_admin_facture_presence_attach", methods={"GET", "POST"})
      */
     public function attach(Request $request, Facture $facture): Response
     {
@@ -76,7 +73,7 @@ class FacturePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_presence/attach.html.twig',
             [
-                'facture' => $facture,
+                self::FACTURE => $facture,
                 'presences' => $presences,
                 'form' => $form->createView(),
             ]
@@ -93,7 +90,7 @@ class FacturePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_presence/show.html.twig',
             [
-                'facture' => $facture,
+                self::FACTURE => $facture,
                 'facturePresence' => $facturePresence,
             ]
         );
@@ -108,12 +105,14 @@ class FacturePresenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //todo
+            echo '';
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/edit.html.twig',
             [
-                'facture' => $facture,
+                self::FACTURE => $facture,
                 'form' => $form->createView(),
             ]
         );

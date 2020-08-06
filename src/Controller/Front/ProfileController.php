@@ -21,12 +21,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @Route("/profile")
  * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
-class ProfileController extends AbstractController
+final class ProfileController extends AbstractController
 {
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
     /**
      * @var UserRepository
      */
@@ -35,17 +31,11 @@ class ProfileController extends AbstractController
      * @var UserPasswordEncoderInterface
      */
     private $userPasswordEncoder;
-
-    public function __construct(
-        UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder,
-        OrganisationRepository $organisationRepository
-    ) {
-        $this->organisationRepository = $organisationRepository;
+    public function __construct(\Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository, UserPasswordEncoderInterface $userPasswordEncoder)
+    {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
-
     /**
      * @Route("/show", name="mercredi_front_user_show")
      * @IsGranted("ROLE_MERCREDI")
@@ -62,7 +52,6 @@ class ProfileController extends AbstractController
             ]
         );
     }
-
     /**
      * @Route("/redirect", name="mercredi_front_profile_redirect")
      */
@@ -90,7 +79,7 @@ class ProfileController extends AbstractController
                 return $this->redirectToRoute('mercredi_animateur_home');
             }
 
-            if ($user->hasRole('ROLE_MERCREDI_ADMIN') or $user->hasRole('ROLE_MERCREDI_READ')) {
+            if ($user->hasRole('ROLE_MERCREDI_ADMIN') || $user->hasRole('ROLE_MERCREDI_READ')) {
                 return $this->redirectToRoute('mercredi_admin_home');
             }
         }
@@ -99,7 +88,6 @@ class ProfileController extends AbstractController
 
         return $this->redirectToRoute('mercredi_front_home');
     }
-
     /**
      * @Route("/select", name="mercredi_front_select_profile")
      * @IsGranted("ROLE_MERCREDI")
@@ -112,7 +100,6 @@ class ProfileController extends AbstractController
             ]
         );
     }
-
     /**
      * @Route("/edit", name="mercredi_front_user_edit")
      * @IsGranted("ROLE_MERCREDI")
@@ -139,7 +126,6 @@ class ProfileController extends AbstractController
             ]
         );
     }
-
     /**
      * @Route("/password", name="mercredi_front_user_password")
      * @IsGranted("ROLE_MERCREDI")

@@ -23,7 +23,6 @@ use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -34,7 +33,7 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Enfant\Repository\EnfantRepository")
+ * @ORM\Entity()
  * @Vich\Uploadable
  */
 class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface
@@ -64,60 +63,8 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use PresencesTrait;
     use AccueilsTrait;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    private $photo_autorisation = false;
-
-    /**
-     * @var AnneeScolaire|null
-     *
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", inversedBy="enfants")
-     */
-    private $annee_scolaire;
-
-    /**
-     * @var GroupeScolaire|null
-     *
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="enfants")
-     */
-    private $groupe_scolaire;
-
-    /**
-     * @var Ecole|null
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
-     */
-    private $ecole;
-
-    /**
-     * @var Relation[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="enfant", cascade={"remove"})
-     */
-    private $relations;
-
-    /**
-     * J'ai mis la definition pour pouvoir mettre le cascade.
-     *
-     * @var Presence[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="enfant", cascade={"remove"})
-     */
-    private $presences;
-
-    /**
-     * J'ai mis la definition pour pouvoir mettre le cascade.
-     *
-     * @var Accueil[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="enfant", cascade={"remove"})
-     */
-    private $accueils;
-
     public function __construct()
     {
-        $this->relations = new ArrayCollection();
-        $this->accueils = new ArrayCollection();
-        $this->presences = new ArrayCollection();
         $this->ficheSanteIsComplete = false;
     }
 
@@ -134,5 +81,15 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
+    }
+
+    public function getTuteurs()
+    {
+        return array_map(
+            function ($relation) {
+                return $relation->getTuteur();
+            },
+            $this->getRelations()
+        );
     }
 }

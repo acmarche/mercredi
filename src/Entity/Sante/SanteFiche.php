@@ -19,11 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table("sante_fiche", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"enfant_id"})
- * }))
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteFicheRepository")
- * @UniqueEntity(fields={"enfant"}, message="L'enfant a déjà une fiche santé")
+ * })
  */
-class SanteFiche implements TimestampableInterface
+final class SanteFiche implements TimestampableInterface
 {
     use TimestampableTrait;
     use IdTrait;
@@ -34,6 +32,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
+     * @var string
      */
     private $personne_urgence;
 
@@ -154,23 +153,23 @@ class SanteFiche implements TimestampableInterface
         $this->questions = $questions;
     }
 
-    public function addReponse(SanteReponse $reponse): self
+    public function addReponse(SanteReponse $santeReponse): self
     {
-        if (! $this->reponses->contains($reponse)) {
-            $this->reponses[] = $reponse;
-            $reponse->setSanteFiche($this);
+        if ($this->reponses->contains($santeReponse) === []) {
+            $this->reponses[] = $santeReponse;
+            $santeReponse->setSanteFiche($this);
         }
 
         return $this;
     }
 
-    public function removeReponse(SanteReponse $reponse): self
+    public function removeReponse(SanteReponse $santeReponse): self
     {
-        if ($this->reponses->contains($reponse)) {
-            $this->reponses->removeElement($reponse);
+        if ($this->reponses->contains($santeReponse) !== []) {
+            $this->reponses->removeElement($santeReponse);
             // set the owning side to null (unless already changed)
-            if ($reponse->getSanteFiche() === $this) {
-                $reponse->setSanteFiche(null);
+            if ($santeReponse->getSanteFiche() === $this) {
+                $santeReponse->setSanteFiche(null);
             }
         }
 

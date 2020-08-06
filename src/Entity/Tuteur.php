@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
@@ -26,7 +25,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Tuteur\Repository\TuteurRepository")
+ * @ORM\Entity()
  */
 class Tuteur implements SluggableInterface, TimestampableInterface
 {
@@ -54,26 +53,11 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      */
     private $relations;
 
-    /**
-     * J'ai mis la definition pour pouvoir mettre le cascade.
-     *
-     * @var Accueil[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="tuteur", cascade={"remove"})
-     */
-    private $accueils;
-
-    /**
-     * @var Facture[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur")
-     */
-    private $factures;
-
     public function __construct()
     {
-        $this->relations = [];
+        $this->relations = new ArrayCollection();
         $this->presences = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->accueils = new ArrayCollection();
     }
 
     public function __toString()

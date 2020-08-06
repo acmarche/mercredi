@@ -21,14 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/santeFiche")
  * @IsGranted("ROLE_MERCREDI_PARENT")
  */
-class SanteFicheController extends AbstractController
+final class SanteFicheController extends AbstractController
 {
     use GetTuteurTrait;
-
-    /**
-     * @var SanteFicheRepository
-     */
-    private $santeFicheRepository;
     /**
      * @var SanteHandler
      */
@@ -46,14 +41,8 @@ class SanteFicheController extends AbstractController
      */
     private $organisationRepository;
 
-    public function __construct(
-        SanteFicheRepository $santeFicheRepository,
-        SanteQuestionRepository $santeQuestionRepository,
-        OrganisationRepository $organisationRepository,
-        SanteHandler $santeHandler,
-        SanteChecker $santeChecker
-    ) {
-        $this->santeFicheRepository = $santeFicheRepository;
+    public function __construct(SanteQuestionRepository $santeQuestionRepository, OrganisationRepository $organisationRepository, SanteHandler $santeHandler, SanteChecker $santeChecker)
+    {
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;
         $this->santeQuestionRepository = $santeQuestionRepository;
@@ -75,7 +64,7 @@ class SanteFicheController extends AbstractController
         }
 
         $isComplete = $this->santeChecker->isComplete($santeFiche);
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->repository->findAll();
         $organisation = $this->organisationRepository->getOrganisation();
 
         return $this->render(

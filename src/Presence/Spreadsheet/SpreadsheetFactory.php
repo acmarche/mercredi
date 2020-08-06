@@ -6,43 +6,63 @@ use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
-use AcMarche\Mercredi\Spreadsheet\AbstractSpreadsheetDownloader;
+use AcMarche\Mercredi\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Mercredi\Utils\DateUtils;
+use DateTime;
+use IntlDateFormatter;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-class SpreadsheetFactory extends AbstractSpreadsheetDownloader
+use function count;
+
+final class SpreadsheetFactory
 {
+    use SpreadsheetDownloaderTrait;
+
     /**
      * @var ScolaireUtils
      */
     private $scolaireUtils;
+    /**
+     * @var string
+     */
+    private const NOM = 'Nom';
+    /**
+     * @var string
+     */
+    private const FORMAT = 'd-m-Y';
+    /**
+     * @var int
+     */
+    private const COLONNE = 1;
 
     public function __construct(ScolaireUtils $scolaireUtils)
     {
         $this->scolaireUtils = $scolaireUtils;
     }
 
-    public function createXlsByMonthForOne(\DateTime $date, ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
-    {
+    public function createXlsByMonthForOne(
+        DateTime $dateTime,
+        ListingPresenceByMonth $listingPresenceByMonth
+    ): Spreadsheet {
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        $worksheet = $spreadsheet->getActiveSheet();
 
-        $dateInterval = DateUtils::getDatePeriod($date);
+        $datePeriod = DateUtils::getDatePeriod($dateTime);
 
         /**
          * titre de la feuille.
          */
         $ligne = 1;
-        $sheet
-            ->setCellValue('A'.$ligne, 'Nom')
+        $worksheet
+            ->setCellValue('A'.$ligne, self::NOM)
             ->setCellValue('B'.$ligne, 'Prénom')
             ->setCellValue('C'.$ligne, 'Né le')
             ->setCellValue('D'.$ligne, 'Groupe');
 
         $colonne = 'E';
 
-        foreach ($dateInterval as $date) {
-            $sheet->setCellValue($colonne.$ligne, DateUtils::formatFr($date, \IntlDateFormatter::SHORT));
+        foreach ($datePeriod as $dateTime) {
+            $worksheet->setCellValue($colonne.$ligne, DateUtils::formatFr($dateTime, IntlDateFormatter::SHORT));
             ++$colonne;
         }
 
@@ -50,25 +70,18 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
             $colonne = 'A';
 
-            $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
+            $neLe = $enfant->getBirthday() !== null ? $enfant->getBirthday()->format(self::FORMAT) : '';
             $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
 
-            $sheet
+            $worksheet
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
                 ->setCellValue(++$colonne.$ligne, $neLe)
                 ->setCellValue(++$colonne.$ligne, $groupe->getNom());
 
-            foreach ($dateInterval as $date) {
-                //$presence = $this->plaineService->getPresenceByDateAndEnfant($date, $enfant);
-
-                /*  if (!$presence) {
-                      ++$colonne;
-                      continue;
-                  }*/
-
+            foreach ($datePeriod as $dateTime) {
                 ++$colonne;
-                $sheet->setCellValue($colonne.$ligne, 1);
+                $worksheet->setCellValue($colonne.$ligne, 1);
             }
             ++$ligne;
         }
@@ -79,22 +92,22 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
     public function createXlsByMonthDefault(ListingPresenceByMonth $listingPresenceByMonth): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        $worksheet = $spreadsheet->getActiveSheet();
 
         /**
          * title.
          */
         $ligne = 1;
         $colonne = 'A';
-        $sheet
-            ->setCellValue($colonne.$ligne, 'Nom')
+        $worksheet
+            ->setCellValue($colonne.$ligne, self::NOM)
             ->setCellValue(++$colonne.$ligne, 'Prénom')
             ->setCellValue(++$colonne.$ligne, 'Né le');
 
         foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
-            $sheet->setCellValue(++$colonne.$ligne, $jourListing->getJour()->getDateJour()->format('d-m-Y'));
+            $worksheet->setCellValue(++$colonne.$ligne, $jourListing->getJour()->getDateJour()->format(self::FORMAT));
         }
-        $sheet->setCellValue(++$colonne.$ligne, 'Total');
+        $worksheet->setCellValue(++$colonne.$ligne, 'Total');
 
         /**
          * Pour chaque enfant on affiche present ou pas et son total.
@@ -103,8 +116,8 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
             $colonne = 'A';
 
-            $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
-            $sheet
+            $neLe = $enfant->getBirthday() !== null ? $enfant->getBirthday()->format(self::FORMAT) : '';
+            $worksheet
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
                 ->setCellValue(++$colonne.$ligne, $neLe);
@@ -116,9 +129,9 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
                     $present = 1;
                     ++$countPresences;
                 }
-                $sheet->setCellValue(++$colonne.$ligne, $present);
+                $worksheet->setCellValue(++$colonne.$ligne, $present);
             }
-            $sheet->setCellValue(++$colonne.$ligne, $countPresences);
+            $worksheet->setCellValue(++$colonne.$ligne, $countPresences);
             ++$ligne;
         }
 
@@ -126,15 +139,15 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
          * Total enfants et total enfants par jour.
          */
         $colonne = 'A';
-        $sheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getEnfants()).' enfants');
+        $worksheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getEnfants()).' enfants');
         $colonne = 'D';
 
         foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
-            $sheet->setCellValue($colonne.$ligne, \count($jourListing->getEnfants()));
+            $worksheet->setCellValue($colonne.$ligne, count($jourListing->getEnfants()));
             ++$colonne;
         }
 
-        $sheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getPresences()));
+        $worksheet->setCellValue($colonne.$ligne, count($listingPresenceByMonth->getPresences()));
 
         return $spreadsheet;
     }
@@ -142,18 +155,16 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
     /**
      * @param Presence[] $presences
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @return Spreadsheet
      */
     public function presenceXls(array $presences): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $c = 1;
-        $sheet
-            ->setCellValue('A'.$c, 'Nom')
-            ->setCellValue('B'.$c, 'Prénom')
-            ->setCellValue('C'.$c, 'Né le');
+        $worksheet = $spreadsheet->getActiveSheet();
+        $worksheet
+            ->setCellValue('A'.self::COLONNE, self::NOM)
+            ->setCellValue('B'.self::COLONNE, 'Prénom')
+            ->setCellValue('C'.self::COLONNE, 'Né le');
 
         $ligne = 3;
 
@@ -161,8 +172,8 @@ class SpreadsheetFactory extends AbstractSpreadsheetDownloader
 
         foreach ($enfants as $enfant) {
             $colonne = 'A';
-            $neLe = $enfant->getBirthday() ? $enfant->getBirthday()->format('d-m-Y') : '';
-            $sheet
+            $neLe = $enfant->getBirthday() !== null ? $enfant->getBirthday()->format(self::FORMAT) : '';
+            $worksheet
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
                 ->setCellValue(++$colonne.$ligne, $neLe);

@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Sante\Factory\SantePdfFactory;
+use AcMarche\Mercredi\Sante\Factory\SantePdfFactoryTrait;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_PARENT")
  * @Route("/export/pdf")
  */
-class ExportPdfController extends AbstractController
+final class ExportPdfController extends AbstractController
 {
     use GetTuteurTrait;
 
     /**
-     * @var SantePdfFactory
+     * @var SantePdfFactoryTrait
      */
     private $santePdfFactory;
     /**
@@ -29,7 +29,7 @@ class ExportPdfController extends AbstractController
      */
     private $santeHandler;
 
-    public function __construct(SanteHandler $santeHandler, SantePdfFactory $santePdfFactory)
+    public function __construct(SanteHandler $santeHandler, SantePdfFactoryTrait $santePdfFactory)
     {
         $this->santePdfFactory = $santePdfFactory;
         $this->santeHandler = $santeHandler;

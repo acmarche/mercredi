@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/accueil")
  * @IsGranted("ROLE_MERCREDI_PARENT")
  */
-class AccueilController extends AbstractController
+final class AccueilController extends AbstractController
 {
     use GetTuteurTrait;
 
@@ -38,10 +38,6 @@ class AccueilController extends AbstractController
      * @var AccueilHandler
      */
     private $accueilHandler;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
     /**
      * @var RelationUtils
      */
@@ -62,12 +58,15 @@ class AccueilController extends AbstractController
      * @var AccueilCalculatorInterface
      */
     private $accueilCalculator;
+    /**
+     * @var string
+     */
+    private const UUID = 'uuid';
 
     public function __construct(
         RelationUtils $relationUtils,
         TuteurUtils $tuteurUtils,
         AccueilRepository $accueilRepository,
-        JourRepository $jourRepository,
         AccueilHandler $accueilHandler,
         SanteChecker $santeChecker,
         SanteHandler $santeHandler,
@@ -75,7 +74,6 @@ class AccueilController extends AbstractController
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
-        $this->jourRepository = $jourRepository;
         $this->relationUtils = $relationUtils;
         $this->tuteurUtils = $tuteurUtils;
         $this->santeChecker = $santeChecker;
@@ -117,7 +115,7 @@ class AccueilController extends AbstractController
         if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
-            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
         }
 
         $accueil = new Accueil($this->tuteur, $enfant);
@@ -129,7 +127,7 @@ class AccueilController extends AbstractController
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatchMessage(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_parent_accueil_show', ['uuid' => $result->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_accueil_show', [self::UUID => $result->getUuid()]);
         }
 
         return $this->render(
@@ -171,7 +169,7 @@ class AccueilController extends AbstractController
             if (! DeleteConstraint::accueilCanBeDeleted($accueil)) {
                 $this->addFlash('danger', 'Un accueil passé ne peut être supprimé');
 
-                return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+                return $this->redirectToRoute('mercredi_parent_enfant_show', [self::UUID => $enfant->getUuid()]);
             }
             $accueilId = $accueil->getId();
             $this->accueilRepository->remove($accueil);
@@ -179,6 +177,6 @@ class AccueilController extends AbstractController
             $this->dispatchMessage(new AccueilDeleted($accueilId));
         }
 
-        return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+        return $this->redirectToRoute('mercredi_parent_enfant_show', [self::UUID => $enfant->getUuid()]);
     }
 }

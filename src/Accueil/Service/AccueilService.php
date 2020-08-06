@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Service;
 
-class AccueilService
+final class AccueilService
 {
     public static function getMatinSoir(): array
     {

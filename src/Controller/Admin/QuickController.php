@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Relation\Dto\TuteurEnfantDto;
 use AcMarche\Mercredi\Relation\Form\TuteurEnfantQuickType;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use AcMarche\Mercredi\User\Factory\UserFactory;
 use AcMarche\Mercredi\User\Handler\AssociationHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/parent_enfant")
  */
-class QuickController extends AbstractController
+final class QuickController extends AbstractController
 {
     /**
      * @var TuteurRepository
@@ -36,10 +35,6 @@ class QuickController extends AbstractController
      * @var RelationRepository
      */
     private $relationRepository;
-    /**
-     * @var UserFactory
-     */
-    private $userFactory;
     /**
      * @var AssociationHandler
      */

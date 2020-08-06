@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
-class RelationHandler
+final class RelationHandler
 {
     /**
      * @var RelationRepository
@@ -33,12 +33,12 @@ class RelationHandler
             throw new \Exception('Enfant non trouvé');
         }
 
-        $enfant = $this->enfantRepository->find($enfantId);
-        if (! $enfant) {
+        $enfant = $this->repository->find($enfantId);
+        if ($enfant === null) {
             throw new \Exception('Enfant non trouvé');
         }
 
-        if ($this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant)) {
+        if ($this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant) !== null) {
             throw new \Exception('L\'enfant est déjà lié à cet enfant');
         }
 

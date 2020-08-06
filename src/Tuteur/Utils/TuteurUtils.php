@@ -7,7 +7,9 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TuteurUtils
+use function count;
+
+final class TuteurUtils
 {
     /**
      * @var RelationRepository
@@ -29,9 +31,9 @@ class TuteurUtils
         $telephone = $tuteur->getTelephone();
         $telephoneConjoint = $tuteur->getTelephoneConjoint();
 
-        if ($gsm or $gsmConjoint) {
+        if ($gsm || $gsmConjoint) {
             $telephones .= $gsm.' | '.$gsmConjoint;
-        } elseif ($telephoneBureau or $telephoneBureauConjoint) {
+        } elseif ($telephoneBureau || $telephoneBureauConjoint) {
             $telephones .= $telephoneBureau.' | '.$telephoneBureauConjoint;
         } else {
             $telephones .= $telephone.' | '.$telephoneConjoint;
@@ -42,7 +44,7 @@ class TuteurUtils
 
     public static function coordonneesIsComplete(Tuteur $tuteur)
     {
-        if (0 === \strlen(self::getTelephones($tuteur))) {
+        if (self::getTelephones($tuteur) === '') {
             return false;
         }
 
@@ -61,12 +63,7 @@ class TuteurUtils
         if (! $tuteur->getCodePostal()) {
             return false;
         }
-
-        if (! $tuteur->getLocalite()) {
-            return false;
-        }
-
-        return true;
+        return (bool) $tuteur->getLocalite();
     }
 
     /**
@@ -92,17 +89,18 @@ class TuteurUtils
 
     public function tuteurIsActif(Tuteur $tuteur): bool
     {
-        return \count($this->relationRepository->findEnfantsActifs($tuteur)) > 0;
+        return count($this->relationRepository->findEnfantsActifs($tuteur)) > 0;
     }
 
     /**
      * @param UserInterface|User $user
+     * @return Tuteur|null
      */
     public function getTuteurByUser(UserInterface $user): ?Tuteur
     {
         $tuteurs = $user->getTuteurs();
 
-        if (0 === \count($tuteurs)) {
+        if (0 === count($tuteurs)) {
             return null;
         }
 
@@ -110,6 +108,7 @@ class TuteurUtils
     }
 
     /**
+     * @param Tuteur $tuteur
      * @return string[]
      */
     public static function getEmailsOfOneTuteur(Tuteur $tuteur): array
@@ -120,7 +119,7 @@ class TuteurUtils
             $emails[] = $tuteur->getEmail();
         }
 
-        if (\count($tuteur->getUsers()) > 0) {
+        if (count($tuteur->getUsers()) > 0) {
             $users = $tuteur->getUsers();
             $user = $users[0];
             if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
@@ -146,11 +145,13 @@ class TuteurUtils
     {
         $data = [];
         foreach ($tuteurs as $tuteur) {
-            if ($this->tuteurIsActif($tuteur)) {
-                if (0 === \count(self::getEmailsOfOneTuteur($tuteur))) {
-                    $data[] = $tuteur;
-                }
+            if (!$this->tuteurIsActif($tuteur)) {
+                continue;
             }
+            if (0 !== count(self::getEmailsOfOneTuteur($tuteur))) {
+                continue;
+            }
+            $data[] = $tuteur;
         }
 
         return $data;

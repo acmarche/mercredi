@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\GroupeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireCreated;
@@ -19,21 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/groupe_scolaire")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class GroupeScolaireController extends AbstractController
+final class GroupeScolaireController extends AbstractController
 {
     /**
      * @var GroupeScolaireRepository
      */
     private $groupeScolaireRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
 
-    public function __construct(GroupeScolaireRepository $groupeScolaireRepository, EnfantRepository $enfantRepository)
+    public function __construct(GroupeScolaireRepository $groupeScolaireRepository)
     {
         $this->groupeScolaireRepository = $groupeScolaireRepository;
-        $this->enfantRepository = $enfantRepository;
     }
 
     /**

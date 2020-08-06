@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/security/associer/parent")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class AssocierParentController extends AbstractController
+final class AssocierParentController extends AbstractController
 {
     /**
      * @var AssociationHandler
@@ -28,6 +28,14 @@ class AssocierParentController extends AbstractController
      * @var TuteurRepository
      */
     private $tuteurRepository;
+    /**
+     * @var string
+     */
+    private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
 
     public function __construct(
         AssociationHandler $associationHandler,
@@ -45,19 +53,19 @@ class AssocierParentController extends AbstractController
         if (! $user->isParent()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de parent');
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
         }
 
-        $dto = new AssociateUserTuteurDto($user);
-        $this->associationHandler->suggestTuteur($user, $dto);
+        $associateUserTuteurDto = new AssociateUserTuteurDto($user);
+        $this->associationHandler->suggestTuteur($user, $associateUserTuteurDto);
 
-        $form = $this->createForm(AssociateParentType::class, $dto);
+        $form = $this->createForm(AssociateParentType::class, $associateUserTuteurDto);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->associationHandler->handleAssociateParent($dto);
+            $this->associationHandler->handleAssociateParent($associateUserTuteurDto);
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
         }
 
         return $this->render(
@@ -76,18 +84,18 @@ class AssocierParentController extends AbstractController
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $tuteurId = (int) $request->request->get('tuteur');
-            if (! $tuteurId) {
+            if ($tuteurId === 0) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');
 
-                return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+                return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
             }
 
             $tuteur = $this->tuteurRepository->find($tuteurId);
             $this->associationHandler->handleDissociateParent($user, $tuteur);
 
-            return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+            return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
         }
 
-        return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+        return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
     }
 }

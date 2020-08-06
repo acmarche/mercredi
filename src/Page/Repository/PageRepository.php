@@ -12,11 +12,15 @@ use Doctrine\Persistence\ManagerRegistry;
  *                                                                                                 method Page[] findAll()
  * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PageRepository extends ServiceEntityRepository
+final class PageRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const SLUG_SYSTEM = 'slug_system';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Page::class);
+        parent::__construct($managerRegistry, Page::class);
     }
 
     /**
@@ -29,17 +33,17 @@ class PageRepository extends ServiceEntityRepository
 
     public function findHomePage(): ?Page
     {
-        return $this->findOneBy(['slug_system' => 'home']);
+        return $this->findOneBy([self::SLUG_SYSTEM => 'home']);
     }
 
     public function findContactPage(): ?Page
     {
-        return $this->findOneBy(['slug_system' => 'contact']);
+        return $this->findOneBy([self::SLUG_SYSTEM => 'contact']);
     }
 
     public function findModalitePage(): ?Page
     {
-        return $this->findOneBy(['slug_system' => 'modalites-pratiques']);
+        return $this->findOneBy([self::SLUG_SYSTEM => 'modalites-pratiques']);
     }
 
     public function remove(Page $page): void

@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/plaine")
  */
-class PlaineController extends AbstractController
+final class PlaineController extends AbstractController
 {
     use GetTuteurTrait;
 
@@ -139,7 +139,7 @@ class PlaineController extends AbstractController
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
         }
 
-        if ($plaine) {
+        if ($plaine !== null) {
             $this->plainePresenceHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
             $this->addFlash('success', 'Votre enfant a bien été inscrits à la plaine');
         }

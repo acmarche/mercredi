@@ -10,13 +10,16 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PlaineGroupeType extends AbstractType
+final class PlaineGroupeType extends AbstractType
 {
+    /**
+     * @var bool
+     */
     protected $label = false;
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'groupeScolaire',
                 EntityType::class,
@@ -29,9 +32,9 @@ class PlaineGroupeType extends AbstractType
             ->add('inscription_maximum', IntegerType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => PlaineGroupe::class,
             ]

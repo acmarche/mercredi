@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/ajax")
  */
-class AjaxController extends AbstractController
+final class AjaxController extends AbstractController
 {
     /**
      * @var EnfantRepository
@@ -35,8 +34,10 @@ class AjaxController extends AbstractController
 
     /**
      * @Route("/tuteurs/{keyword}", name="mercredi_admin_ajax_tuteurs")
+     * @param string|null $keyword
+     * @return JsonResponse
      */
-    public function tuteurs(Request $request, ?string $keyword = null): JsonResponse
+    public function tuteurs(?string $keyword = null): JsonResponse
     {
         $tuteurs = $data = [];
         if ($keyword) {
@@ -54,8 +55,10 @@ class AjaxController extends AbstractController
 
     /**
      * @Route("/enfants/{keyword}", name="mercredi_admin_ajax_enfants")
+     * @param string|null $keyword
+     * @return JsonResponse
      */
-    public function enfants(Request $request, ?string $keyword = null): JsonResponse
+    public function enfants(?string $keyword = null): JsonResponse
     {
         $enfants = $data = [];
         if ($keyword) {
@@ -70,7 +73,7 @@ class AjaxController extends AbstractController
             $data[$i]['value'] = $enfant->getNom().' '.$enfant->getPrenom();
             $data[$i]['label'] = $enfant->getNom().' '.$enfant->getPrenom();
             $birthday = '';
-            if ($enfant->getBirthday()) {
+            if ($enfant->getBirthday() !== null) {
                 $birthday = $enfant->getBirthday()->format('d-m-Y');
             }
             $data[$i]['birthday'] = $birthday;

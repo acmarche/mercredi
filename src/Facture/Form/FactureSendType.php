@@ -7,13 +7,12 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FactureSendType extends AbstractType
+final class FactureSendType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'from',
                 EmailType::class,
@@ -43,13 +42,5 @@ class FactureSendType extends AbstractType
                     'attr' => ['rows' => 10, 'cols' => 50],
                 ]
             );
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults(
-            [
-            ]
-        );
     }
 }

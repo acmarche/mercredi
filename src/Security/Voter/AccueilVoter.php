@@ -18,13 +18,16 @@ use Symfony\Component\Security\Core\Security;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class AccueilVoter extends Voter
+final class AccueilVoter extends Voter
 {
+    /**
+     * @var mixed|\AcMarche\Mercredi\Entity\Tuteur|null
+     */
+    public $tuteurOfUser;
     public const ADD = 'accueil_new';
     public const SHOW = 'accueil_show';
     public const EDIT = 'accueil_edit';
     public const DELETE = 'accueil_delete';
-    private $decisionManager;
     /**
      * @var RelationRepository
      */
@@ -37,8 +40,15 @@ class AccueilVoter extends Voter
      * @var Security
      */
     private $security;
+    /**
+     * @var null|string|\Stringable|\Symfony\Component\Security\Core\User\UserInterface
+     */
     private $user;
     private $enfant;
+    /**
+     * @var string
+     */
+    private const PARENT = 'ROLE_MERCREDI_PARENT';
 
     public function __construct(
         RelationRepository $relationRepository,
@@ -95,7 +105,7 @@ class AccueilVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if ($this->security->isGranted(self::PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -107,22 +117,17 @@ class AccueilVoter extends Voter
      *
      * @return bool
      */
-    private function canEdit(Accueil $accueil, TokenInterface $token)
+    private function canEdit()
     {
-        if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if ($this->security->isGranted(self::PARENT)) {
             return $this->checkTuteur();
         }
-
         return false;
     }
 
     private function canAdd(Accueil $accueil, TokenInterface $token)
     {
-        if ($this->canEdit($accueil, $token)) {
-            return true;
-        }
-
-        return false;
+        return $this->canEdit($accueil, $token);
     }
 
     private function canDelete(Accueil $accueil, TokenInterface $token)
@@ -131,7 +136,7 @@ class AccueilVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if ($this->security->isGranted(self::PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -143,13 +148,13 @@ class AccueilVoter extends Voter
      */
     private function checkTuteur()
     {
-        if (! $this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (! $this->security->isGranted(self::PARENT)) {
             return false;
         }
 
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if (! $this->tuteurOfUser) {
+        if ($this->tuteurOfUser === null) {
             return false;
         }
 
@@ -161,11 +166,6 @@ class AccueilVoter extends Voter
             },
             $relations
         );
-
-        if (\in_array($this->enfant->getId(), $enfants, true)) {
-            return true;
-        }
-
-        return false;
+        return \in_array($this->enfant->getId(), $enfants, true);
     }
 }

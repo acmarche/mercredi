@@ -5,11 +5,11 @@ namespace AcMarche\Mercredi\Enfant\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class EnfantEditForParentType extends AbstractType
+final class EnfantEditForParentType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->remove('ordre')
             ->remove('groupe_scolaire');
     }

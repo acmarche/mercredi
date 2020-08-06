@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -13,43 +13,43 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class AcMarcheMercrediExtension extends Extension implements PrependExtensionInterface
+final class AcMarcheMercrediExtension extends Extension implements PrependExtensionInterface
 {
-    public function load(array $configs, ContainerBuilder $container): void
+    public function load(array $configs, ContainerBuilder $containerBuilder): void
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
-        $loader->load('services.yaml');
+        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__.'/../../config'));
+        $phpFileLoader->load('services.php');
     }
 
     /**
      * Allow an extension to prepend the extension configurations.
      */
-    public function prepend(ContainerBuilder $container): void
+    public function prepend(ContainerBuilder $containerBuilder): void
     {
         // get all bundles
-        $bundles = $container->getParameter('kernel.bundles');
+        $bundles = $containerBuilder->getParameter('kernel.bundles');
 
         if (isset($bundles['DoctrineBundle'])) {
-            foreach ($container->getExtensions() as $name => $extension) {
+            foreach (array_keys($containerBuilder->getExtensions()) as $name) {
                 switch ($name) {
                     case 'doctrine':
-                        $this->loadConfig($container, 'doctrine');
+                        $this->loadConfig($containerBuilder, 'doctrine');
 
                         break;
                     case 'twig':
-                        $this->loadConfig($container, 'twig');
+                        $this->loadConfig($containerBuilder, 'twig');
 
                         break;
                     case 'liip_imagine':
-                        $this->loadConfig($container, 'liip_imagine');
+                        $this->loadConfig($containerBuilder, 'liip_imagine');
 
                         break;
                     case 'framework':
-                        $this->loadConfig($container, 'security');
+                        $this->loadConfig($containerBuilder, 'security');
 
                         break;
                     case 'vich_uploader':
-                        $this->loadConfig($container, 'vich_uploader');
+                        $this->loadConfig($containerBuilder, 'vich_uploader');
 
                         break;
                     case 'api_platform':
@@ -60,17 +60,17 @@ class AcMarcheMercrediExtension extends Extension implements PrependExtensionInt
         }
     }
 
-    protected function loadConfig(ContainerBuilder $container, string $name): void
+    protected function loadConfig(ContainerBuilder $containerBuilder, string $name): void
     {
-        $configs = $this->loadYamlFile($container);
+        $configs = $this->loadYamlFile($containerBuilder);
 
-        $configs->load($name.'.yaml');
+        $configs->load($name.'.php');
     }
 
-    protected function loadYamlFile(ContainerBuilder $container): Loader\YamlFileLoader
+    protected function loadYamlFile(ContainerBuilder $containerBuilder): PhpFileLoader
     {
-        return new Loader\YamlFileLoader(
-            $container,
+        return new PhpFileLoader(
+            $containerBuilder,
             new FileLocator(__DIR__.'/../../config/packages/')
         );
     }

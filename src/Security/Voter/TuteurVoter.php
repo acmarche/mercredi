@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Security;
  *
  * See http://symfony.com/doc/current/security/voters.html
  */
-class TuteurVoter extends Voter
+final class TuteurVoter extends Voter
 {
     public const ADD = 'tuteur_new';
     public const SHOW = 'tuteur_show';
@@ -54,10 +54,8 @@ class TuteurVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if ($subject) {
-            if (! $subject instanceof Tuteur) {
-                return false;
-            }
+        if ($subject && ! $subject instanceof Tuteur) {
+            return false;
         }
 
         return \in_array(
@@ -116,20 +114,12 @@ class TuteurVoter extends Voter
 
     private function canAdd()
     {
-        if ($this->canEdit()) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->canEdit();
     }
 
     private function canDelete()
     {
-        if ($this->canEdit()) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->canEdit();
     }
 
     private function checkOwnTuteur()
@@ -145,11 +135,6 @@ class TuteurVoter extends Voter
         if (! $this->tuteurToCheck instanceof Tuteur) {
             return false;
         }
-
-        if ($this->tuteurOfUser->getId() === $this->tuteurToCheck->getId()) {
-            return true;
-        }
-
-        return false;
+        return $this->tuteurOfUser->getId() === $this->tuteurToCheck->getId();
     }
 }

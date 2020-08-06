@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Presence\Dto;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 
-class PresenceSelectDays
+final class PresenceSelectDays
 {
     use EnfantTrait;
 

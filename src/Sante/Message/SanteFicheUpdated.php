@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Sante\Message;
 
-class SanteFicheUpdated
+final class SanteFicheUpdated
 {
     /**
      * @var int

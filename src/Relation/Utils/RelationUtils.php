@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
-class RelationUtils
+final class RelationUtils
 {
     /**
      * @var RelationRepository

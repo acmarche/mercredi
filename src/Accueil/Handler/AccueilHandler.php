@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 
-class AccueilHandler
+final class AccueilHandler
 {
     /**
      * @var AccueilRepository
@@ -21,7 +21,7 @@ class AccueilHandler
 
     public function handleNew(Enfant $enfant, Accueil $accueilSubmited)
     {
-        if ($accueil = $this->accueilRepository->isRegistered($accueilSubmited, $enfant)) {
+        if (($accueil = $this->accueilRepository->isRegistered($accueilSubmited, $enfant)) !== null) {
             $accueil->setHeure($accueilSubmited->getHeure());
             $accueil->setDuree($accueilSubmited->getDuree());
             $accueil->setRemarque($accueilSubmited->getRemarque());

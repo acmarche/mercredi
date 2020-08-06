@@ -15,14 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class DefaultController.
  */
-class DefaultController extends AbstractController
+final class DefaultController extends AbstractController
 {
     use GetTuteurTrait;
-
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
     /**
      * @var Organisation|null
      */
@@ -44,14 +39,8 @@ class DefaultController extends AbstractController
      */
     private $factureRepository;
 
-    public function __construct(
-        OrganisationRepository $organisationRepository,
-        TuteurUtils $tuteurUtils,
-        RelationUtils $relationUtils,
-        SanteChecker $santeChecker,
-        FactureRepository $factureRepository
-    ) {
-        $this->organisationRepository = $organisationRepository;
+    public function __construct(TuteurUtils $tuteurUtils, RelationUtils $relationUtils, SanteChecker $santeChecker, FactureRepository $factureRepository)
+    {
         $this->organisation = $organisationRepository->getOrganisation();
         $this->tuteurUtils = $tuteurUtils;
         $this->relationUtils = $relationUtils;

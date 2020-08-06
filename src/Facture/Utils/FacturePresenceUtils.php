@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Facture\Utils;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence;
 
-class FacturePresenceUtils
+final class FacturePresenceUtils
 {
     /**
      * @param FacturePresence[] $facturePresences

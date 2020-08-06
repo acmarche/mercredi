@@ -2,48 +2,58 @@
 
 namespace AcMarche\Mercredi\Utils;
 
-class DateUtils
+use DateInterval;
+use DatePeriod;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
+use IntlDateFormatter;
+use Locale;
+
+final class DateUtils
 {
     /**
      * @param string $mois 05/2020
      *
-     * @throws \Exception
+     * @return DateTime
+     * @throws Exception
      */
-    public static function createDateTimeFromDayMonth(string $mois): \DateTime
+    public static function createDateTimeFromDayMonth(string $mois): DateTime
     {
-        if ($date = \DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
+        if ($date = DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
             return $date;
         }
 
-        throw new \Exception('Mauvais format de date: '.$mois);
+        throw new Exception('Mauvais format de date: '.$mois);
     }
 
-    public static function formatFr(\DateTime $dateTime, $format = \IntlDateFormatter::FULL): string
+    public static function formatFr(DateTime $dateTime, $format = IntlDateFormatter::FULL): string
     {
-        $formatter = new \IntlDateFormatter(
-            \Locale::getDefault(),
+        $intlDateFormatter = new IntlDateFormatter(
+            Locale::getDefault(),
             $format,
-            \IntlDateFormatter::NONE,
-            new \DateTimeZone('Europe/Brussels'),
-            \IntlDateFormatter::GREGORIAN
+            IntlDateFormatter::NONE,
+            new DateTimeZone('Europe/Brussels'),
+            IntlDateFormatter::GREGORIAN
         );
 
-        return $formatter->format($dateTime);
+        return $intlDateFormatter->format($dateTime);
     }
 
     /**
-     * @param string $date "01/08/2018"
+     * @param DateTime $dateTime "01/08/2018"
      *
-     * @throws \Exception
+     * @return DatePeriod
      */
-    public static function getDatePeriod(\DateTime $date): \DatePeriod
+    public static function getDatePeriod(DateTime $dateTime): DatePeriod
     {
-        $begin = \DateTimeImmutable::createFromMutable($date);
+        $begin = DateTimeImmutable::createFromMutable($dateTime);
         $end = $begin->modify('last day of this month');
         $end = $end->modify('+1 day');
 
-        $interval = new \DateInterval('P1D');
+        $dateInterval = new DateInterval('P1D');
 
-        return new \DatePeriod($begin, $interval, $end);
+        return new DatePeriod($begin, $dateInterval, $end);
     }
 }

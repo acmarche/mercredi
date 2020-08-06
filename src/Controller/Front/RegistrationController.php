@@ -16,38 +16,29 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
-class RegistrationController extends AbstractController
+final class RegistrationController extends AbstractController
 {
+    /**
+     * @var \AcMarche\Mercredi\Registration\EmailVerifier
+     */
     private $emailVerifier;
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $passwordEncoder;
+    private $userPasswordEncoder;
     /**
      * @var UserRepository
      */
     private $userRepository;
-    /**
-     * @var RegistrationMailerFactory
-     */
-    private $registrationMailerFactory;
-    /**
-     * @var RegistrationHandler
-     */
-    private $registrationHandler;
 
     public function __construct(
         EmailVerifier $emailVerifier,
-        UserPasswordEncoderInterface $passwordEncoder,
-        UserRepository $userRepository,
-        RegistrationMailerFactory $registrationMailerFactory,
-        RegistrationHandler $registrationHandler
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        \Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository
     ) {
         $this->emailVerifier = $emailVerifier;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordEncoder = $userPasswordEncoder;
         $this->userRepository = $userRepository;
-        $this->registrationMailerFactory = $registrationMailerFactory;
-        $this->registrationHandler = $registrationHandler;
     }
 
     /**
@@ -62,7 +53,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $this->passwordEncoder->encodePassword(
+                $this->userPasswordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )

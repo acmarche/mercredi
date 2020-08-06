@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class ResponseIsComplete extends Constraint
+final class ResponseIsComplete extends Constraint
 {
     /*
      * Any public properties become valid options for the annotation.

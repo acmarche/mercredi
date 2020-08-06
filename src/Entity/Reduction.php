@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Reduction\Repository\ReductionRepository")
+ * @ORM\Entity()
  * @AcMarcheReductionAssert\PourcentageOrForfait()
  */
 class Reduction
@@ -52,18 +52,8 @@ class Reduction
         return $this->pourcentage;
     }
 
-    public function setPourcentage(?float $pourcentage): void
-    {
-        $this->pourcentage = $pourcentage;
-    }
-
     public function getForfait(): ?float
     {
         return $this->forfait;
-    }
-
-    public function setForfait(?float $forfait): void
-    {
-        $this->forfait = $forfait;
     }
 }

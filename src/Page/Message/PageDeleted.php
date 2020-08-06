@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Page\Message;
 
-class PageDeleted
+final class PageDeleted
 {
     /**
      * @var int

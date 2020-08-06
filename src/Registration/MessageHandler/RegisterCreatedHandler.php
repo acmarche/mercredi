@@ -9,7 +9,7 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class RegisterCreatedHandler implements MessageHandlerInterface
+final class RegisterCreatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
@@ -29,7 +29,7 @@ class RegisterCreatedHandler implements MessageHandlerInterface
     private $registrationMailerFactory;
 
     public function __construct(
-        UserRepository $userRepository,
+        \Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository,
         FlashBagInterface $flashBag,
         EmailVerifier $emailVerifier,
         RegistrationMailerFactory $registrationMailerFactory
@@ -43,7 +43,7 @@ class RegisterCreatedHandler implements MessageHandlerInterface
     public function __invoke(RegisterCreated $registerCreated): void
     {
         $userId = $registerCreated->getUserId();
-        $user = $this->userRepository->find($userId);
+        $user = $this->repository->find($userId);
 
         // generate a signed url and email it to the user
         /* $this->emailVerifier->sendEmailConfirmation(

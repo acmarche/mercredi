@@ -13,11 +13,11 @@ use Doctrine\ORM\QueryBuilder;
  * @method PlaineGroupe[]    findAll()
  * @method PlaineGroupe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlaineGroupeRepository extends ServiceEntityRepository
+final class PlaineGroupeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, PlaineGroupe::class);
+        parent::__construct($managerRegistry, PlaineGroupe::class);
     }
 
     public function findPlaineOpen(): ?PlaineGroupe

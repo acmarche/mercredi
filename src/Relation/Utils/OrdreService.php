@@ -8,8 +8,13 @@ use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
-class OrdreService
+use Exception;
+
+use function count;
+
+final class OrdreService
 {
+    public $ordreService;
     /**
      * @var RelationRepository
      */
@@ -27,26 +32,28 @@ class OrdreService
 
     /**
      * Ordre de l'enfant par importance decroissante.
+     * @param Enfant $enfant
+     * @param Tuteur $tuteur
+     * @return int
      */
     public function getOrdreEnfant(Enfant $enfant, Tuteur $tuteur): int
     {
         $relation = $this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant);
-        if ($relation) {
-            if ($ordre = $relation->getOrdre()) {
-                return $ordre;
-            }
+        if ($relation !== null && ($ordre = $relation->getOrdre())) {
+            return $ordre;
         }
 
         return $enfant->getOrdre();
     }
 
     /**
-     * @throws \Exception
+     * @param PresenceInterface $presence
+     * @return float
      */
     public function getOrdreOnPresence(PresenceInterface $presence): float
     {
         //on a forcé l'ordre
-        if ($ordre = $presence->getOrdre()) {
+        if (($ordre = $presence->getOrdre()) !== 0) {
             return $ordre;
         }
 
@@ -67,7 +74,7 @@ class OrdreService
         );
 
         //pas de fraterie ce jour là
-        if (0 === \count($fratries)) {
+        if (0 === count($fratries)) {
             return $ordreBase;
         }
 
@@ -75,36 +82,16 @@ class OrdreService
 
         $presents = [];
         foreach ($fratries as $fratry) {
-            if ($this->presenceRepository->findPresencesByEnfantAndJour($fratry, $jour)) {
+            if ($this->presenceRepository->findPresencesByEnfantAndJour($fratry, $jour) !== null) {
                 $presents[] = $fratry;
             }
         }
 
-        if (0 === \count($presents)) {
+        if (0 === count($presents)) {
             return $ordreBase;
         }
 
         //todo verifier calcul
-        return $ordreBase - \count($presents);
-
-        //lisa = 2, si marie en 1 reste 2
-        //lisa = 3, si marie en 1 devient 2
-        foreach ($presents as $frere) {
-            $ordreFrere = $this->ordreService->getOrdreEnfant($frere, $tuteur);
-        }
-
-        //si ordre enfant = 1, peu importe
-        //si ordre enfant = 2, doit avoir 1 fratrie
-        //si ordre enfant = 3, doit avoir 2 fratries
-        //si ordre enfant = 4, doit avoir 3 fratries
-        /*  if ($ordre_fiche > 1) {
-              if (($ordre_fiche - 1) == $fratries_count) {
-                  //var_dump("ok");
-              } else {
-                  //var_dump("ko");
-              }
-          }*/
-
-        return $ordreBase;
+        return $ordreBase - count($presents);
     }
 }

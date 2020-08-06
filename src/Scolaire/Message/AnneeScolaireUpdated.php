@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Scolaire\Message;
 
-class AnneeScolaireUpdated
+final class AnneeScolaireUpdated
 {
     /**
      * @var int

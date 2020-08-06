@@ -19,21 +19,24 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/annee_scolaire")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class AnneeScolaireController extends AbstractController
+final class AnneeScolaireController extends AbstractController
 {
     /**
      * @var AnneeScolaireRepository
      */
     private $anneeScolaireRepository;
     /**
-     * @var EnfantRepository
+     * @var string
      */
-    private $enfantRepository;
+    private const MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW = 'mercredi_admin_annee_scolaire_show';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
 
-    public function __construct(AnneeScolaireRepository $anneeScolaireRepository, EnfantRepository $enfantRepository)
+    public function __construct(AnneeScolaireRepository $anneeScolaireRepository)
     {
         $this->anneeScolaireRepository = $anneeScolaireRepository;
-        $this->enfantRepository = $enfantRepository;
     }
 
     /**
@@ -64,7 +67,7 @@ class AnneeScolaireController extends AbstractController
 
             $this->dispatchMessage(new AnneeScolaireCreated($anneeScolaire->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW, [self::ID => $anneeScolaire->getId()]);
         }
 
         return $this->render(
@@ -102,7 +105,7 @@ class AnneeScolaireController extends AbstractController
 
             $this->dispatchMessage(new AnneeScolaireUpdated($anneeScolaire->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW, [self::ID => $anneeScolaire->getId()]);
         }
 
         return $this->render(
@@ -123,7 +126,7 @@ class AnneeScolaireController extends AbstractController
             if (\count($anneeScolaire->getEnfants()) > 0) {
                 $this->addFlash('danger', 'Une année scolaire contenant des enfants ne peux pas être supprimée');
 
-                return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+                return $this->redirectToRoute(self::MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW, [self::ID => $anneeScolaire->getId()]);
             }
 
             $ecoleId = $anneeScolaire->getId();

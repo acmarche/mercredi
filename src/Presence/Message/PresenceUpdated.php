@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Message;
 
-class PresenceUpdated
+final class PresenceUpdated
 {
     /**
      * @var int

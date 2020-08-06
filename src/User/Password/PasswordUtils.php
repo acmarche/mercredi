@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\User\Password;
 
 use Symfony\Component\String\ByteString;
 
-class PasswordUtils
+final class PasswordUtils
 {
     public function generatePassword(): string
     {

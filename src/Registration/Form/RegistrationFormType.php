@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
-class RegistrationFormType extends AbstractType
+final class RegistrationFormType extends AbstractType
 {
     /**
      * @var RouterInterface
@@ -22,11 +22,11 @@ class RegistrationFormType extends AbstractType
         $this->router = $router;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $url = $this->router->generate('mercredi_front_modalite');
 
-        $builder
+        $formBuilder
             ->remove('roles')
             ->add(
                 'telephone',

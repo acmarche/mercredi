@@ -6,16 +6,19 @@ use AcMarche\Mercredi\Entity\Traits\ContentTrait;
 use AcMarche\Mercredi\Entity\Traits\DocumentsTraits;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Page\Repository\PageRepository")
+ * @ORM\Entity()
  */
 class Page implements SluggableInterface
 {
+    /**
+     * @var bool
+     */
+    public $system = false;
     use IdTrait;
     use NomTrait;
     use ContentTrait;
@@ -34,16 +37,9 @@ class Page implements SluggableInterface
      */
     private $position;
 
-    /**
-     * @var Document[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Document")
-     */
-    private $documents;
-
     public function __construct()
     {
         $this->system = false;
-        $this->documents = new ArrayCollection();
     }
 
     public function __toString()
@@ -59,11 +55,6 @@ class Page implements SluggableInterface
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
-    }
-
-    public function getPosition(): ?int
-    {
-        return $this->position;
     }
 
     public function setPosition(?int $position): self

@@ -3,37 +3,18 @@
 namespace AcMarche\Mercredi\Notification\Mailer;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
 
-class NotifcationMailer
+final class NotifcationMailer
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
 
-    public function __construct(MailerInterface $mailer, OrganisationRepository $organisationRepository)
-    {
-        $this->mailer = $mailer;
-        $this->organisationRepository = $organisationRepository;
-        $this->organisation = $organisationRepository->getOrganisation();
-    }
+    use InitMailerTrait;
 
     public function sendMessagEnfantCreated(User $user, Enfant $enfant): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($user->getEmail())
             ->to($this->organisation->getEmail())
             ->subject('Un enfant a été ajouté par '.$user->getNom().' '.$user->getPrenom())
@@ -45,6 +26,6 @@ class NotifcationMailer
                 ]
             );
 
-        $this->mailer->send($email);
+        $this->sendMail($templatedEmail);
     }
 }

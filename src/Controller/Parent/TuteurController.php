@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Security;
  *
  * @Route("/tuteur")
  */
-class TuteurController extends AbstractController
+final class TuteurController extends AbstractController
 {
     use GetTuteurTrait;
 
@@ -29,16 +29,11 @@ class TuteurController extends AbstractController
      * @var TuteurUtils
      */
     private $tuteurUtils;
-    /**
-     * @var Security
-     */
-    private $security;
 
-    public function __construct(TuteurRepository $tuteurRepository, TuteurUtils $tuteurUtils, Security $security)
+    public function __construct(TuteurRepository $tuteurRepository, TuteurUtils $tuteurUtils)
     {
         $this->tuteurRepository = $tuteurRepository;
         $this->tuteurUtils = $tuteurUtils;
-        $this->security = $security;
     }
 
     /**

@@ -12,23 +12,27 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EnfantQuickType extends AbstractType
+final class EnfantQuickType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
@@ -37,7 +41,7 @@ class EnfantQuickType extends AbstractType
                 [
                     'label' => 'Né le',
                     'widget' => 'single_text',
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
@@ -45,7 +49,7 @@ class EnfantQuickType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'required' => true,
+                    self::REQUIRED => true,
                     'placeholder' => 'Choisissez son école',
                 ]
             )
@@ -60,9 +64,9 @@ class EnfantQuickType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Enfant::class,
             ]

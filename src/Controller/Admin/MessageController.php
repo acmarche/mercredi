@@ -14,7 +14,6 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Search\SearchHelper;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,22 +21,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function count;
+
 /**
  * Class DefaultController.
  *
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/message")
  */
-class MessageController extends AbstractController
+final class MessageController extends AbstractController
 {
     /**
      * @var PresenceRepository
      */
     private $presenceRepository;
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
     /**
      * @var RelationRepository
      */
@@ -62,10 +59,25 @@ class MessageController extends AbstractController
      * @var PresenceHandler
      */
     private $presenceHandler;
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const EMAILS = 'emails';
+    /**
+     * @var string
+     */
+    private const TUTEURS = 'tuteurs';
+    /**
+     * @var string
+     */
+    private const SUCCESS = 'success';
 
     public function __construct(
         PresenceRepository $presenceRepository,
-        TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
         SearchHelper $searchHelper,
         TuteurUtils $tuteurUtils,
@@ -74,7 +86,6 @@ class MessageController extends AbstractController
         PresenceHandler $presenceHandler
     ) {
         $this->presenceRepository = $presenceRepository;
-        $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
         $this->searchHelper = $searchHelper;
         $this->tuteurUtils = $tuteurUtils;
@@ -107,7 +118,7 @@ class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if (! $jour && ! $ecole) {
+            if (!$jour && !$ecole) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
@@ -126,9 +137,9 @@ class MessageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
-                'form' => $form->createView(),
-                'emails' => $emails,
-                'tuteurs' => $tuteursWithOutEmails,
+                self::FORM => $form->createView(),
+                self::EMAILS => $emails,
+                self::TUTEURS => $tuteursWithOutEmails,
             ]
         );
     }
@@ -153,7 +164,7 @@ class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
-            $this->addFlash('success', 'Le message a bien été envoyé');
+            $this->addFlash(self::SUCCESS, 'Le message a bien été envoyé');
 
             return $this->redirectToRoute('mercredi_message_index');
         }
@@ -162,9 +173,9 @@ class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                'form' => $form->createView(),
-                'emails' => $emails,
-                'tuteurs' => [],
+                self::FORM => $form->createView(),
+                self::EMAILS => $emails,
+                self::TUTEURS => [],
             ]
         );
     }
@@ -175,7 +186,7 @@ class MessageController extends AbstractController
     public function groupeScolaire(Request $request, string $groupe): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
-        if (\count($args) < 1) {
+        if (count($args) < 1) {
             return $this->redirectToRoute('mercredi_admin_presence_index');
         }
 
@@ -198,7 +209,7 @@ class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
-            $this->addFlash('success', 'Le message a bien été envoyé');
+            $this->addFlash(self::SUCCESS, 'Le message a bien été envoyé');
 
             return $this->redirectToRoute('mercredi_admin_presence_index');
         }
@@ -207,9 +218,9 @@ class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                'form' => $form->createView(),
-                'emails' => $emails,
-                'tuteurs' => [],
+                self::FORM => $form->createView(),
+                self::EMAILS => $emails,
+                self::TUTEURS => [],
             ]
         );
     }
@@ -230,7 +241,7 @@ class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
-            $this->addFlash('success', 'Le message a bien été envoyé');
+            $this->addFlash(self::SUCCESS, 'Le message a bien été envoyé');
 
             $this->searchHelper->deleteSearch(SearchHelper::MESSAGE_INDEX);
 
@@ -240,8 +251,8 @@ class MessageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
-                'emails' => $emails,
-                'form' => $form->createView(),
+                self::EMAILS => $emails,
+                self::FORM => $form->createView(),
             ]
         );
     }

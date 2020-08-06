@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Fixture;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class FixtureLoader
+final class FixtureLoader
 {
     /**
      * @var LoaderInterface

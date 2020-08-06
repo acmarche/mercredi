@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
-class SanteBinder
+final class SanteBinder
 {
     /**
      * @var SanteQuestionRepository
@@ -31,7 +31,7 @@ class SanteBinder
      */
     public function bindResponses(SanteFiche $santeFiche): array
     {
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->repository->findAll();
         if (! $santeFiche->getId()) {
             $santeFiche->setQuestions($questions);
 
@@ -40,7 +40,7 @@ class SanteBinder
 
         foreach ($questions as $question) {
             $question->setReponseTxt(null);
-            if ($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) {
+            if (($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) !== null) {
                 $question->setReponseTxt($reponse->getReponse());
                 $question->setRemarque($reponse->getRemarque());
             }

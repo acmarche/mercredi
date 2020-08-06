@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Note\Message;
 
-class NoteCreated
+final class NoteCreated
 {
     /**
      * @var int

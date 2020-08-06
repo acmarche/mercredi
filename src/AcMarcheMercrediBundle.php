@@ -4,10 +4,12 @@ namespace AcMarche\Mercredi;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AcMarcheMercrediBundle extends Bundle
+use function dirname;
+
+final class AcMarcheMercrediBundle extends Bundle
 {
     public function getPath(): string
     {
-        return \dirname(__DIR__);
+        return dirname(__DIR__);
     }
 }

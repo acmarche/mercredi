@@ -13,10 +13,8 @@ use AcMarche\Mercredi\Facture\Mailer\FactureMailer;
 use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
-use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/facture")
  */
-class FactureController extends AbstractController
+final class FactureController extends AbstractController
 {
     /**
      * @var FactureRepository
@@ -41,14 +39,6 @@ class FactureController extends AbstractController
      */
     private $factureHandler;
     /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var FacturePresenceRepository
-     */
-    private $facturePresenceRepository;
-    /**
      * @var FactureMailer
      */
     private $factureMailer;
@@ -56,19 +46,35 @@ class FactureController extends AbstractController
      * @var FactureUtils
      */
     private $factureUtils;
+    /**
+     * @var string
+     */
+    private const TUTEUR = 'tuteur';
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const MERCREDI_ADMIN_FACTURE_SHOW = 'mercredi_admin_facture_show';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
+     * @var string
+     */
+    private const FACTURE = 'facture';
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
-        PresenceRepository $presenceRepository,
-        FacturePresenceRepository $facturePresenceRepository,
         FactureMailer $factureMailer,
         FactureUtils $factureUtils
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
-        $this->presenceRepository = $presenceRepository;
-        $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureMailer = $factureMailer;
         $this->factureUtils = $factureUtils;
     }
@@ -84,7 +90,7 @@ class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/index.html.twig',
             [
                 'factures' => $factures,
-                'tuteur' => $tuteur,
+                self::TUTEUR => $tuteur,
             ]
         );
     }
@@ -100,14 +106,14 @@ class FactureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
-            $factures = $this->factureRepository->search($dataForm['tuteur'], $dataForm['paye']);
+            $factures = $this->factureRepository->search($dataForm[self::TUTEUR], $dataForm['paye']);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/search.html.twig',
             [
                 'factures' => $factures,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -133,17 +139,17 @@ class FactureController extends AbstractController
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_FACTURE_SHOW, [self::ID => $facture->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/new.html.twig',
             [
-                'tuteur' => $tuteur,
+                self::TUTEUR => $tuteur,
                 'presences' => $presences,
                 'accueils' => $accueils,
                 //   'plaines'=>$plaines,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -158,8 +164,8 @@ class FactureController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [
-                'facture' => $facture,
-                'tuteur' => $tuteur,
+                self::FACTURE => $facture,
+                self::TUTEUR => $tuteur,
             ]
         );
     }
@@ -177,14 +183,14 @@ class FactureController extends AbstractController
 
             $this->dispatchMessage(new FactureUpdated($facture->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_FACTURE_SHOW, [self::ID => $facture->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/edit.html.twig',
             [
-                'facture' => $facture,
-                'form' => $form->createView(),
+                self::FACTURE => $facture,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -209,15 +215,15 @@ class FactureController extends AbstractController
                 $this->addFlash('danger', 'Une erreur est survenue: '.$e->getMessage());
             }
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_FACTURE_SHOW, [self::ID => $facture->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/send.html.twig',
             [
-                'facture' => $facture,
-                'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                self::FACTURE => $facture,
+                self::TUTEUR => $tuteur,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -235,6 +241,6 @@ class FactureController extends AbstractController
             $this->dispatchMessage(new FactureDeleted($factureId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
     }
 }

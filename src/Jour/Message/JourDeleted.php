@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Jour\Message;
 
-class JourDeleted
+final class JourDeleted
 {
     /**
      * @var int

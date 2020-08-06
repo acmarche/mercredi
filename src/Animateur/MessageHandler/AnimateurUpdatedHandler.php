@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class AnimateurUpdatedHandler implements MessageHandlerInterface
+final class AnimateurUpdatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var AnimateurRepository
-     */
-    private $animateurRepository;
 
-    public function __construct(AnimateurRepository $animateurRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->animateurRepository = $animateurRepository;
     }
 
     public function __invoke(AnimateurUpdated $animateurUpdated): void

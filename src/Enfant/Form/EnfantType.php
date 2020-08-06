@@ -21,53 +21,65 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class EnfantType extends AbstractType
+final class EnfantType extends AbstractType
 {
     /**
      * @var Security
      */
     private $security;
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    /**
+     * @var string
+     */
+    private const LABEL = 'label';
+    /**
+     * @var string
+     */
+    private const PLACEHOLDER = 'placeholder';
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $isAdmin = ! $this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
 
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    'required' => true,
+                    self::REQUIRED => true,
                 ]
             )
             ->add(
                 'birthday',
                 BirthdayType::class,
                 [
-                    'label' => 'Né le',
+                    self::LABEL => 'Né le',
                     'widget' => 'single_text',
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    'required' => $isAdmin,
+                    self::REQUIRED => $isAdmin,
                     'choices' => MercrediConstantes::SEXES,
-                    'placeholder' => 'Choisissez son sexe',
+                    self::PLACEHOLDER => 'Choisissez son sexe',
                 ]
             )
             ->add(
@@ -81,8 +93,8 @@ class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'required' => $isAdmin,
-                    'placeholder' => 'Choisissez son école',
+                    self::REQUIRED => $isAdmin,
+                    self::PLACEHOLDER => 'Choisissez son école',
                 ]
             )
             ->add(
@@ -90,8 +102,8 @@ class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => AnneeScolaire::class,
-                    'label' => 'Année scolaire',
-                    'placeholder' => 'Choisissez son année scolaire',
+                    self::LABEL => 'Année scolaire',
+                    self::PLACEHOLDER => 'Choisissez son année scolaire',
                 ]
             )
             ->add(
@@ -99,9 +111,9 @@ class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => GroupeScolaire::class,
-                    'required' => false,
-                    'label' => 'Forcer le groupe scolaire',
-                    'placeholder' => 'Choisissez un groupe',
+                    self::REQUIRED => false,
+                    self::LABEL => 'Forcer le groupe scolaire',
+                    self::PLACEHOLDER => 'Choisissez un groupe',
                     'help' => 'Utilisé pour le listing des présences',
                 ]
             )
@@ -113,8 +125,8 @@ class EnfantType extends AbstractType
                 'photoAutorisation',
                 CheckboxType::class,
                 [
-                    'required' => false,
-                    'label' => 'Autorisation de ses photos',
+                    self::REQUIRED => false,
+                    self::LABEL => 'Autorisation de ses photos',
                     'help' => 'Cochez si les parents autorisent la diffusion des photos de l\'enfant',
                 ]
             )
@@ -122,14 +134,14 @@ class EnfantType extends AbstractType
                 'photo',
                 VichImageType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Enfant::class,
             ]

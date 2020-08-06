@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 
-class ScolaireUtils
+final class ScolaireUtils
 {
     /**
      * @var GroupeScolaireRepository
@@ -20,17 +20,17 @@ class ScolaireUtils
 
     public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): GroupeScolaire
     {
-        if ($groupeScolaire = $enfant->getGroupeScolaire()) {
+        if (($groupeScolaire = $enfant->getGroupeScolaire()) !== null) {
             return $groupeScolaire;
         }
 
-        $annee_scolaire = $enfant->getAnneeScolaire();
+        $anneeScolaire = $enfant->getAnneeScolaire();
 
-        if ($groupeScolaire = $annee_scolaire->getGroupeScolaire()) {
+        if ($groupeScolaire = $anneeScolaire->getGroupeScolaire()) {
             return $groupeScolaire;
         }
 
-        $groupes = $this->groupeScolaireRepository->findAll();
+        $groupes = $this->repository->findAll();
 
         return $groupes[0];
     }

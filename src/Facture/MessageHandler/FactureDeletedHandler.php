@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class FactureDeletedHandler implements MessageHandlerInterface
+final class FactureDeletedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var FactureRepository
-     */
-    private $factureRepository;
 
-    public function __construct(FactureRepository $factureRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->factureRepository = $factureRepository;
     }
 
     public function __invoke(FactureDeleted $factureDeleted): void

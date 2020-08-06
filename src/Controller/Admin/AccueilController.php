@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/accueil")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class AccueilController extends AbstractController
+final class AccueilController extends AbstractController
 {
     /**
      * @var AccueilRepository
@@ -47,6 +47,14 @@ class AccueilController extends AbstractController
      * @var FactureAccueilRepository
      */
     private $factureAccueilRepository;
+    /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
 
     public function __construct(
         AccueilRepository $accueilRepository,
@@ -75,7 +83,7 @@ class AccueilController extends AbstractController
             [
                 'accueils' => $accueils,
                 'relations' => $relations,
-                'enfant' => $enfant,
+                self::ENFANT => $enfant,
             ]
         );
     }
@@ -87,21 +95,21 @@ class AccueilController extends AbstractController
      */
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
-        $accueilNew = new Accueil($tuteur, $enfant);
-        $form = $this->createForm(AccueilType::class, $accueilNew);
+        $accueil = new Accueil($tuteur, $enfant);
+        $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $result = $this->accueilHandler->handleNew($enfant, $accueilNew);
+            $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatchMessage(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $result->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [self::ID => $result->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/new.html.twig',
             [
-                'enfant' => $enfant,
+                self::ENFANT => $enfant,
                 'form' => $form->createView(),
             ]
         );
@@ -114,15 +122,15 @@ class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         $cout = $this->accueilCalculator->calculate($accueil);
-        $facture = $this->factureAccueilRepository->findByAccueil($accueil);
+        $factureAccueil = $this->factureAccueilRepository->findByAccueil($accueil);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/show.html.twig',
             [
                 'accueil' => $accueil,
                 'cout' => $cout,
-                'enfant' => $enfant,
-                'facture' => $facture,
+                self::ENFANT => $enfant,
+                'facture' => $factureAccueil,
             ]
         );
     }
@@ -140,7 +148,7 @@ class AccueilController extends AbstractController
 
             $this->dispatchMessage(new AccueilUpdated($accueil->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [self::ID => $accueil->getId()]);
         }
 
         return $this->render(
@@ -165,6 +173,6 @@ class AccueilController extends AbstractController
             $this->dispatchMessage(new AccueilDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $enfant->getId()]);
     }
 }

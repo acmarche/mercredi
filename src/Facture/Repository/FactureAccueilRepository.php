@@ -13,22 +13,36 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method FactureAccueil[]    findAll()
  * @method FactureAccueil[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FactureAccueilRepository extends ServiceEntityRepository
+final class FactureAccueilRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const FACTURE = 'facture';
+    /**
+     * @var string
+     */
+    private const WITH = 'WITH';
+    /**
+     * @var string
+     */
+    private const ACCUEIL = 'accueil';
+
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, FactureAccueil::class);
+        parent::__construct($managerRegistry, FactureAccueil::class);
     }
 
     /**
+     * @param Accueil[] $accueils
      * @return FactureAccueil[]
      */
     public function findPaye(array $accueils): array
     {
         return $this->createQueryBuilder('facture_accueil')
-            ->leftJoin('facture_accueil.facture', 'facture', 'WITH')
-            ->leftJoin('facture_accueil.accueil', 'accueil', 'WITH')
-            ->addSelect('facture', 'accueil')
+            ->leftJoin('facture_accueil.facture', self::FACTURE, self::WITH)
+            ->leftJoin('facture_accueil.accueil', self::ACCUEIL, self::WITH)
+            ->addSelect(self::FACTURE, self::ACCUEIL)
             ->andWhere('facture_accueil.accueil IN (:accueils)')
             ->setParameter('accueils', $accueils)
             ->getQuery()->getResult();
@@ -37,10 +51,10 @@ class FactureAccueilRepository extends ServiceEntityRepository
     public function findByAccueil(Accueil $accueil): ?FactureAccueil
     {
         return $this->createQueryBuilder('facture_accueil')
-            ->leftJoin('facture_accueil.facture', 'facture', 'WITH')
-            ->addSelect('facture')
+            ->leftJoin('facture_accueil.facture', self::FACTURE, self::WITH)
+            ->addSelect(self::FACTURE)
             ->andWhere('facture_accueil.accueil = :accueil')
-            ->setParameter('accueil', $accueil)
+            ->setParameter(self::ACCUEIL, $accueil)
             ->getQuery()->getOneOrNullResult();
     }
 

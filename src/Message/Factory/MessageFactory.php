@@ -3,26 +3,16 @@
 namespace AcMarche\Mercredi\Message\Factory;
 
 use AcMarche\Mercredi\Entity\Message;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 
-class MessageFactory
+final class MessageFactory
 {
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-
-    public function __construct(OrganisationRepository $organisationRepository)
-    {
-        $this->organisationRepository = $organisationRepository;
-    }
+    use OrganisationPropertyInitTrait;
 
     public function createInstance(): Message
     {
-        $organisation = $this->organisationRepository->getOrganisation();
-
         $message = new Message();
-        $message->setFrom($organisation->getEmail());
+        $message->setFrom($this->organisation->getEmail());
 
         return $message;
     }

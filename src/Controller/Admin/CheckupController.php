@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/checkup")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class CheckupController extends AbstractController
+final class CheckupController extends AbstractController
 {
     /**
      * @var EnfantRepository
@@ -36,7 +35,7 @@ class CheckupController extends AbstractController
     /**
      * @Route("/orphelin", name="mercredi_admin_orphelin")
      */
-    public function orphelin(Request $request): Response
+    public function orphelin(): Response
     {
         return $this->render(
             '@AcMarcheMercrediAdmin/checkup/orphelins.html.twig',
@@ -49,7 +48,7 @@ class CheckupController extends AbstractController
     /**
      * @Route("/sansenfants", name="mercredi_admin_sansenfant")
      */
-    public function sansenfant(Request $request): Response
+    public function sansenfant(): Response
     {
         return $this->render(
             '@AcMarcheMercrediAdmin/checkup/sansenfants.html.twig',

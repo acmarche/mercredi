@@ -8,14 +8,23 @@ use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class PlainePresencesDto
+final class PlainePresencesDto
 {
     /**
      * @var Jour[]|ArrayCollection
      */
     public $daysOfPlaine;
+    /**
+     * @var Plaine
+     */
     private $plaine;
+    /**
+     * @var Enfant
+     */
     private $enfant;
+    /**
+     * @var Collection
+     */
     private $jours;
 
     public function __construct(Plaine $plaine, Enfant $enfant, iterable $daysOfPlaine)
@@ -27,9 +36,9 @@ class PlainePresencesDto
     }
 
     /**
-     * @return mixed
+     * @return Enfant
      */
-    public function getEnfant()
+    public function getEnfant(): Enfant
     {
         return $this->enfant;
     }
@@ -40,9 +49,9 @@ class PlainePresencesDto
     }
 
     /**
-     * @param mixed $jours
+     * @param Jour[] $jours
      */
-    public function setJours($jours): void
+    public function setJours(array $jours): void
     {
         foreach ($jours as $jour) {
             $this->addJour($jour);
@@ -59,7 +68,7 @@ class PlainePresencesDto
 
     public function addJour(Jour $jour): self
     {
-        if (! $this->jours->contains($jour)) {
+        if (!$this->jours->contains($jour)) {
             $this->jours[] = $jour;
         }
 

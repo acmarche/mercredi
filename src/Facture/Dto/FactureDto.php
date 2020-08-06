@@ -2,28 +2,16 @@
 
 namespace AcMarche\Mercredi\Facture\Dto;
 
-use AcMarche\Mercredi\Entity\Accueil;
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class FactureDto
+final class FactureDto
 {
     /**
      * @var Presence[]
      */
     private $presences;
-
-    /**
-     * @var Accueil[]
-     */
-    private $accueils;
-
-    /**
-     * @var Plaine[]
-     */
-    private $plaines;
 
     public function __construct(array $presences)
     {
@@ -40,7 +28,7 @@ class FactureDto
 
     public function addPresence(Presence $presence): self
     {
-        if (! $this->presences->contains($presence)) {
+        if ($this->presences->contains($presence) === []) {
             $this->presences[] = $presence;
         }
 
@@ -49,7 +37,7 @@ class FactureDto
 
     public function removePresence(Presence $presence): self
     {
-        if ($this->presences->contains($presence)) {
+        if ($this->presences->contains($presence) !== []) {
             $this->presences->removeElement($presence);
         }
 

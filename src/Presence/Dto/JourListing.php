@@ -10,8 +10,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Pour le listing par mois
  * Class JourListing.
  */
-class JourListing
+final class JourListing
 {
+    /**
+     * @var ArrayCollection
+     */
     protected $enfants;
     /**
      * @var Jour
@@ -34,9 +37,9 @@ class JourListing
         return $this->enfants;
     }
 
-    public function setEnfants(ArrayCollection $enfants): void
+    public function setEnfants(ArrayCollection $arrayCollection): void
     {
-        $this->enfants = $enfants;
+        $this->enfants = $arrayCollection;
     }
 
     public function getJour(): Jour

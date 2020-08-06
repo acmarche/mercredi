@@ -4,30 +4,18 @@ namespace AcMarche\Mercredi\Entity\Security\Traits;
 
 trait IsRoleTrait
 {
-    public function isParent()
+    public function isParent():bool
     {
-        if (\in_array('ROLE_MERCREDI_PARENT', $this->getRoles(), true)) {
-            return true;
-        }
-
-        return false;
+        return (bool) \in_array('ROLE_MERCREDI_PARENT', $this->getRoles(), true);
     }
 
-    public function isAnimateur()
+    public function isAnimateur():bool
     {
-        if (\in_array('ROLE_MERCREDI_ANIMATEUR', $this->getRoles(), true)) {
-            return true;
-        }
-
-        return false;
+        return (bool) \in_array('ROLE_MERCREDI_ANIMATEUR', $this->getRoles(), true);
     }
 
-    public function isEcole()
+    public function isEcole():bool
     {
-        if (\in_array('ROLE_MERCREDI_ECOLE', $this->getRoles(), true)) {
-            return true;
-        }
-
-        return false;
+        return (bool) \in_array('ROLE_MERCREDI_ECOLE', $this->getRoles(), true);
     }
 }

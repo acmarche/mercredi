@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Security;
  *
  * See http://symfony.com/doc/current/security/voters.html
  */
-class EnfantVoter extends Voter
+final class EnfantVoter extends Voter
 {
     public const ADD = 'enfant_new';
     public const ADD_PRESENCE = 'add_presence';
@@ -36,7 +36,7 @@ class EnfantVoter extends Voter
     /**
      * @var Tuteur
      */
-    private $tuteurOfUser;
+    private $tuteur;
     /**
      * @var TuteurUtils
      */
@@ -62,10 +62,8 @@ class EnfantVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if ($subject) {
-            if (! $subject instanceof Enfant) {
-                return false;
-            }
+        if ($subject && ! $subject instanceof Enfant) {
+            return false;
         }
 
         return \in_array(
@@ -87,7 +85,7 @@ class EnfantVoter extends Voter
             return true;
         }
 
-        $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
+        $this->tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
 
         switch ($attribute) {
             case self::SHOW:
@@ -151,11 +149,11 @@ class EnfantVoter extends Voter
             return false;
         }
 
-        if (! $this->tuteurOfUser) {
+        if (! $this->tuteur) {
             return false;
         }
 
-        $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
+        $relations = $this->relationRepository->findByTuteur($this->tuteur);
 
         $enfants = array_map(
             function ($relation) {
@@ -163,11 +161,6 @@ class EnfantVoter extends Voter
             },
             $relations
         );
-
-        if (\in_array($this->enfant->getId(), $enfants, true)) {
-            return true;
-        }
-
-        return false;
+        return \in_array($this->enfant->getId(), $enfants, true);
     }
 }

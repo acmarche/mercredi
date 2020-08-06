@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Message;
 
-class AccueilCreated
+final class AccueilCreated
 {
     /**
      * @var int

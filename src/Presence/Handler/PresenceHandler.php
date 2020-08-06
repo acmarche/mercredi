@@ -11,8 +11,9 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use Doctrine\ORM\NonUniqueResultException;
 
-class PresenceHandler
+final class PresenceHandler
 {
     /**
      * @var PresenceRepository
@@ -44,14 +45,16 @@ class PresenceHandler
     }
 
     /**
+     * @param Tuteur $tuteur
+     * @param Enfant $enfant
      * @param Jour[] $days
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function handleNew(Tuteur $tuteur, Enfant $enfant, iterable $days): void
     {
         foreach ($days as $jour) {
-            if ($this->presenceRepository->isRegistered($enfant, $jour)) {
+            if ($this->presenceRepository->isRegistered($enfant, $jour) !== null) {
                 continue;
             }
 
@@ -79,7 +82,6 @@ class PresenceHandler
     {
         $this->presenceConstraints->execute($jour);
         foreach ($this->presenceConstraints as $constraint) {
-            dump($constraint);
             if (! $constraint->check($jour)) {
                 $constraint->addFlashError($jour);
 
@@ -92,10 +94,6 @@ class PresenceHandler
 
     public function isFactured(Presence $presence): bool
     {
-        if ($this->facturePresenceRepository->findByPresence($presence)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->facturePresenceRepository->findByPresence($presence);
     }
 }

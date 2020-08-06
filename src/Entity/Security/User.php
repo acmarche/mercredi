@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\User\Repository\UserRepository")
+ * @ORM\Entity()
  * @UniqueEntity("email")
  * @UniqueEntity("username")
  */
@@ -37,27 +37,10 @@ class User implements UserInterface
     use TuteursTrait;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=150, nullable=true)
-     */
-    private $telephone;
-
-    /**
-     * @ORM\Column(type="string", length=50, unique=true)
-     */
-    private $email;
-
-    /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isVerified = false;
 
     public function __construct()
     {
@@ -67,11 +50,6 @@ class User implements UserInterface
     public function __toString()
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
-    }
-
-    public function getNiceRoles(): array
-    {
-        return MercrediSecurity::niceName($this->getRoles());
     }
 
     /**
@@ -104,34 +82,5 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): self
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    public function getIsVerified(): ?bool
-    {
-        return $this->isVerified;
-    }
-
-    public function getTelephone(): ?string
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(?string $telephone): self
-    {
-        $this->telephone = $telephone;
-
-        return $this;
     }
 }

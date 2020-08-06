@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Tuteur\Message;
 
-class TuteurCreated
+final class TuteurCreated
 {
     /**
      * @var int

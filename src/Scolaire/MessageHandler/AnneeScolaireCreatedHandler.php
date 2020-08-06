@@ -7,24 +7,19 @@ use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class AnneeScolaireCreatedHandler implements MessageHandlerInterface
+final class AnneeScolaireCreatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var AnneeScolaireRepository
-     */
-    private $anneeScolaireRepository;
 
-    public function __construct(AnneeScolaireRepository $anneeScolaireRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->anneeScolaireRepository = $anneeScolaireRepository;
     }
 
-    public function __invoke(AnneeScolaireCreated $groupeScolaireCreated): void
+    public function __invoke(AnneeScolaireCreated $anneeScolaireCreated): void
     {
         $this->flashBag->add('success', "L'année a bien été ajoutée");
     }

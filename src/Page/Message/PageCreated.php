@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Page\Message;
 
-class PageCreated
+final class PageCreated
 {
     /**
      * @var int

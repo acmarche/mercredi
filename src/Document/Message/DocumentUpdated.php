@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Document\Message;
 
-class DocumentUpdated
+final class DocumentUpdated
 {
     /**
      * @var int

@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/enfant")
  */
-class EnfantController extends AbstractController
+final class EnfantController extends AbstractController
 {
     use GetTuteurTrait;
 
@@ -71,6 +71,10 @@ class EnfantController extends AbstractController
      * @var NotifcationMailer
      */
     private $notifcationMailer;
+    /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -139,7 +143,7 @@ class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/enfant/new.html.twig',
             [
-                'enfant' => $enfant,
+                self::ENFANT => $enfant,
                 'form' => $form->createView(),
             ]
         );
@@ -160,7 +164,7 @@ class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/enfant/show.html.twig',
             [
-                'enfant' => $enfant,
+                self::ENFANT => $enfant,
                 'presences' => $presences,
                 'plaines' => $plaines,
                 'accueils' => $accueils,
@@ -189,7 +193,7 @@ class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/enfant/edit.html.twig',
             [
-                'enfant' => $enfant,
+                self::ENFANT => $enfant,
                 'form' => $form->createView(),
             ]
         );

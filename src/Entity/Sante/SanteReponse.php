@@ -9,27 +9,24 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table("sante_reponse", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
- * }))
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteReponseRepository")
- * @UniqueEntity(fields={"sante_fiche", "question"}, message="Une réponse existe déjà")
- */
-class SanteReponse
+ * }) */
+final class SanteReponse
 {
     use IdTrait;
 
     /**
      * @var SanteQuestion
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion", inversedBy="reponse")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $question;
+    private $santeQuestion;
 
     /**
      * @var SanteFiche
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", inversedBy="reponses", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $sante_fiche;
+    private $santeFiche;
 
     /**
      * @var bool
@@ -47,28 +44,28 @@ class SanteReponse
 
     public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
     {
-        $this->sante_fiche = $santeFiche;
-        $this->question = $santeQuestion;
+        $this->santeFiche = $santeFiche;
+        $this->santeQuestion = $santeQuestion;
     }
 
     public function getQuestion(): SanteQuestion
     {
-        return $this->question;
+        return $this->santeQuestion;
     }
 
-    public function setQuestion(SanteQuestion $question): void
+    public function setQuestion(SanteQuestion $santeQuestion): void
     {
-        $this->question = $question;
+        $this->santeQuestion = $santeQuestion;
     }
 
     public function getSanteFiche(): SanteFiche
     {
-        return $this->sante_fiche;
+        return $this->santeFiche;
     }
 
-    public function setSanteFiche(SanteFiche $sante_fiche): void
+    public function setSanteFiche(SanteFiche $santeFiche): void
     {
-        $this->sante_fiche = $sante_fiche;
+        $this->santeFiche = $santeFiche;
     }
 
     public function isReponse(): bool

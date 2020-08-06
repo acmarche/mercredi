@@ -10,21 +10,21 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table("plaine_jour", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"jour_id", "plaine_id"})
- * }))
- * @UniqueEntity({"jour", "plaine"})
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Plaine\Repository\PlaineJourRepository")
+ * })
  */
-class PlaineJour
+final class PlaineJour
 {
     use IdTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_jours")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine")
+     * @var Plaine|null
      */
     private $plaine;
 
     /**
-     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="plaine_jour")
+     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
+     * @var Jour|null
      */
     private $jour;
 

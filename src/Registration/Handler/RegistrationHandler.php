@@ -2,9 +2,6 @@
 
 namespace AcMarche\Mercredi\Registration\Handler;
 
-class RegistrationHandler
+final class RegistrationHandler
 {
-    public function new(): void
-    {
-    }
 }

@@ -4,8 +4,8 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Factory\FacturePdfFactory;
-use AcMarche\Mercredi\Sante\Factory\SantePdfFactory;
+use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
+use AcMarche\Mercredi\Sante\Factory\SantePdfFactoryTrait;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +18,10 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/export/pdf")
  */
-class ExportPdfController extends AbstractController
+final class ExportPdfController extends AbstractController
 {
     /**
-     * @var SantePdfFactory
+     * @var SantePdfFactoryTrait
      */
     private $santePdfFactory;
     /**
@@ -29,11 +29,11 @@ class ExportPdfController extends AbstractController
      */
     private $santeHandler;
     /**
-     * @var FacturePdfFactory
+     * @var FacturePdfFactoryTrait
      */
     private $facturePdfFactory;
 
-    public function __construct(SanteHandler $santeHandler, SantePdfFactory $santePdfFactory, FacturePdfFactory $facturePdfFactory)
+    public function __construct(SanteHandler $santeHandler, SantePdfFactoryTrait $santePdfFactory, FacturePdfFactoryTrait $facturePdfFactory)
     {
         $this->santePdfFactory = $santePdfFactory;
         $this->santeHandler = $santeHandler;

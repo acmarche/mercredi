@@ -3,26 +3,20 @@
 namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Pdf\AbstractPdfDownloader;
-use Knp\Snappy\Pdf;
+use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
-class FacturePdfFactory extends AbstractPdfDownloader
+final class FacturePdfFactoryTrait
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
+    use PdfDownloaderTrait;
+
     /**
      * @var FactureFactory
      */
     private $factureFactory;
 
-    public function __construct(Pdf $pdf, FactureFactory $factureFactory)
+    public function __construct(FactureFactory $factureFactory)
     {
-        parent::__construct($pdf);
-
         $this->factureFactory = $factureFactory;
     }
 

@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class SanteFicheDeletedHandler implements MessageHandlerInterface
+final class SanteFicheDeletedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var SanteFicheRepository
-     */
-    private $santeFicheRepository;
 
-    public function __construct(SanteFicheRepository $santeFicheRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->santeFicheRepository = $santeFicheRepository;
     }
 
     public function __invoke(SanteFicheDeleted $santeFicheDeleted): void

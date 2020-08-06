@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Message;
 
-class UserCreated
+final class UserCreated
 {
     /**
      * @var int

@@ -10,7 +10,7 @@ trait HalfTrait
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $half;
+    private $half = false;
 
     public function isHalf(): bool
     {

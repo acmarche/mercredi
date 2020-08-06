@@ -9,12 +9,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SanteReponseType extends AbstractType
+final class SanteReponseType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $choices = array_flip(['Non', 'Oui']);
-        $builder
+        $formBuilder
             ->add(
                 'reponseTxt',
                 ChoiceType::class,
@@ -36,9 +36,9 @@ class SanteReponseType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => SanteQuestion::class,
             ]

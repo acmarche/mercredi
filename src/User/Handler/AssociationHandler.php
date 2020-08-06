@@ -11,7 +11,9 @@ use AcMarche\Mercredi\User\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class AssociationHandler
+use function count;
+
+final class AssociationHandler
 {
     /**
      * @var TuteurRepository
@@ -29,6 +31,10 @@ class AssociationHandler
      * @var UserFactory
      */
     private $userFactory;
+    /**
+     * @var string
+     */
+    private const SUCCESS = 'success';
 
     public function __construct(
         TuteurRepository $tuteurRepository,
@@ -42,33 +48,33 @@ class AssociationHandler
         $this->userFactory = $userFactory;
     }
 
-    public function suggestTuteur(User $user, AssociateUserTuteurDto $dto): void
+    public function suggestTuteur(User $user, AssociateUserTuteurDto $associateUserTuteurDto): void
     {
         $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
-        if ($tuteur) {
-            $dto->setTuteur($tuteur);
+        if ($tuteur !== null) {
+            $associateUserTuteurDto->setTuteur($tuteur);
         }
     }
 
-    public function handleAssociateParent(AssociateUserTuteurDto $dto): void
+    public function handleAssociateParent(AssociateUserTuteurDto $associateUserTuteurDto): void
     {
-        $tuteur = $dto->getTuteur();
-        $user = $dto->getUser();
+        $tuteur = $associateUserTuteurDto->getTuteur();
+        $user = $associateUserTuteurDto->getUser();
 
-        if (\count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
+        if (count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
             //remove old tuteur
             $user->getTuteurs()->clear();
         }
 
-        $tuteur->addUser($dto->getUser());
+        $tuteur->addUser($associateUserTuteurDto->getUser());
         $this->tuteurRepository->flush();
 
-        $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
+        $this->flashBag->add(self::SUCCESS, 'L\'utilisateur a bien été associé.');
 
-        if ($dto->isSendEmail()) {
+        if ($associateUserTuteurDto->isSendEmail()) {
             try {
                 $this->userMailer->sendNewAccountToParent($user, $tuteur);
-                $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
+                $this->flashBag->add(self::SUCCESS, 'Un mail de bienvenue a été envoyé');
             } catch (TransportExceptionInterface $e) {
                 $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
             }
@@ -80,7 +86,7 @@ class AssociationHandler
         $user->removeTuteur($tuteur);
 
         $this->tuteurRepository->flush();
-        $this->flashBag->add('success', 'Le parent a bien été dissocié.');
+        $this->flashBag->add(self::SUCCESS, 'Le parent a bien été dissocié.');
 
         return $tuteur;
     }
@@ -88,16 +94,13 @@ class AssociationHandler
     public function handleCreateUserFromTuteur(Tuteur $tuteur): User
     {
         $user = $this->userFactory->newFromTuteur($tuteur);
-        $password = $user->getPlainPassword();
-        $this->userMailer->sendNewAccountToParent($user, $tuteur, $password);
+        $plainPassword = $user->getPlainPassword();
+        try {
+            $this->userMailer->sendNewAccountToParent($user, $tuteur, $plainPassword);
+        } catch (TransportExceptionInterface $e) {
+            $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
+        }
 
         return $user;
-    }
-
-    private function dissociateParent(User $user, Tuteur $tuteur): void
-    {
-        $tuteur->removeUser($user);
-        $this->tuteurRepository->flush();
-        $this->flashBag->add('success', 'L\'utilisateur a bien été dissocié.');
     }
 }

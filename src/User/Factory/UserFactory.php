@@ -9,8 +9,9 @@ use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Security\PasswordGenerator;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
-class UserFactory
+final class UserFactory
 {
     /**
      * @var UserRepository
@@ -19,24 +20,23 @@ class UserFactory
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $passwordEncoder;
+    private $userPasswordEncoder;
 
-    public function __construct(UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(
+        PasswordUpgraderInterface $userRepository,
+        UserPasswordEncoderInterface $userPasswordEncoder)
     {
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     public function getInstance(?string $email = null): User
     {
         $user = new User();
-        if ($email) {
-            if (! $user = $this->userRepository->findOneByEmailOrUserName($email)) {
-                $user = new User();
-                $user->setEmail($email);
-                $user->setUsername($email);
-            }
+        if ($email && ! $user = $this->userRepository->findOneByEmailOrUserName($email)) {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setUsername($email);
         }
 
         $user->setEnabled(true);
@@ -46,7 +46,7 @@ class UserFactory
 
     public function newFromAnimateur(Animateur $animateur, ?User $user = null): User
     {
-        if (! $user) {
+        if ($user === null) {
             $user = $this->getInstance($animateur->getEmail());
             $user->setNom($animateur->getNom());
             $user->setPrenom($animateur->getPreNom());
@@ -58,9 +58,9 @@ class UserFactory
         $user->setUsername($user->getEmail());
         $user->setUsername($user->getEmail());
         $user->setPlainPassword(PasswordGenerator::generatePassword());
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
         $user->addRole(MercrediSecurity::ROLE_ANIMATEUR);
-        $user->addAnimateur($animateur);
+        //$user->addAnimateur($animateur);
 
         $this->userRepository->insert($user);
 
@@ -69,7 +69,7 @@ class UserFactory
 
     public function newFromTuteur(Tuteur $tuteur, ?User $user = null): User
     {
-        if (! $user) {
+        if ($user === null) {
             $user = $this->getInstance($tuteur->getEmail());
             $user->setNom($tuteur->getNom());
             $user->setPrenom($tuteur->getPreNom());
@@ -80,7 +80,7 @@ class UserFactory
 
         $user->setUsername($user->getEmail());
         $user->setPlainPassword(PasswordGenerator::generatePassword());
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
 
         $user->addTuteur($tuteur);
         $user->addRole(MercrediSecurity::ROLE_PARENT);

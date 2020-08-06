@@ -11,12 +11,16 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/organisation")
  */
-class OrganisationController extends AbstractController
+final class OrganisationController extends AbstractController
 {
     /**
      * @var OrganisationRepository
      */
     private $organisationRepository;
+    /**
+     * @var string
+     */
+    private const ORGANISATION = 'organisation';
 
     public function __construct(
         OrganisationRepository $organisationRepository
@@ -34,7 +38,7 @@ class OrganisationController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/organisation/_organisation.html.twig',
             [
-                'organisation' => $organisation,
+                self::ORGANISATION => $organisation,
             ]
         );
     }
@@ -49,7 +53,7 @@ class OrganisationController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/organisation/_organisation_title.html.twig',
             [
-                'organisation' => $organisation,
+                self::ORGANISATION => $organisation,
             ]
         );
     }
@@ -64,7 +68,7 @@ class OrganisationController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/organisation/_organisation_short.html.twig',
             [
-                'organisation' => $organisation,
+                self::ORGANISATION => $organisation,
             ]
         );
     }

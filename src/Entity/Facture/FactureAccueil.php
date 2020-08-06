@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository")
+ * @ORM\Entity()
  * @ORM\Table("facture_accueil", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"accueil_id"})
  * })
@@ -41,7 +41,7 @@ class FactureAccueil
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $accueilDate;
+    private $dateTime;
 
     /**
      * @var string
@@ -61,21 +61,11 @@ class FactureAccueil
         $this->accueil = $accueil;
     }
 
-    public function getAccueilDate(): ?\DateTimeInterface
+    public function setAccueilDate(\DateTimeInterface $dateTime): self
     {
-        return $this->accueilDate;
-    }
-
-    public function setAccueilDate(\DateTimeInterface $accueilDate): self
-    {
-        $this->accueilDate = $accueilDate;
+        $this->dateTime = $dateTime;
 
         return $this;
-    }
-
-    public function getCout(): ?float
-    {
-        return $this->cout;
     }
 
     public function setCout(float $cout): self
@@ -83,11 +73,6 @@ class FactureAccueil
         $this->cout = $cout;
 
         return $this;
-    }
-
-    public function getHeure(): ?string
-    {
-        return $this->heure;
     }
 
     public function setHeure(string $heure): self

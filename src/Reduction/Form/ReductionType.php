@@ -10,18 +10,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReductionType extends AbstractType
+final class ReductionType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('nom')
             ->add(
                 'pourcentage',
                 PercentType::class,
                 [
                     'label' => 'Pourcentage',
-                    'required' => false,
+                    self::REQUIRED => false,
                     'type' => 'integer',
                     'help' => 'Uniquement les chiffres',
                 ]
@@ -29,7 +33,7 @@ class ReductionType extends AbstractType
                 'forfait',
                 MoneyType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'help' => 'Montant du forfait, uniquement les chiffres',
                 ]
             )
@@ -37,14 +41,14 @@ class ReductionType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Reduction::class,
             ]

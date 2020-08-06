@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Utils;
 
 use AcMarche\Mercredi\Entity\Jour;
 
-class SortUtils
+final class SortUtils
 {
     /**
      * @param Jour[] $data

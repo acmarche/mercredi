@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class ReductionDeletedHandler implements MessageHandlerInterface
+final class ReductionDeletedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var ReductionRepository
-     */
-    private $reductionRepository;
 
-    public function __construct(ReductionRepository $reductionRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->reductionRepository = $reductionRepository;
     }
 
     public function __invoke(ReductionDeleted $reductionDeleted): void

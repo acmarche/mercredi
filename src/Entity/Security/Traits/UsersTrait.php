@@ -10,6 +10,7 @@ trait UsersTrait
 {
     /**
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="tuteurs" )
+     * @var User[]|Collection
      */
     private $users;
 

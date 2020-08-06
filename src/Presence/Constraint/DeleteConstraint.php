@@ -5,34 +5,27 @@ namespace AcMarche\Mercredi\Presence\Constraint;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Presence;
 use DateTime;
+use DateTimeInterface;
 
 /**
  * Pour les parents ne peuvent supprimer une date passée
  * Class DeleteConstraint.
  */
-class DeleteConstraint
+final class DeleteConstraint
 {
     public static function canBeDeleted(Presence $presence)
     {
-        $today = new DateTime();
-        if ($presence->getJour()->getDateJour() <= $today) {
-            return false;
-        }
-
-        return true;
+        $dateTime = new DateTime();
+        return $presence->getJour()->getDateJour() > $dateTime;
     }
 
-    public static function accueilCanBeDeleted(Accueil $presence)
+    public static function accueilCanBeDeleted(Accueil $accueil)
     {
-        $today = new DateTime();
-        if ($presence->getDateJour() <= $today) {
-            return false;
-        }
-
-        return true;
+        $dateTime = new DateTime();
+        return $accueil->getDateJour() > $dateTime;
     }
 
-    public function constraintDelete(\DateTimeInterface $datePresence, $today = null): bool
+    public function constraintDelete(DateTimeInterface $dateTime, $today = null): bool
     {
         /*
          * Si on est un mardi la veille !
@@ -43,18 +36,16 @@ class DeleteConstraint
             $lendemain = clone $today;
             $lendemain = $lendemain->modify('+1 day');
             //la veille ?
-            if ($lendemain->format('d-m-Y') === $datePresence->format('d-m-Y')) {
+            if ($lendemain->format('d-m-Y') === $dateTime->format('d-m-Y')) {
                 //si après 10h
                 $heure = (int) $today->format('G');
                 $minute = (int) $today->format('i');
                 if ($heure > 10) {
                     return false;
                 }
-                if (10 === $heure) {
-                    //si après 10h02
-                    if ($minute > 02) {
-                        return false;
-                    }
+                //si après 10h02
+                if (10 === $heure && $minute > 02) {
+                    return false;
                 }
             }
         }

@@ -11,12 +11,10 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SiteWebTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Organisation\Repository\OrganisationRepository")
+ * @ORM\Entity()
  * @Vich\Uploadable
  */
 class Organisation
@@ -30,45 +28,8 @@ class Organisation
     use RemarqueTrait;
     use PhotoTrait;
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    private $initiale;
-
-    /**
-     * overload pour nullable false.
-     *
-     * @var string|null
-     * @Assert\Email()
-     * @ORM\Column(name="email", type="string", length=50, nullable=false)
-     */
-    private $email;
-
-    /**
-     * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     * @Assert\Image(
-     *     maxSize="7M"
-     * )
-     *
-     * @var UploadedFile
-     */
-    private $photo;
-
     public function __toString()
     {
         return $this->nom;
-    }
-
-    public function getInitiale(): ?string
-    {
-        return $this->initiale;
-    }
-
-    public function setInitiale(?string $initiale): void
-    {
-        $this->initiale = $initiale;
     }
 }

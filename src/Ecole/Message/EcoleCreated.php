@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Ecole\Message;
 
-class EcoleCreated
+final class EcoleCreated
 {
     /**
      * @var int

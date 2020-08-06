@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class AnneeScolaireDeletedHandler implements MessageHandlerInterface
+final class AnneeScolaireDeletedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var AnneeScolaireRepository
-     */
-    private $anneeScolaireRepository;
 
-    public function __construct(AnneeScolaireRepository $anneeScolaireRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->anneeScolaireRepository = $anneeScolaireRepository;
     }
 
     public function __invoke(AnneeScolaireDeleted $anneeScolaireDeleted): void

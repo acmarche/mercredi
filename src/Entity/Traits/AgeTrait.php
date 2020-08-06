@@ -19,7 +19,7 @@ trait AgeTrait
 
         $today = new \DateTime();
 
-        if ($date_reference) {
+        if ($date_reference !== null) {
             $today = $date_reference;
         }
 

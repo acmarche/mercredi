@@ -13,11 +13,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AnneeScolaire[]    findAll()
  * @method AnneeScolaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AnneeScolaireRepository extends ServiceEntityRepository
+final class AnneeScolaireRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, AnneeScolaire::class);
+        parent::__construct($managerRegistry, AnneeScolaire::class);
     }
 
     /**
@@ -25,22 +25,22 @@ class AnneeScolaireRepository extends ServiceEntityRepository
      */
     public function findAllOrderByOrdre(): array
     {
-        return $this->createQueryBuilder('annee_scolaire')
+        return $this->repository->createQueryBuilder('annee_scolaire')
             ->orderBy('annee_scolaire.ordre', 'ASC')->getQuery()->getResult();
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder('jour')
+        return $this->repository->createQueryBuilder('jour')
             ->andWhere('jour.archived = 0')
             ->orderBy('jour.date_jour', 'DESC');
     }
 
-    public function findOneByDateGroupeScolaire(\DateTime $date): ?AnneeScolaire
+    public function findOneByDateGroupeScolaire(\DateTime $dateTime): ?AnneeScolaire
     {
-        return $this->createQueryBuilder('jour')
+        return $this->repository->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $date->format('Y-m-d').'%')
+            ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->getQuery()->getOneOrNullResult();
     }
 

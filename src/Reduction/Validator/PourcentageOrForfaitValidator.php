@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Reduction;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class PourcentageOrForfaitValidator extends ConstraintValidator
+final class PourcentageOrForfaitValidator extends ConstraintValidator
 {
     /**
      * Soi pourcentage soit forfait.

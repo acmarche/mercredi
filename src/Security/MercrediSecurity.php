@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Security;
 
-class MercrediSecurity
+final class MercrediSecurity
 {
     public const ROLE_ADMIN = 'ROLE_MERCREDI_ADMIN';
     public const ROLE_PARENT = 'ROLE_MERCREDI_PARENT';

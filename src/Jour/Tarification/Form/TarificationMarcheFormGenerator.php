@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Twig\Environment;
 
-class TarificationMarcheFormGenerator implements TarificationFormGeneratorInterface
+final class TarificationMarcheFormGenerator implements TarificationFormGeneratorInterface
 {
     /**
      * @var FormFactoryInterface

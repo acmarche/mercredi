@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class DefaultController.
  */
-class DefaultController extends AbstractController
+final class DefaultController extends AbstractController
 {
     /**
      * @var PageRepository
@@ -35,7 +35,7 @@ class DefaultController extends AbstractController
     public function index()
     {
         $homePage = $this->pageRepository->findHomePage();
-        if (! $homePage) {
+        if ($homePage === null) {
             $homePage = $this->pageFactory->createHomePage();
         }
 
@@ -52,7 +52,7 @@ class DefaultController extends AbstractController
      */
     public function menu()
     {
-        $pages = $this->pageRepository->findAll();
+        $pages = $this->repository->findAll();
 
         return $this->render(
             '@AcMarcheMercredi/front/_menu_top.html.twig',

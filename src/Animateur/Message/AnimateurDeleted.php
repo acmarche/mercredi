@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Animateur\Message;
 
-class AnimateurDeleted
+final class AnimateurDeleted
 {
     /**
      * @var int

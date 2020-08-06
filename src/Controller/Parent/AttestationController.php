@@ -14,23 +14,21 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/attestation")
  */
-class AttestationController extends AbstractController
+final class AttestationController extends AbstractController
 {
+    public $relationRepository;
     use GetTuteurTrait;
 
     /**
      * @Route("/", name="mercredi_parent_attestation")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function default(Request $request)
+    public function default()
     {
         $this->hasTuteur();
-
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
         $enfants = RelationUtils::extractEnfants($relations);
-
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
-
         return $this->render(
             '@AcMarcheMercrediParent/default/index.html.twig',
             [

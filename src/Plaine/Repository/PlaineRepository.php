@@ -13,11 +13,11 @@ use Doctrine\ORM\QueryBuilder;
  * @method Plaine[]    findAll()
  * @method Plaine[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlaineRepository extends ServiceEntityRepository
+final class PlaineRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Plaine::class);
+        parent::__construct($managerRegistry, Plaine::class);
     }
 
     public function findPlaineOpen(): ?Plaine
@@ -26,6 +26,12 @@ class PlaineRepository extends ServiceEntityRepository
             ->andWhere('plaine.inscriptionOpen = 1')
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getQbForListing(): QueryBuilder
+    {
+        return $this->createQueryBuilder('plaine')
+            ->orderBy('plaine.nom', 'ASC');
     }
 
     public function remove(Plaine $plaine): void
@@ -43,9 +49,4 @@ class PlaineRepository extends ServiceEntityRepository
         $this->_em->persist($plaine);
     }
 
-    public function getQbForListing(): QueryBuilder
-    {
-        return $this->createQueryBuilder('plaine')
-            ->orderBy('plaine.nom', 'ASC');
-    }
 }

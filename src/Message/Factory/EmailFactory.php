@@ -3,30 +3,16 @@
 namespace AcMarche\Mercredi\Message\Factory;
 
 use AcMarche\Mercredi\Entity\Message;
-use AcMarche\Mercredi\Entity\Organisation;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
-class EmailFactory
+final class EmailFactory
 {
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
-
-    public function __construct(OrganisationRepository $organisationRepository)
-    {
-        $this->organisationRepository = $organisationRepository;
-        $this->organisation = $organisationRepository->getOrganisation();
-    }
+    use OrganisationPropertyInitTrait;
 
     public function create(Message $message): TemplatedEmail
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->subject($message->getSujet())
             ->from($message->getFrom())
             //  ->htmlTemplate('@AcMarcheMercrediAdmin/mail/mail.html.twig')
@@ -41,10 +27,14 @@ class EmailFactory
         /*
          * Pieces jointes.
          */
-        if ($file = $message->getFile()) {
-            $email->attachFromPath($file->getRealPath(), $file->getClientOriginalName(), $file->getClientMimeType());
+        if (($uploadedFile = $message->getFile()) !== null) {
+            $templatedEmail->attachFromPath(
+                $uploadedFile->getRealPath(),
+                $uploadedFile->getClientOriginalName(),
+                $uploadedFile->getClientMimeType()
+            );
         }
 
-        return $email;
+        return $templatedEmail;
     }
 }

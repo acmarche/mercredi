@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table("message")
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Message\Repository\MessageRepository")
+ * @ORM\Entity()
  */
 class Message implements TimestampableInterface
 {
@@ -43,7 +43,7 @@ class Message implements TimestampableInterface
     /**
      * @var UploadedFile|null
      */
-    private $file;
+    private $uploadedFile;
 
     /**
      * @var array|null
@@ -67,33 +67,14 @@ class Message implements TimestampableInterface
         return $this->sujet;
     }
 
-    public function setSujet(string $sujet): self
-    {
-        $this->sujet = $sujet;
-
-        return $this;
-    }
-
     public function getTexte(): ?string
     {
         return $this->texte;
     }
 
-    public function setTexte(string $texte): self
-    {
-        $this->texte = $texte;
-
-        return $this;
-    }
-
     public function getFile(): ?UploadedFile
     {
-        return $this->file;
-    }
-
-    public function setFile(?UploadedFile $file): void
-    {
-        $this->file = $file;
+        return $this->uploadedFile;
     }
 
     public function getDestinataires(): ?array

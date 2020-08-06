@@ -10,7 +10,7 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
 /**
  * @Route("/document")
  */
-class DocumentController extends AbstractController
+final class DocumentController extends AbstractController
 {
     /**
      * @var DownloadHandler

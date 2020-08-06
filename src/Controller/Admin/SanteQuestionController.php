@@ -13,17 +13,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function is_array;
 
 /**
  * @Route("/sante/question")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class SanteQuestionController extends AbstractController
+final class SanteQuestionController extends AbstractController
 {
     /**
      * @var SanteQuestionRepository
      */
     private $santeQuestionRepository;
+    /**
+     * @var string
+     */
+    private const SANTE_QUESTION = 'sante_question';
 
     public function __construct(SanteQuestionRepository $santeQuestionRepository)
     {
@@ -64,7 +69,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/new.html.twig',
             [
-                'sante_question' => $santeQuestion,
+                self::SANTE_QUESTION => $santeQuestion,
                 'form' => $form->createView(),
             ]
         );
@@ -78,7 +83,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/show.html.twig',
             [
-                'sante_question' => $santeQuestion,
+                self::SANTE_QUESTION => $santeQuestion,
             ]
         );
     }
@@ -102,7 +107,7 @@ class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/edit.html.twig',
             [
-                'sante_question' => $santeQuestion,
+                self::SANTE_QUESTION => $santeQuestion,
                 'form' => $form->createView(),
             ]
         );
@@ -130,10 +135,10 @@ class SanteQuestionController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $questions = $request->request->get('questions');
-            if (\is_array($questions)) {
+            if (is_array($questions)) {
                 foreach ($questions as $position => $questionId) {
                     $santeQuestion = $this->santeQuestionRepository->find($questionId);
-                    if ($santeQuestion) {
+                    if ($santeQuestion !== null) {
                         $santeQuestion->setDisplayOrder($position);
                     }
                 }

@@ -7,11 +7,12 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\PresenceTrait;
+use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository")
+ * @ORM\Entity()
  * @ORM\Table("facture_presence", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"presence_id"})
  * })
@@ -41,7 +42,7 @@ class FacturePresence
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $presenceDate;
+    private $dateTime;
 
     /**
      * @var float
@@ -49,27 +50,17 @@ class FacturePresence
      */
     private $cout;
 
-    public function __construct(Facture $facture, Presence $presence)
+    public function __construct(Facture $facture, PresenceInterface $presence)
     {
         $this->facture = $facture;
         $this->presence = $presence;
     }
 
-    public function getPresenceDate(): ?\DateTimeInterface
+    public function setPresenceDate(\DateTimeInterface $dateTime): self
     {
-        return $this->presenceDate;
-    }
-
-    public function setPresenceDate(\DateTimeInterface $presenceDate): self
-    {
-        $this->presenceDate = $presenceDate;
+        $this->dateTime = $dateTime;
 
         return $this;
-    }
-
-    public function getCout(): ?float
-    {
-        return $this->cout;
     }
 
     public function setCout(float $cout): self

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Document\Message;
 
-class DocumentDeleted
+final class DocumentDeleted
 {
     /**
      * @var int

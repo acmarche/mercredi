@@ -11,13 +11,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PresenceNewType extends AbstractType
+final class PresenceNewType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $enfant = $builder->getData()->getEnfant();
+        $enfant = $formBuilder->getData()->getEnfant();
 
-        $builder
+        $formBuilder
             ->add(
                 'jours',
                 EntityType::class,
@@ -41,9 +41,9 @@ class PresenceNewType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => PresenceSelectDays::class,
             ]

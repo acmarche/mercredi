@@ -10,16 +10,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SanteFicheType extends AbstractType
+final class SanteFicheType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const LABEL = 'label';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'personne_urgence',
                 TextareaType::class,
                 [
-                    'label' => 'Personne(s) en cas d\'urgence',
+                    self::LABEL => 'Personne(s) en cas d\'urgence',
                     'help' => 'Nom, prénom et numéro de téléphone',
                 ]
             )
@@ -27,14 +31,14 @@ class SanteFicheType extends AbstractType
                 'medecin_nom',
                 TextType::class,
                 [
-                    'label' => 'Nom du médecin',
+                    self::LABEL => 'Nom du médecin',
                 ]
             )
             ->add(
                 'medecin_telephone',
                 TextType::class,
                 [
-                    'label' => 'Téléphone du médecin',
+                    self::LABEL => 'Téléphone du médecin',
                 ]
             )
             ->add(
@@ -55,7 +59,7 @@ class SanteFicheType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false,
-                    'label' => "D'autres remarques",
+                    self::LABEL => "D'autres remarques",
                 ]
             )
             ->add(
@@ -67,9 +71,9 @@ class SanteFicheType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => SanteFiche::class,
             ]

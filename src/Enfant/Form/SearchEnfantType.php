@@ -9,17 +9,29 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class SearchEnfantType extends AbstractType
+final class SearchEnfantType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    /**
+     * @var string
+     */
+    private const ATTR = 'attr';
+    /**
+     * @var string
+     */
+    private const PLACEHOLDER = 'placeholder';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 SearchType::class,
                 [
-                    'required' => false,
-                    'attr' => ['placeholder' => 'Nom'],
+                    self::REQUIRED => false,
+                    self::ATTR => [self::PLACEHOLDER => 'Nom'],
                 ]
             )
             ->add(
@@ -27,9 +39,9 @@ class SearchEnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'required' => false,
-                    'placeholder' => 'Choisissez une école',
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                    self::REQUIRED => false,
+                    self::PLACEHOLDER => 'Choisissez une école',
+                    self::ATTR => ['class' => 'custom-select my-1 mr-sm-2'],
                 ]
             )
             ->add(
@@ -38,9 +50,9 @@ class SearchEnfantType extends AbstractType
                 [
                     'class' => AnneeScolaire::class,
                     'label' => 'Année scolaire',
-                    'placeholder' => 'Choisissez son année scolaire',
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-                    'required' => false,
+                    self::PLACEHOLDER => 'Choisissez son année scolaire',
+                    self::ATTR => ['class' => 'custom-select my-1 mr-sm-2'],
+                    self::REQUIRED => false,
                 ]
             );
     }

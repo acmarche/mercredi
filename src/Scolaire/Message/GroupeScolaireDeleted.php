@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Scolaire\Message;
 
-class GroupeScolaireDeleted
+final class GroupeScolaireDeleted
 {
     /**
      * @var int

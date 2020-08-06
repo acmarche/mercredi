@@ -5,9 +5,13 @@ namespace AcMarche\Mercredi\User\Repository;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+use function get_class;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,20 +19,24 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($managerRegistry, User::class);
     }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     * @param UserInterface $user
+     * @param string $newEncodedPassword
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
         if (! $user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
         $user->setPassword($newEncodedPassword);
@@ -46,26 +54,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * @param string $name
-     * @param string $role
+     * @param string|null $name
+     * @param string|null $role
      *
      * @return User[]
      */
     public function findByNameOrRoles(?string $name, ?string $role): array
     {
-        $qb = $this->createQueryBuilder('user');
+        $queryBuilder = $this->createQueryBuilder('user');
 
         if ($name) {
-            $qb->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
+            $queryBuilder->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
                 ->setParameter('nom', '%'.$name.'%');
         }
 
         if ($role) {
-            $qb->andWhere('user.roles LIKE :role')
+            $queryBuilder->andWhere('user.roles LIKE :role')
                 ->setParameter('role', '%'.$role.'%');
         }
 
-        return $qb
+        return $queryBuilder
             ->addOrderBy('user.nom', 'ASC')
             ->getQuery()
             ->getResult();

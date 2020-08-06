@@ -20,28 +20,41 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 /**
  * @Route("/reset-password")
  */
-class ResetPasswordController extends AbstractController
+final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
+    /**
+     * @var \SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface
+     */
     private $resetPasswordHelper;
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $passwordEncoder;
+    private $userPasswordEncoder;
     /**
      * @var ResetPasswordMailer
      */
     private $resetPasswordMailer;
+    /**
+     * @var string
+     */
+    private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
+    /**
+     * @var \AcMarche\Mercredi\Repository\Security\UserRepository
+     */
+    private $userRepository;
 
     public function __construct(
         ResetPasswordHelperInterface $resetPasswordHelper,
-        UserPasswordEncoderInterface $passwordEncoder,
-        ResetPasswordMailer $resetPasswordMailer
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        ResetPasswordMailer $resetPasswordMailer,
+        \AcMarche\Mercredi\Repository\Security\UserRepository $userRepository
     ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordEncoder = $userPasswordEncoder;
         $this->resetPasswordMailer = $resetPasswordMailer;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -78,7 +91,7 @@ class ResetPasswordController extends AbstractController
     {
         // We prevent users from directly accessing this page
         if (! $this->canCheckEmail()) {
-            return $this->redirectToRoute('mercredi_front_forgot_password_request');
+            return $this->redirectToRoute(self::MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST);
         }
 
         return $this->render(
@@ -122,7 +135,7 @@ class ResetPasswordController extends AbstractController
                 )
             );
 
-            return $this->redirectToRoute('mercredi_front_forgot_password_request');
+            return $this->redirectToRoute(self::MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST);
         }
 
         // The token is valid; allow the user to change their password.
@@ -134,7 +147,7 @@ class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $this->passwordEncoder->encodePassword(
+            $encodedPassword = $this->userPasswordEncoder->encodePassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
@@ -156,9 +169,9 @@ class ResetPasswordController extends AbstractController
         );
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(
+        $user = $this->userRepository->findOneBy(
             [
                 'email' => $emailFormData,
             ]
@@ -173,7 +186,7 @@ class ResetPasswordController extends AbstractController
         }
 
         try {
-            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+            $resetPasswordToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash(
                 'reset_password_error',
@@ -183,10 +196,10 @@ class ResetPasswordController extends AbstractController
                 )
             );
 
-            return $this->redirectToRoute('mercredi_front_forgot_password_request');
+            return $this->redirectToRoute(self::MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST);
         }
 
-        $this->resetPasswordMailer->sendLink($user, $resetToken, $this->resetPasswordHelper->getTokenLifetime());
+        $this->resetPasswordMailer->sendLink($user, $resetPasswordToken, $this->resetPasswordHelper->getTokenLifetime());
 
         return $this->redirectToRoute('mercredi_front_check_email');
     }

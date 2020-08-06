@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Reduction\Calculator;
 
 use AcMarche\Mercredi\Entity\Reduction;
 
-class ReductionCalculator
+final class ReductionCalculator
 {
     public function applicate(Reduction $reduction, float $montant): float
     {

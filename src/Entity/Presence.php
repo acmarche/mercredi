@@ -24,7 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table("presence", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"jour_id", "enfant_id"})
  * })
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Presence\Repository\PresenceRepository")
+ * @ORM\Entity()
  * @UniqueEntity(fields={"jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
  */
 class Presence implements TimestampableInterface, PresenceInterface, UuidableInterface
@@ -43,27 +43,26 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     use HalfTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
+     * @var \AcMarche\Mercredi\Entity\Jour|null
      */
     private $jour;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
+     * @var \AcMarche\Mercredi\Entity\Enfant|null
      */
     private $enfant;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
+     * @var \AcMarche\Mercredi\Entity\Tuteur|null
      */
     private $tuteur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")
-     */
-    private $reduction;
-
-    /**
-     * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
+     * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment"="-1 sans certif,1 avec certfi"})
+     * @var int
      */
     private $absent;
 
@@ -78,8 +77,6 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
 
     public function __toString()
     {
-        $date_jour = $this->jour->getDateJour();
-
         return 'presence to string';
     }
 }

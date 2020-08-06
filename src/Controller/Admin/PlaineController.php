@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
@@ -22,16 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/plaine")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PlaineController extends AbstractController
+final class PlaineController extends AbstractController
 {
     /**
      * @var PlaineRepository
      */
     private $plaineRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
     /**
      * @var PlainePresenceRepository
      */
@@ -43,12 +38,10 @@ class PlaineController extends AbstractController
 
     public function __construct(
         PlaineRepository $plaineRepository,
-        EnfantRepository $enfantRepository,
         PlainePresenceRepository $plainePresenceRepository,
         GroupeScolaireRepository $groupeScolaireRepository
     ) {
         $this->plaineRepository = $plaineRepository;
-        $this->enfantRepository = $enfantRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->groupeScolaireRepository = $groupeScolaireRepository;
     }

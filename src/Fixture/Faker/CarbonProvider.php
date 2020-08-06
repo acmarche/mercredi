@@ -11,7 +11,7 @@ use Faker\Provider\Base as BaseProvider;
  * Util pour le chargement des fixtures lors des tests
  * Class CarbonProvider.
  */
-class CarbonProvider extends BaseProvider
+final class CarbonProvider extends BaseProvider
 {
     public function carbonDateTime(int $year, int $month, int $day, int $hour, int $minute): DateTime
     {
@@ -24,7 +24,9 @@ class CarbonProvider extends BaseProvider
     }
 
     /**
-     * @return \Carbon\CarbonImmutable|bool
+     * @param string $format
+     * @param string $date
+     * @return CarbonImmutable|bool
      */
     public function carbonFromFormat(string $format, string $date)
     {

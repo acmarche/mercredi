@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Data;
 
-class MercrediConstantes
+final class MercrediConstantes
 {
     public const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
     public const ORDRES = ['' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
@@ -35,16 +35,10 @@ class MercrediConstantes
         switch ($sexe) {
             case 'Masculin':
                 return 'Monsieur';
-
-                break;
             case 'Féminin':
                 return 'Madame';
-
-                break;
             default:
                 return '';
-
-                break;
         }
     }
 }

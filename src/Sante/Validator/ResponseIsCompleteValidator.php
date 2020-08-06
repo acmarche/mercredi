@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class ResponseIsCompleteValidator extends ConstraintValidator
+final class ResponseIsCompleteValidator extends ConstraintValidator
 {
     /**
      * @var SanteChecker

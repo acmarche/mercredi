@@ -3,14 +3,16 @@
 namespace AcMarche\Mercredi\Message\Handler;
 
 use AcMarche\Mercredi\Entity\Message;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Message\Factory\EmailFactory;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 
-class MessageHandler
+final class MessageHandler
 {
+    use InitMailerTrait;
+
     /**
      * @var MessageRepository
      */
@@ -20,10 +22,6 @@ class MessageHandler
      */
     private $emailFactory;
     /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
      * @var FlashBagInterface
      */
     private $flashBag;
@@ -31,24 +29,22 @@ class MessageHandler
     public function __construct(
         MessageRepository $messageRepository,
         EmailFactory $emailFactory,
-        MailerInterface $mailer,
         FlashBagInterface $flashBag
     ) {
         $this->messageRepository = $messageRepository;
         $this->emailFactory = $emailFactory;
-        $this->mailer = $mailer;
         $this->flashBag = $flashBag;
     }
 
     public function handle(Message $message): void
     {
-        $email = $this->emailFactory->create($message);
+        $templatedEmail = $this->emailFactory->create($message);
 
         foreach ($message->getDestinataires() as $addressEmail) {
-            $email->to($addressEmail);
+            $templatedEmail->to($addressEmail);
 
             try {
-                $this->mailer->send($email);
+                $this->sendMail($templatedEmail);
             } catch (TransportExceptionInterface $e) {
                 $this->flashBag->add('danger', 'Erreur pour l\'email '.$addressEmail.': '.$e->getMessage());
             }

@@ -6,9 +6,10 @@ use AcMarche\Mercredi\Utils\PropertyUtil;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Exception;
 use Symfony\Component\Security\Core\Security;
 
-class UserAddSubscriber implements EventSubscriber
+final class UserAddSubscriber implements EventSubscriber
 {
     /**
      * @var Security
@@ -33,14 +34,14 @@ class UserAddSubscriber implements EventSubscriber
         ];
     }
 
-    public function prePersist(LifecycleEventArgs $args): void
+    public function prePersist(LifecycleEventArgs $lifecycleEventArgs): void
     {
-        $entity = $args->getObject();
-        if (! $this->propertyUtil->getPropertyAccessor()->isWritable($entity, 'userAdd')) {
+        $object = $lifecycleEventArgs->getObject();
+        if (! $this->propertyUtil->getPropertyAccessor()->isWritable($object, 'userAdd')) {
             return;
         }
 
-        $this->setUserAdd($entity);
+        $this->setUserAdd($object);
     }
 
     private function setUserAdd(object $entity): void
@@ -52,8 +53,8 @@ class UserAddSubscriber implements EventSubscriber
 
         $user = $this->security->getUser();
 
-        if (! $user) {
-            throw new \Exception('You must be login');
+        if ($user === null) {
+            throw new Exception('You must be login');
         }
 
         if ($user) {

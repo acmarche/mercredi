@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Message;
 
-class EnfantDeleted
+final class EnfantDeleted
 {
     /**
      * @var int

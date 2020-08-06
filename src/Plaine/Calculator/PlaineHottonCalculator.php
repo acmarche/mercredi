@@ -10,7 +10,7 @@ use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
-class PlaineHottonCalculator implements PlaineCalculatorInterface
+final class PlaineHottonCalculator implements PlaineCalculatorInterface
 {
     /**
      * @var PlainePresenceHandler
@@ -56,7 +56,7 @@ class PlaineHottonCalculator implements PlaineCalculatorInterface
 
     private function reductionApplicate(PresenceInterface $presence, float $cout)
     {
-        if ($reduction = $presence->getReduction()) {
+        if (($reduction = $presence->getReduction()) !== null) {
             return $this->reductionCalculator->applicate($reduction, $cout);
         }
 

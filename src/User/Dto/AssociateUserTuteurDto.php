@@ -4,8 +4,9 @@ namespace AcMarche\Mercredi\User\Dto;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class AssociateUserTuteurDto
+final class AssociateUserTuteurDto
 {
     /**
      * @var User
@@ -22,7 +23,7 @@ class AssociateUserTuteurDto
      */
     private $sendEmail = true;
 
-    public function __construct(User $user)
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }

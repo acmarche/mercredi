@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Reduction\Message;
 
-class ReductionUpdated
+final class ReductionUpdated
 {
     /**
      * @var int

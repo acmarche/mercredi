@@ -12,11 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Reduction[]    findAll()
  * @method Reduction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ReductionRepository extends ServiceEntityRepository
+final class ReductionRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Reduction::class);
+        parent::__construct($managerRegistry, Reduction::class);
     }
 
     public function remove(Reduction $reduction): void

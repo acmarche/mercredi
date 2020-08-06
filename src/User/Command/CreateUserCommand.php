@@ -11,9 +11,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
-class CreateUserCommand extends Command
+use function strlen;
+
+final class CreateUserCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'mercredi:create-user';
     /**
      * @var UserRepository
@@ -23,9 +29,13 @@ class CreateUserCommand extends Command
      * @var UserPasswordEncoderInterface
      */
     private $userPasswordEncoder;
+    /**
+     * @var string
+     */
+    private const EMAIL = 'email';
 
     public function __construct(
-        UserRepository $userRepository,
+        PasswordUpgraderInterface $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder,
         ?string $name = null
     ) {
@@ -40,31 +50,31 @@ class CreateUserCommand extends Command
         $this
             ->setDescription('Création d\'un utilisateur')
             ->addArgument('name', InputArgument::REQUIRED, 'nom')
-            ->addArgument('email', InputArgument::REQUIRED, 'Email')
+            ->addArgument(self::EMAIL, InputArgument::REQUIRED, 'Email')
             ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
-        $email = $input->getArgument('email');
+        $email = $input->getArgument(self::EMAIL);
         $name = $input->getArgument('name');
         $password = $input->getArgument('password');
 
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $io->error('Adresse email non valide');
+            $symfonyStyle->error('Adresse email non valide');
 
             return 1;
         }
 
-        if (\strlen($name) < 1) {
-            $io->error('Name minium 1');
+        if (strlen($name) < 1) {
+            $symfonyStyle->error('Name minium 1');
 
             return 1;
         }
-        if (null !== $this->userRepository->findOneBy(['email' => $email])) {
-            $io->error('Un utilisateur existe déjà avec cette adresse email');
+        if (null !== $this->userRepository->findOneBy([self::EMAIL => $email])) {
+            $symfonyStyle->error('Un utilisateur existe déjà avec cette adresse email');
 
             return 1;
         }
@@ -78,7 +88,7 @@ class CreateUserCommand extends Command
 
         $this->userRepository->insert($user);
 
-        $io->success('User crée.');
+        $symfonyStyle->success('User crée.');
 
         return 0;
     }

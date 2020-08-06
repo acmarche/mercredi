@@ -13,31 +13,31 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method SanteFiche[]|null findAll()
  * @method SanteFiche[]      findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SanteFicheRepository extends ServiceEntityRepository
+final class SanteFicheRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, SanteFiche::class);
+        parent::__construct($managerRegistry, SanteFiche::class);
     }
 
     public function getByEnfants(iterable $enfants)
     {
-        $qb = $this->createQueryBuilder('sante_fiche');
+        $queryBuilder = $this->repository->createQueryBuilder('sante_fiche');
 
-        $qb->andWhere('sante_fiche.enfant IN (:enfants)')
+        $queryBuilder->andWhere('sante_fiche.enfant IN (:enfants)')
             ->setParameter('enfants', $enfants);
 
-        return $qb->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
-    public function persist(SanteFiche $enfant): void
+    public function persist(SanteFiche $santeFiche): void
     {
-        $this->_em->persist($enfant);
+        $this->_em->persist($santeFiche);
     }
 
-    public function remove(SanteFiche $enfant): void
+    public function remove(SanteFiche $santeFiche): void
     {
-        $this->_em->remove($enfant);
+        $this->_em->remove($santeFiche);
     }
 
     public function flush(): void
@@ -47,7 +47,7 @@ class SanteFicheRepository extends ServiceEntityRepository
 
     public function findByEnfant(Enfant $enfant): ?SanteFiche
     {
-        return $this->createQueryBuilder('sante_fiche')->andWhere('sante_fiche.enfant = :enfant')
+        return $this->repository->createQueryBuilder('sante_fiche')->andWhere('sante_fiche.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getOneOrNullResult();
     }

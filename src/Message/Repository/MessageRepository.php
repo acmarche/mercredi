@@ -12,11 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Message[]    findAll()
  * @method Message[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MessageRepository extends ServiceEntityRepository
+final class MessageRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Message::class);
+        parent::__construct($managerRegistry, Message::class);
     }
 
     public function remove(Message $message): void

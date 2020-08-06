@@ -14,16 +14,16 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method SanteReponse[]|null findAll()
  * @method SanteReponse[]      findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SanteReponseRepository extends ServiceEntityRepository
+final class SanteReponseRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, SanteReponse::class);
+        parent::__construct($managerRegistry, SanteReponse::class);
     }
 
     public function getResponse(SanteFiche $santeFiche, SanteQuestion $santeQuestion): ?SanteReponse
     {
-        return $this->createQueryBuilder('reponse')
+        return $this->repository->createQueryBuilder('reponse')
             ->andWhere('reponse.sante_fiche = :fiche')
             ->setParameter('fiche', $santeFiche)
             ->andWhere('reponse.question = :question')
@@ -38,7 +38,7 @@ class SanteReponseRepository extends ServiceEntityRepository
      */
     public function findBySanteFiche(SanteFiche $santeFiche): array
     {
-        return $this->createQueryBuilder('reponse')
+        return $this->repository->createQueryBuilder('reponse')
             ->andWhere('reponse.sante_fiche = :fiche')
             ->setParameter('fiche', $santeFiche)
             ->getQuery()->getResult();

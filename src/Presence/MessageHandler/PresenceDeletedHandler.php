@@ -3,25 +3,19 @@
 namespace AcMarche\Mercredi\Presence\MessageHandler;
 
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class PresenceDeletedHandler implements MessageHandlerInterface
+final class PresenceDeletedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
 
-    public function __construct(PresenceRepository $presenceRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->presenceRepository = $presenceRepository;
     }
 
     public function __invoke(PresenceDeleted $presenceDeleted): void

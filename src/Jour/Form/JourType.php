@@ -12,32 +12,40 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class JourType extends AbstractType
+final class JourType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const LABEL = 'label';
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'date_jour',
                 DateWidgetType::class,
                 [
-                    'label' => 'Date du jour de garde',
+                    self::LABEL => 'Date du jour de garde',
                 ]
             )
             ->add(
                 'pedagogique',
                 CheckboxType::class,
                 [
-                    'label' => 'Journée pédagoque',
-                    'required' => false,
+                    self::LABEL => 'Journée pédagoque',
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'color',
                 ColorType::class,
                 [
-                    'required' => false,
-                    'label' => 'Couleur',
+                    self::REQUIRED => false,
+                    self::LABEL => 'Couleur',
                 ]
             )
             ->add(
@@ -51,8 +59,8 @@ class JourType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
-                    'label' => 'Remarques',
+                    self::REQUIRED => false,
+                    self::LABEL => 'Remarques',
                     'help' => 'Cette donnée est visible par les parents et dans le listing des présences',
                     'attr' => [
                         'rows' => 5,
@@ -61,9 +69,9 @@ class JourType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Jour::class,
             ]

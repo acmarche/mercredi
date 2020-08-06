@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
 
-class TuteurEnfantDto
+final class TuteurEnfantDto
 {
     use EnfantTrait;
     use TuteurTrait;

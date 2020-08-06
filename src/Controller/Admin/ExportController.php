@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/export")
  */
-class ExportController extends AbstractController
+final class ExportController extends AbstractController
 {
     /**
      * @var SpreadsheetFactory

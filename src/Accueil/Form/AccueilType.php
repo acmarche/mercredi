@@ -13,23 +13,27 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 
-class AccueilType extends AbstractType
+final class AccueilType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const LABEL = 'label';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'date_jour',
                 DateWidgetType::class,
                 [
-                    'label' => 'Date',
+                    self::LABEL => 'Date',
                 ]
             )
             ->add(
                 'heure',
                 ChoiceType::class,
                 [
-                    'label' => 'Quand',
+                    self::LABEL => 'Quand',
                     'placeholder' => 'Matin ou soir',
                     'choices' => AccueilService::getMatinSoir(),
                     'multiple' => false,
@@ -41,7 +45,7 @@ class AccueilType extends AbstractType
                 'duree',
                 IntegerType::class,
                 [
-                    'label' => 'Temps resté',
+                    self::LABEL => 'Temps resté',
                     'help' => 'Nombre de demi heure que l\'enfant est resté',
                     'constraints' => [
                         new GreaterThan(
@@ -62,9 +66,9 @@ class AccueilType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Accueil::class,
             ]

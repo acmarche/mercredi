@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Tuteur\Message;
 
-class TuteurDeleted
+final class TuteurDeleted
 {
     /**
      * @var int

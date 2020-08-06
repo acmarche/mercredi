@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/plaine_jour")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PlaineJourController extends AbstractController
+final class PlaineJourController extends AbstractController
 {
     /**
      * @var PlaineRepository
@@ -32,6 +32,10 @@ class PlaineJourController extends AbstractController
      * @var PlaineHandler
      */
     private $plaineHandler;
+    /**
+     * @var string
+     */
+    private const PLAINE = 'plaine';
 
     public function __construct(
         PlaineRepository $plaineRepository,
@@ -78,7 +82,7 @@ class PlaineJourController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_jour/edit.html.twig',
             [
-                'plaine' => $plaine,
+                self::PLAINE => $plaine,
                 'form' => $form->createView(),
             ]
         );
@@ -92,7 +96,7 @@ class PlaineJourController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',
             [
-                'plaine' => $plaine,
+                self::PLAINE => $plaine,
             ]
         );
     }
@@ -103,7 +107,7 @@ class PlaineJourController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
-            if (\count($this->enfantRepository->findBy(['plaine' => $plaine])) > 0) {
+            if (count($this->enfantRepository->findBy([self::PLAINE => $plaine])) > 0) {
                 $this->addFlash('danger', 'La plaine contient des enfants et ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);

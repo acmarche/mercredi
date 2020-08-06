@@ -15,7 +15,7 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 
-class FactureHandler
+final class FactureHandler
 {
     /**
      * @var FactureRepository
@@ -76,13 +76,16 @@ class FactureHandler
     }
 
     /**
+     * @param Facture $facture
      * @param int[] $presencesId
+     * @param array $accueilsId
+     * @return Facture
      */
     public function handleNew(Facture $facture, array $presencesId, array $accueilsId): Facture
     {
         $this->handlePresences($presencesId, $facture);
         $this->handleAccueils($accueilsId, $facture);
-        if (! $facture->getId()) {
+        if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
         $this->factureRepository->flush();
@@ -94,10 +97,10 @@ class FactureHandler
     private function handlePresences(array $presencesId, Facture $facture): void
     {
         foreach ($presencesId as $presenceId) {
-            if (! $presence = $this->presenceRepository->find($presenceId)) {
+            if (($presence = $this->presenceRepository->find($presenceId)) === null) {
                 continue;
             }
-            if ($this->facturePresenceRepository->findByPresence($presence)) {
+            if ($this->facturePresenceRepository->findByPresence($presence) !== null) {
                 continue;
             }
             $facturePresence = new FacturePresence($facture, $presence);
@@ -114,10 +117,10 @@ class FactureHandler
     private function handleAccueils(array $accueilsId, Facture $facture): void
     {
         foreach ($accueilsId as $accueilId) {
-            if (! $accueil = $this->accueilRepository->find($accueilId)) {
+            if (($accueil = $this->accueilRepository->find($accueilId)) === null) {
                 continue;
             }
-            if ($this->factureAccueilRepository->findByAccueil($accueil)) {
+            if ($this->factureAccueilRepository->findByAccueil($accueil) !== null) {
                 continue;
             }
             $factureAccueil = new FactureAccueil($facture, $accueil);

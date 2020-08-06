@@ -4,32 +4,35 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
-use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @Route("/utilisateur/password")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PasswordController extends AbstractController
+final class PasswordController extends AbstractController
 {
+    /**
+     * @var \AcMarche\Mercredi\User\Repository\UserRepository
+     */
     private $userRepository;
 
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $passwordEncoder;
+    private $userPasswordEncoder;
 
     public function __construct(
-        UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder
+        PasswordUpgraderInterface $userRepository,
+        UserPasswordEncoderInterface $userPasswordEncoder
     ) {
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
@@ -44,7 +47,7 @@ class PasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->passwordEncoder->encodePassword($user, $form->getData()->getPlainPassword());
+            $password = $this->userPasswordEncoder->encodePassword($user, $form->getData()->getPlainPassword());
             $user->setPassword($password);
             $this->userRepository->flush();
             $this->addFlash('success', 'Le mot de passe a bien été modifié');

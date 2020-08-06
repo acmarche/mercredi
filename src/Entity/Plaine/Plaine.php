@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Plaine\Repository\PlaineRepository")
+ * @ORM\Entity()
  */
 class Plaine
 {
@@ -24,23 +24,9 @@ class Plaine
     use PrematernelleTrait;
     use PlaineGroupesTrait;
 
-    /**
-     * @var PlaineJour[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="plaine", cascade={"remove"})
-     */
-    private $plaine_jours;
-
-    /**
-     * @var PlaineGroupe[]|null
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="plaine", cascade={"remove","persist"})
-     */
-    private $plaine_groupes;
-
     public function __construct()
     {
         $this->jours = new ArrayCollection();
-        $this->plaine_groupes = new ArrayCollection();
-        $this->plaine_jours = new ArrayCollection();
         $this->inscriptionOpen = false;
         $this->prix1 = 0;
         $this->prix2 = 0;

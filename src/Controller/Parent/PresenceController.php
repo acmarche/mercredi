@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/presence")
  * @IsGranted("ROLE_MERCREDI_PARENT")
  */
-class PresenceController extends AbstractController
+final class PresenceController extends AbstractController
 {
     use GetTuteurTrait;
 
@@ -43,14 +43,6 @@ class PresenceController extends AbstractController
      * @var PresenceHandler
      */
     private $presenceHandler;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
-    /**
-     * @var PresenceUtils
-     */
-    private $presenceUtils;
     /**
      * @var RelationUtils
      */
@@ -68,28 +60,24 @@ class PresenceController extends AbstractController
      */
     private $santeHandler;
     /**
-     * @var DateConstraint
+     * @var string
      */
-    private $dateConstraint;
+    private const UUID = 'uuid';
     /**
-     * @var PresenceConstraints
+     * @var string
      */
-    private $presenceConstraints;
+    private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
 
     public function __construct(
         RelationUtils $relationUtils,
         TuteurUtils $tuteurUtils,
         PresenceRepository $presenceRepository,
-        JourRepository $jourRepository,
         PresenceHandler $presenceHandler,
-        PresenceUtils $presenceUtils,
         SanteChecker $santeChecker,
         SanteHandler $santeHandler
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
-        $this->jourRepository = $jourRepository;
-        $this->presenceUtils = $presenceUtils;
         $this->relationUtils = $relationUtils;
         $this->tuteurUtils = $tuteurUtils;
         $this->santeChecker = $santeChecker;
@@ -162,11 +150,11 @@ class PresenceController extends AbstractController
         if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
-            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
         }
 
-        $dto = new PresenceSelectDays($enfant);
-        $form = $this->createForm(PresenceNewForParentType::class, $dto);
+        $presenceSelectDays = new PresenceSelectDays($enfant);
+        $form = $this->createForm(PresenceNewForParentType::class, $presenceSelectDays);
 
         $form->handleRequest($request);
 
@@ -177,7 +165,7 @@ class PresenceController extends AbstractController
 
             $this->dispatchMessage(new PresenceCreated($days));
 
-            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);
         }
 
         return $this->render(
@@ -215,7 +203,7 @@ class PresenceController extends AbstractController
             if (! DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
-                return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+                return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);
             }
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
@@ -223,6 +211,6 @@ class PresenceController extends AbstractController
             $this->dispatchMessage(new PresenceDeleted($presenceId));
         }
 
-        return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+        return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);
     }
 }

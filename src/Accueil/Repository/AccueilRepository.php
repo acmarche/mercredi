@@ -15,22 +15,26 @@ use Doctrine\ORM\QueryBuilder;
  * @method Accueil[]    findAll()
  * @method Accueil[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccueilRepository extends ServiceEntityRepository
+final class AccueilRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const ACCUEIL = 'accueil';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Accueil::class);
+        parent::__construct($managerRegistry, Accueil::class);
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQueryBuilder(self::ACCUEIL)
             ->orderBy('accueil.date_jour', 'ASC');
     }
 
     public function isRegistered(Accueil $accueil, Enfant $enfant): ?Accueil
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQueryBuilder(self::ACCUEIL)
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour = :date')
@@ -45,7 +49,7 @@ class AccueilRepository extends ServiceEntityRepository
      */
     public function findByEnfant(Enfant $enfant): array
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQueryBuilder(self::ACCUEIL)
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
@@ -56,7 +60,7 @@ class AccueilRepository extends ServiceEntityRepository
      */
     public function findByTuteur(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQueryBuilder(self::ACCUEIL)
             ->andWhere('accueil.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
@@ -75,9 +79,5 @@ class AccueilRepository extends ServiceEntityRepository
     public function persist(Accueil $accueil): void
     {
         $this->_em->persist($accueil);
-    }
-
-    public function findAccueilsByTuteur(Tuteur $tuteur): void
-    {
     }
 }

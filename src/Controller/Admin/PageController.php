@@ -14,16 +14,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function is_array;
+
 /**
  * @Route("/page")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PageController extends AbstractController
+final class PageController extends AbstractController
 {
     /**
      * @var PageRepository
      */
     private $pageRepository;
+    /**
+     * @var string
+     */
+    private const PAGES = 'pages';
+    /**
+     * @var string
+     */
+    private const PAGE = 'page';
 
     public function __construct(PageRepository $pageRepository)
     {
@@ -38,7 +48,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/index.html.twig',
             [
-                'pages' => $this->pageRepository->findAll(),
+                self::PAGES => $this->pageRepository->findAll(),
             ]
         );
     }
@@ -64,7 +74,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/new.html.twig',
             [
-                'page' => $page,
+                self::PAGE => $page,
                 'form' => $form->createView(),
             ]
         );
@@ -78,7 +88,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/show.html.twig',
             [
-                'page' => $page,
+                self::PAGE => $page,
             ]
         );
     }
@@ -102,7 +112,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/edit.html.twig',
             [
-                'page' => $page,
+                self::PAGE => $page,
                 'form' => $form->createView(),
             ]
         );
@@ -129,12 +139,12 @@ class PageController extends AbstractController
     public function trier(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $pages = $request->request->get('pages');
-            if (\is_array($pages)) {
+            $pages = $request->request->get(self::PAGES);
+            if (is_array($pages)) {
                 foreach ($pages as $position => $pageId) {
-                    $santeQuestion = $this->pageRepository->find($pageId);
-                    if ($santeQuestion) {
-                        $santeQuestion->setPosition($position);
+                    $page = $this->pageRepository->find($pageId);
+                    if ($page !== null) {
+                        $page->setPosition($position);
                     }
                 }
                 $this->pageRepository->flush();
@@ -150,7 +160,7 @@ class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/sort.html.twig',
             [
-                'pages' => $pages,
+                self::PAGES => $pages,
             ]
         );
     }

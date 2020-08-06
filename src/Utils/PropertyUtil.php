@@ -7,7 +7,7 @@ use Symfony\Bridge\Doctrine\PropertyInfo\DoctrineExtractor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class PropertyUtil
+final class PropertyUtil
 {
     /**
      * @var EntityManagerInterface

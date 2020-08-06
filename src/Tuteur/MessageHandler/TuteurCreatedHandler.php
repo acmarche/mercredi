@@ -3,25 +3,19 @@
 namespace AcMarche\Mercredi\Tuteur\MessageHandler;
 
 use AcMarche\Mercredi\Tuteur\Message\TuteurCreated;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class TuteurCreatedHandler implements MessageHandlerInterface
+final class TuteurCreatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
 
-    public function __construct(TuteurRepository $tuteurRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->tuteurRepository = $tuteurRepository;
     }
 
     public function __invoke(TuteurCreated $tuteurCreated): void

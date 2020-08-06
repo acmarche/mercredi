@@ -7,8 +7,9 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use DateTimeInterface;
 
-class ListingPresenceByMonth
+final class ListingPresenceByMonth
 {
     /**
      * @var Presence[]
@@ -37,11 +38,11 @@ class ListingPresenceByMonth
         $this->jourRepository = $jourRepository;
     }
 
-    public function create(\DateTimeInterface $month): self
+    public function create(DateTimeInterface $dateTime): self
     {
-        $daysOfMonth = $this->getDaysOfMonth($month);
-        $this->presences = $this->getPresencesOfMonth($month);
-        $this->enfants = $this->getEnfantsPresentsOfMonth($month);
+        $daysOfMonth = $this->getDaysOfMonth($dateTime);
+        $this->presences = $this->getPresencesOfMonth($dateTime);
+        $this->enfants = $this->getEnfantsPresentsOfMonth();
 
         $joursListing = [];
 
@@ -61,11 +62,12 @@ class ListingPresenceByMonth
     }
 
     /**
+     * @param DateTimeInterface $dateTime
      * @return Jour[]
      */
-    public function getDaysOfMonth(\DateTimeInterface $month)
+    public function getDaysOfMonth(DateTimeInterface $dateTime)
     {
-        return $this->jourRepository->findDaysByMonth($month);
+        return $this->jourRepository->findDaysByMonth($dateTime);
     }
 
     /**
@@ -93,17 +95,18 @@ class ListingPresenceByMonth
     }
 
     /**
+     * @param DateTimeInterface $dateTime
      * @return Presence[]
      */
-    private function getPresencesOfMonth(\DateTimeInterface $month): array
+    private function getPresencesOfMonth(DateTimeInterface $dateTime): array
     {
-        return $this->presenceRepository->findByMonth($month);
+        return $this->presenceRepository->findByMonth($dateTime);
     }
 
     /**
      * @return Enfant[]
      */
-    private function getEnfantsPresentsOfMonth(\DateTimeInterface $month): array
+    private function getEnfantsPresentsOfMonth(): array
     {
         $enfants = array_map(
             function ($presence) {
@@ -111,7 +114,6 @@ class ListingPresenceByMonth
             },
             $this->presences
         );
-
         return array_unique($enfants);
     }
 }

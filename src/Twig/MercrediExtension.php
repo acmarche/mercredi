@@ -6,13 +6,34 @@ use AcMarche\Mercredi\Data\MercrediConstantes;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class MercrediExtension extends AbstractExtension
+final class MercrediExtension extends AbstractExtension
 {
+    /**
+     * @var string[]
+     */
+    private const MONTHS = [
+        1 => 'Janvier',
+        'Février',
+        'Mars',
+        'Avril',
+        'Mai',
+        'Juin',
+        'Juillet',
+        'Août',
+        'Septembre',
+        'Octobre',
+        'Novembre',
+        'Décembre',
+    ];
     public function getFilters(): array
     {
         return [
-            new TwigFilter('mercredi_month_fr', [$this, 'monthFr']),
-            new TwigFilter('mercredi_absence_text', [$this, 'absenceFilter']),
+            new TwigFilter('mercredi_month_fr', function (int $number) {
+                return $this->monthFr($number);
+            }),
+            new TwigFilter('mercredi_absence_text', function ($number) : string {
+                return $this->absenceFilter($number);
+            }),
         ];
     }
 
@@ -23,21 +44,6 @@ class MercrediExtension extends AbstractExtension
 
     public function monthFr(int $number)
     {
-        $months = [
-            1 => 'Janvier',
-            'Février',
-            'Mars',
-            'Avril',
-            'Mai',
-            'Juin',
-            'Juillet',
-            'Août',
-            'Septembre',
-            'Octobre',
-            'Novembre',
-            'Décembre',
-        ];
-
-        return isset($months[$number]) ? $months[$number] : $number;
+        return isset(self::MONTHS[$number]) ? self::MONTHS[$number] : $number;
     }
 }

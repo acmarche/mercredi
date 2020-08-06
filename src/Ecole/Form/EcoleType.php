@@ -11,31 +11,35 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EcoleType extends AbstractType
+final class EcoleType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('nom')
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add('telephone')
@@ -44,22 +48,22 @@ class EcoleType extends AbstractType
                 'email',
                 EmailType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                 ]
             )
             ->add(
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'attr' => ['rows' => 8],
                 ]
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Ecole::class,
             ]

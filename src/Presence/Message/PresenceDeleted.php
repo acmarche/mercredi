@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Message;
 
-class PresenceDeleted
+final class PresenceDeleted
 {
     /**
      * @var int

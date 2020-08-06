@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
@@ -20,9 +19,9 @@ use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/presence")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class PresenceController extends AbstractController
+final class PresenceController extends AbstractController
 {
     /**
      * @var PresenceRepository
@@ -49,17 +48,9 @@ class PresenceController extends AbstractController
      */
     private $searchHelper;
     /**
-     * @var JourRepository
-     */
-    private $jourRepository;
-    /**
      * @var ListingPresenceByMonth
      */
     private $listingPresenceByMonth;
-    /**
-     * @var PresenceUtils
-     */
-    private $presenceUtils;
     /**
      * @var PresenceCalculatorInterface
      */
@@ -68,23 +59,27 @@ class PresenceController extends AbstractController
      * @var FacturePresenceRepository
      */
     private $facturePresenceRepository;
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
 
     public function __construct(
         PresenceRepository $presenceRepository,
-        JourRepository $jourRepository,
         PresenceHandler $presenceHandler,
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
-        PresenceUtils $presenceUtils,
         PresenceCalculatorInterface $presenceCalculator,
         FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
         $this->searchHelper = $searchHelper;
-        $this->jourRepository = $jourRepository;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
-        $this->presenceUtils = $presenceUtils;
         $this->presenceCalculator = $presenceCalculator;
         $this->facturePresenceRepository = $facturePresenceRepository;
     }
@@ -114,7 +109,7 @@ class PresenceController extends AbstractController
             '@AcMarcheMercrediAdmin/presence/index.html.twig',
             [
                 'data' => $data,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
                 'search' => $search,
                 'jour' => $jour,
                 'display_remarques' => $displayRemarque,
@@ -143,7 +138,7 @@ class PresenceController extends AbstractController
 
             try {
                 $date = DateUtils::createDateTimeFromDayMonth($mois);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->addFlash('danger', $e->getMessage());
 
                 return $this->redirectToRoute('mercredi_admin_presence_by_month');
@@ -157,7 +152,7 @@ class PresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index_by_month.html.twig',
             [
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
                 'search_form' => $form->createView(),
                 'search' => $search,
                 'month' => $mois,
@@ -173,8 +168,8 @@ class PresenceController extends AbstractController
      */
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
-        $dto = new PresenceSelectDays($enfant);
-        $form = $this->createForm(PresenceNewType::class, $dto);
+        $presenceSelectDays = new PresenceSelectDays($enfant);
+        $form = $this->createForm(PresenceNewType::class, $presenceSelectDays);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -184,7 +179,7 @@ class PresenceController extends AbstractController
 
             $this->dispatchMessage(new PresenceCreated($days));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $enfant->getId()]);
         }
 
         return $this->render(
@@ -192,7 +187,7 @@ class PresenceController extends AbstractController
             [
                 'enfant' => $enfant,
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -224,7 +219,7 @@ class PresenceController extends AbstractController
         if ($this->presenceHandler->isFactured($presence)) {
             $this->addFlash('danger', 'Une présence déjà facturée ne peut être editée');
 
-            return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
+            return $this->redirectToRoute('mercredi_admin_presence_show', [self::ID => $presence->getId()]);
         }
 
         $form = $this->createForm(PresenceType::class, $presence);
@@ -235,14 +230,14 @@ class PresenceController extends AbstractController
 
             $this->dispatchMessage(new PresenceUpdated($presence->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
+            return $this->redirectToRoute('mercredi_admin_presence_show', [self::ID => $presence->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/edit.html.twig',
             [
                 'presence' => $presence,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
             ]
         );
     }

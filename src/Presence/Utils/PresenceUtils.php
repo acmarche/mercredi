@@ -15,7 +15,7 @@ use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class PresenceUtils
+final class PresenceUtils
 {
     /**
      * @var RelationRepository
@@ -29,21 +29,15 @@ class PresenceUtils
      * @var ParameterBagInterface
      */
     private $parameterBag;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
         RelationRepository $relationRepository,
-        JourRepository $jourRepository,
         ScolaireUtils $scolaireUtils
     ) {
         $this->relationRepository = $relationRepository;
         $this->scolaireUtils = $scolaireUtils;
         $this->parameterBag = $parameterBag;
-        $this->jourRepository = $jourRepository;
     }
 
     public function getDeadLineDatePresence(): \DateTimeInterface
@@ -175,7 +169,7 @@ class PresenceUtils
      */
     public static function extractPlainesFromPresences(array $presences): iterable
     {
-        $plaines = new ArrayCollection();
+        $arrayCollection = new ArrayCollection();
         array_map(
             function ($presence) use ($plaines) {
                 $jour = $presence->getJour();
@@ -183,7 +177,7 @@ class PresenceUtils
                     return null;
                 }
                 $plaineJour = $jour->getPlaineJour();
-                if (! $plaineJour) {
+                if ($plaineJour === null) {
                     return null;
                 }
                 $plaine = $plaineJour->getPlaine();
@@ -194,6 +188,6 @@ class PresenceUtils
             $presences
         );
 
-        return $plaines;
+        return $arrayCollection;
     }
 }

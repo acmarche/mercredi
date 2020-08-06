@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Registration\Message;
 
-class RegisterCreated
+final class RegisterCreated
 {
     /**
      * @var int

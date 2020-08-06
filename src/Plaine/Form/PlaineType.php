@@ -11,28 +11,40 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PlaineType extends AbstractType
+final class PlaineType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    /**
+     * @var string
+     */
+    private const LABEL = 'label';
+    /**
+     * @var string
+     */
+    private const HELP = 'help';
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('nom')
             ->add(
                 'prix1',
                 MoneyType::class,
                 [
-                    'required' => true,
-                    'label' => 'Prix 1er enfant',
-                    'help' => 'Uniquement les chiffres',
+                    self::REQUIRED => true,
+                    self::LABEL => 'Prix 1er enfant',
+                    self::HELP => 'Uniquement les chiffres',
                 ]
             )
             ->add(
                 'prix2',
                 MoneyType::class,
                 [
-                    'required' => true,
-                    'label' => 'Prix 2iem enfant et suivant',
-                    'help' => 'Uniquement les chiffres',
+                    self::REQUIRED => true,
+                    self::LABEL => 'Prix 2iem enfant et suivant',
+                    self::HELP => 'Uniquement les chiffres',
                 ]
             )
 
@@ -41,39 +53,39 @@ class PlaineType extends AbstractType
                 CollectionType::class,
                 [
                     'entry_type' => PlaineGroupeType::class,
-                    'label' => 'Maximum par groupe',
+                    self::LABEL => 'Maximum par groupe',
                 ]
             )
             ->add(
                 'prematernelle',
                 CheckboxType::class,
                 [
-                    'required' => false,
-                    'label' => 'Distinguer les prématernelles pour le listing ?',
+                    self::REQUIRED => false,
+                    self::LABEL => 'Distinguer les prématernelles pour le listing ?',
                 ]
             )
             ->add(
                 'inscriptionOpen',
                 CheckboxType::class,
                 [
-                    'required' => false,
-                    'label' => 'Ouvrir les inscriptions',
-                    'help' => 'Si cette case est cochée, les parents pourront inscrire leurs enfants à la plaine',
+                    self::REQUIRED => false,
+                    self::LABEL => 'Ouvrir les inscriptions',
+                    self::HELP => 'Si cette case est cochée, les parents pourront inscrire leurs enfants à la plaine',
                 ]
             )
             ->add(
                 'remarque',
                 TextareaType::class,
                 [
-                    'required' => false,
+                    self::REQUIRED => false,
                     'attr' => ['rows' => 8],
                 ]
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Plaine::class,
             ]

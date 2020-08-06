@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Security;
 
-class PasswordGenerator
+final class PasswordGenerator
 {
     public static function generatePassword(): string
     {

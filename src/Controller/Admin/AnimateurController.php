@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/animateur")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class AnimateurController extends AbstractController
+final class AnimateurController extends AbstractController
 {
     /**
      * @var AnimateurRepository
@@ -30,6 +30,14 @@ class AnimateurController extends AbstractController
      * @var SearchHelper
      */
     private $searchHelper;
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const ANIMATEUR = 'animateur';
 
     public function __construct(
         AnimateurRepository $animateurRepository,
@@ -60,7 +68,7 @@ class AnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/index.html.twig',
             [
                 'animateurs' => $animateurs,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
                 'search' => $search,
             ]
         );
@@ -87,8 +95,8 @@ class AnimateurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/new.html.twig',
             [
-                'animateur' => $animateur,
-                'form' => $form->createView(),
+                self::ANIMATEUR => $animateur,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -101,7 +109,7 @@ class AnimateurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/show.html.twig',
             [
-                'animateur' => $animateur,
+                self::ANIMATEUR => $animateur,
             ]
         );
     }
@@ -125,8 +133,8 @@ class AnimateurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/edit.html.twig',
             [
-                'animateur' => $animateur,
-                'form' => $form->createView(),
+                self::ANIMATEUR => $animateur,
+                self::FORM => $form->createView(),
             ]
         );
     }

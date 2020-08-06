@@ -13,54 +13,61 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Facture[]    findAll()
  * @method Facture[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FactureRepository extends ServiceEntityRepository
+final class FactureRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const TUTEUR = 'tuteur';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Facture::class);
+        parent::__construct($managerRegistry, Facture::class);
     }
 
     /**
+     * @param Tuteur $tuteur
      * @return Facture[]
      */
     public function findFacturesByTuteur(Tuteur $tuteur): array
     {
         return $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->addSelect('tuteur')
+            ->leftJoin('facture.tuteur', self::TUTEUR, 'WITH')
+            ->addSelect(self::TUTEUR)
             ->andWhere('facture.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
+            ->setParameter(self::TUTEUR, $tuteur)
             ->getQuery()->getResult();
     }
 
     /**
+     * @param string|null $tuteur
+     * @param bool|null $paye
      * @return Facture[]
      */
     public function search(?string $tuteur, ?bool $paye): array
     {
-        $qb = $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->addSelect('tuteur');
+        $queryBuilder = $this->createQueryBuilder('facture')
+            ->leftJoin('facture.tuteur', self::TUTEUR, 'WITH')
+            ->addSelect(self::TUTEUR);
 
         if ($tuteur) {
-            $qb->andWhere('tuteur.nom LIKE :tuteur')
-                ->setParameter('tuteur', '%'.$tuteur.'%');
+            $queryBuilder->andWhere('tuteur.nom LIKE :tuteur')
+                ->setParameter(self::TUTEUR, '%'.$tuteur.'%');
         }
 
         switch ($paye) {
             case true:
-                $qb->andWhere('facture.payeLe IS NOT NULL');
+                $queryBuilder->andWhere('facture.payeLe IS NOT NULL');
 
                 break;
             case false:
-                $qb->andWhere('facture.payeLe IS NULL');
+                $queryBuilder->andWhere('facture.payeLe IS NULL');
 
                 break;
             default:
                 break;
         }
 
-        return $qb->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     public function remove(Facture $facture): void

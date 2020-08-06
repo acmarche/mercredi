@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
-class EnfantHandler
+final class EnfantHandler
 {
     /**
      * @var EnfantRepository

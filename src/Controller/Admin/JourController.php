@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/jour")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class JourController extends AbstractController
+final class JourController extends AbstractController
 {
     /**
      * @var JourRepository
@@ -29,6 +29,18 @@ class JourController extends AbstractController
      * @var TarificationFormGeneratorInterface
      */
     private $tarificationFormGenerator;
+    /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
+     * @var string
+     */
+    private const JOUR = 'jour';
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
 
     public function __construct(
         JourRepository $jourRepository,
@@ -66,14 +78,14 @@ class JourController extends AbstractController
 
             $this->dispatchMessage(new JourCreated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_tarif', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_tarif', [self::ID => $jour->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/new.html.twig',
             [
-                'jour' => $jour,
-                'form' => $form->createView(),
+                self::JOUR => $jour,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -93,14 +105,14 @@ class JourController extends AbstractController
 
             $this->dispatchMessage(new JourCreated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_show', [self::ID => $jour->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/tarif.html.twig',
             [
-                'jour' => $jour,
-                'form' => $form->createView(),
+                self::JOUR => $jour,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -115,7 +127,7 @@ class JourController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/show.html.twig',
             [
-                'jour' => $jour,
+                self::JOUR => $jour,
                 'tarifs' => $tarifs,
             ]
         );
@@ -135,14 +147,14 @@ class JourController extends AbstractController
 
             $this->dispatchMessage(new JourUpdated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_show', [self::ID => $jour->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/edit.html.twig',
             [
-                'jour' => $jour,
-                'form' => $form->createView(),
+                self::JOUR => $jour,
+                self::FORM => $form->createView(),
             ]
         );
     }

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Reduction\Message;
 
-class ReductionDeleted
+final class ReductionDeleted
 {
     /**
      * @var int

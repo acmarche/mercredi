@@ -13,11 +13,11 @@ use Doctrine\ORM\QueryBuilder;
  * @method Document[]    findAll()
  * @method Document[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentRepository extends ServiceEntityRepository
+final class DocumentRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Document::class);
+        parent::__construct($managerRegistry, Document::class);
     }
 
     /**
@@ -27,7 +27,7 @@ class DocumentRepository extends ServiceEntityRepository
      */
     public function search(?string $keyword): array
     {
-        return $this->createQueryBuilder('document')
+        return $this->repository->createQueryBuilder('document')
             ->andWhere('document.nom LIKE :keyword OR document.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%')
             ->addOrderBy('document.nom', 'ASC')
@@ -51,7 +51,7 @@ class DocumentRepository extends ServiceEntityRepository
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder('document')
+        return $this->repository->createQueryBuilder('document')
             ->orderBy('document.nom', 'ASC');
     }
 }

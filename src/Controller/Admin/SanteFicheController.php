@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/santeFiche")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class SanteFicheController extends AbstractController
+final class SanteFicheController extends AbstractController
 {
     /**
      * @var SanteFicheRepository
@@ -44,6 +44,10 @@ class SanteFicheController extends AbstractController
      * @var OrganisationRepository
      */
     private $organisationRepository;
+    /**
+     * @var string
+     */
+    private const ID = 'id';
 
     public function __construct(
         SanteFicheRepository $santeFicheRepository,
@@ -69,7 +73,7 @@ class SanteFicheController extends AbstractController
         if (! $santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', [self::ID => $enfant->getId()]);
         }
 
         $isComplete = $this->santeChecker->isComplete($santeFiche);
@@ -104,7 +108,7 @@ class SanteFicheController extends AbstractController
 
             $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', [self::ID => $enfant->getId()]);
         }
 
         return $this->render(
@@ -129,6 +133,6 @@ class SanteFicheController extends AbstractController
             $this->dispatchMessage(new SanteFicheDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $enfant->getId()]);
     }
 }

@@ -13,11 +13,11 @@ use Doctrine\ORM\QueryBuilder;
  * @method Animateur[]    findAll()
  * @method Animateur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AnimateurRepository extends ServiceEntityRepository
+final class AnimateurRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Animateur::class);
+        parent::__construct($managerRegistry, Animateur::class);
     }
 
     /**

@@ -2,23 +2,15 @@
 
 namespace AcMarche\Mercredi\Registration\Mailer;
 
-use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 
-class RegistrationMailerFactory
+final class RegistrationMailerFactory
 {
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
 
-    public function __construct(OrganisationRepository $organisationRepository)
-    {
-        $this->organisation = $organisationRepository->getOrganisation();
-    }
+    use InitMailerTrait;
 
     public function generateMessagRegisgerSuccess(User $user): TemplatedEmail
     {
@@ -40,7 +32,7 @@ class RegistrationMailerFactory
 
     public function generateMessageToAdminAccountCreated(User $user): TemplatedEmail
     {
-        $email = $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $email = $this->organisation !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         return (new TemplatedEmail())
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))

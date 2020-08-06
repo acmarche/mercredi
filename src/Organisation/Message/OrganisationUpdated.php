@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Organisation\Message;
 
-class OrganisationUpdated
+final class OrganisationUpdated
 {
     /**
      * @var int

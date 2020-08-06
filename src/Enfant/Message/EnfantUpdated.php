@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Message;
 
-class EnfantUpdated
+final class EnfantUpdated
 {
     /**
      * @var int

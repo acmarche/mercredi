@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Message;
 
-class FactureDeleted
+final class FactureDeleted
 {
     /**
      * @var int

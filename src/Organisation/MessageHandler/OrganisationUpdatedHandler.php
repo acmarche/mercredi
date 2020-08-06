@@ -7,21 +7,16 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class OrganisationUpdatedHandler implements MessageHandlerInterface
+final class OrganisationUpdatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
      */
     private $flashBag;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
 
-    public function __construct(OrganisationRepository $organisationRepository, FlashBagInterface $flashBag)
+    public function __construct(FlashBagInterface $flashBag)
     {
         $this->flashBag = $flashBag;
-        $this->organisationRepository = $organisationRepository;
     }
 
     public function __invoke(OrganisationUpdated $organisationUpdated): void

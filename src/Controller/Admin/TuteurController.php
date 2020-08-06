@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/tuteur")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class TuteurController extends AbstractController
+final class TuteurController extends AbstractController
 {
     /**
      * @var TuteurRepository
@@ -35,6 +35,14 @@ class TuteurController extends AbstractController
      * @var SearchHelper
      */
     private $searchHelper;
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const TUTEUR = 'tuteur';
 
     public function __construct(
         TuteurRepository $tuteurRepository,
@@ -67,7 +75,7 @@ class TuteurController extends AbstractController
             '@AcMarcheMercrediAdmin/tuteur/index.html.twig',
             [
                 'tuteurs' => $tuteurs,
-                'form' => $form->createView(),
+                self::FORM => $form->createView(),
                 'search' => $search,
             ]
         );
@@ -94,8 +102,8 @@ class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/new.html.twig',
             [
-                'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                self::TUTEUR => $tuteur,
+                self::FORM => $form->createView(),
             ]
         );
     }
@@ -110,7 +118,7 @@ class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/show.html.twig',
             [
-                'tuteur' => $tuteur,
+                self::TUTEUR => $tuteur,
                 'relations' => $relations,
             ]
         );
@@ -135,8 +143,8 @@ class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/edit.html.twig',
             [
-                'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                self::TUTEUR => $tuteur,
+                self::FORM => $form->createView(),
             ]
         );
     }

@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class PourcentageOrForfait extends Constraint
+final class PourcentageOrForfait extends Constraint
 {
     /*
      * Any public properties become valid options for the annotation.

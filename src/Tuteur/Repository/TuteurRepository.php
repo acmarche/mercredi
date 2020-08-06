@@ -14,11 +14,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Tuteur[]    findAll()
  * @method Tuteur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TuteurRepository extends ServiceEntityRepository
+final class TuteurRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const TUTEUR = 'tuteur';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Tuteur::class);
+        parent::__construct($managerRegistry, Tuteur::class);
     }
 
     /**
@@ -28,7 +32,7 @@ class TuteurRepository extends ServiceEntityRepository
      */
     public function search(?string $keyword): array
     {
-        return $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder(self::TUTEUR)
             ->leftJoin('tuteur.relations', 'relations', 'WITH')
             ->addSelect('relations')
             ->andWhere('tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword')
@@ -40,22 +44,22 @@ class TuteurRepository extends ServiceEntityRepository
     /**
      * @return Tuteur[]
      */
-    public function findSansEnfants()
+    public function findSansEnfants():array
     {
-        return $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder(self::TUTEUR)
             ->andWhere('tuteur.relations IS EMPTY')
             ->getQuery()->getResult();
     }
 
     public function findForAssociateParent(): QueryBuilder
     {
-        return $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder(self::TUTEUR)
             ->orderBy('tuteur.nom');
     }
 
     public function findOneByEmail(string $email): ?Tuteur
     {
-        return $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder(self::TUTEUR)
             ->andWhere('tuteur.email = :email or tuteur.email_conjoint = :email')
             ->setParameter('email', $email)
             ->getQuery()
@@ -64,7 +68,7 @@ class TuteurRepository extends ServiceEntityRepository
 
     public function getTuteursByUser(User $user): array
     {
-        return $this->createQueryBuilder('tuteur')
+        return $this->createQueryBuilder(self::TUTEUR)
             ->leftJoin('tuteur.users', 'users', 'WITH')
             ->andWhere(':user MEMBER OF tuteur.users')
             ->setParameter('user', $user)

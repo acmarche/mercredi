@@ -8,8 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class MigrationCommand extends Command
+final class MigrationCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'mercredi:migration';
     /**
      * @var EnfantRepository
@@ -33,7 +36,7 @@ class MigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
         foreach ($this->enfantRepository->findAll() as $enfant) {
             $enfant->generateUuid();
@@ -42,7 +45,7 @@ class MigrationCommand extends Command
 
         $this->enfantRepository->flush();
 
-        $io->success('User crée.');
+        $symfonyStyle->success('User crée.');
 
         return 0;
     }

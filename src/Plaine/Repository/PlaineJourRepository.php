@@ -14,21 +14,26 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method PlaineJour[]    findAll()
  * @method PlaineJour[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlaineJourRepository extends ServiceEntityRepository
+final class PlaineJourRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var string
+     */
+    private const JOUR = 'jour';
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, PlaineJour::class);
+        parent::__construct($managerRegistry, PlaineJour::class);
     }
 
     /**
+     * @param Plaine $plaine
      * @return PlaineJour[]
      */
     public function findByPlaine(Plaine $plaine): array
     {
         return $this->createQueryBuilder('plaine_jour')
-            ->leftJoin('plaine_jour.jour', 'jour', 'WITH')
-            ->addSelect('jour')
+            ->leftJoin('plaine_jour.jour', self::JOUR, 'WITH')
+            ->addSelect(self::JOUR)
             ->andWhere('plaine_jour.plaine = :plaine')
             ->setParameter('plaine', $plaine)
             ->addOrderBy('jour.date_jour', 'ASC')
@@ -42,14 +47,14 @@ class PlaineJourRepository extends ServiceEntityRepository
             ->andWhere('plaine_jour.plaine = :plaine')
             ->setParameter('plaine', $plaine)
             ->andWhere('plaine_jour.jour = :jour')
-            ->setParameter('jour', $jour)
+            ->setParameter(self::JOUR, $jour)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function remove(PlaineJour $plaine): void
+    public function remove(PlaineJour $plaineJour): void
     {
-        $this->_em->remove($plaine);
+        $this->_em->remove($plaineJour);
     }
 
     public function flush(): void
@@ -57,8 +62,8 @@ class PlaineJourRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-    public function persist(PlaineJour $plaine): void
+    public function persist(PlaineJour $plaineJour): void
     {
-        $this->_em->persist($plaine);
+        $this->_em->persist($plaineJour);
     }
 }

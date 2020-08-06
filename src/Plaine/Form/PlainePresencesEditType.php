@@ -12,11 +12,11 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Count;
 
-class PlainePresencesEditType extends AbstractType
+final class PlainePresencesEditType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder->addEventListener(
+        $formBuilder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event): void {
                 $form = $event->getForm();
@@ -41,9 +41,9 @@ class PlainePresencesEditType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => PlainePresencesDto::class,
             ]

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Message;
 
-class PresenceCreated
+final class PresenceCreated
 {
     /**
      * @var array

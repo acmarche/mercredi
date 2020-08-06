@@ -6,23 +6,13 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Doctrine\Common\Collections\Collection;
 
-class PlainePresenceHandler
+final class PlainePresenceHandler
 {
-    /**
-     * @var PlaineRepository
-     */
-    private $plaineRepository;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
     /**
      * @var PresenceRepository
      */
@@ -32,14 +22,8 @@ class PlainePresenceHandler
      */
     private $presenceHandler;
 
-    public function __construct(
-        PlaineRepository $plaineRepository,
-        JourRepository $jourRepository,
-        PresenceRepository $presenceRepository,
-        PresenceHandler $presenceHandler
-    ) {
-        $this->plaineRepository = $plaineRepository;
-        $this->jourRepository = $jourRepository;
+    public function __construct(PresenceRepository $presenceRepository, PresenceHandler $presenceHandler)
+    {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
     }
@@ -56,6 +40,8 @@ class PlainePresenceHandler
     }
 
     /**
+     * @param Plaine $plaine
+     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPresencesByPlaineEnfant(Plaine $plaine, Enfant $enfant): array
@@ -69,15 +55,19 @@ class PlainePresenceHandler
         $this->presenceRepository->flush();
     }
 
-    public function handleEditPresence(Presence $presence): void
+    public function handleEditPresence(): void
     {
         $this->presenceRepository->flush();
     }
 
-    public function handleEditPresences(Tuteur $tuteur, Enfant $enfant, array $currentJours, Collection $new): void
-    {
-        $enMoins = array_diff($currentJours, $new->toArray());
-        $enPlus = array_diff($new->toArray(), $currentJours);
+    public function handleEditPresences(
+        Tuteur $tuteur,
+        Enfant $enfant,
+        array $currentJours,
+        Collection $collection
+    ): void {
+        $enMoins = array_diff($currentJours, $collection->toArray());
+        $enPlus = array_diff($collection->toArray(), $currentJours);
 
         foreach ($enPlus as $jour) {
             $presence = new Presence($tuteur, $enfant, $jour);
@@ -86,7 +76,7 @@ class PlainePresenceHandler
 
         foreach ($enMoins as $jour) {
             $presence = $this->presenceRepository->findOneByEnfantJour($enfant, $jour);
-            if ($presence) {
+            if ($presence !== null) {
                 $this->presenceRepository->remove($presence);
             }
         }

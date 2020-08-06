@@ -18,12 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/reduction")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
  */
-class ReductionController extends AbstractController
+final class ReductionController extends AbstractController
 {
     /**
      * @var ReductionRepository
      */
     private $reductionRepository;
+    /**
+     * @var string
+     */
+    private const REDUCTION = 'reduction';
 
     public function __construct(ReductionRepository $reductionRepository)
     {
@@ -64,7 +68,7 @@ class ReductionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/new.html.twig',
             [
-                'reduction' => $reduction,
+                self::REDUCTION => $reduction,
                 'form' => $form->createView(),
             ]
         );
@@ -78,7 +82,7 @@ class ReductionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/show.html.twig',
             [
-                'reduction' => $reduction,
+                self::REDUCTION => $reduction,
             ]
         );
     }
@@ -102,7 +106,7 @@ class ReductionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/edit.html.twig',
             [
-                'reduction' => $reduction,
+                self::REDUCTION => $reduction,
                 'form' => $form->createView(),
             ]
         );
