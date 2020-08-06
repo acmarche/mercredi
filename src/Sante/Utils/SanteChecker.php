@@ -9,6 +9,8 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
+use function count;
+
 final class SanteChecker
 {
     /**
@@ -36,36 +38,37 @@ final class SanteChecker
 
     public function identiteEnfantIsComplete(Enfant $enfant): bool
     {
-        if (! $enfant->getNom()) {
+        if (!$enfant->getNom()) {
             return false;
         }
 
-        if (! $enfant->getPrenom()) {
+        if (!$enfant->getPrenom()) {
             return false;
         }
 
         if ($enfant->getEcole() === null) {
             return false;
         }
-        return (bool) $enfant->getAnneeScolaire();
+
+        return (bool)$enfant->getAnneeScolaire();
     }
 
     public function isComplete(SanteFiche $santeFiche): bool
     {
-        if (! $santeFiche->getId()) {
+        if (!$santeFiche->getId()) {
             return false;
         }
 
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
-        $questions = $this->repository->findAll();
+        $questions = $this->santeQuestionRepository->findAll();
 
-        if (\count($reponses) < \count($questions)) {
+        if (count($reponses) < count($questions)) {
             return false;
         }
 
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
-            if (! $this->checkQuestionOk($question)) {
+            if (!$this->checkQuestionOk($question)) {
                 return false;
             }
         }
@@ -74,9 +77,10 @@ final class SanteChecker
     }
 
     /**
+     * @param SanteQuestion $santeQuestion
      * @return bool
      */
-    public function checkQuestionOk(SanteQuestion $santeQuestion)
+    public function checkQuestionOk(SanteQuestion $santeQuestion): bool
     {
         if (!$santeQuestion->getComplement()) {
             return true;
@@ -87,6 +91,7 @@ final class SanteChecker
         if (trim('' === $santeQuestion->getRemarque()) !== '') {
             return false;
         }
+
         return true;
     }
 

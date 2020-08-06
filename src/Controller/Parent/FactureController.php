@@ -3,10 +3,8 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,19 +28,13 @@ final class FactureController extends AbstractController
      * @var FacturePdfFactoryTrait
      */
     private $facturePdfFactory;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
 
     public function __construct(
-        TuteurUtils $tuteurUtils,
         FactureRepository $factureRepository,
         FacturePdfFactoryTrait $facturePdfFactory
     ) {
         $this->factureRepository = $factureRepository;
         $this->facturePdfFactory = $facturePdfFactory;
-        $this->tuteurUtils = $tuteurUtils;
     }
 
     /**

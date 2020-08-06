@@ -52,7 +52,7 @@ final class DefaultController extends AbstractController
      */
     public function menu()
     {
-        $pages = $this->repository->findAll();
+        $pages = $this->pageRepository->findAll();
 
         return $this->render(
             '@AcMarcheMercredi/front/_menu_top.html.twig',

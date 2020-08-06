@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function count;
+
 /**
  * @Route("/ecole")
  * @IsGranted("ROLE_MERCREDI_ADMIN")
@@ -103,6 +105,9 @@ final class EcoleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="mercredi_admin_ecole_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Ecole $ecole
+     * @return Response
      */
     public function edit(Request $request, Ecole $ecole): Response
     {
@@ -132,7 +137,7 @@ final class EcoleController extends AbstractController
     public function delete(Request $request, Ecole $ecole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
-            if (\count($this->ecoleRepository->findBy([self::ECOLE => $ecole])) > 0) {
+            if (count($this->enfantRepository->findBy([self::ECOLE => $ecole])) > 0) {
                 $this->addFlash('danger', 'L\'école contient des enfants et ne peut être supprimée');
 
                 return $this->redirectToRoute(self::MERCREDI_ADMIN_ECOLE_SHOW, [self::ID => $ecole->getId()]);

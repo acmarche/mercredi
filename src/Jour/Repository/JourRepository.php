@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Jour\Repository;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Entity\Presence;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -45,15 +45,10 @@ final class JourRepository extends ServiceEntityRepository
      * @var string
      */
     private const FORMAT = 'Y-m-d';
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
 
-    public function __construct(ManagerRegistry $managerRegistry, PresenceRepository $presenceRepository)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Jour::class);
-        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -62,7 +57,9 @@ final class JourRepository extends ServiceEntityRepository
      */
     public function getQbDaysNotRegisteredByEnfant(Enfant $enfant): QueryBuilder
     {
-        $joursRegistered = $this->presenceRepository->findDaysRegisteredByEnfant($enfant);
+        $joursRegistered = $this->getEntityManager()->getRepository(Presence::class)->findDaysRegisteredByEnfant(
+            $enfant
+        );
 
         $queryBuilder = $this->createQueryBuilder(self::JOUR)
             ->leftJoin('jour.plaine_jour', self::PLAINE_JOUR, self::WITH)

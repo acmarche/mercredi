@@ -10,12 +10,10 @@ use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,10 +41,6 @@ final class AccueilController extends AbstractController
      */
     private $relationUtils;
     /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
-    /**
      * @var SanteChecker
      */
     private $santeChecker;
@@ -65,7 +59,6 @@ final class AccueilController extends AbstractController
 
     public function __construct(
         RelationUtils $relationUtils,
-        TuteurUtils $tuteurUtils,
         AccueilRepository $accueilRepository,
         AccueilHandler $accueilHandler,
         SanteChecker $santeChecker,
@@ -75,7 +68,6 @@ final class AccueilController extends AbstractController
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
         $this->relationUtils = $relationUtils;
-        $this->tuteurUtils = $tuteurUtils;
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
         $this->accueilCalculator = $accueilCalculator;
@@ -112,7 +104,7 @@ final class AccueilController extends AbstractController
         $this->hasTuteur();
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (! $this->santeChecker->isComplete($santeFiche)) {
+        if (!$this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
@@ -166,7 +158,7 @@ final class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
-            if (! DeleteConstraint::accueilCanBeDeleted($accueil)) {
+            if (!DeleteConstraint::accueilCanBeDeleted($accueil)) {
                 $this->addFlash('danger', 'Un accueil passé ne peut être supprimé');
 
                 return $this->redirectToRoute('mercredi_parent_enfant_show', [self::UUID => $enfant->getUuid()]);

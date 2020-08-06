@@ -9,7 +9,6 @@ use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Security\PasswordGenerator;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 final class UserFactory
 {
@@ -23,9 +22,9 @@ final class UserFactory
     private $userPasswordEncoder;
 
     public function __construct(
-        PasswordUpgraderInterface $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder)
-    {
+        UserRepository $userRepository,
+        UserPasswordEncoderInterface $userPasswordEncoder
+    ) {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
@@ -33,7 +32,7 @@ final class UserFactory
     public function getInstance(?string $email = null): User
     {
         $user = new User();
-        if ($email && ! $user = $this->userRepository->findOneByEmailOrUserName($email)) {
+        if ($email && !$user = $this->userRepository->findOneByEmailOrUserName($email)) {
             $user = new User();
             $user->setEmail($email);
             $user->setUsername($email);

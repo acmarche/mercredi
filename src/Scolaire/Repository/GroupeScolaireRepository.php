@@ -29,19 +29,19 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
      */
     public function findAllOrderByNom(): array
     {
-        return $this->repository->createQueryBuilder(self::GROUPE_SCOLAIRE)
+        return $this->createQueryBuilder(self::GROUPE_SCOLAIRE)
             ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->repository->createQueryBuilder(self::GROUPE_SCOLAIRE)
+        return $this->createQueryBuilder(self::GROUPE_SCOLAIRE)
             ->orderBy('groupe_scolaire.nom', 'DESC');
     }
 
     public function findByAnneeScolaire(?string $annee_scolaire): ?GroupeScolaire
     {
-        return $this->repository->createQueryBuilder(self::GROUPE_SCOLAIRE)
+        return $this->createQueryBuilder(self::GROUPE_SCOLAIRE)
             ->andWhere(':annee MEMBER OF groupe_scolaire.annees_scolaires')
             ->setParameter('annee', $annee_scolaire)
             ->getQuery()->getOneOrNullResult();

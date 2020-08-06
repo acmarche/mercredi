@@ -19,7 +19,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 final class RegistrationController extends AbstractController
 {
     /**
-     * @var \AcMarche\Mercredi\Registration\EmailVerifier
+     * @var EmailVerifier
      */
     private $emailVerifier;
     /**
@@ -34,7 +34,7 @@ final class RegistrationController extends AbstractController
     public function __construct(
         EmailVerifier $emailVerifier,
         UserPasswordEncoderInterface $userPasswordEncoder,
-        \Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository
+        UserRepository $userRepository
     ) {
         $this->emailVerifier = $emailVerifier;
         $this->userPasswordEncoder = $userPasswordEncoder;

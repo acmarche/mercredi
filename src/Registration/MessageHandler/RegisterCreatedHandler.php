@@ -29,7 +29,7 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
     private $registrationMailerFactory;
 
     public function __construct(
-        \Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository,
+        UserRepository $userRepository,
         FlashBagInterface $flashBag,
         EmailVerifier $emailVerifier,
         RegistrationMailerFactory $registrationMailerFactory
@@ -43,7 +43,7 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
     public function __invoke(RegisterCreated $registerCreated): void
     {
         $userId = $registerCreated->getUserId();
-        $user = $this->repository->find($userId);
+        $user = $this->userRepository->find($userId);
 
         // generate a signed url and email it to the user
         /* $this->emailVerifier->sendEmailConfirmation(

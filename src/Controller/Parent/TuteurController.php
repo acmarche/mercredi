@@ -25,15 +25,10 @@ final class TuteurController extends AbstractController
      * @var TuteurRepository
      */
     private $tuteurRepository;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
 
-    public function __construct(TuteurRepository $tuteurRepository, TuteurUtils $tuteurUtils)
+    public function __construct(TuteurRepository $tuteurRepository)
     {
         $this->tuteurRepository = $tuteurRepository;
-        $this->tuteurUtils = $tuteurUtils;
     }
 
     /**

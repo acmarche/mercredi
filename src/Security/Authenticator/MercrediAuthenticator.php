@@ -2,8 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
-use AcMarche\Mercredi\Entity\Security\User;
-use Doctrine\ORM\EntityManagerInterface;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,19 +24,15 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
     use TargetPathTrait;
 
     /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
+     * @var UrlGeneratorInterface
      */
     private $urlGenerator;
     /**
-     * @var \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface
+     * @var CsrfTokenManagerInterface
      */
     private $csrfTokenManager;
     /**
-     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
+     * @var UserPasswordEncoderInterface
      */
     private $passwordEncoder;
     /**
@@ -49,13 +44,16 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
      */
     private const PASSWORD = 'password';
     /**
-     * @var \AcMarche\Mercredi\Repository\Security\UserRepository
+     * @var UserRepository
      */
     private $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $userPasswordEncoder, \AcMarche\Mercredi\Repository\Security\UserRepository $userRepository)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserRepository $userRepository
+    ) {
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $userPasswordEncoder;
@@ -86,13 +84,13 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $csrfToken = new CsrfToken('authenticate', $credentials['csrf_token']);
-        if (! $this->csrfTokenManager->isTokenValid($csrfToken)) {
+        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
             throw new InvalidCsrfTokenException();
         }
 
         $user = $this->userRepository->findOneBy([self::EMAIL => $credentials[self::EMAIL]]);
 
-        if (! $user) {
+        if (!$user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
@@ -107,6 +105,8 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     * @param $credentials
+     * @return string|null
      */
     public function getPassword($credentials): ?string
     {

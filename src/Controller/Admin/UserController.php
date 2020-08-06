@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @Route("/user")
@@ -25,14 +24,6 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 final class UserController extends AbstractController
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
     /**
      * @var string
      */
@@ -50,8 +41,17 @@ final class UserController extends AbstractController
      */
     private const USER = 'user';
 
-    public function __construct(
-        PasswordUpgraderInterface $userRepository,
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $userPasswordEncoder;
+
+    public function construct(
+        UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {
         $this->userRepository = $userRepository;

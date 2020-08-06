@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use Exception;
 
 final class RelationHandler
 {
@@ -25,21 +26,24 @@ final class RelationHandler
     }
 
     /**
-     * @throws \Exception
+     * @param Tuteur $tuteur
+     * @param int|null $enfantId
+     * @return Relation|null
+     * @throws Exception
      */
     public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): ?Relation
     {
         if (! $enfantId) {
-            throw new \Exception('Enfant non trouvé');
+            throw new Exception('Enfant non trouvé');
         }
 
-        $enfant = $this->repository->find($enfantId);
+        $enfant = $this->enfantRepository->find($enfantId);
         if ($enfant === null) {
-            throw new \Exception('Enfant non trouvé');
+            throw new Exception('Enfant non trouvé');
         }
 
         if ($this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant) !== null) {
-            throw new \Exception('L\'enfant est déjà lié à cet enfant');
+            throw new Exception('L\'enfant est déjà lié à cet enfant');
         }
 
         $relation = new Relation($tuteur, $enfant);

@@ -2,9 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -18,14 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 final class DefaultController extends AbstractController
 {
     use GetTuteurTrait;
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
+    use OrganisationPropertyInitTrait;
+
     /**
      * @var RelationUtils
      */
@@ -39,10 +32,11 @@ final class DefaultController extends AbstractController
      */
     private $factureRepository;
 
-    public function __construct(TuteurUtils $tuteurUtils, RelationUtils $relationUtils, SanteChecker $santeChecker, FactureRepository $factureRepository)
-    {
-        $this->organisation = $organisationRepository->getOrganisation();
-        $this->tuteurUtils = $tuteurUtils;
+    public function __construct(
+        RelationUtils $relationUtils,
+        SanteChecker $santeChecker,
+        FactureRepository $factureRepository
+    ) {
         $this->relationUtils = $relationUtils;
         $this->santeChecker = $santeChecker;
         $this->factureRepository = $factureRepository;

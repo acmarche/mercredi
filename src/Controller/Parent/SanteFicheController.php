@@ -64,7 +64,7 @@ final class SanteFicheController extends AbstractController
         }
 
         $isComplete = $this->santeChecker->isComplete($santeFiche);
-        $questions = $this->repository->findAll();
+        $questions = $this->santeQuestionRepository->findAll();
         $organisation = $this->organisationRepository->getOrganisation();
 
         return $this->render(

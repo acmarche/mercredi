@@ -10,7 +10,6 @@ use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,10 +26,6 @@ final class PlaineController extends AbstractController
      * @var PlaineRepository
      */
     private $plaineRepository;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
     /**
      * @var RelationUtils
      */
@@ -53,7 +48,6 @@ final class PlaineController extends AbstractController
     private $plainePresenceRepository;
 
     public function __construct(
-        TuteurUtils $tuteurUtils,
         PlaineRepository $plaineRepository,
         RelationUtils $relationUtils,
         PlainePresenceHandler $plainePresenceHandler,
@@ -62,7 +56,6 @@ final class PlaineController extends AbstractController
         PlainePresenceRepository $plainePresenceRepository
     ) {
         $this->plaineRepository = $plaineRepository;
-        $this->tuteurUtils = $tuteurUtils;
         $this->relationUtils = $relationUtils;
         $this->plainePresenceHandler = $plainePresenceHandler;
         $this->santeHandler = $santeHandler;
@@ -133,7 +126,7 @@ final class PlaineController extends AbstractController
 
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (! $this->santeChecker->isComplete($santeFiche)) {
+        if (!$this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);

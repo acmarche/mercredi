@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Message\UserUpdated;
@@ -31,11 +30,13 @@ final class ProfileController extends AbstractController
      * @var UserPasswordEncoderInterface
      */
     private $userPasswordEncoder;
-    public function __construct(\Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository, UserPasswordEncoderInterface $userPasswordEncoder)
+
+    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordEncoder)
     {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
+
     /**
      * @Route("/show", name="mercredi_front_user_show")
      * @IsGranted("ROLE_MERCREDI")
@@ -52,6 +53,7 @@ final class ProfileController extends AbstractController
             ]
         );
     }
+
     /**
      * @Route("/redirect", name="mercredi_front_profile_redirect")
      */
@@ -88,6 +90,7 @@ final class ProfileController extends AbstractController
 
         return $this->redirectToRoute('mercredi_front_home');
     }
+
     /**
      * @Route("/select", name="mercredi_front_select_profile")
      * @IsGranted("ROLE_MERCREDI")
@@ -100,6 +103,7 @@ final class ProfileController extends AbstractController
             ]
         );
     }
+
     /**
      * @Route("/edit", name="mercredi_front_user_edit")
      * @IsGranted("ROLE_MERCREDI")
@@ -126,6 +130,7 @@ final class ProfileController extends AbstractController
             ]
         );
     }
+
     /**
      * @Route("/password", name="mercredi_front_user_password")
      * @IsGranted("ROLE_MERCREDI")

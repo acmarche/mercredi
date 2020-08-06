@@ -4,12 +4,12 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @Route("/utilisateur/password")
@@ -18,17 +18,16 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 final class PasswordController extends AbstractController
 {
     /**
-     * @var \AcMarche\Mercredi\User\Repository\UserRepository
+     * @var UserRepository
      */
     private $userRepository;
-
     /**
      * @var UserPasswordEncoderInterface
      */
     private $userPasswordEncoder;
 
-    public function __construct(
-        PasswordUpgraderInterface $userRepository,
+    public function construct(
+        UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {
         $this->userRepository = $userRepository;

@@ -15,7 +15,6 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,10 +34,6 @@ final class EnfantController extends AbstractController
      * @var EnfantRepository
      */
     private $enfantRepository;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
     /**
      * @var RelationUtils
      */
@@ -78,7 +73,6 @@ final class EnfantController extends AbstractController
 
     public function __construct(
         EnfantRepository $enfantRepository,
-        TuteurUtils $tuteurUtils,
         SanteHandler $santeHandler,
         RelationUtils $relationUtils,
         SanteChecker $santeChecker,
@@ -89,7 +83,6 @@ final class EnfantController extends AbstractController
         NotifcationMailer $notifcationMailer
     ) {
         $this->enfantRepository = $enfantRepository;
-        $this->tuteurUtils = $tuteurUtils;
         $this->relationUtils = $relationUtils;
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;

@@ -5,10 +5,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Presence\Constraint\DateConstraint;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
-use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
@@ -16,11 +13,9 @@ use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,10 +43,6 @@ final class PresenceController extends AbstractController
      */
     private $relationUtils;
     /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
-    /**
      * @var SanteChecker
      */
     private $santeChecker;
@@ -70,7 +61,6 @@ final class PresenceController extends AbstractController
 
     public function __construct(
         RelationUtils $relationUtils,
-        TuteurUtils $tuteurUtils,
         PresenceRepository $presenceRepository,
         PresenceHandler $presenceHandler,
         SanteChecker $santeChecker,
@@ -79,7 +69,6 @@ final class PresenceController extends AbstractController
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
         $this->relationUtils = $relationUtils;
-        $this->tuteurUtils = $tuteurUtils;
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
     }
@@ -147,7 +136,7 @@ final class PresenceController extends AbstractController
         $this->hasTuteur();
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (! $this->santeChecker->isComplete($santeFiche)) {
+        if (!$this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
@@ -200,7 +189,7 @@ final class PresenceController extends AbstractController
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
-            if (! DeleteConstraint::canBeDeleted($presence)) {
+            if (!DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
                 return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);

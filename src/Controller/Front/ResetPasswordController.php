@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
 use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
 use AcMarche\Mercredi\ResetPassword\Mailer\ResetPasswordMailer;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,7 @@ final class ResetPasswordController extends AbstractController
     use ResetPasswordControllerTrait;
 
     /**
-     * @var \SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface
+     * @var ResetPasswordHelperInterface
      */
     private $resetPasswordHelper;
     /**
@@ -41,7 +41,7 @@ final class ResetPasswordController extends AbstractController
      */
     private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
     /**
-     * @var \AcMarche\Mercredi\Repository\Security\UserRepository
+     * @var UserRepository
      */
     private $userRepository;
 
@@ -49,7 +49,7 @@ final class ResetPasswordController extends AbstractController
         ResetPasswordHelperInterface $resetPasswordHelper,
         UserPasswordEncoderInterface $userPasswordEncoder,
         ResetPasswordMailer $resetPasswordMailer,
-        \AcMarche\Mercredi\Repository\Security\UserRepository $userRepository
+        UserRepository $userRepository
     ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->userPasswordEncoder = $userPasswordEncoder;

@@ -11,8 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-
 use function strlen;
 
 final class CreateUserCommand extends Command
@@ -35,7 +33,7 @@ final class CreateUserCommand extends Command
     private const EMAIL = 'email';
 
     public function __construct(
-        PasswordUpgraderInterface $userRepository,
+        UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder,
         ?string $name = null
     ) {
@@ -62,7 +60,7 @@ final class CreateUserCommand extends Command
         $name = $input->getArgument('name');
         $password = $input->getArgument('password');
 
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $symfonyStyle->error('Adresse email non valide');
 
             return 1;

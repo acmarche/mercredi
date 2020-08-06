@@ -30,7 +30,7 @@ final class ScolaireUtils
             return $groupeScolaire;
         }
 
-        $groupes = $this->repository->findAll();
+        $groupes = $this->groupeScolaireRepository->findAll();
 
         return $groupes[0];
     }
