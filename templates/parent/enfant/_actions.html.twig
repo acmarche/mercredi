@@ -1,20 +1,19 @@
+<div class="btn-toolbar">
+    <div class="btn-group mr-2 mb-2">
+        <a href="{{ path('mercredi_parent_enfant_edit', { 'uuid': enfant.uuid }) }}" role="button"
+           class="btn btn-primary"><i
+                    class="far fa-edit"></i> Modifier</a>
+    </div>
 
-<div class="btn-group">
-    <a href="{{ path('mercredi_parent_enfant_edit', { 'uuid': enfant.uuid }) }}" role="button"
-       class="btn btn-primary"><i
-                class="far fa-edit"></i> Modifier</a>
+    <div class="btn-group mb-2 mr-2 ">
+        <a href="{{ path('mercredi_parent_sante_fiche_show', { 'uuid': enfant.uuid }) }}" role="button"
+           class="btn btn-primary">
+            <i class="fas fa-heartbeat"></i> Fiche santé</a>
+    </div>
+    <div class="btn-group mb-2 ">
+        <a href="{{ path('mercredi_parent_enfant_index') }}" class="btn btn-primary" role='button'><i
+                    class="fas fa-list"></i>
+            Retour à la Liste</a>
+    </div>
 </div>
 
-<div class="btn-group">
-    <a href="{{ path('mercredi_parent_sante_fiche_show', { 'uuid': enfant.uuid }) }}" role="button"
-       class="btn btn-primary">
-        <i class="fas fa-heartbeat"></i> Fiche santé</a>
-</div>
-
-<div class="btn-group">
-    <a href="{{ path('mercredi_parent_enfant_index') }}" class="btn btn-primary" role='button'><i
-                class="fas fa-list"></i>
-        Retour à la Liste</a>
-</div>
-
-<br/><br/>

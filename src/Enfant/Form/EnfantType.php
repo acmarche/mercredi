@@ -126,8 +126,8 @@ final class EnfantType extends AbstractType
                 CheckboxType::class,
                 [
                     self::REQUIRED => false,
-                    self::LABEL => 'Autorisation de ses photos',
-                    'help' => 'Cochez si les parents autorisent la diffusion des photos de l\'enfant',
+                    self::LABEL => 'Autorisation de diffusion de ses photos',
+                    'help' => 'Cochez si vous autorisez la diffusion des photos de l\'enfant',
                 ]
             )
             ->add(

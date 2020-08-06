@@ -12,10 +12,10 @@
 </div>
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-12">
         {{ form_row(form.personne_urgence) }}
     </div>
-    <div class="col-6">
+    <div class="col-12">
         {{ form_label(form.accompagnateurs) }}
         <ul class="list-group" id="accompagnateurs-list"
             data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}">
@@ -26,7 +26,7 @@
                 </li>
             {% endfor %}
         </ul>
-        <div class="col-offset-8">
+        <div class="offset-md-8">
             <a href="#" id="add-another-accompagnateur" class="btn btn-success btn-xs">
                 <i class="fas fa-plus"></i> Ajouter un accompagnateur
             </a>
@@ -42,11 +42,10 @@
     <h5 class="text-warning"><strong>{{ question.vars.data.nom }}</strong></h5>
     <hr/>
     <div class="row">
-        <div class="col-md-4 col-sm-4">
+        <div class="col-md-4 col-12">
             {{ form_row(question.reponseTxt) }}
         </div>
-        <div class="col-md-8 col-sm-8">
-
+        <div class="col-md-8 col-12">
             {{ form_row(question.remarque) }}
             {% if question.vars.data.complementLabel %}
                 <span class="text-muted">Si oui, {{ question.vars.data.complementLabel }}</span>

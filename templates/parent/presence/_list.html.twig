@@ -2,7 +2,6 @@
     <thead>
     <tr>
         <th>Date</th>
-        <th>Tuteur</th>
         <th>Remarque</th>
     </tr>
     </thead>
@@ -10,12 +9,9 @@
     {% for presence in presences %}
         <tr>
             <td>
-            <a href="{{ path('mercredi_parent_presence_show', {'uuid': presence.uuid}) }}">
-                {{ (presence.jour.dateJour | format_date('full'))|capitalize }}
-            </a>
-            </td>
-            <td>
-                {{ presence.tuteur }}
+                <a href="{{ path('mercredi_parent_presence_show', {'uuid': presence.uuid}) }}">
+                    {{ (presence.jour.dateJour | format_date('full'))|capitalize }}
+                </a>
             </td>
             <td class="text-muted">
                 {{ presence.remarque }}
