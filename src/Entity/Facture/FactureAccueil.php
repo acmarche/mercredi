@@ -3,17 +3,17 @@
 namespace AcMarche\Mercredi\Entity\Facture;
 
 use AcMarche\Mercredi\Entity\Accueil;
-use AcMarche\Mercredi\Entity\Traits\AccueilTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\AccueilTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository")
  * @ORM\Table("facture_accueil", uniqueConstraints={
- * @ORM\UniqueConstraint(columns={"accueil_id"})
+ *     @ORM\UniqueConstraint(columns={"accueil_id"})
  * })
  * @UniqueEntity(fields={"accueil"}, message="Accueil déjà payé")
  */
@@ -41,7 +41,7 @@ class FactureAccueil
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $dateTime;
+    private $accueilDate;
 
     /**
      * @var string
@@ -61,11 +61,21 @@ class FactureAccueil
         $this->accueil = $accueil;
     }
 
-    public function setAccueilDate(\DateTimeInterface $dateTime): self
+    public function getAccueilDate(): ?\DateTimeInterface
     {
-        $this->dateTime = $dateTime;
+        return $this->accueilDate;
+    }
+
+    public function setAccueilDate(\DateTimeInterface $accueilDate): self
+    {
+        $this->accueilDate = $accueilDate;
 
         return $this;
+    }
+
+    public function getCout(): ?float
+    {
+        return $this->cout;
     }
 
     public function setCout(float $cout): self
@@ -73,6 +83,11 @@ class FactureAccueil
         $this->cout = $cout;
 
         return $this;
+    }
+
+    public function getHeure(): ?string
+    {
+        return $this->heure;
     }
 
     public function setHeure(string $heure): self

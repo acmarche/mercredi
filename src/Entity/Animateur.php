@@ -17,7 +17,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Animateur\Repository\AnimateurRepository")
  */
 class Animateur implements TimestampableInterface
 {

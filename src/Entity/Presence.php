@@ -22,9 +22,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("presence", uniqueConstraints={
- * @ORM\UniqueConstraint(columns={"jour_id", "enfant_id"})
+ *     @ORM\UniqueConstraint(columns={"jour_id", "enfant_id"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Presence\Repository\PresenceRepository")
  * @UniqueEntity(fields={"jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
  */
 class Presence implements TimestampableInterface, PresenceInterface, UuidableInterface
@@ -43,26 +43,27 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     use HalfTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour")
-     * @var \AcMarche\Mercredi\Entity\Jour|null
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
      */
     private $jour;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
-     * @var \AcMarche\Mercredi\Entity\Enfant|null
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
      */
     private $enfant;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
-     * @var \AcMarche\Mercredi\Entity\Tuteur|null
      */
     private $tuteur;
 
     /**
-     * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment"="-1 sans certif,1 avec certfi"})
-     * @var int
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")
+     */
+    private $reduction;
+
+    /**
+     * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
      */
     private $absent;
 

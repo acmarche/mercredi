@@ -8,10 +8,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("plaine_groupe", uniqueConstraints={
- * @ORM\UniqueConstraint(columns={"plaine_id", "groupe_scolaire_id"})
- * })
+ *     @ORM\UniqueConstraint(columns={"plaine_id", "groupe_scolaire_id"})
+ * }))
+ * @UniqueEntity({"plaine", "groupe_scolaire"})
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository")
  */
-final class PlaineGroupe
+class PlaineGroupe
 {
     /**
      * @var int|null
@@ -25,13 +27,13 @@ final class PlaineGroupe
     /**
      * @var GroupeScolaire|null
      *
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="plaine_groupes")
      */
-    private $groupeScolaire;
+    private $groupe_scolaire;
 
     /**
      * @var Plaine|null
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_groupes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $plaine;
@@ -42,10 +44,10 @@ final class PlaineGroupe
      */
     private $inscription_maximum;
 
-    public function __construct(Plaine $plaine, GroupeScolaire $groupeScolaire)
+    public function __construct(Plaine $plaine, GroupeScolaire $groupe_scolaire)
     {
         $this->plaine = $plaine;
-        $this->groupeScolaire = $groupeScolaire;
+        $this->groupe_scolaire = $groupe_scolaire;
     }
 
     public function getId(): ?int
@@ -77,12 +79,12 @@ final class PlaineGroupe
 
     public function getGroupeScolaire(): ?GroupeScolaire
     {
-        return $this->groupeScolaire;
+        return $this->groupe_scolaire;
     }
 
-    public function setGroupeScolaire(?GroupeScolaire $groupeScolaire): self
+    public function setGroupeScolaire(?GroupeScolaire $groupe_scolaire): self
     {
-        $this->groupeScolaire = $groupeScolaire;
+        $this->groupe_scolaire = $groupe_scolaire;
 
         return $this;
     }

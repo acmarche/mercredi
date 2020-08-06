@@ -12,7 +12,7 @@ use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Ecole\Repository\EcoleRepository")
  */
 class Ecole
 {

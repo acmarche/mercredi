@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table("relation", uniqueConstraints={
  * @ORM\UniqueConstraint(columns={"tuteur_id", "enfant_id"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Relation\Repository\RelationRepository")
  * @UniqueEntity(fields={"tuteur", "enfant"}, message="Cet enfant est déjà lié à ce parent")
  */
 class Relation
@@ -24,9 +24,17 @@ class Relation
     use OrdreTrait;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "pere,mere,beau pere.."})
+     */
+    private $type;
+
+    /**
      * @var Enfant
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     *
      * */
     private $enfant;
 
@@ -42,5 +50,15 @@ class Relation
     {
         $this->tuteur = $tuteur;
         $this->enfant = $enfant;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
     }
 }

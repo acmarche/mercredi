@@ -18,7 +18,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureRepository")
  */
 class Facture implements TimestampableInterface, UuidableInterface
 {
@@ -35,8 +35,7 @@ class Facture implements TimestampableInterface, UuidableInterface
     use UserAddTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur")
-     * @var Tuteur|null
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="factures")
      */
     private $tuteur;
 
@@ -44,7 +43,13 @@ class Facture implements TimestampableInterface, UuidableInterface
      * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $dateTime;
+    private $factureLe;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $payeLe;
 
     public function __construct(Tuteur $tuteur)
     {
@@ -58,14 +63,26 @@ class Facture implements TimestampableInterface, UuidableInterface
         return 'Facture '.$this->id;
     }
 
-    public function getFactureLe(): ?\DateTimeInterface
+    public function getPayeLe(): ?\DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->payeLe;
     }
 
-    public function setFactureLe(?\DateTimeInterface $dateTime): self
+    public function setPayeLe(?\DateTimeInterface $payeLe): self
     {
-        $this->dateTime = $dateTime;
+        $this->payeLe = $payeLe;
+
+        return $this;
+    }
+
+    public function getFactureLe(): ?\DateTimeInterface
+    {
+        return $this->factureLe;
+    }
+
+    public function setFactureLe(?\DateTimeInterface $factureLe): self
+    {
+        $this->factureLe = $factureLe;
 
         return $this;
     }

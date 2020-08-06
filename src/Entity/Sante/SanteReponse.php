@@ -8,25 +8,28 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("sante_reponse", uniqueConstraints={
- * @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
- * }) */
-final class SanteReponse
+ *     @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
+ * }))
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteReponseRepository")
+ * @UniqueEntity(fields={"sante_fiche", "question"}, message="Une réponse existe déjà")
+ */
+class SanteReponse
 {
     use IdTrait;
 
     /**
      * @var SanteQuestion
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion", inversedBy="reponse")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $santeQuestion;
+    private $question;
 
     /**
      * @var SanteFiche
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", inversedBy="reponses", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $santeFiche;
+    private $sante_fiche;
 
     /**
      * @var bool
@@ -44,28 +47,28 @@ final class SanteReponse
 
     public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
     {
-        $this->santeFiche = $santeFiche;
-        $this->santeQuestion = $santeQuestion;
+        $this->sante_fiche = $santeFiche;
+        $this->question = $santeQuestion;
     }
 
     public function getQuestion(): SanteQuestion
     {
-        return $this->santeQuestion;
+        return $this->question;
     }
 
-    public function setQuestion(SanteQuestion $santeQuestion): void
+    public function setQuestion(SanteQuestion $question): void
     {
-        $this->santeQuestion = $santeQuestion;
+        $this->question = $question;
     }
 
     public function getSanteFiche(): SanteFiche
     {
-        return $this->santeFiche;
+        return $this->sante_fiche;
     }
 
-    public function setSanteFiche(SanteFiche $santeFiche): void
+    public function setSanteFiche(SanteFiche $sante_fiche): void
     {
-        $this->santeFiche = $santeFiche;
+        $this->sante_fiche = $sante_fiche;
     }
 
     public function isReponse(): bool

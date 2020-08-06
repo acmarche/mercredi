@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
@@ -18,6 +19,7 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -25,7 +27,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Tuteur\Repository\TuteurRepository")
  */
 class Tuteur implements SluggableInterface, TimestampableInterface
 {
@@ -53,17 +55,19 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      */
     private $relations;
 
-    public function __construct()
-    {
-        $this->relations = new ArrayCollection();
-        $this->presences = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
+    /**
+     * J'ai mis la definition pour pouvoir mettre le cascade.
+     *
+     * @var Accueil[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="tuteur", cascade={"remove"})
+     */
+    private $accueils;
 
-    public function __toString()
-    {
-        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
-    }
+    /**
+     * @var Facture[]
+     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur")
+     */
+    private $factures;
 
     public function getSluggableFields(): array
     {
@@ -73,5 +77,18 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
+    }
+
+    public function __construct()
+    {
+        $this->relations = [];
+        $this->presences = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->accueils = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 }

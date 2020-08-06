@@ -7,8 +7,6 @@ use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
@@ -18,12 +16,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Accueil.
- *
+ * Class Accueil
  * @ORM\Table("accueil", uniqueConstraints={
- * @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
+ *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
  * @UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
  */
 class Accueil implements TimestampableInterface, UuidableInterface
@@ -37,12 +34,12 @@ class Accueil implements TimestampableInterface, UuidableInterface
     use UserAddTrait;
 
     /**
-     * @var DateTime|null
+     * @var \DateTime|null
      *
      * @ORM\Column(name="date_jour", type="date")
      * @Assert\Type("datetime")
      */
-    private $dateTime;
+    private $date_jour;
 
     /**
      * @var int
@@ -57,17 +54,15 @@ class Accueil implements TimestampableInterface, UuidableInterface
     private $heure;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
-     *
      * @var Enfant
      */
     private $enfant;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
-     *
      * @var Tuteur
      */
     private $tuteur;
@@ -81,12 +76,19 @@ class Accueil implements TimestampableInterface, UuidableInterface
 
     public function __toString(): string
     {
-        return $this->dateTime->format('Y-m-d');
+        return $this->date_jour->format('Y-m-d');
     }
 
-    public function getDateJour(): ?DateTimeInterface
+    public function getDateJour(): ?\DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->date_jour;
+    }
+
+    public function setDateJour(\DateTimeInterface $date_jour): self
+    {
+        $this->date_jour = $date_jour;
+
+        return $this;
     }
 
     public function getDuree(): int

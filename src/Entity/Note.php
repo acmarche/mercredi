@@ -11,7 +11,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Note\Repository\NoteRepository")
  */
 class Note implements TimestampableInterface
 {
@@ -23,6 +23,6 @@ class Note implements TimestampableInterface
 
     public function __toString()
     {
-        return 'Note '.$this->id;
+        return 'Note '.(string) $this->id;
     }
 }
