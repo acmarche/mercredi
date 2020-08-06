@@ -105,7 +105,7 @@ final class TuteurType extends AbstractType
                 [
                     self::REQUIRED => false,
                     'choices' => MercrediConstantes::SEXES,
-                    'placeholder' => 'Choisissez son sexe',
+                    'placeholder' => 'Choisissez le sexe',
                 ]
             )
             ->add(
@@ -113,7 +113,7 @@ final class TuteurType extends AbstractType
                 TextareaType::class,
                 [
                     self::REQUIRED => false,
-                    'attr' => ['rows' => 8],
+                    'attr' => ['rows' => 4],
                 ]
             )
             ->add(
