@@ -85,7 +85,9 @@ final class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine)
     {
-        $this->hasTuteur();
+        if ($t= $this->hasTuteur()) {
+            return $t;
+        }
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $this->tuteur);
 
         return $this->render(

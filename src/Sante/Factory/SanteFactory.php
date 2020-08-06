@@ -30,7 +30,7 @@ final class SanteFactory
 
     public function getSanteFicheByEnfant(Enfant $enfant): SanteFiche
     {
-        if (($santeFiche = $this->repository->findOneBy(['enfant' => $enfant])) === null) {
+        if (($santeFiche = $this->santeFicheRepository->findOneBy(['enfant' => $enfant])) === null) {
             $santeFiche = new SanteFiche($enfant);
             $this->santeFicheRepository->persist($santeFiche);
         }

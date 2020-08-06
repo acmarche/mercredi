@@ -80,7 +80,9 @@ final class AccueilController extends AbstractController
      */
     public function selectEnfant()
     {
-        $this->hasTuteur();
+        if ($t= $this->hasTuteur()) {
+            return $t;
+        }
 
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
 
@@ -101,7 +103,9 @@ final class AccueilController extends AbstractController
      */
     public function selectJours(Request $request, Enfant $enfant)
     {
-        $this->hasTuteur();
+        if ($t= $this->hasTuteur()) {
+            return $t;
+        }
         $santeFiche = $this->santeHandler->init($enfant);
 
         if (!$this->santeChecker->isComplete($santeFiche)) {

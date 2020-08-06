@@ -47,7 +47,7 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findByEnfant(Enfant $enfant)
     {
-        return $this->repository->createQueryBuilder(self::RELATION)
+        return $this->createQueryBuilder(self::RELATION)
             ->leftJoin('relation.tuteur', self::TUTEUR, self::WITH)
             ->addSelect(self::TUTEUR)
             ->andWhere('relation.enfant = :enfant')
@@ -62,7 +62,7 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findByTuteur(Tuteur $tuteur)
     {
-        return $this->repository->createQueryBuilder(self::RELATION)
+        return $this->createQueryBuilder(self::RELATION)
             ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
             ->addSelect(self::ENFANT)
             ->andWhere('relation.tuteur = :tuteur')
@@ -77,7 +77,7 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findByEcole(Ecole $ecole)
     {
-        return $this->repository->createQueryBuilder(self::RELATION)
+        return $this->createQueryBuilder(self::RELATION)
             ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
             ->addSelect(self::ENFANT)
             ->andWhere('enfant.ecole = :ecole')
@@ -119,7 +119,7 @@ final class RelationRepository extends ServiceEntityRepository
 
     public function findOneByTuteurAndEnfant(Tuteur $tuteur, Enfant $enfant): ?Relation
     {
-        return $this->repository->findOneBy([self::TUTEUR => $tuteur, self::ENFANT => $enfant]);
+        return $this->findOneBy([self::TUTEUR => $tuteur, self::ENFANT => $enfant]);
     }
 
     /**
@@ -132,7 +132,7 @@ final class RelationRepository extends ServiceEntityRepository
             $tuteurs = $this->findTuteursByEnfant($enfant);
         }
 
-        $relations = $this->repository->createQueryBuilder(self::RELATION)
+        $relations = $this->createQueryBuilder(self::RELATION)
             ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
             ->addSelect(self::ENFANT)
             ->andWhere('relation.tuteur IN (:tuteurs)')
@@ -155,7 +155,7 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findEnfantsActifs(Tuteur $tuteur): array
     {
-        return $this->repository->createQueryBuilder(self::RELATION)
+        return $this->createQueryBuilder(self::RELATION)
             ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
             ->addSelect(self::ENFANT)
             ->andwhere('relation.tuteur = :tuteur')
@@ -170,7 +170,7 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findTuteursActifs(): array
     {
-        return $this->repository->createQueryBuilder(self::RELATION)
+        return $this->createQueryBuilder(self::RELATION)
             ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
             ->leftJoin('relation.tuteur', self::TUTEUR, self::WITH)
             ->addSelect(self::ENFANT, self::TUTEUR)

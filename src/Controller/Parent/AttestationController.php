@@ -25,7 +25,9 @@ final class AttestationController extends AbstractController
      */
     public function default()
     {
-        $this->hasTuteur();
+        if ($t= $this->hasTuteur()) {
+            return $t;
+        }
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
         $enfants = RelationUtils::extractEnfants($relations);
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);

@@ -42,7 +42,9 @@ final class FactureController extends AbstractController
      */
     public function index(): Response
     {
-        $this->hasTuteur();
+        if ($t= $this->hasTuteur()) {
+            return $t;
+        }
         $factures = $this->factureRepository->findFacturesByTuteur($this->tuteur);
 
         return $this->render(

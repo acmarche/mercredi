@@ -27,7 +27,7 @@ final class DocumentRepository extends ServiceEntityRepository
      */
     public function search(?string $keyword): array
     {
-        return $this->repository->createQueryBuilder('document')
+        return $this->createQueryBuilder('document')
             ->andWhere('document.nom LIKE :keyword OR document.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%')
             ->addOrderBy('document.nom', 'ASC')
@@ -51,7 +51,7 @@ final class DocumentRepository extends ServiceEntityRepository
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->repository->createQueryBuilder('document')
+        return $this->createQueryBuilder('document')
             ->orderBy('document.nom', 'ASC');
     }
 }

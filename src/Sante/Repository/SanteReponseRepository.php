@@ -23,7 +23,7 @@ final class SanteReponseRepository extends ServiceEntityRepository
 
     public function getResponse(SanteFiche $santeFiche, SanteQuestion $santeQuestion): ?SanteReponse
     {
-        return $this->repository->createQueryBuilder('reponse')
+        return $this->createQueryBuilder('reponse')
             ->andWhere('reponse.sante_fiche = :fiche')
             ->setParameter('fiche', $santeFiche)
             ->andWhere('reponse.question = :question')
@@ -38,7 +38,7 @@ final class SanteReponseRepository extends ServiceEntityRepository
      */
     public function findBySanteFiche(SanteFiche $santeFiche): array
     {
-        return $this->repository->createQueryBuilder('reponse')
+        return $this->createQueryBuilder('reponse')
             ->andWhere('reponse.sante_fiche = :fiche')
             ->setParameter('fiche', $santeFiche)
             ->getQuery()->getResult();

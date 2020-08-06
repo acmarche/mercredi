@@ -31,7 +31,7 @@ final class SanteBinder
      */
     public function bindResponses(SanteFiche $santeFiche): array
     {
-        $questions = $this->repository->findAll();
+        $questions = $this->findAll();
         if (! $santeFiche->getId()) {
             $santeFiche->setQuestions($questions);
 

@@ -50,7 +50,7 @@ final class UserController extends AbstractController
      */
     private $userPasswordEncoder;
 
-    public function construct(
+    public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {
@@ -75,7 +75,7 @@ final class UserController extends AbstractController
 
             $users = $this->userRepository->findByNameOrRoles($nom, $role);
         } else {
-            $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
+            $users = $this->userRepository->findAll();
         }
 
         return $this->render(

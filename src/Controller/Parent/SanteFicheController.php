@@ -3,12 +3,10 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Sante\Form\SanteFicheType;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
-use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -23,7 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SanteFicheController extends AbstractController
 {
-    use GetTuteurTrait;
     /**
      * @var SanteHandler
      */
@@ -41,8 +38,12 @@ final class SanteFicheController extends AbstractController
      */
     private $organisationRepository;
 
-    public function __construct(SanteQuestionRepository $santeQuestionRepository, OrganisationRepository $organisationRepository, SanteHandler $santeHandler, SanteChecker $santeChecker)
-    {
+    public function __construct(
+        SanteQuestionRepository $santeQuestionRepository,
+        OrganisationRepository $organisationRepository,
+        SanteHandler $santeHandler,
+        SanteChecker $santeChecker
+    ) {
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;
         $this->santeQuestionRepository = $santeQuestionRepository;
@@ -57,7 +58,7 @@ final class SanteFicheController extends AbstractController
     {
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (! $santeFiche->getId()) {
+        if (!$santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_edit', ['uuid' => $enfant->getUuid()]);

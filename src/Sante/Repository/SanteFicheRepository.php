@@ -22,7 +22,7 @@ final class SanteFicheRepository extends ServiceEntityRepository
 
     public function getByEnfants(iterable $enfants)
     {
-        $queryBuilder = $this->repository->createQueryBuilder('sante_fiche');
+        $queryBuilder = $this->createQueryBuilder('sante_fiche');
 
         $queryBuilder->andWhere('sante_fiche.enfant IN (:enfants)')
             ->setParameter('enfants', $enfants);
@@ -47,7 +47,7 @@ final class SanteFicheRepository extends ServiceEntityRepository
 
     public function findByEnfant(Enfant $enfant): ?SanteFiche
     {
-        return $this->repository->createQueryBuilder('sante_fiche')->andWhere('sante_fiche.enfant = :enfant')
+        return $this->createQueryBuilder('sante_fiche')->andWhere('sante_fiche.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getOneOrNullResult();
     }

@@ -20,7 +20,7 @@ final class SanteQuestionRepository extends ServiceEntityRepository
 
     public function findAll()
     {
-        return $this->repository->findBy([], ['display_order' => 'ASC']);
+        return $this->findBy([], ['display_order' => 'ASC']);
     }
 
     /**
@@ -30,7 +30,7 @@ final class SanteQuestionRepository extends ServiceEntityRepository
      */
     public function getQuestionsNonRepondues($questionsRepondues)
     {
-        $queryBuilder = $this->repository->createQueryBuilder('santeQuestion');
+        $queryBuilder = $this->createQueryBuilder('santeQuestion');
 
         if (\count($questionsRepondues) > 0) {
             $queryBuilder->andWhere('santeQuestion.id NOT IN (:questions) ')
