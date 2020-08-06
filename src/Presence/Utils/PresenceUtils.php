@@ -169,7 +169,7 @@ final class PresenceUtils
      */
     public static function extractPlainesFromPresences(array $presences): iterable
     {
-        $arrayCollection = new ArrayCollection();
+        $plaines = new ArrayCollection();
         array_map(
             function ($presence) use ($plaines) {
                 $jour = $presence->getJour();
@@ -188,6 +188,6 @@ final class PresenceUtils
             $presences
         );
 
-        return $arrayCollection;
+        return $plaines;
     }
 }
