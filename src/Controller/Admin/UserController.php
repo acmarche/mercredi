@@ -75,7 +75,7 @@ final class UserController extends AbstractController
 
             $users = $this->userRepository->findByNameOrRoles($nom, $role);
         } else {
-            $users = $this->userRepository->findAll();
+            $users = $this->userRepository->findAllOrderByNom();
         }
 
         return $this->render(

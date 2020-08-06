@@ -50,6 +50,7 @@ Feature: Gestion des utilisateurs
     Then I follow "Associer un parent"
     And I select "GASPARD Aurore" from "associate_parent_tuteur"
     And I press "Sauvegarder"
+    #Then print last response
     Then I should see "L'utilisateur a bien été associé."
     Then I should see "Un mail de bienvenue a été envoyé"
     Then I should see "GASPARD Aurore"

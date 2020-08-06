@@ -17,7 +17,11 @@ trait InitMailerTrait
      */
     private $mailer;
 
-    public function __construct(
+    /**
+     * @param MailerInterface $mailer
+     * @required
+     */
+    public function setMailer(
         MailerInterface $mailer
     ) {
         $this->mailer = $mailer;
@@ -27,7 +31,7 @@ trait InitMailerTrait
      * @param Email $email
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function sendMail(Email $email):void
+    public function sendMail(Email $email): void
     {
         $this->mailer->send($email);
     }

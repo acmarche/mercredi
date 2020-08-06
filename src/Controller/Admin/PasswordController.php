@@ -26,7 +26,7 @@ final class PasswordController extends AbstractController
      */
     private $userPasswordEncoder;
 
-    public function construct(
+    public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {

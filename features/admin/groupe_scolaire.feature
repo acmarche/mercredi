@@ -7,7 +7,7 @@ Feature: Gestion des groupes scolaires
   Background:
     Given I am logged in as an admin
     Given I am on "/admin/groupe_scolaire/"
-    Then I should see "Liste des groupes scolaires"
+    Then I should see "Liste des groupes"
 
   Scenario: Ajout un groupe
     Then I follow "Ajouter un groupe"

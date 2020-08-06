@@ -25,14 +25,15 @@ trait OrganisationPropertyInitTrait
     }
 
     /**
-     *
+     * @required
      */
     public function setorganisationRepository(OrganisationRepository $organisationRepository)
     {
-        $this->organisation = $organisationRepository;
+        $this->organisationRepository = $organisationRepository;
+        $this->setOrganisation();
     }
 
-    public function __invoke()
+    public function setOrganisation()
     {
         $this->organisation = $this->organisationRepository->getOrganisation();
     }

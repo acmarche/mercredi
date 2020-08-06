@@ -27,6 +27,17 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     }
 
     /**
+     * @return User[]
+     */
+    public function findAllOrderByNom(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->addOrderBy('user.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Used to upgrade (rehash) the user's password automatically over time.
      * @param UserInterface $user
      * @param string $newEncodedPassword
@@ -35,7 +46,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
-        if (! $user instanceof User) {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
@@ -99,4 +110,5 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     {
         $this->_em->remove($user);
     }
+
 }
