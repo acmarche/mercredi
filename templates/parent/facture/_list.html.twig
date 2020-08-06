@@ -4,7 +4,6 @@
         <th>Numéro</th>
         <th>Facturé le</th>
         <th>Payé le</th>
-        <th>Nbre de présences</th>
         <th>Télécharger</th>
     </tr>
     </thead>
@@ -18,7 +17,6 @@
                 {{ facture.factureLe | format_date('full') | title }}
             </td>
             <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') : '<span class="text-danger">Non payé</span>' }}</td>
-            <td>{{ facture.facturePresences | length }}</td>
             <td>
                 <a href="{{ path('mercredi_parent_facture_pdf', {'uuid': facture.uuid}) }}">
                     <i class="fas fa-download"></i> Télécharger
@@ -27,7 +25,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="3">Aucune</td>
+            <td colspan="5">Aucune</td>
         </tr>
     {% endfor %}
     </tbody>
