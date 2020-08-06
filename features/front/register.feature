@@ -14,4 +14,5 @@ Feature: M'enregistrer
     And I fill in "registration_form[plainPassword]" with "Montgomery"
     And I check "Conditions d'utilisation"
     And I press "M'enregistrer"
+    Then print last response
     Then I should see "Votre compte a bien été créé, consultez votre boite mail"

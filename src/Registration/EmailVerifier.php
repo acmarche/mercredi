@@ -2,38 +2,42 @@
 
 namespace AcMarche\Mercredi\Registration;
 
-use Doctrine\ORM\EntityManagerInterface;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 final class EmailVerifier
 {
+    use InitMailerTrait;
+
     /**
      * @var \SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface
      */
     private $verifyEmailHelper;
     /**
-     * @var \Symfony\Component\Mailer\MailerInterface
-     */
-    private $mailer;
-    /**
      * @var \Doctrine\ORM\EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(VerifyEmailHelperInterface $verifyEmailHelper, MailerInterface $mailer, EntityManagerInterface $entityManager)
+    public function __construct(VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository)
     {
         $this->verifyEmailHelper = $verifyEmailHelper;
-        $this->mailer = $mailer;
-        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $templatedEmail): void
-    {
+    public function sendEmailConfirmation(
+        string $verifyEmailRouteName,
+        UserInterface $user,
+        TemplatedEmail $templatedEmail
+    ): void {
         $verifyEmailSignatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             $user->getId(),
@@ -46,7 +50,7 @@ final class EmailVerifier
 
         $templatedEmail->context($context);
 
-        $this->mailer->send($templatedEmail);
+        $this->sendMail($templatedEmail);
     }
 
     /**
@@ -58,7 +62,7 @@ final class EmailVerifier
 
         $user->setIsVerified(true);
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->userRepository->persist($user);
+        $this->userRepository->flush();
     }
 }
