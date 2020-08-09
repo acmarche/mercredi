@@ -7,8 +7,6 @@ use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineHottonCalculator;
 use AcMarche\Mercredi\Presence\Calculator\PrenceHottonCalculator;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
-use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
-use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
@@ -29,7 +27,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->defaults()
+    $services
+        ->defaults()
         ->autowire()
         ->autoconfigure()
         ->private();
@@ -51,12 +50,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->instanceof(AfterUserRegistration::class)
         ->tag('app.user.after_registration');
 
-    $services->instanceof(PresenceConstraintInterface::class)
-        ->tag('mercredi.presence_constraint');
-
     $services->set(Register::class)
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
-    $services->set(PresenceConstraints::class)
-        ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));
+    /*  $services->set(PresenceConstraints::class)
+          ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));*/
 };

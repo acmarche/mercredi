@@ -9,9 +9,13 @@ final class PresenceConstraints
      */
     private $constraints;
 
-    public function __construct(iterable $constraints)
+    public function __construct()
     {
-        $this->constraints = $constraints;
+        $this->constraints = [];
+    }
+
+    public function addConstraint(PresenceConstraintInterface $constraint) {
+        $this->constraints[] = $constraint;
     }
 
     public function execute($jour): void
@@ -20,5 +24,10 @@ final class PresenceConstraints
             dump(123);
             $constraint->check($jour);
         }
+    }
+
+    public function getConstraints():array
+    {
+        return $this->constraints;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\DependencyInjection;
 
+use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -19,6 +20,10 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
     {
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__.'/../../config'));
         $phpFileLoader->load('services.php');
+
+        //auto tag PresenceConstraintInterface
+        $containerBuilder->registerForAutoconfiguration(PresenceConstraintInterface::class)
+            ->addTag('mercredi.presence_constraint');
     }
 
     /**
@@ -74,4 +79,5 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
             new FileLocator(__DIR__.'/../../config/packages/')
         );
     }
+
 }
