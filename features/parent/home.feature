@@ -7,7 +7,7 @@ Feature: Test des pages parents
     Given I am on "/parent"
 
   Scenario: Je suis sur la page d'accueil
-    Then I should see "Votre (Vos) enfant(s)"
+    Then I should see "Vos enfants"
     Then I should see "SIMPSON Lisa"
     Then I should see "SIMPSON Homer"
     Then I should see "Mardi 6 Octobre 2020"

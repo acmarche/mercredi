@@ -43,7 +43,7 @@ final class ExportPdfController extends AbstractController
     /**
      * @Route("/santefiche/{id}", name="mercredi_admin_export_sante_fiche_pdf")
      */
-    public function default(Enfant $enfant): Response
+    public function sante(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
 

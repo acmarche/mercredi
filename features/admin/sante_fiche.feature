@@ -2,6 +2,7 @@ Feature: Gestion des fiches santés
   Je suis connecté
   J' ajoute une fiche a un enfant
   J' édite une fiche
+  J'exporte en pdf
 
   Background:
     Given I am logged in as an admin
@@ -41,3 +42,13 @@ Feature: Gestion des fiches santés
     Then I should see "Le formulaire santé a bien été enregistré"
    # Then I should see "La grande soeur"
     Then I should see "Docteur maboulle"
+
+  Scenario: J'exporte une fiche en pdf
+    Given I am on "/admin/enfant/"
+    Then I should see "Liste des enfants"
+    Then I fill in "search_enfant[nom]" with "Bart"
+    And I press "Rechercher"
+    Then I follow "Simpson"
+    Then I follow "Fiche santé"
+    Then I follow "Pdf"
+    And the response status code should be 200

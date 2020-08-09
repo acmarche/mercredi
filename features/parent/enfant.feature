@@ -4,6 +4,7 @@ Feature: Test des pages parents
   J' ajoute un enfant
   En vue détail, Lisa n'a pas sa fiche santé complète
   En vue détail, Bart a sa fiche santé complète
+  J'affiche une attestation
 
   Background:
     Given I am login with user "albert@marche.be" and password "homer"
@@ -59,3 +60,7 @@ Feature: Test des pages parents
   Scenario: Bart a sa fiche santé complète
     Then I follow "SIMPSON Bart"
     Then I should not see "Attention la fiche santé n'est pas complète, veuillez la remplir."
+
+  Scenario: J'affiche une attestation fiscale
+    Then I follow "Télécharger 2020"
+    And the response status code should be 200

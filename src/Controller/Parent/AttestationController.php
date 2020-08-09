@@ -2,11 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -18,26 +20,35 @@ final class AttestationController extends AbstractController
 {
     public $relationRepository;
     use GetTuteurTrait;
+    use PdfDownloaderTrait;
+
+    public function __construct(RelationRepository $relationRepository)
+    {
+        $this->relationRepository = $relationRepository;
+    }
 
     /**
-     * @Route("/", name="mercredi_parent_attestation")
+     * @Route("/{year}/{uuid}", name="mercredi_parent_attestation")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function default()
+    public function default(int $year, Enfant $enfant)
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
         $enfants = RelationUtils::extractEnfants($relations);
-        $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
-        return $this->render(
-            '@AcMarcheMercrediParent/default/index.html.twig',
+        $factures = [];
+        $html = $this->render(
+            '@AcMarcheMercredi/commun/attestation/index.html.Twig',
             [
                 'enfants' => $enfants,
-                'tuteurIsComplete' => $tuteurIsComplete,
-                'year' => date('Y'),
+                'factures' => $factures,
+                'tuteur' => $this->tuteur,
+                'year' => $year,
             ]
         );
+
+        return $this->downloadPdf($html, $enfant->getSlug().'-attestation-'.$year.'.pdf');
     }
 }

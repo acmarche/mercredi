@@ -21,7 +21,6 @@ final class PresenceConstraints
     public function execute($jour): void
     {
         foreach ($this->constraints as $constraint) {
-            dump(123);
             $constraint->check($jour);
         }
     }

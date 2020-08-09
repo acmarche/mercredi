@@ -13,7 +13,11 @@ trait PdfDownloaderTrait
      */
     private $pdf;
 
-    public function __construct(Pdf $pdf)
+    /**
+     * @param Pdf $pdf
+     * @required
+     */
+    public function setPdf(Pdf $pdf)
     {
         $this->pdf = $pdf;
     }
