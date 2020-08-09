@@ -32,11 +32,11 @@ class SanteReponse
     private $sante_fiche;
 
     /**
-     * @var bool
+     * @var bool|null
      *
      * @ORM\Column(type="boolean")
      */
-    private $reponse = false;
+    private $reponse;
 
     /**
      * @var string|null
@@ -71,12 +71,12 @@ class SanteReponse
         $this->sante_fiche = $sante_fiche;
     }
 
-    public function isReponse(): bool
+    public function isReponse(): ?bool
     {
         return $this->reponse;
     }
 
-    public function setReponse(bool $reponse): void
+    public function setReponse(?bool $reponse): void
     {
         $this->reponse = $reponse;
     }
