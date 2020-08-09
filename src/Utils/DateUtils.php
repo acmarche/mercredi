@@ -28,7 +28,7 @@ final class DateUtils
         throw new Exception('Mauvais format de date: '.$mois);
     }
 
-    public static function formatFr(DateTime $dateTime, $format = IntlDateFormatter::FULL): string
+    public static function formatFr(DateTime $dateTime, string $format = IntlDateFormatter::FULL): string
     {
         $intlDateFormatter = new IntlDateFormatter(
             Locale::getDefault(),
