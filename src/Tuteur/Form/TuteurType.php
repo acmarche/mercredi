@@ -18,13 +18,13 @@ use Symfony\Component\Security\Core\Security;
 final class TuteurType extends AbstractType
 {
     /**
-     * @var Security
-     */
-    private $security;
-    /**
      * @var string
      */
     private const REQUIRED = 'required';
+    /**
+     * @var Security
+     */
+    private $security;
 
     public function __construct(Security $security)
     {

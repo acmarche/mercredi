@@ -63,7 +63,7 @@ final class SanteHandler
             if (null === $question->getReponseTxt() && ! $question->getRemarque()) {
                 return null;
             }
-            if (($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) === null) {
+            if (null === ($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question))) {
                 $reponse = $this->santeFactory->createSanteReponse($santeFiche, $question);
             }
             $reponse->setReponse($question->getReponseTxt());

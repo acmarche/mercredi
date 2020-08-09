@@ -59,7 +59,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Jour[]
      */
     public function findDaysRegisteredByEnfant(Enfant $enfant): array
@@ -87,7 +86,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPresencesByEnfant(Enfant $enfant): array
@@ -103,7 +101,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Presence[]
      */
     public function findPresencesByTuteur(Tuteur $tuteur): array
@@ -118,7 +115,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Plaine $plaine
      * @return Presence[]
      */
     public function findPresencesByPlaine(Plaine $plaine): array
@@ -135,8 +131,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Plaine $plaine
-     * @param Tuteur $tuteur
      * @return Presence[]
      */
     public function findPresencesByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
@@ -170,7 +164,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPlainesByEnfant(Enfant $enfant): array
@@ -187,8 +180,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Enfant $enfant
-     * @param Jour $jour
      * @return Presence
      *
      * @throws NonUniqueResultException
@@ -248,9 +239,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Jour $jour
-     * @param Ecole|null $ecole
-     *
      * @return Presence[]
      */
     public function findPresencesByJourAndEcole(Jour $jour, ?Ecole $ecole): array
@@ -264,7 +252,7 @@ final class PresenceRepository extends ServiceEntityRepository
                 ->setParameter(self::JOUR, $jour);
         }
 
-        if ($ecole !== null) {
+        if (null !== $ecole) {
             $queryBuilder->andWhere('enfant.ecole = :ecole')
                 ->setParameter('ecole', $ecole);
         }
@@ -273,9 +261,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $nom
-     * @param Ecole $ecole
-     * @param string $annee_scolaire
      * @return Presence[]
      */
     public function search(string $nom, Ecole $ecole, string $annee_scolaire): array
@@ -284,7 +269,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->join('presence.enfant', self::ENFANT, self::WITH)
             ->addSelect(self::ENFANT);
 
-        if ($nom !== '') {
+        if ('' !== $nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :nom')
                 ->setParameter('nom', $nom);
         }
@@ -294,7 +279,7 @@ final class PresenceRepository extends ServiceEntityRepository
                 ->setParameter('ecole', $ecole);
         }
 
-        if ($annee_scolaire !== '') {
+        if ('' !== $annee_scolaire) {
             $queryBuilder->andWhere('enfant.annee_scolaire = :annee')
                 ->setParameter('annee', $annee_scolaire);
         }

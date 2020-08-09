@@ -25,6 +25,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class SanteFicheController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
      * @var SanteFicheRepository
      */
     private $santeFicheRepository;
@@ -44,10 +48,6 @@ final class SanteFicheController extends AbstractController
      * @var OrganisationRepository
      */
     private $organisationRepository;
-    /**
-     * @var string
-     */
-    private const ID = 'id';
 
     public function __construct(
         SanteFicheRepository $santeFicheRepository,

@@ -20,6 +20,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PageController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const PAGE = 'page';
+    /**
      * @var OrganisationRepository
      */
     private $organisationRepository;
@@ -35,10 +39,6 @@ final class PageController extends AbstractController
      * @var ContactMailer
      */
     private $contactMailer;
-    /**
-     * @var string
-     */
-    private const PAGE = 'page';
 
     public function __construct(
         OrganisationRepository $organisationRepository,
@@ -79,7 +79,7 @@ final class PageController extends AbstractController
     public function contact(Request $request)
     {
         $page = $this->pageRepository->findContactPage();
-        if ($page === null) {
+        if (null === $page) {
             $page = $this->pageFactory->createContactPage();
         }
 
@@ -119,7 +119,7 @@ final class PageController extends AbstractController
     public function modalite()
     {
         $page = $this->pageRepository->findModalitePage();
-        if ($page === null) {
+        if (null === $page) {
             $page = $this->pageFactory->createModalitePage();
         }
 

@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Reduction\MessageHandler;
 
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
-use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

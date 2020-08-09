@@ -5,13 +5,12 @@ namespace AcMarche\Mercredi\Jour\Repository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
+use function count;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-
-use function count;
 
 /**
  * @method Jour|null find($id, $lockMode = null, $lockVersion = null)
@@ -51,10 +50,6 @@ final class JourRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Jour::class);
     }
 
-    /**
-     * @param Enfant $enfant
-     * @return QueryBuilder
-     */
     public function getQbDaysNotRegisteredByEnfant(Enfant $enfant): QueryBuilder
     {
         $joursRegistered = $this->getEntityManager()->getRepository(Presence::class)->findDaysRegisteredByEnfant(
@@ -80,8 +75,6 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param DateTimeInterface $dateTime
-     *
      * @return Jour[]
      */
     public function findDaysByMonth(DateTimeInterface $dateTime): array
@@ -121,9 +114,6 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param DateTimeInterface $dateTime
-     *
-     * @param Enfant $enfant
      * @return Jour[]
      */
     public function findPedagogiqueByDateGreatherOrEqual(DateTimeInterface $dateTime, Enfant $enfant): array
@@ -139,9 +129,6 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param DateTimeInterface $dateTime
-     *
-     * @param Enfant $enfant
      * @return Jour[]
      */
     public function findJourByDateGreatherOrEqual(DateTimeInterface $dateTime, Enfant $enfant): array

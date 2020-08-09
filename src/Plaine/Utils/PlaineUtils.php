@@ -10,7 +10,7 @@ final class PlaineUtils
     /**
      * @return Jour[]
      */
-    public static function extractJoursFromPlaine(Plaine $plaine):array
+    public static function extractJoursFromPlaine(Plaine $plaine): array
     {
         $plaineJours = $plaine->getPlaineJours();
         $jours = [];

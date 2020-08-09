@@ -16,7 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Accueil
+ * Class Accueil.
+ *
  * @ORM\Table("accueil", uniqueConstraints={
  *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
  * })
@@ -56,6 +57,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
+     *
      * @var Enfant
      */
     private $enfant;
@@ -63,6 +65,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
+     *
      * @var Tuteur
      */
     private $tuteur;

@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Document\MessageHandler;
 
 use AcMarche\Mercredi\Document\Message\DocumentDeleted;
-use AcMarche\Mercredi\Document\Repository\DocumentRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

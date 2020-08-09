@@ -15,7 +15,7 @@ final class JourListing
     /**
      * @var ArrayCollection
      */
-    protected $enfants;
+    private $enfants;
     /**
      * @var Jour
      */

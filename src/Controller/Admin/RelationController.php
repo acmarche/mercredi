@@ -24,14 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class RelationController extends AbstractController
 {
     /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var RelationHandler
-     */
-    private $relationHandler;
-    /**
      * @var string
      */
     private const DANGER = 'danger';
@@ -39,6 +31,14 @@ final class RelationController extends AbstractController
      * @var string
      */
     private const ID = 'id';
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
+    /**
+     * @var RelationHandler
+     */
+    private $relationHandler;
 
     public function __construct(RelationRepository $relationRepository, RelationHandler $relationHandler)
     {
@@ -52,7 +52,7 @@ final class RelationController extends AbstractController
     public function attachEnfant(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
-            $enfantId = (int)$request->request->get('enfantId');
+            $enfantId = (int) $request->request->get('enfantId');
 
             try {
                 $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
@@ -101,13 +101,13 @@ final class RelationController extends AbstractController
     {
         $relationId = $request->request->get('relationid');
 
-        if (!$relationId) {
+        if (! $relationId) {
             $this->addFlash(self::DANGER, 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
-        if ($relation === null) {
+        if (null === $relation) {
             $this->addFlash(self::DANGER, 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');

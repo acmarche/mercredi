@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Enfant\MessageHandler;
 
 use AcMarche\Mercredi\Enfant\Message\EnfantDeleted;
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

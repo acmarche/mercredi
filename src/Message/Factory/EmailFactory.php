@@ -27,7 +27,7 @@ final class EmailFactory
         /*
          * Pieces jointes.
          */
-        if (($uploadedFile = $message->getFile()) !== null) {
+        if (null !== ($uploadedFile = $message->getFile())) {
             $templatedEmail->attachFromPath(
                 $uploadedFile->getRealPath(),
                 $uploadedFile->getClientOriginalName(),

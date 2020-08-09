@@ -16,12 +16,14 @@ final class DeleteConstraint
     public static function canBeDeleted(Presence $presence)
     {
         $dateTime = new DateTime();
+
         return $presence->getJour()->getDateJour() > $dateTime;
     }
 
     public static function accueilCanBeDeleted(Accueil $accueil)
     {
         $dateTime = new DateTime();
+
         return $accueil->getDateJour() > $dateTime;
     }
 

@@ -19,6 +19,7 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
      * @var string
      */
     private const GROUPE_SCOLAIRE = 'groupe_scolaire';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, GroupeScolaire::class);

@@ -22,10 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class NoteController extends AbstractController
 {
     /**
-     * @var NoteRepository
-     */
-    private $noteRepository;
-    /**
      * @var string
      */
     private const MERCREDI_ADMIN_NOTE_SHOW = 'mercredi_admin_note_show';
@@ -41,6 +37,10 @@ final class NoteController extends AbstractController
      * @var string
      */
     private const FORM = 'form';
+    /**
+     * @var NoteRepository
+     */
+    private $noteRepository;
 
     public function __construct(NoteRepository $noteRepository)
     {

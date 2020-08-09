@@ -8,10 +8,9 @@ use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineJourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use function count;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use function count;
 
 final class PlaineHandler
 {
@@ -39,7 +38,6 @@ final class PlaineHandler
     }
 
     /**
-     * @param Plaine $plaine
      * @param Jour[]|ArrayCollection $newJours
      */
     public function handleEditJours(Plaine $plaine, iterable $newJours): void
@@ -59,7 +57,6 @@ final class PlaineHandler
 
     /**
      * Ajoute au moins deux dates a la plaine.
-     * @param Plaine $plaine
      */
     public function initJours(Plaine $plaine): void
     {
@@ -78,7 +75,6 @@ final class PlaineHandler
     }
 
     /**
-     * @param Plaine $plaine
      * @return PlaineJour[]
      */
     public function findPlaineJoursByPlaine(Plaine $plaine): array
@@ -92,7 +88,7 @@ final class PlaineHandler
             return $jour;
         }
 
-        if (($newJour = $this->jourRepository->findOneByDate($jour->getDateJour())) === null) {
+        if (null === ($newJour = $this->jourRepository->findOneByDate($jour->getDateJour()))) {
             $newJour = new Jour($jour->getDateJour());
             $this->jourRepository->persist($newJour);
         }
@@ -102,14 +98,14 @@ final class PlaineHandler
 
     private function getPlaineJourByPlaineAndJour(Plaine $plaine, Jour $jour): PlaineJour
     {
-        if (!$jour->getId()) {
+        if (! $jour->getId()) {
             $plaineJour = new PlaineJour($plaine, $jour);
             $this->plaineJourRepository->persist($plaineJour);
 
             return $plaineJour;
         }
 
-        if (($plaineJour = $this->plaineJourRepository->findByPlaineAndJour($plaine, $jour)) !== null) {
+        if (null !== ($plaineJour = $this->plaineJourRepository->findByPlaineAndJour($plaine, $jour))) {
             return $plaineJour;
         }
 
@@ -120,7 +116,6 @@ final class PlaineHandler
     }
 
     /**
-     * @param Plaine $plaine
      * @param Jour[] $newJours
      */
     private function removePlaineJours(Plaine $plaine, iterable $newJours): void
@@ -137,7 +132,7 @@ final class PlaineHandler
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $this->jourRepository->remove($jourEntity);
                 $this->plaineJourRepository->remove($plaineJour);
             }

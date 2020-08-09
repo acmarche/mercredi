@@ -9,13 +9,12 @@ use AcMarche\Mercredi\Ecole\Message\EcoleUpdated;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Ecole;
+use function count;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use function count;
 
 /**
  * @Route("/ecole")
@@ -23,14 +22,6 @@ use function count;
  */
 final class EcoleController extends AbstractController
 {
-    /**
-     * @var EcoleRepository
-     */
-    private $ecoleRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
     /**
      * @var string
      */
@@ -43,6 +34,14 @@ final class EcoleController extends AbstractController
      * @var string
      */
     private const ECOLE = 'ecole';
+    /**
+     * @var EcoleRepository
+     */
+    private $ecoleRepository;
+    /**
+     * @var EnfantRepository
+     */
+    private $enfantRepository;
 
     public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository)
     {
@@ -105,9 +104,6 @@ final class EcoleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="mercredi_admin_ecole_edit", methods={"GET","POST"})
-     * @param Request $request
-     * @param Ecole $ecole
-     * @return Response
      */
     public function edit(Request $request, Ecole $ecole): Response
     {

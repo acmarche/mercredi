@@ -43,7 +43,8 @@ class GroupeScolaire
     private $annees_scolaires;
 
     /**
-     * Pour le cascade
+     * Pour le cascade.
+     *
      * @var PlaineGroupe[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="groupe_scolaire", cascade={"remove"})
      */
@@ -95,7 +96,7 @@ class GroupeScolaire
 
     public function addEnfant(Enfant $enfant): self
     {
-        if (!$this->enfants->contains($enfant)) {
+        if (! $this->enfants->contains($enfant)) {
             $this->enfants[] = $enfant;
             $enfant->setGroupeScolaire($this);
         }
@@ -126,7 +127,7 @@ class GroupeScolaire
 
     public function addAnneesScolaire(AnneeScolaire $anneesScolaire): self
     {
-        if (!$this->annees_scolaires->contains($anneesScolaire)) {
+        if (! $this->annees_scolaires->contains($anneesScolaire)) {
             $this->annees_scolaires[] = $anneesScolaire;
             $anneesScolaire->setGroupeScolaire($this);
         }
@@ -157,7 +158,7 @@ class GroupeScolaire
 
     public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if (!$this->plaine_groupes->contains($plaineGroupe)) {
+        if (! $this->plaine_groupes->contains($plaineGroupe)) {
             $this->plaine_groupes[] = $plaineGroupe;
             $plaineGroupe->setGroupeScolaire($this);
         }

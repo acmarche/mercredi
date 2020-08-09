@@ -8,13 +8,16 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
 use AcMarche\Mercredi\User\Mailer\UserMailer;
+use function count;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-use function count;
-
 final class AssociationHandler
 {
+    /**
+     * @var string
+     */
+    private const SUCCESS = 'success';
     /**
      * @var TuteurRepository
      */
@@ -31,10 +34,6 @@ final class AssociationHandler
      * @var UserFactory
      */
     private $userFactory;
-    /**
-     * @var string
-     */
-    private const SUCCESS = 'success';
 
     public function __construct(
         TuteurRepository $tuteurRepository,
@@ -51,7 +50,7 @@ final class AssociationHandler
     public function suggestTuteur(User $user, AssociateUserTuteurDto $associateUserTuteurDto): void
     {
         $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
-        if ($tuteur !== null) {
+        if (null !== $tuteur) {
             $associateUserTuteurDto->setTuteur($tuteur);
         }
     }
@@ -95,6 +94,7 @@ final class AssociationHandler
     {
         $user = $this->userFactory->newFromTuteur($tuteur);
         $plainPassword = $user->getPlainPassword();
+
         try {
             $this->userMailer->sendNewAccountToParent($user, $tuteur, $plainPassword);
         } catch (TransportExceptionInterface $e) {

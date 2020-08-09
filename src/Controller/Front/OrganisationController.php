@@ -14,13 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class OrganisationController extends AbstractController
 {
     /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
      * @var string
      */
     private const ORGANISATION = 'organisation';
+    /**
+     * @var OrganisationRepository
+     */
+    private $organisationRepository;
 
     public function __construct(
         OrganisationRepository $organisationRepository

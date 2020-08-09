@@ -9,7 +9,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 final class NotifcationMailer
 {
-
     use InitMailerTrait;
 
     public function sendMessagEnfantCreated(User $user, Enfant $enfant): void

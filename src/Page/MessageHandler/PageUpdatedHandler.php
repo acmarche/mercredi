@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Page\MessageHandler;
 
 use AcMarche\Mercredi\Page\Message\PageUpdated;
-use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

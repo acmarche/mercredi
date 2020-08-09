@@ -5,8 +5,6 @@ namespace AcMarche\Mercredi\Controller\Front;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Registration\EmailVerifier;
 use AcMarche\Mercredi\Registration\Form\RegistrationFormType;
-use AcMarche\Mercredi\Registration\Handler\RegistrationHandler;
-use AcMarche\Mercredi\Registration\Mailer\RegistrationMailerFactory;
 use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

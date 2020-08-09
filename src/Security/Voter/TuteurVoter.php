@@ -135,6 +135,7 @@ final class TuteurVoter extends Voter
         if (! $this->tuteurToCheck instanceof Tuteur) {
             return false;
         }
+
         return $this->tuteurOfUser->getId() === $this->tuteurToCheck->getId();
     }
 }

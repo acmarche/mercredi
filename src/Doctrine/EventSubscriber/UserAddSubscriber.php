@@ -53,7 +53,7 @@ final class UserAddSubscriber implements EventSubscriber
 
         $user = $this->security->getUser();
 
-        if ($user === null) {
+        if (null === $user) {
             throw new Exception('You must be login');
         }
 

@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Facture\MessageHandler;
 
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
-use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

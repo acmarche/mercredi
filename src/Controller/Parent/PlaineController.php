@@ -85,7 +85,7 @@ final class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine)
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $this->tuteur);
@@ -128,13 +128,13 @@ final class PlaineController extends AbstractController
 
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$this->santeChecker->isComplete($santeFiche)) {
+        if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
         }
 
-        if ($plaine !== null) {
+        if (null !== $plaine) {
             $this->plainePresenceHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
             $this->addFlash('success', 'Votre enfant a bien été inscrits à la plaine');
         }

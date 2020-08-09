@@ -19,13 +19,13 @@ final class FactureRepository extends ServiceEntityRepository
      * @var string
      */
     private const TUTEUR = 'tuteur';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Facture::class);
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Facture[]
      */
     public function findFacturesByTuteur(Tuteur $tuteur): array
@@ -39,8 +39,6 @@ final class FactureRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string|null $tuteur
-     * @param bool|null $paye
      * @return Facture[]
      */
     public function search(?string $tuteur, ?bool $paye): array

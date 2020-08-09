@@ -32,26 +32,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PlainePresenceController extends AbstractController
 {
     /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var PlainePresenceHandler
-     */
-    private $plainePresenceHandler;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var PlainePresenceRepository
-     */
-    private $plainePresenceRepository;
-    /**
-     * @var PlaineCalculatorInterface
-     */
-    private $plaineCalculator;
-    /**
      * @var string
      */
     private const DANGER = 'danger';
@@ -75,6 +55,26 @@ final class PlainePresenceController extends AbstractController
      * @var string
      */
     private const SUCCESS = 'success';
+    /**
+     * @var EnfantRepository
+     */
+    private $enfantRepository;
+    /**
+     * @var PlainePresenceHandler
+     */
+    private $plainePresenceHandler;
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
+    /**
+     * @var PlainePresenceRepository
+     */
+    private $plainePresenceRepository;
+    /**
+     * @var PlaineCalculatorInterface
+     */
+    private $plaineCalculator;
 
     public function __construct(
         PlainePresenceHandler $plainePresenceHandler,
@@ -280,14 +280,14 @@ final class PlainePresenceController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int)$request->request->get('presence');
-            if ($presenceId === 0) {
+            $presenceId = (int) $request->request->get('presence');
+            if (0 === $presenceId) {
                 $this->addFlash(self::DANGER, 'Référence à la présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
             $presence = $this->plainePresenceHandler->findPresence($presenceId);
-            if ($presence === null) {
+            if (null === $presence) {
                 $this->addFlash(self::DANGER, 'Présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');

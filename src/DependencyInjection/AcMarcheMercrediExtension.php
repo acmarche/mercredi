@@ -79,5 +79,4 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
             new FileLocator(__DIR__.'/../../config/packages/')
         );
     }
-
 }

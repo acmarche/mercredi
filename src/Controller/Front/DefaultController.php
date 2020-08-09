@@ -35,7 +35,7 @@ final class DefaultController extends AbstractController
     public function index()
     {
         $homePage = $this->pageRepository->findHomePage();
-        if ($homePage === null) {
+        if (null === $homePage) {
             $homePage = $this->pageFactory->createHomePage();
         }
 

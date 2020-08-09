@@ -40,8 +40,6 @@ final class PlainePresenceHandler
     }
 
     /**
-     * @param Plaine $plaine
-     * @param Enfant $enfant
      * @return Presence[]
      */
     public function findPresencesByPlaineEnfant(Plaine $plaine, Enfant $enfant): array
@@ -76,7 +74,7 @@ final class PlainePresenceHandler
 
         foreach ($enMoins as $jour) {
             $presence = $this->presenceRepository->findOneByEnfantJour($enfant, $jour);
-            if ($presence !== null) {
+            if (null !== $presence) {
                 $this->presenceRepository->remove($presence);
             }
         }

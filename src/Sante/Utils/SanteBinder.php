@@ -40,7 +40,7 @@ final class SanteBinder
 
         foreach ($questions as $question) {
             $question->setReponseTxt(null);
-            if (($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question)) !== null) {
+            if (null !== ($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question))) {
                 $question->setReponseTxt($reponse->getReponse());
                 $question->setRemarque($reponse->getRemarque());
             }

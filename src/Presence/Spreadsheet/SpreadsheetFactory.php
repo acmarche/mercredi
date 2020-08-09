@@ -8,20 +8,14 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Mercredi\Utils\DateUtils;
+use function count;
 use DateTime;
 use IntlDateFormatter;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-use function count;
-
 final class SpreadsheetFactory
 {
     use SpreadsheetDownloaderTrait;
-
-    /**
-     * @var ScolaireUtils
-     */
-    private $scolaireUtils;
     /**
      * @var string
      */
@@ -34,6 +28,11 @@ final class SpreadsheetFactory
      * @var int
      */
     private const COLONNE = 1;
+
+    /**
+     * @var ScolaireUtils
+     */
+    private $scolaireUtils;
 
     public function __construct(ScolaireUtils $scolaireUtils)
     {
@@ -70,7 +69,7 @@ final class SpreadsheetFactory
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
             $colonne = 'A';
 
-            $neLe = $enfant->getBirthday() !== null ? $enfant->getBirthday()->format(self::FORMAT) : '';
+            $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
             $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
 
             $worksheet
@@ -116,7 +115,7 @@ final class SpreadsheetFactory
         foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
             $colonne = 'A';
 
-            $neLe = $enfant->getBirthday() !== null ? $enfant->getBirthday()->format(self::FORMAT) : '';
+            $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
             $worksheet
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
@@ -154,8 +153,6 @@ final class SpreadsheetFactory
 
     /**
      * @param Presence[] $presences
-     *
-     * @return Spreadsheet
      */
     public function presenceXls(array $presences): Spreadsheet
     {
@@ -172,7 +169,7 @@ final class SpreadsheetFactory
 
         foreach ($enfants as $enfant) {
             $colonne = 'A';
-            $neLe = $enfant->getBirthday() !== null ? $enfant->getBirthday()->format(self::FORMAT) : '';
+            $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
             $worksheet
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())

@@ -9,7 +9,6 @@ use Symfony\Component\Mime\Address;
 
 final class RegistrationMailerFactory
 {
-
     use InitMailerTrait;
 
     public function generateMessagRegisgerSuccess(User $user): TemplatedEmail
@@ -32,7 +31,7 @@ final class RegistrationMailerFactory
 
     public function generateMessageToAdminAccountCreated(User $user): TemplatedEmail
     {
-        $email = $this->organisation !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $email = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         return (new TemplatedEmail())
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))

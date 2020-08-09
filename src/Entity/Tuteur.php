@@ -19,7 +19,6 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -69,16 +68,6 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      */
     private $factures;
 
-    public function getSluggableFields(): array
-    {
-        return ['nom', 'prenom'];
-    }
-
-    public function shouldGenerateUniqueSlugs(): bool
-    {
-        return true;
-    }
-
     public function __construct()
     {
         $this->relations = [];
@@ -90,5 +79,15 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     public function __toString()
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+    }
+
+    public function getSluggableFields(): array
+    {
+        return ['nom', 'prenom'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
     }
 }

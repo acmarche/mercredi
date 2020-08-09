@@ -20,7 +20,7 @@ final class ScolaireUtils
 
     public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): GroupeScolaire
     {
-        if (($groupeScolaire = $enfant->getGroupeScolaire()) !== null) {
+        if (null !== ($groupeScolaire = $enfant->getGroupeScolaire())) {
             return $groupeScolaire;
         }
 

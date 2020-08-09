@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -177,7 +176,7 @@ final class PresenceUtils
                     return null;
                 }
                 $plaineJour = $jour->getPlaineJour();
-                if ($plaineJour === null) {
+                if (null === $plaineJour) {
                     return null;
                 }
                 $plaine = $plaineJour->getPlaine();

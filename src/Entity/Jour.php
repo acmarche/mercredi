@@ -93,7 +93,7 @@ class Jour implements TimestampableInterface
 
     public function addPresence(Presence $presence): self
     {
-        if (!$this->presences->contains($presence)) {
+        if (! $this->presences->contains($presence)) {
             $this->presences[] = $presence;
             $presence->setJour($this);
         }

@@ -29,6 +29,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PresenceController extends AbstractController
 {
     use GetTuteurTrait;
+    /**
+     * @var string
+     */
+    private const UUID = 'uuid';
+    /**
+     * @var string
+     */
+    private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
 
     /**
      * @var PresenceRepository
@@ -50,14 +58,6 @@ final class PresenceController extends AbstractController
      * @var SanteHandler
      */
     private $santeHandler;
-    /**
-     * @var string
-     */
-    private const UUID = 'uuid';
-    /**
-     * @var string
-     */
-    private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -113,7 +113,7 @@ final class PresenceController extends AbstractController
      */
     public function selectEnfant()
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
 
@@ -135,12 +135,12 @@ final class PresenceController extends AbstractController
      */
     public function selectJours(Request $request, Enfant $enfant)
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$this->santeChecker->isComplete($santeFiche)) {
+        if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
@@ -193,7 +193,7 @@ final class PresenceController extends AbstractController
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
-            if (!DeleteConstraint::canBeDeleted($presence)) {
+            if (! DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
                 return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);

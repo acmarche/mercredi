@@ -23,6 +23,7 @@ final class SearchEnfantType extends AbstractType
      * @var string
      */
     private const PLACEHOLDER = 'placeholder';
+
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder

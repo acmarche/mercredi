@@ -21,13 +21,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class ReductionController extends AbstractController
 {
     /**
-     * @var ReductionRepository
-     */
-    private $reductionRepository;
-    /**
      * @var string
      */
     private const REDUCTION = 'reduction';
+    /**
+     * @var ReductionRepository
+     */
+    private $reductionRepository;
 
     public function __construct(ReductionRepository $reductionRepository)
     {

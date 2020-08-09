@@ -34,8 +34,6 @@ final class AjaxController extends AbstractController
 
     /**
      * @Route("/tuteurs/{keyword}", name="mercredi_admin_ajax_tuteurs")
-     * @param string|null $keyword
-     * @return JsonResponse
      */
     public function tuteurs(?string $keyword = null): JsonResponse
     {
@@ -55,8 +53,6 @@ final class AjaxController extends AbstractController
 
     /**
      * @Route("/enfants/{keyword}", name="mercredi_admin_ajax_enfants")
-     * @param string|null $keyword
-     * @return JsonResponse
      */
     public function enfants(?string $keyword = null): JsonResponse
     {
@@ -73,7 +69,7 @@ final class AjaxController extends AbstractController
             $data[$i]['value'] = $enfant->getNom().' '.$enfant->getPrenom();
             $data[$i]['label'] = $enfant->getNom().' '.$enfant->getPrenom();
             $birthday = '';
-            if ($enfant->getBirthday() !== null) {
+            if (null !== $enfant->getBirthday()) {
                 $birthday = $enfant->getBirthday()->format('d-m-Y');
             }
             $data[$i]['birthday'] = $birthday;

@@ -28,6 +28,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class AccueilController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
      * @var AccueilRepository
      */
     private $accueilRepository;
@@ -47,14 +55,6 @@ final class AccueilController extends AbstractController
      * @var FactureAccueilRepository
      */
     private $factureAccueilRepository;
-    /**
-     * @var string
-     */
-    private const ENFANT = 'enfant';
-    /**
-     * @var string
-     */
-    private const ID = 'id';
 
     public function __construct(
         AccueilRepository $accueilRepository,

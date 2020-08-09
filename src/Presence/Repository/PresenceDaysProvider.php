@@ -26,7 +26,6 @@ final class PresenceDaysProvider implements PresenceDaysProviderInterface
     }
 
     /**
-     * @param Enfant $enfant
      * @return Jour[]
      */
     public function getAllDaysToSubscribe(Enfant $enfant): array

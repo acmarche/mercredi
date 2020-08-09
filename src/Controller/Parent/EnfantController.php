@@ -29,6 +29,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class EnfantController extends AbstractController
 {
     use GetTuteurTrait;
+    /**
+     * @var string
+     */
+    private const ENFANT = 'enfant';
 
     /**
      * @var EnfantRepository
@@ -66,10 +70,6 @@ final class EnfantController extends AbstractController
      * @var NotifcationMailer
      */
     private $notifcationMailer;
-    /**
-     * @var string
-     */
-    private const ENFANT = 'enfant';
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -99,7 +99,7 @@ final class EnfantController extends AbstractController
      */
     public function index()
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
 

@@ -24,6 +24,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FacturePresenceController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const FACTURE = 'facture';
+    /**
      * @var FacturePresenceRepository
      */
     private $facturePresenceRepository;
@@ -35,10 +39,6 @@ final class FacturePresenceController extends AbstractController
      * @var FactureUtils
      */
     private $factureUtils;
-    /**
-     * @var string
-     */
-    private const FACTURE = 'facture';
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,

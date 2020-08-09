@@ -26,9 +26,6 @@ final class RelationHandler
     }
 
     /**
-     * @param Tuteur $tuteur
-     * @param int|null $enfantId
-     * @return Relation|null
      * @throws Exception
      */
     public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): ?Relation
@@ -38,11 +35,11 @@ final class RelationHandler
         }
 
         $enfant = $this->enfantRepository->find($enfantId);
-        if ($enfant === null) {
+        if (null === $enfant) {
             throw new Exception('Enfant non trouvé');
         }
 
-        if ($this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant) !== null) {
+        if (null !== $this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant)) {
             throw new Exception('L\'enfant est déjà lié à cet enfant');
         }
 

@@ -24,6 +24,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class TuteurController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const TUTEUR = 'tuteur';
+    /**
      * @var TuteurRepository
      */
     private $tuteurRepository;
@@ -35,14 +43,6 @@ final class TuteurController extends AbstractController
      * @var SearchHelper
      */
     private $searchHelper;
-    /**
-     * @var string
-     */
-    private const FORM = 'form';
-    /**
-     * @var string
-     */
-    private const TUTEUR = 'tuteur';
 
     public function __construct(
         TuteurRepository $tuteurRepository,

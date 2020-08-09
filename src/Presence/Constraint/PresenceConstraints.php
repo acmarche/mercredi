@@ -14,7 +14,8 @@ final class PresenceConstraints
         $this->constraints = [];
     }
 
-    public function addConstraint(PresenceConstraintInterface $constraint) {
+    public function addConstraint(PresenceConstraintInterface $constraint): void
+    {
         $this->constraints[] = $constraint;
     }
 
@@ -25,7 +26,7 @@ final class PresenceConstraints
         }
     }
 
-    public function getConstraints():array
+    public function getConstraints(): array
     {
         return $this->constraints;
     }

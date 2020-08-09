@@ -21,6 +21,7 @@ final class AccueilRepository extends ServiceEntityRepository
      * @var string
      */
     private const ACCUEIL = 'accueil';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Accueil::class);

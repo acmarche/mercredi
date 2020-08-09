@@ -15,13 +15,12 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use function count;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use function count;
 
 /**
  * Class DefaultController.
@@ -31,6 +30,22 @@ use function count;
  */
 final class MessageController extends AbstractController
 {
+    /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const EMAILS = 'emails';
+    /**
+     * @var string
+     */
+    private const TUTEURS = 'tuteurs';
+    /**
+     * @var string
+     */
+    private const SUCCESS = 'success';
     /**
      * @var PresenceRepository
      */
@@ -59,22 +74,6 @@ final class MessageController extends AbstractController
      * @var PresenceHandler
      */
     private $presenceHandler;
-    /**
-     * @var string
-     */
-    private const FORM = 'form';
-    /**
-     * @var string
-     */
-    private const EMAILS = 'emails';
-    /**
-     * @var string
-     */
-    private const TUTEURS = 'tuteurs';
-    /**
-     * @var string
-     */
-    private const SUCCESS = 'success';
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -118,7 +117,7 @@ final class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if (!$jour && !$ecole) {
+            if (! $jour && ! $ecole) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }

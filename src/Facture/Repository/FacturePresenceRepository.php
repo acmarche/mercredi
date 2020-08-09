@@ -27,6 +27,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      * @var string
      */
     private const PRESENCE = 'presence';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, FacturePresence::class);

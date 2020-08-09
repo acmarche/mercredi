@@ -18,6 +18,7 @@ final class PageRepository extends ServiceEntityRepository
      * @var string
      */
     private const SLUG_SYSTEM = 'slug_system';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Page::class);

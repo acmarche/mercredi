@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DefaultController.
@@ -37,7 +36,7 @@ final class TuteurController extends AbstractController
      */
     public function show()
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
 
@@ -58,7 +57,7 @@ final class TuteurController extends AbstractController
      */
     public function edit(Request $request)
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
 

@@ -36,7 +36,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
             return 0;
         }
         $jour = $presence->getJour();
-        if ($jour->getPlaineJour() !== null) {
+        if (null !== $jour->getPlaineJour()) {
             return $this->calculatePlaine($presence, $jour);
         }
         if ($jour->isPedagogique()) {
@@ -77,7 +77,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
 
     private function reductionApplicate(PresenceInterface $presence, float $cout)
     {
-        if (($reduction = $presence->getReduction()) !== null) {
+        if (null !== ($reduction = $presence->getReduction())) {
             return $this->reductionCalculator->applicate($reduction, $cout);
         }
 

@@ -20,13 +20,13 @@ final class PlaineJourRepository extends ServiceEntityRepository
      * @var string
      */
     private const JOUR = 'jour';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, PlaineJour::class);
     }
 
     /**
-     * @param Plaine $plaine
      * @return PlaineJour[]
      */
     public function findByPlaine(Plaine $plaine): array

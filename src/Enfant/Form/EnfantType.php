@@ -24,10 +24,6 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 final class EnfantType extends AbstractType
 {
     /**
-     * @var Security
-     */
-    private $security;
-    /**
      * @var string
      */
     private const REQUIRED = 'required';
@@ -39,6 +35,10 @@ final class EnfantType extends AbstractType
      * @var string
      */
     private const PLACEHOLDER = 'placeholder';
+    /**
+     * @var Security
+     */
+    private $security;
 
     public function __construct(Security $security)
     {

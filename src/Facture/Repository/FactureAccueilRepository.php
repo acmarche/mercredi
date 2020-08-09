@@ -35,6 +35,7 @@ final class FactureAccueilRepository extends ServiceEntityRepository
 
     /**
      * @param Accueil[] $accueils
+     *
      * @return FactureAccueil[]
      */
     public function findPaye(array $accueils): array

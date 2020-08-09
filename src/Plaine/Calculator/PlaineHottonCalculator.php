@@ -56,7 +56,7 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
 
     private function reductionApplicate(PresenceInterface $presence, float $cout)
     {
-        if (($reduction = $presence->getReduction()) !== null) {
+        if (null !== ($reduction = $presence->getReduction())) {
             return $this->reductionCalculator->applicate($reduction, $cout);
         }
 

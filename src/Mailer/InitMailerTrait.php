@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Mailer;
-
 
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Component\Mailer\MailerInterface;
@@ -18,17 +16,15 @@ trait InitMailerTrait
     private $mailer;
 
     /**
-     * @param MailerInterface $mailer
      * @required
      */
     public function setMailer(
         MailerInterface $mailer
-    ) {
+    ): void {
         $this->mailer = $mailer;
     }
 
     /**
-     * @param Email $email
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function sendMail(Email $email): void

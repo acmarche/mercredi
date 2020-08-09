@@ -19,6 +19,7 @@ final class AccueilType extends AbstractType
      * @var string
      */
     private const LABEL = 'label';
+
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder

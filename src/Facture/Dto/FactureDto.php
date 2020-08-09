@@ -28,7 +28,7 @@ final class FactureDto
 
     public function addPresence(Presence $presence): self
     {
-        if ($this->presences->contains($presence) === []) {
+        if ([] === $this->presences->contains($presence)) {
             $this->presences[] = $presence;
         }
 
@@ -37,7 +37,7 @@ final class FactureDto
 
     public function removePresence(Presence $presence): self
     {
-        if ($this->presences->contains($presence) !== []) {
+        if ([] !== $this->presences->contains($presence)) {
             $this->presences->removeElement($presence);
         }
 

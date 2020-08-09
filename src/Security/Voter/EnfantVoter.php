@@ -161,6 +161,7 @@ final class EnfantVoter extends Voter
             },
             $relations
         );
+
         return \in_array($this->enfant->getId(), $enfants, true);
     }
 }

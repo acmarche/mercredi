@@ -14,10 +14,9 @@ trait PdfDownloaderTrait
     private $pdf;
 
     /**
-     * @param Pdf $pdf
      * @required
      */
-    public function setPdf(Pdf $pdf)
+    public function setPdf(Pdf $pdf): void
     {
         $this->pdf = $pdf;
     }

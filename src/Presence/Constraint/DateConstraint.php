@@ -10,6 +10,10 @@ use Twig\Environment;
 final class DateConstraint implements PresenceConstraintInterface
 {
     /**
+     * @var string
+     */
+    private const FORMAT = 'Y-m-d';
+    /**
      * @var FlashBagInterface
      */
     private $flashBag;
@@ -21,10 +25,6 @@ final class DateConstraint implements PresenceConstraintInterface
      * @var PresenceUtils
      */
     private $presenceUtils;
-    /**
-     * @var string
-     */
-    private const FORMAT = 'Y-m-d';
 
     public function __construct(
         FlashBagInterface $flashBag,

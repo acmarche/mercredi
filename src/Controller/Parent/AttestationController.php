@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +17,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AttestationController extends AbstractController
 {
-    public $relationRepository;
     use GetTuteurTrait;
     use PdfDownloaderTrait;
+    public $relationRepository;
 
     public function __construct(RelationRepository $relationRepository)
     {

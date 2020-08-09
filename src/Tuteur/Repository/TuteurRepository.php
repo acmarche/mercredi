@@ -20,6 +20,7 @@ final class TuteurRepository extends ServiceEntityRepository
      * @var string
      */
     private const TUTEUR = 'tuteur';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Tuteur::class);
@@ -44,7 +45,7 @@ final class TuteurRepository extends ServiceEntityRepository
     /**
      * @return Tuteur[]
      */
-    public function findSansEnfants():array
+    public function findSansEnfants(): array
     {
         return $this->createQueryBuilder(self::TUTEUR)
             ->andWhere('tuteur.relations IS EMPTY')

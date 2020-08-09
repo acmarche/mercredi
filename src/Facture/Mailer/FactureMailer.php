@@ -6,9 +6,8 @@ use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-
 use function count;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 final class FactureMailer
 {
@@ -28,7 +27,7 @@ final class FactureMailer
     public function init(Facture $facture): array
     {
         $data = [];
-        $data['from'] = $this->organisation !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $data['from'] = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
         $tuteur = $facture->getTuteur();
         $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
         $data['to'] = count($emails) > 0 ? $emails[0] : null;
@@ -36,10 +35,6 @@ final class FactureMailer
         return $data;
     }
 
-    /**
-     * @param Facture $facture
-     * @param array $data
-     */
     public function sendFacture(Facture $facture, array $data): void
     {
         $templatedEmail = (new TemplatedEmail())

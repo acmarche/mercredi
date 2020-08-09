@@ -156,7 +156,7 @@ class SanteFiche implements TimestampableInterface
 
     public function addReponse(SanteReponse $reponse): self
     {
-        if (!$this->reponses->contains($reponse)) {
+        if (! $this->reponses->contains($reponse)) {
             $this->reponses[] = $reponse;
             $reponse->setSanteFiche($this);
         }

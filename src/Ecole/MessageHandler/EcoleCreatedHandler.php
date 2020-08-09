@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Ecole\MessageHandler;
 
 use AcMarche\Mercredi\Ecole\Message\EcoleCreated;
-use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

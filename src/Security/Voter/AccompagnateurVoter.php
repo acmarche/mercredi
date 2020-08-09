@@ -24,6 +24,10 @@ final class AccompagnateurVoter extends Voter
     public const EDIT = 'edit';
     public const DELETE = 'delete';
     /**
+     * @var string
+     */
+    private const ECOLE = 'ROLE_MERCREDI_ECOLE';
+    /**
      * @var User
      */
     private $user;
@@ -46,10 +50,6 @@ final class AccompagnateurVoter extends Voter
      * @var Accompagnateur
      */
     private $accompagnateur;
-    /**
-     * @var string
-     */
-    private const ECOLE = 'ROLE_MERCREDI_ECOLE';
 
     public function __construct(AccessDecisionManagerInterface $accessDecisionManager, FlashBagInterface $flashBag)
     {
@@ -120,6 +120,7 @@ final class AccompagnateurVoter extends Voter
         if (! $this->decisionManager->decide($token, [self::ECOLE])) {
             return false;
         }
+
         return $this->ecoles->contains($this->accompagnateur->getEcole());
     }
 
@@ -128,6 +129,7 @@ final class AccompagnateurVoter extends Voter
         if (! $this->decisionManager->decide($token, [self::ECOLE])) {
             return false;
         }
+
         return $this->ecoles->contains($this->accompagnateur->getEcole());
     }
 

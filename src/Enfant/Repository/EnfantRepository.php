@@ -32,6 +32,7 @@ final class EnfantRepository extends ServiceEntityRepository
      * @var string
      */
     private const WITH = 'WITH';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Enfant::class);
@@ -94,7 +95,7 @@ final class EnfantRepository extends ServiceEntityRepository
                 ->setParameter('keyword', '%'.$nom.'%');
         }
 
-        if ($ecole !== null) {
+        if (null !== $ecole) {
             $queryBuilder->andWhere('ecole = :ecole')
                 ->setParameter(self::ECOLE, $ecole);
         }

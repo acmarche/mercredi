@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Sante\MessageHandler;
 
 use AcMarche\Mercredi\Sante\Message\SanteQuestionCreated;
-use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

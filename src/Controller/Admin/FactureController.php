@@ -31,22 +31,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FactureController extends AbstractController
 {
     /**
-     * @var FactureRepository
-     */
-    private $factureRepository;
-    /**
-     * @var FactureHandler
-     */
-    private $factureHandler;
-    /**
-     * @var FactureMailer
-     */
-    private $factureMailer;
-    /**
-     * @var FactureUtils
-     */
-    private $factureUtils;
-    /**
      * @var string
      */
     private const TUTEUR = 'tuteur';
@@ -66,6 +50,22 @@ final class FactureController extends AbstractController
      * @var string
      */
     private const FACTURE = 'facture';
+    /**
+     * @var FactureRepository
+     */
+    private $factureRepository;
+    /**
+     * @var FactureHandler
+     */
+    private $factureHandler;
+    /**
+     * @var FactureMailer
+     */
+    private $factureMailer;
+    /**
+     * @var FactureUtils
+     */
+    private $factureUtils;
 
     public function __construct(
         FactureRepository $factureRepository,

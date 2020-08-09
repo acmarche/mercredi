@@ -5,16 +5,20 @@ namespace AcMarche\Mercredi\User\Command;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use function strlen;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use function strlen;
 
 final class CreateUserCommand extends Command
 {
+    /**
+     * @var string
+     */
+    private const EMAIL = 'email';
     /**
      * @var string
      */
@@ -27,10 +31,6 @@ final class CreateUserCommand extends Command
      * @var UserPasswordEncoderInterface
      */
     private $userPasswordEncoder;
-    /**
-     * @var string
-     */
-    private const EMAIL = 'email';
 
     public function __construct(
         UserRepository $userRepository,
@@ -60,7 +60,7 @@ final class CreateUserCommand extends Command
         $name = $input->getArgument('name');
         $password = $input->getArgument('password');
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $symfonyStyle->error('Adresse email non valide');
 
             return 1;

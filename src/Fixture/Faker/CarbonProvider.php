@@ -24,8 +24,6 @@ final class CarbonProvider extends BaseProvider
     }
 
     /**
-     * @param string $format
-     * @param string $date
      * @return CarbonImmutable|bool
      */
     public function carbonFromFormat(string $format, string $date)

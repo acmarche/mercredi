@@ -76,16 +76,13 @@ final class FactureHandler
     }
 
     /**
-     * @param Facture $facture
      * @param int[] $presencesId
-     * @param array $accueilsId
-     * @return Facture
      */
     public function handleNew(Facture $facture, array $presencesId, array $accueilsId): Facture
     {
         $this->handlePresences($presencesId, $facture);
         $this->handleAccueils($accueilsId, $facture);
-        if (!$facture->getId()) {
+        if (! $facture->getId()) {
             $this->factureRepository->persist($facture);
         }
         $this->factureRepository->flush();
@@ -97,10 +94,10 @@ final class FactureHandler
     private function handlePresences(array $presencesId, Facture $facture): void
     {
         foreach ($presencesId as $presenceId) {
-            if (($presence = $this->presenceRepository->find($presenceId)) === null) {
+            if (null === ($presence = $this->presenceRepository->find($presenceId))) {
                 continue;
             }
-            if ($this->facturePresenceRepository->findByPresence($presence) !== null) {
+            if (null !== $this->facturePresenceRepository->findByPresence($presence)) {
                 continue;
             }
             $facturePresence = new FacturePresence($facture, $presence);
@@ -117,10 +114,10 @@ final class FactureHandler
     private function handleAccueils(array $accueilsId, Facture $facture): void
     {
         foreach ($accueilsId as $accueilId) {
-            if (($accueil = $this->accueilRepository->find($accueilId)) === null) {
+            if (null === ($accueil = $this->accueilRepository->find($accueilId))) {
                 continue;
             }
-            if ($this->factureAccueilRepository->findByAccueil($accueil) !== null) {
+            if (null !== $this->factureAccueilRepository->findByAccueil($accueil)) {
                 continue;
             }
             $factureAccueil = new FactureAccueil($facture, $accueil);

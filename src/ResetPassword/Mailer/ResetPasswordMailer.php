@@ -10,7 +10,6 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 
 final class ResetPasswordMailer
 {
-
     use InitMailerTrait;
 
     public function sendLink(User $user, ResetPasswordToken $resetPasswordToken, int $tokenLifeTime): void

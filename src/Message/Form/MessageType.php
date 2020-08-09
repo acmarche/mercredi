@@ -17,6 +17,7 @@ final class MessageType extends AbstractType
      * @var string
      */
     private const REQUIRED = 'required';
+
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder

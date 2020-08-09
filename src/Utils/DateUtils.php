@@ -16,7 +16,6 @@ final class DateUtils
     /**
      * @param string $mois 05/2020
      *
-     * @return DateTime
      * @throws Exception
      */
     public static function createDateTimeFromDayMonth(string $mois): DateTime
@@ -43,8 +42,6 @@ final class DateUtils
 
     /**
      * @param DateTime $dateTime "01/08/2018"
-     *
-     * @return DatePeriod
      */
     public static function getDatePeriod(DateTime $dateTime): DatePeriod
     {

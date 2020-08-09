@@ -23,6 +23,10 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
+    /**
+     * @var string
+     */
+    private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
 
     /**
      * @var ResetPasswordHelperInterface
@@ -36,10 +40,6 @@ final class ResetPasswordController extends AbstractController
      * @var ResetPasswordMailer
      */
     private $resetPasswordMailer;
-    /**
-     * @var string
-     */
-    private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
     /**
      * @var UserRepository
      */

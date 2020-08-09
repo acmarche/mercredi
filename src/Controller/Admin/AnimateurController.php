@@ -23,14 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class AnimateurController extends AbstractController
 {
     /**
-     * @var AnimateurRepository
-     */
-    private $animateurRepository;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
-    /**
      * @var string
      */
     private const FORM = 'form';
@@ -38,6 +30,14 @@ final class AnimateurController extends AbstractController
      * @var string
      */
     private const ANIMATEUR = 'animateur';
+    /**
+     * @var AnimateurRepository
+     */
+    private $animateurRepository;
+    /**
+     * @var SearchHelper
+     */
+    private $searchHelper;
 
     public function __construct(
         AnimateurRepository $animateurRepository,

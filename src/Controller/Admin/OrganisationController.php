@@ -21,10 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class OrganisationController extends AbstractController
 {
     /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
      * @var string
      */
     private const MERCREDI_ADMIN_ORGANISATION_SHOW = 'mercredi_admin_organisation_show';
@@ -36,6 +32,10 @@ final class OrganisationController extends AbstractController
      * @var string
      */
     private const ORGANISATION = 'organisation';
+    /**
+     * @var OrganisationRepository
+     */
+    private $organisationRepository;
 
     public function __construct(OrganisationRepository $organisationRepository)
     {
@@ -47,7 +47,7 @@ final class OrganisationController extends AbstractController
      */
     public function index(): Response
     {
-        if (($organisation = $this->organisationRepository->getOrganisation()) !== null) {
+        if (null !== ($organisation = $this->organisationRepository->getOrganisation())) {
             return $this->redirectToRoute(self::MERCREDI_ADMIN_ORGANISATION_SHOW, [self::ID => $organisation->getId()]);
         }
 
@@ -64,7 +64,7 @@ final class OrganisationController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        if (($organisation = $this->organisationRepository->getOrganisation()) !== null) {
+        if (null !== ($organisation = $this->organisationRepository->getOrganisation())) {
             $this->addFlash('danger', 'Une seule organisation peut être enregistrée');
 
             return $this->redirectToRoute(self::MERCREDI_ADMIN_ORGANISATION_SHOW, [self::ID => $organisation->getId()]);

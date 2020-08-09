@@ -27,6 +27,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class AccueilController extends AbstractController
 {
     use GetTuteurTrait;
+    /**
+     * @var string
+     */
+    private const UUID = 'uuid';
 
     /**
      * @var AccueilRepository
@@ -52,10 +56,6 @@ final class AccueilController extends AbstractController
      * @var AccueilCalculatorInterface
      */
     private $accueilCalculator;
-    /**
-     * @var string
-     */
-    private const UUID = 'uuid';
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -80,7 +80,7 @@ final class AccueilController extends AbstractController
      */
     public function selectEnfant()
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
 
@@ -103,12 +103,12 @@ final class AccueilController extends AbstractController
      */
     public function selectJours(Request $request, Enfant $enfant)
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (!$this->santeChecker->isComplete($santeFiche)) {
+        if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
@@ -162,7 +162,7 @@ final class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
-            if (!DeleteConstraint::accueilCanBeDeleted($accueil)) {
+            if (! DeleteConstraint::accueilCanBeDeleted($accueil)) {
                 $this->addFlash('danger', 'Un accueil passé ne peut être supprimé');
 
                 return $this->redirectToRoute('mercredi_parent_enfant_show', [self::UUID => $enfant->getUuid()]);

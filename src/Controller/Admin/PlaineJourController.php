@@ -21,6 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PlaineJourController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const PLAINE = 'plaine';
+    /**
      * @var PlaineRepository
      */
     private $plaineRepository;
@@ -32,10 +36,6 @@ final class PlaineJourController extends AbstractController
      * @var PlaineHandler
      */
     private $plaineHandler;
-    /**
-     * @var string
-     */
-    private const PLAINE = 'plaine';
 
     public function __construct(
         PlaineRepository $plaineRepository,

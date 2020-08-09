@@ -8,12 +8,12 @@ use AcMarche\Mercredi\Sante\Message\SanteQuestionCreated;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionDeleted;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
+use function is_array;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function is_array;
 
 /**
  * @Route("/sante/question")
@@ -22,13 +22,13 @@ use function is_array;
 final class SanteQuestionController extends AbstractController
 {
     /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
-    /**
      * @var string
      */
     private const SANTE_QUESTION = 'sante_question';
+    /**
+     * @var SanteQuestionRepository
+     */
+    private $santeQuestionRepository;
 
     public function __construct(SanteQuestionRepository $santeQuestionRepository)
     {
@@ -138,7 +138,7 @@ final class SanteQuestionController extends AbstractController
             if (is_array($questions)) {
                 foreach ($questions as $position => $questionId) {
                     $santeQuestion = $this->santeQuestionRepository->find($questionId);
-                    if ($santeQuestion !== null) {
+                    if (null !== $santeQuestion) {
                         $santeQuestion->setDisplayOrder($position);
                     }
                 }

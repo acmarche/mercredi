@@ -48,7 +48,7 @@ final class DefaultController extends AbstractController
      */
     public function default()
     {
-        if ($t= $this->hasTuteur()) {
+        if ($t = $this->hasTuteur()) {
             return $t;
         }
 

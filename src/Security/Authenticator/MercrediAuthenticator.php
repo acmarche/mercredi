@@ -22,6 +22,14 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 final class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
+    /**
+     * @var string
+     */
+    private const EMAIL = 'email';
+    /**
+     * @var string
+     */
+    private const PASSWORD = 'password';
 
     /**
      * @var UrlGeneratorInterface
@@ -35,14 +43,6 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
      * @var UserPasswordEncoderInterface
      */
     private $passwordEncoder;
-    /**
-     * @var string
-     */
-    private const EMAIL = 'email';
-    /**
-     * @var string
-     */
-    private const PASSWORD = 'password';
     /**
      * @var UserRepository
      */
@@ -84,13 +84,13 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $csrfToken = new CsrfToken('authenticate', $credentials['csrf_token']);
-        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+        if (! $this->csrfTokenManager->isTokenValid($csrfToken)) {
             throw new InvalidCsrfTokenException();
         }
 
         $user = $this->userRepository->findOneBy([self::EMAIL => $credentials[self::EMAIL]]);
 
-        if (!$user) {
+        if (! $user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
@@ -105,8 +105,8 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     *
      * @param $credentials
-     * @return string|null
      */
     public function getPassword($credentials): ?string
     {

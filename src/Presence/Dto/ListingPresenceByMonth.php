@@ -14,15 +14,15 @@ final class ListingPresenceByMonth
     /**
      * @var Presence[]
      */
-    protected $presences;
+    private $presences;
     /**
      * @var Enfant[]
      */
-    protected $enfants;
+    private $enfants;
     /**
      * @var JourListing[]
      */
-    protected $joursListing;
+    private $joursListing;
     /**
      * @var PresenceRepository
      */
@@ -62,7 +62,6 @@ final class ListingPresenceByMonth
     }
 
     /**
-     * @param DateTimeInterface $dateTime
      * @return Jour[]
      */
     public function getDaysOfMonth(DateTimeInterface $dateTime)
@@ -95,7 +94,6 @@ final class ListingPresenceByMonth
     }
 
     /**
-     * @param DateTimeInterface $dateTime
      * @return Presence[]
      */
     private function getPresencesOfMonth(DateTimeInterface $dateTime): array
@@ -114,6 +112,7 @@ final class ListingPresenceByMonth
             },
             $this->presences
         );
+
         return array_unique($enfants);
     }
 }

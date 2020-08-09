@@ -35,9 +35,6 @@ final class PlainePresencesDto
         $this->daysOfPlaine = $daysOfPlaine;
     }
 
-    /**
-     * @return Enfant
-     */
     public function getEnfant(): Enfant
     {
         return $this->enfant;
@@ -68,7 +65,7 @@ final class PlainePresencesDto
 
     public function addJour(Jour $jour): self
     {
-        if (!$this->jours->contains($jour)) {
+        if (! $this->jours->contains($jour)) {
             $this->jours[] = $jour;
         }
 

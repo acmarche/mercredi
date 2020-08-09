@@ -7,10 +7,9 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 final class ContactMailer
 {
-
     use InitMailerTrait;
 
-    public function __invoke()
+    public function __invoke(): void
     {
         $this->organisation = $this->organisationRepository->getOrganisation();
     }

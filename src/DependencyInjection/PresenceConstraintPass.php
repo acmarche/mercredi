@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AcMarche\Mercredi\DependencyInjection;
-
 
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
@@ -12,18 +10,14 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Population constraints
- * Class PresenceConstraintPass
- * @package AcMarche\Mercredi\DependencyInjection
+ * Class PresenceConstraintPass.
  */
 class PresenceConstraintPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // always first check finds out if there is an "PresenceConstraintInterface" definition or alias
-        if (!$container->has(PresenceConstraintInterface::class)) {
+        if (! $container->has(PresenceConstraintInterface::class)) {
             return;
         }
 

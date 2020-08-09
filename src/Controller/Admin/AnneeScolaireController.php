@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\AnneeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireCreated;
@@ -22,10 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class AnneeScolaireController extends AbstractController
 {
     /**
-     * @var AnneeScolaireRepository
-     */
-    private $anneeScolaireRepository;
-    /**
      * @var string
      */
     private const MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW = 'mercredi_admin_annee_scolaire_show';
@@ -33,6 +28,10 @@ final class AnneeScolaireController extends AbstractController
      * @var string
      */
     private const ID = 'id';
+    /**
+     * @var AnneeScolaireRepository
+     */
+    private $anneeScolaireRepository;
 
     public function __construct(AnneeScolaireRepository $anneeScolaireRepository)
     {

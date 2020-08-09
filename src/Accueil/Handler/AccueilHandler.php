@@ -21,7 +21,7 @@ final class AccueilHandler
 
     public function handleNew(Enfant $enfant, Accueil $accueilSubmited)
     {
-        if (($accueil = $this->accueilRepository->isRegistered($accueilSubmited, $enfant)) !== null) {
+        if (null !== ($accueil = $this->accueilRepository->isRegistered($accueilSubmited, $enfant))) {
             $accueil->setHeure($accueilSubmited->getHeure());
             $accueil->setDuree($accueilSubmited->getDuree());
             $accueil->setRemarque($accueilSubmited->getRemarque());

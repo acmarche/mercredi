@@ -36,6 +36,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PresenceController extends AbstractController
 {
     /**
+     * @var string
+     */
+    private const FORM = 'form';
+    /**
+     * @var string
+     */
+    private const ID = 'id';
+    /**
      * @var PresenceRepository
      */
     private $presenceRepository;
@@ -59,14 +67,6 @@ final class PresenceController extends AbstractController
      * @var FacturePresenceRepository
      */
     private $facturePresenceRepository;
-    /**
-     * @var string
-     */
-    private const FORM = 'form';
-    /**
-     * @var string
-     */
-    private const ID = 'id';
 
     public function __construct(
         PresenceRepository $presenceRepository,

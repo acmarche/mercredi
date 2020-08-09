@@ -12,7 +12,7 @@ final class DirectoryNamer implements DirectoryNamerInterface
     /**
      * Creates a directory name for the file being uploaded.
      *
-     * @param Enfant          $object  The object the upload is attached to
+     * @param Enfant          $object          The object the upload is attached to
      * @param PropertyMapping $propertyMapping The mapping to use to manipulate the given object
      *
      * @return string The directory name
@@ -22,10 +22,10 @@ final class DirectoryNamer implements DirectoryNamerInterface
         return '';
     }
 
-    protected function getExtension(UploadedFile $uploadedFile)
+    private function getExtension(UploadedFile $uploadedFile)
     {
         $clientOriginalName = $uploadedFile->getClientOriginalName();
-        if (($extension = pathinfo($clientOriginalName, PATHINFO_EXTENSION)) !== '') {
+        if ('' !== ($extension = pathinfo($clientOriginalName, PATHINFO_EXTENSION))) {
             return $extension;
         }
         if ($extension = $uploadedFile->guessExtension()) {

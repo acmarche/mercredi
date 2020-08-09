@@ -22,14 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class JourController extends AbstractController
 {
     /**
-     * @var JourRepository
-     */
-    private $jourRepository;
-    /**
-     * @var TarificationFormGeneratorInterface
-     */
-    private $tarificationFormGenerator;
-    /**
      * @var string
      */
     private const ID = 'id';
@@ -41,6 +33,14 @@ final class JourController extends AbstractController
      * @var string
      */
     private const FORM = 'form';
+    /**
+     * @var JourRepository
+     */
+    private $jourRepository;
+    /**
+     * @var TarificationFormGeneratorInterface
+     */
+    private $tarificationFormGenerator;
 
     public function __construct(
         JourRepository $jourRepository,

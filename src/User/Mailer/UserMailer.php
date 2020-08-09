@@ -13,14 +13,11 @@ final class UserMailer
     use InitMailerTrait;
 
     /**
-     * @param User $user
-     * @param Tuteur $tuteur
-     * @param string|null $password
      * @throws TransportExceptionInterface
      */
     public function sendNewAccountToParent(User $user, Tuteur $tuteur, ?string $password = null): void
     {
-        $from = $this->organisation !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         $templatedEmail = (new TemplatedEmail())
             ->subject('informations sur votre compte de '.$this->organisation->getNom())

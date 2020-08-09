@@ -5,9 +5,8 @@ namespace AcMarche\Mercredi\Tuteur\Utils;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
-
 use function count;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class TuteurUtils
 {
@@ -44,7 +43,7 @@ final class TuteurUtils
 
     public static function coordonneesIsComplete(Tuteur $tuteur)
     {
-        if (self::getTelephones($tuteur) === '') {
+        if ('' === self::getTelephones($tuteur)) {
             return false;
         }
 
@@ -63,6 +62,7 @@ final class TuteurUtils
         if (! $tuteur->getCodePostal()) {
             return false;
         }
+
         return (bool) $tuteur->getLocalite();
     }
 
@@ -94,7 +94,6 @@ final class TuteurUtils
 
     /**
      * @param UserInterface|User $user
-     * @return Tuteur|null
      */
     public function getTuteurByUser(UserInterface $user): ?Tuteur
     {
@@ -108,7 +107,6 @@ final class TuteurUtils
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return string[]
      */
     public static function getEmailsOfOneTuteur(Tuteur $tuteur): array
@@ -145,7 +143,7 @@ final class TuteurUtils
     {
         $data = [];
         foreach ($tuteurs as $tuteur) {
-            if (!$this->tuteurIsActif($tuteur)) {
+            if (! $this->tuteurIsActif($tuteur)) {
                 continue;
             }
             if (0 !== count(self::getEmailsOfOneTuteur($tuteur))) {

@@ -20,14 +20,18 @@ use Symfony\Component\Security\Core\Security;
  */
 final class AccueilVoter extends Voter
 {
-    /**
-     * @var mixed|\AcMarche\Mercredi\Entity\Tuteur|null
-     */
-    public $tuteurOfUser;
     public const ADD = 'accueil_new';
     public const SHOW = 'accueil_show';
     public const EDIT = 'accueil_edit';
     public const DELETE = 'accueil_delete';
+    /**
+     * @var string
+     */
+    private const PARENT = 'ROLE_MERCREDI_PARENT';
+    /**
+     * @var mixed|\AcMarche\Mercredi\Entity\Tuteur|null
+     */
+    public $tuteurOfUser;
     /**
      * @var RelationRepository
      */
@@ -45,10 +49,6 @@ final class AccueilVoter extends Voter
      */
     private $user;
     private $enfant;
-    /**
-     * @var string
-     */
-    private const PARENT = 'ROLE_MERCREDI_PARENT';
 
     public function __construct(
         RelationRepository $relationRepository,
@@ -122,6 +122,7 @@ final class AccueilVoter extends Voter
         if ($this->security->isGranted(self::PARENT)) {
             return $this->checkTuteur();
         }
+
         return false;
     }
 
@@ -154,7 +155,7 @@ final class AccueilVoter extends Voter
 
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if ($this->tuteurOfUser === null) {
+        if (null === $this->tuteurOfUser) {
             return false;
         }
 
@@ -166,6 +167,7 @@ final class AccueilVoter extends Voter
             },
             $relations
         );
+
         return \in_array($this->enfant->getId(), $enfants, true);
     }
 }

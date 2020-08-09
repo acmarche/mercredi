@@ -22,6 +22,7 @@ final class JourTarificationDegressiveType extends AbstractType
      * @var string
      */
     private const HELP = 'help';
+
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder

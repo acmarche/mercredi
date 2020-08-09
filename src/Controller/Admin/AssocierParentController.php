@@ -21,14 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class AssocierParentController extends AbstractController
 {
     /**
-     * @var AssociationHandler
-     */
-    private $associationHandler;
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
-    /**
      * @var string
      */
     private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
@@ -36,6 +28,14 @@ final class AssocierParentController extends AbstractController
      * @var string
      */
     private const ID = 'id';
+    /**
+     * @var AssociationHandler
+     */
+    private $associationHandler;
+    /**
+     * @var TuteurRepository
+     */
+    private $tuteurRepository;
 
     public function __construct(
         AssociationHandler $associationHandler,
@@ -84,7 +84,7 @@ final class AssocierParentController extends AbstractController
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $tuteurId = (int) $request->request->get('tuteur');
-            if ($tuteurId === 0) {
+            if (0 === $tuteurId) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');
 
                 return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);

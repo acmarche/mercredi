@@ -45,8 +45,6 @@ final class PresenceHandler
     }
 
     /**
-     * @param Tuteur $tuteur
-     * @param Enfant $enfant
      * @param Jour[] $days
      *
      * @throws NonUniqueResultException
@@ -54,7 +52,7 @@ final class PresenceHandler
     public function handleNew(Tuteur $tuteur, Enfant $enfant, iterable $days): void
     {
         foreach ($days as $jour) {
-            if ($this->presenceRepository->isRegistered($enfant, $jour) !== null) {
+            if (null !== $this->presenceRepository->isRegistered($enfant, $jour)) {
                 continue;
             }
 

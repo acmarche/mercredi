@@ -42,7 +42,6 @@ final class FactureUtils
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Presence[]
      */
     public function getPresencesNonPayees(Tuteur $tuteur): array
@@ -50,7 +49,7 @@ final class FactureUtils
         $presencesAll = $this->presenceRepository->findPresencesByTuteur($tuteur);
         $presencesNonFacturees = [];
         foreach ($presencesAll as $presence) {
-            if ($this->facturePresenceRepository->findByPresence($presence) === null) {
+            if (null === $this->facturePresenceRepository->findByPresence($presence)) {
                 $presencesNonFacturees[] = $presence;
             }
         }
@@ -59,7 +58,6 @@ final class FactureUtils
     }
 
     /**
-     * @param Tuteur $tuteur
      * @return Accueil[]
      */
     public function getAccueilsNonPayes(Tuteur $tuteur): array
@@ -67,7 +65,7 @@ final class FactureUtils
         $all = $this->accueilRepository->findByTuteur($tuteur);
         $nonFacturees = [];
         foreach ($all as $accueil) {
-            if ($this->factureAccueilRepository->findByAccueil($accueil) === null) {
+            if (null === $this->factureAccueilRepository->findByAccueil($accueil)) {
                 $nonFacturees[] = $accueil;
             }
         }

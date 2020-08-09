@@ -8,13 +8,12 @@ use AcMarche\Mercredi\Page\Message\PageCreated;
 use AcMarche\Mercredi\Page\Message\PageDeleted;
 use AcMarche\Mercredi\Page\Message\PageUpdated;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
+use function is_array;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use function is_array;
 
 /**
  * @Route("/page")
@@ -23,10 +22,6 @@ use function is_array;
 final class PageController extends AbstractController
 {
     /**
-     * @var PageRepository
-     */
-    private $pageRepository;
-    /**
      * @var string
      */
     private const PAGES = 'pages';
@@ -34,6 +29,10 @@ final class PageController extends AbstractController
      * @var string
      */
     private const PAGE = 'page';
+    /**
+     * @var PageRepository
+     */
+    private $pageRepository;
 
     public function __construct(PageRepository $pageRepository)
     {
@@ -143,7 +142,7 @@ final class PageController extends AbstractController
             if (is_array($pages)) {
                 foreach ($pages as $position => $pageId) {
                     $page = $this->pageRepository->find($pageId);
-                    if ($page !== null) {
+                    if (null !== $page) {
                         $page->setPosition($position);
                     }
                 }

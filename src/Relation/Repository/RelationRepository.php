@@ -37,6 +37,7 @@ final class RelationRepository extends ServiceEntityRepository
      * @var string
      */
     private const ASC = 'ASC';
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Relation::class);

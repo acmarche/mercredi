@@ -7,9 +7,6 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-
-use Exception;
-
 use function count;
 
 final class OrdreService
@@ -32,28 +29,21 @@ final class OrdreService
 
     /**
      * Ordre de l'enfant par importance decroissante.
-     * @param Enfant $enfant
-     * @param Tuteur $tuteur
-     * @return int
      */
     public function getOrdreEnfant(Enfant $enfant, Tuteur $tuteur): int
     {
         $relation = $this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant);
-        if ($relation !== null && ($ordre = $relation->getOrdre())) {
+        if (null !== $relation && ($ordre = $relation->getOrdre())) {
             return $ordre;
         }
 
         return $enfant->getOrdre();
     }
 
-    /**
-     * @param PresenceInterface $presence
-     * @return float
-     */
     public function getOrdreOnPresence(PresenceInterface $presence): float
     {
         //on a forcé l'ordre
-        if (($ordre = $presence->getOrdre()) !== 0) {
+        if (0 !== ($ordre = $presence->getOrdre())) {
             return $ordre;
         }
 
@@ -82,7 +72,7 @@ final class OrdreService
 
         $presents = [];
         foreach ($fratries as $fratry) {
-            if ($this->presenceRepository->findPresencesByEnfantAndJour($fratry, $jour) !== null) {
+            if (null !== $this->presenceRepository->findPresencesByEnfantAndJour($fratry, $jour)) {
                 $presents[] = $fratry;
             }
         }
