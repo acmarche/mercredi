@@ -30,7 +30,7 @@ AcMarche\Mercredi\Entity\Security\User:
     email: joseph@marche.be
     username: joseph@marche.be
     nom: Jacob
-    prenom: Jospeh
+    prenom: Joseph
     password: homer
     roles: ["ROLE_MERCREDI_ECOLE"]
     ecoles: ["@ecole_Champlon"]
