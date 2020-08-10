@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -20,42 +18,35 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 final class EcoleVoter extends Voter
 {
-    public const INDEX = 'index_ecole';
-    public const SHOW = 'show';
-    public const ADD = 'add';
-    public const EDIT = 'edit';
-    public const DELETE = 'delete';
+    public const INDEX = 'ecole_index';
+    public const SHOW = 'ecole_show';
+    public const ADD = 'ecole_add';
+    public const EDIT = 'ecole_edit';
+    public const DELETE = 'ecole_delete';
+
     /**
-     * @var User
+     * @var Security
      */
-    private $user;
+    private $security;
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
-     */
-    private $decisionManager;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var Ecole[]|ArrayCollection
-     */
-    private $ecoles;
-    /**
-     * @var Ecole
+     * @var Ecole|null
      */
     private $ecole;
+    /**
+     * @var Ecole[]|\Doctrine\Common\Collections\Collection
+     */
+    private $ecoles;
 
-    public function __construct(AccessDecisionManagerInterface $accessDecisionManager, FlashBagInterface $flashBag)
-    {
-        $this->decisionManager = $accessDecisionManager;
-        $this->flashBag = $flashBag;
+    public function __construct(
+        Security $security
+    ) {
+        $this->security = $security;
     }
 
     protected function supports($attribute, $subject)
     {
         //a cause de index pas d'ecole defini
-        if ($subject && ! $subject instanceof Ecole) {
+        if ($subject && !$subject instanceof Ecole) {
             return false;
         }
 
@@ -66,12 +57,16 @@ final class EcoleVoter extends Voter
     {
         $this->user = $token->getUser();
 
-        if (! $this->user instanceof User) {
+        if (!$this->user instanceof User) {
             return false;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ADMIN'])) {
+        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             return true;
+        }
+
+        if (!$this->security->isGranted('ROLE_MERCREDI_ECOLE')) {
+            return false;
         }
 
         $this->ecole = $ecole;
@@ -79,78 +74,47 @@ final class EcoleVoter extends Voter
 
         switch ($attribute) {
             case self::INDEX:
-                return $this->canIndex($token);
+                return $this->canIndex();
             case self::SHOW:
-                return $this->canView($token);
-            case self::ADD:
-                return $this->canAdd($token);
-            case self::EDIT:
-                return $this->canEdit($token);
+                return $this->canView();
             case self::DELETE:
-                return $this->canDelete($token);
+            case self::ADD:
+                return false;//only admin
+            case self::EDIT:
+                return $this->canEdit();
         }
 
         return false;
     }
 
-    private function canIndex(TokenInterface $token)
+    private function canIndex(): bool
     {
-        if ($this->canEdit($token)) {
-            return true;
-        }
-
-        if ($this->checkEcoles($token)) {
-            return true;
-        }
-
-        $this->flashBag->add('danger', 'Aucune école attribué à votre compte');
-
-        return false;
+        return $this->checkEcoles();
     }
 
-    private function canView(TokenInterface $token)
+    private function canView(): bool
     {
-        if ($this->canEdit($token)) {
-            return true;
-        }
+        return $this->canEdit();
+    }
 
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_READ'])) {
-            return true;
+    private function canEdit(): bool
+    {
+        if (!$this->checkEcoles()) {
+            return false;
         }
-
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ANIMATEUR'])) {
+        if (!$this->ecole) {
             return false;
         }
 
-        return $this->checkEcoles($token);
-    }
-
-    private function canEdit()
-    {
         return $this->ecoles->contains($this->ecole);
     }
 
-    private function canAdd()
+    private function checkEcoles(): bool
     {
-        //only mercredi admin
-        return false;
-    }
-
-    private function canDelete()
-    {
-        //only mercredi admin
-        return false;
-    }
-
-    private function checkEcoles($token)
-    {
-        if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ECOLE'])) {
-            $ecoles = $this->user->getEcoles();
-            if (\count($ecoles) > 0) {
-                return true;
-            }
+        if (\count($this->ecoles) == 0) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

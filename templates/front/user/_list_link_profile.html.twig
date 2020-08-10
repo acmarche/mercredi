@@ -6,7 +6,7 @@
     {% endif %}
     {% if is_granted('ROLE_MERCREDI_ANIMATEUR') %}
         <li class="list-group-item">
-            <a href="">Accès en tant que animateur</a>
+            <a href="{{ path('mercredi_animateur_home') }}">Accès en tant que animateur</a>
         </li>
     {% endif %}
     {% if is_granted('ROLE_MERCREDI_PARENT') %}
@@ -16,7 +16,7 @@
     {% endif %}
     {% if is_granted('ROLE_MERCREDI_ECOLE') %}
         <li class="list-group-item">
-            <a href="">Accès en tant que école</a>
+            <a href="{{ path('mercredi_ecole_home') }}">Accès en tant que école</a>
         </li>
     {% endif %}
 </ul>

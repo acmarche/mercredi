@@ -10,8 +10,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'paths' => [
                 '%kernel.project_dir%/src/AcMarche/Mercredi/templates/admin' => 'AcMarcheMercrediAdmin',
                 '%kernel.project_dir%/src/AcMarche/Mercredi/templates/parent' => 'AcMarcheMercrediParent',
+                '%kernel.project_dir%/src/AcMarche/Mercredi/templates/ecole' => 'AcMarcheMercrediEcole',
                 '%kernel.project_dir%/src/AcMarche/Mercredi/templates/animateur' => 'AcMarcheMercrediAnimateur',
-                '%kernel.project_dir%/src/AcMarche/Mercredi/templates/ecole' => 'AcMarcheMercrediAnimateur',
             ],
         ]
     );

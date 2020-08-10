@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,17 +22,11 @@ final class FactureController extends AbstractController
      * @var FactureRepository
      */
     private $factureRepository;
-    /**
-     * @var FacturePdfFactoryTrait
-     */
-    private $facturePdfFactory;
 
     public function __construct(
-        FactureRepository $factureRepository,
-        FacturePdfFactoryTrait $facturePdfFactory
+        FactureRepository $factureRepository
     ) {
         $this->factureRepository = $factureRepository;
-        $this->facturePdfFactory = $facturePdfFactory;
     }
 
     /**
@@ -56,14 +48,5 @@ final class FactureController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/pdf/{uuid}", name="mercredi_parent_facture_pdf")
-     */
-    public function facture(Facture $facture): Response
-    {
-        $this->hasTuteur();
-        $this->denyAccessUnlessGranted('tuteur_show', $this->tuteur);
 
-        return $this->facturePdfFactory->generate($facture);
-    }
 }

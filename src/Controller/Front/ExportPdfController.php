@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Controller\Admin;
+namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class DefaultController.
  *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
  * @Route("/export/pdf")
  */
 final class ExportPdfController extends AbstractController
@@ -33,15 +31,19 @@ final class ExportPdfController extends AbstractController
      */
     private $facturePdfFactory;
 
-    public function __construct(SanteHandler $santeHandler, SantePdfFactoryTrait $santePdfFactory, FacturePdfFactoryTrait $facturePdfFactory)
-    {
+    public function __construct(
+        SanteHandler $santeHandler,
+        SantePdfFactoryTrait $santePdfFactory,
+        FacturePdfFactoryTrait $facturePdfFactory
+    ) {
         $this->santePdfFactory = $santePdfFactory;
         $this->santeHandler = $santeHandler;
         $this->facturePdfFactory = $facturePdfFactory;
     }
 
     /**
-     * @Route("/santefiche/{id}", name="mercredi_admin_export_sante_fiche_pdf")
+     * @Route("/santefiche/{uuid}", name="mercredi_commun_export_sante_fiche_pdf")
+     * @IsGranted("enfant_show", subject="enfant")
      */
     public function sante(Enfant $enfant): Response
     {
@@ -51,10 +53,13 @@ final class ExportPdfController extends AbstractController
     }
 
     /**
-     * @Route("/facture/{id}", name="mercredi_admin_export_facture_pdf")
+     * @Route("/pdf/{uuid}", name="mercredi_commun_export_facture_pdf")
      */
     public function facture(Facture $facture): Response
     {
+        $tuteur = $facture->getTuteur();
+        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
+
         return $this->facturePdfFactory->generate($facture);
     }
 }

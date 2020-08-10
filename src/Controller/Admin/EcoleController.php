@@ -94,10 +94,13 @@ final class EcoleController extends AbstractController
      */
     public function show(Ecole $ecole): Response
     {
+        $enfants = $this->enfantRepository->findByEcoles([$ecole]);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/ecole/show.html.twig',
             [
                 self::ECOLE => $ecole,
+                'enfants' => $enfants,
             ]
         );
     }
@@ -133,7 +136,7 @@ final class EcoleController extends AbstractController
     public function delete(Request $request, Ecole $ecole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
-            if (count($this->enfantRepository->findBy([self::ECOLE => $ecole])) > 0) {
+            if (count($this->enfantRepository->findByEcoles([$ecole])) > 0) {
                 $this->addFlash('danger', 'L\'école contient des enfants et ne peut être supprimée');
 
                 return $this->redirectToRoute(self::MERCREDI_ADMIN_ECOLE_SHOW, [self::ID => $ecole->getId()]);

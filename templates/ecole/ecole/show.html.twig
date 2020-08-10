@@ -1,4 +1,4 @@
-{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+{% extends '@AcMarcheMercrediEcole/layout.html.twig' %}
 
 {% block body %}
 
@@ -8,7 +8,6 @@
         </div>
         <div class="card-body">
 
-            {% include '@AcMarcheMercrediAdmin/ecole/_actions.html.twig' %}
             <i class="fas fa-map-marked-alt"></i>
             {{ ecole.rue }} <br/>
             {{ ecole.codepostal }} {{ ecole.localite }}
@@ -53,7 +52,7 @@
                 {% for enfant in enfants %}
                     <tr>
                         <td>
-                            <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
+                            <a href="{{ path('mercredi_ecole_enfant_show', { 'uuid': enfant.uuid }) }}">
                                 {{ enfant.nom }}
                             </a>
                         </td>
@@ -65,6 +64,5 @@
             </table>
         </div>
     </div>
-    {% include '@AcMarcheMercrediAdmin/ecole/_delete_form.html.twig' %}
 
 {% endblock %}

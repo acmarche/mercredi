@@ -62,13 +62,14 @@ final class EnfantVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if ($subject && ! $subject instanceof Enfant) {
+        if ($subject && !$subject instanceof Enfant) {
             return false;
         }
 
         return \in_array(
             $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE], true
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE],
+            true
         );
     }
 
@@ -77,7 +78,7 @@ final class EnfantVoter extends Voter
         $this->user = $token->getUser();
         $this->enfant = $enfant;
 
-        if (! $this->user instanceof User) {
+        if (!$this->user instanceof User) {
             return false;
         }
 
@@ -103,7 +104,7 @@ final class EnfantVoter extends Voter
         return false;
     }
 
-    private function canView()
+    private function canView(): bool
     {
         if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
             return true;
@@ -114,28 +115,28 @@ final class EnfantVoter extends Voter
         }
 
         if ($this->security->isGranted('ROLE_MERCREDI_ECOLE')) {
-            return false;
+            return $this->checkEcoles();
         }
 
         return $this->canEdit();
     }
 
-    private function canEdit()
+    private function canEdit(): bool
     {
         return $this->checkTuteur();
     }
 
-    private function canAdd()
+    private function canAdd(): bool
     {
         return $this->canEdit();
     }
 
-    private function canAddPresence()
+    private function canAddPresence(): bool
     {
         return $this->canEdit();
     }
 
-    private function canDelete()
+    private function canDelete(): bool
     {
         return $this->canEdit();
     }
@@ -143,13 +144,13 @@ final class EnfantVoter extends Voter
     /**
      * @return bool
      */
-    private function checkTuteur()
+    private function checkTuteur(): bool
     {
-        if (! $this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
             return false;
         }
 
-        if (! $this->tuteur) {
+        if (!$this->tuteur) {
             return false;
         }
 
@@ -163,5 +164,15 @@ final class EnfantVoter extends Voter
         );
 
         return \in_array($this->enfant->getId(), $enfants, true);
+    }
+
+    private function checkEcoles(): bool
+    {
+        $ecoles = $this->user->getEcoles();
+        if (\count($ecoles) == 0) {
+            return false;
+        }
+
+        return $ecoles->contains($this->enfant->getEcole());
     }
 }

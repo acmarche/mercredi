@@ -4,15 +4,21 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Ecole mercredi</h3>
+            <h3>Votre école</h3>
         </div>
         <div class="card-body">
-
-
+            <table class="table table-bordered">
+                {% for ecole in ecoles %}
+                    <tr>
+                        <th>
+                            <a href="{{ path('mercredi_ecole_ecole_show', {'id': ecole.id}) }}">
+                                {{ ecole }}
+                            </a>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
-
-{% endblock %}
-{% block javascripts %}
 
 {% endblock %}

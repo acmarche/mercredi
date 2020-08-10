@@ -4,6 +4,7 @@ Feature: Gestion des utilisateurs
   Je modifie les rôles d'un utilisateur
   J'associe un parent sans les bons droits
   J'associe un parent avec les bons droits
+  J'associe une école avec les bons droits
   Je change le mot de passe et je me connecte avec le nouveau mot de passe
   Je supprime un utilisateur
   Je recherche l'utilisateur jf qui est admin
@@ -54,6 +55,15 @@ Feature: Gestion des utilisateurs
     Then I should see "L'utilisateur a bien été associé."
     Then I should see "Un mail de bienvenue a été envoyé"
     Then I should see "GASPARD Aurore"
+
+  Scenario: J'associe une école avec les bons droits
+    When I follow "Cohen Albert"
+    Then I follow "Associer une école"
+    And I select "Aye" from "associate_ecole[ecoles]"
+    And I press "Sauvegarder"
+    #Then print last response
+    Then I should see "L'utilisateur a bien été associé."
+    Then I should see "Aye"
 
   Scenario: Je change le mot de passe et je me connecte avec le nouveau mot de passe
     When I follow "Cohen Albert"

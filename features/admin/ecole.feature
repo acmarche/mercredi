@@ -4,6 +4,7 @@ Feature: Gestion des écoles
   J' édite l'école
   Je supprime l'école de Waha
   Je ne peux pas supprimer l'école de Aye
+  Enfants de l'école
 
   Background:
     Given I am logged in as an admin
@@ -37,3 +38,8 @@ Feature: Gestion des écoles
     Then I follow "Aye"
     Then I press "Supprimer l'école"
     Then I should see "L'école contient des enfants et ne peut être supprimée"
+
+  Scenario: Enfants de l' école
+    Then I follow "Aye"
+    Then I should see "Peeter"
+    Then I should see "Merlin"

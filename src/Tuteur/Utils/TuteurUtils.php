@@ -41,29 +41,29 @@ final class TuteurUtils
         return $telephones;
     }
 
-    public static function coordonneesIsComplete(Tuteur $tuteur)
+    public static function coordonneesIsComplete(Tuteur $tuteur): bool
     {
         if ('' === self::getTelephones($tuteur)) {
             return false;
         }
 
-        if (! $tuteur->getNom()) {
+        if (!$tuteur->getNom()) {
             return false;
         }
 
-        if (! $tuteur->getPrenom()) {
+        if (!$tuteur->getPrenom()) {
             return false;
         }
 
-        if (! $tuteur->getRue()) {
+        if (!$tuteur->getRue()) {
             return false;
         }
 
-        if (! $tuteur->getCodePostal()) {
+        if (!$tuteur->getCodePostal()) {
             return false;
         }
 
-        return (bool) $tuteur->getLocalite();
+        return (bool)$tuteur->getLocalite();
     }
 
     /**
@@ -143,7 +143,7 @@ final class TuteurUtils
     {
         $data = [];
         foreach ($tuteurs as $tuteur) {
-            if (! $this->tuteurIsActif($tuteur)) {
+            if (!$this->tuteurIsActif($tuteur)) {
                 continue;
             }
             if (0 !== count(self::getEmailsOfOneTuteur($tuteur))) {

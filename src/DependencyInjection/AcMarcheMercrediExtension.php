@@ -67,12 +67,14 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
 
     protected function loadConfig(ContainerBuilder $containerBuilder, string $name): void
     {
-        $configs = $this->loadYamlFile($containerBuilder);
+        //https://symfony.com/doc/current/bundles/prepend_extension.html
+        //$containerBuilder->prependExtensionConfig($name, $config);
+        $configs = $this->loadConfigFile($containerBuilder);
 
         $configs->load($name.'.php');
     }
 
-    protected function loadYamlFile(ContainerBuilder $containerBuilder): PhpFileLoader
+    protected function loadConfigFile(ContainerBuilder $containerBuilder): PhpFileLoader
     {
         return new PhpFileLoader(
             $containerBuilder,

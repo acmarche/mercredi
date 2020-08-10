@@ -18,7 +18,7 @@
             </td>
             <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') : '<span class="text-danger">Non payé</span>' }}</td>
             <td>
-                <a href="{{ path('mercredi_parent_facture_pdf', {'uuid': facture.uuid}) }}">
+                <a href="{{ path('mercredi_commun_export_facture_pdf', {'uuid': facture.uuid}) }}">
                     <i class="fas fa-download"></i> Télécharger
                 </a>
             </td>

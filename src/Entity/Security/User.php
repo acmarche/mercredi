@@ -64,6 +64,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->tuteurs = new ArrayCollection();
+        $this->ecoles = new ArrayCollection();
     }
 
     public function __toString()

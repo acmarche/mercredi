@@ -1,0 +1,8 @@
+{{ user.username }} a ajouté un enfant
+
+Nom: {{ enfant.nom }}
+Prénom: {{ enfant.prenom }}
+
+Vous pouvez consulter la fiche de l'enfant :{{ absolute_url(path('mercredi_admin_enfant_show', {'id': enfant.id})) }}
+
+Vous pouvez consulter le compte utilisateur :{{ absolute_url(path('mercredi_admin_user_show', {'id': user.id})) }}

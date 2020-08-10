@@ -69,6 +69,20 @@ final class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array $ecoles
+     * @return Enfant[]
+     */
+    public function findByEcoles(iterable $ecoles): array
+    {
+        return $this->createQueryBuilder(self::ENFANT)
+            ->andWhere('enfant.ecole IN (:ecoles)')
+            ->setParameter('ecoles', $ecoles)
+            ->andWhere('enfant.archived = 0')
+            ->addOrderBy('enfant.nom', self::ASC)
+            ->getQuery()->getResult();
+    }
+
+    /**
      * @return Enfant[]
      */
     public function findOrphelins()
@@ -129,4 +143,5 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         $this->_em->persist($enfant);
     }
+
 }
