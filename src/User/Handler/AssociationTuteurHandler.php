@@ -8,16 +8,13 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
 use AcMarche\Mercredi\User\Mailer\UserMailer;
-use function count;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class AssociationHandler
+use function count;
+
+final class AssociationTuteurHandler
 {
-    /**
-     * @var string
-     */
-    private const SUCCESS = 'success';
     /**
      * @var TuteurRepository
      */
@@ -68,24 +65,24 @@ final class AssociationHandler
         $tuteur->addUser($associateUserTuteurDto->getUser());
         $this->tuteurRepository->flush();
 
-        $this->flashBag->add(self::SUCCESS, 'L\'utilisateur a bien été associé.');
+        $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserTuteurDto->isSendEmail()) {
             try {
                 $this->userMailer->sendNewAccountToParent($user, $tuteur);
-                $this->flashBag->add(self::SUCCESS, 'Un mail de bienvenue a été envoyé');
+                $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
             } catch (TransportExceptionInterface $e) {
                 $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
             }
         }
     }
 
-    public function handleDissociateParent(User $user, Tuteur $tuteur)
+    public function handleDissociateParent(User $user, Tuteur $tuteur): Tuteur
     {
         $user->removeTuteur($tuteur);
 
         $this->tuteurRepository->flush();
-        $this->flashBag->add(self::SUCCESS, 'Le parent a bien été dissocié.');
+        $this->flashBag->add('success', 'Le parent a bien été dissocié.');
 
         return $tuteur;
     }
@@ -103,4 +100,5 @@ final class AssociationHandler
 
         return $user;
     }
+
 }

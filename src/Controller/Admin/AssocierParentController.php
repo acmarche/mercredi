@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Form\AssociateParentType;
-use AcMarche\Mercredi\User\Handler\AssociationHandler;
+use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +29,7 @@ final class AssocierParentController extends AbstractController
      */
     private const ID = 'id';
     /**
-     * @var AssociationHandler
+     * @var AssociationTuteurHandler
      */
     private $associationHandler;
     /**
@@ -38,7 +38,7 @@ final class AssocierParentController extends AbstractController
     private $tuteurRepository;
 
     public function __construct(
-        AssociationHandler $associationHandler,
+        AssociationTuteurHandler $associationHandler,
         TuteurRepository $tuteurRepository
     ) {
         $this->associationHandler = $associationHandler;

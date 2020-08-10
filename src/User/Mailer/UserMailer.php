@@ -35,4 +35,6 @@ final class UserMailer
 
         $this->sendMail($templatedEmail);
     }
+
+
 }

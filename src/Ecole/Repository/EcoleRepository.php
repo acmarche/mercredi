@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Ecole\Repository;
 
 use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -18,6 +19,26 @@ final class EcoleRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Ecole::class);
+    }
+
+    public function findForAssociate(): QueryBuilder
+    {
+        return $this->createQueryBuilder('ecole')
+            ->orderBy('ecole.nom');
+    }
+
+    /**
+     * @param User $user
+     * @return Ecole[]
+     */
+    public function getEcolesByUser(User $user): array
+    {
+        return $this->createQueryBuilder('ecole')
+            ->leftJoin('ecole.users', 'users', 'WITH')
+            ->andWhere(':user MEMBER OF ecole.users')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     public function remove(Ecole $ecole): void

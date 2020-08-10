@@ -180,7 +180,7 @@ final class UserController extends AbstractController
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/user/roles.html.twig',
+            '@AcMarcheMercrediAdmin/user/roles_edit.html.twig',
             [
                 self::USER => $user,
                 self::FORM => $form->createView(),

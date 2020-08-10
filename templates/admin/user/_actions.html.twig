@@ -16,7 +16,7 @@
         <a class="dropdown-item" href="{{ path('mercredi_user_associate_parent', { 'id': user.id }) }}"
            role="button" {% if not user.isParent == true %} disabled title="Donnez le droit de parent"{% endif %}>
             Associer un parent</a>
-        <a class="dropdown-item" href="#"
+        <a class="dropdown-item" href="{{ path('mercredi_user_associate_ecole', { 'id': user.id }) }}"
            role="button" {% if not user.isEcole == true %} disabled title="Donnez le droit d'école" {% endif %}>
             Associer une école</a>
         <a class="dropdown-item"

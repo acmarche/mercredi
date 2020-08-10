@@ -49,7 +49,29 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
-                                                data-id="{{ tuteur.id }}" data-target="#dissocierModal">
+                                                data-id="{{ tuteur.id }}" data-target="#dissocierModalParent">
+                                            <i class="fas fa-unlink"></i> Dissocier
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Ecole(s) associée(s)</th>
+                    <td>
+                        <table class="table table-hover">
+
+                            {% for ecole in user.ecoles %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('mercredi_admin_ecole_show', {'id': ecole.id}) }}">{{ ecole }}</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
+                                                data-id="{{ ecole.id }}" data-target="#dissocierModalEcole">
                                             <i class="fas fa-unlink"></i> Dissocier
                                         </button>
                                     </td>
@@ -65,19 +87,28 @@
     </div>
 
     {% include '@AcMarcheMercrediAdmin/user/_delete.html.twig' %}
-    {% include '@AcMarcheMercrediAdmin/user/_dissocier.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_dissocier_parent.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_dissocier_ecole.html.twig' %}
 
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript">
-        $('#dissocierModal').on('show.bs.modal', function (event) {
+        $('#dissocierModalParent').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var tuteurId = button.data('id'); // Extract info from data-* attributes
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this);
             modal.find('#modal-tuteur').val(tuteurId)
+        })
+    </script>
+    <script type="text/javascript">
+        $('#dissocierModalEcole').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var ecoleId = button.data('id'); // Extract info from data-* attributes
+            var modal = $(this);
+            modal.find('#modal-ecole').val(ecoleId)
         })
     </script>
 {% endblock %}

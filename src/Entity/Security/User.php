@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\PlainPasswordTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\RoleTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserNameTrait;
+use AcMarche\Mercredi\Entity\Traits\EcolesTrait;
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\EnabledTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -19,7 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\User\Repository\UserRepository")
+ * @ORM\Entity()
  * @UniqueEntity("email")
  * @UniqueEntity("username")
  */
@@ -35,6 +36,7 @@ class User implements UserInterface
     use IsRoleTrait;
     use UserNameTrait;
     use TuteursTrait;
+    use EcolesTrait;
 
     /**
      * @var string|null

@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Relation\Dto\TuteurEnfantDto;
 use AcMarche\Mercredi\Relation\Form\TuteurEnfantQuickType;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use AcMarche\Mercredi\User\Handler\AssociationHandler;
+use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ final class QuickController extends AbstractController
      */
     private $relationRepository;
     /**
-     * @var AssociationHandler
+     * @var AssociationTuteurHandler
      */
     private $associationHandler;
 
@@ -44,7 +44,7 @@ final class QuickController extends AbstractController
         TuteurRepository $tuteurRepository,
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
-        AssociationHandler $associationHandler
+        AssociationTuteurHandler $associationHandler
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->enfantRepository = $enfantRepository;
