@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -24,39 +24,27 @@ final class AccueilVoter extends Voter
     public const SHOW = 'accueil_show';
     public const EDIT = 'accueil_edit';
     public const DELETE = 'accueil_delete';
-    /**
-     * @var string
-     */
-    private const PARENT = 'ROLE_MERCREDI_PARENT';
-    /**
-     * @var mixed|\AcMarche\Mercredi\Entity\Tuteur|null
-     */
-    public $tuteurOfUser;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
+
     /**
      * @var Security
      */
     private $security;
     /**
-     * @var null|string|\Stringable|\Symfony\Component\Security\Core\User\UserInterface
+     * @var Accueil|null
+     */
+    private $accueil;
+    /**
+     * @var User
      */
     private $user;
+    /**
+     * @var Enfant
+     */
     private $enfant;
 
     public function __construct(
-        RelationRepository $relationRepository,
-        TuteurUtils $tuteurUtils,
         Security $security
     ) {
-        $this->relationRepository = $relationRepository;
-        $this->tuteurUtils = $tuteurUtils;
         $this->security = $security;
     }
 
@@ -64,110 +52,41 @@ final class AccueilVoter extends Voter
     {
         return $subject instanceof Accueil && \in_array(
                 $attribute,
-                [self::ADD, self::SHOW, self::EDIT, self::DELETE], true
+                [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+                true
             );
     }
 
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token)
     {
         $this->user = $token->getUser();
+        $this->accueil = $accueil;
+
+        if (!$this->user instanceof User) {
+            return false;
+        }
+
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
+            return true;
+        }
+
         $this->enfant = $accueil->getEnfant();
 
-        if (! $this->user instanceof User) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
+            return $this->checkEcoles();
+        }
+
+        return false;
+    }
+
+    private function checkEcoles(): bool
+    {
+        $ecoles = $this->user->getEcoles();
+
+        if (\count($ecoles) == 0) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
-            return true;
-        }
-
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView($accueil, $token);
-            case self::ADD:
-                return $this->canAdd($accueil, $token);
-            case self::EDIT:
-                return $this->canEdit($accueil, $token);
-            case self::DELETE:
-                return $this->canDelete($accueil, $token);
-        }
-
-        return false;
-    }
-
-    private function canView(Accueil $accueil, TokenInterface $token)
-    {
-        if ($this->canEdit($accueil, $token)) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
-            return true;
-        }
-
-        if ($this->security->isGranted(self::PARENT)) {
-            return $this->checkTuteur();
-        }
-
-        return false;
-    }
-
-    /**
-     * Uniquement l'admin, droit donne plus haut.
-     *
-     * @return bool
-     */
-    private function canEdit()
-    {
-        if ($this->security->isGranted(self::PARENT)) {
-            return $this->checkTuteur();
-        }
-
-        return false;
-    }
-
-    private function canAdd(Accueil $accueil, TokenInterface $token)
-    {
-        return $this->canEdit($accueil, $token);
-    }
-
-    private function canDelete(Accueil $accueil, TokenInterface $token)
-    {
-        if ($this->canEdit($accueil, $token)) {
-            return true;
-        }
-
-        if ($this->security->isGranted(self::PARENT)) {
-            return $this->checkTuteur();
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    private function checkTuteur()
-    {
-        if (! $this->security->isGranted(self::PARENT)) {
-            return false;
-        }
-
-        $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
-
-        if (null === $this->tuteurOfUser) {
-            return false;
-        }
-
-        $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
-
-        $enfants = array_map(
-            function ($relation) {
-                return $relation->getEnfant()->getId();
-            },
-            $relations
-        );
-
-        return \in_array($this->enfant->getId(), $enfants, true);
+        return $ecoles->contains($this->enfant->getEcole());
     }
 }

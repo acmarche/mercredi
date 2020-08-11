@@ -1,13 +1,11 @@
 {% extends '@AcMarcheMercrediEcole/layout.html.twig' %}
 
 {% block body %}
-    <div class="card">
 
+    <div class="card mb-2">
         <h3 class="card-header">{{ enfant }}        </h3>
         <div class="card-body">
-
             {% include '@AcMarcheMercrediEcole/enfant/_actions.html.twig' %}
-
             <div class="row pl-1">
                 <div class="col-md-3 mt-2">
                     {% include '@AcMarcheMercrediEcole/enfant/_photo.html.twig' %}
@@ -16,13 +14,10 @@
                     {% include '@AcMarcheMercrediEcole/enfant/_identite.html.twig' %}
                 </div>
             </div>
-
             <br/>
-            <div class="pl-1">
-
-            </div>
         </div>
     </div>
 
+    {% include '@AcMarcheMercredi/ecole/enfant/_accueils.html.twig' %}
 
 {% endblock %}

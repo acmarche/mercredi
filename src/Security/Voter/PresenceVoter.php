@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Security\Voter;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -24,10 +25,7 @@ final class PresenceVoter extends Voter
     public const SHOW = 'presence_show';
     public const EDIT = 'presence_edit';
     public const DELETE = 'presence_delete';
-    /**
-     * @var string
-     */
-    private const PARENT = 'ROLE_MERCREDI_PARENT';
+
     /**
      * @var mixed|\AcMarche\Mercredi\Entity\Tuteur|null
      */
@@ -77,7 +75,7 @@ final class PresenceVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
             return true;
         }
 
@@ -97,15 +95,11 @@ final class PresenceVoter extends Voter
 
     private function canView(Presence $presence, TokenInterface $token)
     {
-        if ($this->canEdit($presence, $token)) {
+        if ($this->canEdit()) {
             return true;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
-            return true;
-        }
-
-        if ($this->security->isGranted(self::PARENT)) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -119,21 +113,21 @@ final class PresenceVoter extends Voter
      */
     private function canEdit()
     {
-        if ($this->security->isGranted(self::PARENT)) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
         return false;
     }
 
-    private function canAdd(Presence $presence, TokenInterface $token)
+    private function canAdd()
     {
-        return $this->canEdit($presence, $token);
+        return $this->canEdit();
     }
 
-    private function canDelete(Presence $presence, TokenInterface $token)
+    private function canDelete()
     {
-        if ($this->canEdit($presence, $token)) {
+        if ($this->canEdit()) {
             return true;
         }
 

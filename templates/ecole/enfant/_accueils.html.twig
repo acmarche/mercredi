@@ -15,7 +15,7 @@
                 {% for accueil in accueils %}
                     <tr>
                         <td>
-                            <a href="{{ path('mercredi_parent_accueil_show', { 'uuid': accueil.uuid }) }}">
+                            <a href="{{ path('mercredi_ecole_accueil_show', { 'uuid': accueil.uuid }) }}">
                                 {{ accueil.dateJour|format_date('full') }}
                             </a>
                         </td>

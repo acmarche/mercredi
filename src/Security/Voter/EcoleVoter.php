@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -61,11 +62,11 @@ final class EcoleVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
             return true;
         }
 
-        if (!$this->security->isGranted('ROLE_MERCREDI_ECOLE')) {
+        if (!$this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
             return false;
         }
 

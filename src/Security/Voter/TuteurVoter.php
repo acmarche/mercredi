@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -54,13 +55,14 @@ final class TuteurVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if ($subject && ! $subject instanceof Tuteur) {
+        if ($subject && !$subject instanceof Tuteur) {
             return false;
         }
 
         return \in_array(
             $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE], true
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+            true
         );
     }
 
@@ -68,13 +70,13 @@ final class TuteurVoter extends Voter
     {
         $this->user = $token->getUser();
 
-        if (! $this->user instanceof User) {
+        if (!$this->user instanceof User) {
             return false;
         }
 
         $this->tuteurToCheck = $tuteur;
 
-        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
             return true;
         }
 
@@ -96,11 +98,7 @@ final class TuteurVoter extends Voter
 
     private function canShow()
     {
-        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_MERCREDI_ANIMATEUR')) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
             return true;
         }
 
@@ -114,25 +112,25 @@ final class TuteurVoter extends Voter
 
     private function canAdd()
     {
-        return (bool) $this->canEdit();
+        return (bool)$this->canEdit();
     }
 
     private function canDelete()
     {
-        return (bool) $this->canEdit();
+        return (bool)$this->canEdit();
     }
 
     private function checkOwnTuteur()
     {
-        if (! $this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (!$this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return false;
         }
 
-        if (! $this->tuteurOfUser instanceof Tuteur) {
+        if (!$this->tuteurOfUser instanceof Tuteur) {
             return false;
         }
 
-        if (! $this->tuteurToCheck instanceof Tuteur) {
+        if (!$this->tuteurToCheck instanceof Tuteur) {
             return false;
         }
 

@@ -6,10 +6,13 @@ use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use AcMarche\Mercredi\Search\Form\SearchNameType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,37 +44,53 @@ final class EnfantController extends AbstractController
      * @var AccueilRepository
      */
     private $accueilRepository;
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         SanteHandler $santeHandler,
         SanteChecker $santeChecker,
         PresenceRepository $presenceRepository,
-        AccueilRepository $accueilRepository
+        AccueilRepository $accueilRepository,
+        RelationRepository $relationRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;
         $this->presenceRepository = $presenceRepository;
         $this->accueilRepository = $accueilRepository;
+        $this->relationRepository = $relationRepository;
     }
 
     /**
-     * @Route("/", name="mercredi_ecole_enfant_index", methods={"GET"})
+     * @Route("/", name="mercredi_ecole_enfant_index", methods={"GET", "POST"})
      * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
-    public function index()
+    public function index(Request $request)
     {
         if ($t = $this->hasEcoles()) {
             return $t;
         }
 
-        $enfants = $this->enfantRepository->findByEcoles($this->ecoles);
+        $nom = null;
+        $form = $this->createForm(SearchNameType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $nom = $data['nom'];
+        }
+
+        $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom);
 
         return $this->render(
             '@AcMarcheMercrediEcole/enfant/index.html.twig',
             [
                 'enfants' => $enfants,
+                'form' => $form->createView(),
             ]
         );
     }
@@ -86,6 +105,7 @@ final class EnfantController extends AbstractController
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
         $presences = $this->presenceRepository->findPresencesByEnfant($enfant);
         $accueils = $this->accueilRepository->findByEnfant($enfant);
+        $relations = $this->relationRepository->findByEnfant($enfant);
 
         return $this->render(
             '@AcMarcheMercrediEcole/enfant/show.html.twig',
@@ -93,18 +113,10 @@ final class EnfantController extends AbstractController
                 'enfant' => $enfant,
                 'presences' => $presences,
                 'accueils' => $accueils,
+                'relations' => $relations,
                 'ficheSanteComplete' => $ficheSanteComplete,
             ]
         );
     }
 
-    /**
-     * @Route("/santefiche/{id}", name="mercredi_admin_export_sante_fiche_pdf")
-     */
-    public function sante(Enfant $enfant): Response
-    {
-        $santeFiche = $this->santeHandler->init($enfant);
-
-        return $this->santePdfFactory->santeFiche($santeFiche);
-    }
 }

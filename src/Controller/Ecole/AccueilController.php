@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
-use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
@@ -23,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/accueil")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
+ * @IsGranted("ROLE_MERCREDI_ECOLE")
  */
 final class AccueilController extends AbstractController
 {
@@ -31,10 +30,6 @@ final class AccueilController extends AbstractController
      * @var string
      */
     private const ENFANT = 'enfant';
-    /**
-     * @var string
-     */
-    private const ID = 'id';
     /**
      * @var AccueilRepository
      */
@@ -71,27 +66,10 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/list/{id}", name="mercredi_admin_accueil_index", methods={"GET","POST"})
-     */
-    public function index(Enfant $enfant): Response
-    {
-        $accueils = $this->accueilRepository->findByEnfant($enfant);
-        $relations = $this->relationRepository->findByEnfant($enfant);
-
-        return $this->render(
-            '@AcMarcheMercrediAdmin/accueil/index.html.twig',
-            [
-                'accueils' => $accueils,
-                'relations' => $relations,
-                self::ENFANT => $enfant,
-            ]
-        );
-    }
-
-    /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_accueil_new", methods={"GET","POST"})
+     * @Route("/new/{tuteur}/{enfant}", name="mercredi_ecole_accueil_new", methods={"GET","POST"})
      * @Entity("tuteur", expr="repository.find(tuteur)")
      * @Entity("enfant", expr="repository.find(enfant)")
+     * @IsGranted("enfant_edit", subject="enfant")
      */
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
@@ -103,11 +81,11 @@ final class AccueilController extends AbstractController
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatchMessage(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', [self::ID => $result->getId()]);
+            return $this->redirectToRoute('mercredi_ecole_accueil_show', ['uuid' => $result->getUuid()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/accueil/new.html.twig',
+            '@AcMarcheMercrediEcole/accueil/new.html.twig',
             [
                 self::ENFANT => $enfant,
                 'form' => $form->createView(),
@@ -116,7 +94,8 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_accueil_show", methods={"GET"})
+     * @Route("/{uuid}", name="mercredi_ecole_accueil_show", methods={"GET"})
+     * @IsGranted("accueil_show", subject="accueil")
      */
     public function show(Accueil $accueil): Response
     {
@@ -125,7 +104,7 @@ final class AccueilController extends AbstractController
         $factureAccueil = $this->factureAccueilRepository->findByAccueil($accueil);
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/accueil/show.html.twig',
+            '@AcMarcheMercrediEcole/accueil/show.html.twig',
             [
                 'accueil' => $accueil,
                 'cout' => $cout,
@@ -136,7 +115,8 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_accueil_edit", methods={"GET","POST"})
+     * @Route("/{uuid}/edit", name="mercredi_ecole_accueil_edit", methods={"GET","POST"})
+     * @IsGranted("accueil_edit", subject="accueil")
      */
     public function edit(Request $request, Accueil $accueil): Response
     {
@@ -148,31 +128,15 @@ final class AccueilController extends AbstractController
 
             $this->dispatchMessage(new AccueilUpdated($accueil->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', [self::ID => $accueil->getId()]);
+            return $this->redirectToRoute('mercredi_ecole_accueil_show', ['uuid' => $accueil->getUuid()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/accueil/edit.html.twig',
+            '@AcMarcheMercrediEcole/accueil/edit.html.twig',
             [
                 'accueil' => $accueil,
                 'form' => $form->createView(),
             ]
         );
-    }
-
-    /**
-     * @Route("/{id}", name="mercredi_admin_accueil_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Accueil $accueil): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
-            $id = $accueil->getId();
-            $enfant = $accueil->getEnfant();
-            $this->accueilRepository->remove($accueil);
-            $this->accueilRepository->flush();
-            $this->dispatchMessage(new AccueilDeleted($id));
-        }
-
-        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $enfant->getId()]);
     }
 }

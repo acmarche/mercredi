@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -20,7 +21,6 @@ use Symfony\Component\Security\Core\Security;
 final class EnfantVoter extends Voter
 {
     public const ADD = 'enfant_new';
-    public const ADD_PRESENCE = 'add_presence';
     public const SHOW = 'enfant_show';
     public const EDIT = 'enfant_edit';
     public const DELETE = 'enfant_delete';
@@ -68,7 +68,7 @@ final class EnfantVoter extends Voter
 
         return \in_array(
             $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE, self::ADD_PRESENCE],
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
             true
         );
     }
@@ -82,7 +82,7 @@ final class EnfantVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
             return true;
         }
 
@@ -93,8 +93,6 @@ final class EnfantVoter extends Voter
                 return $this->canView();
             case self::ADD:
                 return $this->canAdd();
-            case self::ADD_PRESENCE:
-                return $this->canAddPresence();
             case self::EDIT:
                 return $this->canEdit();
             case self::DELETE:
@@ -106,15 +104,11 @@ final class EnfantVoter extends Voter
 
     private function canView(): bool
     {
-        if ($this->security->isGranted('ROLE_MERCREDI_READ')) {
-            return true;
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
+            return false;
         }
 
-        if ($this->security->isGranted('ROLE_MERCREDI_ANIMATEUR')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_MERCREDI_ECOLE')) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
             return $this->checkEcoles();
         }
 
@@ -123,22 +117,24 @@ final class EnfantVoter extends Voter
 
     private function canEdit(): bool
     {
-        return $this->checkTuteur();
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
+            return $this->checkEcoles();
+        }
+        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+            return $this->checkTuteur();
+        }
+
+        return false;
     }
 
     private function canAdd(): bool
     {
-        return $this->canEdit();
-    }
-
-    private function canAddPresence(): bool
-    {
-        return $this->canEdit();
+        return false;//not use
     }
 
     private function canDelete(): bool
     {
-        return $this->canEdit();
+        return false;//only admin
     }
 
     /**
@@ -146,7 +142,7 @@ final class EnfantVoter extends Voter
      */
     private function checkTuteur(): bool
     {
-        if (!$this->security->isGranted('ROLE_MERCREDI_PARENT')) {
+        if (!$this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return false;
         }
 
