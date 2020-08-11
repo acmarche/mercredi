@@ -5,7 +5,9 @@ namespace AcMarche\Mercredi\Security\Voter;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -41,11 +43,23 @@ final class AccueilVoter extends Voter
      * @var Enfant
      */
     private $enfant;
+    /**
+     * @var RelationRepository
+     */
+    private $relationRepository;
+    /**
+     * @var TuteurUtils
+     */
+    private $tuteurUtils;
 
     public function __construct(
-        Security $security
+        Security $security,
+        RelationRepository $relationRepository,
+        TuteurUtils $tuteurUtils
     ) {
         $this->security = $security;
+        $this->relationRepository = $relationRepository;
+        $this->tuteurUtils = $tuteurUtils;
     }
 
     protected function supports($attribute, $subject)
@@ -72,6 +86,10 @@ final class AccueilVoter extends Voter
 
         $this->enfant = $accueil->getEnfant();
 
+        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+            return $this->checkTuteur();
+        }
+
         if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
             return $this->checkEcoles();
         }
@@ -88,5 +106,28 @@ final class AccueilVoter extends Voter
         }
 
         return $ecoles->contains($this->enfant->getEcole());
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkTuteur()
+    {
+        $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
+
+        if (null === $this->tuteurOfUser) {
+            return false;
+        }
+
+        $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
+
+        $enfants = array_map(
+            function ($relation) {
+                return $relation->getEnfant()->getId();
+            },
+            $relations
+        );
+
+        return \in_array($this->enfant->getId(), $enfants, true);
     }
 }

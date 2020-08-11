@@ -83,17 +83,17 @@ final class PresenceVoter extends Voter
             case self::SHOW:
                 return $this->canView($presence, $token);
             case self::ADD:
-                return $this->canAdd($presence, $token);
+                return $this->canAdd();
             case self::EDIT:
-                return $this->canEdit($presence, $token);
+                return $this->canEdit();
             case self::DELETE:
-                return $this->canDelete($presence, $token);
+                return $this->canDelete();
         }
 
         return false;
     }
 
-    private function canView(Presence $presence, TokenInterface $token)
+    private function canView()
     {
         if ($this->canEdit()) {
             return true;
@@ -131,7 +131,7 @@ final class PresenceVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted(self::PARENT)) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -143,7 +143,7 @@ final class PresenceVoter extends Voter
      */
     private function checkTuteur()
     {
-        if (! $this->security->isGranted(self::PARENT)) {
+        if (! $this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return false;
         }
 
