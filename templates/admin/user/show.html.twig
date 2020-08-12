@@ -81,20 +81,43 @@
                         </table>
                     </td>
                 </tr>
+                <tr>
+                    <th>Animateur associé</th>
+                    <td>
+                        <table class="table table-hover">
+
+                            {% for animateur in user.animateurs %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('mercredi_admin_animateur_show', {'id': animateur.id}) }}">{{ animateur }}</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
+                                                data-id="{{ animateur.id }}" data-target="#dissocierModalAnimateur">
+                                            <i class="fas fa-unlink"></i> Dissocier
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     {% include '@AcMarcheMercrediAdmin/user/_delete.html.twig' %}
-    {% include '@AcMarcheMercrediAdmin/user/_dissocier_parent.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_dissocier_tuteur.html.twig' %}
     {% include '@AcMarcheMercrediAdmin/user/_dissocier_ecole.html.twig' %}
+    {% include '@AcMarcheMercrediAdmin/user/_dissocier_animateur.html.twig' %}
 
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript">
-        $('#dissocierModalParent').on('show.bs.modal', function (event) {
+        $('#dissocierModalTuteur').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var tuteurId = button.data('id'); // Extract info from data-* attributes
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -109,6 +132,14 @@
             var ecoleId = button.data('id'); // Extract info from data-* attributes
             var modal = $(this);
             modal.find('#modal-ecole').val(ecoleId)
+        })
+    </script>
+    <script type="text/javascript">
+        $('#dissocierModalAnimateur').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var animateurId = button.data('id'); // Extract info from data-* attributes
+            var modal = $(this);
+            modal.find('#modal-animateur').val(animateurId)
         })
     </script>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Security;
 
+use AcMarche\Mercredi\Entity\Security\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\PlainPasswordTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\RoleTrait;
@@ -37,6 +38,7 @@ class User implements UserInterface
     use UserNameTrait;
     use TuteursTrait;
     use EcolesTrait;
+    use AnimateursTrait;
 
     /**
      * @var string|null
@@ -65,6 +67,7 @@ class User implements UserInterface
     {
         $this->tuteurs = new ArrayCollection();
         $this->ecoles = new ArrayCollection();
+        $this->animateurs = new ArrayCollection();
     }
 
     public function __toString()

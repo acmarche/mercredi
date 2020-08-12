@@ -35,6 +35,7 @@ final class DefaultController extends AbstractController
 
     /**
      * @Route("/nouveau", name="mercredi_ecole_nouveau")
+     * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
     public function nouveau()
     {

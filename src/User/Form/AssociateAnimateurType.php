@@ -2,30 +2,30 @@
 
 namespace AcMarche\Mercredi\User\Form;
 
-use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
+use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
+use AcMarche\Mercredi\Entity\Animateur;
+use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class AssociateParentType extends AbstractType
+final class AssociateAnimateurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
             ->add(
-                'tuteur',
+                'animateur',
                 EntityType::class,
                 [
-                    'label' => 'Sélectionnez un parent',
-                    'class' => Tuteur::class,
-                    'placeholder' => 'Sélectionnez le parent',
+                    'label' => 'Sélectionnez un animateur',
+                    'class' => Animateur::class,
+                    'placeholder' => 'Sélectionnez l\'animateur',
                     'required' => true,
-                    'query_builder' => function (TuteurRepository $cr) {
-                        return $cr->findForAssociateParent();
+                    'query_builder' => function (AnimateurRepository $cr) {
+                        return $cr->findForAssociateAnimateur();
                     },
                 ]
             )
@@ -34,8 +34,8 @@ final class AssociateParentType extends AbstractType
                 CheckboxType::class,
                 [
                     'required' => false,
-                    'label' => 'Prévenir par email le parent',
-                    'help' => 'Un email va être envoyé au parent pour signaler que son compte a été associé à une fiche parent',
+                    'label' => 'Prévenir par email l\'animateur',
+                    'help' => 'Un email va être envoyé à l\'animateur pour signaler que son compte a été associé à une fiche animateur',
                 ]
             );
     }
@@ -44,7 +44,7 @@ final class AssociateParentType extends AbstractType
     {
         $optionsResolver->setDefaults(
             [
-                'data_class' => AssociateUserTuteurDto::class,
+                'data_class' => AssociateUserAnimateurDto::class,
             ]
         );
     }

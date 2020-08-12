@@ -1,10 +1,6 @@
 Feature: Gestion des écoles
   Je suis connecté
   Je vois les enfants d'une école sur la page de détail
-  J' édite l'école
-  Je supprime l'école de Waha
-  Je ne peux pas supprimer l'école de Aye
-  Enfants de l'école
 
   Background:
     Given I am login with user "joseph@marche.be" and password "homer"

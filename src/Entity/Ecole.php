@@ -28,7 +28,6 @@ class Ecole
     use UsersTrait;
 
     /**
-     * Override pour le mappedBy
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="ecoles" )
      *
      * @var User[]|Collection

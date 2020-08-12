@@ -57,6 +57,12 @@ class Jour implements TimestampableInterface
      */
     private $plaine_jour;
 
+    /**
+     * @var Animateur[]
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", inversedBy="jours")
+     */
+    private $animateurs;
+
     public function __construct(?\DateTime $date_jour = null)
     {
         $this->prix1 = 0;
@@ -65,6 +71,7 @@ class Jour implements TimestampableInterface
         $this->forfait = 0;
         $this->pedagogique = false;
         $this->presences = new ArrayCollection();
+        $this->animateurs = new ArrayCollection();
         $this->date_jour = $date_jour;
     }
 

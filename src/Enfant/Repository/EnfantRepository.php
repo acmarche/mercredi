@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Repository;
 
+use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -153,6 +154,26 @@ final class EnfantRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    public function searchForAnimateur(Animateur $animateur, $nom)
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ENFANT)
+            ->leftJoin('enfant.ecole', self::ECOLE, self::WITH)
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', self::WITH)
+            ->leftJoin('enfant.relations', 'relations', self::WITH)
+            ->addSelect(self::ECOLE, 'relations', 'sante_fiche', 'annee_scolaire');
+
+        if ($nom) {
+            $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
+                ->setParameter('keyword', '%'.$nom.'%');
+        }
+
+        $queryBuilder->andWhere('enfant.archived = 0');
+
+        return $queryBuilder->addOrderBy('enfant.nom', self::ASC)
+            ->getQuery()->getResult();
+    }
+
     public function remove(Enfant $enfant): void
     {
         $this->_em->remove($enfant);
@@ -167,4 +188,5 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         $this->_em->persist($enfant);
     }
+
 }

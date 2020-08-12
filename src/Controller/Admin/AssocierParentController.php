@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
-use AcMarche\Mercredi\User\Form\AssociateParentType;
+use AcMarche\Mercredi\User\Form\AssociateTuteurType;
 use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +46,7 @@ final class AssocierParentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_associate_parent", methods={"GET","POST"})
+     * @Route("/{id}", name="mercredi_user_associate_tuteur", methods={"GET","POST"})
      */
     public function associate(Request $request, User $user)
     {
@@ -59,17 +59,17 @@ final class AssocierParentController extends AbstractController
         $associateUserTuteurDto = new AssociateUserTuteurDto($user);
         $this->associationHandler->suggestTuteur($user, $associateUserTuteurDto);
 
-        $form = $this->createForm(AssociateParentType::class, $associateUserTuteurDto);
+        $form = $this->createForm(AssociateTuteurType::class, $associateUserTuteurDto);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->associationHandler->handleAssociateParent($associateUserTuteurDto);
+            $this->associationHandler->handleAssociateTuteur($associateUserTuteurDto);
 
             return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/user/associer_parent.html.twig',
+            '@AcMarcheMercrediAdmin/user/associer_tuteur.html.twig',
             [
                 'user' => $user,
                 'form' => $form->createView(),
@@ -78,7 +78,7 @@ final class AssocierParentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_dissociate_parent", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_user_dissociate_tuteur", methods={"DELETE"})
      */
     public function dissociate(Request $request, User $user)
     {
@@ -91,9 +91,7 @@ final class AssocierParentController extends AbstractController
             }
 
             $tuteur = $this->tuteurRepository->find($tuteurId);
-            $this->associationHandler->handleDissociateParent($user, $tuteur);
-
-            return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
+            $this->associationHandler->handleDissociateTuteur($user, $tuteur);
         }
 
         return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);

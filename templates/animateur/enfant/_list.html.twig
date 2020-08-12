@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+    <tr>
+        <th>Nom</th>
+        <th>Ecole</th>
+    </tr>
+    {% for enfant in enfants %}
+        <tr>
+            <td>
+                <a href="{{ path('mercredi_animateur_enfant_show', {'uuid': enfant.uuid}) }}">
+                    {{ enfant }}
+                </a>
+            </td>
+            <td>{{ enfant.animateur }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>Aucun enfant trouvé</td>
+        </tr>
+    {% endfor %}
+</table>

@@ -6,7 +6,7 @@ AcMarche\Mercredi\Entity\Security\User:
     prenom: Jf
     password: homer
     roles: ["ROLE_MERCREDI_ADMIN"]
-  user_{alice, bob, fred, raoul, kevin, charle, brenda, jules, lisa}:
+  user_{alice, bob, fred, raoul, charle, brenda, jules, lisa}:
     email: '<current()>\@domain.be'
     username: '<current()>\@domain.be'
     nom: '<lastName()>'
@@ -34,3 +34,11 @@ AcMarche\Mercredi\Entity\Security\User:
     password: homer
     roles: ["ROLE_MERCREDI_ECOLE"]
     ecoles: ["@ecole_Champlon"]
+  user_animateur:
+    email: kevin@marche.be
+    username: kevin@marche.be
+    nom: Malice
+    prenom: Kevin
+    password: homer
+    roles: ["ROLE_MERCREDI_ANIMATEUR"]
+    animateurs: ['@animateur_Szyslak']

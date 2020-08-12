@@ -1,5 +1,5 @@
 <!-- Modal candidat -->
-<div class="modal fade" id="dissocierModalParent" tabindex="-1" role="dialog" aria-labelledby="dissocierModalLabel"
+<div class="modal fade" id="dissocierModalTuteur" tabindex="-1" role="dialog" aria-labelledby="dissocierModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -13,7 +13,7 @@
                 Dissocier le parent du compte ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('mercredi_user_dissociate_parent', {'id': user.id}) }}">
+                <form method="post" action="{{ path('mercredi_user_dissociate_tuteur', {'id': user.id}) }}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('dissociate' ~ user.id) }}">
                     <input type="hidden" name="tuteur" id="modal-tuteur" value="">

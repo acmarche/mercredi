@@ -52,7 +52,7 @@ final class AssociationTuteurHandler
         }
     }
 
-    public function handleAssociateParent(AssociateUserTuteurDto $associateUserTuteurDto): void
+    public function handleAssociateTuteur(AssociateUserTuteurDto $associateUserTuteurDto): void
     {
         $tuteur = $associateUserTuteurDto->getTuteur();
         $user = $associateUserTuteurDto->getUser();
@@ -62,14 +62,14 @@ final class AssociationTuteurHandler
             $user->getTuteurs()->clear();
         }
 
-        $tuteur->addUser($associateUserTuteurDto->getUser());
+        $user->addTuteur($tuteur);
         $this->tuteurRepository->flush();
 
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserTuteurDto->isSendEmail()) {
             try {
-                $this->userMailer->sendNewAccountToParent($user, $tuteur);
+                $this->userMailer->sendNewAccountToTuteur($user, $tuteur);
                 $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
             } catch (TransportExceptionInterface $e) {
                 $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
@@ -77,7 +77,7 @@ final class AssociationTuteurHandler
         }
     }
 
-    public function handleDissociateParent(User $user, Tuteur $tuteur): Tuteur
+    public function handleDissociateTuteur(User $user, Tuteur $tuteur): Tuteur
     {
         $user->removeTuteur($tuteur);
 
@@ -93,7 +93,7 @@ final class AssociationTuteurHandler
         $plainPassword = $user->getPlainPassword();
 
         try {
-            $this->userMailer->sendNewAccountToParent($user, $tuteur, $plainPassword);
+            $this->userMailer->sendNewAccountToTuteur($user, $tuteur, $plainPassword);
         } catch (TransportExceptionInterface $e) {
             $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
         }

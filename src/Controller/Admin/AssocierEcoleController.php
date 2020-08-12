@@ -91,8 +91,6 @@ final class AssocierEcoleController extends AbstractController
 
             $ecole = $this->ecoleRepository->find($ecoleId);
             $this->associationEcoleHandler->handleDissociateEcole($user, $ecole);
-
-            return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $ecole->getId()]);
         }
 
         return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);

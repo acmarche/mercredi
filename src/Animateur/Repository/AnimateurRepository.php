@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Animateur\Repository;
 
 use AcMarche\Mercredi\Entity\Animateur;
+use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -18,6 +19,15 @@ final class AnimateurRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Animateur::class);
+    }
+
+    public function findOneByEmail(string $email): ?Animateur
+    {
+        return $this->createQueryBuilder('animateur')
+            ->andWhere('animateur.email = :email')
+            ->setParameter('email', $email)
+            ->addOrderBy('animateur.nom', 'ASC')
+            ->getQuery()->getResult();
     }
 
     /**
@@ -54,4 +64,22 @@ final class AnimateurRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('animateur')
             ->orderBy('animateur.nom', 'ASC');
     }
+
+    public function getAnimateursByUser(User $user)
+    {
+        return $this->createQueryBuilder('animateur')
+            ->leftJoin('animateur.users', 'users', 'WITH')
+            ->andWhere(':user MEMBER OF animateur.users')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findForAssociateAnimateur(): QueryBuilder
+    {
+        return $this->createQueryBuilder('animateur')
+            ->orderBy('animateur.nom');
+
+    }
+
 }
