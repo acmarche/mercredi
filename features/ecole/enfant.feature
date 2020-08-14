@@ -13,5 +13,4 @@ Feature: Gestion des enfants
     Then I should see "Liste des enfants"
     Then I follow "SIMPSON Bart"
     Then I follow "Fiche santé"
-    Then I follow "Pdf"
     And the response status code should be 200

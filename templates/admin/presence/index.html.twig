@@ -4,11 +4,11 @@
     <h3>Liste des présences
         {% if jour %} {{ jour.dateJour | format_date('full') }}
             <a href="{{ path('mercredi_message_new_jour', {'id': jour.id}) }}"
-               title="Envoyer un message aux parents">
+               title="Envoyer un message aux parents" id="new_message_from_jour">
                 <i class="far fa-envelope"></i></a>
 
             <a href="{{ path('mercredi_admin_export_presence_xls') }}"
-               title="Exporter en xls">
+               title="Exporter en xls" id="export_xls_presence">
                 <i class="fas fa-file-excel"></i> </a>
         {% endif %}
     </h3>
@@ -27,7 +27,7 @@
             <h3>
                 {{ groupeName | title }} <a
                         href="{{ path('mercredi_message_new_groupescolaire', {'groupe': groupeName}) }}"
-                        title="Envoyer un message aux parents" class="d-print-none">
+                        title="Envoyer un message aux parents" class="d-print-none" id="new_message_from_groupe_{{ groupeName }}">
                     <i class="far fa-envelope"></i></a>
             </h3>
 

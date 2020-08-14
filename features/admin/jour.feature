@@ -41,7 +41,7 @@ Feature: Gestion des dates d'accueil
     Then I should see "Samedi 9 mai 2020"
 
   Scenario: Modifier le tarif d'un jour non pédagogique
-    Then I follow "Mercredi 9 Septembre 2020"
+    Then I follow "Mercredi 11 Septembre 2024"
     Then I follow "Tarifs"
     And I fill in "jour_tarification_degressive_with_forfait[prix1]" with "3.66"
     And I fill in "jour_tarification_degressive_with_forfait[forfait]" with "1.22"
@@ -50,7 +50,7 @@ Feature: Gestion des dates d'accueil
     Then I should see "1.22 €"
 
   Scenario: Modifier le tarif d'un jour pédagogique
-    Then I follow "Lundi 30 Décembre 2019"
+    Then I follow "Mardi 20 Août 2024"
     Then I follow "Tarifs"
     And I fill in "jour_tarification_full_day[prix1]" with "3.99"
     And I fill in "jour_tarification_full_day[prix2]" with "1.33"
@@ -59,19 +59,19 @@ Feature: Gestion des dates d'accueil
     Then I should see "1.33 €"
 
   Scenario: Modifier la date d'un jour
-    Then I follow "Mercredi 9 Septembre 2020"
+    Then I follow "Mercredi 11 Septembre 2024"
     Then I follow "Modifier"
-    And I fill in "jour[date_jour]" with "2020-09-11"
+    And I fill in "jour[date_jour]" with "2024-09-13"
     And I press "Sauvegarder"
-    Then I should see "Vendredi 11 septembre 2020"
+    Then I should see "Vendredi 13 septembre 2024"
 
   Scenario: Supprimer une date sans présence
-    Then I follow "Mercredi 9 Septembre 2020"
+    Then I follow "Jeudi 26 Septembre 2024"
     Then I press "Supprimer la date"
    # Then print last response
     Then I should see "La date a bien été supprimée"
 
   Scenario: Supprimer une date avec présence
-    Then I follow "Mercredi 9 Septembre 2020"
+    Then I follow "Mercredi 11 Septembre 2024"
     Then I press "Supprimer la date"
     Then I should see "La date a bien été supprimée"

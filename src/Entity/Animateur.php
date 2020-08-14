@@ -9,9 +9,9 @@ use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\JoursTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use AcMarche\Mercredi\Entity\Traits\PresencesTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
@@ -38,6 +38,7 @@ class Animateur implements TimestampableInterface
     use TimestampableTrait;
     use UserAddTrait;
     use UsersTrait;
+    use JoursTrait;
 
     /**
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="animateurs" )
@@ -47,7 +48,7 @@ class Animateur implements TimestampableInterface
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", mappedBy="animateurs" )
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="animateurs" )
      *
      * @var Jour[]|Collection
      */
@@ -63,4 +64,7 @@ class Animateur implements TimestampableInterface
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
+
+
+
 }

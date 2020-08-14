@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Enfant\Utils\EnfantUtils;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Message\Factory\MessageFactory;
 use AcMarche\Mercredi\Message\Form\MessageType;
@@ -169,7 +168,7 @@ final class MessageController extends AbstractController
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/message/index.html.twig',
+            '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
                 self::FORM => $form->createView(),
@@ -180,7 +179,7 @@ final class MessageController extends AbstractController
     }
 
     /**
-     * @Route("/groupe", name="mercredi_message_new_groupescolaire")
+     * @Route("/groupe/{groupe}", name="mercredi_message_new_groupescolaire")
      */
     public function groupeScolaire(Request $request, string $groupe): Response
     {
@@ -195,7 +194,7 @@ final class MessageController extends AbstractController
         $data = $this->presenceHandler->handleForGrouping($jour, $ecole, false);
         $enfants = $data[$groupe] ?? [];
 
-        $tuteurs = EnfantUtils::extractTuteurs($enfants);
+        $tuteurs = $this->tuteurUtils->getTuteursByEnfants($enfants);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
 
         $message = $this->messageFactory->createInstance();
@@ -214,7 +213,7 @@ final class MessageController extends AbstractController
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/message/index.html.twig',
+            '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
                 self::FORM => $form->createView(),

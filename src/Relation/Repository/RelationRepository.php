@@ -180,6 +180,18 @@ final class RelationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByEnfants(array $enfants)
+    {
+        return $this->createQueryBuilder(self::RELATION)
+            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
+            ->leftJoin('relation.tuteur', self::TUTEUR, self::WITH)
+            ->addSelect(self::ENFANT, self::TUTEUR)
+            ->andwhere('relation.enfant IN (:enfants)')
+            ->setParameter('enfants', $enfants)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function remove(Relation $relation): void
     {
         $this->_em->remove($relation);
@@ -194,4 +206,5 @@ final class RelationRepository extends ServiceEntityRepository
     {
         $this->_em->persist($relation);
     }
+
 }

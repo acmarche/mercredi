@@ -11,6 +11,7 @@ AcMarche\Mercredi\Entity\Animateur:
     gsm: '<phoneNumber()>'
     sexe: shuffle('Féminin, Masculin')
     userAdd: administrator
+    jours: ['@jour_2024_09_19','@jour_2020_05_06']
   animateur_{Gumble}:
     nom: '<current()>'
     prenom: 'Barney'

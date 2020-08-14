@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Animateur;
 
+use AcMarche\Mercredi\Enfant\Form\SearchEnfantForAnimateurType;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Search\Form\SearchNameType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,7 +69,13 @@ final class EnfantController extends AbstractController
         }
 
         $nom = null;
-        $form = $this->createForm(SearchNameType::class);
+        $form = $this->createForm(
+            SearchEnfantForAnimateurType::class,
+            null,
+            [
+                'animateur' => $this->animateur,
+            ]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -261,6 +261,23 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array|Jour[] $jours
+     * @return Presence[]
+     */
+    public function findPresencesByJours(array $jours): array
+    {
+        $queryBuilder = $this->createQueryBuilder(self::PRESENCE)
+            ->join('presence.enfant', self::ENFANT, self::WITH)
+            ->join('presence.jour', self::JOUR, self::WITH)
+            ->addSelect(self::ENFANT, self::JOUR);
+
+        $queryBuilder->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @return Presence[]
      */
     public function search(string $nom, Ecole $ecole, string $annee_scolaire): array

@@ -2,11 +2,14 @@
 
 namespace AcMarche\Mercredi\Tuteur\Utils;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use function count;
+use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+use function count;
 
 final class TuteurUtils
 {
@@ -153,5 +156,16 @@ final class TuteurUtils
         }
 
         return $data;
+    }
+
+    /**
+     * @param Enfant[] $enfants
+     * @return Tuteur[]
+     */
+    public function getTuteursByEnfants(array $enfants): array
+    {
+        $relations = $this->relationRepository->findByEnfants($enfants);
+
+        return RelationUtils::extractTuteurs($relations);
     }
 }

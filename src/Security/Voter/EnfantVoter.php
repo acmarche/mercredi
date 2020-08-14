@@ -2,12 +2,14 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use AcMarche\Mercredi\Animateur\Utils\AnimateurUtils;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -49,15 +51,21 @@ final class EnfantVoter extends Voter
      * @var RelationRepository
      */
     private $relationRepository;
+    /**
+     * @var AnimateurUtils
+     */
+    private $animateurUtils;
 
     public function __construct(
         RelationRepository $relationRepository,
         TuteurUtils $tuteurUtils,
+        AnimateurUtils $animateurUtils,
         Security $security
     ) {
         $this->tuteurUtils = $tuteurUtils;
         $this->security = $security;
         $this->relationRepository = $relationRepository;
+        $this->animateurUtils = $animateurUtils;
     }
 
     protected function supports($attribute, $subject)
@@ -105,7 +113,7 @@ final class EnfantVoter extends Voter
     private function canView(): bool
     {
         if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
-            return false;
+            return $this->checkAnimateur();
         }
 
         if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
@@ -135,6 +143,21 @@ final class EnfantVoter extends Voter
     private function canDelete(): bool
     {
         return false;//only admin
+    }
+
+    private function checkAnimateur()
+    {
+        $animateur = $this->user->getAnimateur();
+        if (!$animateur) {
+            return false;
+        }
+
+        $enfants = new ArrayCollection($this->animateurUtils->getAllEnfants($animateur));
+        if ($enfants->contains($this->enfant)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

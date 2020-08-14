@@ -142,7 +142,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
             function ($relation) {
                 return $relation->getTuteur();
             },
-            $this->getRelations()
+            $this->getRelations()->toArray()
         );
     }
 }

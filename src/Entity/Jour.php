@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use AcMarche\Mercredi\Entity\Plaine\PlaineJourTrait;
+use AcMarche\Mercredi\Entity\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\ColorTrait;
 use AcMarche\Mercredi\Entity\Traits\ForfaitTrait;
@@ -34,6 +35,7 @@ class Jour implements TimestampableInterface
     use PedagogiqueTrait;
     use ForfaitTrait;
     use PlaineJourTrait;
+    use AnimateursTrait;
 
     /**
      * @var \DateTime|null
@@ -59,7 +61,7 @@ class Jour implements TimestampableInterface
 
     /**
      * @var Animateur[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", inversedBy="jours")
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", mappedBy="jours")
      */
     private $animateurs;
 
@@ -120,4 +122,6 @@ class Jour implements TimestampableInterface
 
         return $this;
     }
+
+
 }

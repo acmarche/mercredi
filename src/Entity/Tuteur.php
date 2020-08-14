@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Entity\Traits\AccueilsTraits;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\ConjointTrait;
@@ -49,6 +50,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use PresencesTuteurTrait;
     use RelationsTrait;
     use FacturesTrait;
+    use AccueilsTraits;
 
     /**
      * @var Relation[]
@@ -99,4 +101,5 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     {
         return true;
     }
+
 }

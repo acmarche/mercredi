@@ -1,0 +1,38 @@
+{% extends '@AcMarcheMercrediAnimateur/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Mes jours de travail</h3>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered">
+                <tr>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Enfants</th>
+                </tr>
+                {% for jour in jours %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_animateur_presence_show', {'id': jour.id}) }}">
+                                {{ jour.dateJour|format_date('full') }}
+                            </a>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Aucun jour trouvé</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}
+

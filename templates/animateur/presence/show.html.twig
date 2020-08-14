@@ -1,0 +1,33 @@
+{% extends '@AcMarcheMercrediAnimateur/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Enfants présents le {{ jour.dateJour|format_date('full') }}</h3>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered">
+                <tr>
+                    <th class="text-center">Nom</th>
+                </tr>
+                {% for enfant in enfants %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_animateur_enfant_show', {'uuid': enfant.uuid}) }}">
+                                {{ enfant }}
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>Aucun enfant trouvé</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

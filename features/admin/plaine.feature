@@ -42,7 +42,7 @@ Feature: Gestion des plaines
   #  Then I follow "Ajouter une date"
   #  And I fill in "plaine_jour[jours][3][date_jour]" with "2020-12-24"
     And I press "Sauvegarder"
-    Then I should see "mercredi 23 décembre"
+    Then I should see "mercredi 18 décembre"
 
   Scenario: Supprimer une plaine
     Then I follow "Plaine de noel"

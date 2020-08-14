@@ -6,6 +6,8 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Presence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -154,19 +156,59 @@ final class EnfantRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function searchForAnimateur(Animateur $animateur, $nom)
+    /**
+     * @param Animateur $animateur
+     * @return array|Enfant[]
+     */
+    public function findAllForAnimateur(Animateur $animateur): array
     {
         $queryBuilder = $this->createQueryBuilder(self::ENFANT)
-            ->leftJoin('enfant.ecole', self::ECOLE, self::WITH)
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', self::WITH)
-            ->leftJoin('enfant.relations', 'relations', self::WITH)
-            ->addSelect(self::ECOLE, 'relations', 'sante_fiche', 'annee_scolaire');
+            ->leftJoin('enfant.presences', 'presences', self::WITH)
+            ->addSelect('presences');
+
+        $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
+
+        if (count($jours) == 0) {
+            return [];
+        }
+
+        $presences = $this->getEntityManager()->getRepository(Presence::class)->findPresencesByJours($jours);
+
+        $queryBuilder->andWhere('presences IN (:presences)')
+            ->setParameter('presences', $presences);
+
+        $queryBuilder->andWhere('enfant.archived = 0');
+
+        return $queryBuilder->addOrderBy('enfant.nom', self::ASC)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @param Animateur $animateur
+     * @param $nom
+     * @return array|Enfant[]
+     */
+    public function searchForAnimateur(Animateur $animateur, $nom): array
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ENFANT)
+            ->leftJoin('enfant.presences', 'presences', self::WITH)
+            ->addSelect('presences');
+
+        $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
+
+        if (count($jours) == 0) {
+            return [];
+        }
+
+        $presences = $this->getEntityManager()->getRepository(Presence::class)->findPresencesByJours($jours);
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
                 ->setParameter('keyword', '%'.$nom.'%');
         }
+
+        $queryBuilder->andWhere('presences IN (:presences)')
+            ->setParameter('presences', $presences);
 
         $queryBuilder->andWhere('enfant.archived = 0');
 

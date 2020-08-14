@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Jour\Repository;
 
+use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
@@ -113,6 +114,18 @@ final class JourRepository extends ServiceEntityRepository
             ->orderBy('jour.date_jour', self::DESC);
     }
 
+    public function getQbForListingAnimateur(Animateur $animateur): QueryBuilder
+    {
+        return $this->createQueryBuilder(self::JOUR)
+            ->leftJoin('jour.plaine_jour', self::PLAINE_JOUR, self::WITH)
+            ->addSelect(self::PLAINE_JOUR)
+            ->andWhere('jour.archived = 0')
+            ->andWhere('plaineJour IS NULL')
+            ->andWhere(':animateur MEMBER OF jour.animateurs')
+            ->setParameter('animateur', $animateur)
+            ->orderBy('jour.date_jour', self::DESC);
+    }
+
     /**
      * @return Jour[]
      */
@@ -149,6 +162,19 @@ final class JourRepository extends ServiceEntityRepository
             ->andWhere('jour.date_jour LIKE :date')
             ->setParameter(self::DATE, $dateTime->format(self::FORMAT).'%')
             ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Animateur $animateur
+     * @return array|Jour[]
+     */
+    public function findByAnimateur(Animateur $animateur): array
+    {
+        return $this->createQueryBuilder(self::JOUR)
+            ->andWhere(':animateur MEMBER OF jour.animateurs')
+            ->setParameter('animateur', $animateur)
+            ->andWhere('jour.archived = 0')
+            ->getQuery()->getResult();
     }
 
     public function remove(Jour $jour): void

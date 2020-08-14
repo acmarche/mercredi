@@ -164,6 +164,8 @@ final class PlainePresenceController extends AbstractController
     {
         $this->plainePresenceHandler->handleAddEnfant($plaine, $tuteur, $enfant);
 
+        $this->addFlash('success', "L'enfant a bien été ajouté");
+
         return $this->redirectToRoute(
             self::MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW,
             [
