@@ -33,6 +33,8 @@ trait OrganisationPropertyInitTrait
 
     public function setOrganisation(): void
     {
-        $this->organisation = $this->organisationRepository->getOrganisation();
+        if ($this->organisationRepository !== null) {
+            $this->organisation = $this->organisationRepository->getOrganisation();
+        }
     }
 }
