@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Entity\Sante\SanteReponse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method SanteReponse|null   find($id, $lockMode = null, $lockVersion = null)

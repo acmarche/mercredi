@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use Carbon\Carbon;
+
 trait AgeTrait
 {
     /**
@@ -13,7 +15,7 @@ trait AgeTrait
     {
         $birthday = $this->birthday;
 
-        if (! $birthday) {
+        if (!$birthday) {
             return '';
         }
 
@@ -30,5 +32,14 @@ trait AgeTrait
         }
 
         return $date->format('%y');
+    }
+
+    /**
+     * alternative
+     */
+    public function getAge2(): int
+    {
+        $daysSinceEpoch = Carbon::createFromDate(1975, 5, 21)->diffInDays();
+        $howOldAmI = Carbon::createFromDate(1975, 5, 21)->age;
     }
 }

@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Facture\Repository;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method FacturePresence|null find($id, $lockMode = null, $lockVersion = null)

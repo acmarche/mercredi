@@ -63,18 +63,18 @@ final class CreateUserCommand extends Command
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $symfonyStyle->error('Adresse email non valide');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         if (strlen($name) < 1) {
             $symfonyStyle->error('Name minium 1');
 
-            return 1;
+            return Command::FAILURE;
         }
         if (null !== $this->userRepository->findOneBy([self::EMAIL => $email])) {
             $symfonyStyle->error('Un utilisateur existe déjà avec cette adresse email');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $user = new User();
@@ -88,6 +88,6 @@ final class CreateUserCommand extends Command
 
         $symfonyStyle->success('User crée.');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

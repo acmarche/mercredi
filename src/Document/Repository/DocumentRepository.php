@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Document\Repository;
 
 use AcMarche\Mercredi\Entity\Document;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 
 /**

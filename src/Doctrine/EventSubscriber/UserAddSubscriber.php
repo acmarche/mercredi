@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Doctrine\EventSubscriber;
 
 use AcMarche\Mercredi\Utils\PropertyUtil;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Exception;
 use Symfony\Component\Security\Core\Security;

@@ -60,6 +60,6 @@ final class LoadfixturesCommand extends Command
 
         $this->fixtureLoader->load();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -11,13 +11,9 @@ Feature: Gestion des messages
     And I press "Rechercher"
 
   Scenario: Message par jour
-    Then I follow "Un animateur"
-    And I fill in "animateur[nom]" with "Marchal"
     Then I follow "new_message_from_jour"
     Then the response status code should be 200
 
   Scenario: Message par groupe
-    Then I follow "Un animateur"
-    And I fill in "animateur[nom]" with "Marchal"
     Then I follow "new_message_from_groupe_Moyens"
     Then the response status code should be 200

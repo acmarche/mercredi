@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Sante\Repository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method SanteFiche|null   find($id, $lockMode = null, $lockVersion = null)

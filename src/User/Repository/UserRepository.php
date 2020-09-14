@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\User\Repository;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use function get_class;
