@@ -26,6 +26,12 @@ class Message implements TimestampableInterface
 
     /**
      * @var string|null
+     * @Assert\NotBlank()
+     */
+    private $to;
+
+    /**
+     * @var string|null
      *
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
@@ -60,6 +66,16 @@ class Message implements TimestampableInterface
     public function setFrom(?string $from): void
     {
         $this->from = $from;
+    }
+
+    public function getTo(): ?string
+    {
+        return $this->to;
+    }
+
+    public function setTo(?string $to): void
+    {
+        $this->to = $to;
     }
 
     public function getSujet(): ?string
