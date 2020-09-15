@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait RoleTrait
 {
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="array")
      */
     private $roles = [];
 
