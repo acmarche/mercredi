@@ -2,9 +2,11 @@
 
 namespace AcMarche\Mercredi\Controller\Ecole;
 
+use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Ecole;
+use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,11 +59,15 @@ final class EcoleController extends AbstractController
     public function show(Ecole $ecole): Response
     {
         $enfants = $this->enfantRepository->findByEcoles([$ecole]);
+        $today = Carbon::today();
+
         return $this->render(
             '@AcMarcheMercrediEcole/ecole/show.html.twig',
             [
                 'ecole' => $ecole,
                 'enfants' => $enfants,
+                'today' => $today,
+                'heures' => AccueilInterface::HEURES,
             ]
         );
     }

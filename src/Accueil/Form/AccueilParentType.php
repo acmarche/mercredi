@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Form;
 
-use AcMarche\Mercredi\Accueil\Service\AccueilService;
+use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Component\Form\AbstractType;
@@ -28,7 +28,7 @@ final class AccueilParentType extends AbstractType
                 ChoiceType::class,
                 [
                     'label' => 'Quand',
-                    'choices' => AccueilService::getMatinSoir(),
+                    'choices' => AccueilInterface::HEURES,
                 ]
             )
             ->add(

@@ -1,0 +1,88 @@
+{% extends '@AcMarcheMercrediEcole/layout.html.twig' %}
+
+{% block container_class %}container-fluid{% endblock %}
+
+{% block body %}
+
+    <a href="{{ path('mercredi_ecole_ecole_show',{'id':ecole.id}) }}" class="mt-4">
+        <i class="fas fa-long-arrow-alt-left"></i> Retour à l'école
+    </a>
+    <br/>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Accueils <strong>{{ heure }}</strong> Semaine {{ date.week }} ({{ ecole }})</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    {{ calendar|raw }}
+                </div>
+                <div class="col-8">
+                    <div class="alert alert-info">
+                        Choisissez sur quelle semaine vous souhaitez travailler<br/>
+                        Indiquez par un chiffre le nombre de demi-heure que l'élève est resté
+                    </div>
+                </div>
+            </div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Sauvegarder
+            </button>
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Nom</th>
+                    <th>Année scolaire</th>
+                    <th>Garde</th>
+                    {% for day in week.days %}
+                        {% if day|date('N') != 7 and day|date('N') != 6 %}
+                            <td class="text-center">
+                                {{ day|date('j') }}<br/>
+                                {{ day|date('D') }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% for enfant in enfants %}
+                    <tr>
+                        <td>
+                            {{ enfant }}
+                        </td>
+                        <td>{{ enfant.anneeScolaire }}</td>
+                        <td>
+                            {% if enfant.relations|length > 1 %}
+                                <label for="tuteurs[{{ enfant.id }}][]">
+                                    <select name="tuteurs[{{ enfant.id }}][]" class="custom-select">
+                                        <option value="0">Sélectionnez sous quelle garde</option>
+                                        {% for relation in enfant.relations %}
+                                            <option value="">{{ relation.tuteur }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            {% else %}
+
+                            {% endif %}
+                        </td>
+                        {% for day in week.days %}
+                            {% if day|date('N') != 7 and day|date('N') != 6 %}
+                                <td>
+                                    <label for="accueilsaccueils[{{ enfant.id }}][{{ day|date('d') }}][]">
+                                        <input type="number" name="accueils[{{ enfant.id }}][{{ day|date('d') }}][]"
+                                               class="form-control" style="width: 60px;">
+                                    </label>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            {{ form_end(form) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Form;
 
-use AcMarche\Mercredi\Accueil\Service\AccueilService;
+use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Component\Form\AbstractType;
@@ -15,11 +15,6 @@ use Symfony\Component\Validator\Constraints\GreaterThan;
 
 final class AccueilType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -27,16 +22,16 @@ final class AccueilType extends AbstractType
                 'date_jour',
                 DateWidgetType::class,
                 [
-                    self::LABEL => 'Date',
+                    'label' => 'Date',
                 ]
             )
             ->add(
                 'heure',
                 ChoiceType::class,
                 [
-                    self::LABEL => 'Quand',
+                    'label' => 'Quand',
                     'placeholder' => 'Matin ou soir',
-                    'choices' => AccueilService::getMatinSoir(),
+                    'choices' => AccueilInterface::HEURES,
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
@@ -46,7 +41,7 @@ final class AccueilType extends AbstractType
                 'duree',
                 IntegerType::class,
                 [
-                    self::LABEL => 'Temps resté',
+                    'label' => 'Temps resté',
                     'help' => 'Nombre de demi heure que l\'enfant est resté',
                     'constraints' => [
                         new GreaterThan(

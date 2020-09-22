@@ -50,7 +50,7 @@
 </nav>
 <!-- Begin page content -->
 <main role="main" class="flex-shrink-0">
-    <div class="container pt-3">
+    <div class="{% block container_class %}container{% endblock%} pt-3">
 
         {% include '@AcMarcheMercredi/_flash_messages.html.twig' %}
 

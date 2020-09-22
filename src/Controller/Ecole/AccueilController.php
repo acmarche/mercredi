@@ -3,16 +3,21 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
+use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
+use AcMarche\Mercredi\Accueil\Form\InscriptionsType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,19 +55,31 @@ final class AccueilController extends AbstractController
      * @var FactureAccueilRepository
      */
     private $factureAccueilRepository;
+    /**
+     * @var EnfantRepository
+     */
+    private $enfantRepository;
+    /**
+     * @var DateUtils
+     */
+    private $dateUtils;
 
     public function __construct(
         AccueilRepository $accueilRepository,
         AccueilHandler $accueilHandler,
         RelationRepository $relationRepository,
         AccueilCalculatorInterface $accueilCalculator,
-        FactureAccueilRepository $factureAccueilRepository
+        FactureAccueilRepository $factureAccueilRepository,
+        EnfantRepository $enfantRepository,
+        DateUtils $dateUtils
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
         $this->relationRepository = $relationRepository;
         $this->accueilCalculator = $accueilCalculator;
         $this->factureAccueilRepository = $factureAccueilRepository;
+        $this->enfantRepository = $enfantRepository;
+        $this->dateUtils = $dateUtils;
     }
 
     /**
@@ -136,6 +153,70 @@ final class AccueilController extends AbstractController
             [
                 'accueil' => $accueil,
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}", name="mercredi_ecole_accueil_inscriptions", methods={"GET","POST"})
+     * @param Request $request
+     * @param Ecole $ecole
+     * @param string $heure
+     * @return Response
+     */
+    public function inscriptions(
+        Request $request,
+        Ecole $ecole,
+        int $year,
+        int $month,
+        string $heure,
+        int $week = 0
+    ): Response {
+
+        if ($week) {
+            $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
+        } else {
+            $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);
+        }
+
+        $data = ['heure' => $heure];
+        $enfants = $this->enfantRepository->findByEcoles([$ecole]);
+
+        $form = $this->createForm(InscriptionsType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $accueils = $request->request->get('accueils');
+
+            foreach ($accueils as $idEnfant => $days) {
+                foreach ($days as $numDays => $day) {
+                    $value = $day[0];
+                    if ($value) {
+                        $enfant = $this->enfantRepository->find((int)$idEnfant);
+                        dump((int)$numDays);
+                        dump((int)$value);
+                        $accueil = new Accueil($tuteur, $enfant);
+
+                        $accueil->setDateJour($date);
+                        $result = $this->accueilHandler->handleNew($enfant, $accueil);
+                    }
+                }
+            }
+        }
+
+        $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);
+        $calendar = $this->dateUtils->renderMonth($ecole, $heure, $week, $date);
+
+        return $this->render(
+            '@AcMarcheMercrediEcole/accueil/inscriptions.html.twig',
+            [
+                'ecole' => $ecole,
+                'enfants' => $enfants,
+                'week' => $weekPeriod,
+                'date' => $date,
+                'heure' => $heure,
+                'form' => $form->createView(),
+                'calendar' => $calendar,
             ]
         );
     }
