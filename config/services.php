@@ -20,6 +20,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set('mercredi.accueil_prix', '%env(MERCREDI_ACCUEIL_PRIX)%');
 
+    /**
+     * Pour envoie de mail en mode console
+     */
+    $parameters->set('router.request_context.scheme', '%env(MERCREDI_HTTP_SCHEME)%');
+    $parameters->set('router.request_context.host', '%env(MERCREDI_HTTP_HOST)%');
+
     $parameters->set('mercredi.presence_deadline_days', '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%');
 
     $parameters->set('mercredi.pedagogique_deadline_days', '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%');

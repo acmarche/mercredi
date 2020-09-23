@@ -6,12 +6,14 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final class UserMailer
 {
     use InitMailerTrait;
+    use OrganisationPropertyInitTrait;
 
     /**
      * @throws TransportExceptionInterface

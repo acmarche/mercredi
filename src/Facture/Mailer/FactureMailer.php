@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Mailer;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use function count;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -12,6 +13,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 final class FactureMailer
 {
     use InitMailerTrait;
+    use OrganisationPropertyInitTrait;
 
     /**
      * @var FactureFactory

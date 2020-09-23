@@ -1,0 +1,6 @@
+Les enfants suivants n'ont pas de parents attribués à leur fiche
+
+{% for enfant in enfants %}
+    {{ enfant }}
+    {{ absolute_url(path('mercredi_admin_enfant_show', {'id': enfant.id})) }}
+{% endfor %}

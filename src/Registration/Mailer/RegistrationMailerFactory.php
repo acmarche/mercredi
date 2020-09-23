@@ -4,12 +4,14 @@ namespace AcMarche\Mercredi\Registration\Mailer;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 
 final class RegistrationMailerFactory
 {
     use InitMailerTrait;
+    use OrganisationPropertyInitTrait;
 
     public function generateMessagRegisgerSuccess(User $user): TemplatedEmail
     {

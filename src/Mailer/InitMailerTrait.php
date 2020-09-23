@@ -8,8 +8,6 @@ use Symfony\Component\Mime\Email;
 
 trait InitMailerTrait
 {
-    use OrganisationPropertyInitTrait;
-
     /**
      * @var MailerInterface
      */
@@ -18,9 +16,8 @@ trait InitMailerTrait
     /**
      * @required
      */
-    public function setMailer(
-        MailerInterface $mailer
-    ): void {
+    public function setMailer(MailerInterface $mailer): void
+    {
         $this->mailer = $mailer;
     }
 

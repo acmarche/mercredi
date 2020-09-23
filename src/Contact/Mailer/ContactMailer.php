@@ -3,11 +3,13 @@
 namespace AcMarche\Mercredi\Contact\Mailer;
 
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 final class ContactMailer
 {
     use InitMailerTrait;
+    use OrganisationPropertyInitTrait;
 
     public function __invoke(): void
     {

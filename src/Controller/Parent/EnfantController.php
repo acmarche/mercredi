@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Notification\Mailer\NotifcationMailer;
+use AcMarche\Mercredi\Notification\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
@@ -67,7 +67,7 @@ final class EnfantController extends AbstractController
      */
     private $enfantHandler;
     /**
-     * @var NotifcationMailer
+     * @var NotificationMailer
      */
     private $notifcationMailer;
 
@@ -80,7 +80,7 @@ final class EnfantController extends AbstractController
         PlainePresenceRepository $plainePresenceRepository,
         AccueilRepository $accueilRepository,
         EnfantHandler $enfantHandler,
-        NotifcationMailer $notifcationMailer
+        NotificationMailer $notifcationMailer
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->relationUtils = $relationUtils;
