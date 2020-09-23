@@ -1,0 +1,43 @@
+<tr>
+    <td>
+        {{ enfant }}
+    </td>
+    <td>{{ enfant.anneeScolaire }}</td>
+    <td>
+        {% if enfant.relations|length > 1 %}
+            <label for="tuteurs[{{ enfant.id }}][]">
+                <select name="tuteurs[{{ enfant.id }}][]" class="custom-select">
+                    <option value="0">Sélectionnez sous quelle garde</option>
+                    {% for relation in enfant.relations %}
+                        <option value="">{{ relation.tuteur }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        {% else %}
+            {{ enfant.relations[0].tuteur }}
+            <input type="hidden" name="tuteurs[{{ enfant.id }}][]"
+                   value="{{ enfant.relations[0].tuteur.id }}">
+        {% endif %}
+    </td>
+    {% for day in week.days %}
+        {% if day|date('N') != 7 and day|date('N') != 6 %}
+            {% set format =  day|date('Y-m-d') %}
+            {% if data[enfant.id][format] is defined %}
+                {% set value = data[enfant.id][format] %}
+            {% else %}
+                {% set value = 0 %}
+            {% endif %}
+            <td>
+                <label for="accueilsaccueils[{{ enfant.id }}][]">
+                    <input type="number" min="0" max="6"
+                           name="accueils[{{ enfant.id }}][{{ format }}]"
+                           value="{{ value }}"
+                           class="form-control" style="width: 70px;">
+                </label>
+            </td>
+        {% endif %}
+    {% endfor %}
+</tr>
+
+
+

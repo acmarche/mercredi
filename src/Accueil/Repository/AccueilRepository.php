@@ -39,7 +39,7 @@ final class AccueilRepository extends ServiceEntityRepository
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour = :date')
-            ->setParameter('date', $accueil->getDateJour())
+            ->setParameter('date', $accueil->getDateJour()->format('Y-m-d'))
             ->andWhere('accueil.heure = :heure')
             ->setParameter('heure', $accueil->getHeure())
             ->getQuery()->getOneOrNullResult();
@@ -53,6 +53,19 @@ final class AccueilRepository extends ServiceEntityRepository
         return $this->createQueryBuilder(self::ACCUEIL)
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Accueil[]
+     */
+    public function findByEnfantAndHeure(Enfant $enfant, string $heure): array
+    {
+        return $this->createQueryBuilder(self::ACCUEIL)
+            ->andWhere('accueil.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->andWhere('accueil.heure = :heure')
+            ->setParameter('heure', $heure)
             ->getQuery()->getResult();
     }
 

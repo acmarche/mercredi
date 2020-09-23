@@ -161,7 +161,10 @@ final class AccueilController extends AbstractController
      * @Route("/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}", name="mercredi_ecole_accueil_inscriptions", methods={"GET","POST"})
      * @param Request $request
      * @param Ecole $ecole
+     * @param int $year
+     * @param int $month
      * @param string $heure
+     * @param int $week
      * @return Response
      */
     public function inscriptions(
@@ -172,36 +175,31 @@ final class AccueilController extends AbstractController
         string $heure,
         int $week = 0
     ): Response {
-
         if ($week) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
         } else {
             $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);
         }
 
-        $data = ['heure' => $heure];
-        $enfants = $this->enfantRepository->findByEcoles([$ecole]);
+        $data = [];
+        $enfants = $this->enfantRepository->findByEcolesForInscription($ecole);
+        foreach ($enfants as $enfant) {
+            $accueils = $this->accueilRepository->findByEnfantAndHeure($enfant, $heure);
+            $rows = [];
+            foreach ($accueils as $accueil) {
+                $rows[$accueil->getDateJour()->format('Y-m-d')] = $accueil->getDuree();
+                $data[$enfant->getId()] = $rows;
+            }
+        }
 
         $form = $this->createForm(InscriptionsType::class, $data);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $accueils = $request->request->get('accueils');
+            $tuteurs = $request->request->get('tuteurs');
 
-            foreach ($accueils as $idEnfant => $days) {
-                foreach ($days as $numDays => $day) {
-                    $value = $day[0];
-                    if ($value) {
-                        $enfant = $this->enfantRepository->find((int)$idEnfant);
-                        dump((int)$numDays);
-                        dump((int)$value);
-                        $accueil = new Accueil($tuteur, $enfant);
-
-                        $accueil->setDateJour($date);
-                        $result = $this->accueilHandler->handleNew($enfant, $accueil);
-                    }
-                }
-            }
+            $this->accueilHandler->handleCollections($accueils, $tuteurs, $heure);
         }
 
         $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);
@@ -217,6 +215,7 @@ final class AccueilController extends AbstractController
                 'heure' => $heure,
                 'form' => $form->createView(),
                 'calendar' => $calendar,
+                'data'=>$data
             ]
         );
     }

@@ -141,8 +141,9 @@ final class DateUtils
     {
         $date = Carbon::create($year);
         $date->setISODate($year, $week);
+        $date->locale('fr');
 
-        return CarbonImmutable::create($date->year, $date->month, 01)->locale('fr');
+        return $date->toImmutable();
     }
 
     public function createDateImmutableFromYearMonth(int $year, int $month): CarbonImmutable
