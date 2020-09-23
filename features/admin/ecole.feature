@@ -41,5 +41,6 @@ Feature: Gestion des écoles
 
   Scenario: Enfants de l' école
     Then I follow "Aye"
+    Then I should see "Nelson"
     Then I should see "Peeter"
     Then I should see "Merlin"

@@ -31,7 +31,7 @@ final class AccueilType extends AbstractType
                 [
                     'label' => 'Quand',
                     'placeholder' => 'Matin ou soir',
-                    'choices' => AccueilInterface::HEURES,
+                    'choices' => array_flip(AccueilInterface::HEURES),
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,

@@ -184,7 +184,7 @@ final class AccueilController extends AbstractController
         $enfants = $this->enfantRepository->findByEcolesForInscription($ecole);
         foreach ($enfants as $enfant) {
             $accueils = $this->accueilRepository->findByEnfantAndHeure($enfant, $heure);
-            $rows = ['accueils'=>[], 'tuteurs'=>[]];
+            $rows = ['accueils' => [], 'tuteurs' => []];
             foreach ($accueils as $accueil) {
                 $rows['accueils'][$accueil->getDateJour()->format('Y-m-d')] = $accueil->getDuree();
                 $rows['tuteur'] = $accueil->getTuteur()->getId();
@@ -200,6 +200,8 @@ final class AccueilController extends AbstractController
             $tuteurs = $request->request->get('tuteurs');
 
             $this->accueilHandler->handleCollections($accueils, $tuteurs, $heure);
+
+            return $this->redirectToRoute('mercredi_ecole_ecole_show', ['id' => $ecole->getId()]);
         }
 
         $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);

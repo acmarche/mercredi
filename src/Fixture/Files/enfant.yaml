@@ -56,7 +56,7 @@ AcMarche\Mercredi\Entity\Enfant:
     userAdd: administrator
   enfant_max:
     nom: Divorce family
-    prenom: Bart
+    prenom: Nelson
     birthday: '<dateTimeBetween("-10 years", "-10 months")>'
     annee_scolaire: '@annee_2M'
     sexe: Masculin

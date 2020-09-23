@@ -76,8 +76,7 @@ final class EnfantRepository extends ServiceEntityRepository
             ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
             ->addSelect( 'relations', 'annee_scolaire')
             ->andWhere('enfant.ecole IN (:ecoles)')
-            ->setParameter('ecoles', $ecoles)
-            ->andWhere('relations IS NOT NULL');
+            ->setParameter('ecoles', $ecoles);
 
         return $this->addOrderByNameQueryBuilder($queryBuilder)
             ->getQuery()->getResult();
