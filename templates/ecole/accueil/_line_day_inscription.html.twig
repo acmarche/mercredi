@@ -5,11 +5,16 @@
     <td>{{ enfant.anneeScolaire }}</td>
     <td>
         {% if enfant.relations|length > 1 %}
-            <label for="tuteurs[{{ enfant.id }}][]">
-                <select name="tuteurs[{{ enfant.id }}][]" class="custom-select">
-                    <option value="0">Sélectionnez sous quelle garde</option>
+            {% set tuteurSelected = data[enfant.id]['tuteur'] %}
+            <label for="tuteurs[{{ enfant.id }}][]" class="required">
+                <select name="tuteurs[{{ enfant.id }}][]" class="custom-select" required="required">
+                    <option value="0" {% if tuteurSelected ==0 %}selected="selected" {% endif %}>
+                        Sous la garde de
+                    </option>
                     {% for relation in enfant.relations %}
-                        <option value="">{{ relation.tuteur }}</option>
+                        <option value="{{ relation.tuteur.id }}"{% if tuteurSelected == relation.tuteur.id %} selected="selected" {% endif %}>
+                            {{ relation.tuteur }}
+                        </option>
                     {% endfor %}
                 </select>
             </label>
@@ -22,8 +27,8 @@
     {% for day in week.days %}
         {% if day|date('N') != 7 and day|date('N') != 6 %}
             {% set format =  day|date('Y-m-d') %}
-            {% if data[enfant.id][format] is defined %}
-                {% set value = data[enfant.id][format] %}
+            {% if data[enfant.id]['accueils'][format] is defined %}
+                {% set value = data[enfant.id]['accueils'][format] %}
             {% else %}
                 {% set value = 0 %}
             {% endif %}

@@ -19,3 +19,11 @@ AcMarche\Mercredi\Entity\Relation:
     __construct: ['@tuteur_Simpson','@enfant_bart']
     type: 'Père'
     ordre: '0'
+  relation_divorce_1:
+    __construct: ['@tuteur_Divorce_1','@enfant_max']
+    type: 'Père'
+    ordre: '0'
+  relation_divorce_2:
+    __construct: ['@tuteur_Divorce_2','@enfant_max']
+    type: 'Mère'
+    ordre: '0'

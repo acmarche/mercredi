@@ -65,13 +65,13 @@ final class AccueilHandler
                 if (!$enfant = $this->enfantRepository->find((int)$enfantId)) {
                     $this->flashBag->add('danger', 'Référence pour l\enfant '.$enfantId.' non trouvé');
 
-                    return;
+                    continue;
                 }
                 $tuteurId = (int)$tuteurs[$enfantId][0];
                 if (!$tuteur = $this->tuteurRepository->find($tuteurId)) {
-                    $this->flashBag->add('danger', 'Référence pour le tuteur '.$tuteurId.' non trouvé');
+                    $this->flashBag->add('danger', '"Spécifié sous quelle garde pour '.$enfant);
 
-                    return;
+                    continue;
                 }
                 $accueil = new Accueil($tuteur, $enfant);
                 $accueil->setDuree($duree);
@@ -83,11 +83,10 @@ final class AccueilHandler
                 } catch (\Exception $exception) {
                     $this->flashBag->add(
                         'danger',
-                        'Impossible de convertir la date '.$dateString.' pour '.$enfant->getNom(
-                        ).' '.$enfant->getPrenom().' '.$exception->getMessage()
+                        'Impossible de convertir la date '.$dateString.' pour '.$enfant.': '.$exception->getMessage()
                     );
 
-                    return;
+                    continue;
                 }
             }
         }

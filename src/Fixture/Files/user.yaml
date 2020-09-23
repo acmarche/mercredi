@@ -33,7 +33,7 @@ AcMarche\Mercredi\Entity\Security\User:
     prenom: Joseph
     password: homer
     roles: ["ROLE_MERCREDI_ECOLE"]
-    ecoles: ["@ecole_Champlon"]
+    ecoles: ["@ecole_Aye"]
   user_animateur:
     email: kevin@marche.be
     username: kevin@marche.be

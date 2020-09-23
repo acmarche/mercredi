@@ -54,3 +54,13 @@ AcMarche\Mercredi\Entity\Enfant:
     ecole: '@ecole_Champlon'
     photo_autorisation: true
     userAdd: administrator
+  enfant_max:
+    nom: Divorce family
+    prenom: Bart
+    birthday: '<dateTimeBetween("-10 years", "-10 months")>'
+    annee_scolaire: '@annee_2M'
+    sexe: Masculin
+    ordre: 2
+    ecole: '@ecole_Aye'
+    photo_autorisation: true
+    userAdd: administrator

@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
-use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\InscriptionsType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
@@ -185,9 +184,10 @@ final class AccueilController extends AbstractController
         $enfants = $this->enfantRepository->findByEcolesForInscription($ecole);
         foreach ($enfants as $enfant) {
             $accueils = $this->accueilRepository->findByEnfantAndHeure($enfant, $heure);
-            $rows = [];
+            $rows = ['accueils'=>[], 'tuteurs'=>[]];
             foreach ($accueils as $accueil) {
-                $rows[$accueil->getDateJour()->format('Y-m-d')] = $accueil->getDuree();
+                $rows['accueils'][$accueil->getDateJour()->format('Y-m-d')] = $accueil->getDuree();
+                $rows['tuteur'] = $accueil->getTuteur()->getId();
                 $data[$enfant->getId()] = $rows;
             }
         }
@@ -215,7 +215,7 @@ final class AccueilController extends AbstractController
                 'heure' => $heure,
                 'form' => $form->createView(),
                 'calendar' => $calendar,
-                'data'=>$data
+                'data' => $data,
             ]
         );
     }
