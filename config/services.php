@@ -3,6 +3,7 @@
 use AcMarche\Mercredi\Jour\Tarification\Form\TarificationFormGeneratorInterface;
 use AcMarche\Mercredi\Jour\Tarification\Form\TarificationHottonFormGenerator;
 use AcMarche\Mercredi\Namer\DirectoryNamer;
+use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineHottonCalculator;
 use AcMarche\Mercredi\Presence\Calculator\PrenceHottonCalculator;
@@ -11,24 +12,22 @@ use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set('mercredi.email_sender', '%env(MERCREDI_FROM)%');
-
-    $parameters->set('mercredi.accueil_prix', '%env(MERCREDI_ACCUEIL_PRIX)%');
+    $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_FROM)%');
+    $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
+    $parameters->set(Option::PRESENCE_DEADLINE_DAYS, '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%');
+    $parameters->set(Option::PEDAGOGIQUE_DEADLINE_DAYS, '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%');
 
     /**
      * Pour envoie de mail en mode console
      */
     $parameters->set('router.request_context.scheme', '%env(MERCREDI_HTTP_SCHEME)%');
     $parameters->set('router.request_context.host', '%env(MERCREDI_HTTP_HOST)%');
-
-    $parameters->set('mercredi.presence_deadline_days', '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%');
-
-    $parameters->set('mercredi.pedagogique_deadline_days', '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%');
 
     $services = $containerConfigurator->services();
 
@@ -57,7 +56,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(Register::class)
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
-
     /*  $services->set(PresenceConstraints::class)
           ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));*/
 };

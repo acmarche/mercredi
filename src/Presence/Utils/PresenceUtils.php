@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -42,7 +43,7 @@ final class PresenceUtils
     public function getDeadLineDatePresence(): \DateTimeInterface
     {
         $today = Carbon::today();
-        $today->addDays($this->parameterBag->get('mercredi.presence_deadline_days'));
+        $today->addDays($this->parameterBag->get(Option::PRESENCE_DEADLINE_DAYS));
 
         return $today;
     }
@@ -50,7 +51,7 @@ final class PresenceUtils
     public function getDeadLineDatePedagogique(): \DateTimeInterface
     {
         $today = Carbon::today();
-        $today->addDays($this->parameterBag->get('mercredi.pedagogique_deadline_days'));
+        $today->addDays($this->parameterBag->get(Option::PEDAGOGIQUE_DEADLINE_DAYS));
 
         return $today;
     }

@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Accueil\Calculator;
 
 use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Parameter\Option;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class AccueilCalculator implements AccueilCalculatorInterface
@@ -19,7 +20,7 @@ final class AccueilCalculator implements AccueilCalculatorInterface
 
     public function calculate(Accueil $accueil): float
     {
-        $prix = $this->parameterBag->get('mercredi.accueil_prix') ?? 0;
+        $prix = $this->parameterBag->get(Option::ACCUEIL_PRIX) ?? 0;
 
         return $accueil->getDuree() * $prix;
     }
