@@ -4,6 +4,7 @@ Feature: Gestion des tuteurs
   J' édite le tuteur
   Je supprime le tuteur sans enfants
   Je supprime le tuteur avec enfants
+  Je supprime le tuteur avec facture
 
   Background:
     Given I am logged in as an admin
@@ -52,3 +53,10 @@ Feature: Gestion des tuteurs
     Given I am on "/admin/checkup/orphelin/"
     Then I should see "Les enfants sans parents"
     Then I should see "Merlin"
+
+  Scenario: Supprimer un tuteur avec facture
+    Then I fill in "search_tuteur[nom]" with "Simpson"
+    And I press "Rechercher"
+    Then I follow "Simpson"
+    Then I press "Supprimer le tuteur"
+    Then I should see "Le tuteur a bien été supprimé"
