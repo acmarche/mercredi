@@ -92,8 +92,7 @@ final class NoteController extends AbstractController
      */
     public function newForEnfant(Request $request, Enfant $enfant): Response
     {
-        $note = new Note();
-        $note->setEnfant($enfant);
+        $note = new Note($enfant);
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
 
@@ -103,7 +102,7 @@ final class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute(self::MERCREDI_ADMIN_NOTE_SHOW, [self::ID => $note->getId()]);
         }
 
         return $this->render(

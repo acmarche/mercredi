@@ -1,6 +1,6 @@
 {% if enfant.notes | length  > 0 %}
     <br/>
-    <a href="{{ path('mercredi_admin_note_enfant_show', {'id': enfant.id}) }}">
+    <a href="{{ path('mercredi_admin_note_enfant_show', {'id': enfant.id}) }}" id="enfant_notes">
         <i class="far fa-clipboard" title="Notes de l'enfant"></i>
         <span class='badge'>{{ enfant.notes | length }}</span>
     </a>

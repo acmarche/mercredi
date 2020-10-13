@@ -29,6 +29,11 @@ class Note implements TimestampableInterface
      */
     private $enfant;
 
+    public function __construct(Enfant $enfant)
+    {
+        $this->enfant = $enfant;
+    }
+
     public function __toString()
     {
         return $this->getRemarque();
