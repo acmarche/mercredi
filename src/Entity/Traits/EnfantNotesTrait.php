@@ -12,7 +12,7 @@ trait EnfantNotesTrait
 {
 
     /**
-     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="enfant")
+     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="enfant", cascade={"remove"})
      */
     private $notes;
 

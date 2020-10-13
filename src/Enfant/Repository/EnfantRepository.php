@@ -83,6 +83,25 @@ final class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array $ecoles
+     * @return Enfant[]
+     */
+    public function findByEcolesForEcole(iterable $ecoles): array
+    {
+        $queryBuilder = $this->addNotArchivedQueryBuilder()
+            ->leftJoin('enfant.relations', 'relations', self::WITH)
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
+            ->addSelect( 'relations', 'annee_scolaire')
+            ->andWhere('enfant.ecole IN (:ecoles)')
+            ->setParameter('ecoles', $ecoles);
+
+        $queryBuilder->andWhere('enfant.accueil_ecole = 1');
+
+        return $this->addOrderByNameQueryBuilder($queryBuilder)
+            ->getQuery()->getResult();
+    }
+
+    /**
      * J'exclus les enfants sans tuteur !
      * @param Ecole $ecole
      * @return Enfant[]
@@ -163,6 +182,8 @@ final class EnfantRepository extends ServiceEntityRepository
 
         $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
             ->setParameter('ecoles', $ecoles);
+
+        $queryBuilder->andWhere('enfant.accueil_ecole = 1');
 
         $this->addOrderByNameQueryBuilder($queryBuilder);
 

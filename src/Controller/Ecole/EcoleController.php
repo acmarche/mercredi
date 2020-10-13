@@ -58,7 +58,7 @@ final class EcoleController extends AbstractController
      */
     public function show(Ecole $ecole): Response
     {
-        $enfants = $this->enfantRepository->findByEcoles([$ecole]);
+        $enfants = $this->enfantRepository->findByEcolesForEcole([$ecole]);
         $today = Carbon::today();
 
         return $this->render(

@@ -10,6 +10,8 @@ final class EnfantEditForParentType extends AbstractType
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
+            ->remove('archived')
+            ->remove('accueilEcole')
             ->remove('ordre')
             ->remove('groupe_scolaire');
     }

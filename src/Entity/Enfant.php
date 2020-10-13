@@ -14,6 +14,7 @@ use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantNotesTrait;
 use AcMarche\Mercredi\Entity\Traits\GroupeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Entity\Traits\IsAccueilEcoleTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoAutorisationTrait;
@@ -66,6 +67,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use PresencesTrait;
     use AccueilsTrait;
     use EnfantNotesTrait;
+    use IsAccueilEcoleTrait;
 
     /**
      * @var bool

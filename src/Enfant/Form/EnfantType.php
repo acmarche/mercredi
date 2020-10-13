@@ -47,7 +47,7 @@ final class EnfantType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $isAdmin = ! $this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
+        $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
 
         $formBuilder
             ->add(
@@ -128,6 +128,27 @@ final class EnfantType extends AbstractType
                     self::REQUIRED => false,
                     self::LABEL => 'Autorisation de diffusion de ses photos',
                     'help' => 'Cochez si vous autorisez la diffusion des photos de l\'enfant',
+                    'label_attr' => ['class' => 'switch-custom'],
+                ]
+            )
+            ->add(
+                'archived',
+                CheckboxType::class,
+                [
+                    self::LABEL => 'Archiver',
+                    'help' => 'Ces données seront toujours visibles, mais il ne pourra plus être inscrit nul part',
+                    self::REQUIRED => false,
+                    'label_attr' => ['class' => 'switch-custom'],
+                ]
+            )
+            ->add(
+                'accueilEcole',
+                CheckboxType::class,
+                [
+                    self::LABEL => 'Accueils des écoles',
+                    self::REQUIRED => false,
+                    'help' => 'L\'enfant vient-il en accueil dans les écoles ?',
+                    'label_attr' => ['class' => 'switch-custom'],
                 ]
             )
             ->add(
