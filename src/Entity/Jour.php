@@ -65,6 +65,11 @@ class Jour implements TimestampableInterface
      */
     private $animateurs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Ecole")
+     */
+    private $ecoles;
+
     public function __construct(?\DateTime $date_jour = null)
     {
         $this->prix1 = 0;
@@ -74,6 +79,7 @@ class Jour implements TimestampableInterface
         $this->pedagogique = false;
         $this->presences = new ArrayCollection();
         $this->animateurs = new ArrayCollection();
+        $this->ecoles = new ArrayCollection();
         $this->date_jour = $date_jour;
     }
 
@@ -118,6 +124,32 @@ class Jour implements TimestampableInterface
             if ($presence->getJour() === $this) {
                 $presence->setJour(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ecole[]
+     */
+    public function getEcoles(): Collection
+    {
+        return $this->ecoles;
+    }
+
+    public function addEcole(Ecole $ecole): self
+    {
+        if (!$this->ecoles->contains($ecole)) {
+            $this->ecoles[] = $ecole;
+        }
+
+        return $this;
+    }
+
+    public function removeEcole(Ecole $ecole): self
+    {
+        if ($this->ecoles->contains($ecole)) {
+            $this->ecoles->removeElement($ecole);
         }
 
         return $this;

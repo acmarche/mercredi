@@ -13,6 +13,8 @@
             {% if jour.pedagogique %}
                 <div class="alert alert-info">
                     Journée pédagogique
+                    <br />
+                    {{ jour.ecoles | join(', ') }}
                 </div>
             {% endif %}
 

@@ -99,7 +99,7 @@ final class JourRepository extends ServiceEntityRepository
             ->leftJoin('jour.plaine_jour', self::PLAINE_JOUR, self::WITH)
             ->addSelect(self::PLAINE_JOUR)
             ->andWhere('jour.archived = 0')
-            ->orderBy('jour.date_jour', self::DESC)
+            ->orderBy('jour.date_jour', 'ASC')
             ->andWhere('plaineJour IS NULL')
             ->getQuery()->getResult();
     }

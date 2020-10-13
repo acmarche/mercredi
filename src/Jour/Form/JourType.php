@@ -2,9 +2,12 @@
 
 namespace AcMarche\Mercredi\Jour\Form;
 
+use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Form\Type\ArchivedType;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
@@ -39,14 +42,7 @@ final class JourType extends AbstractType
                 [
                     self::LABEL => 'Journée pédagoque',
                     self::REQUIRED => false,
-                ]
-            )
-            ->add(
-                'color',
-                ColorType::class,
-                [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Couleur',
+                    'label_attr' => ['class' => 'switch-custom'],
                 ]
             )
             ->add(
@@ -54,6 +50,20 @@ final class JourType extends AbstractType
                 ArchivedType::class,
                 [
                     'help' => 'En archivant la date ne sera plus proposée lors de l\'ajout d\'une présence',
+                ]
+            )
+            ->add(
+                'ecoles',
+                EntityType::class,
+                [
+                    'class' => Ecole::class,
+                    'query_builder' => function (EcoleRepository $ecoleRepository) {
+                        return $ecoleRepository->getQbForListing();
+                    },
+                    'help' => 'Pour les journées pédagogiques',
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => true,
                 ]
             )
             ->add(

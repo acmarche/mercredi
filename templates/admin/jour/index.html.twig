@@ -10,8 +10,9 @@
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>Date</th>
-            <th>Pédagogique</th>
+            <th>Date des mercredis récréatifs</th>
+            <th>Journée pédagogique</th>
+            <th>Archivé</th>
         </tr>
         </thead>
         <tbody>
@@ -23,7 +24,13 @@
                     </a>
                 </td>
                 <td>
-                    {{ jour.pedagogique ? '<i class="fas fa-check"></i>' }}
+                    {% if jour.pedagogique %}
+                        {{ jour.pedagogique ? '<i class="fas fa-check" title="Oui"></i>' }}
+                        {{ jour.ecoles | join(', ') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ jour.archived ? '<i class="fas fa-check" title="Oui"></i>' }}
                 </td>
             </tr>
         {% endfor %}
