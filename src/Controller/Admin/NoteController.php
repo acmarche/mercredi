@@ -175,10 +175,13 @@ final class NoteController extends AbstractController
     public function delete(Request $request, Note $note): Response
     {
         if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
+            $enfant = $note->getEnfant();
             $noteId = $note->getId();
             $this->noteRepository->remove($note);
             $this->noteRepository->flush();
             $this->dispatchMessage(new NoteDeleted($noteId));
+
+            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
         }
 
         return $this->redirectToRoute('mercredi_admin_note_index');
