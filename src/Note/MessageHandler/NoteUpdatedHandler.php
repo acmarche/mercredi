@@ -20,6 +20,6 @@ final class NoteUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(NoteUpdated $noteUpdated): void
     {
-        $this->flashBag->add('success', "L'école a bien été modifiée");
+        $this->flashBag->add('success', "La note a bien été modifiée");
     }
 }

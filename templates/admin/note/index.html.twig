@@ -9,7 +9,8 @@
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>Num</th>
+            <th>Numéro</th>
+            <th>Enfant</th>
             <th>Contenu</th>
         </tr>
         </thead>
@@ -18,7 +19,12 @@
             <tr>
                 <td>
                     <a href="{{ path('mercredi_admin_note_show', { 'id': note.id }) }}">
-                        {{ note.id }}
+                      Num {{ note.id }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('mercredi_admin_note_show', { 'id': note.enfant.id }) }}">
+                        {{ note.enfant }}
                     </a>
                 </td>
                 <td>{{ note.remarque | u.truncate(80) }}</td>

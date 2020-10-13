@@ -20,6 +20,6 @@ final class NoteCreatedHandler implements MessageHandlerInterface
 
     public function __invoke(NoteCreated $noteCreated): void
     {
-        $this->flashBag->add('success', "L'école a bien été ajoutée");
+        $this->flashBag->add('success', "La note a bien été ajoutée");
     }
 }

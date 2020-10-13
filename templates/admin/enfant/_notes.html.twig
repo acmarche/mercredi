@@ -1,7 +1,7 @@
-<a href="{{ path('note', {'slugname': enfant.slugname}) }}">
-    {% if enfant.notes | length  > 0 %}
+{% if enfant.notes | length  > 0 %}
+    <br/>
+    <a href="{{ path('mercredi_admin_note_enfant_show', {'id': enfant.id}) }}">
+        <i class="far fa-clipboard" title="Notes de l'enfant"></i>
         <span class='badge'>{{ enfant.notes | length }}</span>
-        <img src="{{ asset('images/note.png') }}" alt="postit"
-             title="Notes de l'enfant"/>
-    {% endif %}
-</a>
+    </a>
+{% endif %}

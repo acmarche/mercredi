@@ -2,11 +2,12 @@
    class="btn btn-primary"><i
             class="far fa-edit"></i> Modifier</a>
 
-<a href="{{ path('mercredi_admin_note_index') }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
-    Retour à la Liste</a>
+<a href="{{ path('mercredi_admin_enfant_show', {'id': enfant.id}) }}" class="btn btn-primary" role='button'><i
+            class="fas fa-list"></i>
+    Retour à l'enfant</a>
 
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
     <i class="fas fa-trash"></i> Supprimer
 </button>
 
-<br /><br />
+<br/><br/>

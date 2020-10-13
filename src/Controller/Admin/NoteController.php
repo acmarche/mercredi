@@ -61,7 +61,7 @@ final class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_note_new", methods={"GET","POST"})
+     * @Route("/new/", name="mercredi_admin_note_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -93,8 +93,7 @@ final class NoteController extends AbstractController
     public function newForEnfant(Request $request, Enfant $enfant): Response
     {
         $note = new Note();
-        //todo note enfant
-        $enfant->addNote($note);
+        $note->setEnfant($enfant);
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
 
@@ -104,13 +103,14 @@ final class NoteController extends AbstractController
 
             $this->dispatchMessage(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_NOTE_SHOW, [self::ID => $note->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/note/new.html.twig',
             [
                 self::NOTE => $note,
+                'enfant' => $enfant,
                 self::FORM => $form->createView(),
             ]
         );
@@ -125,6 +125,21 @@ final class NoteController extends AbstractController
             '@AcMarcheMercrediAdmin/note/show.html.twig',
             [
                 self::NOTE => $note,
+                'enfant' => $note->getEnfant(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/enfant/{id}", name="mercredi_admin_note_enfant_show", methods={"GET"})
+     */
+    public function enfant(Enfant $enfant): Response
+    {
+        return $this->render(
+            '@AcMarcheMercrediAdmin/note/index_by_enfant.html.twig',
+            [
+                'enfant' => $enfant,
+                'notes' => $enfant->getNotes(),
             ]
         );
     }

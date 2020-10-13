@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
+use AcMarche\Mercredi\Entity\Traits\EnfantNotesTrait;
 use AcMarche\Mercredi\Entity\Traits\GroupeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -24,6 +25,7 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -63,6 +65,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use AnneeScolaireTrait;
     use PresencesTrait;
     use AccueilsTrait;
+    use EnfantNotesTrait;
 
     /**
      * @var bool
@@ -119,6 +122,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         $this->accueils = new ArrayCollection();
         $this->presences = new ArrayCollection();
         $this->ficheSanteIsComplete = false;
+        $this->notes = new ArrayCollection();
     }
 
     public function __toString()
@@ -145,4 +149,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
             $this->getRelations()->toArray()
         );
     }
+
+
 }
