@@ -36,6 +36,14 @@ final class UserType extends AbstractType
             )
             ->add('email', EmailType::class)
             ->add(
+                'telephone',
+                TextType::class,
+                [
+                    'label' => 'Téléphone',
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'plainPassword',
                 PasswordType::class,
                 [

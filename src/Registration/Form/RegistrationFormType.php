@@ -33,6 +33,7 @@ final class RegistrationFormType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Téléphone',
+                    'required' => true,
                 ]
             )
             ->add(

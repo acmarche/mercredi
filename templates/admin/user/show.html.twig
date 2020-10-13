@@ -32,12 +32,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Rôles techniques</th>
-                    <td>
-                        {{ user.roles|join(', ') }}
-                    </td>
-                </tr>
-                <tr>
                     <th>Parent(s) associé(s)</th>
                     <td>
                         <table class="table table-hover">
@@ -49,7 +43,7 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-warning btn-sm mb-2" data-toggle="modal"
-                                                data-id="{{ tuteur.id }}" data-target="#dissocierModalParent">
+                                                data-id="{{ tuteur.id }}" data-target="#dissocierModalTuteur">
                                             <i class="fas fa-unlink"></i> Dissocier
                                         </button>
                                     </td>
@@ -105,6 +99,9 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="card-footer">
+            <span class="text-muted">{{ user.roles|join(', ') }}</span>
         </div>
     </div>
 
