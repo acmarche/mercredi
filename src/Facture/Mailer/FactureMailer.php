@@ -20,9 +20,8 @@ final class FactureMailer
      */
     private $factureFactory;
 
-    public function __construct(
-        FactureFactory $factureFactory
-    ) {
+    public function __construct(FactureFactory $factureFactory)
+    {
         $this->factureFactory = $factureFactory;
     }
 
@@ -37,6 +36,11 @@ final class FactureMailer
         return $data;
     }
 
+    /**
+     * @param Facture $facture
+     * @param array $data
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function sendFacture(Facture $facture, array $data): void
     {
         $templatedEmail = (new TemplatedEmail())

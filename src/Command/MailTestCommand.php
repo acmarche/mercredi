@@ -2,30 +2,20 @@
 
 namespace AcMarche\Mercredi\Command;
 
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\Message;
 
 class MailTestCommand extends Command
 {
-    protected static $defaultName = 'mercredi:test-mail';
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
+    use InitMailerTrait;
 
-    public function __construct(MailerInterface $mailer, string $name = null)
-    {
-        parent::__construct($name);
-        $this->mailer = $mailer;
-    }
+    protected static $defaultName = 'mercredi:test-mail';
 
     protected function configure()
     {
@@ -48,7 +38,7 @@ class MailTestCommand extends Command
         $message->text('Coucou, mail de test');
 
         try {
-            $this->mailer->send($message);
+            $this->sendMail($message);
             $io->success('Le mail a bien été envoyé.');
         } catch (TransportExceptionInterface $e) {
             $io->error('Erreur lors de l envoie: '.$e->getMessage());

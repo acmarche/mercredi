@@ -198,7 +198,7 @@ final class FactureController extends AbstractController
     /**
      * @Route("/{id}/send", name="mercredi_admin_facture_send", methods={"GET","POST"})
      */
-    public function send(Request $request, Facture $facture): Response
+    public function sendFacture(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
         $data = $this->factureMailer->init($facture);

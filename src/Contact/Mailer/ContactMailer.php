@@ -16,6 +16,12 @@ final class ContactMailer
         $this->organisation = $this->organisationRepository->getOrganisation();
     }
 
+    /**
+     * @param string $from
+     * @param string $nom
+     * @param string $body
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function sendContactForm(string $from, string $nom, string $body): void
     {
         $to = $this->organisationRepository->getOrganisation() ? $this->organisation->getEmail() : 'nomail@domain.be';

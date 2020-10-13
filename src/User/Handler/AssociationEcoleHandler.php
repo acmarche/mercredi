@@ -7,17 +7,12 @@ use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
-use AcMarche\Mercredi\User\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 use function count;
 
 final class AssociationEcoleHandler
 {
-    /**
-     * @var UserMailer
-     */
-    private $userMailer;
     /**
      * @var FlashBagInterface
      */
@@ -33,11 +28,9 @@ final class AssociationEcoleHandler
 
     public function __construct(
         EcoleRepository $ecoleRepository,
-        UserMailer $userMailer,
         UserFactory $userFactory,
         FlashBagInterface $flashBag
     ) {
-        $this->userMailer = $userMailer;
         $this->flashBag = $flashBag;
         $this->userFactory = $userFactory;
         $this->ecoleRepository = $ecoleRepository;
