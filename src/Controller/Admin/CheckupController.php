@@ -57,4 +57,19 @@ final class CheckupController extends AbstractController
             ]
         );
     }
+
+    /**
+     * @Route("/plantage", name="mercredi_admin_plantage")
+     */
+    public function plantage(): Response
+    {
+        $this->tutru->getAll();
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/default/index.html.twig',
+            [
+
+            ]
+        );
+    }
 }
