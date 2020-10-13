@@ -121,6 +121,6 @@ final class RelationController extends AbstractController
             $this->dispatchMessage(new RelationDeleted($relationId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
     }
 }

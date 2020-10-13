@@ -41,7 +41,7 @@
 
             <br/>
             {% include '@AcMarcheMercrediAdmin/tuteur/_enfants.html.twig' %}
-            {% include '@AcMarcheMercrediAdmin/relation/_delete_form.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/relation/_unlink_modal.html.twig' %}
 
         </div>
         <div class="card-footer text-muted mt-3">
@@ -77,19 +77,19 @@
                 minLength: 2
             };
 
-            var dataSetParents = {
+            var dataSetTuteurs = {
                 display: 'label',
                 limit: 10,
                 source: tuteurs,
                 templates: {
                     suggestion: function (data) {
-                        var value = data.nom + ' '+ data.prenom + ' ' + data.birthday;
+                        var value = data.nom + ' ' + data.prenom + ' ' + data.birthday;
                         return '<p>' + value + ' </p>';
                     }
                 }
             };
 
-            $('.typeahead').typeahead(options, dataSetParents);
+            $('.typeahead').typeahead(options, dataSetTuteurs);
             $('.typeahead').bind('typeahead:select', function (ev, suggestion) {
                 $('#enfantId').val(suggestion.id)
             });
@@ -103,7 +103,7 @@
     </script>
 
     <script type="text/javascript">
-        $(".unlinkparent").click(function () {
+        $(".unlinktuteur").click(function () {
             var relationId = $(this).attr("data-id");
             var relationToken = $(this).attr("data-token");
             $("#relationid").val(relationId);
