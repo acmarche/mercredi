@@ -2,7 +2,8 @@ Feature: Gestion des animateurs
   Je suis connecté
   J' ajoute le animateur
   J' édite le animateur
-  Je supprime le animateur
+  Je supprime l' animateur
+  Ses jours de travail animateur
 
   Background:
     Given I am logged in as an admin
@@ -32,6 +33,15 @@ Feature: Gestion des animateurs
     And I select "Masculin" from "animateur_sexe"
     And I press "Sauvegarder"
     Then I should see "0476 22 66 99"
+
+  Scenario: Ses jours de garde
+    Then I follow "Szyslak"
+    Then I follow "Ses jours de travails"
+    And I check "Dimanche 25 octobre 2020"
+    And I check "Mercredi 4 septembre 2024"
+    And I press "Sauvegarder"
+    Then I should see "dimanche 25 octobre 2020"
+    Then I should see "mercredi 4 septembre 2024"
 
   Scenario: Supprimer un animateur
     Then I fill in "search_animateur[nom]" with "Barney"

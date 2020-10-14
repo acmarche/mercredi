@@ -5,7 +5,7 @@ Feature: Gestion des acceuils
   J'édite un acceuil déjà facturée
 
   Background:
-    Given I am login with user "joseph@marche.be" and password "homer"
+    Given I am login with user "champlon@marche.be" and password "homer"
     Given I am on "/ecole/enfant/"
     Then I should see "Liste des enfants"
 
@@ -47,3 +47,8 @@ Feature: Gestion des acceuils
     And I fill in "accueil[duree]" with "3"
     And I press "Sauvegarder"
     Then I should see "L'accueil a bien été modifié"
+
+  Scenario: Enfant non inscrit aux accueils
+    Then I fill in "search_name[nom]" with "Jason"
+    And I press "Rechercher"
+    Then I should not see "BOLT Jason"

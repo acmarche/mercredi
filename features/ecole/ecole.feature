@@ -8,7 +8,9 @@ Feature: Gestion des écoles
 
   Scenario: Je vois les enfants d'une école sur la page de détail
     Then I should see "Liste de vos écoles"
-    Then I should see "Champlon"
-    Then I follow "Champlon"
-    Then I should see "Yves"
-    Then I should see "Bart"
+    Then I should see "Aye"
+    Then I should not see "Champlon"
+    Then I follow "Aye"
+    Then I should not see "Nelson"
+    Then I should see "Peeter"
+    Then I should see "Merlin"

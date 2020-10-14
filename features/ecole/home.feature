@@ -8,5 +8,5 @@ Feature: Test des pages ecoles
 
   Scenario: Je suis sur la page d'accueil
     Then I should see "Votre école"
-    Then I should see "Champlon"
+    Then I should see "Aye"
 

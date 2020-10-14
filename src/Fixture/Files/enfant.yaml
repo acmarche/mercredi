@@ -13,6 +13,7 @@ AcMarche\Mercredi\Entity\Enfant:
       SIESTE avec doudou
     photo_autorisation: true
     userAdd: administrator
+    accueil_ecole: true
     #photo_name: image($dir, $width, $height, 'cats')
   enfant_peeter:
     nom: Gauthie
@@ -23,6 +24,7 @@ AcMarche\Mercredi\Entity\Enfant:
     ordre: 2
     ecole: '@ecole_Aye'
     photo_autorisation: true
+    accueil_ecole: true
     userAdd: administrator
   enfant_divorce:
     nom: Fernandel
@@ -33,6 +35,7 @@ AcMarche\Mercredi\Entity\Enfant:
     ordre: 1
     ecole: '@ecole_Champlon'
     photo_autorisation: true
+    accueil_ecole: true
     userAdd: administrator
   enfant_lisa:
     nom: Simpson
@@ -53,6 +56,7 @@ AcMarche\Mercredi\Entity\Enfant:
     ordre: 2
     ecole: '@ecole_Champlon'
     photo_autorisation: true
+    accueil_ecole: true
     userAdd: administrator
   enfant_max:
     nom: Divorce family
@@ -63,4 +67,16 @@ AcMarche\Mercredi\Entity\Enfant:
     ordre: 2
     ecole: '@ecole_Aye'
     photo_autorisation: true
+    userAdd: administrator
+    accueil_ecole: false
+  enfant_champlon:
+    nom: Bolt
+    prenom: Jason
+    birthday: '<dateTimeBetween("-10 years", "-10 months")>'
+    annee_scolaire: '@annee_6P'
+    sexe: Masculin
+    ordre: 1
+    ecole: '@ecole_Champlon'
+    photo_autorisation: true
+    accueil_ecole: false
     userAdd: administrator
