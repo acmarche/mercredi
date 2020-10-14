@@ -40,7 +40,7 @@ final class RelationHandler
         }
 
         if (null !== $this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant)) {
-            throw new Exception('L\'enfant est déjà lié à cet enfant');
+            throw new Exception('L\'enfant est déjà lié à ce parent');
         }
 
         $relation = new Relation($tuteur, $enfant);
