@@ -19,6 +19,7 @@ Feature: Gestion des présences
     Then I follow "Ajouter une présence"
     Then I should see "Nouvelle présence pour PERET Merlin"
     And I select "Mercredi 4 septembre 2024" from "presence_new_jours"
+    And I additionally select "Mardi 20 août 2024 (Pédagogique Champlon,Aye)" from "presence_new_jours"
     And I press "Sauvegarder"
     Then I should see "La présence a bien été ajoutée"
     Then I should see "Mercredi 4 septembre 2024"

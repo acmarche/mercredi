@@ -29,6 +29,8 @@ Feature: Gestion des dates d'accueil
   Scenario: Ajouter une jour d'accueil pédagogique
     Then I follow "Ajouter une date"
     And I fill in "jour[date_jour]" with "2020-05-09"
+    And I check "Aye"
+    And I check "Hollogne"
     And I check "Journée pédagoque"
     And I press "Sauvegarder"
     Then I should see "Tarifs pour la journée du 09-05-2020"
@@ -39,6 +41,8 @@ Feature: Gestion des dates d'accueil
     Then I should see "Par journée complète"
     Then I should see "Journée pédagogique"
     Then I should see "Samedi 9 mai 2020"
+    Then I should see "Aye"
+    Then I should see "Hollogne"
 
   Scenario: Modifier le tarif d'un jour non pédagogique
     Then I follow "Mercredi 11 Septembre 2024"

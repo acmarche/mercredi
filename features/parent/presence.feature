@@ -18,6 +18,7 @@ Feature: Test de la gestion des présences
     Then I should see "Sélectionnez des jours d'accueil"
     When I select day plus "16" from "presence_new_for_parent_jours"
     When I additionally select day plus "20" from "presence_new_for_parent_jours"
+    And I additionally select "Mardi 20 août 2024 (Pédagogique Champlon,Aye)" from "presence_new_for_parent_jours"
     And I press "Sauvegarder"
     Then I should see "La présence a bien été ajoutée"
 

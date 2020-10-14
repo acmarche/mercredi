@@ -19,4 +19,19 @@ class EcoleUtils
         return $user->getEcoles();
     }
 
+    /**
+     * @param Ecole[]|ArrayCollection $ecoles
+     * @return string
+     */
+    public static function getNamesEcole(iterable $ecoles):string
+    {
+       $noms = array_map(
+            function ($ecole) {
+                return $ecole->getNom();
+            },
+            $ecoles->toArray()
+        );
+       return implode(",", $noms);
+    }
+
 }

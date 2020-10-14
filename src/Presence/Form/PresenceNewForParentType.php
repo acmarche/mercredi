@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Form;
 
+use AcMarche\Mercredi\Ecole\Utils\EcoleUtils;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface;
@@ -39,7 +40,8 @@ final class PresenceNewForParentType extends AbstractType
                     'choice_label' => function (Jour $jour) {
                         $peda = '';
                         if ($jour->isPedagogique()) {
-                            $peda = '(P)';
+                            $ecoles = EcoleUtils::getNamesEcole($jour->getEcoles());
+                            $peda = '(Pédagogique '.$ecoles.')';
                         }
 
                         return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
