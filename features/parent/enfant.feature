@@ -2,9 +2,13 @@ Feature: Test des pages parents
   Je suis sur la page d'accueil
   J'affiche un enfant
   J' ajoute un enfant
-  En vue détail, Lisa n'a pas sa fiche santé complète
-  En vue détail, Bart a sa fiche santé complète
-  J'affiche une attestation
+  Je modifie un enfant sans fiche santé
+  Je modifie sa fiche santé correctement
+  Je modifie sa fiche santé sans répondre a une obligation de complément d'informations
+  Je modifie sa fiche santé sans coche oui ou non et met un texte dans remarque
+  Lisa n'a pas sa fiche santé complète
+  Bart a sa fiche santé complète
+  J'affiche une attestation fiscale
 
   Background:
     Given I am login with user "albert@marche.be" and password "homer"
@@ -39,7 +43,7 @@ Feature: Test des pages parents
     Then I should see "Waha"
     Then I should see "3M"
 
-  Scenario: Je modifie sa fiche santé
+  Scenario: Je modifie sa fiche santé correctement
     Then I follow "SIMPSON Lisa"
     Then I should see "SIMPSON Lisa"
     Then I follow "Fiche santé"
@@ -47,6 +51,39 @@ Feature: Test des pages parents
     And I fill in "sante_fiche[medecin_nom]" with "Ledoux"
     And I fill in "sante_fiche[medecin_telephone]" with "084 32 55 66"
     And I fill in "sante_fiche[personne_urgence]" with "Papa et maman"
+    And I fill in "sante_fiche[questions][0][reponseTxt]" with "1"
+    And I fill in "sante_fiche[questions][0][remarque]" with "23-10-2022"
+    And I fill in "sante_fiche[questions][1][reponseTxt]" with "0"
+    And I press "Sauvegarder"
+    Then I should see "Le formulaire santé a bien été enregistré"
+    Then I should see "084 32 55 66"
+    Then I should see "Papa et maman"
+    Then I should see "Ledoux"
+    Then I should see "23-10-2022"
+
+  Scenario: Je modifie sa fiche santé sans répondre a une obligation de complément d'informations
+    Then I follow "SIMPSON Lisa"
+    Then I should see "SIMPSON Lisa"
+    Then I follow "Fiche santé"
+    Then I should see "Fiche santé de SIMPSON Lisa"
+    And I fill in "sante_fiche[medecin_nom]" with "Ledoux"
+    And I fill in "sante_fiche[medecin_telephone]" with "084 32 55 66"
+    And I fill in "sante_fiche[personne_urgence]" with "Papa et maman"
+    And I fill in "sante_fiche[questions][0][reponseTxt]" with "1"
+    And I fill in "sante_fiche[questions][1][reponseTxt]" with "0"
+    And I press "Sauvegarder"
+    Then I should not see "Le formulaire santé a bien été enregistré"
+    Then I should see "A-t-il été vacciné contre le tétanos? : Date du dernier rappel (Indiquez la réponse dans le champ remarque à côté de la question)"
+
+  Scenario: Je modifie sa fiche santé sans coche oui ou non et met un texte dans remarque
+    Then I follow "SIMPSON Lisa"
+    Then I should see "SIMPSON Lisa"
+    Then I follow "Fiche santé"
+    Then I should see "Fiche santé de SIMPSON Lisa"
+    And I fill in "sante_fiche[medecin_nom]" with "Ledoux"
+    And I fill in "sante_fiche[medecin_telephone]" with "084 32 55 66"
+    And I fill in "sante_fiche[personne_urgence]" with "Papa et maman"
+    And I fill in "sante_fiche[questions][0][remarque]" with "Non ca va pas"
     And I press "Sauvegarder"
     Then I should see "Le formulaire santé a bien été enregistré"
     Then I should see "084 32 55 66"

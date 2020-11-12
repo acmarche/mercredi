@@ -15,7 +15,7 @@
                 {% if enfant.isFicheSanteIsComplete == false %}
                     <i class="fas fa-exclamation-triangle"
                        title="Données non complètes"></i> <span class="text-danger">Non complète</span>
-                    <a href="{{ path('mercredi_parent_enfant_edit', {'uuid': enfant.uuid}) }}"
+                    <a href="{{ path('mercredi_parent_enfant_show', {'uuid': enfant.uuid}) }}"
                        style="margin-left: 0.9em;">
                         <i class="fas fa-edit" title="Modifier"></i> Remplir
                     </a>
