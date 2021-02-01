@@ -42,7 +42,8 @@ final class ExportController extends AbstractController
         ListingPresenceByMonth $listingPresenceByMonth,
         PresenceRepository $presenceRepository,
         SearchHelper $searchHelper
-    ) {
+    )
+    {
         $this->spreadsheetFactory = $spreadsheetFactory;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->searchHelper = $searchHelper;
@@ -74,7 +75,11 @@ final class ExportController extends AbstractController
     public function presenceByMonthXls(bool $one): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST_BY_MONTH);
-        $mois = $args['mois'];
+        $mois = isset($args['mois']) ?? null;
+        if (!$mois) {
+            $this->addFlash('danger', 'Indiquez un mois');
+            return $this->redirectToRoute('mercredi_admin_presence_by_month');
+        }
 
         try {
             $date = DateUtils::createDateTimeFromDayMonth($mois);
@@ -84,7 +89,7 @@ final class ExportController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_presence_by_month');
         }
 
-        $fileName = 'listing-'.$date->format('m-Y').'.xls';
+        $fileName = 'listing-' . $date->format('m-Y') . '.xls';
 
         $listingPresences = $this->listingPresenceByMonth->create($date);
 
