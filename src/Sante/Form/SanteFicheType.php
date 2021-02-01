@@ -53,6 +53,8 @@ final class SanteFicheType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
+                    'label' => 'Personnes autorisées à reprendre l’enfant dans les accueils',
+                    'help' => 'Nom et téléphone'
                 ]
             )
             ->add(

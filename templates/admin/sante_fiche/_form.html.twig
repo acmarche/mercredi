@@ -17,6 +17,7 @@
     </div>
     <div class="col-6">
         {{ form_label(form.accompagnateurs) }}
+        {{ form_help(form.accompagnateurs) }}
         <ul class="list-group" id="accompagnateurs-list"
             data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}">
             {% for accompagnateurField in form.accompagnateurs %}
