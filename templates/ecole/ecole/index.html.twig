@@ -10,6 +10,7 @@
             <th>Nom</th>
             <th>Localité</th>
             <th>Téléphone</th>
+            <th>Inscrire</th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +23,9 @@
                 </td>
                 <td>{{ ecole.localite }}</td>
                 <td>{{ ecole.telephone }}</td>
+                <td>
+                    {% include '@AcMarcheMercredi/ecole/ecole/_btn_inscriptions.html.twig' %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -43,11 +43,14 @@ final class EcoleController extends AbstractController
         if ($t = $this->hasEcoles()) {
             return $t;
         }
+        $today = Carbon::today();
 
         return $this->render(
             '@AcMarcheMercrediEcole/ecole/index.html.twig',
             [
                 'ecoles' => $this->ecoles,
+                'today' => $today,
+                'heures' => AccueilInterface::HEURES,
             ]
         );
     }
