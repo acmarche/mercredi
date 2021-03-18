@@ -76,6 +76,25 @@ final class SanteChecker
         return true;
     }
 
+    /**
+     * @param SanteFiche $santeFiche
+     * @return SanteQuestion[]
+     */
+    public function getQuestionsNotOk(SanteFiche $santeFiche): array
+    {
+        $questionsnotOk = [];
+        $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
+        foreach ($reponses as $reponse) {
+            $question = $reponse->getQuestion();
+            if (!$this->checkQuestionOk($question)) {
+                $questionsnotOk [] = $question;
+            }
+        }
+        $questions = $this->santeQuestionRepository->getQuestionsNonRepondues($questionsnotOk);
+
+        return $questions;
+    }
+
     public function checkQuestionOk(SanteQuestion $santeQuestion): bool
     {
         if (!$santeQuestion->getComplement()) {
