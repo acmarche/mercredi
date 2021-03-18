@@ -1,6 +1,5 @@
 <table class="table table-bordered ">
     <thead>
-
     <tr>
         <th>
             <a href="{{ path('mercredi_ecole_accueil_inscriptions',
@@ -20,9 +19,8 @@
     </tr>
     </thead>
     <tbody>
-
     {% for week in weeks %}
-        {% if week.startDate.week == weekSelected %}
+        {% if week.startDate.weekOfYear == weekSelected %}
             {% set class = "table-info" %}
         {% else %}
             {% set class = "" %}
@@ -30,8 +28,8 @@
         <tr class="{{ class }}">
             <td>
                 <a href="{{ path('mercredi_ecole_accueil_inscriptions',
-                    { 'id': ecole.id, 'year':date.year, 'month': date.month, 'week': week.startDate.week , 'heure': heure }) }}">
-                    S {{ week.startDate.week }}
+                    { 'id': ecole.id, 'year':date.year, 'month': date.month, 'week': week.startDate.weekOfYear , 'heure': heure }) }}">
+                    S {{ week.startDate.weekOfYear }}
                 </a>
             </td>
             {% for day in week.day %}
