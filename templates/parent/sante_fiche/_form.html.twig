@@ -8,7 +8,6 @@
     <div class="col-6">
         {{ form_row(form.medecin_telephone) }}
     </div>
-
 </div>
 
 <div class="row">
@@ -16,7 +15,7 @@
         {{ form_row(form.personne_urgence) }}
     </div>
     <div class="col-12">
-        {{ form_label(form.accompagnateurs) }}
+        {{ form_label(form.accompagnateurs, null, {'label_attr': {'class': 'required'}}) }}
         {{ form_help(form.accompagnateurs) }}
         <ul class="list-group" id="accompagnateurs-list"
             data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}">

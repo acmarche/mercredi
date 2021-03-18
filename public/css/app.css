@@ -16,6 +16,11 @@ label.required:after {
     color: red;
 }
 
+legend.required:after {
+    content: " *";
+    color: red;
+}
+
 body {
     padding-top: 4rem;
 }

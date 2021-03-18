@@ -49,7 +49,7 @@ final class SanteFicheType extends AbstractType
                     'entry_type' => TextType::class,
                     'entry_options' => [],
                     'prototype' => true,
-                    'required' => false,
+                    'required' => true,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
