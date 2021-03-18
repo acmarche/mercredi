@@ -74,7 +74,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $photo_autorisation = false;
+    private $photo_autorisation;
 
     /**
      * @var AnneeScolaire|null
@@ -125,6 +125,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         $this->presences = new ArrayCollection();
         $this->ficheSanteIsComplete = false;
         $this->notes = new ArrayCollection();
+        $this->photo_autorisation = false;
     }
 
     public function __toString()
