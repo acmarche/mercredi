@@ -116,6 +116,8 @@ final class EnfantRepository extends ServiceEntityRepository
             ->setParameter('ecole', $ecole)
             ->andWhere('relations IS NOT NULL');
 
+        $queryBuilder->andWhere('enfant.accueil_ecole = 1');
+
         return $this->addOrderByNameQueryBuilder($queryBuilder)
             ->getQuery()->getResult();
     }
