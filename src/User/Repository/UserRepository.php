@@ -44,7 +44,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
-        if (! $user instanceof User) {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
@@ -67,7 +67,11 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function findByNameOrRoles(?string $name, ?string $role): array
     {
-        $queryBuilder = $this->createQueryBuilder('user');
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->leftJoin('user.ecoles', 'ecoles', 'WITH')
+            ->leftJoin('user.animateurs', 'animateurs', 'WITH')
+            ->leftJoin('user.tuteurs', 'tuteurs', 'WITH')
+            ->addSelect('ecoles', 'animateurs', 'tuteurs');
 
         if ($name) {
             $queryBuilder->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')

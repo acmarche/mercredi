@@ -16,6 +16,7 @@
             <th>Nom</th>
             <th>Email</th>
             <th>Role(s)</th>
+            <th>Associé(s) à</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +29,17 @@
                 </td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.niceRoles | join(',') }}</td>
+                <td>
+                    {% for tuteur in user.tuteurs %}
+                        <a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">{{ tuteur }}</a>
+                    {% endfor %}
+                    {% for ecole in user.ecoles %}
+                        <a href="{{ path('mercredi_admin_ecole_show', {'id': ecole.id}) }}">{{ ecole|u.truncate(25, '…') }}</a>
+                    {% endfor %}
+                    {% for animateur in user.animateurs %}
+                        <a href="{{ path('mercredi_admin_animateur_show', {'id': animateur.id}) }}">{{ animateur }}</a>
+                    {% endfor %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
