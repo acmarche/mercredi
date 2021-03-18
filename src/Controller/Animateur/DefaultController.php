@@ -22,16 +22,11 @@ final class DefaultController extends AbstractController
      */
     public function default()
     {
-        if ($t = $this->hasAnimateur()) {
-            return $t;
+        if ($response = $this->hasAnimateur()) {
+            return $response;
         }
 
-        return $this->render(
-            '@AcMarcheMercrediAnimateur/default/index.html.twig',
-            [
-                'animateur' => $this->animateur,
-            ]
-        );
+        return $this->redirectToRoute('mercredi_animateur_enfant_index');
     }
 
     /**
