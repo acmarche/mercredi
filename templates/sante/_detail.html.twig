@@ -3,15 +3,18 @@
         <td>
             {% if organisation and organisation.photoName %}
                 <img class="img-thumbnail"
-                     src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}" alt="img"/>
+                     src="{{ vich_uploader_asset(organisation, 'photo') | imagine_filter('mercredi_thumb') }}"
+                     alt="img"/>
             {% endif %}
         </td>
         <td>
             <h2 class="text-warning">Fiche médicale individuelle</h2>
-                <span class="pull-right">Maj le {{ sante_fiche.updatedAt | date('d-m-Y') }}</span>
-                {% if is_complete == false %}
-                    <i class="fas fa-ban"></i><span class="text-danger"> Fiche non complète!</span>
-                {% endif %}
+            <span class="pull-right">Maj le {{ sante_fiche.updatedAt | date('d-m-Y') }}</span>
+            {% if is_complete == false %}
+                <i class="fas fa-ban"></i><span class="text-danger"><strong>Fiche non complète!</strong></span>
+            {% else %}
+                <i class="far fa-smile"></i><span class="text-success"> Fiche complète</span>
+            {% endif %}
         </td>
     </tr>
 </table>
@@ -37,16 +40,18 @@
     <tr>
         <td>
             <h4 class="text-warning">Personne(s) à joindre en cas d'urgence</h4>
-                {{ sante_fiche.personneUrgence | nl2br }}
+            {{ sante_fiche.personneUrgence | nl2br }}
             <h4 class="text-warning">Médecin traitant</h4>
-                {{ sante_fiche.medecinNom }}
-                {{ sante_fiche.medecinTelephone }}
+            {{ sante_fiche.medecinNom }}
+            {{ sante_fiche.medecinTelephone }}
         </td>
         <td>
             <h4 class="text-warning">Personnes autorisées à reprendre l’enfant dans les accueils</h4>
             <ul class="list-group">
                 {% for accompagnateur in sante_fiche.accompagnateurs %}
                     <li class="list-group-item">{{ accompagnateur }}</li>
+                    {% else %}
+                    <li class="list-group-item list-group-item-danger">Aucune personne encodée !</li>
                 {% endfor %}
             </ul>
         </td>
