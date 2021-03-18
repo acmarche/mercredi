@@ -7,7 +7,7 @@ trait PhotoAutorisationTrait
     /**
      * @var bool
      */
-    private $photo_autorisation = false;
+    private $photo_autorisation;
 
     public function isPhotoAutorisation(): bool
     {
