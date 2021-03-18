@@ -2,6 +2,8 @@
     <tr>
         <th>Nom</th>
         <th>Ecole</th>
+        <th>Inscrit accueil ?</th>
+        <th>Modifier</th>
     </tr>
     {% for enfant in enfants %}
         <tr>
@@ -11,10 +13,13 @@
                 </a>
             </td>
             <td>{{ enfant.ecole }}</td>
+            <td>{{ enfant.isAccueilEcole ? 'Oui' : 'Non' }}</td>
+            <td><a class="btn btn-warning btn-sm" role="button"
+                   href="{{ path('mercredi_ecole_enfant_edit', {'uuid': enfant.uuid}) }}">Modifier</a></td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="2">Aucun enfant trouvé</td>
+            <td colspan="4">Aucun enfant trouvé</td>
         </tr>
     {% endfor %}
 </table>

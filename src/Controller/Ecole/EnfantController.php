@@ -3,12 +3,16 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Enfant\Form\EnfantEditForEcoleType;
+use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
+use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use AcMarche\Mercredi\Search\Form\SearchEnfantEcoleType;
 use AcMarche\Mercredi\Search\Form\SearchNameType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,20 +75,22 @@ final class EnfantController extends AbstractController
      */
     public function index(Request $request)
     {
-        if ($t = $this->hasEcoles()) {
-            return $t;
+        if ($response = $this->hasEcoles()) {
+            return $response;
         }
 
         $nom = null;
-        $form = $this->createForm(SearchNameType::class);
+        $accueil = true;
+        $form = $this->createForm(SearchEnfantEcoleType::class, ['accueil' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
+            $accueil = $data['accueil'];
         }
 
-        $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom);
+        $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom, $accueil);
 
         return $this->render(
             '@AcMarcheMercrediEcole/enfant/index.html.twig',
@@ -96,7 +102,7 @@ final class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}", name="mercredi_ecole_enfant_show", methods={"GET"})
+     * @Route("/show/{uuid}", name="mercredi_ecole_enfant_show", methods={"GET"})
      * @IsGranted("enfant_show", subject="enfant")
      */
     public function show(Enfant $enfant)
@@ -119,4 +125,29 @@ final class EnfantController extends AbstractController
         );
     }
 
+    /**
+     * @Route("/{uuid}/edit", name="mercredi_ecole_enfant_edit", methods={"GET","POST"})
+     * @IsGranted("enfant_edit", subject="enfant")
+     */
+    public function edit(Request $request, Enfant $enfant)
+    {
+        $form = $this->createForm(EnfantEditForEcoleType::class, $enfant);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->enfantRepository->flush();
+
+            $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
+
+            return $this->redirectToRoute('mercredi_ecole_enfant_index', ['uuid' => $enfant->getUuid()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediEcole/enfant/edit.html.twig',
+            [
+                'enfant' => $enfant,
+                'form' => $form->createView(),
+            ]
+        );
+    }
 }
