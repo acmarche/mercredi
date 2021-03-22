@@ -39,12 +39,17 @@ final class ProfileController extends AbstractController
 
     /**
      * @Route("/show", name="mercredi_front_user_show")
-     * @IsGranted("ROLE_MERCREDI")
+     *
      */
     public function show()
     {
         /** @var User */
         $user = $this->getUser();
+        if ($user == null) {
+            $this->addFlash('warning', 'Votre compte n\'est pas encore actif');
+
+            return $this->redirectToRoute('mercredi_front_home');
+        }
 
         return $this->render(
             '@AcMarcheMercredi/front/user/show.html.twig',
@@ -62,7 +67,7 @@ final class ProfileController extends AbstractController
         /** @var User */
         $user = $this->getUser();
 
-        if ($user) {
+        if ($user !=null) {
             $roles = $user->getRoles();
             $del_val = 'ROLE_USER';
 
