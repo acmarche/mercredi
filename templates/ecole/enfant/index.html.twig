@@ -9,6 +9,12 @@
 
         <div class="card-body">
 
+            <div class="alert alert-success">
+                La liste ci-dessous affiche les enfants qui <strong>viennent au matin et/ou au soir.</strong><br/>
+                Pour afficher les enfants, qui ne sont <strong>pas encore inscrits</strong> décochez la case et cliquez
+                sur rechercher.
+            </div>
+
             {% include '@AcMarcheMercrediEcole/enfant/_search.html.twig' %}
             {% include '@AcMarcheMercrediEcole/enfant/_list.html.twig' %}
         </div>
