@@ -21,6 +21,9 @@ final class EnfantQuickType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
+        $year = new \DateTime('today');
+        $year = $year->format('Y');
+
         $formBuilder
             ->add(
                 'nom',
@@ -41,9 +44,8 @@ final class EnfantQuickType extends AbstractType
                 BirthdayType::class,
                 [
                     'label' => 'Né le',
-                    'widget' => 'single_text',
-                    'help' => 'Format:24/05/2009',
                     self::REQUIRED => false,
+                    'years' => range($year - 15, $year),
                 ]
             )
             ->add(

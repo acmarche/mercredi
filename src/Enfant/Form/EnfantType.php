@@ -47,6 +47,8 @@ final class EnfantType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
+        $year = new \DateTime('today');
+        $year = $year->format('Y');
         $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
 
         $formBuilder
@@ -69,9 +71,8 @@ final class EnfantType extends AbstractType
                 BirthdayType::class,
                 [
                     self::LABEL => 'Né le',
-                    'widget' => 'single_text',
-                    'help' => 'Format:24/05/2009',
                     self::REQUIRED => $isAdmin,
+                    'years' => range($year - 15, $year),
                 ]
             )
             ->add(
