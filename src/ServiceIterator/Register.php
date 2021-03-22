@@ -16,7 +16,6 @@ final class Register
 
     public function exe(): void
     {
-        dump(123);
         foreach ($this->secondaryFlows as $flow) {
             $flow->afterUserRegistrationSuccessful();
         }
