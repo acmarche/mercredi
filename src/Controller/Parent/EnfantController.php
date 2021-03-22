@@ -29,6 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class EnfantController extends AbstractController
 {
     use GetTuteurTrait;
+
     /**
      * @var string
      */
@@ -129,7 +130,7 @@ final class EnfantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantHandler->newHandle($enfant, $this->tuteur);
             $this->dispatchMessage(new EnfantCreated($enfant->getId()));
-
+            $enfant->setPhoto(null);//bug serialize
             $this->notifcationMailer->sendMessagEnfantCreated($this->getUser(), $enfant);
 
             return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
