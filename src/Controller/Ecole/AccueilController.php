@@ -201,6 +201,8 @@ final class AccueilController extends AbstractController
 
             $this->accueilHandler->handleCollections($accueils, $tuteurs, $heure);
 
+            $this->addFlash('success', "Les acceuils ont bien été ajoutés");
+
             return $this->redirectToRoute('mercredi_ecole_ecole_show', ['id' => $ecole->getId()]);
         }
 
