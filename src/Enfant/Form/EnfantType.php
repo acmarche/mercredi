@@ -70,6 +70,7 @@ final class EnfantType extends AbstractType
                 [
                     self::LABEL => 'Né le',
                     'widget' => 'single_text',
+                    'help' => 'Format:24/05/2009',
                     self::REQUIRED => $isAdmin,
                 ]
             )
