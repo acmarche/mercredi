@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Controller\Ecole;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\InscriptionsType;
+use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
@@ -30,6 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AccueilController extends AbstractController
 {
+    use GetEcolesTrait;
+
     /**
      * @var string
      */
@@ -82,6 +85,37 @@ final class AccueilController extends AbstractController
     }
 
     /**
+     * @Route("/index", name="mercredi_ecole_accueils_index", methods={"GET","POST"})
+     * @IsGranted("ROLE_MERCREDI_ECOLE")
+     */
+    public function index(Request $request)
+    {
+        if ($response = $this->hasEcoles()) {
+            return $response;
+        }
+
+        $accueils = [];
+        $form = $this->createForm(SearchAccueilByDate::class, []);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $date = $data['date_jour'];
+            $heure = $data['heure'];
+            $ecoles = $this->ecoles;dump($ecoles);
+            $accueils = $this->accueilRepository->findByDateAndHeureAndEcoles($date, $heure, $ecoles);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediEcole/accueil/index.html.twig',
+            [
+                'accueils' => $accueils,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
      * @Route("/new/{tuteur}/{enfant}", name="mercredi_ecole_accueil_new", methods={"GET","POST"})
      * @Entity("tuteur", expr="repository.find(tuteur)")
      * @Entity("enfant", expr="repository.find(enfant)")
@@ -110,7 +144,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}", name="mercredi_ecole_accueil_show", methods={"GET"})
+     * @Route("/{uuid}/show", name="mercredi_ecole_accueil_show", methods={"GET"})
      * @IsGranted("accueil_show", subject="accueil")
      */
     public function show(Accueil $accueil): Response

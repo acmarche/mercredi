@@ -80,6 +80,39 @@ final class AccueilRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * @param \DateTime $date
+     * @param string|null $heure
+     * @param array $ecoles
+     * @return Accueil[]
+     */
+    public function findByDateAndHeureAndEcoles(\DateTime $date, ?string $heure, iterable $ecoles): array
+    {
+        $qb = $this->createQueryBuilder(self::ACCUEIL)
+            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->addSelect('enfant', 'ecole')
+            ->andWhere('accueil.date_jour = :date')
+            ->setParameter('date', $date);
+
+        if ($heure) {
+            $qb->andWhere('accueil.heure = :heure')
+                ->setParameter('heure', $heure)
+                ->getQuery()->getResult();
+
+        }
+
+        if (count($ecoles) > 0) {
+            $qb->andWhere('ecole IN (:ecoles)')
+                ->setParameter('ecoles', $ecoles)
+                ->getQuery()->getResult();
+
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     public function remove(Accueil $accueil): void
     {
         $this->_em->remove($accueil);

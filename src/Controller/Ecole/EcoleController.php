@@ -40,8 +40,8 @@ final class EcoleController extends AbstractController
      */
     public function index(): Response
     {
-        if ($t = $this->hasEcoles()) {
-            return $t;
+        if ($response = $this->hasEcoles()) {
+            return $response;
         }
         $today = Carbon::today();
 

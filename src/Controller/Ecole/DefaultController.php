@@ -21,8 +21,8 @@ final class DefaultController extends AbstractController
      */
     public function default()
     {
-        if ($t = $this->hasEcoles()) {
-            return $t;
+        if ($response = $this->hasEcoles()) {
+            return $response;
         }
 
         return $this->render(
