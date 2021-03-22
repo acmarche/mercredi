@@ -26,6 +26,7 @@ final class UserMailer
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
             ->to($user->getEmail())
+            ->bcc($from)
             ->htmlTemplate('@AcMarcheMercredi/front/mail/_mail_welcome_parent.html.twig')
             ->context(
                 [
@@ -47,6 +48,7 @@ final class UserMailer
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
             ->to($user->getEmail())
+            ->bcc($from)
             ->htmlTemplate('@AcMarcheMercredi/front/mail/_mail_welcome_animateur.html.twig')
             ->context(
                 [
