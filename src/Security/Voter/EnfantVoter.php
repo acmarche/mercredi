@@ -112,14 +112,12 @@ final class EnfantVoter extends Voter
 
     private function canView(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
-            return $this->checkAnimateur();
-        }
-
         if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
             return $this->checkEcoles();
         }
-
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
+            return $this->checkAnimateur();
+        }
         return $this->canEdit();
     }
 
