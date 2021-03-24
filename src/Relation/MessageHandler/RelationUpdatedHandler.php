@@ -3,10 +3,11 @@
 namespace AcMarche\Mercredi\Relation\MessageHandler;
 
 use AcMarche\Mercredi\Relation\Message\RelationCreated;
+use AcMarche\Mercredi\Relation\Message\RelationUpdated;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class RelationCreatedHandler implements MessageHandlerInterface
+final class RelationUpdatedHandler implements MessageHandlerInterface
 {
     /**
      * @var FlashBagInterface
@@ -18,7 +19,7 @@ final class RelationCreatedHandler implements MessageHandlerInterface
         $this->flashBag = $flashBag;
     }
 
-    public function __invoke(RelationCreated $relationCreated): void
+    public function __invoke(RelationUpdated $relationCreated): void
     {
         $this->flashBag->add('success', "La relation a bien été modifiée");
     }
