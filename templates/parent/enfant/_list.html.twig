@@ -31,7 +31,10 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="3">Aucun enfant trouvé</td>
+            <td colspan="3">
+                Aucun enfant trouvé<br />
+                <a href="{{ path('mercredi_parent_enfant_new') }}">Ajouter un enfant</a>
+            </td>
         </tr>
     {% endfor %}
 </table>
