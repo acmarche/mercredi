@@ -112,7 +112,12 @@ final class PresenceUtils
                 $presences
             );
 
-        return array_unique($enfants, SORT_REGULAR);
+        $data = [];
+        foreach ($enfants as $enfant) {
+            $data[$enfant->getId()] = $enfant;
+        }
+
+        return $data;
     }
 
     /**
@@ -173,7 +178,7 @@ final class PresenceUtils
         array_map(
             function ($presence) use ($plaines) {
                 $jour = $presence->getJour();
-                if (! $jour) {
+                if (!$jour) {
                     return null;
                 }
                 $plaineJour = $jour->getPlaineJour();
@@ -181,7 +186,7 @@ final class PresenceUtils
                     return null;
                 }
                 $plaine = $plaineJour->getPlaine();
-                if (! $plaines->contains($plaine)) {
+                if (!$plaines->contains($plaine)) {
                     $plaines->add($plaine);
                 }
             },
