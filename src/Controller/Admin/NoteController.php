@@ -61,7 +61,7 @@ final class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/new/", name="mercredi_admin_note_new", methods={"GET","POST"})
+     * Route("/new/", name="mercredi_admin_note_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
