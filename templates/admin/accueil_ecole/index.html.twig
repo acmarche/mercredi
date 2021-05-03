@@ -35,7 +35,7 @@
                 {% for accueil in accueils %}
                     <tr>
                         <td>
-                            <a href="{{ path('mercredi_admin_enfant_show', {'uuid': accueil.enfant.uuid}) }}">
+                            <a href="{{ path('mercredi_admin_enfant_show', {'id': accueil.enfant.id}) }}">
                                 {{ accueil.enfant }}
                             </a>
                         </td>
