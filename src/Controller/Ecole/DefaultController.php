@@ -25,12 +25,7 @@ final class DefaultController extends AbstractController
             return $response;
         }
 
-        return $this->render(
-            '@AcMarcheMercrediEcole/default/index.html.twig',
-            [
-                'ecoles' => $this->ecoles,
-            ]
-        );
+        return $this->redirectToRoute('mercredi_ecole_enfant_index');
     }
 
     /**
