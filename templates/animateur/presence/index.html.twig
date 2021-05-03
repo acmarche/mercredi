@@ -4,9 +4,11 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Mes jours de travail</h3>
+            <h3>Listing des présences</h3>
         </div>
         <div class="card-body">
+
+            <div class="alert alert-info">La liste reprend les jours où vous travaillez</div>
 
             <table class="table table-bordered">
                 <tr>
@@ -17,11 +19,11 @@
                     <tr>
                         <td>
                             <a href="{{ path('mercredi_animateur_presence_show', {'id': jour.id}) }}">
-                                {{ jour.dateJour|format_date('full') }}
+                                {{ jour.dateJour|format_date('full')|title }}
                             </a>
                         </td>
                         <td>
-
+                            {{ jour.presences|length }}
                         </td>
                     </tr>
                 {% else %}

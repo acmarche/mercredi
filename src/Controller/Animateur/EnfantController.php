@@ -68,7 +68,7 @@ final class EnfantController extends AbstractController
             return $t;
         }
 
-        $nom = null;
+        $nom = $jour = null;
         $form = $this->createForm(
             SearchEnfantForAnimateurType::class,
             null,
@@ -81,9 +81,10 @@ final class EnfantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
+            $jour = $data['jour'];
         }
 
-        $enfants = $this->enfantRepository->searchForAnimateur($this->animateur, $nom);
+        $enfants = $this->enfantRepository->searchForAnimateur($this->animateur, $nom, $jour);
 
         return $this->render(
             '@AcMarcheMercrediAnimateur/enfant/index.html.twig',

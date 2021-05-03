@@ -2,13 +2,12 @@
 
 namespace AcMarche\Mercredi\Controller\Animateur;
 
-use AcMarche\Mercredi\Animateur\Utils\AnimateurUtils;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -25,28 +24,34 @@ final class PresenceController extends AbstractController
      */
     private $presenceRepository;
     /**
-     * @var AnimateurUtils
+     * @var EnfantRepository
      */
-    private $animateurUtils;
+    private $enfantRepository;
+    /**
+     * @var JourRepository
+     */
+    private $jourRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
-        AnimateurUtils $animateurUtils
+        JourRepository $jourRepository,
+        EnfantRepository $enfantRepository
     ) {
         $this->presenceRepository = $presenceRepository;
-        $this->animateurUtils = $animateurUtils;
+        $this->enfantRepository = $enfantRepository;
+        $this->jourRepository = $jourRepository;
     }
 
     /**
      * @Route("/", name="mercredi_animateur_presence_index", methods={"GET","POST"}).
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        if ($t = $this->hasAnimateur()) {
-            return $t;
+        if ($response = $this->hasAnimateur()) {
+            return $response;
         }
 
-        $jours = $this->animateurUtils->getAllJours($this->animateur);
+        $jours = $this->jourRepository->findByAnimateur($this->animateur);
 
         return $this->render(
             '@AcMarcheMercrediAnimateur/presence/index.html.twig',
@@ -62,9 +67,11 @@ final class PresenceController extends AbstractController
     public function show(Jour $jour): Response
     {
         $this->denyAccessUnlessGranted('jour_show', $jour);
+        if ($response = $this->hasAnimateur()) {
+            return $response;
+        }
 
-        $presences = $this->presenceRepository->findPresencesByJours([$jour]);
-        $enfants = PresenceUtils::extractEnfants($presences);
+        $enfants = $this->enfantRepository->searchForAnimateur($this->animateur, null, $jour);
 
         return $this->render(
             '@AcMarcheMercrediAnimateur/presence/show.html.twig',

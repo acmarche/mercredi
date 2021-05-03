@@ -26,22 +26,6 @@ class SearchEnfantForAnimateurType extends AbstractType
                     'required' => false,
                     'attr' => ['placeholder' => 'Nom'],
                 ]
-            )
-            ->add(
-                'jour',
-                EntityType::class,
-                [
-                    'class' => Jour::class,
-                    'placeholder' => 'Jour d\'accueil',
-                    'query_builder' => function (JourRepository $jourRepository) use ($animateur) {
-                        return $jourRepository->getQbForListingAnimateur($animateur);
-                    },
-                    //todo display name day
-                    'group_by' => function ($jour, $key, $id) {
-                        return $jour->getDateJour()->format('Y');
-                    },
-                    'required' => false,
-                ]
             );
     }
 

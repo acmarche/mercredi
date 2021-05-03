@@ -174,6 +174,7 @@ final class JourRepository extends ServiceEntityRepository
             ->andWhere(':animateur MEMBER OF jour.animateurs')
             ->setParameter('animateur', $animateur)
             ->andWhere('jour.archived = 0')
+            ->addOrderBy('jour.date_jour', 'DESC')
             ->getQuery()->getResult();
     }
 

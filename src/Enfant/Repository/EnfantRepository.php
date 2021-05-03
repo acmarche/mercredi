@@ -222,17 +222,21 @@ final class EnfantRepository extends ServiceEntityRepository
 
     /**
      * @param Animateur $animateur
-     * @param $nom
+     * @param string|null $nom
+     * @param \AcMarche\Mercredi\Entity\Jour|null $jour
      * @return array|Enfant[]
      */
-    public function searchForAnimateur(Animateur $animateur, $nom): array
+    public function searchForAnimateur(Animateur $animateur, ?string $nom, ?Jour $jour): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
             ->leftJoin('enfant.presences', 'presences', self::WITH)
             ->addSelect('presences');
 
-        $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
-
+        if ($jour) {
+            $jours = [$jour];
+        } else {
+            $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
+        }
         if (count($jours) == 0) {
             return [];
         }
