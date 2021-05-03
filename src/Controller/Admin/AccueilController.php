@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
+use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
@@ -71,15 +72,41 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/list/{id}", name="mercredi_admin_accueil_index", methods={"GET","POST"})
+     * @Route("/index", name="mercredi_admin_accueil_index", methods={"GET","POST"})
+     *
      */
-    public function index(Enfant $enfant): Response
+    public function index(Request $request)
+    {
+        $accueils = [];
+        $form = $this->createForm(SearchAccueilByDate::class, []);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $date = $data['date_jour'];
+            $heure = $data['heure'];
+            $accueils = $this->accueilRepository->findByDateAndHeure($date, $heure);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/accueil/index.html.twig',
+            [
+                'accueils' => $accueils,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/list/{id}", name="mercredi_admin_accueil_show_enfant", methods={"GET","POST"})
+     */
+    public function enfant(Enfant $enfant): Response
     {
         $accueils = $this->accueilRepository->findByEnfant($enfant);
         $relations = $this->relationRepository->findByEnfant($enfant);
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/accueil/index.html.twig',
+            '@AcMarcheMercrediAdmin/accueil/enfant.html.twig',
             [
                 'accueils' => $accueils,
                 'relations' => $relations,
@@ -116,7 +143,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_accueil_show", methods={"GET"})
+     * @Route("/show/{id}", name="mercredi_admin_accueil_show", methods={"GET"})
      */
     public function show(Accueil $accueil): Response
     {
@@ -161,7 +188,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_accueil_delete", methods={"DELETE"})
+     * @Route("/delete/{id}", name="mercredi_admin_accueil_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Accueil $accueil): Response
     {
