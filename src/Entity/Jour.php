@@ -154,6 +154,4 @@ class Jour implements TimestampableInterface
 
         return $this;
     }
-
-
 }

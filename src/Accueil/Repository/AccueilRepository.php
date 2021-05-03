@@ -99,14 +99,36 @@ final class AccueilRepository extends ServiceEntityRepository
             $qb->andWhere('accueil.heure = :heure')
                 ->setParameter('heure', $heure)
                 ->getQuery()->getResult();
-
         }
 
         if (count($ecoles) > 0) {
             $qb->andWhere('ecole IN (:ecoles)')
                 ->setParameter('ecoles', $ecoles)
                 ->getQuery()->getResult();
+        }
 
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param \DateTime $date
+     * @param string|null $heure
+     * @param array $ecoles
+     * @return Accueil[]
+     */
+    public function findByDateAndHeure(\DateTime $date, ?string $heure): array
+    {
+        $qb = $this->createQueryBuilder(self::ACCUEIL)
+            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->addSelect('enfant', 'ecole')
+            ->andWhere('accueil.date_jour = :date')
+            ->setParameter('date', $date);
+
+        if ($heure) {
+            $qb->andWhere('accueil.heure = :heure')
+                ->setParameter('heure', $heure)
+                ->getQuery()->getResult();
         }
 
         return $qb->getQuery()->getResult();

@@ -6,6 +6,5 @@ final class NotifyUser implements AfterUserRegistration
 {
     public function afterUserRegistrationSuccessful(): void
     {
-
     }
 }

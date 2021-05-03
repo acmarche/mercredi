@@ -73,5 +73,4 @@ final class AnimateurPresenceController extends AbstractController
             ]
         );
     }
-
 }

@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Enfant\Form;
 
-
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;

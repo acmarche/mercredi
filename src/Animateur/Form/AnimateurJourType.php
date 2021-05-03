@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class AnimateurJourType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder

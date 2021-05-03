@@ -5,7 +5,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('twig', ['form_themes' => ['bootstrap_4_layout.html.twig']]);
 
-    $containerConfigurator->extension('twig',
+    $containerConfigurator->extension(
+        'twig',
         [
             'paths' => [
                 '%kernel.project_dir%/src/AcMarche/Mercredi/templates/admin' => 'AcMarcheMercrediAdmin',
@@ -16,7 +17,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]
     );
 
-    $containerConfigurator->extension('twig',
+    $containerConfigurator->extension(
+        'twig',
         [
             'globals' => [
                 'presence_nb_days' => '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%',

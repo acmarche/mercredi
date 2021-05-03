@@ -100,5 +100,4 @@ final class AssociationAnimateurHandler
 
         return $user;
     }
-
 }

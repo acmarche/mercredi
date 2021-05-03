@@ -116,5 +116,4 @@ final class EnfantController extends AbstractController
             ]
         );
     }
-
 }

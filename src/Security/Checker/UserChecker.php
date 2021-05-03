@@ -24,8 +24,6 @@ class UserChecker implements UserCheckerInterface
     public function checkPostAuth(UserInterface $user)
     {
     }
-
-
 }
 /**
  * # config/packages/security.yaml

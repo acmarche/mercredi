@@ -47,6 +47,4 @@ final class FactureController extends AbstractController
             ]
         );
     }
-
-
 }

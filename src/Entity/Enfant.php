@@ -152,6 +152,4 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
             $this->getRelations()->toArray()
         );
     }
-
-
 }

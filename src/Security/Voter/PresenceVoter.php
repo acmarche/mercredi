@@ -61,9 +61,10 @@ final class PresenceVoter extends Voter
     protected function supports($attribute, $subject)
     {
         return $subject instanceof Presence && \in_array(
-                $attribute,
-                [self::ADD, self::SHOW, self::EDIT, self::DELETE], true
-            );
+            $attribute,
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+            true
+        );
     }
 
     protected function voteOnAttribute($attribute, $presence, TokenInterface $token)

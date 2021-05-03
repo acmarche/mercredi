@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Accueil\Form;
 
-
 use AcMarche\Mercredi\Entity\Accueil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -41,6 +40,4 @@ class AccueilInlineTpe extends AbstractType
             ]
         );
     }
-
-
 }

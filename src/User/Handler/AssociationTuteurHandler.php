@@ -100,5 +100,4 @@ final class AssociationTuteurHandler
 
         return $user;
     }
-
 }

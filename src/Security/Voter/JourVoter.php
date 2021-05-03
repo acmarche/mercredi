@@ -141,6 +141,4 @@ final class JourVoter extends Voter
 
         return true;
     }
-
-
 }

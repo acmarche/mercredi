@@ -15,13 +15,15 @@ final class UserRoleType extends AbstractType
     {
         $roles = array_flip(MercrediSecurity::ROLES);
         $formBuilder
-            ->add('roles',
+            ->add(
+                'roles',
                 ChoiceType::class,
                 [
                     'choices' => $roles,
                     'multiple' => true,
                     'expanded' => true,
-                ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

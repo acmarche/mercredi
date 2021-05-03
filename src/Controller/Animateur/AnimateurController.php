@@ -84,6 +84,4 @@ final class AnimateurController extends AbstractController
             ]
         );
     }
-
-
 }

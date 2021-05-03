@@ -101,5 +101,4 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     {
         return true;
     }
-
 }

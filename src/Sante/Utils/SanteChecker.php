@@ -73,7 +73,7 @@ final class SanteChecker
             }
         }
 
-        if(count($santeFiche->getAccompagnateurs()) < 1) {
+        if (count($santeFiche->getAccompagnateurs()) < 1) {
             return false;
         }
 

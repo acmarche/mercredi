@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-
 use AcMarche\Mercredi\Entity\Animateur;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

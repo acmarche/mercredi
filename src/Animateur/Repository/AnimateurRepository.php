@@ -79,7 +79,5 @@ final class AnimateurRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('animateur')
             ->orderBy('animateur.nom');
-
     }
-
 }

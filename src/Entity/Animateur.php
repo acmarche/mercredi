@@ -64,7 +64,4 @@ class Animateur implements TimestampableInterface
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
-
-
-
 }

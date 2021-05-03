@@ -42,8 +42,7 @@ final class ExportController extends AbstractController
         ListingPresenceByMonth $listingPresenceByMonth,
         PresenceRepository $presenceRepository,
         SearchHelper $searchHelper
-    )
-    {
+    ) {
         $this->spreadsheetFactory = $spreadsheetFactory;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->searchHelper = $searchHelper;

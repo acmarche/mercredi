@@ -11,13 +11,13 @@ final class InscriptionsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-      /*  $formBuilder->add(
-            'accueils',
-            CollectionType::class,
-            [
-                'entry_type' => AccueilInlineTpe::class,
-            ]
-        );*/
+        /*  $formBuilder->add(
+              'accueils',
+              CollectionType::class,
+              [
+                  'entry_type' => AccueilInlineTpe::class,
+              ]
+          );*/
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

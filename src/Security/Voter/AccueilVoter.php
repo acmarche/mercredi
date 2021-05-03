@@ -65,10 +65,10 @@ final class AccueilVoter extends Voter
     protected function supports($attribute, $subject)
     {
         return $subject instanceof Accueil && \in_array(
-                $attribute,
-                [self::ADD, self::SHOW, self::EDIT, self::DELETE],
-                true
-            );
+            $attribute,
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+            true
+        );
     }
 
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token)

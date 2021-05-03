@@ -15,14 +15,14 @@ final class UserPasswordType extends AbstractType
     {
         $formBuilder
             ->add(
-            'plainPassword',
-            RepeatedType::class,
-            [
+                'plainPassword',
+                RepeatedType::class,
+                [
                 'type' => PasswordType::class,
                 'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => 'Repeat Password'],
             ]
-        );
+            );
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-
 use AcMarche\Mercredi\Entity\Jour;
 use Doctrine\Common\Collections\Collection;
 

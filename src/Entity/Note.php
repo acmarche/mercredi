@@ -38,6 +38,4 @@ class Note implements TimestampableInterface
     {
         return $this->getRemarque();
     }
-
-
 }

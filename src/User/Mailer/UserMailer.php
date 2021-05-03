@@ -42,7 +42,7 @@ final class UserMailer
 
     public function sendNewAccountToAnimateur(User $user, Animateur $animateur, ?string $password = null): void
     {
-         $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         $templatedEmail = (new TemplatedEmail())
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
@@ -61,6 +61,4 @@ final class UserMailer
 
         $this->sendMail($templatedEmail);
     }
-
-
 }

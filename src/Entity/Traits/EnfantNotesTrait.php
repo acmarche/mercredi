@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-
 use AcMarche\Mercredi\Entity\Note;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -41,5 +40,4 @@ trait EnfantNotesTrait
 
         return $this;
     }
-
 }
