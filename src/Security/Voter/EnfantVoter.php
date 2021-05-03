@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use AcMarche\Mercredi\Animateur\Utils\AnimateurUtils;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\MercrediSecurity;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -52,20 +52,20 @@ final class EnfantVoter extends Voter
      */
     private $relationRepository;
     /**
-     * @var AnimateurUtils
+     * @var JourRepository
      */
-    private $animateurUtils;
+    private $jourRepository;
 
     public function __construct(
         RelationRepository $relationRepository,
         TuteurUtils $tuteurUtils,
-        AnimateurUtils $animateurUtils,
+        JourRepository $jourRepository,
         Security $security
     ) {
         $this->tuteurUtils = $tuteurUtils;
         $this->security = $security;
         $this->relationRepository = $relationRepository;
-        $this->animateurUtils = $animateurUtils;
+        $this->jourRepository = $jourRepository;
     }
 
     protected function supports($attribute, $subject)
@@ -150,7 +150,7 @@ final class EnfantVoter extends Voter
             return false;
         }
 
-        $enfants = new ArrayCollection($this->animateurUtils->getAllEnfants($animateur));
+        $enfants = new ArrayCollection($this->jourRepository->findAllForAnimateur($animateur));
         if ($enfants->contains($this->enfant)) {
             return true;
         }
