@@ -60,7 +60,7 @@ final class SantePdfFactoryTrait
             ]
         );
 
-        return new Response($html);
+       // return new Response($html);
         return $this->downloadPdf($html, $enfant->getSlug().'-sante.pdf');
     }
 }

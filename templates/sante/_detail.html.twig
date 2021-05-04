@@ -93,7 +93,7 @@
             </td>
             <td>
                 {% if question.reponseTxt is null %}
-                    <img alt="Ko" src="{{ asset('bundles/acmarchemercredi/images/exclamation.png') }}" height="50px">
+                    <img alt="Ko" src="{{ absolute_url(asset('bundles/acmarchemercredi/images/exclamation.png')) }}" height="50px">
                     <span class="text-danger">Non répondu</span>
                 {% endif %}
                 {{ question.remarque }}
