@@ -93,7 +93,7 @@ final class PresenceController extends AbstractController
         $form->handleRequest($request);
         $data = [];
         $search = $displayRemarque = false;
-        $jour = $remarques = null;
+        $jour = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();

@@ -26,7 +26,7 @@
 
             <h3>
                 {{ groupeName | title }} <a
-                        href="{{ path('mercredi_message_new_groupescolaire', {'groupe': groupeName}) }}"
+                        href="{{ path('mercredi_message_new_groupescolaire', {'groupe': groupeName|url_encode}) }}"
                         title="Envoyer un message aux parents" class="d-print-none" id="new_message_from_groupe_{{ groupeName }}">
                     <i class="far fa-envelope"></i></a>
             </h3>

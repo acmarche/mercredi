@@ -26,7 +26,7 @@ class Message implements TimestampableInterface
 
     /**
      * @var string|null
-     * @Assert\NotBlank()
+     * Assert\NotBlank()
      */
     private $to;
 

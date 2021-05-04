@@ -192,6 +192,7 @@ final class MessageController extends AbstractController
         $ecole = $args['ecole'];
 
         $data = $this->presenceHandler->handleForGrouping($jour, $ecole, false);
+        $groupe = urldecode($groupe);
         $enfants = $data[$groupe] ?? [];
 
         $tuteurs = $this->tuteurUtils->getTuteursByEnfants($enfants);
@@ -200,7 +201,7 @@ final class MessageController extends AbstractController
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
 
-        $form = $form = $this->createForm(MessageType::class, $message);
+        $form = $this->createForm(MessageType::class, $message);
 
         $form->handleRequest($request);
 
