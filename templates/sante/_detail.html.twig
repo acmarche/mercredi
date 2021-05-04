@@ -81,19 +81,20 @@
                 {% if question.reponseTxt is null %}
                     -
                 {% elseif question.reponseTxt == 0 %}
-                    <i class="fas fa-chevron-down"></i>
+                    <span class="text-success font-weight-bolder">Non</span>
                 {% endif %}
             </td>
             <td>
                 {% if question.reponseTxt is null %}
                     -
                 {% elseif question.reponseTxt == 1 %}
-                    <i class="fas fa-chevron-down"></i>
+                    <span class="text-success font-weight-bolder">Oui</span>
                 {% endif %}
             </td>
             <td>
                 {% if question.reponseTxt is null %}
-                    <i class="fas fa-exclamation-circle"></i> <span class="text-danger">Non répondu</span>
+                    <img alt="Ko" src="{{ asset('bundles/acmarchemercredi/images/exclamation.png') }}" height="50px">
+                    <span class="text-danger">Non répondu</span>
                 {% endif %}
                 {{ question.remarque }}
             </td>
