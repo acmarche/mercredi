@@ -94,8 +94,6 @@ final class EnfantVoter extends Voter
             return true;
         }
 
-        $this->tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
-
         switch ($attribute) {
             case self::SHOW:
                 return $this->canView();
@@ -113,21 +111,33 @@ final class EnfantVoter extends Voter
     private function canView(): bool
     {
         if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
-            return $this->checkEcoles();
+            if ($this->checkEcoles()) {
+                return true;
+            }
         }
         if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
-            return $this->checkAnimateur();
+            if ($this->checkAnimateur()) {
+                return true;
+            }
         }
-        return $this->canEdit();
+        if ($this->canEdit()) {
+            return true;
+        }
+
+        return false;
     }
 
     private function canEdit(): bool
     {
         if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
-            return $this->checkEcoles();
+            if ($this->checkEcoles()) {
+                return true;
+            }
         }
         if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
-            return $this->checkTuteur();
+            if ($this->checkTuteur()) {
+                return true;
+            }
         }
 
         return false;
@@ -167,6 +177,7 @@ final class EnfantVoter extends Voter
             return false;
         }
 
+        $this->tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
         if (!$this->tuteur) {
             return false;
         }

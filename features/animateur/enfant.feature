@@ -3,6 +3,9 @@ Feature: Gestion de sa fiche animateur
   Je fais une recherche
   Je consulte un enfant
 
+  todo tester un user qui a une ecole x et qui essaie de consulter un enfant d'une ecole y
+  mais qui est animateur avec une présence lors de son jour de travail
+
   Background:
     Given I am login with user "kevin@marche.be" and password "homer"
     Given I am on "/animateur/enfant/"
