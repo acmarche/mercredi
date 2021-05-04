@@ -56,6 +56,8 @@ final class PresenceType extends AbstractType
                 }
             }
         );
+
+        $formBuilder->addEventSubscriber(new AddFieldTuteurSubscriber());
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

@@ -1,11 +1,6 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 <div class="row">
-    {% if form.tuteur is defined %}
-        <div class="col-12">
-            {{ form_row(form.tuteur) }}
-        </div>
-    {% endif %}
     <div class="col-6">
         {{ form_row(form.absent) }}
     </div>
@@ -15,6 +10,11 @@
     <div class="col-6">
         {{ form_row(form.ordre) }}
     </div>
+    {% if form.tuteur is defined %}
+    <div class="col-6">
+        {{ form_row(form.tuteur) }}
+    </div>
+     {% endif %}
     {% if form.half is defined %}
         <div class="col-6">
             {{ form_row(form.half) }}

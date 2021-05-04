@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Relation;
+use Doctrine\Common\Collections\Collection;
 
 trait RelationsTrait
 {
@@ -12,7 +13,7 @@ trait RelationsTrait
     private $relations;
 
     /**
-     * @return Relation[]
+     * @return Relation[]|Collection
      */
     public function getRelations(): iterable
     {
