@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
-use AcMarche\Mercredi\Entity\Accueil;
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;

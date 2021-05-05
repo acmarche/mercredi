@@ -6,22 +6,25 @@ use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
+use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use function count;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use function count;
 
 final class FactureMailer
 {
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
+    use PdfDownloaderTrait;
 
     /**
      * @var FactureFactory
      */
     private $factureFactory;
 
-    public function __construct(FactureFactory $factureFactory)
-    {
+    public function __construct(
+        FactureFactory $factureFactory
+    ) {
         $this->factureFactory = $factureFactory;
     }
 
@@ -55,9 +58,11 @@ final class FactureMailer
                 ]
             );
 
+        $html = $this->factureFactory->generateFullHtml2($facture);
         $date = $facture->getFactureLe();
-        $html = $this->factureFactory->generateFullHtml($facture);
-        $templatedEmail->attach($html, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
+        $invoicepdf = $this->getPdf()->getOutputFromHtml($html);
+
+        $templatedEmail->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
 
         $this->sendMail($templatedEmail);
     }

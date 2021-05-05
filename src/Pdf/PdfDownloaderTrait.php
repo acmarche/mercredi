@@ -11,7 +11,7 @@ trait PdfDownloaderTrait
     /**
      * @var Pdf
      */
-    private $pdf;
+    public $pdf;
 
     /**
      * @required
@@ -19,6 +19,14 @@ trait PdfDownloaderTrait
     public function setPdf(Pdf $pdf): void
     {
         $this->pdf = $pdf;
+    }
+
+    /**
+     * @return \Knp\Snappy\Pdf
+     */
+    public function getPdf(): Pdf
+    {
+        return $this->pdf;
     }
 
     public function downloadPdf(string $html, string $fileName): Response
