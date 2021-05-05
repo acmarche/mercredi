@@ -25,7 +25,7 @@ final class FacturePdfFactoryTrait
         $date = $facture->getFactureLe();
         $html = $this->factureFactory->generateFullHtml2($facture);
 
-         return new Response($html);
+       //  return new Response($html);
 
         return $this->downloadPdf($html, 'facture_'.$date->format('d-m-Y').'.pdf');
     }
