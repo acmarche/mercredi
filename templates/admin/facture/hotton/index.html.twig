@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/pdf.css')) }}" rel="stylesheet">
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/bootstrap/css/bootstrap.min.css')) }}" rel="stylesheet">
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/print.css')) }}" rel="stylesheet" media="print">
+    <title>Facture</title>
+    <style type="text/css">
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Détails de la facture {{ facture.id }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="d-flex flex-row">
+                <img height="70px" src="{{ asset('bundles/acmarchemercredi/images/logo-hotton.png') }}"
+                     alt="logo hotton">
+                <div class="ml-2 w-100 ">Administration communale de Hotton<br>
+                    Rue des Ecoles, 50
+                    6990 Hotton<br>
+                    Contact: Sophie Dawance<br>
+                    Mail: planu@hotton.be<br>
+                </div>
+                <div class="p-2 flex-shrink-1 w-25">
+                    Hotton, le {{ facture.createdAt|format_date('full') }}
+                    <br><br>
+                    {{ facture.nom }} {{ facture.prenom }}<br>
+                    {{ facture.rue }} <br/>
+                    {{ facture.codepostal }} {{ facture.localite }}
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-center">
+                <div>
+                    {{ organisation.nom }} Mois {{ mois|format_date('full') }}
+                </div>
+                <br/>
+                <div>Implantation scolaire {{ facture.ecoles|join(',') }}</div>
+            </div>
+            <p class="mt-5 text-muted">
+                Nous vous invitons à verser le montant total mentionné ci-dessous dans les 30 jours.
+                <br/>En cas de rappel, nous appliquerons
+                des frais administratifs de selon les factures dues à l’échéance.
+            </p>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Enfant(s)</th>
+                    {% for row in data %}
+                        <th>{{ row.enfant }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <tr>
+                    <td>
+                        Garderies matin ≤ 7h29=0,50€ &7h30 -
+                        8h = 0,50€
+                    </td>
+                    {% for row in data %}
+                        <td>{{ row.accueils.Matin.nb }} demi-heure(s)</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>
+                        Garderies soir ≤ 17h = 0,50€ & Après
+                        17h = 0,50 €/demi-heure
+                    </td>
+                    {% for row in data %}
+                        <td>{{ row.accueils.Soir.nb }} demi-heure(s)</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>
+                        Journée pédagogique
+                        1 journée = 5,00 € & 1/2 journée = 2,50 €
+                    </td>
+                    {% for row in data %}
+                        <td>{{ row.peda }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Mercredi récréatif
+                        5 €, 3 €, 1 € (selon le nbre d'enfants)
+                    </td>
+                    {% for row in data %}
+                       <td>{{ row.mercredi }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>
+                        Total période
+                    </th>
+                    {% for row in data %}
+                       <td>{{ row.cout | format_currency('eur') }}</td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+
+            <p class="text-center">
+                Recevez nos salutations distinguées,
+            </p>
+            <div class="d-flex flex-row justify-content-between">
+                <div>
+                    La Directrice Générale,
+                    Marie-France DEWEZ
+                </div>
+                <div>
+                    Le Bourgmestre,
+                    Jacques CHAPLIER
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted mt-3">
+            A payer:<br>
+            IBAN: B E 2 3 0 9 1 0 1 9 6 1 9 6 9 1<br>
+            BIC: G K C C B E B B<br>
+            Communication: xxx
+        </div>
+    </div>
+</div>
+</body>

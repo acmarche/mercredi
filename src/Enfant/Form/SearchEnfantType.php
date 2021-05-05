@@ -32,7 +32,7 @@ final class SearchEnfantType extends AbstractType
                 SearchType::class,
                 [
                     self::REQUIRED => false,
-                    self::ATTR => [self::PLACEHOLDER => 'Nom'],
+                    self::ATTR => [self::PLACEHOLDER => 'Nom', 'autocomplete' => 'off'],
                 ]
             )
             ->add(

@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -51,6 +53,16 @@ class Facture implements TimestampableInterface, UuidableInterface
      */
     private $payeLe;
 
+    /**
+     * @var Ecole[] $ecoles
+     */
+    private $ecoles;
+
+    /**
+     * @var Enfant[] $enfants
+     */
+    private $enfants;
+
     public function __construct(Tuteur $tuteur)
     {
         $this->tuteur = $tuteur;
@@ -61,6 +73,35 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function __toString()
     {
         return 'Facture '.$this->id;
+    }
+
+    /**
+     * @return array|Enfant[]
+     */
+    public function getEnfants(): array
+    {
+        $enfants = [];
+        foreach ($this->facturePresences as $facturePresence) {
+            $presence = $facturePresence->getPresence();
+            $enfant = $presence->getEnfant();
+            $enfants[$enfant->getId()] = $enfant;
+        }
+
+        return $enfants;
+    }
+
+    /**
+     * @return array|Ecole[]
+     */
+    public function getEcoles(): array
+    {
+        $ecoles = [];
+        foreach ($this->getEnfants() as $enfant) {
+            $ecole = $enfant->getEcole();
+            $ecoles[$ecole->getId()] = $ecole;
+        }
+
+        return $ecoles;
     }
 
     public function getPayeLe(): ?\DateTimeInterface
