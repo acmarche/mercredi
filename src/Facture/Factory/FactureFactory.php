@@ -59,17 +59,22 @@ final class FactureFactory
     {
         $tuteur = $facture->getTuteur();
         $organisation = $this->organisationRepository->getOrganisation();
-        $data = [];
+        $data = [
+            'enfants' => [],
+            'cout' => 0,
+        ];
         //init
         foreach ($facture->getEnfants() as $enfant) {
-            $data[$enfant->getId()]['enfant'] = $enfant;
-            $data[$enfant->getId()]['peda'] = 0;
-            $data[$enfant->getId()]['mercredi'] = 0;
-            $data[$enfant->getId()]['accueils'] = [
-                'Soir' => ['nb' => 0, 'cout' => 0],
-                'Matin' => ['nb' => 0, 'cout' => 0],
+            $data['enfants'][$enfant->getId()] = [
+                'enfant' => $enfant,
+                'cout' => 0,
+                'peda' => 0,
+                'mercredi' => 0,
+                'accueils' => [
+                    'Soir' => ['nb' => 0, 'cout' => 0],
+                    'Matin' => ['nb' => 0, 'cout' => 0],
+                ],
             ];
-            $data[$enfant->getId()]['cout'] = 0;
         }
 
         foreach ($facture->getFactureAccueils() as $factureAccueil) {
@@ -78,6 +83,10 @@ final class FactureFactory
 
         foreach ($facture->getFacturePresences() as $facturePresence) {
             $data = $this->groupPresences($facturePresence, $data);
+        }
+
+        foreach ($data['enfants'] as $enfant) {
+            $data['cout'] += $enfant['cout'];
         }
 
         return $this->environment->render(
@@ -98,8 +107,8 @@ final class FactureFactory
         $enfant = $accueil->getEnfant();
         $heure = $accueil->getHeure();
         $duree = $accueil->getDuree();
-        $data[$enfant->getId()]['cout'] += $factureAccueil->getCout();
-        $data[$enfant->getId()]['accueils'][$heure]['nb'] += $duree;
+        $data['enfants'][$enfant->getId()]['cout'] += $factureAccueil->getCout();
+        $data['enfants'][$enfant->getId()]['accueils'][$heure]['nb'] += $duree;
 
         return $data;
     }
@@ -109,12 +118,12 @@ final class FactureFactory
         $presence = $facturePresence->getPresence();
         $enfant = $presence->getEnfant();
         if ($presence->getJour()->isPedagogique()) {
-            $data[$enfant->getId()]['peda'] += 1;
+            $data['enfants'][$enfant->getId()]['peda'] += 1;
         }
         if (!$presence->getJour()->isPedagogique()) {
-            $data[$enfant->getId()]['mercredi'] += 1;
+            $data['enfants'][$enfant->getId()]['mercredi'] += 1;
         }
-        $data[$enfant->getId()]['cout'] += $facturePresence->getCout();
+        $data['enfants'][$enfant->getId()]['cout'] += $facturePresence->getCout();
 
         return $data;
     }
