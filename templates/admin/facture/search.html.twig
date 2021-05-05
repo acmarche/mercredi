@@ -11,38 +11,46 @@
 
             {% include '@AcMarcheMercredi/admin/facture/_search.html.twig' %}
 
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Numéro</th>
-                    <th>Facturé le</th>
-                    <th>Facturé à</th>
-                    <th>Payé le</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for facture in factures %}
+            {% if search %}
+                <table class="table table-bordered table-hover">
+                    <thead>
                     <tr>
-                        <td>
-                            N° {{ facture.id }}
-                        </td>
-                        <td>
-                            <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
-                                {{ facture.factureLe | format_date('full') | title }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ path('mercredi_admin_tuteur_show', { 'id': facture.tuteur.id }) }}">
-                                {{ facture.tuteur }}
-                            </a>
-                        </td>
-                        <td>
-                            {{ facture.payeLe ? facture.payeLe | format_date('full','full') }}
-                        </td>
+                        <th>Numéro</th>
+                        <th>Facturé le</th>
+                        <th>Facturé à</th>
+                        <th>Payé le</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for facture in factures %}
+                        <tr>
+                            <td>
+                                N° {{ facture.id }}
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
+                                    {{ facture.factureLe | format_date('full') | title }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_admin_tuteur_show', { 'id': facture.tuteur.id }) }}">
+                                    {{ facture.tuteur }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ facture.payeLe ? facture.payeLe | format_date('full','full') }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">
+                                Aucune facture trouvée
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
 
         </div>
     </div>

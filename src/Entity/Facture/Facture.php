@@ -86,6 +86,11 @@ class Facture implements TimestampableInterface, UuidableInterface
             $enfant = $presence->getEnfant();
             $enfants[$enfant->getId()] = $enfant;
         }
+        foreach ($this->getFactureAccueils() as $factureAccueil) {
+            $accueil = $factureAccueil->getAccueil();
+            $enfant = $accueil->getEnfant();
+            $enfants[$enfant->getId()] = $enfant;
+        }
 
         return $enfants;
     }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -15,11 +16,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class FactureRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
-    private const TUTEUR = 'tuteur';
-
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Facture::class);
@@ -31,25 +27,36 @@ final class FactureRepository extends ServiceEntityRepository
     public function findFacturesByTuteur(Tuteur $tuteur): array
     {
         return $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', self::TUTEUR, 'WITH')
-            ->addSelect(self::TUTEUR)
+            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
+            ->addSelect('tuteur')
             ->andWhere('facture.tuteur = :tuteur')
-            ->setParameter(self::TUTEUR, $tuteur)
+            ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
     }
 
     /**
      * @return Facture[]
      */
-    public function search(?string $tuteur, ?bool $paye): array
+    public function search(?string $tuteur, ?Ecole $ecole, ?bool $paye): array
     {
         $queryBuilder = $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', self::TUTEUR, 'WITH')
-            ->addSelect(self::TUTEUR);
+            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('facture.facturePresences', 'facturePresences', 'WITH')
+            ->leftJoin('facturePresences.presence', 'presence', 'WITH')
+            ->leftJoin('presence.enfant', 'enfantE', 'WITH')
+            ->leftJoin('facture.factureAccueils', 'factureAccueils', 'WITH')
+            ->leftJoin('factureAccueils.accueil', 'accueil', 'WITH')
+            ->leftJoin('accueil.enfant', 'enfantA', 'WITH')
+            ->addSelect('tuteur', 'facturePresences', 'factureAccueils', 'presence', 'enfantA', 'enfantE', 'accueil');
 
         if ($tuteur) {
             $queryBuilder->andWhere('tuteur.nom LIKE :tuteur')
-                ->setParameter(self::TUTEUR, '%'.$tuteur.'%');
+                ->setParameter('tuteur', '%'.$tuteur.'%');
+        }
+
+        if ($ecole) {
+            $queryBuilder->andWhere('enfantE.ecole = :ecole OR enfantA.ecole = :ecole')
+                ->setParameter('ecole', $ecole);
         }
 
         switch ($paye) {

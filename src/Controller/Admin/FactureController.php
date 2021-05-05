@@ -83,10 +83,12 @@ final class FactureController extends AbstractController
         $factures = [];
         $form = $this->createForm(FactureSearchType::class);
         $form->handleRequest($request);
+        $search = false;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
-            $factures = $this->factureRepository->search($dataForm['tuteur'], $dataForm['paye']);
+            $search = true;
+            $factures = $this->factureRepository->search($dataForm['tuteur'], $dataForm['ecole'], $dataForm['paye']);
         }
 
         return $this->render(
@@ -94,6 +96,7 @@ final class FactureController extends AbstractController
             [
                 'factures' => $factures,
                 'form' => $form->createView(),
+                'search' => $search,
             ]
         );
     }
