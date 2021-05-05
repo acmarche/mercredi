@@ -116,6 +116,12 @@
                     {% endfor %}
                 </tr>
                 </tbody>
+                <tfoot>
+                <tr>
+                    <th>Total à payer</th>
+                    <td>{{ data.cout | format_currency('eur') }}</td>
+                </tr>
+                </tfoot>
             </table>
 
             <p class="text-center">

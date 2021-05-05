@@ -77,10 +77,8 @@ final class FactureFactory
         }
 
         foreach ($facture->getFacturePresences() as $facturePresence) {
-            $this->groupPresences($facturePresence, $data);
+            $data = $this->groupPresences($facturePresence, $data);
         }
-
-        //   dump($data);
 
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/hotton/index.html.twig',
@@ -116,6 +114,7 @@ final class FactureFactory
         if (!$presence->getJour()->isPedagogique()) {
             $data[$enfant->getId()]['mercredi'] += 1;
         }
+        $data[$enfant->getId()]['cout'] += $facturePresence->getCout();
 
         return $data;
     }
