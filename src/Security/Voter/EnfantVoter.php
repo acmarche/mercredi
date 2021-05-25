@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -52,20 +53,20 @@ final class EnfantVoter extends Voter
      */
     private $relationRepository;
     /**
-     * @var JourRepository
+     * @var EnfantRepository
      */
-    private $jourRepository;
+    private $enfantRepository;
 
     public function __construct(
         RelationRepository $relationRepository,
         TuteurUtils $tuteurUtils,
-        JourRepository $jourRepository,
+        EnfantRepository $enfantRepository,
         Security $security
     ) {
         $this->tuteurUtils = $tuteurUtils;
         $this->security = $security;
         $this->relationRepository = $relationRepository;
-        $this->jourRepository = $jourRepository;
+        $this->enfantRepository = $enfantRepository;
     }
 
     protected function supports($attribute, $subject)
@@ -160,7 +161,7 @@ final class EnfantVoter extends Voter
             return false;
         }
 
-        $enfants = new ArrayCollection($this->jourRepository->findAllForAnimateur($animateur));
+        $enfants = new ArrayCollection($this->enfantRepository->findAllForAnimateur($animateur));
         if ($enfants->contains($this->enfant)) {
             return true;
         }
