@@ -93,7 +93,7 @@ class Jour implements TimestampableInterface
         return $this->date_jour->format('d-m-Y');
     }
 
-    public function getDateJour(): ?DateTime
+    public function getDateJour(): \DateTime
     {
         return $this->date_jour;
     }
@@ -140,7 +140,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Ecole[]
      */
-    public function getEcoles(): ArrayCollection
+    public function getEcoles(): iterable
     {
         return $this->ecoles;
     }

@@ -60,7 +60,7 @@ class GroupeScolaire
         return $this->nom;
     }
 
-    public function getAgeMinimum(): int
+    public function getAgeMinimum(): ?int
     {
         return $this->age_minimum;
     }
@@ -72,7 +72,7 @@ class GroupeScolaire
         return $this;
     }
 
-    public function getAgeMaximum(): int
+    public function getAgeMaximum(): ?int
     {
         return $this->age_maximum;
     }

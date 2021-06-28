@@ -9,17 +9,17 @@ trait AdresseTrait
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private ?string $rue;
+    private ?string $rue = null;
 
     /**
      * @ORM\Column(type="integer", length=6, nullable=true)
      */
-    private ?string $code_postal;
+    private ?string $code_postal = null;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private ?string $localite;
+    private ?string $localite = null;
 
     public function getRue(): ?string
     {

@@ -37,7 +37,7 @@ final class UserFactory
         return $user;
     }
 
-    public function newFromAnimateur(Animateur $animateur, ?User $user = null): User
+    public function newFromAnimateur(Animateur $animateur, ?User $user = null): ?User
     {
         if (null === $user) {
             $user = $this->getInstance($animateur->getEmail());
@@ -60,7 +60,7 @@ final class UserFactory
         return $user;
     }
 
-    public function newFromTuteur(Tuteur $tuteur, ?User $user = null): User
+    public function newFromTuteur(Tuteur $tuteur, ?User $user = null): ?User
     {
         if (null === $user) {
             $user = $this->getInstance($tuteur->getEmail());

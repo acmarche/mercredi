@@ -45,7 +45,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
      */
-    private ?Jour $jour;
+    private ?Jour $jour=null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
@@ -55,7 +55,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
      */
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur=null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")

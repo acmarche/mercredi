@@ -35,7 +35,7 @@ class FactureAccueil
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Accueil")
      */
-    private ?Accueil $accueil;
+    private ?Accueil $accueil=null;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -58,7 +58,7 @@ class FactureAccueil
         $this->accueil = $accueil;
     }
 
-    public function getAccueilDate(): DateTimeInterface
+    public function getAccueilDate(): ?\DateTimeInterface
     {
         return $this->accueilDate;
     }
@@ -70,7 +70,7 @@ class FactureAccueil
         return $this;
     }
 
-    public function getCout(): float
+    public function getCout(): ?float
     {
         return $this->cout;
     }
@@ -82,7 +82,7 @@ class FactureAccueil
         return $this;
     }
 
-    public function getHeure(): string
+    public function getHeure(): ?string
     {
         return $this->heure;
     }

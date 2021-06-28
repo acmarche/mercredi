@@ -21,21 +21,21 @@ trait PhotoTrait
      *
      * @var UploadedFile
      */
-    private ?File $photo;
+    private ?File $photo = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @var string|null
      */
-    private ?string $photoName;
+    private ?string $photoName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
      */
-    private ?string $mime;
+    private ?string $mime = null;
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance

@@ -7,7 +7,7 @@ trait TelephonesTrait
     /**
      * @var string|null
      */
-    private ?string $telephones;
+    private ?string $telephones = null;
 
     public function getTelephones(): ?string
     {

@@ -21,7 +21,7 @@ final class FactureDto
     /**
      * @return Collection|Presence[]
      */
-    public function getPresences(): array
+    public function getPresences(): Collection
     {
         return $this->presences;
     }

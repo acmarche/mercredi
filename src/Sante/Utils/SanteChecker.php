@@ -89,7 +89,7 @@ final class SanteChecker
         if (!$santeQuestion->getComplement()) {
             return true;
         }
-        if (!$santeQuestion->getReponseTxt()) {
+        if ($santeQuestion->getReponseTxt() === '') {
             return true;
         }
         return '' != trim($santeQuestion->getRemarque()) && null !== $santeQuestion->getRemarque();

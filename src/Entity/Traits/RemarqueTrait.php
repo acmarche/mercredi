@@ -10,7 +10,7 @@ trait RemarqueTrait
      * @var string|null
      * @ORM\Column(type="text", nullable=true)
      */
-    private ?string $remarque;
+    private ?string $remarque = null;
 
     public function getRemarque(): ?string
     {

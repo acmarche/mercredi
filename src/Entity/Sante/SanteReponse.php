@@ -67,7 +67,7 @@ class SanteReponse
         $this->sante_fiche = $sante_fiche;
     }
 
-    public function isReponse(): ?bool
+    public function isReponse(): bool
     {
         return $this->reponse;
     }
@@ -87,7 +87,7 @@ class SanteReponse
         $this->remarque = $remarque;
     }
 
-    public function getReponse(): ?bool
+    public function getReponse(): bool
     {
         return $this->reponse;
     }

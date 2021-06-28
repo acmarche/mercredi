@@ -12,7 +12,7 @@ trait SiteWebTrait
      * @ORM\Column(type="string", length=150, nullable=true)
      * @Assert\Url()
      */
-    private ?string $site_web;
+    private ?string $site_web = null;
 
     public function getSiteWeb(): ?string
     {

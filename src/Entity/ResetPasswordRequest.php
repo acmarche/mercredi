@@ -20,7 +20,7 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Security\User")
      */
-    private ?User $user;
+    private ?User $user=null;
 
     public function __construct(object $user, DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {

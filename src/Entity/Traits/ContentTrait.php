@@ -10,7 +10,7 @@ trait ContentTrait
      * @var string|null
      * @ORM\Column(type="text", nullable=true)
      */
-    private ?string $content;
+    private ?string $content = null;
 
     public function getContent(): ?string
     {

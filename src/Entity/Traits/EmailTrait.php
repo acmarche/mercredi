@@ -12,7 +12,7 @@ trait EmailTrait
      * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=50, nullable=true)
      */
-    private ?string $email;
+    private ?string $email = null;
 
     public function getEmail(): ?string
     {

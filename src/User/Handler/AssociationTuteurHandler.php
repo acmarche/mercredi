@@ -75,7 +75,7 @@ final class AssociationTuteurHandler
         return $tuteur;
     }
 
-    public function handleCreateUserFromTuteur(Tuteur $tuteur): User
+    public function handleCreateUserFromTuteur(Tuteur $tuteur): ?User
     {
         $user = $this->userFactory->newFromTuteur($tuteur);
         $plainPassword = $user->getPlainPassword();

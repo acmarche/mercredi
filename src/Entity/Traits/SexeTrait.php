@@ -11,7 +11,7 @@ trait SexeTrait
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private ?string $sexe;
+    private ?string $sexe = null;
 
     public function getSexe(): ?string
     {

@@ -40,7 +40,7 @@ class Relation
      * @ORM\JoinColumn(nullable=false)
      *
      * */
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur=null;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant)
     {

@@ -15,7 +15,7 @@ trait BirthdayTrait
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
-    private ?DateTimeInterface $birthday;
+    private ?DateTimeInterface $birthday = null;
 
     public function getBirthday(): ?DateTime
     {

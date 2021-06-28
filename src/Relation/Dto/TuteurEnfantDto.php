@@ -12,12 +12,12 @@ final class TuteurEnfantDto
     use EnfantTrait;
     use TuteurTrait;
 
-    public function getTuteur(): Tuteur
+    public function getTuteur(): ?Tuteur
     {
         return $this->tuteur;
     }
 
-    public function getEnfant(): Enfant
+    public function getEnfant(): ?Enfant
     {
         return $this->enfant;
     }

@@ -9,7 +9,7 @@ trait UserAddTrait
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private ?string $userAdd;
+    private ?string $userAdd = null;
 
     public function getUserAdd(): ?string
     {

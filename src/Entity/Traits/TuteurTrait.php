@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Tuteur;
 
 trait TuteurTrait
 {
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur = null;
 
     public function getTuteur(): Tuteur
     {

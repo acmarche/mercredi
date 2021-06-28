@@ -26,13 +26,13 @@ class PlaineGroupe
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="plaine_groupes")
      */
-    private ?GroupeScolaire $groupe_scolaire;
+    private ?GroupeScolaire $groupe_scolaire=null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_groupes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Plaine $plaine;
+    private ?Plaine $plaine=null;
 
     /**
      * @ORM\Column(type="integer")

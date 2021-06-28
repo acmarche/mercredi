@@ -35,7 +35,7 @@ class FacturePresence
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Presence")
      */
-    private ?Presence $presence;
+    private ?Presence $presence = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -53,7 +53,7 @@ class FacturePresence
         $this->presence = $presence;
     }
 
-    public function getPresenceDate(): DateTime
+    public function getPresenceDate(): ?\DateTimeInterface
     {
         return $this->presenceDate;
     }
@@ -65,7 +65,7 @@ class FacturePresence
         return $this;
     }
 
-    public function getCout(): float
+    public function getCout(): ?float
     {
         return $this->cout;
     }

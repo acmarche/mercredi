@@ -75,7 +75,7 @@ final class AssociationAnimateurHandler
         return $animateur;
     }
 
-    public function handleCreateUserFromAnimateur(Animateur $animateur): User
+    public function handleCreateUserFromAnimateur(Animateur $animateur): ?User
     {
         $user = $this->userFactory->newFromAnimateur($animateur);
         $plainPassword = $user->getPlainPassword();

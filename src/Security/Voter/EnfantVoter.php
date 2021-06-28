@@ -110,11 +110,7 @@ final class EnfantVoter extends Voter
         if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE) && $this->checkEcoles()) {
             return true;
         }
-        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT) && $this->checkTuteur()) {
-            return true;
-        }
-
-        return false;
+        return $this->security->isGranted(MercrediSecurity::ROLE_PARENT) && $this->checkTuteur();
     }
 
     private function canAdd(): bool

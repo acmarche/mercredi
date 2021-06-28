@@ -83,7 +83,7 @@ class SanteFiche implements TimestampableInterface
         return 'Fiche '.$this->id;
     }
 
-    public function getPersonneUrgence(): string
+    public function getPersonneUrgence(): ?string
     {
         return $this->personne_urgence;
     }

@@ -9,7 +9,7 @@ trait ColorTrait
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private ?string $color;
+    private ?string $color = null;
 
     public function getColor(): ?string
     {

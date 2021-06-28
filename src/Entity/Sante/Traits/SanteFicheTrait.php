@@ -10,7 +10,7 @@ trait SanteFicheTrait
     /**
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", mappedBy="enfant", cascade={"remove"})
      */
-    private ?SanteFiche $sante_fiche;
+    private ?SanteFiche $sante_fiche = null;
 
     public function getSanteFiche(): ?SanteFiche
     {

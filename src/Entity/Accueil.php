@@ -62,7 +62,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur = null;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant)
     {
@@ -100,7 +100,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
         return $this;
     }
 
-    public function getHeure(): string
+    public function getHeure(): ?string
     {
         return $this->heure;
     }

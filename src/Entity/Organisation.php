@@ -42,7 +42,7 @@ class Organisation
      * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=50, nullable=false)
      */
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
@@ -52,7 +52,7 @@ class Organisation
      *     maxSize="7M"
      * )
      */
-    private ?File $photo;
+    private ?File $photo = null;
 
     public function __toString()
     {

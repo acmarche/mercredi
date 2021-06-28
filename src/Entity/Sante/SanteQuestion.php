@@ -56,7 +56,7 @@ class SanteQuestion
 
     private string $reponseTxt;
 
-    private ?string $remarque;
+    private ?string $remarque = null;
 
     public function __construct()
     {
@@ -106,7 +106,7 @@ class SanteQuestion
     /**
      * @return mixed
      */
-    public function getReponseTxt()
+    public function getReponseTxt(): string
     {
         return $this->reponseTxt;
     }
