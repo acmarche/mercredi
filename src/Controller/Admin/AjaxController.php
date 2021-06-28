@@ -17,14 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AjaxController extends AbstractController
 {
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
+    private EnfantRepository $enfantRepository;
+    private TuteurRepository $tuteurRepository;
 
     public function __construct(EnfantRepository $enfantRepository, TuteurRepository $tuteurRepository)
     {

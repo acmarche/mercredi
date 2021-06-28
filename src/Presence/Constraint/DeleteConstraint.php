@@ -13,14 +13,14 @@ use DateTimeInterface;
  */
 final class DeleteConstraint
 {
-    public static function canBeDeleted(Presence $presence)
+    public static function canBeDeleted(Presence $presence): bool
     {
         $dateTime = new DateTime();
 
         return $presence->getJour()->getDateJour() > $dateTime;
     }
 
-    public static function accueilCanBeDeleted(Accueil $accueil)
+    public static function accueilCanBeDeleted(Accueil $accueil): bool
     {
         $dateTime = new DateTime();
 

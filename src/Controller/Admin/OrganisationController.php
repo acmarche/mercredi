@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Organisation\Form\OrganisationType;
 use AcMarche\Mercredi\Organisation\Message\OrganisationCreated;
@@ -32,10 +33,7 @@ final class OrganisationController extends AbstractController
      * @var string
      */
     private const ORGANISATION = 'organisation';
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
+    private OrganisationRepository $organisationRepository;
 
     public function __construct(OrganisationRepository $organisationRepository)
     {
@@ -133,7 +131,7 @@ final class OrganisationController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_organisation_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Organisation $organisation): Response
+    public function delete(Request $request, Organisation $organisation): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$organisation->getId(), $request->request->get('_token'))) {
             $id = $organisation->getId();

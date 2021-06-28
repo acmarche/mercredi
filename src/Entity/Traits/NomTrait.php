@@ -10,7 +10,7 @@ trait NomTrait
      * @var string|null
      * @ORM\Column(type="string", length=150)
      */
-    private $nom;
+    private ?string $nom = null;
 
     public function getNom(): ?string
     {

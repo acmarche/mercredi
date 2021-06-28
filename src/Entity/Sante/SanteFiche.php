@@ -35,30 +35,27 @@ class SanteFiche implements TimestampableInterface
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
-    private $personne_urgence;
+    private ?string $personne_urgence = null;
 
     /**
-     * @var string|null
      *
      * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
-    private $medecin_nom;
+    private ?string $medecin_nom = null;
 
     /**
-     * @var string|null
      *
      * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
-    private $medecin_telephone;
+    private ?string $medecin_telephone = null;
 
     /**
-     * @var Enfant
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="sante_fiche")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $enfant;
+    private ?Enfant $enfant =null;
 
     /**
      * Pour le cascade.
@@ -66,13 +63,13 @@ class SanteFiche implements TimestampableInterface
      * @var SanteReponse[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="sante_fiche", cascade={"remove"})
      */
-    private $reponses;
+    private iterable $reponses;
 
     /**
      * @var SanteQuestion[]|ArrayCollection
      * @AcMarcheSanteAssert\ResponseIsComplete()
      */
-    private $questions;
+    private iterable $questions;
 
     public function __construct(Enfant $enfant)
     {
@@ -86,7 +83,7 @@ class SanteFiche implements TimestampableInterface
         return 'Fiche '.$this->id;
     }
 
-    public function getPersonneUrgence(): ?string
+    public function getPersonneUrgence(): string
     {
         return $this->personne_urgence;
     }
@@ -125,7 +122,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponses(): Collection
+    public function getReponses(): array
     {
         return $this->reponses;
     }

@@ -12,7 +12,7 @@ trait JoursTrait
      * @var Jour[]|ArrayCollection
      *
      * */
-    private $jours;
+    private iterable $jours;
 
     public function initJours(): void
     {

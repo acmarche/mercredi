@@ -2,14 +2,14 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait ColorTrait
 {
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $color;
+    private ?string $color;
 
     public function getColor(): ?string
     {

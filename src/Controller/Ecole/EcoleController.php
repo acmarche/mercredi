@@ -20,14 +20,8 @@ final class EcoleController extends AbstractController
 {
     use GetEcolesTrait;
 
-    /**
-     * @var EcoleRepository
-     */
-    private $ecoleRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
+    private EcoleRepository $ecoleRepository;
+    private EnfantRepository $enfantRepository;
 
     public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository)
     {
@@ -40,7 +34,7 @@ final class EcoleController extends AbstractController
      */
     public function index(): Response
     {
-        if ($response = $this->hasEcoles()) {
+        if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
         $today = Carbon::today();

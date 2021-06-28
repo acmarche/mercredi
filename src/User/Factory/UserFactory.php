@@ -12,14 +12,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UserFactory
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
+    private UserRepository $userRepository;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,
@@ -29,7 +23,7 @@ final class UserFactory
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    public function getInstance(?string $email = null): User
+    public function getInstance(?string $email = null): ?User
     {
         $user = new User();
         if ($email && ! $user = $this->userRepository->findOneByEmailOrUserName($email)) {

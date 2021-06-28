@@ -10,14 +10,8 @@ use Exception;
 
 final class RelationHandler
 {
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
+    private RelationRepository $relationRepository;
+    private EnfantRepository $enfantRepository;
 
     public function __construct(RelationRepository $relationRepository, EnfantRepository $enfantRepository)
     {
@@ -28,7 +22,7 @@ final class RelationHandler
     /**
      * @throws Exception
      */
-    public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): ?Relation
+    public function handleAttachEnfant(Tuteur $tuteur, ?int $enfantId): Relation
     {
         if (! $enfantId) {
             throw new Exception('Enfant non trouvé');

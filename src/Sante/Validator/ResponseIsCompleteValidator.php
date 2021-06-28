@@ -9,10 +9,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 final class ResponseIsCompleteValidator extends ConstraintValidator
 {
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
+    private SanteChecker $santeChecker;
 
     public function __construct(SanteChecker $santeChecker)
     {

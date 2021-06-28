@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Reduction\Form\ReductionType;
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
@@ -24,10 +25,7 @@ final class ReductionController extends AbstractController
      * @var string
      */
     private const REDUCTION = 'reduction';
-    /**
-     * @var ReductionRepository
-     */
-    private $reductionRepository;
+    private ReductionRepository $reductionRepository;
 
     public function __construct(ReductionRepository $reductionRepository)
     {
@@ -115,7 +113,7 @@ final class ReductionController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_reduction_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Reduction $reduction): Response
+    public function delete(Request $request, Reduction $reduction): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$reduction->getId(), $request->request->get('_token'))) {
             $id = $reduction->getId();

@@ -13,7 +13,7 @@ trait AnimateursTrait
     /**
      * @var Animateur[]|ArrayCollection
      */
-    private $animateurs;
+    private iterable $animateurs;
 
     /**
      * @return Collection|Animateur[]

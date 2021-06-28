@@ -13,19 +13,10 @@ final class PlainePresencesDto
     /**
      * @var Jour[]|ArrayCollection
      */
-    public $daysOfPlaine;
-    /**
-     * @var Plaine
-     */
-    private $plaine;
-    /**
-     * @var Enfant
-     */
-    private $enfant;
-    /**
-     * @var Collection
-     */
-    private $jours;
+    public iterable $daysOfPlaine;
+    private Plaine $plaine;
+    private Enfant $enfant;
+    private Collection $jours;
 
     public function __construct(Plaine $plaine, Enfant $enfant, iterable $daysOfPlaine)
     {

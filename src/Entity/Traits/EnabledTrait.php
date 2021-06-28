@@ -11,7 +11,7 @@ trait EnabledTrait
      *
      * @var bool
      */
-    private $enabled = true;
+    private bool $enabled = true;
 
     public function isEnabled(): bool
     {

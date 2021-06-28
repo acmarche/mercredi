@@ -13,7 +13,7 @@ trait IdTrait
      *
      * @var int|null
      */
-    private $id;
+    private ?int $id;
 
     public function getId(): ?int
     {

@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Scolaire\Repository;
 
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -36,7 +39,10 @@ final class AnneeScolaireRepository extends ServiceEntityRepository
             ->orderBy('jour.date_jour', 'DESC');
     }
 
-    public function findOneByDateGroupeScolaire(\DateTime $dateTime): ?AnneeScolaire
+    /**
+     * @param DateTime|DateTimeImmutable $dateTime
+     */
+    public function findOneByDateGroupeScolaire(DateTimeInterface $dateTime): ?AnneeScolaire
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')

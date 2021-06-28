@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Mailer;
 
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
@@ -17,10 +18,7 @@ final class FactureMailer
     use OrganisationPropertyInitTrait;
     use PdfDownloaderTrait;
 
-    /**
-     * @var FactureFactory
-     */
-    private $factureFactory;
+    private FactureFactory $factureFactory;
 
     public function __construct(
         FactureFactory $factureFactory
@@ -42,7 +40,7 @@ final class FactureMailer
     /**
      * @param Facture $facture
      * @param array $data
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function sendFacture(Facture $facture, array $data): void
     {

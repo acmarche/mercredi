@@ -20,27 +20,23 @@ class Reduction
     use RemarqueTrait;
 
     /**
-     * @var float|null
      *
      * @ORM\Column(type="float", nullable=true)
-     *
      * @Assert\Range(
      *      min = 0,
      *      max = 100
      *     )
      */
-    private $pourcentage;
+    private ?float $pourcentage = null;
 
     /**
-     * @var float|null
      *
      * @ORM\Column(type="float", nullable=true)
-     *
      * @Assert\Range(
      *      min = 0
      *     )
      */
-    private $forfait;
+    private ?float $forfait = null;
 
     public function __toString()
     {

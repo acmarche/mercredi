@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Form;
 
+use DateTime;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
@@ -35,10 +36,7 @@ final class EnfantType extends AbstractType
      * @var string
      */
     private const PLACEHOLDER = 'placeholder';
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security)
     {
@@ -47,7 +45,7 @@ final class EnfantType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $year = new \DateTime('today');
+        $year = new DateTime('today');
         $year = $year->format('Y');
         $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
 

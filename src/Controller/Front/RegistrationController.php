@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Registration\EmailVerifier;
 use AcMarche\Mercredi\Registration\Form\RegistrationFormType;
@@ -16,18 +17,9 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 final class RegistrationController extends AbstractController
 {
-    /**
-     * @var EmailVerifier
-     */
-    private $emailVerifier;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private EmailVerifier $emailVerifier;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserRepository $userRepository;
 
     public function __construct(
         EmailVerifier $emailVerifier,
@@ -79,7 +71,7 @@ final class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request): RedirectResponse
     {
         // validate email confirmation link, sets User::isVerified=true and persists
         try {

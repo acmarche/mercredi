@@ -12,10 +12,7 @@ final class SearchHelper
     public const PRESENCE_LIST_BY_MONTH = 'presence_list_by_month';
     public const MESSAGE_INDEX = 'message_index';
 
-    /**
-     * @var SessionInterface
-     */
-    private $session;
+    private SessionInterface $session;
 
     public function __construct(SessionInterface $session)
     {

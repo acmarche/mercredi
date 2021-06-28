@@ -15,7 +15,7 @@ trait PresencesTuteurTrait
      * @var Presence[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="tuteur", cascade={"remove"})
      */
-    private $presences;
+    private iterable $presences;
 
     /**
      * @return Collection|Presence[]

@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Presence\Message;
 
 final class PresenceUpdated
 {
-    /**
-     * @var int
-     */
-    private $presenceId;
+    private int $presenceId;
 
     public function __construct(int $presenceId)
     {

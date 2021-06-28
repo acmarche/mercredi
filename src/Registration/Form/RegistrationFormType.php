@@ -12,10 +12,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 
 final class RegistrationFormType extends AbstractType
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
     public function __construct(RouterInterface $router)
     {

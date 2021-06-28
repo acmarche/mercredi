@@ -20,10 +20,7 @@ use Twig\Environment;
 
 final class DateUtils
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
+    private Environment $environment;
 
     public function __construct(Environment $environment)
     {
@@ -60,7 +57,7 @@ final class DateUtils
     /**
      * @param DateTime $dateTime "01/08/2018"
      */
-    public static function getDatePeriod(DateTime $dateTime): DatePeriod
+    public static function getDatePeriod(\DateTimeInterface $dateTime): DatePeriod
     {
         $begin = DateTimeImmutable::createFromMutable($dateTime);
         $end = $begin->modify('last day of this month');
@@ -74,7 +71,7 @@ final class DateUtils
     /**
      * @param DateTime $dateTime "01/08/2018"
      */
-    public static function getAllDaysOfMonth(DateTime $dateTime): DatePeriod
+    public static function getAllDaysOfMonth(\DateTimeInterface $dateTime): DatePeriod
     {
         $begin = DateTimeImmutable::createFromMutable($dateTime);
         $start = $begin->modify('first day of this month');

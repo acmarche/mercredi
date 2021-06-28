@@ -11,14 +11,8 @@ use Symfony\Component\Security\Core\Security;
 
 final class UserAddSubscriber implements EventSubscriber
 {
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var PropertyUtil
-     */
-    private $propertyUtil;
+    private Security $security;
+    private PropertyUtil $propertyUtil;
 
     public function __construct(Security $security, PropertyUtil $propertyUtil)
     {

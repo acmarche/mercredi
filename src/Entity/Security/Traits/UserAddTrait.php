@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait UserAddTrait
 {
     /**
-     * @var string|null
      * @ORM\Column(type="string", nullable=false)
      */
-    private $userAdd;
+    private ?string $userAdd;
 
     public function getUserAdd(): ?string
     {

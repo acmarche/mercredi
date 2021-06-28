@@ -18,32 +18,28 @@ class SanteReponse
     use IdTrait;
 
     /**
-     * @var SanteQuestion
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion", inversedBy="reponse")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $question;
+    private SanteQuestion $question;
 
     /**
-     * @var SanteFiche
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", inversedBy="reponses", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $sante_fiche;
+    private SanteFiche $sante_fiche;
 
     /**
      * @var bool|null
      *
      * @ORM\Column(type="boolean")
      */
-    private $reponse;
+    private bool $reponse;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $remarque;
+    private ?string $remarque = null;
 
     public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
     {

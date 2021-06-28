@@ -31,22 +31,10 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
      */
     private const PASSWORD = 'password';
 
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-    /**
-     * @var CsrfTokenManagerInterface
-     */
-    private $csrfTokenManager;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private UrlGeneratorInterface $urlGenerator;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserRepository $userRepository;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
@@ -90,7 +78,7 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
 
         $user = $this->userRepository->findOneBy([self::EMAIL => $credentials[self::EMAIL]]);
 
-        if (! $user) {
+        if ($user === null) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
@@ -122,7 +110,7 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
         return new RedirectResponse($this->urlGenerator->generate('mercredi_front_profile_redirect'));
     }
 
-    protected function getLoginUrl()
+    protected function getLoginUrl(): string
     {
         return $this->urlGenerator->generate('app_login');
     }

@@ -11,7 +11,7 @@ trait JoursTrait
     /**
      * @var Jour[]|Collection
      */
-    private $jours;
+    private iterable $jours;
 
     /**
      * @return Collection|Jour[]

@@ -22,7 +22,7 @@ final class DirectoryNamer implements DirectoryNamerInterface
         return '';
     }
 
-    private function getExtension(UploadedFile $uploadedFile)
+    private function getExtension(UploadedFile $uploadedFile): ?string
     {
         $clientOriginalName = $uploadedFile->getClientOriginalName();
         if ('' !== ($extension = pathinfo($clientOriginalName, PATHINFO_EXTENSION))) {

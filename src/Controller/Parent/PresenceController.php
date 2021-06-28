@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
@@ -38,26 +39,11 @@ final class PresenceController extends AbstractController
      */
     private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
 
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var PresenceHandler
-     */
-    private $presenceHandler;
-    /**
-     * @var RelationUtils
-     */
-    private $relationUtils;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
+    private PresenceRepository $presenceRepository;
+    private PresenceHandler $presenceHandler;
+    private RelationUtils $relationUtils;
+    private SanteChecker $santeChecker;
+    private SanteHandler $santeHandler;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -111,9 +97,9 @@ final class PresenceController extends AbstractController
      *
      * @Route("/select/enfant", name="mercredi_parent_presence_select_enfant", methods={"GET"})
      */
-    public function selectEnfant()
+    public function selectEnfant(): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
 
@@ -133,9 +119,9 @@ final class PresenceController extends AbstractController
      * @Route("/select/jour/{uuid}", name="mercredi_parent_presence_select_jours", methods={"GET","POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
-    public function selectJours(Request $request, Enfant $enfant)
+    public function selectJours(Request $request, Enfant $enfant): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
         $santeFiche = $this->santeHandler->init($enfant);
@@ -189,7 +175,7 @@ final class PresenceController extends AbstractController
      * @Route("/{id}", name="mercredi_parent_presence_delete", methods={"DELETE"})
      * @IsGranted("presence_edit", subject="presence")
      */
-    public function delete(Request $request, Presence $presence): Response
+    public function delete(Request $request, Presence $presence): RedirectResponse
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {

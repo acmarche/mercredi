@@ -16,33 +16,28 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class PlaineGroupe
 {
     /**
-     * @var int|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @var GroupeScolaire|null
-     *
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="plaine_groupes")
      */
-    private $groupe_scolaire;
+    private ?GroupeScolaire $groupe_scolaire;
 
     /**
-     * @var Plaine|null
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_groupes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $plaine;
+    private ?Plaine $plaine;
 
     /**
-     * @var int|null
      * @ORM\Column(type="integer")
      */
-    private $inscription_maximum;
+    private ?int $inscription_maximum = null;
 
     public function __construct(Plaine $plaine, GroupeScolaire $groupe_scolaire)
     {

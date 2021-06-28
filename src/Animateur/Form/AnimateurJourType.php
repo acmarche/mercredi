@@ -22,12 +22,8 @@ final class AnimateurJourType extends AbstractType
                 [
                     'class' => Jour::class,
                     'placeholder' => 'Jours d\'accueil',
-                    'query_builder' => function (JourRepository $jourRepository) {
-                        return $jourRepository->getQbForListing();
-                    },
-                    'group_by' => function ($jour, $key, $id) {
-                        return $jour->getDateJour()->format('Y');
-                    },
+                    'query_builder' => fn(JourRepository $jourRepository) => $jourRepository->getQbForListing(),
+                    'group_by' => fn($jour, $key, $id) => $jour->getDateJour()->format('Y'),
                     'required' => false,
                     'choice_label' => function (Jour $jour) {
                         $peda = '';

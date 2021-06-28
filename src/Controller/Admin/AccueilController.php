@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
@@ -36,26 +37,11 @@ final class AccueilController extends AbstractController
      * @var string
      */
     private const ID = 'id';
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
-    /**
-     * @var AccueilHandler
-     */
-    private $accueilHandler;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var AccueilCalculatorInterface
-     */
-    private $accueilCalculator;
-    /**
-     * @var FactureAccueilRepository
-     */
-    private $factureAccueilRepository;
+    private AccueilRepository $accueilRepository;
+    private AccueilHandler $accueilHandler;
+    private RelationRepository $relationRepository;
+    private AccueilCalculatorInterface $accueilCalculator;
+    private FactureAccueilRepository $factureAccueilRepository;
 
     public function __construct(
         AccueilRepository $accueilRepository,
@@ -75,7 +61,7 @@ final class AccueilController extends AbstractController
      * @Route("/index", name="mercredi_admin_accueil_index", methods={"GET","POST"})
      *
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $accueils = [];
         $form = $this->createForm(SearchAccueilByDate::class, []);
@@ -190,7 +176,7 @@ final class AccueilController extends AbstractController
     /**
      * @Route("/delete/{id}", name="mercredi_admin_accueil_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Accueil $accueil): Response
+    public function delete(Request $request, Accueil $accueil): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
             $id = $accueil->getId();

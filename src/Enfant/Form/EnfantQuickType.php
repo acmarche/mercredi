@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Form;
 
+use DateTime;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -21,7 +22,7 @@ final class EnfantQuickType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $year = new \DateTime('today');
+        $year = new DateTime('today');
         $year = $year->format('Y');
 
         $formBuilder

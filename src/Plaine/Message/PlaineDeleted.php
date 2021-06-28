@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Plaine\Message;
 
 final class PlaineDeleted
 {
-    /**
-     * @var int
-     */
-    private $plaineId;
+    private int $plaineId;
 
     public function __construct(int $plaineId)
     {

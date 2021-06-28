@@ -9,7 +9,7 @@ trait PresenceTrait
     /**
      * @var Presence
      */
-    private $presence;
+    private ?Presence $presence;
 
     public function getPresence(): Presence
     {

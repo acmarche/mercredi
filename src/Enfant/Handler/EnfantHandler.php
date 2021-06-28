@@ -10,14 +10,8 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
 final class EnfantHandler
 {
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
+    private EnfantRepository $enfantRepository;
+    private RelationRepository $relationRepository;
 
     public function __construct(EnfantRepository $enfantRepository, RelationRepository $relationRepository)
     {

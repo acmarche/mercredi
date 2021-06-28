@@ -12,7 +12,7 @@ trait AccueilsTraits
     /**
      * @var Accueil[]|ArrayCollection
      */
-    private $accueils;
+    private iterable $accueils;
 
     /**
      * @return Collection|Accueil[]

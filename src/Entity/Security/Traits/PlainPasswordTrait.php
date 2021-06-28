@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Entity\Security\Traits;
 
 trait PlainPasswordTrait
 {
-    /**
-     * @var string|null
-     */
-    private $plain_password;
+    private ?string $plain_password;
 
     public function getPlainPassword(): ?string
     {

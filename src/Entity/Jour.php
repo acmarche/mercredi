@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use AcMarche\Mercredi\Entity\Plaine\PlaineJourTrait;
 use AcMarche\Mercredi\Entity\Traits\AnimateursTrait;
@@ -38,12 +41,12 @@ class Jour implements TimestampableInterface
     use AnimateursTrait;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="date_jour", type="date", unique=true)
      * @Assert\Type("datetime")
      */
-    private $date_jour;
+    private DateTimeInterface $date_jour;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -51,26 +54,28 @@ class Jour implements TimestampableInterface
      * @var Presence[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="jour", cascade={"remove"})
      */
-    private $presences;
+    private iterable $presences;
 
     /**
-     * @var PlaineJour
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="jour")
      */
-    private $plaine_jour;
+    private ?PlaineJour $plaine_jour = null;
 
     /**
      * @var Animateur[]
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", mappedBy="jours")
      */
-    private $animateurs;
+    private iterable $animateurs;
 
     /**
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Ecole")
      */
-    private $ecoles;
+    private iterable $ecoles;
 
-    public function __construct(?\DateTime $date_jour = null)
+    /**
+     * @param DateTime|DateTimeImmutable|null $date_jour
+     */
+    public function __construct(?DateTimeInterface $date_jour = null)
     {
         $this->prix1 = 0;
         $this->prix2 = 0;
@@ -88,12 +93,15 @@ class Jour implements TimestampableInterface
         return $this->date_jour->format('d-m-Y');
     }
 
-    public function getDateJour(): ?\DateTime
+    public function getDateJour(): ?DateTime
     {
         return $this->date_jour;
     }
 
-    public function setDateJour(?\DateTime $date_jour): void
+    /**
+     * @param DateTime|DateTimeImmutable|null $date_jour
+     */
+    public function setDateJour(?DateTimeInterface $date_jour): void
     {
         $this->date_jour = $date_jour;
     }
@@ -101,7 +109,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Presence[]
      */
-    public function getPresences(): Collection
+    public function getPresences(): array
     {
         return $this->presences;
     }
@@ -132,7 +140,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Ecole[]
      */
-    public function getEcoles(): Collection
+    public function getEcoles(): ArrayCollection
     {
         return $this->ecoles;
     }

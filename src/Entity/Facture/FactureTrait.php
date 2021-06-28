@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 
 trait FactureTrait
 {
-    /**
-     * @var Facture
-     */
-    private $facture;
+    private Facture $facture;
 
     public function getFacture(): Facture
     {

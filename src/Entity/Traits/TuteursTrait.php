@@ -13,7 +13,7 @@ trait TuteursTrait
      * @var Tuteur[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="users")
      */
-    private $tuteurs;
+    private iterable $tuteurs;
 
     /**
      * @return Collection|Tuteur[]

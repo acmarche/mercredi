@@ -10,7 +10,7 @@ trait ForfaitTrait
      * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      */
-    private $forfait;
+    private float $forfait;
 
     public function getForfait(): float
     {

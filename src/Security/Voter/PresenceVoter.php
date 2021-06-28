@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use AcMarche\Mercredi\Entity\Tuteur;
+use Stringable;
+use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -26,24 +29,12 @@ final class PresenceVoter extends Voter
     public const EDIT = 'presence_edit';
     public const DELETE = 'presence_delete';
 
+    public ?Tuteur $tuteurOfUser = null;
+    private RelationRepository $relationRepository;
+    private TuteurUtils $tuteurUtils;
+    private Security $security;
     /**
-     * @var mixed|\AcMarche\Mercredi\Entity\Tuteur|null
-     */
-    public $tuteurOfUser;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var null|string|\Stringable|\Symfony\Component\Security\Core\User\UserInterface
+     * @var null|string|Stringable|UserInterface
      */
     private $user;
     private $enfant;
@@ -58,7 +49,7 @@ final class PresenceVoter extends Voter
         $this->security = $security;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Presence && \in_array(
             $attribute,
@@ -67,7 +58,7 @@ final class PresenceVoter extends Voter
         );
     }
 
-    protected function voteOnAttribute($attribute, $presence, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $presence, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
         $this->enfant = $presence->getEnfant();
@@ -82,7 +73,7 @@ final class PresenceVoter extends Voter
 
         switch ($attribute) {
             case self::SHOW:
-                return $this->canView($presence, $token);
+                return $this->canView();
             case self::ADD:
                 return $this->canAdd();
             case self::EDIT:
@@ -94,7 +85,7 @@ final class PresenceVoter extends Voter
         return false;
     }
 
-    private function canView()
+    private function canView(): bool
     {
         if ($this->canEdit()) {
             return true;
@@ -109,10 +100,8 @@ final class PresenceVoter extends Voter
 
     /**
      * Uniquement l'admin, droit donne plus haut.
-     *
-     * @return bool
      */
-    private function canEdit()
+    private function canEdit(): bool
     {
         if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return $this->checkTuteur();
@@ -121,12 +110,12 @@ final class PresenceVoter extends Voter
         return false;
     }
 
-    private function canAdd()
+    private function canAdd(): bool
     {
         return $this->canEdit();
     }
 
-    private function canDelete()
+    private function canDelete(): bool
     {
         if ($this->canEdit()) {
             return true;
@@ -139,10 +128,7 @@ final class PresenceVoter extends Voter
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    private function checkTuteur()
+    private function checkTuteur(): bool
     {
         if (! $this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return false;
@@ -157,9 +143,7 @@ final class PresenceVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
         $enfants = array_map(
-            function ($relation) {
-                return $relation->getEnfant()->getId();
-            },
+            fn($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

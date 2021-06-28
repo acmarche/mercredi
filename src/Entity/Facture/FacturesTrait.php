@@ -7,7 +7,7 @@ trait FacturesTrait
     /**
      * @var Facture[]
      */
-    private $factures;
+    private iterable $factures;
 
     /**
      * @return Facture[]

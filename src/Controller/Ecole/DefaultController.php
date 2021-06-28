@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Ecole;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,9 +20,9 @@ final class DefaultController extends AbstractController
      * @Route("/", name="mercredi_ecole_home")
      * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
-    public function default()
+    public function default(): Response
     {
-        if ($response = $this->hasEcoles()) {
+        if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
 
@@ -32,7 +33,7 @@ final class DefaultController extends AbstractController
      * @Route("/nouveau", name="mercredi_ecole_nouveau")
      * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
-    public function nouveau()
+    public function nouveau(): Response
     {
         return $this->render(
             '@AcMarcheMercrediEcole/default/nouveau.html.twig',

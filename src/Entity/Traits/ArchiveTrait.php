@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait ArchiveTrait
 {
     /**
-     * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $archived = false;
+    private bool $archived = false;
 
     public function isArchived(): bool
     {

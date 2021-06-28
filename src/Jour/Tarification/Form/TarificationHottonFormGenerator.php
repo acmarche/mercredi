@@ -9,14 +9,8 @@ use Twig\Environment;
 
 final class TarificationHottonFormGenerator implements TarificationFormGeneratorInterface
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-    /**
-     * @var Environment
-     */
-    private $environment;
+    private FormFactoryInterface $formFactory;
+    private Environment $environment;
 
     public function __construct(FormFactoryInterface $formFactory, Environment $environment)
     {

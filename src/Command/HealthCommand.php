@@ -11,14 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class HealthCommand extends Command
 {
     protected static $defaultName = 'mercredi:health';
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var NotificationMailer
-     */
-    private $notifcationMailer;
+    private EnfantRepository $enfantRepository;
+    private NotificationMailer $notifcationMailer;
 
     public function __construct(
         EnfantRepository $enfantRepository,

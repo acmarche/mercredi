@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserRoleType;
@@ -41,14 +42,8 @@ final class UserController extends AbstractController
      */
     private const USER = 'user';
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
+    private UserRepository $userRepository;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,
@@ -63,7 +58,7 @@ final class UserController extends AbstractController
      *
      * @Route("/", name="mercredi_admin_user_index", methods={"GET","POST"})
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $form = $this->createForm(UserSearchType::class);
         $form->handleRequest($request);
@@ -92,7 +87,7 @@ final class UserController extends AbstractController
      *
      * @Route("/new", name="mercredi_admin_user_new", methods={"GET","POST"})
      */
-    public function new(Request $request)
+    public function new(Request $request): RedirectResponse
     {
         $user = new User();
 
@@ -124,7 +119,7 @@ final class UserController extends AbstractController
      *
      * @Route("/{id}", name="mercredi_admin_user_show", methods={"GET"})
      */
-    public function show(User $user)
+    public function show(User $user): Response
     {
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
@@ -139,7 +134,7 @@ final class UserController extends AbstractController
      *
      * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user)
+    public function edit(Request $request, User $user): RedirectResponse
     {
         $editForm = $this->createForm(UserEditType::class, $user);
 
@@ -166,7 +161,7 @@ final class UserController extends AbstractController
      *
      * @Route("/{id}/roles", name="mercredi_admin_user_roles", methods={"GET","POST"})
      */
-    public function roles(Request $request, User $user)
+    public function roles(Request $request, User $user): RedirectResponse
     {
         $form = $this->createForm(UserRoleType::class, $user);
 
@@ -193,7 +188,7 @@ final class UserController extends AbstractController
      *
      * @Route("/{id}", name="mercredi_admin_user_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, User $user): Response
+    public function delete(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $id = $user->getId();

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -32,18 +33,12 @@ final class AccompagnateurVoter extends Voter
      */
     private $user;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
-     */
-    private $decisionManager;
+    private AccessDecisionManagerInterface $decisionManager;
+
+    private FlashBagInterface $flashBag;
 
     /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-
-    /**
-     * @var Ecole[]|\Doctrine\Common\Collections\Collection
+     * @var Ecole[]|Collection
      */
     private $ecoles;
     /**
@@ -57,7 +52,7 @@ final class AccompagnateurVoter extends Voter
         $this->flashBag = $flashBag;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         //a cause de index pas d'ecole defini
         if ($subject && ! $subject instanceof Accompagnateur) {
@@ -67,7 +62,7 @@ final class AccompagnateurVoter extends Voter
         return \in_array($attribute, [self::INDEX, self::SHOW, self::EDIT, self::DELETE], true);
     }
 
-    protected function voteOnAttribute($attribute, $accompagnateur, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $accompagnateur, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
 
@@ -96,7 +91,7 @@ final class AccompagnateurVoter extends Voter
         return false;
     }
 
-    private function canIndex(TokenInterface $token)
+    private function canIndex(TokenInterface $token): bool
     {
         if ($this->canEdit($token)) {
             return true;
@@ -111,7 +106,7 @@ final class AccompagnateurVoter extends Voter
         return false;
     }
 
-    private function canView(TokenInterface $token)
+    private function canView(TokenInterface $token): bool
     {
         if ($this->canEdit($token)) {
             return true;
@@ -124,7 +119,7 @@ final class AccompagnateurVoter extends Voter
         return $this->ecoles->contains($this->accompagnateur->getEcole());
     }
 
-    private function canEdit(TokenInterface $token)
+    private function canEdit(TokenInterface $token): bool
     {
         if (! $this->decisionManager->decide($token, [self::ECOLE])) {
             return false;
@@ -133,17 +128,13 @@ final class AccompagnateurVoter extends Voter
         return $this->ecoles->contains($this->accompagnateur->getEcole());
     }
 
-    private function canDelete(TokenInterface $token)
+    private function canDelete(TokenInterface $token): bool
     {
         return (bool) $this->canEdit($token);
     }
 
-    private function checkEcoles($token)
+    private function checkEcoles($token): bool
     {
-        if ($this->decisionManager->decide($token, [self::ECOLE]) && \count($this->ecoles) > 0) {
-            return true;
-        }
-
-        return false;
+        return $this->decisionManager->decide($token, [self::ECOLE]) && \count($this->ecoles) > 0;
     }
 }

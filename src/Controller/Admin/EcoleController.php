@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Ecole\Form\EcoleType;
 use AcMarche\Mercredi\Ecole\Message\EcoleCreated;
 use AcMarche\Mercredi\Ecole\Message\EcoleDeleted;
@@ -34,14 +35,8 @@ final class EcoleController extends AbstractController
      * @var string
      */
     private const ECOLE = 'ecole';
-    /**
-     * @var EcoleRepository
-     */
-    private $ecoleRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
+    private EcoleRepository $ecoleRepository;
+    private EnfantRepository $enfantRepository;
 
     public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository)
     {
@@ -133,7 +128,7 @@ final class EcoleController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_ecole_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Ecole $ecole): Response
+    public function delete(Request $request, Ecole $ecole): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
             if (count($this->enfantRepository->findByEcoles([$ecole])) > 0) {

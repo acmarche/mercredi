@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -28,26 +29,11 @@ final class SanteFicheController extends AbstractController
      * @var string
      */
     private const ID = 'id';
-    /**
-     * @var SanteFicheRepository
-     */
-    private $santeFicheRepository;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
+    private SanteFicheRepository $santeFicheRepository;
+    private SanteHandler $santeHandler;
+    private SanteChecker $santeChecker;
+    private SanteQuestionRepository $santeQuestionRepository;
+    private OrganisationRepository $organisationRepository;
 
     public function __construct(
         SanteFicheRepository $santeFicheRepository,
@@ -123,7 +109,7 @@ final class SanteFicheController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_sante_fiche_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, SanteFiche $santeFiche): Response
+    public function delete(Request $request, SanteFiche $santeFiche): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$santeFiche->getId(), $request->request->get('_token'))) {
             $id = $santeFiche->getId();

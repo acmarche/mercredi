@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use DateTimeInterface;
+use DateTime;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -26,28 +28,24 @@ class FacturePresence
     use PresenceTrait;
 
     /**
-     * @var Facture
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", inversedBy="facturePresences")
      */
-    private $facture;
+    private Facture $facture;
 
     /**
-     * @var Presence
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Presence")
      */
-    private $presence;
+    private ?Presence $presence;
 
     /**
-     * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $presenceDate;
+    private ?DateTimeInterface $presenceDate = null;
 
     /**
-     * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      */
-    private $cout;
+    private ?float $cout = null;
 
     public function __construct(Facture $facture, Presence $presence)
     {
@@ -55,19 +53,19 @@ class FacturePresence
         $this->presence = $presence;
     }
 
-    public function getPresenceDate(): ?\DateTimeInterface
+    public function getPresenceDate(): DateTime
     {
         return $this->presenceDate;
     }
 
-    public function setPresenceDate(\DateTimeInterface $presenceDate): self
+    public function setPresenceDate(DateTimeInterface $presenceDate): self
     {
         $this->presenceDate = $presenceDate;
 
         return $this;
     }
 
-    public function getCout(): ?float
+    public function getCout(): float
     {
         return $this->cout;
     }

@@ -12,22 +12,10 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 
 final class FactureUtils
 {
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var FacturePresenceRepository
-     */
-    private $facturePresenceRepository;
-    /**
-     * @var FactureAccueilRepository
-     */
-    private $factureAccueilRepository;
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
+    private PresenceRepository $presenceRepository;
+    private FacturePresenceRepository $facturePresenceRepository;
+    private FactureAccueilRepository $factureAccueilRepository;
+    private AccueilRepository $accueilRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,

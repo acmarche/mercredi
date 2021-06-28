@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Contact\Mailer;
 
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -20,11 +21,11 @@ final class ContactMailer
      * @param string $from
      * @param string $nom
      * @param string $body
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function sendContactForm(string $from, string $nom, string $body): void
     {
-        $to = $this->organisationRepository->getOrganisation() ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $to = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
 
         $templatedEmail = (new TemplatedEmail())
             ->subject('[Mercredi] '.$nom.' vous contact via le site')

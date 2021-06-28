@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Entity\Sante\Traits;
 
 trait FicheSanteIsCompleteTrait
 {
-    /**
-     * @var bool
-     */
-    private $ficheSanteIsComplete = false;
+    private bool $ficheSanteIsComplete = false;
 
     public function isFicheSanteIsComplete(): bool
     {

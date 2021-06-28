@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Form\PlaineJourType;
@@ -24,18 +25,9 @@ final class PlaineJourController extends AbstractController
      * @var string
      */
     private const PLAINE = 'plaine';
-    /**
-     * @var PlaineRepository
-     */
-    private $plaineRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var PlaineHandler
-     */
-    private $plaineHandler;
+    private PlaineRepository $plaineRepository;
+    private EnfantRepository $enfantRepository;
+    private PlaineHandler $plaineHandler;
 
     public function __construct(
         PlaineRepository $plaineRepository,
@@ -104,7 +96,7 @@ final class PlaineJourController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_plaine_jour_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Plaine $plaine): Response
+    public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
             if (count($this->enfantRepository->findBy([self::PLAINE => $plaine])) > 0) {

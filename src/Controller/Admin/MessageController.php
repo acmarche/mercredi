@@ -45,34 +45,13 @@ final class MessageController extends AbstractController
      * @var string
      */
     private const SUCCESS = 'success';
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
-    /**
-     * @var MessageFactory
-     */
-    private $messageFactory;
-    /**
-     * @var MessageHandler
-     */
-    private $messageHandler;
-    /**
-     * @var PresenceHandler
-     */
-    private $presenceHandler;
+    private PresenceRepository $presenceRepository;
+    private RelationRepository $relationRepository;
+    private SearchHelper $searchHelper;
+    private TuteurUtils $tuteurUtils;
+    private MessageFactory $messageFactory;
+    private MessageHandler $messageHandler;
+    private PresenceHandler $presenceHandler;
 
     public function __construct(
         PresenceRepository $presenceRepository,

@@ -8,11 +8,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait InscriptionOpenTrait
 {
     /**
-     * @var bool
      * @ORM\Column(type="boolean")
      * Assert\Type() //todo my constraint only one
      */
-    private $inscriptionOpen = false;
+    private bool $inscriptionOpen = false;
 
     public function isInscriptionOpen(): bool
     {

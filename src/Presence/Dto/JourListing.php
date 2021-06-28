@@ -12,14 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 final class JourListing
 {
-    /**
-     * @var ArrayCollection
-     */
-    private $enfants;
-    /**
-     * @var Jour
-     */
-    private $jour;
+    private ArrayCollection $enfants;
+    private Jour $jour;
 
     public function __construct(Jour $jour, array $enfants)
     {

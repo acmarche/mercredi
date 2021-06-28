@@ -17,14 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class CheckupController extends AbstractController
 {
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
+    private EnfantRepository $enfantRepository;
+    private TuteurRepository $tuteurRepository;
     private $tutru;
 
     public function __construct(EnfantRepository $enfantRepository, TuteurRepository $tuteurRepository)

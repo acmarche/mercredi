@@ -6,10 +6,7 @@ use AcMarche\Mercredi\Entity\Accueil;
 
 trait AccueilTrait
 {
-    /**
-     * @var Accueil|null
-     */
-    private $accueil;
+    private ?Accueil $accueil;
 
     public function getAccueil(): ?Accueil
     {

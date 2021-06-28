@@ -9,14 +9,8 @@ use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
 final class SanteBinder
 {
-    /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
-    /**
-     * @var SanteReponseRepository
-     */
-    private $santeReponseRepository;
+    private SanteQuestionRepository $santeQuestionRepository;
+    private SanteReponseRepository $santeReponseRepository;
 
     public function __construct(
         SanteQuestionRepository $santeQuestionRepository,

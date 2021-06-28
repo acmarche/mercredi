@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Notification\Mailer;
 
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
@@ -32,11 +33,11 @@ final class NotificationMailer
 
     /**
      * @param array $enfants
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function sendMessagEnfantsOrphelins(array $enfants): void
     {
-        $email = $this->organisationRepository->getOrganisation() ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
         $templatedEmail = (new TemplatedEmail())
             ->from($email)
             ->to($email)

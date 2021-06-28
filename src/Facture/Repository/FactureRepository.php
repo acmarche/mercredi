@@ -54,7 +54,7 @@ final class FactureRepository extends ServiceEntityRepository
                 ->setParameter('tuteur', '%'.$tuteur.'%');
         }
 
-        if ($ecole) {
+        if ($ecole !== null) {
             $queryBuilder->andWhere('enfantE.ecole = :ecole OR enfantA.ecole = :ecole')
                 ->setParameter('ecole', $ecole);
         }

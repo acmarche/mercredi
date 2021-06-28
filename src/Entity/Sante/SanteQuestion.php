@@ -21,10 +21,9 @@ class SanteQuestion
     use RemarqueTrait;
 
     /**
-     * @var string|null
      * @ORM\Column(type="string", length=200)
      */
-    private $nom;
+    private ?string $nom = null;
 
     /**
      * Information complementaire necessaire.
@@ -32,22 +31,20 @@ class SanteQuestion
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $complement = false;
+    private bool $complement = false;
 
     /**
      * Texte d'aide pour le complement.
      *
-     * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $complement_label;
+    private ?string $complement_label = null;
 
     /**
-     * @var int|null
      * @ORM\Column(type="integer",nullable=true)
      */
-    private $display_order;
+    private ?int $display_order = null;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -55,11 +52,11 @@ class SanteQuestion
      * @var Presence[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="question", cascade={"remove"})
      */
-    private $reponse;
+    private iterable $reponse;
 
-    private $reponseTxt;
+    private string $reponseTxt;
 
-    private $remarque;
+    private ?string $remarque;
 
     public function __construct()
     {
@@ -101,7 +98,7 @@ class SanteQuestion
         $this->display_order = $display_order;
     }
 
-    public function getComplement(): ?bool
+    public function getComplement(): bool
     {
         return $this->complement;
     }
@@ -125,7 +122,7 @@ class SanteQuestion
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponse(): Collection
+    public function getReponse(): array
     {
         return $this->reponse;
     }

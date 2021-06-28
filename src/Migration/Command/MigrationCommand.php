@@ -14,10 +14,7 @@ final class MigrationCommand extends Command
      * @var string
      */
     protected static $defaultName = 'mercredi:migration';
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
+    private EnfantRepository $enfantRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,

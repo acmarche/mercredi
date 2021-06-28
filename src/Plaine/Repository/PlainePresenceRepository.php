@@ -12,10 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class PlainePresenceRepository
 {
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(PresenceRepository $presenceRepository)
     {

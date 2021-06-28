@@ -20,14 +20,8 @@ final class AnimateurController extends AbstractController
 {
     use GetAnimateurTrait;
 
-    /**
-     * @var AnimateurRepository
-     */
-    private $animateurRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
+    private AnimateurRepository $animateurRepository;
+    private EnfantRepository $enfantRepository;
 
     public function __construct(AnimateurRepository $animateurRepository, EnfantRepository $enfantRepository)
     {
@@ -40,7 +34,7 @@ final class AnimateurController extends AbstractController
      */
     public function show(): Response
     {
-        if ($t = $this->hasAnimateur()) {
+        if (($t = $this->hasAnimateur()) !== null) {
             return $t;
         }
 
@@ -59,7 +53,7 @@ final class AnimateurController extends AbstractController
      */
     public function edit(Request $request): Response
     {
-        if ($t = $this->hasAnimateur()) {
+        if (($t = $this->hasAnimateur()) !== null) {
             return $t;
         }
 

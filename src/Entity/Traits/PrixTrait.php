@@ -12,21 +12,21 @@ trait PrixTrait
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
-    private $prix1;
+    private float $prix1;
 
     /**
      * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
-    private $prix2;
+    private float $prix2;
 
     /**
      * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
-    private $prix3;
+    private float $prix3;
 
     public function getPrix1(): float
     {

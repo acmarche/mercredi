@@ -23,14 +23,8 @@ final class CreateUserCommand extends Command
      * @var string
      */
     protected static $defaultName = 'mercredi:create-user';
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
+    private UserRepository $userRepository;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,

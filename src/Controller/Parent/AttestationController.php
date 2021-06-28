@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -19,7 +20,7 @@ final class AttestationController extends AbstractController
 {
     use GetTuteurTrait;
     use PdfDownloaderTrait;
-    public $relationRepository;
+    public RelationRepository $relationRepository;
 
     public function __construct(RelationRepository $relationRepository)
     {
@@ -30,9 +31,9 @@ final class AttestationController extends AbstractController
      * @Route("/{year}/{uuid}", name="mercredi_parent_attestation")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function default(int $year, Enfant $enfant)
+    public function default(int $year, Enfant $enfant): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
         $relations = $this->relationRepository->findByTuteur($this->tuteur);

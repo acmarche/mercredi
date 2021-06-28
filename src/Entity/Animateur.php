@@ -45,14 +45,14 @@ class Animateur implements TimestampableInterface
      *
      * @var User[]|Collection
      */
-    private $users;
+    private iterable $users;
 
     /**
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="animateurs" )
      *
      * @var Jour[]|Collection
      */
-    private $jours;
+    private iterable $jours;
 
     public function __construct()
     {

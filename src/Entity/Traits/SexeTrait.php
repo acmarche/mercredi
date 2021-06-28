@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait SexeTrait
 {
     /**
@@ -9,7 +11,7 @@ trait SexeTrait
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $sexe;
+    private ?string $sexe;
 
     public function getSexe(): ?string
     {

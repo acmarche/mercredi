@@ -17,38 +17,14 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 
 final class FactureHandler
 {
-    /**
-     * @var FactureRepository
-     */
-    private $factureRepository;
-    /**
-     * @var FactureFactory
-     */
-    private $factureFactory;
-    /**
-     * @var PresenceCalculatorInterface
-     */
-    private $presenceCalculator;
-    /**
-     * @var FacturePresenceRepository
-     */
-    private $facturePresenceRepository;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
-    /**
-     * @var FactureAccueilRepository
-     */
-    private $factureAccueilRepository;
-    /**
-     * @var AccueilCalculatorInterface
-     */
-    private $accueilCalculator;
+    private FactureRepository $factureRepository;
+    private FactureFactory $factureFactory;
+    private PresenceCalculatorInterface $presenceCalculator;
+    private FacturePresenceRepository $facturePresenceRepository;
+    private PresenceRepository $presenceRepository;
+    private AccueilRepository $accueilRepository;
+    private FactureAccueilRepository $factureAccueilRepository;
+    private AccueilCalculatorInterface $accueilCalculator;
 
     public function __construct(
         FactureRepository $factureRepository,

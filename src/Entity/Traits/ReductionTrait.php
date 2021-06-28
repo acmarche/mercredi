@@ -9,7 +9,7 @@ trait ReductionTrait
     /**
      * @var Reduction|null
      */
-    private $reduction;
+    private ?Reduction $reduction = null;
 
     public function getReduction(): ?Reduction
     {

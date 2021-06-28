@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SiteWebTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -31,19 +32,17 @@ class Organisation
     use PhotoTrait;
 
     /**
-     * @var string|null
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $initiale;
+    private ?string $initiale = null;
 
     /**
      * overload pour nullable false.
      *
-     * @var string|null
      * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=50, nullable=false)
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
@@ -52,10 +51,8 @@ class Organisation
      * @Assert\Image(
      *     maxSize="7M"
      * )
-     *
-     * @var UploadedFile
      */
-    private $photo;
+    private ?File $photo;
 
     public function __toString()
     {

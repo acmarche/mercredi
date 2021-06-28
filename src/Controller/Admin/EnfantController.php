@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Form\SearchEnfantType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
@@ -35,30 +36,12 @@ final class EnfantController extends AbstractController
      * @var string
      */
     private const ENFANT = 'enfant';
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var EnfantHandler
-     */
-    private $enfantHandler;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var PresenceUtils
-     */
-    private $presenceUtils;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
+    private EnfantRepository $enfantRepository;
+    private EnfantHandler $enfantHandler;
+    private RelationRepository $relationRepository;
+    private PresenceRepository $presenceRepository;
+    private PresenceUtils $presenceUtils;
+    private SearchHelper $searchHelper;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -178,7 +161,7 @@ final class EnfantController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_enfant_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Enfant $enfant): Response
+    public function delete(Request $request, Enfant $enfant): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
             $enfantId = $enfant->getId();

@@ -8,9 +8,9 @@ use Doctrine\Common\Collections\Collection;
 trait PresencesTrait
 {
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
-    private $presences;
+    private iterable $presences;
 
     /**
      * @return Collection|Presence[]

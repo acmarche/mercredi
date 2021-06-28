@@ -8,10 +8,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class SanteFicheDeletedHandler implements MessageHandlerInterface
 {
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
+    private FlashBagInterface $flashBag;
 
     public function __construct(FlashBagInterface $flashBag)
     {

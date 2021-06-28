@@ -11,7 +11,7 @@ trait AccompagnateursTrait
      *
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    private $accompagnateurs = [];
+    private array $accompagnateurs = [];
 
     /**
      * @return string[]

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Tuteur\Form\TuteurType;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
@@ -20,10 +21,7 @@ final class TuteurController extends AbstractController
 {
     use GetTuteurTrait;
 
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
+    private TuteurRepository $tuteurRepository;
 
     public function __construct(TuteurRepository $tuteurRepository)
     {
@@ -34,9 +32,9 @@ final class TuteurController extends AbstractController
      * @Route("/", name="mercredi_parent_tuteur_show", methods={"GET"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function show()
+    public function show(): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
 
@@ -55,9 +53,9 @@ final class TuteurController extends AbstractController
      * @Route("/edit", name="mercredi_parent_tuteur_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function edit(Request $request)
+    public function edit(Request $request): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
 

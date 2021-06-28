@@ -7,7 +7,7 @@ trait PlaineTrait
     /**
      * @var Plaine|null
      */
-    private $plaine;
+    private ?Plaine $plaine;
 
     public function getPlaine(): ?Plaine
     {

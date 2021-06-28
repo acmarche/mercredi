@@ -13,14 +13,8 @@ use Doctrine\Common\Collections\Collection;
 
 final class PlainePresenceHandler
 {
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var PresenceHandler
-     */
-    private $presenceHandler;
+    private PresenceRepository $presenceRepository;
+    private PresenceHandler $presenceHandler;
 
     public function __construct(PresenceRepository $presenceRepository, PresenceHandler $presenceHandler)
     {

@@ -9,7 +9,7 @@ trait EnfantTrait
     /**
      * @var Enfant
      */
-    private $enfant;
+    private ?Enfant $enfant = null;
 
     public function getEnfant(): Enfant
     {

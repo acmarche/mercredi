@@ -45,27 +45,27 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
      */
-    private $jour;
+    private ?Jour $jour;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
      */
-    private $enfant;
+    private ?Enfant $enfant = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
      */
-    private $tuteur;
+    private ?Tuteur $tuteur;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")
      */
-    private $reduction;
+    private ?Reduction $reduction = null;
 
     /**
      * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
      */
-    private $absent;
+    private int $absent;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
     {

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use AcMarche\Mercredi\Entity\Document;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,10 +13,7 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
  */
 final class DocumentController extends AbstractController
 {
-    /**
-     * @var DownloadHandler
-     */
-    private $downloadHandler;
+    private DownloadHandler $downloadHandler;
 
     public function __construct(DownloadHandler $downloadHandler)
     {
@@ -25,7 +23,7 @@ final class DocumentController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_font_document_download")
      */
-    public function index(Document $document)
+    public function index(Document $document): StreamedResponse
     {
         return $this->downloadHandler->downloadObject($document, 'file');
     }

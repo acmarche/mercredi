@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Animateur;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,9 +21,9 @@ final class DefaultController extends AbstractController
      * @Route("/", name="mercredi_animateur_home")
      *
      */
-    public function default()
+    public function default(): Response
     {
-        if ($response = $this->hasAnimateur()) {
+        if (($response = $this->hasAnimateur()) !== null) {
             return $response;
         }
 
@@ -32,7 +33,7 @@ final class DefaultController extends AbstractController
     /**
      * @Route("/nouveau", name="mercredi_animateur_nouveau")
      */
-    public function nouveau()
+    public function nouveau(): Response
     {
         return $this->render(
             '@AcMarcheMercrediAnimateur/default/nouveau.html.twig',

@@ -14,22 +14,10 @@ final class SantePdfFactoryTrait
 {
     use PdfDownloaderTrait;
 
-    /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var Environment
-     */
-    private $environment;
+    private SanteQuestionRepository $santeQuestionRepository;
+    private OrganisationRepository $organisationRepository;
+    private SanteChecker $santeChecker;
+    private Environment $environment;
 
     public function __construct(
         SanteQuestionRepository $santeQuestionRepository,

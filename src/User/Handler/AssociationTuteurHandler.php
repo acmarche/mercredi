@@ -15,22 +15,10 @@ use function count;
 
 final class AssociationTuteurHandler
 {
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
-    /**
-     * @var UserMailer
-     */
-    private $userMailer;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var UserFactory
-     */
-    private $userFactory;
+    private TuteurRepository $tuteurRepository;
+    private UserMailer $userMailer;
+    private FlashBagInterface $flashBag;
+    private UserFactory $userFactory;
 
     public function __construct(
         TuteurRepository $tuteurRepository,

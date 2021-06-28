@@ -10,7 +10,7 @@ trait PedagogiqueTrait
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $pedagogique = false;
+    private bool $pedagogique = false;
 
     public function isPedagogique(): bool
     {

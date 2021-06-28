@@ -15,22 +15,10 @@ use Doctrine\ORM\NonUniqueResultException;
 
 final class PresenceHandler
 {
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var PresenceUtils
-     */
-    private $presenceUtils;
-    /**
-     * @var FacturePresenceRepository
-     */
-    private $facturePresenceRepository;
-    /**
-     * @var PresenceConstraints
-     */
-    private $presenceConstraints;
+    private PresenceRepository $presenceRepository;
+    private PresenceUtils $presenceUtils;
+    private FacturePresenceRepository $facturePresenceRepository;
+    private PresenceConstraints $presenceConstraints;
 
     public function __construct(
         PresenceRepository $presenceRepository,

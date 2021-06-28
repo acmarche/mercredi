@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
@@ -43,30 +44,12 @@ final class PresenceController extends AbstractController
      * @var string
      */
     private const ID = 'id';
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var PresenceHandler
-     */
-    private $presenceHandler;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
-    /**
-     * @var ListingPresenceByMonth
-     */
-    private $listingPresenceByMonth;
-    /**
-     * @var PresenceCalculatorInterface
-     */
-    private $presenceCalculator;
-    /**
-     * @var FacturePresenceRepository
-     */
-    private $facturePresenceRepository;
+    private PresenceRepository $presenceRepository;
+    private PresenceHandler $presenceHandler;
+    private SearchHelper $searchHelper;
+    private ListingPresenceByMonth $listingPresenceByMonth;
+    private PresenceCalculatorInterface $presenceCalculator;
+    private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -122,7 +105,7 @@ final class PresenceController extends AbstractController
      *
      * @Route("/by/month", name="mercredi_admin_presence_by_month", methods={"GET","POST"})
      */
-    public function indexByMonth(Request $request)
+    public function indexByMonth(Request $request): RedirectResponse
     {
         $search = false;
         $mois = null;
@@ -245,7 +228,7 @@ final class PresenceController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_presence_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Presence $presence): Response
+    public function delete(Request $request, Presence $presence): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
             $presenceId = $presence->getId();

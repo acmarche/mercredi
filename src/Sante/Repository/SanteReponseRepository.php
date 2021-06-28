@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Sante\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Entity\Sante\SanteReponse;
@@ -34,7 +35,7 @@ final class SanteReponseRepository extends ServiceEntityRepository
     /**
      * @return SanteReponse[]
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findBySanteFiche(SanteFiche $santeFiche): array
     {

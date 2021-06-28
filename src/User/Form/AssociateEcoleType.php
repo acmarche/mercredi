@@ -23,9 +23,7 @@ final class AssociateEcoleType extends AbstractType
                     'class' => Ecole::class,
                     'placeholder' => 'Sélectionnez',
                     'required' => true,
-                    'query_builder' => function (EcoleRepository $cr) {
-                        return $cr->findForAssociate();
-                    },
+                    'query_builder' => fn(EcoleRepository $cr) => $cr->findForAssociate(),
                     'multiple' => true,
                     'expanded' => true,
                 ]

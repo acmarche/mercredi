@@ -10,6 +10,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -35,10 +36,8 @@ class Document implements TimestampableInterface, UuidableInterface
      *     mimeTypes = {"application/pdf", "application/x-pdf", "image/*"},
      *     mimeTypesMessage = "Uniquement des images ou Pdf"
      * )
-     *
-     * @var UploadedFile
      */
-    private $file;
+    private ?File $file = null;
 
     public function __toString()
     {

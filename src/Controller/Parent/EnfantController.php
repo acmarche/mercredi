@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
@@ -35,42 +36,15 @@ final class EnfantController extends AbstractController
      */
     private const ENFANT = 'enfant';
 
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var RelationUtils
-     */
-    private $relationUtils;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var PlainePresenceRepository
-     */
-    private $plainePresenceRepository;
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
-    /**
-     * @var EnfantHandler
-     */
-    private $enfantHandler;
-    /**
-     * @var NotificationMailer
-     */
-    private $notifcationMailer;
+    private EnfantRepository $enfantRepository;
+    private RelationUtils $relationUtils;
+    private SanteHandler $santeHandler;
+    private SanteChecker $santeChecker;
+    private PresenceRepository $presenceRepository;
+    private PlainePresenceRepository $plainePresenceRepository;
+    private AccueilRepository $accueilRepository;
+    private EnfantHandler $enfantHandler;
+    private NotificationMailer $notifcationMailer;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -98,9 +72,9 @@ final class EnfantController extends AbstractController
      * @Route("/", name="mercredi_parent_enfant_index", methods={"GET"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function index()
+    public function index(): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
 
@@ -149,7 +123,7 @@ final class EnfantController extends AbstractController
      * @Route("/{uuid}", name="mercredi_parent_enfant_show", methods={"GET"})
      * @IsGranted("enfant_show", subject="enfant")
      */
-    public function show(Enfant $enfant)
+    public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
@@ -173,7 +147,7 @@ final class EnfantController extends AbstractController
      * @Route("/{uuid}/edit", name="mercredi_parent_enfant_edit", methods={"GET","POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
-    public function edit(Request $request, Enfant $enfant)
+    public function edit(Request $request, Enfant $enfant): RedirectResponse
     {
         $form = $this->createForm(EnfantEditForParentType::class, $enfant);
         $form->handleRequest($request);

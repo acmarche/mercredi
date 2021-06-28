@@ -9,7 +9,7 @@ trait RoleTrait
     /**
      * @ORM\Column(type="array")
      */
-    private $roles = [];
+    private array $roles = [];
 
     public function addRole(string $role): void
     {

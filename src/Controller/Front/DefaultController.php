@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,14 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class DefaultController extends AbstractController
 {
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
-    /**
-     * @var PageFactory
-     */
-    private $pageFactory;
+    private PageRepository $pageRepository;
+    private PageFactory $pageFactory;
 
     public function __construct(
         PageRepository $pageRepository,
@@ -32,7 +27,7 @@ final class DefaultController extends AbstractController
     /**
      * @Route("/", name="mercredi_front_home")
      */
-    public function index()
+    public function index(): Response
     {
         $homePage = $this->pageRepository->findHomePage();
         if (null === $homePage) {
@@ -50,7 +45,7 @@ final class DefaultController extends AbstractController
     /**
      * @Route("/menu/front", name="mercredi_front_menu_page")
      */
-    public function menu()
+    public function menu(): Response
     {
         $pages = $this->pageRepository->findAll();
 

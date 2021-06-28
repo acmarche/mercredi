@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 
 trait PlaineJourTrait
 {
-    /**
-     * @var PlaineJour|null
-     */
-    private $plaine_jour;
+    private ?PlaineJour $plaine_jour = null;
 
     public function getPlaineJour(): ?PlaineJour
     {

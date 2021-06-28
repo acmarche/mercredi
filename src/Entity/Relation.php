@@ -24,27 +24,23 @@ class Relation
     use OrdreTrait;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "pere,mere,beau pere.."})
      */
-    private $type;
+    private ?string $type = null;
 
     /**
-     * @var Enfant
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      * */
-    private $enfant;
+    private ?Enfant $enfant = null;
 
     /**
-     * @var Tuteur
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      * */
-    private $tuteur;
+    private ?Tuteur $tuteur;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant)
     {

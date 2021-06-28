@@ -9,10 +9,7 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
 final class RelationUtils
 {
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
+    private RelationRepository $relationRepository;
 
     public function __construct(RelationRepository $relationRepository)
     {
@@ -38,9 +35,7 @@ final class RelationUtils
     {
         return array_unique(
             array_map(
-                function ($relation) {
-                    return $relation->getTuteur();
-                },
+                fn($relation) => $relation->getTuteur(),
                 $relations
             )
         );
@@ -55,9 +50,7 @@ final class RelationUtils
     {
         return array_unique(
             array_map(
-                function ($relation) {
-                    return $relation->getEnfant();
-                },
+                fn($relation) => $relation->getEnfant(),
                 $relations
             )
         );

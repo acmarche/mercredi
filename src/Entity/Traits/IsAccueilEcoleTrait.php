@@ -10,7 +10,7 @@ trait IsAccueilEcoleTrait
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $accueil_ecole = false;
+    private bool $accueil_ecole = false;
 
     public function isAccueilEcole(): bool
     {

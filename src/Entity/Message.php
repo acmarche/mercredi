@@ -19,44 +19,37 @@ class Message implements TimestampableInterface
     use TimestampableTrait;
 
     /**
-     * @var string|null
      * @Assert\NotBlank()
      */
-    private $from;
+    private ?string $from = null;
 
     /**
-     * @var string|null
      * Assert\NotBlank()
      */
-    private $to;
+    private ?string $to = null;
 
     /**
-     * @var string|null
      *
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
-    private $sujet;
+    private ?string $sujet = null;
 
     /**
-     * @var string|null
      *
      * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
-    private $texte;
+    private ?string $texte = null;
 
-    /**
-     * @var UploadedFile|null
-     */
-    private $file;
+    private ?UploadedFile $file = null;
 
     /**
      * @var array|null
      *
      * @ORM\Column(type="array", nullable=false)
      */
-    private $destinataires;
+    private iterable $destinataires;
 
     public function getFrom(): ?string
     {

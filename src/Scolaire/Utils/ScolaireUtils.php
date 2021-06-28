@@ -8,10 +8,7 @@ use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 
 final class ScolaireUtils
 {
-    /**
-     * @var GroupeScolaireRepository
-     */
-    private $groupeScolaireRepository;
+    private GroupeScolaireRepository $groupeScolaireRepository;
 
     public function __construct(GroupeScolaireRepository $groupeScolaireRepository)
     {
@@ -26,7 +23,7 @@ final class ScolaireUtils
 
         $anneeScolaire = $enfant->getAnneeScolaire();
 
-        if ($groupeScolaire = $anneeScolaire->getGroupeScolaire()) {
+        if (($groupeScolaire = $anneeScolaire->getGroupeScolaire()) !== null) {
             return $groupeScolaire;
         }
 

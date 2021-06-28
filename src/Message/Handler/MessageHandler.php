@@ -13,18 +13,9 @@ final class MessageHandler
 {
     use InitMailerTrait;
 
-    /**
-     * @var MessageRepository
-     */
-    private $messageRepository;
-    /**
-     * @var EmailFactory
-     */
-    private $emailFactory;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
+    private MessageRepository $messageRepository;
+    private EmailFactory $emailFactory;
+    private FlashBagInterface $flashBag;
 
     public function __construct(
         MessageRepository $messageRepository,

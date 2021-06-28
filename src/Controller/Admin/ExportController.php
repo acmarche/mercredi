@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Exception;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Spreadsheet\SpreadsheetFactory;
@@ -20,22 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ExportController extends AbstractController
 {
-    /**
-     * @var SpreadsheetFactory
-     */
-    private $spreadsheetFactory;
-    /**
-     * @var ListingPresenceByMonth
-     */
-    private $listingPresenceByMonth;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
+    private SpreadsheetFactory $spreadsheetFactory;
+    private ListingPresenceByMonth $listingPresenceByMonth;
+    private SearchHelper $searchHelper;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(
         SpreadsheetFactory $spreadsheetFactory,
@@ -82,7 +71,7 @@ final class ExportController extends AbstractController
 
         try {
             $date = DateUtils::createDateTimeFromDayMonth($mois);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addFlash('danger', $e->getMessage());
 
             return $this->redirectToRoute('mercredi_admin_presence_by_month');

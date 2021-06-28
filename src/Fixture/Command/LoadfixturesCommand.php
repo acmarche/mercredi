@@ -17,14 +17,8 @@ final class LoadfixturesCommand extends Command
      * @var string
      */
     protected static $defaultName = 'mercredi:load-fixtures';
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var FixtureLoader
-     */
-    private $fixtureLoader;
+    private EntityManagerInterface $entityManager;
+    private FixtureLoader $fixtureLoader;
 
     public function __construct(
         FixtureLoader $fixtureLoader,

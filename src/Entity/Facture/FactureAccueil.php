@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use DateTimeInterface;
+use DateTime;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Traits\AccueilTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -26,34 +28,29 @@ class FactureAccueil
     use AccueilTrait;
 
     /**
-     * @var Facture
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", inversedBy="factureAccueils")
      */
-    private $facture;
+    private Facture $facture;
 
     /**
-     * @var Accueil
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Accueil")
      */
-    private $accueil;
+    private ?Accueil $accueil;
 
     /**
-     * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $accueilDate;
+    private ?DateTimeInterface $accueilDate = null;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
-    private $heure;
+    private ?string $heure = null;
 
     /**
-     * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      */
-    private $cout;
+    private ?float $cout = null;
 
     public function __construct(Facture $facture, Accueil $accueil)
     {
@@ -61,19 +58,19 @@ class FactureAccueil
         $this->accueil = $accueil;
     }
 
-    public function getAccueilDate(): ?\DateTimeInterface
+    public function getAccueilDate(): DateTimeInterface
     {
         return $this->accueilDate;
     }
 
-    public function setAccueilDate(\DateTimeInterface $accueilDate): self
+    public function setAccueilDate(DateTimeInterface $accueilDate): self
     {
         $this->accueilDate = $accueilDate;
 
         return $this;
     }
 
-    public function getCout(): ?float
+    public function getCout(): float
     {
         return $this->cout;
     }
@@ -85,7 +82,7 @@ class FactureAccueil
         return $this;
     }
 
-    public function getHeure(): ?string
+    public function getHeure(): string
     {
         return $this->heure;
     }

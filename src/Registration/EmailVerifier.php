@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Registration;
 
+use Doctrine\ORM\EntityManagerInterface;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -14,18 +15,9 @@ final class EmailVerifier
 {
     use InitMailerTrait;
 
-    /**
-     * @var \SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface
-     */
-    private $verifyEmailHelper;
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private VerifyEmailHelperInterface $verifyEmailHelper;
+    private EntityManagerInterface $entityManager;
+    private UserRepository $userRepository;
 
     public function __construct(VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository)
     {

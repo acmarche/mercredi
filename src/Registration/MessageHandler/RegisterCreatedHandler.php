@@ -11,22 +11,10 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class RegisterCreatedHandler implements MessageHandlerInterface
 {
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var EmailVerifier
-     */
-    private $emailVerifier;
-    /**
-     * @var RegistrationMailerFactory
-     */
-    private $registrationMailerFactory;
+    private FlashBagInterface $flashBag;
+    private UserRepository $userRepository;
+    private EmailVerifier $emailVerifier;
+    private RegistrationMailerFactory $registrationMailerFactory;
 
     public function __construct(
         UserRepository $userRepository,

@@ -12,18 +12,9 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PlaineHottonCalculator implements PlaineCalculatorInterface
 {
-    /**
-     * @var PlainePresenceHandler
-     */
-    private $plainePresenceHandler;
-    /**
-     * @var OrdreService
-     */
-    private $ordreService;
-    /**
-     * @var ReductionCalculator
-     */
-    private $reductionCalculator;
+    private PlainePresenceHandler $plainePresenceHandler;
+    private OrdreService $ordreService;
+    private ReductionCalculator $reductionCalculator;
 
     public function __construct(
         PlainePresenceHandler $plainePresenceHandler,
@@ -54,7 +45,7 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
         return $total;
     }
 
-    private function reductionApplicate(PresenceInterface $presence, float $cout)
+    private function reductionApplicate(PresenceInterface $presence, float $cout): float
     {
         if (null !== ($reduction = $presence->getReduction())) {
             return $this->reductionCalculator->applicate($reduction, $cout);

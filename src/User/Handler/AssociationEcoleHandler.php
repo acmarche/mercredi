@@ -13,18 +13,9 @@ use function count;
 
 final class AssociationEcoleHandler
 {
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var UserFactory
-     */
-    private $userFactory;
-    /**
-     * @var EcoleRepository
-     */
-    private $ecoleRepository;
+    private FlashBagInterface $flashBag;
+    private UserFactory $userFactory;
+    private EcoleRepository $ecoleRepository;
 
     public function __construct(
         EcoleRepository $ecoleRepository,

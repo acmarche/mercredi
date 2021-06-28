@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Document\Form\DocumentType;
 use AcMarche\Mercredi\Document\Message\DocumentCreated;
 use AcMarche\Mercredi\Document\Message\DocumentDeleted;
@@ -22,14 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class DocumentController extends AbstractController
 {
-    /**
-     * @var DocumentRepository
-     */
-    private $documentRepository;
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
+    private DocumentRepository $documentRepository;
+    private PageRepository $pageRepository;
 
     public function __construct(
         DocumentRepository $documentRepository,
@@ -123,7 +118,7 @@ final class DocumentController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_document_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Document $document): Response
+    public function delete(Request $request, Document $document): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$document->getId(), $request->request->get('_token'))) {
             $id = $document->getId();

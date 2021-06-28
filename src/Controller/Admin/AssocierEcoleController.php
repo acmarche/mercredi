@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
@@ -28,14 +29,8 @@ final class AssocierEcoleController extends AbstractController
      * @var string
      */
     private const ID = 'id';
-    /**
-     * @var AssociationEcoleHandler
-     */
-    private $associationEcoleHandler;
-    /**
-     * @var EcoleRepository
-     */
-    private $ecoleRepository;
+    private AssociationEcoleHandler $associationEcoleHandler;
+    private EcoleRepository $ecoleRepository;
 
     public function __construct(
         AssociationEcoleHandler $associationEcoleHandler,
@@ -48,7 +43,7 @@ final class AssocierEcoleController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_user_associate_ecole", methods={"GET","POST"})
      */
-    public function associate(Request $request, User $user)
+    public function associate(Request $request, User $user): RedirectResponse
     {
         if (!$user->isEcole()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de école');
@@ -79,7 +74,7 @@ final class AssocierEcoleController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_user_dissociate_ecole", methods={"DELETE"})
      */
-    public function dissociate(Request $request, User $user)
+    public function dissociate(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $ecoleId = (int)$request->request->get('tuteur');

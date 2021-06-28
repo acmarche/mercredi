@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Accueil\Repository;
 
+use DateTime;
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -81,12 +83,12 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      * @param string|null $heure
      * @param array $ecoles
      * @return Accueil[]
      */
-    public function findByDateAndHeureAndEcoles(\DateTime $date, ?string $heure, iterable $ecoles): array
+    public function findByDateAndHeureAndEcoles(DateTimeInterface $date, ?string $heure, iterable $ecoles): array
     {
         $qb = $this->createQueryBuilder(self::ACCUEIL)
             ->leftJoin('accueil.enfant', 'enfant', 'WITH')
@@ -111,12 +113,12 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      * @param string|null $heure
      * @param array $ecoles
      * @return Accueil[]
      */
-    public function findByDateAndHeure(\DateTime $date, ?string $heure): array
+    public function findByDateAndHeure(DateTimeInterface $date, ?string $heure): array
     {
         $qb = $this->createQueryBuilder(self::ACCUEIL)
             ->leftJoin('accueil.enfant', 'enfant', 'WITH')

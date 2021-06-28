@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Enfant\Message;
 
 final class EnfantCreated
 {
-    /**
-     * @var int
-     */
-    private $enfantId;
+    private int $enfantId;
 
     public function __construct(int $enfantId)
     {

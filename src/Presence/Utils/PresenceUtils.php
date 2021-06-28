@@ -17,18 +17,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class PresenceUtils
 {
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var ScolaireUtils
-     */
-    private $scolaireUtils;
-    /**
-     * @var ParameterBagInterface
-     */
-    private $parameterBag;
+    private RelationRepository $relationRepository;
+    private ScolaireUtils $scolaireUtils;
+    private ParameterBagInterface $parameterBag;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
@@ -40,7 +31,7 @@ final class PresenceUtils
         $this->parameterBag = $parameterBag;
     }
 
-    public function getDeadLineDatePresence(): \DateTimeInterface
+    public function getDeadLineDatePresence(): Carbon
     {
         $today = Carbon::today();
         $today->addDays($this->parameterBag->get(Option::PRESENCE_DEADLINE_DAYS));
@@ -48,7 +39,7 @@ final class PresenceUtils
         return $today;
     }
 
-    public function getDeadLineDatePedagogique(): \DateTimeInterface
+    public function getDeadLineDatePedagogique(): Carbon
     {
         $today = Carbon::today();
         $today->addDays($this->parameterBag->get(Option::PEDAGOGIQUE_DEADLINE_DAYS));
@@ -79,9 +70,7 @@ final class PresenceUtils
     {
         return array_unique(
             array_map(
-                function ($presence) {
-                    return $presence->getTuteur();
-                },
+                fn($presence) => $presence->getTuteur(),
                 $presences
             ),
             SORT_REGULAR
@@ -129,9 +118,7 @@ final class PresenceUtils
     {
         return array_unique(
             array_map(
-                function ($presence) {
-                    return $presence->getJour();
-                },
+                fn($presence) => $presence->getJour(),
                 $presences
             ),
             SORT_REGULAR
@@ -172,7 +159,7 @@ final class PresenceUtils
      *
      * @return ArrayCollection|Plaine[]
      */
-    public static function extractPlainesFromPresences(array $presences): iterable
+    public static function extractPlainesFromPresences(array $presences): ArrayCollection
     {
         $plaines = new ArrayCollection();
         array_map(

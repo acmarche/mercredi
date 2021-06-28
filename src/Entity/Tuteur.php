@@ -56,7 +56,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      * @var Relation[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="tuteur", cascade={"remove"})
      */
-    private $relations;
+    private iterable $relations;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -64,20 +64,20 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      * @var Accueil[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="tuteur", cascade={"remove"})
      */
-    private $accueils;
+    private iterable $accueils;
 
     /**
      * @var Facture[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", mappedBy="tuteur", cascade={"remove"})
      */
-    private $factures;
+    private iterable $factures;
 
     /**
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="tuteurs" )
      *
      * @var User[]|Collection
      */
-    private $users;
+    private iterable $users;
 
     public function __construct()
     {

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Animateur;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Form\SearchEnfantForAnimateurType;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -23,26 +24,11 @@ final class EnfantController extends AbstractController
 {
     use GetAnimateurTrait;
 
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
+    private EnfantRepository $enfantRepository;
+    private SanteHandler $santeHandler;
+    private SanteChecker $santeChecker;
+    private PresenceRepository $presenceRepository;
+    private RelationRepository $relationRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -62,9 +48,9 @@ final class EnfantController extends AbstractController
      * @Route("/", name="mercredi_animateur_enfant_index", methods={"GET", "POST"})
      * @IsGranted("ROLE_MERCREDI_ANIMATEUR")
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        if ($t = $this->hasAnimateur()) {
+        if (($t = $this->hasAnimateur()) !== null) {
             return $t;
         }
 
@@ -99,7 +85,7 @@ final class EnfantController extends AbstractController
      * @Route("/{uuid}", name="mercredi_animateur_enfant_show", methods={"GET"})
      * @IsGranted("enfant_show", subject="enfant")
      */
-    public function show(Enfant $enfant)
+    public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);

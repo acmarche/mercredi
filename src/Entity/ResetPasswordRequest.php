@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,9 +20,9 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Security\User")
      */
-    private $user;
+    private ?User $user;
 
-    public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
+    public function __construct(object $user, DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {
         $this->user = $user;
         $this->initialize($expiresAt, $selector, $hashedToken);

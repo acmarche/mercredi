@@ -2,12 +2,10 @@
 
 namespace AcMarche\Mercredi\ServiceIterator;
 
+
 final class Register
 {
-    /**
-     * @var iterable
-     */
-    private $secondaryFlows;
+    private iterable $secondaryFlows;
 
     public function __construct(iterable $secondaryFlows)
     {

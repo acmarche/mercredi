@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Scolaire\Message;
 
 final class AnneeScolaireDeleted
 {
-    /**
-     * @var int
-     */
-    private $anneeScolaireId;
+    private int $anneeScolaireId;
 
     public function __construct(int $anneeScolaireId)
     {

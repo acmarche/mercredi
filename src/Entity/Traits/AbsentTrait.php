@@ -7,11 +7,9 @@ use AcMarche\Mercredi\Data\MercrediConstantes;
 trait AbsentTrait
 {
     /**
-     * @var int
-     *
      * @see MercrediConstantes::ABSENCE_AVEC_CERTIF
      */
-    private $absent;
+    private int $absent;
 
     public function getAbsent(): int
     {

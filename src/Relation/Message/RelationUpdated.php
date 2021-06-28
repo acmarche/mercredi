@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Relation\Message;
 
 final class RelationUpdated
 {
-    /**
-     * @var int
-     */
-    private $relationId;
+    private int $relationId;
 
     public function __construct(int $relationId)
     {

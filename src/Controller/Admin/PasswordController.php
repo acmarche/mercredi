@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -17,14 +18,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 final class PasswordController extends AbstractController
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
+    private UserRepository $userRepository;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,
@@ -39,7 +34,7 @@ final class PasswordController extends AbstractController
      *
      * @Route("/{id}/password", name="mercredi_admin_user_password", methods={"GET","POST"})
      */
-    public function passord(Request $request, User $user)
+    public function passord(Request $request, User $user): RedirectResponse
     {
         $form = $this->createForm(UserPasswordType::class, $user);
 

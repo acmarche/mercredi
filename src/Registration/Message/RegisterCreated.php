@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Registration\Message;
 
 final class RegisterCreated
 {
-    /**
-     * @var int
-     */
-    private $userId;
+    private int $userId;
 
     public function __construct(int $userId)
     {

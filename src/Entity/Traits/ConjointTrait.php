@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait ConjointTrait
 {
     /**
@@ -9,49 +11,49 @@ trait ConjointTrait
      *
      * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "pere, mere, oncle..."})
      */
-    private $relation_conjoint;
+    private ?string $relation_conjoint;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $nom_conjoint;
+    private ?string $nom_conjoint;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $prenom_conjoint;
+    private ?string $prenom_conjoint;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $telephone_conjoint;
+    private ?string $telephone_conjoint;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $telephone_bureau_conjoint;
+    private ?string $telephone_bureau_conjoint;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $gsm_conjoint;
+    private ?string $gsm_conjoint;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $email_conjoint;
+    private ?string $email_conjoint;
 
     public function getRelationConjoint(): ?string
     {

@@ -8,10 +8,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class SanteQuestionUpdatedHandler implements MessageHandlerInterface
 {
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
+    private FlashBagInterface $flashBag;
 
     public function __construct(FlashBagInterface $flashBag)
     {

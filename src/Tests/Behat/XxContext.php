@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
+use Behat\Mink\Element\DocumentElement;
+use Doctrine\ORM\EntityManager;
+use Behat\Mink\Element\NodeElement;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -14,10 +17,7 @@ use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 class XxContext
 {
     private $currentUser;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
      * Initializes context.
@@ -54,7 +54,7 @@ class XxContext
     /**
      * @Given there is an admin user :username with password :password
      */
-    public function thereIsAnAdminUserWithPassword($username, $password)
+    public function thereIsAnAdminUserWithPassword($username, $password): \App\Entity\Security\User
     {
         $user = new \App\Entity\Security\User();
         $user->setUsername($username);
@@ -213,18 +213,12 @@ class XxContext
         $this->saveScreenshot($filename, __DIR__.'/../sallessf');
     }
 
-    /**
-     * @return \Behat\Mink\Element\DocumentElement
-     */
-    private function getPage()
+    private function getPage(): DocumentElement
     {
         return $this->getSession()->getPage();
     }
 
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    private function getEntityManager()
+    private function getEntityManager(): EntityManager
     {
         return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
@@ -237,7 +231,7 @@ class XxContext
             $product->setPrice(rand(10, 1000));
             $product->setDescription('lorem');
 
-            if ($author) {
+            if ($author !== null) {
                 $product->setAuthor($author);
             }
 
@@ -249,10 +243,8 @@ class XxContext
 
     /**
      * @param $rowText
-     *
-     * @return \Behat\Mink\Element\NodeElement
      */
-    private function findRowByText($rowText)
+    private function findRowByText($rowText): ?NodeElement
     {
         $row = $this->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
         assertNotNull($row, 'Cannot find a table row with this text!');

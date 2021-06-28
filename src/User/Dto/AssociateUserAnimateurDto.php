@@ -8,20 +8,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserAnimateurDto
 {
-    /**
-     * @var User
-     */
-    private $user;
+    private User $user;
 
-    /**
-     * @var Animateur|null
-     */
-    private $animateur;
+    private ?Animateur $animateur = null;
 
-    /**
-     * @var bool
-     */
-    private $sendEmail = true;
+    private bool $sendEmail = true;
 
     public function __construct(UserInterface $user)
     {

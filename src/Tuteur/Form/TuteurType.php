@@ -21,10 +21,7 @@ final class TuteurType extends AbstractType
      * @var string
      */
     private const REQUIRED = 'required';
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security)
     {

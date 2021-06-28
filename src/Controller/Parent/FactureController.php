@@ -18,10 +18,7 @@ final class FactureController extends AbstractController
 {
     use GetTuteurTrait;
 
-    /**
-     * @var FactureRepository
-     */
-    private $factureRepository;
+    private FactureRepository $factureRepository;
 
     public function __construct(
         FactureRepository $factureRepository
@@ -34,7 +31,7 @@ final class FactureController extends AbstractController
      */
     public function index(): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
         $factures = $this->factureRepository->findFacturesByTuteur($this->tuteur);

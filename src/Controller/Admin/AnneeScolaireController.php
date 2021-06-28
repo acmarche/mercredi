@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\AnneeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireCreated;
@@ -28,10 +29,7 @@ final class AnneeScolaireController extends AbstractController
      * @var string
      */
     private const ID = 'id';
-    /**
-     * @var AnneeScolaireRepository
-     */
-    private $anneeScolaireRepository;
+    private AnneeScolaireRepository $anneeScolaireRepository;
 
     public function __construct(AnneeScolaireRepository $anneeScolaireRepository)
     {
@@ -119,7 +117,7 @@ final class AnneeScolaireController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_annee_scolaire_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, AnneeScolaire $anneeScolaire): Response
+    public function delete(Request $request, AnneeScolaire $anneeScolaire): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$anneeScolaire->getId(), $request->request->get('_token'))) {
             if (\count($anneeScolaire->getEnfants()) > 0) {

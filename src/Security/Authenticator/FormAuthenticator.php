@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,17 +21,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 
 final class FormAuthenticator implements AuthenticatorInterface
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
+    private PasswordUpgraderInterface $userRepository;
+    private UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
-        \Symfony\Component\Security\Core\User\PasswordUpgraderInterface $userRepository,
+        PasswordUpgraderInterface $userRepository,
         UrlGeneratorInterface $urlGenerator
     ) {
         $this->userRepository = $userRepository;

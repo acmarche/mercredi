@@ -32,14 +32,8 @@ final class AnimateurPresenceController extends AbstractController
      * @var string
      */
     private const ANIMATEUR = 'animateur';
-    /**
-     * @var AnimateurRepository
-     */
-    private $animateurRepository;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
+    private AnimateurRepository $animateurRepository;
+    private JourRepository $jourRepository;
 
 
     public function __construct(

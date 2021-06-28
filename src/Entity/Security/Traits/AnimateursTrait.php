@@ -13,7 +13,7 @@ trait AnimateursTrait
      * @var Animateur[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", inversedBy="users")
      */
-    private $animateurs;
+    private iterable $animateurs;
 
     /**
      * @return Animateur|null

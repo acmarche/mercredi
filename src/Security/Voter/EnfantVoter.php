@@ -36,26 +36,11 @@ final class EnfantVoter extends Voter
      * @var Enfant
      */
     private $enfant;
-    /**
-     * @var Tuteur
-     */
-    private $tuteur;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
+    private ?Tuteur $tuteur = null;
+    private TuteurUtils $tuteurUtils;
+    private Security $security;
+    private RelationRepository $relationRepository;
+    private EnfantRepository $enfantRepository;
 
     public function __construct(
         RelationRepository $relationRepository,
@@ -69,7 +54,7 @@ final class EnfantVoter extends Voter
         $this->enfantRepository = $enfantRepository;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         if ($subject && !$subject instanceof Enfant) {
             return false;
@@ -82,7 +67,7 @@ final class EnfantVoter extends Voter
         );
     }
 
-    protected function voteOnAttribute($attribute, $enfant, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $enfant, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
         $this->enfant = $enfant;
@@ -111,34 +96,22 @@ final class EnfantVoter extends Voter
 
     private function canView(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
-            if ($this->checkEcoles()) {
-                return true;
-            }
-        }
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
-            if ($this->checkAnimateur()) {
-                return true;
-            }
-        }
-        if ($this->canEdit()) {
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE) && $this->checkEcoles()) {
             return true;
         }
-
-        return false;
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR) && $this->checkAnimateur()) {
+            return true;
+        }
+        return $this->canEdit();
     }
 
     private function canEdit(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
-            if ($this->checkEcoles()) {
-                return true;
-            }
+        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE) && $this->checkEcoles()) {
+            return true;
         }
-        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
-            if ($this->checkTuteur()) {
-                return true;
-            }
+        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT) && $this->checkTuteur()) {
+            return true;
         }
 
         return false;
@@ -154,19 +127,15 @@ final class EnfantVoter extends Voter
         return false;//only admin
     }
 
-    private function checkAnimateur()
+    private function checkAnimateur(): bool
     {
         $animateur = $this->user->getAnimateur();
-        if (!$animateur) {
+        if ($animateur === null) {
             return false;
         }
 
         $enfants = new ArrayCollection($this->enfantRepository->findAllForAnimateur($animateur));
-        if ($enfants->contains($this->enfant)) {
-            return true;
-        }
-
-        return false;
+        return $enfants->contains($this->enfant);
     }
 
     /**
@@ -179,16 +148,14 @@ final class EnfantVoter extends Voter
         }
 
         $this->tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
-        if (!$this->tuteur) {
+        if ($this->tuteur === null) {
             return false;
         }
 
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
 
         $enfants = array_map(
-            function ($relation) {
-                return $relation->getEnfant()->getId();
-            },
+            fn($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

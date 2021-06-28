@@ -13,18 +13,9 @@ final class DateConstraint implements PresenceConstraintInterface
      * @var string
      */
     private const FORMAT = 'Y-m-d';
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var PresenceUtils
-     */
-    private $presenceUtils;
+    private FlashBagInterface $flashBag;
+    private Environment $environment;
+    private PresenceUtils $presenceUtils;
 
     public function __construct(
         FlashBagInterface $flashBag,

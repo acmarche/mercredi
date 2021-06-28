@@ -12,14 +12,8 @@ use Twig\Environment;
 
 final class FactureFactory
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
+    private Environment $environment;
+    private OrganisationRepository $organisationRepository;
 
     public function __construct(Environment $environment, OrganisationRepository $organisationRepository)
     {

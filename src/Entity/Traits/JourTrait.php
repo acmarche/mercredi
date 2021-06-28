@@ -10,7 +10,7 @@ trait JourTrait
      * @var Jour
      *
      * */
-    private $jour;
+    private ?Jour $jour;
 
     public function getJour(): Jour
     {

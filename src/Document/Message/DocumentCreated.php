@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Document\Message;
 
 final class DocumentCreated
 {
-    /**
-     * @var int
-     */
-    private $documentId;
+    private int $documentId;
 
     public function __construct(int $documentId)
     {

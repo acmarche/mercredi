@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Ecole\Message;
 
 final class EcoleCreated
 {
-    /**
-     * @var int
-     */
-    private $ecoleId;
+    private int $ecoleId;
 
     public function __construct(int $ecoleId)
     {

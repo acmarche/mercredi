@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
@@ -31,18 +32,9 @@ final class TuteurController extends AbstractController
      * @var string
      */
     private const TUTEUR = 'tuteur';
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
+    private TuteurRepository $tuteurRepository;
+    private RelationRepository $relationRepository;
+    private SearchHelper $searchHelper;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
@@ -154,7 +146,7 @@ final class TuteurController extends AbstractController
      *
      * @Route("/{id}", name="mercredi_admin_tuteur_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Tuteur $tuteur): Response
+    public function delete(Request $request, Tuteur $tuteur): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
             $id = $tuteur->getId();

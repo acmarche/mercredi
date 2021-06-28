@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Animateur\Form\AnimateurType;
 use AcMarche\Mercredi\Animateur\Form\SearchAnimateurType;
 use AcMarche\Mercredi\Animateur\Message\AnimateurCreated;
@@ -30,14 +31,8 @@ final class AnimateurController extends AbstractController
      * @var string
      */
     private const ANIMATEUR = 'animateur';
-    /**
-     * @var AnimateurRepository
-     */
-    private $animateurRepository;
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
+    private AnimateurRepository $animateurRepository;
+    private SearchHelper $searchHelper;
 
     public function __construct(
         AnimateurRepository $animateurRepository,
@@ -144,7 +139,7 @@ final class AnimateurController extends AbstractController
      *
      * @Route("/{id}", name="mercredi_admin_animateur_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Animateur $animateur): Response
+    public function delete(Request $request, Animateur $animateur): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$animateur->getId(), $request->request->get('_token'))) {
             $id = $animateur->getId();

@@ -2,37 +2,35 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait FileTrait
 {
-    /**
-     * @var UploadedFile
-     */
-    private $file;
+    private ?File $file = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @var string|null
      */
-    private $fileName;
+    private ?string $fileName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
      */
-    private $mimeType;
+    private ?string  $mimeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var int|null
      */
-    private $fileSize;
+    private ?int $fileSize;
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -41,7 +39,7 @@ trait FileTrait
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param File|UploadedFile $file
      */
     public function setFile(?File $file = null): void
     {
@@ -50,7 +48,7 @@ trait FileTrait
         if ($file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTime('now');
+            $this->updatedAt = new DateTime('now');
         }
     }
 

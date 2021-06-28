@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Form;
 
+use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,7 +21,7 @@ class AddFieldTuteurSubscriber implements EventSubscriberInterface
     public function preSetData(FormEvent $event)
     {
         /**
-         * @var \AcMarche\Mercredi\Entity\Presence $presence
+         * @var Presence $presence
          */
         $presence = $event->getData();
         $form = $event->getForm();
@@ -29,9 +30,7 @@ class AddFieldTuteurSubscriber implements EventSubscriberInterface
         $relations = $enfant->getRelations();
         if (count($relations) > 1) {
             $tuteurs = array_map(
-                function ($relation) {
-                    return $relation->getTuteur();
-                },
+                fn($relation) => $relation->getTuteur(),
                 $relations->toArray(),
             );
             $form

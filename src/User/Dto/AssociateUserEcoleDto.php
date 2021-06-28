@@ -10,20 +10,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserEcoleDto
 {
-    /**
-     * @var User
-     */
-    private $user;
+    private User $user;
 
     /**
      * @var Ecole[]|ArrayCollection
      */
-    private $ecoles;
+    private Collection $ecoles;
 
-    /**
-     * @var bool
-     */
-    private $sendEmail = true;
+    private bool $sendEmail = true;
 
     public function __construct(UserInterface $user)
     {

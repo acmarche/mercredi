@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Sante\Form\SanteQuestionType;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionCreated;
@@ -25,10 +26,7 @@ final class SanteQuestionController extends AbstractController
      * @var string
      */
     private const SANTE_QUESTION = 'sante_question';
-    /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
+    private SanteQuestionRepository $santeQuestionRepository;
 
     public function __construct(SanteQuestionRepository $santeQuestionRepository)
     {
@@ -116,7 +114,7 @@ final class SanteQuestionController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_sante_question_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, SanteQuestion $santeQuestion): Response
+    public function delete(Request $request, SanteQuestion $santeQuestion): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$santeQuestion->getId(), $request->request->get('_token'))) {
             $id = $santeQuestion->getId();
@@ -131,7 +129,7 @@ final class SanteQuestionController extends AbstractController
     /**
      * @Route("/q/sort", name="mercredi_admin_sante_question_sort", methods={"GET","POST"})
      */
-    public function trier(Request $request)
+    public function trier(Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $questions = $request->request->get('questions');

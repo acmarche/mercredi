@@ -10,7 +10,7 @@ trait PlaineGroupesTrait
     /**
      * @var PlaineGroupe[]|ArrayCollection|null
      */
-    private $plaine_groupes;
+    private iterable $plaine_groupes;
 
     /**
      * @return Collection|PlaineGroupe[]

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Form\JourType;
 use AcMarche\Mercredi\Jour\Message\JourCreated;
@@ -33,14 +34,8 @@ final class JourController extends AbstractController
      * @var string
      */
     private const FORM = 'form';
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
-    /**
-     * @var TarificationFormGeneratorInterface
-     */
-    private $tarificationFormGenerator;
+    private JourRepository $jourRepository;
+    private TarificationFormGeneratorInterface $tarificationFormGenerator;
 
     public function __construct(
         JourRepository $jourRepository,
@@ -162,7 +157,7 @@ final class JourController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_jour_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Jour $jour): Response
+    public function delete(Request $request, Jour $jour): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$jour->getId(), $request->request->get('_token'))) {
             $jourId = $jour->getId();

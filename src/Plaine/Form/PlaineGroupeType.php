@@ -12,10 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PlaineGroupeType extends AbstractType
 {
-    /**
-     * @var bool
-     */
-    protected $label = false;
+    protected bool $label = false;
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {

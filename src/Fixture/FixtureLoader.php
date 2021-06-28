@@ -7,14 +7,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class FixtureLoader
 {
-    /**
-     * @var LoaderInterface
-     */
-    private $loader;
-    /**
-     * @var ParameterBagInterface
-     */
-    private $parameterBag;
+    private LoaderInterface $loader;
+    private ParameterBagInterface $parameterBag;
 
     public function __construct(
         LoaderInterface $loader,

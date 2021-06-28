@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Entity;
 
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
@@ -41,13 +42,13 @@ interface PresenceInterface
 
     public function setRemarque(?string $remarque): void;
 
-    public function getCreatedAt(): \DateTimeInterface;
+    public function getCreatedAt(): DateTimeInterface;
 
-    public function getUpdatedAt(): \DateTimeInterface;
+    public function getUpdatedAt(): DateTimeInterface;
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): void;
+    public function setCreatedAt(DateTimeInterface $createdAt): void;
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void;
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void;
 
     public function updateTimestamps(): void;
 

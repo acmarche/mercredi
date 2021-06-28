@@ -14,10 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PresenceNewForParentType extends AbstractType
 {
-    /**
-     * @var PresenceDaysProviderInterface
-     */
-    private $presenceDaysProvider;
+    private PresenceDaysProviderInterface $presenceDaysProvider;
 
     public function __construct(PresenceDaysProviderInterface $presenceDaysProvider)
     {

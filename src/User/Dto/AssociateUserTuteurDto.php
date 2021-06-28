@@ -8,20 +8,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserTuteurDto
 {
-    /**
-     * @var User
-     */
-    private $user;
+    private User $user;
 
-    /**
-     * @var Tuteur|null
-     */
-    private $tuteur;
+    private ?Tuteur $tuteur = null;
 
-    /**
-     * @var bool
-     */
-    private $sendEmail = true;
+    private bool $sendEmail = true;
 
     public function __construct(UserInterface $user)
     {

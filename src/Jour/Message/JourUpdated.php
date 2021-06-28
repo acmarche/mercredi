@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Jour\Message;
 
 final class JourUpdated
 {
-    /**
-     * @var int
-     */
-    private $jourId;
+    private int $jourId;
 
     public function __construct(int $jourId)
     {

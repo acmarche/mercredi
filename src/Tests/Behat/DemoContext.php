@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
+use RuntimeException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,14 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class DemoContext implements Context
 {
-    /**
-     * @var Response|null
-     */
-    private $response;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private ?Response $response = null;
+    private RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
@@ -40,7 +35,7 @@ final class DemoContext implements Context
         var_dump($headers);
 
         if (null === $this->response) {
-            throw new \RuntimeException('No response received');
+            throw new RuntimeException('No response received');
         }
         var_dump($arg1);
         var_dump($this->response->headers);

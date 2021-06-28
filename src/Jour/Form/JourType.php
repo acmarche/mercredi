@@ -57,9 +57,7 @@ final class JourType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'query_builder' => function (EcoleRepository $ecoleRepository) {
-                        return $ecoleRepository->getQbForListing();
-                    },
+                    'query_builder' => fn(EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
                     'help' => 'Pour les journées pédagogiques',
                     'required' => false,
                     'multiple' => true,

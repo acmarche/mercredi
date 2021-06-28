@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Tuteur\Message;
 
 final class TuteurDeleted
 {
-    /**
-     * @var int
-     */
-    private $tuteurId;
+    private int $tuteurId;
 
     public function __construct(int $tuteurId)
     {

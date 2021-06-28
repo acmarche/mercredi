@@ -11,21 +11,21 @@ trait TelephonieTrait
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $telephone;
+    private ?string $telephone;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $telephone_bureau;
+    private ?string $telephone_bureau;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $gsm;
+    private ?string  $gsm;
 
     public function getTelephone(): ?string
     {

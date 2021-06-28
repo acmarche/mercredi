@@ -10,10 +10,7 @@ final class FacturePdfFactoryTrait
 {
     use PdfDownloaderTrait;
 
-    /**
-     * @var FactureFactory
-     */
-    private $factureFactory;
+    private FactureFactory $factureFactory;
 
     public function __construct(FactureFactory $factureFactory)
     {

@@ -25,9 +25,7 @@ final class PresenceNewType extends AbstractType
                 [
                     'class' => Jour::class,
                     'multiple' => true,
-                    'query_builder' => function (JourRepository $cr) use ($enfant) {
-                        return $cr->getQbDaysNotRegisteredByEnfant($enfant);
-                    },
+                    'query_builder' => fn(JourRepository $cr) => $cr->getQbDaysNotRegisteredByEnfant($enfant),
                     'label' => 'Sélectionnez une ou plusieurs dates',
                     'choice_label' => function (Jour $jour) {
                         $peda = '';

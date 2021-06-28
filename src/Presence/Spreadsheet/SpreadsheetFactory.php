@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Presence\Spreadsheet;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -29,18 +31,18 @@ final class SpreadsheetFactory
      */
     private const COLONNE = 1;
 
-    /**
-     * @var ScolaireUtils
-     */
-    private $scolaireUtils;
+    private ScolaireUtils $scolaireUtils;
 
     public function __construct(ScolaireUtils $scolaireUtils)
     {
         $this->scolaireUtils = $scolaireUtils;
     }
 
+    /**
+     * @param DateTime|DateTimeImmutable $dateTime
+     */
     public function createXlsByMonthForOne(
-        DateTime $dateTime,
+        DateTimeInterface $dateTime,
         ListingPresenceByMonth $listingPresenceByMonth
     ): Spreadsheet {
         $spreadsheet = new Spreadsheet();

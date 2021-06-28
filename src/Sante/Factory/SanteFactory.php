@@ -11,14 +11,8 @@ use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
 final class SanteFactory
 {
-    /**
-     * @var SanteFicheRepository
-     */
-    private $santeFicheRepository;
-    /**
-     * @var SanteReponseRepository
-     */
-    private $santeReponseRepository;
+    private SanteFicheRepository $santeFicheRepository;
+    private SanteReponseRepository $santeReponseRepository;
 
     public function __construct(
         SanteFicheRepository $santeFicheRepository,
@@ -38,10 +32,7 @@ final class SanteFactory
         return $santeFiche;
     }
 
-    /**
-     * @return SanteReponse
-     */
-    public function createSanteReponse(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
+    public function createSanteReponse(SanteFiche $santeFiche, SanteQuestion $santeQuestion): SanteReponse
     {
         $santeReponse = new SanteReponse($santeFiche, $santeQuestion);
         $this->santeReponseRepository->persist($santeReponse);

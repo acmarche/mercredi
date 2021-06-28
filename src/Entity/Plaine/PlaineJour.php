@@ -21,12 +21,12 @@ class PlaineJour
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_jours")
      */
-    private $plaine;
+    private ?Plaine $plaine;
 
     /**
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="plaine_jour")
      */
-    private $jour;
+    private ?Jour $jour;
 
     public function __construct(Plaine $plaine, Jour $jour)
     {
@@ -39,7 +39,7 @@ class PlaineJour
         return $this->jour->getDateJour()->format('Y-m-d');
     }
 
-    public function getPlaine(): ?Plaine
+    public function getPlaine(): Plaine
     {
         return $this->plaine;
     }
@@ -51,7 +51,7 @@ class PlaineJour
         return $this;
     }
 
-    public function getJour(): ?Jour
+    public function getJour(): Jour
     {
         return $this->jour;
     }

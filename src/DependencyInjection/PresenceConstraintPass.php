@@ -27,7 +27,7 @@ class PresenceConstraintPass implements CompilerPassInterface
         // find all service IDs with the mercredi.presence_constraint tag
         $taggedServices = $container->findTaggedServiceIds('mercredi.presence_constraint');
 
-        foreach ($taggedServices as $id => $tags) {
+        foreach (array_keys($taggedServices) as $id) {
             // add the transport service to the TransportChain service
             $definition->addMethodCall('addConstraint', [new Reference($id)]);
         }

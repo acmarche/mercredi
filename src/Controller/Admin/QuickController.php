@@ -23,22 +23,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class QuickController extends AbstractController
 {
-    /**
-     * @var TuteurRepository
-     */
-    private $tuteurRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var AssociationTuteurHandler
-     */
-    private $associationHandler;
+    private TuteurRepository $tuteurRepository;
+    private EnfantRepository $enfantRepository;
+    private RelationRepository $relationRepository;
+    private AssociationTuteurHandler $associationHandler;
 
     public function __construct(
         TuteurRepository $tuteurRepository,

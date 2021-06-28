@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\ContentTrait;
 use AcMarche\Mercredi\Entity\Traits\DocumentsTraits;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -16,6 +17,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
  */
 class Page implements SluggableInterface
 {
+    public bool $system;
     use IdTrait;
     use NomTrait;
     use ContentTrait;
@@ -23,22 +25,20 @@ class Page implements SluggableInterface
     use DocumentsTraits;
 
     /**
-     * @var string|null
      * @ORM\Column(type="text", length=100, nullable=true)
      */
-    private $slug_system;
+    private ?string $slug_system = null;
 
     /**
-     * @var int|null
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $position;
+    private ?int $position = null;
 
     /**
      * @var Document[]
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Document")
      */
-    private $documents;
+    private iterable $documents;
 
     public function __construct()
     {

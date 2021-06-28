@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
+use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -28,13 +29,13 @@ class Plaine
      * @var PlaineJour[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="plaine", cascade={"remove"})
      */
-    private $plaine_jours;
+    private iterable $plaine_jours;
 
     /**
      * @var PlaineGroupe[]|null
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="plaine", cascade={"remove","persist"})
      */
-    private $plaine_groupes;
+    private iterable $plaine_groupes;
 
     public function __construct()
     {

@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Reduction\Message;
 
 final class ReductionUpdated
 {
-    /**
-     * @var int
-     */
-    private $ecoleId;
+    private int $ecoleId;
 
     public function __construct(int $reductionId)
     {

@@ -27,7 +27,7 @@ class Note implements TimestampableInterface
     /**
      * @ORM\ManyToOne (targetEntity=Enfant::class, inversedBy="notes")
      */
-    private $enfant;
+    private ?Enfant $enfant = null;
 
     public function __construct(Enfant $enfant)
     {

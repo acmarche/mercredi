@@ -157,7 +157,7 @@ final class EnfantRepository extends ServiceEntityRepository
                 ->setParameter(self::ECOLE, $ecole);
         }
 
-        if ($anneeScolaire) {
+        if ($anneeScolaire !== null) {
             $queryBuilder->andWhere('enfant.annee_scolaire = :annee')
                 ->setParameter('annee', $anneeScolaire);
         }
@@ -223,7 +223,7 @@ final class EnfantRepository extends ServiceEntityRepository
     /**
      * @param Animateur $animateur
      * @param string|null $nom
-     * @param \AcMarche\Mercredi\Entity\Jour|null $jour
+     * @param Jour|null $jour
      * @return array|Enfant[]
      */
     public function searchForAnimateur(Animateur $animateur, ?string $nom, ?Jour $jour): array
@@ -232,7 +232,7 @@ final class EnfantRepository extends ServiceEntityRepository
             ->leftJoin('enfant.presences', 'presences', self::WITH)
             ->addSelect('presences');
 
-        if ($jour) {
+        if ($jour !== null) {
             $jours = [$jour];
         } else {
             $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
@@ -258,7 +258,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
     private function getOrCreateQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
-        if ($qb) {
+        if ($qb !== null) {
             return $qb;
         }
 

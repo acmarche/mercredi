@@ -23,14 +23,8 @@ final class ListingPresenceByMonth
      * @var JourListing[]
      */
     private $joursListing;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
+    private PresenceRepository $presenceRepository;
+    private JourRepository $jourRepository;
 
     public function __construct(PresenceRepository $presenceRepository, JourRepository $jourRepository)
     {
@@ -49,9 +43,7 @@ final class ListingPresenceByMonth
         foreach ($daysOfMonth as $jour) {
             $presences = $this->presenceRepository->findByDay($jour);
             $enfantsByday = array_map(
-                function ($presence) {
-                    return $presence->getEnfant();
-                },
+                fn($presence) => $presence->getEnfant(),
                 $presences
             );
             $joursListing[] = new JourListing($jour, $enfantsByday);
@@ -64,7 +56,7 @@ final class ListingPresenceByMonth
     /**
      * @return Jour[]
      */
-    public function getDaysOfMonth(DateTimeInterface $dateTime)
+    public function getDaysOfMonth(DateTimeInterface $dateTime): array
     {
         return $this->jourRepository->findDaysByMonth($dateTime);
     }
@@ -107,9 +99,7 @@ final class ListingPresenceByMonth
     private function getEnfantsPresentsOfMonth(): array
     {
         $enfants = array_map(
-            function ($presence) {
-                return $presence->getEnfant();
-            },
+            fn($presence) => $presence->getEnfant(),
             $this->presences
         );
 

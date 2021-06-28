@@ -20,27 +20,25 @@ class GroupeScolaire
     use RemarqueTrait;
 
     /**
-     * @var int
      * @ORM\Column(type="integer", length=10, nullable=true)
      */
-    private $age_minimum;
+    private ?int $age_minimum = null;
     /**
-     * @var int
      * @ORM\Column(type="integer", length=10, nullable=true)
      */
-    private $age_maximum;
+    private ?int $age_maximum = null;
 
     /**
      * @var Enfant[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Enfant", mappedBy="groupe_scolaire")
      */
-    private $enfants;
+    private iterable $enfants;
 
     /**
      * @var AnneeScolaire[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", mappedBy="groupe_scolaire")
      */
-    private $annees_scolaires;
+    private iterable $annees_scolaires;
 
     /**
      * Pour le cascade.
@@ -48,7 +46,7 @@ class GroupeScolaire
      * @var PlaineGroupe[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="groupe_scolaire", cascade={"remove"})
      */
-    private $plaine_groupes;
+    private iterable $plaine_groupes;
 
     public function __construct()
     {
@@ -62,7 +60,7 @@ class GroupeScolaire
         return $this->nom;
     }
 
-    public function getAgeMinimum(): ?int
+    public function getAgeMinimum(): int
     {
         return $this->age_minimum;
     }
@@ -74,7 +72,7 @@ class GroupeScolaire
         return $this;
     }
 
-    public function getAgeMaximum(): ?int
+    public function getAgeMaximum(): int
     {
         return $this->age_maximum;
     }
@@ -89,7 +87,7 @@ class GroupeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): Collection
+    public function getEnfants(): array
     {
         return $this->enfants;
     }
@@ -120,7 +118,7 @@ class GroupeScolaire
     /**
      * @return Collection|AnneeScolaire[]
      */
-    public function getAnneesScolaires(): Collection
+    public function getAnneesScolaires(): array
     {
         return $this->annees_scolaires;
     }
@@ -151,7 +149,7 @@ class GroupeScolaire
     /**
      * @return Collection|PlaineGroupe[]
      */
-    public function getPlaineGroupes(): Collection
+    public function getPlaineGroupes(): array
     {
         return $this->plaine_groupes;
     }

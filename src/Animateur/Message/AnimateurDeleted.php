@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Animateur\Message;
 
 final class AnimateurDeleted
 {
-    /**
-     * @var int
-     */
-    private $animateurId;
+    private int $animateurId;
 
     public function __construct(int $animateurId)
     {

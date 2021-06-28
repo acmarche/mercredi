@@ -10,7 +10,7 @@ trait RelationsTrait
     /**
      * @var Relation[]
      */
-    private $relations;
+    private iterable $relations;
 
     /**
      * @return Relation[]|Collection

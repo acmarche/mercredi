@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Organisation\Message;
 
 final class OrganisationUpdated
 {
-    /**
-     * @var int
-     */
-    private $organisationId;
+    private int $organisationId;
 
     public function __construct(int $organisationId)
     {

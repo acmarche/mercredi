@@ -6,10 +6,7 @@ use AcMarche\Mercredi\Entity\AnneeScolaire;
 
 trait AnneeScolaireTrait
 {
-    /**
-     * @var AnneeScolaire
-     */
-    private $annee_scolaire;
+    private ?AnneeScolaire $annee_scolaire = null;
 
     public function getAnneeScolaire(): ?AnneeScolaire
     {

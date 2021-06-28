@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AccueilsTrait;
-use AcMarche\Mercredi\Entity\Traits\AgeTrait;
 use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
@@ -58,7 +57,6 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use ArchiveTrait;
     use TimestampableTrait;
     use TelephonesTrait;
-    use AgeTrait;
     use SanteFicheTrait;
     use FicheSanteIsCompleteTrait;
     use UuidableTrait;
@@ -74,33 +72,28 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $photo_autorisation;
+    private bool $photo_autorisation;
 
     /**
-     * @var AnneeScolaire|null
-     *
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", inversedBy="enfants")
      */
-    private $annee_scolaire;
+    private ?AnneeScolaire $annee_scolaire = null;
 
     /**
-     * @var GroupeScolaire|null
-     *
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="enfants")
      */
-    private $groupe_scolaire;
+    private ?GroupeScolaire $groupe_scolaire = null;
 
     /**
-     * @var Ecole|null
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
      */
-    private $ecole;
+    private ?Ecole $ecole = null;
 
     /**
      * @var Relation[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="enfant", cascade={"remove"})
      */
-    private $relations;
+    private iterable $relations;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -108,7 +101,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      * @var Presence[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="enfant", cascade={"remove"})
      */
-    private $presences;
+    private iterable $presences;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -116,7 +109,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      * @var Accueil[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="enfant", cascade={"remove"})
      */
-    private $accueils;
+    private iterable $accueils;
 
     public function __construct()
     {
@@ -143,12 +136,10 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         return true;
     }
 
-    public function getTuteurs()
+    public function getTuteurs(): array
     {
         return array_map(
-            function ($relation) {
-                return $relation->getTuteur();
-            },
+            fn($relation) => $relation->getTuteur(),
             $this->getRelations()->toArray()
         );
     }

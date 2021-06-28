@@ -9,7 +9,7 @@ trait EcoleTrait
     /**
      * @var Ecole|null
      */
-    private $ecole;
+    private ?Ecole $ecole=null;
 
     public function getEcole(): ?Ecole
     {

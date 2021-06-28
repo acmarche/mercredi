@@ -13,7 +13,7 @@ trait EcolesTrait
      * @var Ecole[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Ecole", inversedBy="users")
      */
-    private $ecoles;
+    private iterable $ecoles;
 
     /**
      * @return Collection|Ecole[]

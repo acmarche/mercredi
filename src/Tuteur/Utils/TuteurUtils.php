@@ -13,10 +13,7 @@ use function count;
 
 final class TuteurUtils
 {
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
+    private RelationRepository $relationRepository;
 
     public function __construct(RelationRepository $relationRepository)
     {
@@ -73,10 +70,8 @@ final class TuteurUtils
      * Retourne un tableau de string contentant les emails.
      *
      * @param Tuteur[] $tuteurs
-     *
-     * @return array
      */
-    public function getEmails(array $tuteurs)
+    public function getEmails(array $tuteurs): array
     {
         $emails = [[]];
         foreach ($tuteurs as $tuteur) {

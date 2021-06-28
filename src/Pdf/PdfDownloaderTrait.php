@@ -22,7 +22,7 @@ trait PdfDownloaderTrait
     }
 
     /**
-     * @return \Knp\Snappy\Pdf
+     * @return Pdf
      */
     public function getPdf(): Pdf
     {

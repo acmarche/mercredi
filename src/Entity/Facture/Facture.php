@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
@@ -39,29 +40,27 @@ class Facture implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="factures")
      */
-    private $tuteur;
+    private ?Tuteur $tuteur;
 
     /**
-     * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $factureLe;
+    private ?DateTimeInterface $factureLe = null;
 
     /**
-     * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $payeLe;
+    private ?DateTimeInterface $payeLe = null;
 
     /**
      * @var Ecole[] $ecoles
      */
-    private $ecoles;
+    private array $ecoles;
 
     /**
      * @var Enfant[] $enfants
      */
-    private $enfants;
+    private array $enfants;
 
     public function __construct(Tuteur $tuteur)
     {
@@ -109,24 +108,24 @@ class Facture implements TimestampableInterface, UuidableInterface
         return $ecoles;
     }
 
-    public function getPayeLe(): ?\DateTimeInterface
+    public function getPayeLe(): ?DateTimeInterface
     {
         return $this->payeLe;
     }
 
-    public function setPayeLe(?\DateTimeInterface $payeLe): self
+    public function setPayeLe(?DateTimeInterface $payeLe): self
     {
         $this->payeLe = $payeLe;
 
         return $this;
     }
 
-    public function getFactureLe(): ?\DateTimeInterface
+    public function getFactureLe(): ?DateTimeInterface
     {
         return $this->factureLe;
     }
 
-    public function setFactureLe(?\DateTimeInterface $factureLe): self
+    public function setFactureLe(?DateTimeInterface $factureLe): self
     {
         $this->factureLe = $factureLe;
 

@@ -6,10 +6,7 @@ use AcMarche\Mercredi\Entity\GroupeScolaire;
 
 trait GroupeScolaireTrait
 {
-    /**
-     * @var GroupeScolaire
-     */
-    private $groupe_scolaire;
+    private ?GroupeScolaire $groupe_scolaire = null;
 
     public function getGroupeScolaire(): ?GroupeScolaire
     {

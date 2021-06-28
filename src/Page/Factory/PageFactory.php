@@ -7,17 +7,14 @@ use AcMarche\Mercredi\Page\Repository\PageRepository;
 
 final class PageFactory
 {
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
+    private PageRepository $pageRepository;
 
     public function __construct(PageRepository $pageRepository)
     {
         $this->pageRepository = $pageRepository;
     }
 
-    public function createHomePage(): ?Page
+    public function createHomePage(): Page
     {
         $page = new Page();
         $page->setNom('Accueil');
@@ -30,7 +27,7 @@ final class PageFactory
         return $page;
     }
 
-    public function createContactPage(): ?Page
+    public function createContactPage(): Page
     {
         $page = new Page();
         $page->setNom('Nous contacter');
@@ -43,7 +40,7 @@ final class PageFactory
         return $page;
     }
 
-    public function createModalitePage(): ?Page
+    public function createModalitePage(): Page
     {
         $page = new Page();
         $page->setNom('Modalités pratiques');

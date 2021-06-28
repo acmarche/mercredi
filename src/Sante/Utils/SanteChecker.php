@@ -13,18 +13,9 @@ use function count;
 
 final class SanteChecker
 {
-    /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
-    /**
-     * @var SanteReponseRepository
-     */
-    private $santeReponseRepository;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
+    private SanteQuestionRepository $santeQuestionRepository;
+    private SanteReponseRepository $santeReponseRepository;
+    private SanteHandler $santeHandler;
 
     public function __construct(
         SanteQuestionRepository $santeQuestionRepository,
@@ -72,12 +63,7 @@ final class SanteChecker
                 return false;
             }
         }
-
-        if (count($santeFiche->getAccompagnateurs()) < 1) {
-            return false;
-        }
-
-        return true;
+        return count($santeFiche->getAccompagnateurs()) >= 1;
     }
 
     /**
@@ -94,9 +80,8 @@ final class SanteChecker
                 $questionsnotOk [] = $question;
             }
         }
-        $questions = $this->santeQuestionRepository->getQuestionsNonRepondues($questionsnotOk);
 
-        return $questions;
+        return $this->santeQuestionRepository->getQuestionsNonRepondues($questionsnotOk);
     }
 
     public function checkQuestionOk(SanteQuestion $santeQuestion): bool
@@ -107,11 +92,7 @@ final class SanteChecker
         if (!$santeQuestion->getReponseTxt()) {
             return true;
         }
-        if ('' == trim($santeQuestion->getRemarque()) || null === $santeQuestion->getRemarque()) {
-            return false;
-        }
-
-        return true;
+        return '' != trim($santeQuestion->getRemarque()) && null !== $santeQuestion->getRemarque();
     }
 
     /**

@@ -37,34 +37,13 @@ final class AccueilController extends AbstractController
      * @var string
      */
     private const ENFANT = 'enfant';
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
-    /**
-     * @var AccueilHandler
-     */
-    private $accueilHandler;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var AccueilCalculatorInterface
-     */
-    private $accueilCalculator;
-    /**
-     * @var FactureAccueilRepository
-     */
-    private $factureAccueilRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var DateUtils
-     */
-    private $dateUtils;
+    private AccueilRepository $accueilRepository;
+    private AccueilHandler $accueilHandler;
+    private RelationRepository $relationRepository;
+    private AccueilCalculatorInterface $accueilCalculator;
+    private FactureAccueilRepository $factureAccueilRepository;
+    private EnfantRepository $enfantRepository;
+    private DateUtils $dateUtils;
 
     public function __construct(
         AccueilRepository $accueilRepository,
@@ -88,9 +67,9 @@ final class AccueilController extends AbstractController
      * @Route("/index", name="mercredi_ecole_accueils_index", methods={"GET","POST"})
      * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        if ($response = $this->hasEcoles()) {
+        if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
 
@@ -208,7 +187,7 @@ final class AccueilController extends AbstractController
         string $heure,
         int $week = 0
     ): Response {
-        if ($week) {
+        if ($week !== 0) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
         } else {
             $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);

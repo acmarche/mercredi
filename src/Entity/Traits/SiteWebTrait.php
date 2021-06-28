@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait SiteWebTrait
@@ -11,7 +12,7 @@ trait SiteWebTrait
      * @ORM\Column(type="string", length=150, nullable=true)
      * @Assert\Url()
      */
-    private $site_web;
+    private ?string $site_web;
 
     public function getSiteWeb(): ?string
     {

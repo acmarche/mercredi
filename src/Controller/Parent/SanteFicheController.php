@@ -21,22 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SanteFicheController extends AbstractController
 {
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var SanteQuestionRepository
-     */
-    private $santeQuestionRepository;
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
+    private SanteHandler $santeHandler;
+    private SanteChecker $santeChecker;
+    private SanteQuestionRepository $santeQuestionRepository;
+    private OrganisationRepository $organisationRepository;
 
     public function __construct(
         SanteQuestionRepository $santeQuestionRepository,

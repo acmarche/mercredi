@@ -41,27 +41,25 @@ class User implements UserInterface
     use AnimateursTrait;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private $telephone;
+    private ?string $telephone = null;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private ?string $password = null;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     public function __construct()
     {
@@ -75,6 +73,11 @@ class User implements UserInterface
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
     public function getNiceRoles(): array
     {
         return MercrediSecurity::niceName($this->getRoles());
@@ -85,7 +88,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -124,7 +127,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getIsVerified(): ?bool
+    public function getIsVerified(): bool
     {
         return $this->isVerified;
     }
@@ -140,4 +143,5 @@ class User implements UserInterface
 
         return $this;
     }
+
 }

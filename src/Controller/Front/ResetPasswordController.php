@@ -28,22 +28,10 @@ final class ResetPasswordController extends AbstractController
      */
     private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
 
-    /**
-     * @var ResetPasswordHelperInterface
-     */
-    private $resetPasswordHelper;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
-    /**
-     * @var ResetPasswordMailer
-     */
-    private $resetPasswordMailer;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private ResetPasswordHelperInterface $resetPasswordHelper;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private ResetPasswordMailer $resetPasswordMailer;
+    private UserRepository $userRepository;
 
     public function __construct(
         ResetPasswordHelperInterface $resetPasswordHelper,
@@ -69,8 +57,7 @@ final class ResetPasswordController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
-                $form->get('email')->getData(),
-                $mailer
+                $form->get('email')->getData()
             );
         }
 
@@ -181,7 +168,7 @@ final class ResetPasswordController extends AbstractController
         $this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
-        if (! $user) {
+        if ($user === null) {
             return $this->redirectToRoute('mercredi_front_check_email');
         }
 

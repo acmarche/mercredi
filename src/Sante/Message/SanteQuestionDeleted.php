@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Sante\Message;
 
 final class SanteQuestionDeleted
 {
-    /**
-     * @var int
-     */
-    private $santeQuestionId;
+    private int $santeQuestionId;
 
     public function __construct(int $santeQuestionId)
     {

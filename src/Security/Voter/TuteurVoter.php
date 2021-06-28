@@ -28,24 +28,15 @@ final class TuteurVoter extends Voter
      */
     private $user;
 
-    /**
-     * @var Tuteur
-     */
-    private $tuteurOfUser;
+    private ?Tuteur $tuteurOfUser = null;
 
     /**
      * @var Tuteur
      */
     private $tuteurToCheck;
 
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
+    private Security $security;
+    private TuteurUtils $tuteurUtils;
 
     public function __construct(Security $security, TuteurUtils $tuteurUtils)
     {
@@ -53,7 +44,7 @@ final class TuteurVoter extends Voter
         $this->tuteurUtils = $tuteurUtils;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         if ($subject && !$subject instanceof Tuteur) {
             return false;
@@ -66,7 +57,7 @@ final class TuteurVoter extends Voter
         );
     }
 
-    protected function voteOnAttribute($attribute, $tuteur, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $tuteur, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
 
@@ -96,7 +87,7 @@ final class TuteurVoter extends Voter
         return false;
     }
 
-    private function canShow()
+    private function canShow(): bool
     {
         if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
             return true;
@@ -105,22 +96,22 @@ final class TuteurVoter extends Voter
         return $this->canEdit();
     }
 
-    private function canEdit()
+    private function canEdit(): bool
     {
         return $this->checkOwnTuteur();
     }
 
-    private function canAdd()
+    private function canAdd(): bool
     {
         return (bool)$this->canEdit();
     }
 
-    private function canDelete()
+    private function canDelete(): bool
     {
         return (bool)$this->canEdit();
     }
 
-    private function checkOwnTuteur()
+    private function checkOwnTuteur(): bool
     {
         if (!$this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
             return false;

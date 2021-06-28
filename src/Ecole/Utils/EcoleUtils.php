@@ -25,9 +25,7 @@ class EcoleUtils
     public static function getNamesEcole(iterable $ecoles):string
     {
         $noms = array_map(
-            function ($ecole) {
-                return $ecole->getNom();
-            },
+            fn($ecole) => $ecole->getNom(),
             $ecoles->toArray()
         );
         return implode(",", $noms);

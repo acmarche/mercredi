@@ -13,7 +13,7 @@ trait OrdreTrait
      * @ORM\Column(type="smallint", length=2, nullable=true, options={"comment" = "1,2, suviant", "default" = "0"})
      * @Assert\NotBlank()
      */
-    private $ordre = 0;
+    private int $ordre = 0;
 
     public function getOrdre(): int
     {

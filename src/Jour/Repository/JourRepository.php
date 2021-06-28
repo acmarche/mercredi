@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Jour\Repository;
 
+use DateTimeImmutable;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
@@ -156,7 +157,10 @@ final class JourRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findOneByDate(DateTime $dateTime): ?Jour
+    /**
+     * @param DateTime|DateTimeImmutable $dateTime
+     */
+    public function findOneByDate(\DateTimeInterface $dateTime): ?Jour
     {
         return $this->createQueryBuilder(self::JOUR)
             ->andWhere('jour.date_jour LIKE :date')

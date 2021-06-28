@@ -47,10 +47,7 @@ final class PresenceRepository extends ServiceEntityRepository
      * @var string
      */
     private const JOURS = 'jours';
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
+    private JourRepository $jourRepository;
 
     public function __construct(ManagerRegistry $managerRegistry, JourRepository $jourRepository)
     {

@@ -12,14 +12,8 @@ use function count;
 final class OrdreService
 {
     public $ordreService;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
+    private RelationRepository $relationRepository;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(RelationRepository $relationRepository, PresenceRepository $presenceRepository)
     {

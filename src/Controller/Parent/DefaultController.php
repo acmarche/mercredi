@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
@@ -19,18 +20,9 @@ final class DefaultController extends AbstractController
     use GetTuteurTrait;
     use OrganisationPropertyInitTrait;
 
-    /**
-     * @var RelationUtils
-     */
-    private $relationUtils;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var FactureRepository
-     */
-    private $factureRepository;
+    private RelationUtils $relationUtils;
+    private SanteChecker $santeChecker;
+    private FactureRepository $factureRepository;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -46,9 +38,9 @@ final class DefaultController extends AbstractController
      * @Route("/", name="mercredi_parent_home")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function default()
+    public function default(): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
 
@@ -72,7 +64,7 @@ final class DefaultController extends AbstractController
     /**
      * @Route("/nouveau", name="mercredi_parent_nouveau")
      */
-    public function nouveau()
+    public function nouveau(): Response
     {
         return $this->render(
             '@AcMarcheMercrediParent/default/nouveau.html.twig',

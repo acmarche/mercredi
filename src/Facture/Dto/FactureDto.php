@@ -11,7 +11,7 @@ final class FactureDto
     /**
      * @var Presence[]
      */
-    private $presences;
+    private Collection $presences;
 
     public function __construct(array $presences)
     {
@@ -21,7 +21,7 @@ final class FactureDto
     /**
      * @return Collection|Presence[]
      */
-    public function getPresences(): Collection
+    public function getPresences(): array
     {
         return $this->presences;
     }

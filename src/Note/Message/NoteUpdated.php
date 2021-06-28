@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Note\Message;
 
 final class NoteUpdated
 {
-    /**
-     * @var int
-     */
-    private $noteId;
+    private int $noteId;
 
     public function __construct(int $noteId)
     {

@@ -13,5 +13,5 @@ trait GroupeScolaireNextTrait
     /**
      * @var GroupeScolaire
      */
-    private $groupe_scolaire_nex;
+    private GroupeScolaire $groupe_scolaire_nex;
 }

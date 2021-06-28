@@ -29,12 +29,8 @@ final class MercrediExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('mercredi_month_fr', function (int $number) {
-                return $this->monthFr($number);
-            }),
-            new TwigFilter('mercredi_absence_text', function ($number): string {
-                return $this->absenceFilter($number);
-            }),
+            new TwigFilter('mercredi_month_fr', fn(int $number) => $this->monthFr($number)),
+            new TwigFilter('mercredi_absence_text', fn($number): string => $this->absenceFilter($number)),
         ];
     }
 

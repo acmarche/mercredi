@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
@@ -23,18 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PlaineController extends AbstractController
 {
-    /**
-     * @var PlaineRepository
-     */
-    private $plaineRepository;
-    /**
-     * @var PlainePresenceRepository
-     */
-    private $plainePresenceRepository;
-    /**
-     * @var GroupeScolaireRepository
-     */
-    private $groupeScolaireRepository;
+    private PlaineRepository $plaineRepository;
+    private PlainePresenceRepository $plainePresenceRepository;
+    private GroupeScolaireRepository $groupeScolaireRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,
@@ -134,7 +126,7 @@ final class PlaineController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_plaine_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Plaine $plaine): Response
+    public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
             $plaineId = $plaine->getId();

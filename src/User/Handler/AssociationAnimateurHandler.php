@@ -15,22 +15,10 @@ use function count;
 
 final class AssociationAnimateurHandler
 {
-    /**
-     * @var AnimateurRepository
-     */
-    private $animateurRepository;
-    /**
-     * @var UserMailer
-     */
-    private $userMailer;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var UserFactory
-     */
-    private $userFactory;
+    private AnimateurRepository $animateurRepository;
+    private UserMailer $userMailer;
+    private FlashBagInterface $flashBag;
+    private UserFactory $userFactory;
 
     public function __construct(
         AnimateurRepository $animateurRepository,

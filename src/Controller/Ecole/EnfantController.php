@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Ecole;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForEcoleType;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
@@ -26,30 +28,12 @@ final class EnfantController extends AbstractController
 {
     use GetEcolesTrait;
 
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
+    private EnfantRepository $enfantRepository;
+    private SanteHandler $santeHandler;
+    private SanteChecker $santeChecker;
+    private PresenceRepository $presenceRepository;
+    private AccueilRepository $accueilRepository;
+    private RelationRepository $relationRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -71,9 +55,9 @@ final class EnfantController extends AbstractController
      * @Route("/", name="mercredi_ecole_enfant_index", methods={"GET", "POST"})
      * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        if ($response = $this->hasEcoles()) {
+        if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
 
@@ -103,7 +87,7 @@ final class EnfantController extends AbstractController
      * @Route("/show/{uuid}", name="mercredi_ecole_enfant_show", methods={"GET"})
      * @IsGranted("enfant_show", subject="enfant")
      */
-    public function show(Enfant $enfant)
+    public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
@@ -127,7 +111,7 @@ final class EnfantController extends AbstractController
      * @Route("/{uuid}/edit", name="mercredi_ecole_enfant_edit", methods={"GET","POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
-    public function edit(Request $request, Enfant $enfant)
+    public function edit(Request $request, Enfant $enfant): RedirectResponse
     {
         $form = $this->createForm(EnfantEditForEcoleType::class, $enfant);
         $form->handleRequest($request);

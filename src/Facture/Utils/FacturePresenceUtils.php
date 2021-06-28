@@ -16,9 +16,7 @@ final class FacturePresenceUtils
     {
         return array_unique(
             array_map(
-                function ($facturePresence) {
-                    return $facturePresence->getPresence();
-                },
+                fn($facturePresence) => $facturePresence->getPresence(),
                 $facturePresences
             ),
             SORT_REGULAR

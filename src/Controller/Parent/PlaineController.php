@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
@@ -22,30 +23,12 @@ final class PlaineController extends AbstractController
 {
     use GetTuteurTrait;
 
-    /**
-     * @var PlaineRepository
-     */
-    private $plaineRepository;
-    /**
-     * @var RelationUtils
-     */
-    private $relationUtils;
-    /**
-     * @var PlainePresenceHandler
-     */
-    private $plainePresenceHandler;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var PlainePresenceRepository
-     */
-    private $plainePresenceRepository;
+    private PlaineRepository $plaineRepository;
+    private RelationUtils $relationUtils;
+    private PlainePresenceHandler $plainePresenceHandler;
+    private SanteHandler $santeHandler;
+    private SanteChecker $santeChecker;
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,
@@ -67,7 +50,7 @@ final class PlaineController extends AbstractController
      * @Route("/open", name="mercredi_parent_plaine_open")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function open()
+    public function open(): Response
     {
         $plaine = $this->plaineRepository->findPlaineOpen();
 
@@ -83,9 +66,9 @@ final class PlaineController extends AbstractController
      * @Route("/{id}/show", name="mercredi_parent_plaine_show")
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
-    public function show(Plaine $plaine)
+    public function show(Plaine $plaine): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $this->tuteur);
@@ -104,7 +87,7 @@ final class PlaineController extends AbstractController
      *
      * @Route("/select/enfant", name="mercredi_parent_plaine_select_enfant", methods={"GET"})
      */
-    public function selectEnfant()
+    public function selectEnfant(): Response
     {
         $this->hasTuteur();
 
@@ -121,7 +104,7 @@ final class PlaineController extends AbstractController
     /**
      * @Route("/confirmation/{uuid}", name="mercredi_parent_plaine_presence_confirmation", methods={"GET","POST"})
      */
-    public function confirmation(Enfant $enfant): Response
+    public function confirmation(Enfant $enfant): RedirectResponse
     {
         $this->hasTuteur();
         $plaine = $this->plaineRepository->findPlaineOpen();

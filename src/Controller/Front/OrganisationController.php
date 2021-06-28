@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,10 +18,7 @@ final class OrganisationController extends AbstractController
      * @var string
      */
     private const ORGANISATION = 'organisation';
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
+    private OrganisationRepository $organisationRepository;
 
     public function __construct(
         OrganisationRepository $organisationRepository
@@ -31,7 +29,7 @@ final class OrganisationController extends AbstractController
     /**
      * @Route("/show", name="mercredi_organisation_show")
      */
-    public function organisation()
+    public function organisation(): Response
     {
         $organisation = $this->organisationRepository->getOrganisation();
 
@@ -46,7 +44,7 @@ final class OrganisationController extends AbstractController
     /**
      * @Route("/title", name="mercredi_organisation_title")
      */
-    public function organisationTitle()
+    public function organisationTitle(): Response
     {
         $organisation = $this->organisationRepository->getOrganisation();
 
@@ -61,7 +59,7 @@ final class OrganisationController extends AbstractController
     /**
      * @Route("/short", name="mercredi_organisation_short")
      */
-    public function organisationShort()
+    public function organisationShort(): Response
     {
         $organisation = $this->organisationRepository->getOrganisation();
 

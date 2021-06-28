@@ -16,7 +16,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (!$user->getAnimateur()) {
+        if ($user->getAnimateur() === null) {
             throw new LockedException();
         }
     }

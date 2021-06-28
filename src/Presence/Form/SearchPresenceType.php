@@ -22,13 +22,9 @@ final class SearchPresenceType extends AbstractType
                 [
                     'class' => Jour::class,
                     'placeholder' => 'Choisissez une date',
-                    'query_builder' => function (JourRepository $jourRepository) {
-                        return $jourRepository->getQbForListing();
-                    },
+                    'query_builder' => fn(JourRepository $jourRepository) => $jourRepository->getQbForListing(),
                     //todo display name day
-                    'group_by' => function ($jour, $key, $id) {
-                        return $jour->getDateJour()->format('Y');
-                    },
+                    'group_by' => fn($jour, $key, $id) => $jour->getDateJour()->format('Y'),
                 ]
             )
             ->add(
@@ -36,9 +32,7 @@ final class SearchPresenceType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'query_builder' => function (EcoleRepository $ecoleRepository) {
-                        return $ecoleRepository->getQbForListing();
-                    },
+                    'query_builder' => fn(EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
                     'required' => false,
                     'placeholder' => 'Choisissez une école',
                     'attr' => ['class' => 'sr-only'],

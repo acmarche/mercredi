@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
@@ -22,14 +23,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 final class ProfileController extends AbstractController
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
+    private UserRepository $userRepository;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordEncoder)
     {
@@ -41,7 +36,7 @@ final class ProfileController extends AbstractController
      * @Route("/show", name="mercredi_front_user_show")
      *
      */
-    public function show()
+    public function show(): RedirectResponse
     {
         /** @var User */
         $user = $this->getUser();
@@ -62,20 +57,18 @@ final class ProfileController extends AbstractController
     /**
      * @Route("/redirect", name="mercredi_front_profile_redirect")
      */
-    public function redirectByProfile(): Response
+    public function redirectByProfile(): RedirectResponse
     {
         /** @var User */
         $user = $this->getUser();
 
-        if ($user !=null) {
+        if ($user != null) {
             $roles = $user->getRoles();
             $del_val = 'ROLE_USER';
 
             $roles = array_filter(
                 $roles,
-                function ($e) use ($del_val) {
-                    return ($e !== $del_val);
-                }
+                fn($e) => $e !== $del_val
             );
 
             if (\count($roles) > 1) {
@@ -108,7 +101,7 @@ final class ProfileController extends AbstractController
      * @Route("/select", name="mercredi_front_select_profile")
      * @IsGranted("ROLE_MERCREDI")
      */
-    public function selectProfile()
+    public function selectProfile(): Response
     {
         return $this->render(
             '@AcMarcheMercredi/front/user/select_profile.html.twig',
@@ -121,7 +114,7 @@ final class ProfileController extends AbstractController
      * @Route("/edit", name="mercredi_front_user_edit")
      * @IsGranted("ROLE_MERCREDI")
      */
-    public function edit(Request $request)
+    public function edit(Request $request): RedirectResponse
     {
         $user = $this->getUser();
         $form = $this->createForm(UserEditType::class, $user);
@@ -148,7 +141,7 @@ final class ProfileController extends AbstractController
      * @Route("/password", name="mercredi_front_user_password")
      * @IsGranted("ROLE_MERCREDI")
      */
-    public function password(Request $request)
+    public function password(Request $request): RedirectResponse
     {
         $user = $this->getUser();
 

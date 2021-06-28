@@ -12,7 +12,7 @@ trait FactureAccueilsTrait
      * @var FactureAccueil[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\FactureAccueil", mappedBy="facture", cascade={"remove"})
      */
-    private $factureAccueils;
+    private iterable $factureAccueils;
 
     /**
      * @return Collection|FactureAccueil[]
@@ -24,7 +24,7 @@ trait FactureAccueilsTrait
 
     public function addFactureAccueil(FactureAccueil $factureAccueil): self
     {
-        if (! $this->factureAccueils->contains($factureAccueil)) {
+        if (!$this->factureAccueils->contains($factureAccueil)) {
             $this->factureAccueils[] = $factureAccueil;
             $factureAccueil->setFacture($this);
         }

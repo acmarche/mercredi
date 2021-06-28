@@ -91,7 +91,7 @@ final class RelationRepository extends ServiceEntityRepository
     /**
      * @return Tuteur[] Returns an array of RelationEnfant objects
      */
-    public function findTuteursByEnfant(Enfant $enfant)
+    public function findTuteursByEnfant(Enfant $enfant): array
     {
         $tuteurs = [];
         $relations = $this->findByEnfant($enfant);
@@ -106,7 +106,7 @@ final class RelationRepository extends ServiceEntityRepository
     /**
      * @return Enfant[] Returns an array of RelationEnfant objects
      */
-    public function findEnfantsByTuteur(Tuteur $tuteur)
+    public function findEnfantsByTuteur(Tuteur $tuteur): array
     {
         $enfants = [];
         $relations = $this->findByTuteur($tuteur);
@@ -126,7 +126,7 @@ final class RelationRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function findFrateries(Enfant $enfant, array $tuteurs = [])
+    public function findFrateries(Enfant $enfant, array $tuteurs = []): array
     {
         $enfants = [];
         if (0 === \count($tuteurs)) {

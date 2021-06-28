@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Page\Form\PageType;
 use AcMarche\Mercredi\Page\Message\PageCreated;
@@ -29,10 +30,7 @@ final class PageController extends AbstractController
      * @var string
      */
     private const PAGE = 'page';
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
+    private PageRepository $pageRepository;
 
     public function __construct(PageRepository $pageRepository)
     {
@@ -120,7 +118,7 @@ final class PageController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_page_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Page $page): Response
+    public function delete(Request $request, Page $page): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $pageId = $page->getId();
@@ -135,7 +133,7 @@ final class PageController extends AbstractController
     /**
      * @Route("/s/sort", name="mercredi_admin_page_sort", methods={"GET","POST"})
      */
-    public function trier(Request $request)
+    public function trier(Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $pages = $request->request->get(self::PAGES);

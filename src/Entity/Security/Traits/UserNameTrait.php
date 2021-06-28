@@ -8,10 +8,8 @@ trait UserNameTrait
 {
     /**
      * @ORM\Column(type="string", length=50, unique=true)
-     *
-     * @var string
      */
-    private $username;
+    private  ?string$username;
 
     /**
      * A visual identifier that represents this user.

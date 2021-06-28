@@ -23,26 +23,24 @@ class AnneeScolaire
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire")
      * @ORM\JoinColumn(onDelete="SET NULL", unique=true)
      */
-    private $annee_suivante;
+    private ?AnneeScolaire $annee_suivante;
 
     /**
-     * @var int
      * @ORM\Column(type="integer")
      */
-    private $ordre;
+    private ?int $ordre = null;
 
     /**
      * @var Enfant[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Enfant", mappedBy="annee_scolaire")
      */
-    private $enfants;
+    private iterable $enfants;
 
     /**
-     * @var GroupeScolaire
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="annees_scolaires")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
-    private $groupe_scolaire;
+    private ?GroupeScolaire $groupe_scolaire = null;
 
     public function __construct()
     {
@@ -57,7 +55,7 @@ class AnneeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): Collection
+    public function getEnfants(): array
     {
         return $this->enfants;
     }
@@ -85,7 +83,7 @@ class AnneeScolaire
         return $this;
     }
 
-    public function getGroupeScolaire(): ?GroupeScolaire
+    public function getGroupeScolaire(): GroupeScolaire
     {
         return $this->groupe_scolaire;
     }
@@ -97,7 +95,7 @@ class AnneeScolaire
         return $this;
     }
 
-    public function getOrdre(): ?int
+    public function getOrdre(): int
     {
         return $this->ordre;
     }
@@ -109,7 +107,7 @@ class AnneeScolaire
         return $this;
     }
 
-    public function getAnneeSuivante(): ?self
+    public function getAnneeSuivante(): \AcMarche\Mercredi\Entity\AnneeScolaire
     {
         return $this->annee_suivante;
     }

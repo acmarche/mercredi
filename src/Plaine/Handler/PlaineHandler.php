@@ -14,18 +14,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class PlaineHandler
 {
-    /**
-     * @var PlaineRepository
-     */
-    private $plaineRepository;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
-    /**
-     * @var PlaineJourRepository
-     */
-    private $plaineJourRepository;
+    private PlaineRepository $plaineRepository;
+    private JourRepository $jourRepository;
+    private PlaineJourRepository $plaineJourRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,

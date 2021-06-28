@@ -32,7 +32,7 @@ class Ecole
      *
      * @var User[]|Collection
      */
-    private $users;
+    private iterable $users;
 
     public function __construct()
     {

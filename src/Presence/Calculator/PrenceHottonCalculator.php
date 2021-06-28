@@ -10,14 +10,8 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PrenceHottonCalculator implements PresenceCalculatorInterface
 {
-    /**
-     * @var OrdreService
-     */
-    private $ordreService;
-    /**
-     * @var ReductionCalculator
-     */
-    private $reductionCalculator;
+    private OrdreService $ordreService;
+    private ReductionCalculator $reductionCalculator;
 
     public function __construct(
         OrdreService $ordreService,
@@ -75,7 +69,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
         return $this->reductionApplicate($presence, $prix);
     }
 
-    private function reductionApplicate(PresenceInterface $presence, float $cout)
+    private function reductionApplicate(PresenceInterface $presence, float $cout): float
     {
         if (null !== ($reduction = $presence->getReduction())) {
             return $this->reductionCalculator->applicate($reduction, $cout);
@@ -84,7 +78,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
         return $cout;
     }
 
-    private function getPrixByOrdre(Jour $jour, $ordre)
+    private function getPrixByOrdre(Jour $jour, $ordre): float
     {
         switch ($ordre) {
             case 2:

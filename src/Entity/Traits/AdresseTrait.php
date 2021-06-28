@@ -7,25 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 trait AdresseTrait
 {
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $rue;
+    private ?string $rue;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="integer", length=6, nullable=true)
      */
-    private $code_postal;
+    private ?string $code_postal;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $localite;
+    private ?string $localite;
 
     public function getRue(): ?string
     {

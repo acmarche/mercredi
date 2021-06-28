@@ -4,10 +4,7 @@ namespace AcMarche\Mercredi\Facture\Message;
 
 final class FactureUpdated
 {
-    /**
-     * @var int
-     */
-    private $factureId;
+    private int $factureId;
 
     public function __construct(int $factureId)
     {

@@ -12,22 +12,10 @@ use AcMarche\Mercredi\Sante\Utils\SanteBinder;
 
 final class SanteHandler
 {
-    /**
-     * @var SanteFicheRepository
-     */
-    private $santeFicheRepository;
-    /**
-     * @var SanteFactory
-     */
-    private $santeFactory;
-    /**
-     * @var SanteBinder
-     */
-    private $santeBinder;
-    /**
-     * @var SanteReponseRepository
-     */
-    private $santeReponseRepository;
+    private SanteFicheRepository $santeFicheRepository;
+    private SanteFactory $santeFactory;
+    private SanteBinder $santeBinder;
+    private SanteReponseRepository $santeReponseRepository;
 
     public function __construct(
         SanteFicheRepository $santeFicheRepository,

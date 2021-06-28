@@ -11,7 +11,7 @@ trait DocumentsTraits
     /**
      * @var Document[]|ArrayCollection
      */
-    private $documents;
+    private iterable $documents;
 
     /**
      * @return Collection|Document[]

@@ -19,18 +19,9 @@ final class PresenceController extends AbstractController
 {
     use GetAnimateurTrait;
 
-    /**
-     * @var PresenceRepository
-     */
-    private $presenceRepository;
-    /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-    /**
-     * @var JourRepository
-     */
-    private $jourRepository;
+    private PresenceRepository $presenceRepository;
+    private EnfantRepository $enfantRepository;
+    private JourRepository $jourRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -47,7 +38,7 @@ final class PresenceController extends AbstractController
      */
     public function index(): Response
     {
-        if ($response = $this->hasAnimateur()) {
+        if (($response = $this->hasAnimateur()) !== null) {
             return $response;
         }
 
@@ -67,7 +58,7 @@ final class PresenceController extends AbstractController
     public function show(Jour $jour): Response
     {
         $this->denyAccessUnlessGranted('jour_show', $jour);
-        if ($response = $this->hasAnimateur()) {
+        if (($response = $this->hasAnimateur()) !== null) {
             return $response;
         }
 

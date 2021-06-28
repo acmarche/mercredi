@@ -20,6 +20,7 @@ use Symfony\Component\Security\Core\Security;
  */
 final class JourVoter extends Voter
 {
+    public RelationRepository $relationRepository;
     public const ADD = 'jour_new';
     public const SHOW = 'jour_show';
     public const EDIT = 'jour_edit';
@@ -33,18 +34,12 @@ final class JourVoter extends Voter
      * @var Jour
      */
     private $jour;
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
     /**
      * @var Jour[]|ArrayCollection
      */
     private $jours;
-    /**
-     * @var Animateur|null
-     */
-    private $animateur;
+    private ?Animateur $animateur = null;
 
     public function __construct(
         RelationRepository $relationRepository,
@@ -54,7 +49,7 @@ final class JourVoter extends Voter
         $this->relationRepository = $relationRepository;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         if ($subject && !$subject instanceof Jour) {
             return false;
@@ -67,7 +62,7 @@ final class JourVoter extends Voter
         );
     }
 
-    protected function voteOnAttribute($attribute, $jour, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $jour, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
         $this->jour = $jour;
@@ -129,16 +124,11 @@ final class JourVoter extends Voter
     {
         $this->animateur = $this->user->getAnimateur();
 
-        if (!$this->animateur) {
+        if ($this->animateur === null) {
             return false;
         }
 
         $this->jours = $this->animateur->getJours();
-
-        if (count($this->jours) === 0) {
-            return false;
-        }
-
-        return true;
+        return count($this->jours) !== 0;
     }
 }

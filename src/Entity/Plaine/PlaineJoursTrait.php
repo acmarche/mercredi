@@ -10,7 +10,7 @@ trait PlaineJoursTrait
     /**
      * @var PlaineJour[]|ArrayCollection
      */
-    private $plaine_jours;
+    private iterable $plaine_jours;
 
     /**
      * @return Collection|PlaineJour[]

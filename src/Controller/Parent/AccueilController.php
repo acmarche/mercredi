@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilParentType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
@@ -32,30 +33,12 @@ final class AccueilController extends AbstractController
      */
     private const UUID = 'uuid';
 
-    /**
-     * @var AccueilRepository
-     */
-    private $accueilRepository;
-    /**
-     * @var AccueilHandler
-     */
-    private $accueilHandler;
-    /**
-     * @var RelationUtils
-     */
-    private $relationUtils;
-    /**
-     * @var SanteChecker
-     */
-    private $santeChecker;
-    /**
-     * @var SanteHandler
-     */
-    private $santeHandler;
-    /**
-     * @var AccueilCalculatorInterface
-     */
-    private $accueilCalculator;
+    private AccueilRepository $accueilRepository;
+    private AccueilHandler $accueilHandler;
+    private RelationUtils $relationUtils;
+    private SanteChecker $santeChecker;
+    private SanteHandler $santeHandler;
+    private AccueilCalculatorInterface $accueilCalculator;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -78,9 +61,9 @@ final class AccueilController extends AbstractController
      *
      * Route("/select/enfant", name="mercredi_parent_accueil_select_enfant", methods={"GET"})
      */
-    public function selectEnfant()
+    public function selectEnfant(): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
 
@@ -101,9 +84,9 @@ final class AccueilController extends AbstractController
      *
      * @IsGranted("enfant_edit", subject="enfant")
      */
-    public function selectJours(Request $request, Enfant $enfant)
+    public function selectJours(Request $request, Enfant $enfant): Response
     {
-        if ($t = $this->hasTuteur()) {
+        if (($t = $this->hasTuteur()) !== null) {
             return $t;
         }
         $santeFiche = $this->santeHandler->init($enfant);
@@ -158,7 +141,7 @@ final class AccueilController extends AbstractController
      *
      * @IsGranted("accueil_edit", subject="accueil")
      */
-    public function delete(Request $request, Accueil $accueil): Response
+    public function delete(Request $request, Accueil $accueil): RedirectResponse
     {
         $enfant = $accueil->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
