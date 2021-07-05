@@ -118,7 +118,7 @@ class GroupeScolaire
     /**
      * @return Collection|AnneeScolaire[]
      */
-    public function getAnneesScolaires(): array
+    public function getAnneesScolaires(): iterable
     {
         return $this->annees_scolaires;
     }
@@ -149,7 +149,7 @@ class GroupeScolaire
     /**
      * @return Collection|PlaineGroupe[]
      */
-    public function getPlaineGroupes(): array
+    public function getPlaineGroupes(): iterable
     {
         return $this->plaine_groupes;
     }

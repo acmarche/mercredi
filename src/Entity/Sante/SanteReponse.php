@@ -30,8 +30,6 @@ class SanteReponse
     private SanteFiche $sante_fiche;
 
     /**
-     * @var bool|null
-     *
      * @ORM\Column(type="boolean")
      */
     private bool $reponse;
@@ -45,6 +43,7 @@ class SanteReponse
     {
         $this->sante_fiche = $santeFiche;
         $this->question = $santeQuestion;
+        $this->reponse = false;
     }
 
     public function getQuestion(): SanteQuestion

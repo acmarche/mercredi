@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 trait PrenomTrait
 {
     /**
-     * @var string|null
      * @ORM\Column(type="string", length=150, nullable=true)
      */
     private ?string $prenom = null;

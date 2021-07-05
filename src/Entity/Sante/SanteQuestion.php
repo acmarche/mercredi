@@ -27,16 +27,12 @@ class SanteQuestion
 
     /**
      * Information complementaire necessaire.
-     *
-     * @var bool
      * @ORM\Column(type="boolean")
      */
     private bool $complement = false;
 
     /**
      * Texte d'aide pour le complement.
-     *
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $complement_label = null;
@@ -54,7 +50,7 @@ class SanteQuestion
      */
     private iterable $reponse;
 
-    private ?string $reponseTxt;
+    private ?string $reponseTxt = null;
 
     private ?string $remarque = null;
 
@@ -126,7 +122,7 @@ class SanteQuestion
 
     public function addReponse(SanteReponse $reponse): self
     {
-        if (! $this->reponse->contains($reponse)) {
+        if (!$this->reponse->contains($reponse)) {
             $this->reponse[] = $reponse;
             $reponse->setQuestion($this);
         }

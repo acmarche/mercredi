@@ -9,6 +9,4 @@ Feature: Front view
     And I fill in "username" with "jf@marche.be"
     And I fill in "password" with "homer"
     And I press "Me connecter"
-    Then I should see "Accès en tant que administrateur"
-    Then I follow "Accès en tant que administrateur"
-    Then I should see "Accès rapide"
+    Then I should see "Ecrivez le nom de l'enfant pour un accès rapide"

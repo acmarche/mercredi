@@ -19,6 +19,7 @@ Feature: Gestion des fiches santés
     And I fill in "sante_fiche[medecin_nom]" with "Ledoux"
     And I fill in "sante_fiche[medecin_telephone]" with "084 32 55 66"
     And I fill in "sante_fiche[personne_urgence]" with "Papa et maman"
+    And I fill in "sante_fiche[questions][0][remarque]" with "12-06-21"
     And I press "Sauvegarder"
     Then I should see "Le formulaire santé a bien été enregistré"
     Then I should see "084 32 55 66"
@@ -35,6 +36,7 @@ Feature: Gestion des fiches santés
     Then I follow "Fiche santé"
     Then I follow "Modifier"
     And I fill in "sante_fiche[medecin_nom]" with "Docteur maboulle"
+    And I fill in "sante_fiche[questions][0][remarque]" with "12-06-21"
    # And I follow "Ajouter un accompagnateur"
    # Then print last response
    # And I fill in "sante_fiche[accompagnateurs][0]" with "La grande soeur"
