@@ -10,7 +10,7 @@ Feature: Gestion des acceuils
     Then I should see "Liste des enfants"
 
   Scenario: Ajout un acceuil avec tuteur
-    Then I fill in "search_name[nom]" with "bart"
+    Then I fill in "search_enfant_ecole[nom]" with "bart"
     And I press "Rechercher"
     Then I follow "SIMPSON Bart"
     Then I follow "Ajouter un accueil"
@@ -24,7 +24,7 @@ Feature: Gestion des acceuils
     Then I should see "vendredi 10 juillet 2020"
 
   Scenario: Ajout un acceuil 2 tuteurs
-    Then I fill in "search_name[nom]" with "Fernandel"
+    Then I fill in "search_enfant_ecole[nom]" with "Fernandel"
     And I press "Rechercher"
     Then I should see "Fernandel"
     Then I follow "FERNANDEL Yves"
@@ -39,7 +39,7 @@ Feature: Gestion des acceuils
     Then I should see "jeudi 9 juillet 2020"
 
   Scenario: J'édite un acceuil
-    Then I fill in "search_name[nom]" with "bart"
+    Then I fill in "search_enfant_ecole[nom]" with "bart"
     And I press "Rechercher"
     Then I follow "SIMPSON Bart"
     Then I follow "jeudi 9 juillet 2020"
@@ -49,6 +49,6 @@ Feature: Gestion des acceuils
     Then I should see "L'accueil a bien été modifié"
 
   Scenario: Enfant non inscrit aux accueils
-    Then I fill in "search_name[nom]" with "Jason"
+    Then I fill in "search_enfant_ecole[nom]" with "Jason"
     And I press "Rechercher"
     Then I should not see "BOLT Jason"

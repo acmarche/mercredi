@@ -7,6 +7,6 @@ Feature: Test des pages ecoles
     Given I am on "/ecole"
 
   Scenario: Je suis sur la page d'accueil
-    Then I should see "Votre école"
+    Then I should see "GAUTHIE"
     Then I should see "Aye"
 
