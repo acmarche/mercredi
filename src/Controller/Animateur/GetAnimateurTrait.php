@@ -8,10 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait GetAnimateurTrait
 {
-    /**
-     * @var Animateur
-     */
-    private $animateur;
+    private ?Animateur $animateur;
+    private EcoleUtils $ecoleUtils;
 
     /**
      * @required

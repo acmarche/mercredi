@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
@@ -21,14 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AssocierEcoleController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    /**
-     * @var string
-     */
-    private const ID = 'id';
+       private const ID = 'id';
     private AssociationEcoleHandler $associationEcoleHandler;
     private EcoleRepository $ecoleRepository;
 
@@ -43,7 +37,7 @@ final class AssocierEcoleController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_user_associate_ecole", methods={"GET","POST"})
      */
-    public function associate(Request $request, User $user): RedirectResponse
+    public function associate(Request $request, User $user): Response
     {
         if (!$user->isEcole()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de école');
@@ -72,9 +66,9 @@ final class AssocierEcoleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_dissociate_ecole", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_user_dissociate_ecole", methods={"POST"})
      */
-    public function dissociate(Request $request, User $user): RedirectResponse
+    public function dissociate(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $ecoleId = (int)$request->request->get('tuteur');

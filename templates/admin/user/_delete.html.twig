@@ -14,7 +14,6 @@
             </div>
             <div class="modal-footer">
                 <form method="post" action="{{ path('mercredi_admin_user_delete', {'id': user.id}) }}">
-                    <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Annuler

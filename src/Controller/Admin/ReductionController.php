@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Reduction\Form\ReductionType;
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,9 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ReductionController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const REDUCTION = 'reduction';
     private ReductionRepository $reductionRepository;
 
@@ -111,9 +107,9 @@ final class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_reduction_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_reduction_delete", methods={"POST"})
      */
-    public function delete(Request $request, Reduction $reduction): RedirectResponse
+    public function delete(Request $request, Reduction $reduction): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reduction->getId(), $request->request->get('_token'))) {
             $id = $reduction->getId();

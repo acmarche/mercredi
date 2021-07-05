@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
@@ -11,9 +11,8 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class DefaultController.
@@ -24,9 +23,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 final class ProfileController extends AbstractController
 {
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordEncoder;
 
-    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordEncoder)
+    public function __construct(UserRepository $userRepository, UserPasswordHasherInterface $userPasswordEncoder)
     {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
@@ -36,7 +35,7 @@ final class ProfileController extends AbstractController
      * @Route("/show", name="mercredi_front_user_show")
      *
      */
-    public function show(): RedirectResponse
+    public function show(): Response
     {
         /** @var User */
         $user = $this->getUser();
@@ -57,7 +56,7 @@ final class ProfileController extends AbstractController
     /**
      * @Route("/redirect", name="mercredi_front_profile_redirect")
      */
-    public function redirectByProfile(): RedirectResponse
+    public function redirectByProfile(): Response
     {
         /** @var User */
         $user = $this->getUser();
@@ -114,7 +113,7 @@ final class ProfileController extends AbstractController
      * @Route("/edit", name="mercredi_front_user_edit")
      * @IsGranted("ROLE_MERCREDI")
      */
-    public function edit(Request $request): RedirectResponse
+    public function edit(Request $request): Response
     {
         $user = $this->getUser();
         $form = $this->createForm(UserEditType::class, $user);
@@ -141,7 +140,7 @@ final class ProfileController extends AbstractController
      * @Route("/password", name="mercredi_front_user_password")
      * @IsGranted("ROLE_MERCREDI")
      */
-    public function password(Request $request): RedirectResponse
+    public function password(Request $request): Response
     {
         $user = $this->getUser();
 
@@ -149,7 +148,7 @@ final class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->userPasswordEncoder->encodePassword($user, $form->getData()->getPlainPassword());
+            $password = $this->userPasswordEncoder->hashPassword($user, $form->getData()->getPlainPassword());
             $user->setPassword($password);
             $this->userRepository->flush();
             $this->addFlash('success', 'Le mot de passe a bien été modifié');

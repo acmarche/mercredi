@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
@@ -21,13 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AssocierParentController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
     private AssociationTuteurHandler $associationHandler;
     private TuteurRepository $tuteurRepository;
@@ -43,7 +37,7 @@ final class AssocierParentController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_user_associate_tuteur", methods={"GET","POST"})
      */
-    public function associate(Request $request, User $user): RedirectResponse
+    public function associate(Request $request, User $user): Response
     {
         if (! $user->isParent()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de parent');
@@ -73,9 +67,9 @@ final class AssocierParentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_dissociate_tuteur", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_user_dissociate_tuteur", methods={"POST"})
      */
-    public function dissociate(Request $request, User $user): RedirectResponse
+    public function dissociate(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $tuteurId = (int) $request->request->get('tuteur');

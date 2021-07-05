@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
@@ -20,7 +20,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,13 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AccueilController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const ENFANT = 'enfant';
-    /**
-     * @var string
-     */
     private const ID = 'id';
     private AccueilRepository $accueilRepository;
     private AccueilHandler $accueilHandler;
@@ -174,9 +167,9 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="mercredi_admin_accueil_delete", methods={"DELETE"})
+     * @Route("/delete/{id}", name="mercredi_admin_accueil_delete", methods={"POST"})
      */
-    public function delete(Request $request, Accueil $accueil): RedirectResponse
+    public function delete(Request $request, Accueil $accueil): Response
     {
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
             $id = $accueil->getId();

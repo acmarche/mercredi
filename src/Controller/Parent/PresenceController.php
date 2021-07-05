@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
@@ -20,7 +20,6 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,15 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PresenceController extends AbstractController
 {
     use GetTuteurTrait;
-    /**
-     * @var string
-     */
-    private const UUID = 'uuid';
-    /**
-     * @var string
-     */
-    private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
 
+    private const UUID = 'uuid';
+    private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
     private PresenceRepository $presenceRepository;
     private PresenceHandler $presenceHandler;
     private RelationUtils $relationUtils;
@@ -172,10 +165,10 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_parent_presence_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_parent_presence_delete", methods={"POST"})
      * @IsGranted("presence_edit", subject="presence")
      */
-    public function delete(Request $request, Presence $presence): RedirectResponse
+    public function delete(Request $request, Presence $presence): Response
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {

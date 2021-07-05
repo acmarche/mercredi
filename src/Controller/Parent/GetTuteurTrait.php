@@ -8,15 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait GetTuteurTrait
 {
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
-
-    /**
-     * @var Tuteur
-     */
-    private $tuteur;
+    private TuteurUtils $tuteurUtils;
+    private ?Tuteur $tuteur;
 
     /**
      * @required

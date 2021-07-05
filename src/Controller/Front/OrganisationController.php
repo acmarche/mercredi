@@ -14,9 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class OrganisationController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const ORGANISATION = 'organisation';
     private OrganisationRepository $organisationRepository;
 

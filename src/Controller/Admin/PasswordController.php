@@ -2,15 +2,15 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/utilisateur/password")
@@ -19,11 +19,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 final class PasswordController extends AbstractController
 {
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder
+        UserPasswordHasherInterface $userPasswordEncoder
     ) {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
@@ -34,14 +34,14 @@ final class PasswordController extends AbstractController
      *
      * @Route("/{id}/password", name="mercredi_admin_user_password", methods={"GET","POST"})
      */
-    public function passord(Request $request, User $user): RedirectResponse
+    public function passord(Request $request, User $user): Response
     {
         $form = $this->createForm(UserPasswordType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->userPasswordEncoder->encodePassword($user, $form->getData()->getPlainPassword());
+            $password = $this->userPasswordEncoder->hashPassword($user, $form->getData()->getPlainPassword());
             $user->setPassword($password);
             $this->userRepository->flush();
             $this->addFlash('success', 'Le mot de passe a bien été modifié');

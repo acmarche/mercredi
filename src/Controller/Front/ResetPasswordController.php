@@ -7,12 +7,11 @@ use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
 use AcMarche\Mercredi\ResetPassword\Mailer\ResetPasswordMailer;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
@@ -23,19 +22,16 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
-    /**
-     * @var string
-     */
-    private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
 
+    private const MERCREDI_FRONT_FORGOT_PASSWORD_REQUEST = 'mercredi_front_forgot_password_request';
     private ResetPasswordHelperInterface $resetPasswordHelper;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordEncoder;
     private ResetPasswordMailer $resetPasswordMailer;
     private UserRepository $userRepository;
 
     public function __construct(
         ResetPasswordHelperInterface $resetPasswordHelper,
-        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserPasswordHasherInterface $userPasswordEncoder,
         ResetPasswordMailer $resetPasswordMailer,
         UserRepository $userRepository
     ) {
@@ -134,7 +130,7 @@ final class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $this->userPasswordEncoder->encodePassword(
+            $encodedPassword = $this->userPasswordEncoder->hashPassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
@@ -156,7 +152,7 @@ final class ResetPasswordController extends AbstractController
         );
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData): Response
     {
         $user = $this->userRepository->findOneBy(
             [
@@ -165,7 +161,7 @@ final class ResetPasswordController extends AbstractController
         );
 
         // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
+       // $this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
         if ($user === null) {
@@ -174,6 +170,7 @@ final class ResetPasswordController extends AbstractController
 
         try {
             $resetPasswordToken = $this->resetPasswordHelper->generateResetToken($user);
+            $this->setTokenObjectInSession($resetPasswordToken);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash(
                 'reset_password_error',

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilParentType;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
@@ -18,7 +18,6 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,11 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
 final class AccueilController extends AbstractController
 {
     use GetTuteurTrait;
-    /**
-     * @var string
-     */
-    private const UUID = 'uuid';
 
+    private const UUID = 'uuid';
     private AccueilRepository $accueilRepository;
     private AccueilHandler $accueilHandler;
     private RelationUtils $relationUtils;
@@ -137,11 +133,11 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * Route("/{id}", name="mercredi_parent_accueil_delete", methods={"DELETE"}).
+     * Route("/{id}", name="mercredi_parent_accueil_delete", methods={"POST"}).
      *
      * @IsGranted("accueil_edit", subject="accueil")
      */
-    public function delete(Request $request, Accueil $accueil): RedirectResponse
+    public function delete(Request $request, Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {

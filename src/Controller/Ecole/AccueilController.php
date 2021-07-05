@@ -33,9 +33,6 @@ final class AccueilController extends AbstractController
 {
     use GetEcolesTrait;
 
-    /**
-     * @var string
-     */
     private const ENFANT = 'enfant';
     private AccueilRepository $accueilRepository;
     private AccueilHandler $accueilHandler;

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Sante\Form\SanteQuestionType;
 use AcMarche\Mercredi\Sante\Message\SanteQuestionCreated;
@@ -13,7 +13,6 @@ use function is_array;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,9 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SanteQuestionController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const SANTE_QUESTION = 'sante_question';
     private SanteQuestionRepository $santeQuestionRepository;
 
@@ -112,9 +108,9 @@ final class SanteQuestionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_sante_question_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_sante_question_delete", methods={"POST"})
      */
-    public function delete(Request $request, SanteQuestion $santeQuestion): RedirectResponse
+    public function delete(Request $request, SanteQuestion $santeQuestion): Response
     {
         if ($this->isCsrfTokenValid('delete'.$santeQuestion->getId(), $request->request->get('_token'))) {
             $id = $santeQuestion->getId();

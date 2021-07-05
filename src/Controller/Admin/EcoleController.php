@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Ecole\Form\EcoleType;
 use AcMarche\Mercredi\Ecole\Message\EcoleCreated;
 use AcMarche\Mercredi\Ecole\Message\EcoleDeleted;
@@ -14,7 +14,6 @@ use function count;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,17 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class EcoleController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_ECOLE_SHOW = 'mercredi_admin_ecole_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
-    /**
-     * @var string
-     */
     private const ECOLE = 'ecole';
     private EcoleRepository $ecoleRepository;
     private EnfantRepository $enfantRepository;
@@ -126,9 +116,9 @@ final class EcoleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_ecole_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_ecole_delete", methods={"POST"})
      */
-    public function delete(Request $request, Ecole $ecole): RedirectResponse
+    public function delete(Request $request, Ecole $ecole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
             if (count($this->enfantRepository->findByEcoles([$ecole])) > 0) {

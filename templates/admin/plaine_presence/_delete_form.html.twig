@@ -14,7 +14,7 @@
             </div>
             <div class="modal-footer">
                 <form method="post" action="{{ path('mercredi_admin_plaine_presence_remove_enfant', {'plaine': plaine.id, 'enfant': enfant.id}) }}">
-                    <input type="hidden" name="_method" value="DELETE">
+
                     <input type="hidden" name="_token" value="{{ csrf_token('remove' ~ plaine.id) }}">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Annuler

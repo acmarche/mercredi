@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Organisation\Form\OrganisationType;
 use AcMarche\Mercredi\Organisation\Message\OrganisationCreated;
@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,17 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class OrganisationController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_ORGANISATION_SHOW = 'mercredi_admin_organisation_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
-    /**
-     * @var string
-     */
     private const ORGANISATION = 'organisation';
     private OrganisationRepository $organisationRepository;
 
@@ -129,9 +119,9 @@ final class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_organisation_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_organisation_delete", methods={"POST"})
      */
-    public function delete(Request $request, Organisation $organisation): RedirectResponse
+    public function delete(Request $request, Organisation $organisation): Response
     {
         if ($this->isCsrfTokenValid('delete'.$organisation->getId(), $request->request->get('_token'))) {
             $id = $organisation->getId();

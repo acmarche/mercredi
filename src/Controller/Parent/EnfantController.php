@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
@@ -19,7 +19,6 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -31,11 +30,7 @@ final class EnfantController extends AbstractController
 {
     use GetTuteurTrait;
 
-    /**
-     * @var string
-     */
     private const ENFANT = 'enfant';
-
     private EnfantRepository $enfantRepository;
     private RelationUtils $relationUtils;
     private SanteHandler $santeHandler;
@@ -147,7 +142,7 @@ final class EnfantController extends AbstractController
      * @Route("/{uuid}/edit", name="mercredi_parent_enfant_edit", methods={"GET","POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
-    public function edit(Request $request, Enfant $enfant): RedirectResponse
+    public function edit(Request $request, Enfant $enfant): Response
     {
         $form = $this->createForm(EnfantEditForParentType::class, $enfant);
         $form->handleRequest($request);

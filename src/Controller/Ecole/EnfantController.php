@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForEcoleType;
 use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
@@ -111,7 +110,7 @@ final class EnfantController extends AbstractController
      * @Route("/{uuid}/edit", name="mercredi_ecole_enfant_edit", methods={"GET","POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
-    public function edit(Request $request, Enfant $enfant): RedirectResponse
+    public function edit(Request $request, Enfant $enfant): Response
     {
         $form = $this->createForm(EnfantEditForEcoleType::class, $enfant);
         $form->handleRequest($request);

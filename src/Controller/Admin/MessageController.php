@@ -29,21 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MessageController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const FORM = 'form';
-    /**
-     * @var string
-     */
     private const EMAILS = 'emails';
-    /**
-     * @var string
-     */
     private const TUTEURS = 'tuteurs';
-    /**
-     * @var string
-     */
     private const SUCCESS = 'success';
     private PresenceRepository $presenceRepository;
     private RelationRepository $relationRepository;

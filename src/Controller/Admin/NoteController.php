@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Note;
 use AcMarche\Mercredi\Note\Form\NoteType;
@@ -13,7 +13,6 @@ use AcMarche\Mercredi\Note\Repository\NoteRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,21 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class NoteController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_NOTE_SHOW = 'mercredi_admin_note_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
-    /**
-     * @var string
-     */
     private const NOTE = 'note';
-    /**
-     * @var string
-     */
     private const FORM = 'form';
     private NoteRepository $noteRepository;
 
@@ -167,9 +154,9 @@ final class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_note_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_note_delete", methods={"POST"})
      */
-    public function delete(Request $request, Note $note): RedirectResponse
+    public function delete(Request $request, Note $note): Response
     {
         if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
             $enfant = $note->getEnfant();

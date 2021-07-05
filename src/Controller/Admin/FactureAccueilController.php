@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
@@ -13,7 +13,6 @@ use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,9 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FactureAccueilController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const FACTURE = 'facture';
     private FactureAccueilRepository $factureAccueilRepository;
     private FactureHandler $factureHandler;
@@ -111,9 +107,9 @@ final class FactureAccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_facture_accueil_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_facture_accueil_delete", methods={"POST"})
      */
-    public function delete(Request $request, FactureAccueil $factureAccueil): RedirectResponse
+    public function delete(Request $request, FactureAccueil $factureAccueil): Response
     {
         if ($this->isCsrfTokenValid('delete'.$factureAccueil->getId(), $request->request->get('_token'))) {
             $facture = $factureAccueil->getFacture();

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserRoleType;
@@ -15,9 +15,8 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/user")
@@ -25,29 +24,17 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 final class UserController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const FORM = 'form';
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
-    /**
-     * @var string
-     */
     private const USER = 'user';
 
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder
+        UserPasswordHasherInterface $userPasswordEncoder
     ) {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
@@ -87,7 +74,7 @@ final class UserController extends AbstractController
      *
      * @Route("/new", name="mercredi_admin_user_new", methods={"GET","POST"})
      */
-    public function new(Request $request): RedirectResponse
+    public function new(Request $request): Response
     {
         $user = new User();
 
@@ -97,7 +84,7 @@ final class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
-                $this->userPasswordEncoder->encodePassword($user, $form->get('plainPassword')->getData())
+                $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
             );
             $user->setUsername($user->getEmail());
             $this->userRepository->insert($user);
@@ -134,7 +121,7 @@ final class UserController extends AbstractController
      *
      * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user): RedirectResponse
+    public function edit(Request $request, User $user): Response
     {
         $editForm = $this->createForm(UserEditType::class, $user);
 
@@ -161,7 +148,7 @@ final class UserController extends AbstractController
      *
      * @Route("/{id}/roles", name="mercredi_admin_user_roles", methods={"GET","POST"})
      */
-    public function roles(Request $request, User $user): RedirectResponse
+    public function roles(Request $request, User $user): Response
     {
         $form = $this->createForm(UserRoleType::class, $user);
 
@@ -186,9 +173,9 @@ final class UserController extends AbstractController
     /**
      * Deletes a User utilisateur.
      *
-     * @Route("/{id}", name="mercredi_admin_user_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_user_delete", methods={"POST"})
      */
-    public function delete(Request $request, User $user): RedirectResponse
+    public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $id = $user->getId();

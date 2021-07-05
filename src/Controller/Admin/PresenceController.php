@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
@@ -27,7 +27,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -36,13 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PresenceController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const FORM = 'form';
-    /**
-     * @var string
-     */
     private const ID = 'id';
     private PresenceRepository $presenceRepository;
     private PresenceHandler $presenceHandler;
@@ -105,7 +98,7 @@ final class PresenceController extends AbstractController
      *
      * @Route("/by/month", name="mercredi_admin_presence_by_month", methods={"GET","POST"})
      */
-    public function indexByMonth(Request $request): RedirectResponse
+    public function indexByMonth(Request $request): Response
     {
         $search = false;
         $mois = null;
@@ -226,9 +219,9 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_presence_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_presence_delete", methods={"POST"})
      */
-    public function delete(Request $request, Presence $presence): RedirectResponse
+    public function delete(Request $request, Presence $presence): Response
     {
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
             $presenceId = $presence->getId();

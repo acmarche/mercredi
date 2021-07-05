@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Animateur\Form\AnimateurType;
 use AcMarche\Mercredi\Animateur\Form\SearchAnimateurType;
 use AcMarche\Mercredi\Animateur\Message\AnimateurCreated;
@@ -14,7 +14,6 @@ use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,13 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AnimateurController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const FORM = 'form';
-    /**
-     * @var string
-     */
     private const ANIMATEUR = 'animateur';
     private AnimateurRepository $animateurRepository;
     private SearchHelper $searchHelper;
@@ -137,9 +130,9 @@ final class AnimateurController extends AbstractController
     /**
      * //todo que faire si presence.
      *
-     * @Route("/{id}", name="mercredi_admin_animateur_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_animateur_delete", methods={"POST"})
      */
-    public function delete(Request $request, Animateur $animateur): RedirectResponse
+    public function delete(Request $request, Animateur $animateur): Response
     {
         if ($this->isCsrfTokenValid('delete'.$animateur->getId(), $request->request->get('_token'))) {
             $id = $animateur->getId();

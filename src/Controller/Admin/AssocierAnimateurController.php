@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
@@ -21,13 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AssocierAnimateurController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
     private AssociationAnimateurHandler $associationAnimateurHandler;
     private AnimateurRepository $animateurRepository;
@@ -43,7 +37,7 @@ final class AssocierAnimateurController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_user_associate_animateur", methods={"GET","POST"})
      */
-    public function associate(Request $request, User $user): RedirectResponse
+    public function associate(Request $request, User $user): Response
     {
         if (!$user->isAnimateur()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de animateur');
@@ -72,9 +66,9 @@ final class AssocierAnimateurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_dissociate_animateur", methods={"DELETE"})
+     * @Route("/{id}", name="mercredi_user_dissociate_animateur", methods={"POST"})
      */
-    public function dissociate(Request $request, User $user): RedirectResponse
+    public function dissociate(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $animateurId = (int)$request->request->get('animateur');

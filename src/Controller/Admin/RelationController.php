@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Form\RelationType;
@@ -15,7 +15,6 @@ use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,14 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class RelationController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const DANGER = 'danger';
-    /**
-     * @var string
-     */
-    private const ID = 'id';
+      private const ID = 'id';
     private RelationRepository $relationRepository;
     private RelationHandler $relationHandler;
 
@@ -44,7 +37,7 @@ final class RelationController extends AbstractController
     /**
      * @Route("/attach/enfant/{id}", name="mercredi_admin_relation_attach_enfant", methods={"POST"})
      */
-    public function attachEnfant(Request $request, Tuteur $tuteur): RedirectResponse
+    public function attachEnfant(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
             $enfantId = (int) $request->request->get('enfantId');
@@ -90,9 +83,9 @@ final class RelationController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_relation_delete", methods={"DELETE"})
+     * @Route("/delete", name="mercredi_admin_relation_delete", methods={"POST"})
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(Request $request): Response
     {
         $relationId = $request->request->get('relationid');
 

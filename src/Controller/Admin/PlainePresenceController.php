@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -23,7 +23,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -32,29 +31,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PlainePresenceController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const DANGER = 'danger';
-    /**
-     * @var string
-     */
     private const PLAINE = 'plaine';
-    /**
-     * @var string
-     */
     private const FORM = 'form';
-    /**
-     * @var string
-     */
     private const ENFANT = 'enfant';
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_PLAINE_PRESENCE_SHOW = 'mercredi_admin_plaine_presence_show';
-    /**
-     * @var string
-     */
     private const SUCCESS = 'success';
     private EnfantRepository $enfantRepository;
     private PlainePresenceHandler $plainePresenceHandler;
@@ -146,7 +127,7 @@ final class PlainePresenceController extends AbstractController
      * @Entity("plaine", expr="repository.find(plaine)")
      * @Entity("enfant", expr="repository.find(enfant)")
      */
-    public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): RedirectResponse
+    public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): Response
     {
         $this->plainePresenceHandler->handleAddEnfant($plaine, $tuteur, $enfant);
 
@@ -263,9 +244,9 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_plaine_presence_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_plaine_presence_delete", methods={"POST"})
      */
-    public function delete(Request $request, Plaine $plaine): RedirectResponse
+    public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
             $presenceId = (int) $request->request->get('presence');
@@ -293,9 +274,9 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_remove_enfant", methods={"DELETE"})
+     * @Route("/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_remove_enfant", methods={"POST"})
      */
-    public function remove(Request $request, Plaine $plaine, Enfant $enfant): RedirectResponse
+    public function remove(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
         if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
             $this->plainePresenceHandler->removeEnfant($plaine, $enfant);

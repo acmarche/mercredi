@@ -19,7 +19,7 @@ final class CheckupController extends AbstractController
 {
     private EnfantRepository $enfantRepository;
     private TuteurRepository $tuteurRepository;
-    private $tutru;
+    private $tutru = null;
 
     public function __construct(EnfantRepository $enfantRepository, TuteurRepository $tuteurRepository)
     {

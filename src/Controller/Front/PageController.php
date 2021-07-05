@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Contact\Form\ContactType;
 use AcMarche\Mercredi\Contact\Mailer\ContactMailer;
 use AcMarche\Mercredi\Entity\Page;
@@ -11,7 +11,6 @@ use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,9 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PageController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const PAGE = 'page';
     private OrganisationRepository $organisationRepository;
     private PageRepository $pageRepository;
@@ -65,7 +61,7 @@ final class PageController extends AbstractController
     /**
      * @Route("/contact", name="mercredi_front_contact")
      */
-    public function contact(Request $request): RedirectResponse
+    public function contact(Request $request): Response
     {
         $page = $this->pageRepository->findContactPage();
         if (null === $page) {

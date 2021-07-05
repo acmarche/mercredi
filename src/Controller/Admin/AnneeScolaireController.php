@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\AnneeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireCreated;
@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,13 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AnneeScolaireController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW = 'mercredi_admin_annee_scolaire_show';
-    /**
-     * @var string
-     */
     private const ID = 'id';
     private AnneeScolaireRepository $anneeScolaireRepository;
 
@@ -115,9 +108,9 @@ final class AnneeScolaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_annee_scolaire_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_annee_scolaire_delete", methods={"POST"})
      */
-    public function delete(Request $request, AnneeScolaire $anneeScolaire): RedirectResponse
+    public function delete(Request $request, AnneeScolaire $anneeScolaire): Response
     {
         if ($this->isCsrfTokenValid('delete'.$anneeScolaire->getId(), $request->request->get('_token'))) {
             if (\count($anneeScolaire->getEnfants()) > 0) {

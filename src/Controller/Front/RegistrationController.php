@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Registration\EmailVerifier;
 use AcMarche\Mercredi\Registration\Form\RegistrationFormType;
@@ -10,20 +10,19 @@ use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 final class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordEncoder;
     private UserRepository $userRepository;
 
     public function __construct(
         EmailVerifier $emailVerifier,
-        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserPasswordHasherInterface $userPasswordEncoder,
         UserRepository $userRepository
     ) {
         $this->emailVerifier = $emailVerifier;
@@ -43,7 +42,7 @@ final class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $this->userPasswordEncoder->encodePassword(
+                $this->userPasswordEncoder->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -71,7 +70,7 @@ final class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): RedirectResponse
+    public function verifyUserEmail(Request $request): Response
     {
         // validate email confirmation link, sets User::isVerified=true and persists
         try {

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -16,7 +16,6 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -25,9 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SanteFicheController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const ID = 'id';
     private SanteFicheRepository $santeFicheRepository;
     private SanteHandler $santeHandler;
@@ -107,9 +103,9 @@ final class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_admin_sante_fiche_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_sante_fiche_delete", methods={"POST"})
      */
-    public function delete(Request $request, SanteFiche $santeFiche): RedirectResponse
+    public function delete(Request $request, SanteFiche $santeFiche): Response
     {
         if ($this->isCsrfTokenValid('delete'.$santeFiche->getId(), $request->request->get('_token'))) {
             $id = $santeFiche->getId();

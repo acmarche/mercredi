@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
@@ -13,7 +13,6 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -104,7 +103,7 @@ final class PlaineController extends AbstractController
     /**
      * @Route("/confirmation/{uuid}", name="mercredi_parent_plaine_presence_confirmation", methods={"GET","POST"})
      */
-    public function confirmation(Enfant $enfant): RedirectResponse
+    public function confirmation(Enfant $enfant): Response
     {
         $this->hasTuteur();
         $plaine = $this->plaineRepository->findPlaineOpen();

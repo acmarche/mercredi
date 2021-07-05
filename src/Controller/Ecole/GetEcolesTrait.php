@@ -8,15 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait GetEcolesTrait
 {
-    /**
-     * @var EcoleUtils
-     */
-    private $ecoleUtils;
+    private EcoleUtils $ecoleUtils;
 
     /**
      * @var Ecole[]
      */
-    private $ecoles;
+    private  iterable  $ecoles;
 
     /**
      * @required

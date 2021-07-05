@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
@@ -15,7 +15,6 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,13 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class TuteurController extends AbstractController
 {
-    /**
-     * @var string
-     */
     private const FORM = 'form';
-    /**
-     * @var string
-     */
     private const TUTEUR = 'tuteur';
     private TuteurRepository $tuteurRepository;
     private RelationRepository $relationRepository;
@@ -144,9 +137,9 @@ final class TuteurController extends AbstractController
     /**
      * //todo que faire si presence.
      *
-     * @Route("/{id}", name="mercredi_admin_tuteur_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mercredi_admin_tuteur_delete", methods={"POST"})
      */
-    public function delete(Request $request, Tuteur $tuteur): RedirectResponse
+    public function delete(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
             $id = $tuteur->getId();
