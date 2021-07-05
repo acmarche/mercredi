@@ -2,41 +2,45 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Repository\ResetPasswordRequestRepository;
 use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\ResetPassword\Repository\ResetPasswordRequestRepository")
+ * @ORM\Entity(repositoryClass=ResetPasswordRequestRepository::class)
  */
 class ResetPasswordRequest implements ResetPasswordRequestInterface
 {
     use ResetPasswordRequestTrait;
-    use IdTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Security\User")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private ?User $user=null;
+    private $id;
 
-    public function __construct(object $user, DateTimeInterface $expiresAt, string $selector, string $hashedToken)
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {
         $this->user = $user;
         $this->initialize($expiresAt, $selector, $hashedToken);
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getUser(): object
     {
         return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
     }
 }

@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Message;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 
 final class ResetPasswordMailer
@@ -14,7 +15,7 @@ final class ResetPasswordMailer
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    public function sendLink(User $user, ResetPasswordToken $resetPasswordToken, int $tokenLifeTime): void
+    public function sendLink(User $user, ResetPasswordToken $resetPasswordToken): void
     {
         $templatedEmail = (new TemplatedEmail())
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
@@ -24,7 +25,6 @@ final class ResetPasswordMailer
             ->context(
                 [
                     'resetToken' => $resetPasswordToken,
-                    'tokenLifetime' => $tokenLifeTime,
                 ]
             );
 
