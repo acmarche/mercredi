@@ -10,10 +10,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ResetPasswordRequestFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formBuilder
+         $builder
             ->add('email', EmailType::class, [
+                'attr' => ['autocomplete' => 'email'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your email',

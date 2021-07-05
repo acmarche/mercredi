@@ -12,12 +12,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ChangePasswordFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formBuilder
+        $builder
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
+                    'attr' => ['autocomplete' => 'new-password'],
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Please enter a password',
@@ -32,6 +33,7 @@ final class ChangePasswordFormType extends AbstractType
                     'label' => 'New password',
                 ],
                 'second_options' => [
+                    'attr' => ['autocomplete' => 'new-password'],
                     'label' => 'Repeat Password',
                 ],
                 'invalid_message' => 'The password fields must match.',

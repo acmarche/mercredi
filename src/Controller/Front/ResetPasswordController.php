@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Form\ChangePasswordFormType;
-use AcMarche\Mercredi\Form\ResetPasswordRequestFormType;
+use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
+use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
 use AcMarche\Mercredi\ResetPassword\Mailer\ResetPasswordMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
