@@ -54,7 +54,7 @@ class SanteQuestion
      */
     private iterable $reponse;
 
-    private string $reponseTxt;
+    private ?string $reponseTxt;
 
     private ?string $remarque = null;
 
@@ -103,10 +103,7 @@ class SanteQuestion
         return $this->complement;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getReponseTxt(): string
+    public function getReponseTxt(): ?string
     {
         return $this->reponseTxt;
     }
@@ -114,7 +111,7 @@ class SanteQuestion
     /**
      * @param mixed $reponseTxt
      */
-    public function setReponseTxt($reponseTxt): void
+    public function setReponseTxt(?string $reponseTxt): void
     {
         $this->reponseTxt = $reponseTxt;
     }

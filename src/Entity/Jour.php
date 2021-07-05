@@ -46,7 +46,7 @@ class Jour implements TimestampableInterface
      * @ORM\Column(name="date_jour", type="date", unique=true)
      * @Assert\Type("datetime")
      */
-    private DateTimeInterface $date_jour;
+    private ?DateTimeInterface $date_jour;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
