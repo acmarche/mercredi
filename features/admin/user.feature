@@ -41,17 +41,16 @@ Feature: Gestion des utilisateurs
   Scenario: Je change le mot de passe et je me connecte avec le nouveau mot de passe
     When I follow "Cohen Albert"
     Then I follow "Changer le mot de passe"
-    And I fill in "user_password[plainPassword][first]" with "lisa"
-    And I fill in "user_password[plainPassword][second]" with "lisa"
+    And I fill in "user_password[plainPassword]" with "lisa"
     And I press "Sauvegarder"
     Then I should see "Le mot de passe a bien été modifié"
     Given I am on "/logout"
     When I am login with user "albert@marche.be" and password "lisa"
-    Then I should see "Accès en tant que parent"
-    Then I follow "Accès en tant que parent"
-    Then I should see "Vos coordonnées"
+    Then I should see "SIMPSON Bart"
+    Then I follow "Mes coordonnées"
+    Then I should see "SIMPSON Homer"
 
-  Scenario: Supprimer une école
+  Scenario: Supprimer un utilisateur
     When I follow "Cohen Albert"
     Then I press "Supprimer l'utilisateur"
    # Then print last response
