@@ -15,7 +15,6 @@ Feature: Gestion de sa fiche animateur
     Then I should see "PERET Merlin"
     Then I should see "SIMPSON Bart"
     Then I fill in "search_enfant_for_animateur[nom]" with "Yves"
-    Then I select "19-09-2024" from "search_enfant_for_animateur_jour"
     And I press "Rechercher"
     Then I should see "FERNANDEL Yves"
     Then I should not see "PERET Merlin"

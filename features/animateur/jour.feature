@@ -7,11 +7,12 @@ Feature: Gestion de sa fiche animateur
     Given I am on "/animateur/presence/"
 
   Scenario:  Page index
-    Then I should see "Mes jours de travail"
-    Then I should see "mercredi 6 mai 2020"
-    Then I should see "jeudi 19 septembre 2024"
+    Then I should see "Listing des présences"
+    Then I should see "Mercredi 6 Mai 2020"
+    Then I should see "Jeudi 19 Septembre 2024"
 
   Scenario:  Je consulte une date
-    Then I follow "mercredi 6 mai 2020"
-    Then I should see "SIMPSON Bart"
+    Then I follow "Mercredi 6 Mai 2020"
+    Then I should see "SIMPSON"
+    Then I should see "Bart"
     Then I should not see "PERET Merlin"

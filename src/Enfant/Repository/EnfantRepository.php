@@ -226,7 +226,7 @@ final class EnfantRepository extends ServiceEntityRepository
      * @param Jour|null $jour
      * @return array|Enfant[]
      */
-    public function searchForAnimateur(Animateur $animateur, ?string $nom, ?Jour $jour): array
+    public function searchForAnimateur(Animateur $animateur, ?string $nom = null, ?Jour $jour = null): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
             ->leftJoin('enfant.presences', 'presences', self::WITH)
