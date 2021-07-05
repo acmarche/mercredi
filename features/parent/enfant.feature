@@ -24,7 +24,9 @@ Feature: Test des pages parents
     Then I should see "Nouvel enfant"
     And I fill in "enfant_edit_for_parent[nom]" with "Funes"
     And I fill in "enfant_edit_for_parent[prenom]" with "Jules"
-    And I fill in "enfant_edit_for_parent[birthday]" with "2015-12-06"
+    And I select "6" from "enfant_edit_for_parent[birthday][day]"
+    And I select "déc." from "enfant_edit_for_parent[birthday][month]"
+    And I select "2015" from "enfant_edit_for_parent[birthday][year]"
     And I select "Waha" from "enfant_edit_for_parent[ecole]"
     And I select "Masculin" from "enfant_edit_for_parent[sexe]"
     And I select "3M" from "enfant_edit_for_parent[annee_scolaire]"
@@ -99,5 +101,5 @@ Feature: Test des pages parents
     Then I should not see "Attention la fiche santé n'est pas complète, veuillez la remplir."
 
   Scenario: J'affiche une attestation fiscale
-    Then I follow "Télécharger 2020"
+    Then I follow "Télécharger 2021"
     And the response status code should be 200

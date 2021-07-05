@@ -9,3 +9,4 @@ AcMarche\Mercredi\Entity\Sante\SanteFiche:
     personne_urgence: 'Papa et maman'
     medecin_nom: 'Docteur Ledoux'
     medecin_telephone: '084 44 55 66'
+    accompagnateurs: ['papa', 'maman', 'soeur']
