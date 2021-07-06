@@ -94,7 +94,7 @@ class ResetPasswordController extends AbstractController
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);
 
-            return $this->redirectToRoute('mercredi_front_forgot_password_request');
+            return $this->redirectToRoute('mercredi_front_reset_password');
         }
 
         $token = $this->getTokenFromSession();
@@ -140,7 +140,7 @@ class ResetPasswordController extends AbstractController
         }
 
         return $this->render(
-            'reset_password/reset.html.twig',
+            '@AcMarcheMercredi/front/reset_password/reset.html.twig',
             [
                 'resetForm' => $form->createView(),
             ]
