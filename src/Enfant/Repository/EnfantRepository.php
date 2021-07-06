@@ -20,13 +20,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class EnfantRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
     private const ECOLE = 'ecole';
-    /**
-     * @var string
-     */
     private const WITH = 'WITH';
 
     public function __construct(ManagerRegistry $managerRegistry)
