@@ -3,12 +3,13 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 trait NomTrait
 {
     /**
-     * @var string|null
      * @ORM\Column(type="string", length=150)
+     * @Assert\NotBlank()
      */
     private ?string $nom = null;
 
