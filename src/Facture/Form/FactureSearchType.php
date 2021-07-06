@@ -37,6 +37,7 @@ final class FactureSearchType extends AbstractType
                 ChoiceType::class,
                 [
                     'label' => 'Payé',
+                    'placeholder' => 'Payé ou non',
                     'choices' => ['Payée' => 1, 'Non payée' => 0],
                     'required' => false,
                 ]

@@ -1,32 +1,38 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
 {% block body %}
-    <h3>Liste des groupes</h3>
 
-    <a class="btn btn-primary m-2" role="button"
-       href="{{ path('mercredi_admin_groupe_scolaire_new') }}"><i class="fas fa-plus"></i> Ajouter un groupe</a>
+    <div class="card">
+        <div class="card-header">
+            <h3>Liste des groupes</h3>
+        </div>
+        <div class="card-body">
 
-    <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Age minimum</th>
-            <th>Age maximum</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for groupe_scolaire in groupes %}
-            <tr>
-                <td>
-                    <a href="{{ path('mercredi_admin_groupe_scolaire_show', { 'id': groupe_scolaire.id }) }}">
-                        {{ groupe_scolaire.nom }}
-                    </a>
-                </td>
-                <td>{{ groupe_scolaire.ageMinimum ? groupe_scolaire.ageMinimum ~ ' ans' }}</td>
-                <td>{{ groupe_scolaire.ageMaximum ? groupe_scolaire.ageMaximum ~ ' ans' }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <a class="btn btn-primary m-2" role="button"
+               href="{{ path('mercredi_admin_groupe_scolaire_new') }}"><i class="fas fa-plus"></i> Ajouter un groupe</a>
 
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Age minimum</th>
+                    <th>Age maximum</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for groupe_scolaire in groupes %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_admin_groupe_scolaire_show', { 'id': groupe_scolaire.id }) }}">
+                                {{ groupe_scolaire.nom }}
+                            </a>
+                        </td>
+                        <td>{{ groupe_scolaire.ageMinimum ? groupe_scolaire.ageMinimum ~ ' ans' }}</td>
+                        <td>{{ groupe_scolaire.ageMaximum ? groupe_scolaire.ageMaximum ~ ' ans' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

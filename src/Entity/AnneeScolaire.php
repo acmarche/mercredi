@@ -55,7 +55,7 @@ class AnneeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): array
+    public function getEnfants(): iterable
     {
         return $this->enfants;
     }
@@ -107,7 +107,7 @@ class AnneeScolaire
         return $this;
     }
 
-    public function getAnneeSuivante(): ?\AcMarche\Mercredi\Entity\AnneeScolaire
+    public function getAnneeSuivante(): ?AnneeScolaire
     {
         return $this->annee_suivante;
     }

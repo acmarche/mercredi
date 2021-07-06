@@ -1,35 +1,37 @@
 <a href="{{ path('mercredi_admin_facture_edit', { 'id': facture.id }) }}" role="button"
-   class="btn btn-primary"><i
-            class="far fa-edit"></i> Modifier</a>
+   class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
 
-    <a class="btn btn-primary dropdown-toggle"
-       href="#"
-       role="button" id="dropdownMenuLink"
-       data-toggle="dropdown"
-       aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-plus"></i> Attacher...
-    </a>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item"
-           href="{{ path('mercredi_admin_facture_presence_attach', { 'id': facture.id }) }}">
-            Attacher des présences
-        </a> <a class="dropdown-item"
-                href="{{ path('mercredi_admin_facture_accueil_attach', { 'id': facture.id }) }}">
-            Attacher des accueils
-        </a>
+<div class="btn-group">
+    <div class="btn-group" role="group">
+        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <i class="fas fa-plus"></i> Attacher...
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <li>
+                <a class="dropdown-item"
+                   href="{{ path('mercredi_admin_facture_presence_attach', { 'id': facture.id }) }}">
+                    Attacher des présences
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item"
+                   href="{{ path('mercredi_admin_facture_accueil_attach', { 'id': facture.id }) }}">
+                    Attacher des accueils
+                </a>
+            </li>
+        </ul>
     </div>
+</div>
 
-<a href="{{ path('mercredi_commun_export_facture_pdf', {'uuid': facture.uuid}) }}" class="btn btn-primary" role='button'>
-    <i class="fas fa-file-pdf"></i>
-    Exporter en pdf</a>
+<a href="{{ path('mercredi_commun_export_facture_pdf', {'uuid': facture.uuid}) }}" class="btn btn-primary"
+   role='button'> <i class="fas fa-file-pdf"></i> Exporter en pdf</a>
 
 <a href="{{ path('mercredi_admin_facture_send', {'id': facture.id}) }}" class="btn btn-primary" role='button'>
-    <i class="fas fa-envelope"></i>
-    Envoyer par mail</a>
+    <i class="fas fa-envelope"></i> Envoyer par mail</a>
 
 <a href="{{ path('mercredi_admin_facture_index', {'id': tuteur.id}) }}" class="btn btn-primary" role='button'><i
-            class="fas fa-list"></i>
-    Retour à la Liste</a>
+            class="fas fa-list"></i> Retour à la Liste</a>
 
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
     <i class="fas fa-trash"></i> Supprimer
