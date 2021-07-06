@@ -8,6 +8,14 @@
     {% block stylesheets %}{% endblock %}
     <meta name="description" content="">
     <meta name="author" content="Cst">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('bundles/acmarchemercredi/css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
