@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/pdf.css')) }}" rel="stylesheet">
-    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/bootstrap/css/bootstrap.min.css')) }}" rel="stylesheet">
+
     <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/print.css')) }}" rel="stylesheet" media="print">
     <title>Facture</title>
     <style type="text/css">
@@ -76,7 +76,7 @@
                 <tr>
                 <tr>
                     <td>
-                        Garderies matin<br/>
+                        Accueils matin<br/>
                         ≤ 7h29=0,50€ &7h30 -
                         8h = 0,50€
                     </td>
@@ -86,7 +86,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Garderies soir <br/>
+                        Accueils soir <br/>
                         ≤ 17h = 0,50€ & Après
                         17h = 0,50 €/demi-heure
                     </td>
@@ -104,7 +104,8 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td>Mercredi récréatif<br/>
+                    <td>
+                        Mercredis récréatifs<br/>
                         5 €, 3 €, 1 € (selon le nbre d'enfants)
                     </td>
                     {% for row in data.enfants %}
