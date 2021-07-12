@@ -1,31 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/pdf.css')) }}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/print.css')) }}" rel="stylesheet" media="print">
-    <title>Facture</title>
-    <style type="text/css">
-        table {
-            page-break-inside: auto
-        }
-
-        tr {
-            page-break-inside: avoid;
-            page-break-after: auto
-        }
-
-        thead {
-            display: table-header-group
-        }
-
-        tfoot {
-            display: table-footer-group
-        }
-    </style>
-</head>
-<body>
 <div class="container-fluid">
     <div class="card mb-3">
         <div class="card-body">
@@ -53,7 +25,7 @@
             <div class="text-center">
                 <div>
                     {{ organisation.nom }}
-                    <strong>Mois {{ facture.mois|date('m-Y') }}</strong>
+                    <strong>Mois {{ facture.mois }}</strong>
                 </div>
                 <br/>
                 <div>Implantation scolaire {{ facture.ecoles|join(',') }}</div>
@@ -147,8 +119,8 @@
             A payer: {{ data.cout | format_currency('eur') }}<br>
             IBAN: B E 2 3 0 9 1 0 1 9 6 1 9 6 9 1<br>
             BIC: G K C C B E B B<br>
-            Communication: xxx
+            Communication: {{ facture.communication }}
         </div>
     </div>
+    <div class="page-breaker"></div>
 </div>
-</body>

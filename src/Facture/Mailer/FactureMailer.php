@@ -60,7 +60,7 @@ final class FactureMailer
                 ]
             );
 
-        $html = $this->factureFactory->generateFullHtml($facture);
+        $html = $this->factureFactory->generateOneHtml($facture);
         $date = $facture->getFactureLe();
         $invoicepdf = $this->getPdf()->getOutputFromHtml($html);
 

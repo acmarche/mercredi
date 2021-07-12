@@ -8,10 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait PdfDownloaderTrait
 {
-    /**
-     * @var Pdf
-     */
-    public $pdf;
+    public Pdf $pdf;
 
     /**
      * @required
@@ -21,9 +18,6 @@ trait PdfDownloaderTrait
         $this->pdf = $pdf;
     }
 
-    /**
-     * @return Pdf
-     */
     public function getPdf(): Pdf
     {
         return $this->pdf;

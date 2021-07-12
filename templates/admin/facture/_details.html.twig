@@ -25,7 +25,14 @@
         <th>Payé le</th>
         <td>{{ facture.payeLe ? facture.payeLe | format_date('full') }}</td>
     </tr>
-
+    <tr>
+        <th>Envoyé le</th>
+        <td>{{ facture.envoyeLe ? facture.envoyeLe | format_date('full') }}</td>
+    </tr>
+    <tr>
+        <th>Envoyé à</th>
+        <td>{{ facture.envoyeA }}</td>
+    </tr>
     </thead>
 </table>
 

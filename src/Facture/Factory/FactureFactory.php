@@ -34,7 +34,41 @@ final class FactureFactory
         return $facture;
     }
 
-    public function generateFullHtml(Facture $facture): string
+    public function generateOneHtml(Facture $facture): string
+    {
+        $content = $this->prepareContent($facture);
+
+        return $this->environment->render(
+            '@AcMarcheMercrediAdmin/facture/hotton/pdf.html.twig',
+            [
+                'content' => $content,
+            ]
+        );
+    }
+
+    /**
+     * @param array $factures
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function generateMultipleHtml(array $factures): string
+    {
+        $content = '';
+        foreach ($factures as $facture) {
+            $content .= $this->prepareContent($facture);
+        }
+
+        return $this->environment->render(
+            '@AcMarcheMercrediAdmin/facture/hotton/pdf.html.twig',
+            [
+                'content' => $content,
+            ]
+        );
+    }
+
+    private function prepareContent(Facture $facture): string
     {
         $tuteur = $facture->getTuteur();
         $organisation = $this->organisationRepository->getOrganisation();
@@ -69,7 +103,7 @@ final class FactureFactory
         }
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/index.html.twig',
+            '@AcMarcheMercrediAdmin/facture/hotton/_content.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,

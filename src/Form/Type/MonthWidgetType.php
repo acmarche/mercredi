@@ -16,7 +16,7 @@ final class MonthWidgetType extends AbstractType
                 'label' => 'Mois',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Format mois-année: 06-2021',
+                    'placeholder' => '06-2021',
                     'autocomplete' => 'off',
                 ],
                 'constraints' => [new Regex('#^\d{2}-\d{4}$#')],
