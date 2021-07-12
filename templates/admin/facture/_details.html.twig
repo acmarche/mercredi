@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <th>Envoyé le</th>
-        <td>{{ facture.envoyeLe ? facture.envoyeLe | format_date('full') }}</td>
+        <td>{{ facture.envoyeLe ? facture.envoyeLe | format_datetime('full', 'medium') }}</td>
     </tr>
     <tr>
         <th>Envoyé à</th>
