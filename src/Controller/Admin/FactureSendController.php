@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Facture\Form\FactureSelectSendType;
 use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
 use AcMarche\Mercredi\Facture\Mailer\FactureMailer;
-use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -38,6 +37,34 @@ final class FactureSendController extends AbstractController
         $this->factureRepository = $factureRepository;
         $this->factureMailer = $factureMailer;
         $this->facturePdfFactory = $facturePdfFactory;
+    }
+
+    /**
+     * @Route("/select/month", name="mercredi_admin_facture_send_select_month", methods={"GET","POST"})
+     */
+    public function selectMonth(Request $request): Response
+    {
+        $form = $this->createForm(FactureSelectSendType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $mois = $form->get('mois')->getData();
+            $mode = $form->get('mode')->getData();
+            if ($mode === 'mail') {
+                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $mois]);
+            }
+            if ($mode === 'papier') {
+                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_paper', ['month' => $mois]);
+            }
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/select_month.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -77,45 +104,17 @@ final class FactureSendController extends AbstractController
     }
 
     /**
-     * @Route("/select/month", name="mercredi_admin_facture_send_select_month", methods={"GET","POST"})
-     */
-    public function selectMonth(Request $request): Response
-    {
-        $form = $this->createForm(FactureSelectSendType::class);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $mois = $form->get('mois')->getData();
-            $mode = $form->get('mode')->getData();
-            if ($mode === 'mail') {
-                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $mois]);
-            }
-            if ($mode === 'papier') {
-                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_paper', ['month' => $mois]);
-            }
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediAdmin/facture/select_month.html.twig',
-            [
-                'form' => $form->createView(),
-            ]
-        );
-    }
-
-    /**
      * @Route("/all/mail/{month}", name="mercredi_admin_facture_send_all_by_mail", methods={"GET","POST"})
      */
     public function sendAllFacture(Request $request, string $month): Response
     {
+        $factures = $this->factureRepository->findFacturesByMonth($month);
         $form = $this->createForm(FactureSendAllType::class, $this->factureMailer->init());
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $factures = $this->factureRepository->findFacturesByMonth($month);
             if (count($factures) === 0) {
                 $this->addFlash('warning', 'Aucune facture trouvée pour ce mois');
 
@@ -131,16 +130,15 @@ final class FactureSendController extends AbstractController
                     }
                     $data['to'] = count($emails) > 0 ? $emails[0] : null;
                     $this->factureMailer->sendFacture($facture, $data);
-                    $this->addFlash('success', 'La facture a bien été envoyée');
                     $facture->setEnvoyeA($data['to']);
                     $facture->setEnvoyeLe(new \DateTime());
                 } catch (TransportExceptionInterface $e) {
-                    $this->addFlash('danger', 'Une erreur est survenue: '.$e->getMessage());
+                    $this->addFlash('danger', 'Une erreur est survenue pour: '.$e->getMessage());
                 }
             }
 
+            $this->addFlash('success', 'Les factures ont bien été envoyées');
             $this->factureRepository->flush();
-            $this->dispatchMessage(new FacturesCreated($factures));
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }
@@ -149,14 +147,37 @@ final class FactureSendController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/send_all.html.twig',
             [
                 'form' => $form->createView(),
+                'factures' => $factures,
+                'month' => $month,
             ]
         );
     }
 
     /**
-     * @Route("/all/paper/{month}", name="mercredi_admin_facture_send_all_by_paper", methods={"GET","POST"})
+     * @Route("/all/paper/{month}", name="mercredi_admin_facture_send_all_by_paper", methods={"GET"})
      */
     public function sendAllFacturePapier(string $month): Response
+    {
+        $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);
+        if (count($factures) === 0) {
+            $this->addFlash('warning', 'Aucune facture trouvée pour ce mois au format papier');
+
+            return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/paper.html.twig',
+            [
+                'factures' => $factures,
+                'month' => $month,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/download/paper/{month}", name="mercredi_admin_facture_send_download_by_paper", methods={"GET"})
+     */
+    public function downloadFacturePapier(string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);
         if (count($factures) === 0) {
