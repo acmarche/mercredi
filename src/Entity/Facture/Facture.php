@@ -108,24 +108,24 @@ class Facture implements TimestampableInterface, UuidableInterface
         return $ecoles;
     }
 
-    public function getPayeLe(): ?DateTimeInterface
+    public function getPayeLe(): ?\DateTimeInterface
     {
         return $this->payeLe;
     }
 
-    public function setPayeLe(?DateTimeInterface $payeLe): self
+    public function setPayeLe(?\DateTimeInterface $payeLe): self
     {
         $this->payeLe = $payeLe;
 
         return $this;
     }
 
-    public function getFactureLe(): ?DateTimeInterface
+    public function getFactureLe(): ?\DateTimeInterface
     {
         return $this->factureLe;
     }
 
-    public function setFactureLe(?DateTimeInterface $factureLe): self
+    public function setFactureLe(?\DateTimeInterface $factureLe): self
     {
         $this->factureLe = $factureLe;
 

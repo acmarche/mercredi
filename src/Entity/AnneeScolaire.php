@@ -55,14 +55,14 @@ class AnneeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): iterable
+    public function getEnfants(): Collection
     {
         return $this->enfants;
     }
 
     public function addEnfant(Enfant $enfant): self
     {
-        if (! $this->enfants->contains($enfant)) {
+        if (!$this->enfants->contains($enfant)) {
             $this->enfants[] = $enfant;
             $enfant->setAnneeScolaire($this);
         }
@@ -72,8 +72,7 @@ class AnneeScolaire
 
     public function removeEnfant(Enfant $enfant): self
     {
-        if ($this->enfants->contains($enfant)) {
-            $this->enfants->removeElement($enfant);
+        if ($this->enfants->removeElement($enfant)) {
             // set the owning side to null (unless already changed)
             if ($enfant->getAnneeScolaire() === $this) {
                 $enfant->setAnneeScolaire(null);
@@ -107,7 +106,7 @@ class AnneeScolaire
         return $this;
     }
 
-    public function getAnneeSuivante(): ?AnneeScolaire
+    public function getAnneeSuivante(): ?self
     {
         return $this->annee_suivante;
     }

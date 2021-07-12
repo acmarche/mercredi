@@ -106,17 +106,4 @@ final class FactureFactory
 
         return $data;
     }
-
-    public function generateHtml(Facture $facture): string
-    {
-        $tuteur = $facture->getTuteur();
-
-        return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/_facture.html.twig',
-            [
-                'facture' => $facture,
-                'tuteur' => $tuteur,
-            ]
-        );
-    }
 }

@@ -23,30 +23,6 @@ use Doctrine\ORM\NonUniqueResultException;
  */
 final class PresenceRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
-    private const PRESENCE = 'presence';
-    /**
-     * @var string
-     */
-    private const JOUR = 'jour';
-    /**
-     * @var string
-     */
-    private const WITH = 'WITH';
-    /**
-     * @var string
-     */
-    private const ENFANT = 'enfant';
-    /**
-     * @var string
-     */
-    private const TUTEUR = 'tuteur';
-    /**
-     * @var string
-     */
-    private const JOURS = 'jours';
     private JourRepository $jourRepository;
 
     public function __construct(ManagerRegistry $managerRegistry, JourRepository $jourRepository)
@@ -71,14 +47,14 @@ final class PresenceRepository extends ServiceEntityRepository
 
     public function findPresencesByEnfantAndJour(Enfant $enfant, Jour $jour): ?Presence
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.jour', self::JOUR, self::WITH)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT, self::JOUR)
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant', 'jour')
             ->andWhere('presence.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
+            ->setParameter('enfant', $enfant)
             ->andWhere('presence.jour = :jour')
-            ->setParameter(self::JOUR, $jour)
+            ->setParameter('jour', $jour)
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -87,13 +63,13 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findPresencesByEnfant(Enfant $enfant): array
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.tuteur', self::TUTEUR, self::WITH)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
-            ->addSelect(self::TUTEUR)
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
+            ->addSelect('tuteur')
             ->andWhere('presence.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
+            ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
     }
 
@@ -102,12 +78,12 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findPresencesByTuteur(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.tuteur', self::TUTEUR, self::WITH)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT, self::TUTEUR)
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant', 'tuteur')
             ->andWhere('presence.tuteur = :tuteur')
-            ->setParameter(self::TUTEUR, $tuteur)
+            ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
     }
 
@@ -116,13 +92,22 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findPresencesNonPaysByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.tuteur', self::TUTEUR, self::WITH)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT, self::TUTEUR)
+        $qb = $this->createQueryBuilder('presence')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.facture_presences', 'facture_presences', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'tuteur', 'facture_presences', 'jour')
             ->andWhere('presence.tuteur = :tuteur')
-            ->setParameter(self::TUTEUR, $tuteur)
-            ->getQuery()->getResult();
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture_presences IS NULL');
+
+        if ($date) {
+            $qb->andWhere('jour.date_jour LIKE :date')
+                ->setParameter('date', $date->format('Y-m').'%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 
@@ -133,12 +118,12 @@ final class PresenceRepository extends ServiceEntityRepository
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->leftJoin('presence.jour', self::JOUR, self::WITH)
-            ->addSelect(self::ENFANT, self::JOUR)
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter(self::JOURS, $jours)
+            ->setParameter('jour', $jours)
             ->getQuery()->getResult();
     }
 
@@ -149,14 +134,14 @@ final class PresenceRepository extends ServiceEntityRepository
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->leftJoin('presence.jour', self::JOUR, self::WITH)
-            ->addSelect(self::ENFANT, self::JOUR)
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter(self::JOURS, $jours)
+            ->setParameter('jour', $jours)
             ->andWhere('presence.tuteur = :tuteur')
-            ->setParameter(self::TUTEUR, $tuteur)
+            ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
     }
 
@@ -164,14 +149,14 @@ final class PresenceRepository extends ServiceEntityRepository
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->leftJoin('presence.jour', self::JOUR, self::WITH)
-            ->addSelect(self::ENFANT, self::JOUR)
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter(self::JOURS, $jours)
+            ->setParameter('jour', $jours)
             ->andWhere('presence.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
+            ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
     }
 
@@ -180,14 +165,14 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findPlainesByEnfant(Enfant $enfant): array
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
-            ->leftJoin('presence.jour', self::JOUR, self::WITH)
-            ->leftJoin('jour.plaine_jour', 'plaine_jour', self::WITH)
-            ->addSelect(self::ENFANT, self::JOUR, 'plaine_jour')
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->leftJoin('jour.plaine_jour', 'plaine_jour', 'WITH')
+            ->addSelect('enfant', 'jour', 'plaine_jour')
             ->andWhere('plaine_jour IS NOT NULL')
             ->andWhere('presence.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
+            ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
     }
 
@@ -198,11 +183,11 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
     {
-        return $this->createQueryBuilder(self::PRESENCE)
+        return $this->createQueryBuilder('presence')
             ->andWhere('presence.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
+            ->setParameter('enfant', $enfant)
             ->andWhere('presence.jour = :jour')
-            ->setParameter(self::JOUR, $jour)
+            ->setParameter('jour', $jour)
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -215,11 +200,11 @@ final class PresenceRepository extends ServiceEntityRepository
     {
         $jours = $this->jourRepository->findDaysByMonth($dateTime);
 
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->join('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        return $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter(self::JOURS, $jours)
+            ->setParameter('jour', $jours)
             ->getQuery()->getResult();
     }
 
@@ -230,23 +215,23 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findByDay($jour)
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->join('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        return $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
             ->andWhere('presence.jour = :jour')
-            ->setParameter(self::JOUR, $jour)
+            ->setParameter('jour', $jour)
             ->getQuery()->getResult();
     }
 
     public function findOneByEnfantJour(Enfant $enfant, $jour): ?Presence
     {
-        return $this->createQueryBuilder(self::PRESENCE)
-            ->join('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        return $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant')
             ->andWhere('presence.jour = :jour')
-            ->setParameter(self::JOUR, $jour)
+            ->setParameter('jour', $jour)
             ->andWhere('presence.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
+            ->setParameter('enfant', $enfant)
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -255,13 +240,13 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findPresencesByJourAndEcole(Jour $jour, ?Ecole $ecole): array
     {
-        $queryBuilder = $this->createQueryBuilder(self::PRESENCE)
-            ->join('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT);
+        $queryBuilder = $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant');
 
         if ($jour) {
             $queryBuilder->andWhere('presence.jour = :jour')
-                ->setParameter(self::JOUR, $jour);
+                ->setParameter('jour', $jour);
         }
 
         if (null !== $ecole) {
@@ -278,10 +263,10 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findPresencesByJours(array $jours): array
     {
-        $queryBuilder = $this->createQueryBuilder(self::PRESENCE)
-            ->join('presence.enfant', self::ENFANT, self::WITH)
-            ->join('presence.jour', self::JOUR, self::WITH)
-            ->addSelect(self::ENFANT, self::JOUR);
+        $queryBuilder = $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->join('presence.jour', 'jour', 'WITH')
+            ->addSelect('enfant', 'jour');
 
         $queryBuilder->andWhere('presence.jour IN (:jours)')
             ->setParameter('jours', $jours);
@@ -294,9 +279,9 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function search(string $nom, Ecole $ecole, string $annee_scolaire): array
     {
-        $queryBuilder = $this->createQueryBuilder(self::PRESENCE)
-            ->join('presence.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT);
+        $queryBuilder = $this->createQueryBuilder('presence')
+            ->join('presence.enfant', 'enfant', 'WITH')
+            ->addSelect('enfant');
 
         if ('' !== $nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :nom')

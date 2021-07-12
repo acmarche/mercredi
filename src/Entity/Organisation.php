@@ -64,8 +64,10 @@ class Organisation
         return $this->initiale;
     }
 
-    public function setInitiale(?string $initiale): void
+    public function setInitiale(?string $initiale): self
     {
         $this->initiale = $initiale;
+
+        return $this;
     }
 }

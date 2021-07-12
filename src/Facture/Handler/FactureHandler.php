@@ -4,9 +4,11 @@ namespace AcMarche\Mercredi\Facture\Handler;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
+use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
@@ -14,6 +16,7 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use Carbon\Carbon;
 
 final class FactureHandler
 {
@@ -52,13 +55,50 @@ final class FactureHandler
     }
 
     /**
-     * @param int[] $presencesId
+     * @param Facture $facture
+     * @param array|int[] $presencesId
+     * @param array|int[] $accueilsId
+     * @return Facture
      */
-    public function handleNew(Facture $facture, array $presencesId, array $accueilsId): Facture
+    public function handleManually(Facture $facture, array $presencesId, array $accueilsId): Facture
     {
-        $this->handlePresences($presencesId, $facture);
-        $this->handleAccueils($accueilsId, $facture);
-        if (! $facture->getId()) {
+        $presences = $this->presenceRepository->findBy(['id' => $presencesId]);
+        $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
+
+        $this->finish($facture, $presences, $accueils);
+
+        return $facture;
+    }
+
+    public function generateByMonth(Tuteur $tuteur, $month): ?Facture
+    {
+        list($month, $year) = explode('-', $month);
+        $date = Carbon::createFromDate($year, $month, 01);
+
+        $facture = $this->newInstance($tuteur);
+        $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur, $date->toDateTime());
+        $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur, $date->toDateTime());
+
+        if (count($presences) === 0 && count($accueils) === 0) {
+            return null;
+        }
+
+        $this->finish($facture, $presences, $accueils);
+
+        return $facture;
+    }
+
+    /**
+     * @param Facture $facture
+     * @param array|Presence[] $presences
+     * @param array|Accueil[] $accueils
+     * @return Facture
+     */
+    private function finish(Facture $facture, array $presences, array $accueils)
+    {
+        $this->attachPresences($facture, $presences);
+        $this->attachAccueils($facture, $accueils);
+        if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
         $this->factureRepository->flush();
@@ -67,15 +107,13 @@ final class FactureHandler
         return $facture;
     }
 
-    private function handlePresences(array $presencesId, Facture $facture): void
+    /**
+     * @param array|Presence[] $presences
+     * @param Facture $facture
+     */
+    private function attachPresences(Facture $facture, array $presences): void
     {
-        foreach ($presencesId as $presenceId) {
-            if (null === ($presence = $this->presenceRepository->find($presenceId))) {
-                continue;
-            }
-            if (null !== $this->facturePresenceRepository->findByPresence($presence)) {
-                continue;
-            }
+        foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence);
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
@@ -87,15 +125,13 @@ final class FactureHandler
         }
     }
 
-    private function handleAccueils(array $accueilsId, Facture $facture): void
+    /**
+     * @param array|Accueil[] $accueils
+     * @param Facture $facture
+     */
+    private function attachAccueils(Facture $facture, array $accueils): void
     {
-        foreach ($accueilsId as $accueilId) {
-            if (null === ($accueil = $this->accueilRepository->find($accueilId))) {
-                continue;
-            }
-            if (null !== $this->factureAccueilRepository->findByAccueil($accueil)) {
-                continue;
-            }
+        foreach ($accueils as $accueil) {
             $factureAccueil = new FactureAccueil($facture, $accueil);
             $factureAccueil->setAccueilDate($accueil->getDateJour());
             $factureAccueil->setHeure($accueil->getHeure());

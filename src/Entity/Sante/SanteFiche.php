@@ -122,7 +122,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponses(): array
+    public function getReponses(): Collection
     {
         return $this->reponses;
     }
@@ -153,7 +153,7 @@ class SanteFiche implements TimestampableInterface
 
     public function addReponse(SanteReponse $reponse): self
     {
-        if (! $this->reponses->contains($reponse)) {
+        if (!$this->reponses->contains($reponse)) {
             $this->reponses[] = $reponse;
             $reponse->setSanteFiche($this);
         }
@@ -163,8 +163,7 @@ class SanteFiche implements TimestampableInterface
 
     public function removeReponse(SanteReponse $reponse): self
     {
-        if ($this->reponses->contains($reponse)) {
-            $this->reponses->removeElement($reponse);
+        if ($this->reponses->removeElement($reponse)) {
             // set the owning side to null (unless already changed)
             if ($reponse->getSanteFiche() === $this) {
                 $reponse->setSanteFiche(null);

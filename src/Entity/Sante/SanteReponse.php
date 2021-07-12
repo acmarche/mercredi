@@ -46,24 +46,28 @@ class SanteReponse
         $this->reponse = false;
     }
 
-    public function getQuestion(): SanteQuestion
+    public function getQuestion(): ?SanteQuestion
     {
         return $this->question;
     }
 
-    public function setQuestion(SanteQuestion $question): void
+    public function setQuestion(?SanteQuestion $question): self
     {
         $this->question = $question;
+
+        return $this;
     }
 
-    public function getSanteFiche(): SanteFiche
+    public function getSanteFiche(): ?SanteFiche
     {
         return $this->sante_fiche;
     }
 
-    public function setSanteFiche(SanteFiche $sante_fiche): void
+    public function setSanteFiche(?SanteFiche $sante_fiche): self
     {
         $this->sante_fiche = $sante_fiche;
+
+        return $this;
     }
 
     public function isReponse(): bool
@@ -71,9 +75,11 @@ class SanteReponse
         return $this->reponse;
     }
 
-    public function setReponse(?bool $reponse): void
+    public function setReponse(bool $reponse): self
     {
         $this->reponse = $reponse;
+
+        return $this;
     }
 
     public function getRemarque(): ?string
@@ -81,12 +87,14 @@ class SanteReponse
         return $this->remarque;
     }
 
-    public function setRemarque(?string $remarque): void
+    public function setRemarque(?string $remarque): self
     {
         $this->remarque = $remarque;
+
+        return $this;
     }
 
-    public function getReponse(): bool
+    public function getReponse(): ?bool
     {
         return $this->reponse;
     }

@@ -13,6 +13,8 @@ use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
@@ -80,10 +82,41 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
         $this->jour = $jour;
         $this->absent = 0;
         $this->half = 0;
+        $this->facture_presences = new ArrayCollection();
     }
 
     public function __toString()
     {
         return 'presence to string';
+    }
+
+    /**
+     * @return Collection|FacturePresence[]
+     */
+    public function getFacturePresences(): Collection
+    {
+        return $this->facture_presences;
+    }
+
+    public function addFacturePresence(FacturePresence $facturePresence): self
+    {
+        if (!$this->facture_presences->contains($facturePresence)) {
+            $this->facture_presences[] = $facturePresence;
+            $facturePresence->setPresence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFacturePresence(FacturePresence $facturePresence): self
+    {
+        if ($this->facture_presences->removeElement($facturePresence)) {
+            // set the owning side to null (unless already changed)
+            if ($facturePresence->getPresence() === $this) {
+                $facturePresence->setPresence(null);
+            }
+        }
+
+        return $this;
     }
 }

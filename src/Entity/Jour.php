@@ -98,25 +98,24 @@ class Jour implements TimestampableInterface
         return $this->date_jour;
     }
 
-    /**
-     * @param DateTime|DateTimeImmutable|null $date_jour
-     */
-    public function setDateJour(?DateTimeInterface $date_jour): void
+    public function setDateJour(\DateTimeInterface $date_jour): self
     {
         $this->date_jour = $date_jour;
+
+        return $this;
     }
 
     /**
      * @return Collection|Presence[]
      */
-    public function getPresences(): iterable
+    public function getPresences(): Collection
     {
         return $this->presences;
     }
 
     public function addPresence(Presence $presence): self
     {
-        if (! $this->presences->contains($presence)) {
+        if (!$this->presences->contains($presence)) {
             $this->presences[] = $presence;
             $presence->setJour($this);
         }
@@ -126,8 +125,7 @@ class Jour implements TimestampableInterface
 
     public function removePresence(Presence $presence): self
     {
-        if ($this->presences->contains($presence)) {
-            $this->presences->removeElement($presence);
+        if ($this->presences->removeElement($presence)) {
             // set the owning side to null (unless already changed)
             if ($presence->getJour() === $this) {
                 $presence->setJour(null);
@@ -140,7 +138,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Ecole[]
      */
-    public function getEcoles(): iterable
+    public function getEcoles(): Collection
     {
         return $this->ecoles;
     }
@@ -156,9 +154,7 @@ class Jour implements TimestampableInterface
 
     public function removeEcole(Ecole $ecole): self
     {
-        if ($this->ecoles->contains($ecole)) {
-            $this->ecoles->removeElement($ecole);
-        }
+        $this->ecoles->removeElement($ecole);
 
         return $this;
     }

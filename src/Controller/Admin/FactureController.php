@@ -2,13 +2,12 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
-use Carbon\Carbon;
-use Symfony\Component\HttpFoundation\Response;
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
+use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
 use AcMarche\Mercredi\Facture\Form\FactureType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
@@ -17,10 +16,11 @@ use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Facture\Utils\FactureUtils;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,18 +35,21 @@ final class FactureController extends AbstractController
     private FactureRepository $factureRepository;
     private FactureHandler $factureHandler;
     private FactureMailer $factureMailer;
-    private FactureUtils $factureUtils;
+    private PresenceRepository $presenceRepository;
+    private AccueilRepository $accueilRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
         FactureMailer $factureMailer,
-        FactureUtils $factureUtils
+        PresenceRepository $presenceRepository,
+        AccueilRepository $accueilRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
         $this->factureMailer = $factureMailer;
-        $this->factureUtils = $factureUtils;
+        $this->presenceRepository = $presenceRepository;
+        $this->accueilRepository = $accueilRepository;
     }
 
     /**
@@ -106,8 +109,8 @@ final class FactureController extends AbstractController
     {
         $facture = $this->factureHandler->newInstance($tuteur);
 
-        $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
-        $accueils = $this->factureUtils->getAccueilsNonPayes($tuteur);
+        $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur);
+        $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur);
 
         $form = $this->createForm(FactureType::class, $facture);
         $form->handleRequest($request);
@@ -115,7 +118,7 @@ final class FactureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $presencesF = $request->request->get('presences', []);
             $accueilsF = $request->request->get('accueils', []);
-            $this->factureHandler->handleNew($facture, $presencesF, $accueilsF);
+            $this->factureHandler->handleManually($facture, $presencesF, $accueilsF);
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
 
@@ -145,18 +148,20 @@ final class FactureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $month = $form->get('month')->getData();
 
-            $facture = $this->factureHandler->newInstance($tuteur);
-        $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
-        $accueils = $this->factureUtils->getAccueilsNonPayes($tuteur);
+            if (!$facture = $this->factureHandler->generateByMonth($tuteur, $month)) {
+                $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
+                return $this->redirectToRoute('mercredi_admin_facture_index');
+            }
+
+            $this->dispatchMessage(new FactureCreated($facture->getId()));
+
+            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
 
-        return $this->render(
-            '@AcMarcheMercrediAdmin/facture/new.html.twig',
-            [
+        $this->addFlash('danger', 'Date non valide');
 
-            ]
-        );
+        return $this->redirectToRoute('mercredi_admin_facture_index');
     }
 
     /**

@@ -6,10 +6,6 @@ use AcMarche\Mercredi\Entity\Jour;
 
 trait JourTrait
 {
-    /**
-     * @var Jour
-     *
-     * */
     private ?Jour $jour = null;
 
     public function getJour(): Jour

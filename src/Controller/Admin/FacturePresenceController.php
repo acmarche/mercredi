@@ -2,17 +2,17 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Facture\Utils\FactureUtils;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,19 +23,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FacturePresenceController extends AbstractController
 {
-    private const FACTURE = 'facture';
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandler $factureHandler;
-    private FactureUtils $factureUtils;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
         FactureHandler $factureHandler,
-        FactureUtils $factureUtils
+        PresenceRepository $presenceRepository
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureHandler = $factureHandler;
-        $this->factureUtils = $factureUtils;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -44,14 +43,14 @@ final class FacturePresenceController extends AbstractController
     public function attach(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
+        $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur);
 
         $form = $this->createForm(FactureAttachType::class, $facture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $presencesF = $request->request->get('presences', []);
-            $this->factureHandler->handleNew($facture, $presencesF, []);
+            $this->factureHandler->handleManually($facture, $presencesF, []);
 
             $this->addFlash('success', 'Les présences ont bien été attachées');
 
@@ -61,7 +60,7 @@ final class FacturePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_presence/attach.html.twig',
             [
-                self::FACTURE => $facture,
+                'facture' => $facture,
                 'presences' => $presences,
                 'form' => $form->createView(),
             ]
@@ -78,7 +77,7 @@ final class FacturePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_presence/show.html.twig',
             [
-                self::FACTURE => $facture,
+                'facture' => $facture,
                 'facturePresence' => $facturePresence,
             ]
         );
@@ -100,7 +99,7 @@ final class FacturePresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/edit.html.twig',
             [
-                self::FACTURE => $facture,
+                'facture' => $facture,
                 'form' => $form->createView(),
             ]
         );

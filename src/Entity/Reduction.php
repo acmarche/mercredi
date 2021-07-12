@@ -48,9 +48,11 @@ class Reduction
         return $this->pourcentage;
     }
 
-    public function setPourcentage(?float $pourcentage): void
+    public function setPourcentage(?float $pourcentage): self
     {
         $this->pourcentage = $pourcentage;
+
+        return $this;
     }
 
     public function getForfait(): ?float
@@ -58,8 +60,10 @@ class Reduction
         return $this->forfait;
     }
 
-    public function setForfait(?float $forfait): void
+    public function setForfait(?float $forfait): self
     {
         $this->forfait = $forfait;
+
+        return $this;
     }
 }

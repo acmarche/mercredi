@@ -19,11 +19,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class AccueilRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
-    private const ACCUEIL = 'accueil';
-
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Accueil::class);
@@ -31,13 +26,13 @@ final class AccueilRepository extends ServiceEntityRepository
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder(self::ACCUEIL)
+        return $this->createQueryBuilder('accueil')
             ->orderBy('accueil.date_jour', 'ASC');
     }
 
     public function isRegistered(Accueil $accueil, Enfant $enfant): ?Accueil
     {
-        return $this->createQueryBuilder(self::ACCUEIL)
+        return $this->createQueryBuilder('accueil')
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour = :date')
@@ -52,7 +47,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByEnfant(Enfant $enfant): array
     {
-        return $this->createQueryBuilder(self::ACCUEIL)
+        return $this->createQueryBuilder('accueil')
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
@@ -63,7 +58,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByEnfantAndHeure(Enfant $enfant, string $heure): array
     {
-        return $this->createQueryBuilder(self::ACCUEIL)
+        return $this->createQueryBuilder('accueil')
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.heure = :heure')
@@ -76,7 +71,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByTuteur(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder(self::ACCUEIL)
+        return $this->createQueryBuilder('accueil')
             ->andWhere('accueil.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
@@ -90,7 +85,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByDateAndHeureAndEcoles(DateTimeInterface $date, ?string $heure, iterable $ecoles): array
     {
-        $qb = $this->createQueryBuilder(self::ACCUEIL)
+        $qb = $this->createQueryBuilder('accueil')
             ->leftJoin('accueil.enfant', 'enfant', 'WITH')
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
             ->addSelect('enfant', 'ecole')
@@ -120,7 +115,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByDateAndHeure(DateTimeInterface $date, ?string $heure): array
     {
-        $qb = $this->createQueryBuilder(self::ACCUEIL)
+        $qb = $this->createQueryBuilder('accueil')
             ->leftJoin('accueil.enfant', 'enfant', 'WITH')
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
             ->addSelect('enfant', 'ecole')
@@ -136,6 +131,29 @@ final class AccueilRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param Tuteur $tuteur
+     * @param \DateTime|null $date
+     * @return Accueil[]
+     */
+    public function getAccueilsNonPayesByTuteurAndMonth(Tuteur $tuteur, ?DateTime $date = null): array
+    {
+        $qb = $this->createQueryBuilder('accueil')
+            ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
+            ->leftJoin('accueil.facture_accueils', 'facture_accueils', 'WITH')
+            ->addSelect('tuteur', 'enfant', 'facture_accueils')
+            ->andWhere('accueil.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture_accueils IS NULL');
+
+        if ($date) {
+            $qb->andWhere('accueil.date_jour LIKE :date')
+                ->setParameter('date', $date->format('Y-m').'%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 
     public function remove(Accueil $accueil): void
     {
@@ -151,4 +169,5 @@ final class AccueilRepository extends ServiceEntityRepository
     {
         $this->_em->persist($accueil);
     }
+
 }

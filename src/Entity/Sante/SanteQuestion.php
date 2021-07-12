@@ -69,9 +69,11 @@ class SanteQuestion
         return $this->complement;
     }
 
-    public function setComplement(bool $complement): void
+    public function setComplement(bool $complement): self
     {
         $this->complement = $complement;
+
+        return $this;
     }
 
     public function getComplementLabel(): ?string
@@ -79,9 +81,11 @@ class SanteQuestion
         return $this->complement_label;
     }
 
-    public function setComplementLabel(?string $complement_label): void
+    public function setComplementLabel(?string $complement_label): self
     {
         $this->complement_label = $complement_label;
+
+        return $this;
     }
 
     public function getDisplayOrder(): ?int
@@ -89,12 +93,14 @@ class SanteQuestion
         return $this->display_order;
     }
 
-    public function setDisplayOrder(?int $display_order): void
+    public function setDisplayOrder(?int $display_order): self
     {
         $this->display_order = $display_order;
+
+        return $this;
     }
 
-    public function getComplement(): bool
+    public function getComplement(): ?bool
     {
         return $this->complement;
     }
@@ -115,7 +121,7 @@ class SanteQuestion
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponse(): array
+    public function getReponse(): Collection
     {
         return $this->reponse;
     }
@@ -132,8 +138,7 @@ class SanteQuestion
 
     public function removeReponse(SanteReponse $reponse): self
     {
-        if ($this->reponse->contains($reponse)) {
-            $this->reponse->removeElement($reponse);
+        if ($this->reponse->removeElement($reponse)) {
             // set the owning side to null (unless already changed)
             if ($reponse->getQuestion() === $this) {
                 $reponse->setQuestion(null);

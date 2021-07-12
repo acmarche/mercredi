@@ -33,7 +33,7 @@ class FactureAccueil
     private Facture $facture;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Accueil")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Accueil", inversedBy="facture_accueils")
      */
     private ?Accueil $accueil=null;
 
@@ -63,19 +63,19 @@ class FactureAccueil
         return $this->accueilDate;
     }
 
-    public function setAccueilDate(DateTimeInterface $accueilDate): self
+    public function setAccueilDate(\DateTimeInterface $accueilDate): self
     {
         $this->accueilDate = $accueilDate;
 
         return $this;
     }
 
-    public function getCout(): ?float
+    public function getCout(): ?string
     {
         return $this->cout;
     }
 
-    public function setCout(float $cout): self
+    public function setCout(string $cout): self
     {
         $this->cout = $cout;
 

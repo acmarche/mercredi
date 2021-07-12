@@ -58,19 +58,19 @@ class FacturePresence
         return $this->presenceDate;
     }
 
-    public function setPresenceDate(DateTimeInterface $presenceDate): self
+    public function setPresenceDate(\DateTimeInterface $presenceDate): self
     {
         $this->presenceDate = $presenceDate;
 
         return $this;
     }
 
-    public function getCout(): ?float
+    public function getCout(): ?string
     {
         return $this->cout;
     }
 
-    public function setCout(float $cout): self
+    public function setCout(string $cout): self
     {
         $this->cout = $cout;
 

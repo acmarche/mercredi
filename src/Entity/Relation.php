@@ -53,8 +53,10 @@ class Relation
         return $this->type;
     }
 
-    public function setType(?string $type): void
+    public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
     }
 }

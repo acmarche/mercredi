@@ -84,12 +84,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return MercrediSecurity::niceName($this->getRoles());
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return (string)$this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -128,7 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIsVerified(): bool
+    public function getIsVerified(): ?bool
     {
         return $this->isVerified;
     }

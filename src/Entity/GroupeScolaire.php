@@ -65,7 +65,7 @@ class GroupeScolaire
         return $this->age_minimum;
     }
 
-    public function setAgeMinimum(int $age_minimum): self
+    public function setAgeMinimum(?int $age_minimum): self
     {
         $this->age_minimum = $age_minimum;
 
@@ -77,7 +77,7 @@ class GroupeScolaire
         return $this->age_maximum;
     }
 
-    public function setAgeMaximum(int $age_maximum): self
+    public function setAgeMaximum(?int $age_maximum): self
     {
         $this->age_maximum = $age_maximum;
 
@@ -87,14 +87,14 @@ class GroupeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): array
+    public function getEnfants(): Collection
     {
         return $this->enfants;
     }
 
     public function addEnfant(Enfant $enfant): self
     {
-        if (! $this->enfants->contains($enfant)) {
+        if (!$this->enfants->contains($enfant)) {
             $this->enfants[] = $enfant;
             $enfant->setGroupeScolaire($this);
         }
@@ -104,8 +104,7 @@ class GroupeScolaire
 
     public function removeEnfant(Enfant $enfant): self
     {
-        if ($this->enfants->contains($enfant)) {
-            $this->enfants->removeElement($enfant);
+        if ($this->enfants->removeElement($enfant)) {
             // set the owning side to null (unless already changed)
             if ($enfant->getGroupeScolaire() === $this) {
                 $enfant->setGroupeScolaire(null);
@@ -118,14 +117,14 @@ class GroupeScolaire
     /**
      * @return Collection|AnneeScolaire[]
      */
-    public function getAnneesScolaires(): iterable
+    public function getAnneesScolaires(): Collection
     {
         return $this->annees_scolaires;
     }
 
     public function addAnneesScolaire(AnneeScolaire $anneesScolaire): self
     {
-        if (! $this->annees_scolaires->contains($anneesScolaire)) {
+        if (!$this->annees_scolaires->contains($anneesScolaire)) {
             $this->annees_scolaires[] = $anneesScolaire;
             $anneesScolaire->setGroupeScolaire($this);
         }
@@ -135,8 +134,7 @@ class GroupeScolaire
 
     public function removeAnneesScolaire(AnneeScolaire $anneesScolaire): self
     {
-        if ($this->annees_scolaires->contains($anneesScolaire)) {
-            $this->annees_scolaires->removeElement($anneesScolaire);
+        if ($this->annees_scolaires->removeElement($anneesScolaire)) {
             // set the owning side to null (unless already changed)
             if ($anneesScolaire->getGroupeScolaire() === $this) {
                 $anneesScolaire->setGroupeScolaire(null);
@@ -149,14 +147,14 @@ class GroupeScolaire
     /**
      * @return Collection|PlaineGroupe[]
      */
-    public function getPlaineGroupes(): iterable
+    public function getPlaineGroupes(): Collection
     {
         return $this->plaine_groupes;
     }
 
     public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if (! $this->plaine_groupes->contains($plaineGroupe)) {
+        if (!$this->plaine_groupes->contains($plaineGroupe)) {
             $this->plaine_groupes[] = $plaineGroupe;
             $plaineGroupe->setGroupeScolaire($this);
         }
@@ -166,8 +164,7 @@ class GroupeScolaire
 
     public function removePlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if ($this->plaine_groupes->contains($plaineGroupe)) {
-            $this->plaine_groupes->removeElement($plaineGroupe);
+        if ($this->plaine_groupes->removeElement($plaineGroupe)) {
             // set the owning side to null (unless already changed)
             if ($plaineGroupe->getGroupeScolaire() === $this) {
                 $plaineGroupe->setGroupeScolaire(null);

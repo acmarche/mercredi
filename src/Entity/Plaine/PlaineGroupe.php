@@ -55,9 +55,11 @@ class PlaineGroupe
         return $this->plaine;
     }
 
-    public function setPlaine(?Plaine $plaine): void
+    public function setPlaine(?Plaine $plaine): self
     {
         $this->plaine = $plaine;
+
+        return $this;
     }
 
     public function getInscriptionMaximum(): ?int
