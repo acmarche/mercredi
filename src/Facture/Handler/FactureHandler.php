@@ -10,13 +10,16 @@ use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 
 final class FactureHandler
 {
@@ -28,6 +31,7 @@ final class FactureHandler
     private AccueilRepository $accueilRepository;
     private FactureAccueilRepository $factureAccueilRepository;
     private AccueilCalculatorInterface $accueilCalculator;
+    private TuteurRepository $tuteurRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -37,7 +41,8 @@ final class FactureHandler
         PresenceRepository $presenceRepository,
         AccueilRepository $accueilRepository,
         FactureAccueilRepository $factureAccueilRepository,
-        AccueilCalculatorInterface $accueilCalculator
+        AccueilCalculatorInterface $accueilCalculator,
+        TuteurRepository $tuteurRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureFactory = $factureFactory;
@@ -47,6 +52,7 @@ final class FactureHandler
         $this->accueilRepository = $accueilRepository;
         $this->factureAccueilRepository = $factureAccueilRepository;
         $this->accueilCalculator = $accueilCalculator;
+        $this->tuteurRepository = $tuteurRepository;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -66,16 +72,43 @@ final class FactureHandler
         $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
 
         $this->finish($facture, $presences, $accueils);
+        $facture->setMonth(date('d-Y'));
 
         return $facture;
     }
 
-    public function generateByMonth(Tuteur $tuteur, $month): ?Facture
+    public function generateByMonth(Tuteur $tuteur, string $month): ?Facture
     {
         list($month, $year) = explode('-', $month);
         $date = Carbon::createFromDate($year, $month, 01);
 
+        return $this->handleByTuteur($tuteur, $date);
+    }
+
+    /**
+     * @param $month
+     * @return array|null
+     */
+    public function generateByMonthForAll(string $month): array
+    {
+        list($month, $year) = explode('-', $month);
+        $date = Carbon::createFromDate($year, $month, 01);
+        $factures = [];
+
+        $tuteurs = $this->tuteurRepository->findAll();
+        foreach ($tuteurs as $tuteur) {
+            if ($facture = $this->handleByTuteur($tuteur, $date)) {
+                $factures[] = $facture;
+            }
+        }
+
+        return $factures;
+    }
+
+    private function handleByTuteur(Tuteur $tuteur, CarbonInterface $date): ?Facture
+    {
         $facture = $this->newInstance($tuteur);
+        $facture->setMonth($date->format('d-Y'));
         $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur, $date->toDateTime());
         $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur, $date->toDateTime());
 
@@ -96,6 +129,7 @@ final class FactureHandler
      */
     private function finish(Facture $facture, array $presences, array $accueils)
     {
+        $facture->setCommunication(CommunicationFactory::generate($facture));
         $this->attachPresences($facture, $presences);
         $this->attachAccueils($facture, $accueils);
         if (!$facture->getId()) {
@@ -143,4 +177,5 @@ final class FactureHandler
             $facture->addFactureAccueil($factureAccueil);
         }
     }
+
 }

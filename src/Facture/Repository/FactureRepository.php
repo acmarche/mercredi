@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Repository;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
+use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,7 +38,7 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
-    public function search(?string $tuteur, ?Ecole $ecole, ?bool $paye): array
+    public function search(?string $tuteur, ?Ecole $ecole, ?bool $paye, ?string $monthYear = null): array
     {
         $queryBuilder = $this->createQueryBuilder('facture')
             ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
@@ -57,6 +58,11 @@ final class FactureRepository extends ServiceEntityRepository
         if ($ecole !== null) {
             $queryBuilder->andWhere('enfantE.ecole = :ecole OR enfantA.ecole = :ecole')
                 ->setParameter('ecole', $ecole);
+        }
+
+        if ($monthYear !== null) {
+            $queryBuilder->andWhere('facture.month = :date')
+                ->setParameter('date', $monthYear);
         }
 
         switch ($paye) {

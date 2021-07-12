@@ -40,17 +40,31 @@ class Facture implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="factures")
      */
-    private ?Tuteur $tuteur=null;
-
+    private ?Tuteur $tuteur;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private ?DateTimeInterface $factureLe = null;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private ?DateTimeInterface $payeLe = null;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTimeInterface $envoyeLe = null;
+    /**
+     * @ORM\Column(type="string", length=100,nullable=true)
+     */
+    private ?string $envoyeA = null;
+    /**
+     * @ORM\Column(type="string", length=100,nullable=false)
+     */
+    private ?string $mois = null;
+    /**
+     * @ORM\Column(type="string", length=100,nullable=false)
+     */
+    private ?string $communication = null;
 
     /**
      * @var Ecole[] $ecoles
@@ -128,6 +142,54 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function setFactureLe(?\DateTimeInterface $factureLe): self
     {
         $this->factureLe = $factureLe;
+
+        return $this;
+    }
+
+    public function getEnvoyeLe(): ?\DateTimeInterface
+    {
+        return $this->envoyeLe;
+    }
+
+    public function setEnvoyeLe(?\DateTimeInterface $envoyeLe): self
+    {
+        $this->envoyeLe = $envoyeLe;
+
+        return $this;
+    }
+
+    public function getEnvoyeA(): ?string
+    {
+        return $this->envoyeA;
+    }
+
+    public function setEnvoyeA(?string $envoyeA): self
+    {
+        $this->envoyeA = $envoyeA;
+
+        return $this;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
+
+        return $this;
+    }
+
+    public function getCommunication(): ?string
+    {
+        return $this->communication;
+    }
+
+    public function setCommunication(string $communication): self
+    {
+        $this->communication = $communication;
 
         return $this;
     }

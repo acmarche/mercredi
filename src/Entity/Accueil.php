@@ -64,7 +64,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Tuteur $tuteur = null;
+    private ?Tuteur $tuteur;
 
     /**
      * @ORM\OneToMany(targetEntity=FactureAccueil::class, mappedBy="accueil")

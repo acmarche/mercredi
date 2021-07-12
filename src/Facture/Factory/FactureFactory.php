@@ -74,7 +74,6 @@ final class FactureFactory
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'organisation' => $organisation,
-                'mois' => '2021-06-01',
                 'data' => $data,
             ]
         );

@@ -1,6 +1,9 @@
 <a href="{{ path('mercredi_admin_facture_edit', { 'id': facture.id }) }}" role="button"
    class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
 
+<a href="{{ path('mercredi_admin_facture_payer', {'uuid': facture.uuid}) }}" class="btn btn-primary"
+   role='button'> <i class="fas fa-euro-sign"></i> Payer</a>
+
 <div class="btn-group">
     <div class="btn-group" role="group">
         <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"

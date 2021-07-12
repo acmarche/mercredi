@@ -7,7 +7,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 
 final class FactureSearchType extends AbstractType
 {
@@ -20,6 +22,18 @@ final class FactureSearchType extends AbstractType
                 [
                     'required' => false,
                     'attr' => ['placeholder' => 'Nom du tuteur'],
+                ]
+            )->add(
+                'month',
+                TextType::class,
+                [
+                    'label' => 'Mois',
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Format mois-année: 06-2021',
+                        'autocomplete' => 'off',
+                    ],
+                    'constraints' => [new Regex('#^\d{2}-\d{4}$#')],
                 ]
             )
             ->add(
