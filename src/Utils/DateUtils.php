@@ -148,4 +148,15 @@ final class DateUtils
     {
         return CarbonImmutable::create($year, $month, 01)->locale('fr');
     }
+
+    public static function getMonths(DateTimeInterface $dateBegin): CarbonPeriod
+    {
+        $date = Carbon::instance($dateBegin);
+        $today = Carbon::instance(new \DateTime());
+
+        $firstDayOfWeek = $date->toMutable()->toDateString();
+        $lastDayOffWeek = $today->toDateString(); //+6
+
+        return Carbon::parse($firstDayOfWeek)->monthsUntil($lastDayOffWeek);
+    }
 }

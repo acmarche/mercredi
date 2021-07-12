@@ -18,6 +18,7 @@ use AcMarche\Mercredi\Security\MercrediSecurity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -25,7 +26,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity("email")
  * @UniqueEntity("username")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdTrait;
     use EmailTrait;
@@ -51,7 +52,7 @@ class User implements UserInterface
     private ?string $email = null;
 
     /**
-     * @var string The hashed password
+     * The hashed password
      * @ORM\Column(type="string")
      */
     private ?string $password = null;

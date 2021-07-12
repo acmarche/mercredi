@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
+use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -50,15 +52,23 @@ final class FactureController extends AbstractController
     /**
      * @Route("/{id}/index", name="mercredi_admin_facture_index", methods={"GET","POST"})
      */
-    public function index(Tuteur $tuteur): Response
+    public function index(Request $request, Tuteur $tuteur): Response
     {
         $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
+        $form = $this->createForm(
+            FactureSelectMonthType::class,
+            null,
+            [
+                'action' => $this->generateUrl('mercredi_admin_facture_new_month', ['id' => $tuteur->getId()]),
+            ]
+        );
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/index.html.twig',
             [
                 'factures' => $factures,
                 'tuteur' => $tuteur,
+                'form' => $form->createView(),
             ]
         );
     }
@@ -90,15 +100,14 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/new", name="mercredi_admin_facture_new", methods={"GET","POST"})
+     * @Route("/{id}/new", name="mercredi_admin_facture_new_manual", methods={"GET","POST"})
      */
-    public function new(Request $request, Tuteur $tuteur): Response
+    public function newManual(Request $request, Tuteur $tuteur): Response
     {
         $facture = $this->factureHandler->newInstance($tuteur);
 
         $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
         $accueils = $this->factureUtils->getAccueilsNonPayes($tuteur);
-        //  $plaines = $this->factureUtils->getPlainesNonPayes($tuteur);
 
         $form = $this->createForm(FactureType::class, $facture);
         $form->handleRequest($request);
@@ -121,6 +130,31 @@ final class FactureController extends AbstractController
                 'accueils' => $accueils,
                 //   'plaines'=>$plaines,
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{id}/month/", name="mercredi_admin_facture_new_month", methods={"GET","POST"})
+     */
+    public function newMonth(Request $request, Tuteur $tuteur): Response
+    {
+        $form = $this->createForm(FactureSelectMonthType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $month = $form->get('month')->getData();
+
+            $facture = $this->factureHandler->newInstance($tuteur);
+        $presences = $this->factureUtils->getPresencesNonPayees($tuteur);
+        $accueils = $this->factureUtils->getAccueilsNonPayes($tuteur);
+
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/new.html.twig',
+            [
+
             ]
         );
     }

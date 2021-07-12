@@ -19,6 +19,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 
 /**
  * @ORM\Table("presence", uniqueConstraints={
@@ -45,7 +46,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
      */
-    private ?Jour $jour=null;
+    private ?Jour $jour = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
@@ -55,7 +56,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
      */
-    private ?Tuteur $tuteur=null;
+    private ?Tuteur $tuteur = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")
@@ -66,6 +67,11 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
      * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
      */
     private int $absent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FacturePresence::class, mappedBy="presence")
+     */
+    private ?iterable $facture_presences;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
     {

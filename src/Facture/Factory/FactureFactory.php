@@ -37,19 +37,6 @@ final class FactureFactory
     public function generateFullHtml(Facture $facture): string
     {
         $tuteur = $facture->getTuteur();
-
-        return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/pdf/index.html.twig',
-            [
-                'facture' => $facture,
-                'tuteur' => $tuteur,
-            ]
-        );
-    }
-
-    public function generateFullHtml2(Facture $facture): string
-    {
-        $tuteur = $facture->getTuteur();
         $organisation = $this->organisationRepository->getOrganisation();
         $data = [
             'enfants' => [],

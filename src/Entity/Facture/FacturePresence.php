@@ -33,7 +33,7 @@ class FacturePresence
     private Facture $facture;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Presence")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Presence", inversedBy="facture_presences")
      */
     private ?Presence $presence = null;
 

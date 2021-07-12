@@ -114,6 +114,21 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
+    public function findPresencesNonPaysByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
+    {
+        return $this->createQueryBuilder(self::PRESENCE)
+            ->leftJoin('presence.tuteur', self::TUTEUR, self::WITH)
+            ->leftJoin('presence.enfant', self::ENFANT, self::WITH)
+            ->addSelect(self::ENFANT, self::TUTEUR)
+            ->andWhere('presence.tuteur = :tuteur')
+            ->setParameter(self::TUTEUR, $tuteur)
+            ->getQuery()->getResult();
+    }
+
+
+    /**
+     * @return Presence[]
+     */
     public function findPresencesByPlaine(Plaine $plaine): array
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);

@@ -20,7 +20,7 @@ final class FacturePdfFactoryTrait
     public function generate(Facture $facture): Response
     {
         $date = $facture->getFactureLe();
-        $html = $this->factureFactory->generateFullHtml2($facture);
+        $html = $this->factureFactory->generateFullHtml($facture);
 
        //  return new Response($html);
 
