@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -10,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Regex;
 
 final class FactureEditType extends AbstractType
 {
@@ -64,16 +64,9 @@ final class FactureEditType extends AbstractType
             )
             ->add(
                 'mois',
-                TextType::class,
+                MonthWidgetType::class,
                 [
-                    'label' => 'Mois',
                     'required' => true,
-                    'help' => 'Format mois-année: 06-2021',
-                    'attr' => [
-                        'placeholder' => '06-2021',
-                        'autocomplete' => 'off',
-                    ],
-                    'constraints' => [new Regex('#^\d{2}-\d{4}$#')],
                 ]
             )
             ->add(

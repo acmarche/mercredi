@@ -77,6 +77,17 @@ final class TuteurRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Tuteur[]
+     */
+    public function findAllOrderByNom(): array
+    {
+        return $this->createQueryBuilder(self::TUTEUR)
+            ->orderBy('tuteur.nom')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function remove(Tuteur $tuteur): void
     {
         $this->_em->remove($tuteur);
@@ -91,4 +102,5 @@ final class TuteurRepository extends ServiceEntityRepository
     {
         $this->_em->persist($tuteur);
     }
+
 }

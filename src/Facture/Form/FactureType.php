@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,6 +23,13 @@ final class FactureType extends AbstractType
                     'widget' => 'single_text',
                     'required' => true,
                     'attr' => ['autocomplete' => 'off'],
+                ]
+            )
+            ->add(
+                'mois',
+                MonthWidgetType::class,
+                [
+                    'required' => true,
                 ]
             )
             ->add(

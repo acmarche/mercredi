@@ -22,6 +22,7 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureRepository")
+ *
  */
 class Facture implements TimestampableInterface, UuidableInterface
 {
@@ -42,7 +43,7 @@ class Facture implements TimestampableInterface, UuidableInterface
      */
     private ?Tuteur $tuteur;
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     private ?DateTimeInterface $factureLe = null;
     /**
@@ -62,7 +63,7 @@ class Facture implements TimestampableInterface, UuidableInterface
      */
     private ?string $mois = null;
     /**
-     * @ORM\Column(type="string", length=100,nullable=false)
+     * @ORM\Column(type="string", length=100,nullable=false, unique=true)
      */
     private ?string $communication = null;
 

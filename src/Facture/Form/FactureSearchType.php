@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,17 +24,17 @@ final class FactureSearchType extends AbstractType
                     'required' => false,
                     'attr' => ['placeholder' => 'Nom du tuteur'],
                 ]
-            )->add(
-                'month',
+            )
+            ->add(
+                'mois',
+                MonthWidgetType::class
+            )
+            ->add(
+                'communication',
                 TextType::class,
                 [
-                    'label' => 'Mois',
-                    'required' => true,
-                    'attr' => [
-                        'placeholder' => 'Format mois-année: 06-2021',
-                        'autocomplete' => 'off',
-                    ],
-                    'constraints' => [new Regex('#^\d{2}-\d{4}$#')],
+                    'required' => false,
+                    'attr' => ['placeholder' => 'Communication'],
                 ]
             )
             ->add(

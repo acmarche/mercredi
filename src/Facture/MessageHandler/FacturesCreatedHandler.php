@@ -18,6 +18,6 @@ final class FacturesCreatedHandler implements MessageHandlerInterface
     public function __invoke(FacturesCreated $facturesCreated): void
     {
         $count = count($facturesCreated->getFactureIds());
-        $this->flashBag->add('success', 'Les '.$count.' factures a bien été crées');
+        $this->flashBag->add('success', 'Les '.$count.' factures ont bien été crées');
     }
 }

@@ -38,7 +38,7 @@
                     <th>Numéro</th>
                     <th>Facturé le</th>
                     <th>Payé le</th>
-                    <th>Nbre de présences</th>
+                    <th>Communication</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,7 +53,7 @@
                             </a>
                         </td>
                         <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') }}</td>
-                        <td>{{ facture.facturePresences | length }}</td>
+                        <td>{{ facture.communication }}</td>
                     </tr>
                 {% else %}
                     <tr>

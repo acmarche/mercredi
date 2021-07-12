@@ -32,6 +32,7 @@ final class FactureHandler
     private FactureAccueilRepository $factureAccueilRepository;
     private AccueilCalculatorInterface $accueilCalculator;
     private TuteurRepository $tuteurRepository;
+    private CommunicationFactory $communicationFactory;
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -42,7 +43,8 @@ final class FactureHandler
         AccueilRepository $accueilRepository,
         FactureAccueilRepository $factureAccueilRepository,
         AccueilCalculatorInterface $accueilCalculator,
-        TuteurRepository $tuteurRepository
+        TuteurRepository $tuteurRepository,
+        CommunicationFactory $communicationFactory
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureFactory = $factureFactory;
@@ -53,6 +55,7 @@ final class FactureHandler
         $this->factureAccueilRepository = $factureAccueilRepository;
         $this->accueilCalculator = $accueilCalculator;
         $this->tuteurRepository = $tuteurRepository;
+        $this->communicationFactory = $communicationFactory;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -72,7 +75,8 @@ final class FactureHandler
         $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
 
         $this->finish($facture, $presences, $accueils);
-        $facture->setMonth(date('d-Y'));
+        $facture->setMois(date('d-Y'));
+        $this->flush();
 
         return $facture;
     }
@@ -82,7 +86,12 @@ final class FactureHandler
         list($month, $year) = explode('-', $month);
         $date = Carbon::createFromDate($year, $month, 01);
 
-        return $this->handleByTuteur($tuteur, $date);
+        $facture = $this->handleByTuteur($tuteur, $date);
+        if ($facture) {
+            $this->flush();
+        }
+
+        return $facture;
     }
 
     /**
@@ -95,12 +104,14 @@ final class FactureHandler
         $date = Carbon::createFromDate($year, $month, 01);
         $factures = [];
 
-        $tuteurs = $this->tuteurRepository->findAll();
+        $tuteurs = $this->tuteurRepository->findAllOrderByNom();
         foreach ($tuteurs as $tuteur) {
             if ($facture = $this->handleByTuteur($tuteur, $date)) {
                 $factures[] = $facture;
             }
         }
+
+        $this->flush();
 
         return $factures;
     }
@@ -108,7 +119,7 @@ final class FactureHandler
     private function handleByTuteur(Tuteur $tuteur, CarbonInterface $date): ?Facture
     {
         $facture = $this->newInstance($tuteur);
-        $facture->setMonth($date->format('d-Y'));
+        $facture->setMois($date->format('d-Y'));
         $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur, $date->toDateTime());
         $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur, $date->toDateTime());
 
@@ -129,14 +140,12 @@ final class FactureHandler
      */
     private function finish(Facture $facture, array $presences, array $accueils)
     {
-        $facture->setCommunication(CommunicationFactory::generate($facture));
+        $facture->setCommunication($this->communicationFactory->generate($facture));
         $this->attachPresences($facture, $presences);
         $this->attachAccueils($facture, $accueils);
         if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
-        $this->factureRepository->flush();
-        $this->facturePresenceRepository->flush();
 
         return $facture;
     }
@@ -176,6 +185,13 @@ final class FactureHandler
             $this->factureAccueilRepository->persist($factureAccueil);
             $facture->addFactureAccueil($factureAccueil);
         }
+    }
+
+    private function flush()
+    {
+        $this->factureRepository->flush();
+        $this->facturePresenceRepository->flush();
+        $this->factureAccueilRepository->flush();
     }
 
 }

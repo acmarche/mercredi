@@ -55,7 +55,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/index", name="mercredi_admin_facture_index", methods={"GET","POST"})
+     * @Route("/{id}/index", name="mercredi_admin_facture_index_by_tuteur", methods={"GET","POST"})
      */
     public function index(Request $request, Tuteur $tuteur): Response
     {
@@ -79,7 +79,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/search", name="mercredi_admin_facture_search", methods={"GET","POST"})
+     * @Route("/search", name="mercredi_admin_facture_index", methods={"GET","POST"})
      */
     public function search(Request $request): Response
     {
@@ -95,7 +95,8 @@ final class FactureController extends AbstractController
                 $dataForm['tuteur'],
                 $dataForm['ecole'],
                 $dataForm['paye'],
-                $dataForm['month']
+                $dataForm['mois'],
+                $dataForm['communication'],
             );
         }
 
@@ -161,7 +162,7 @@ final class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $month = $form->get('month')->getData();
+            $month = $form->get('mois')->getData();
 
             if (!$facture = $this->factureHandler->generateByMonth($tuteur, $month)) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
@@ -180,7 +181,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/forall/", name="mercredi_admin_facture_new_month_all", methods={"GET","POST"})
+     * @Route("/for/all/", name="mercredi_admin_facture_new_month_all", methods={"GET","POST"})
      */
     public function newByMonthForAll(Request $request): Response
     {
@@ -189,7 +190,8 @@ final class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $month = $form->get('month')->getData();
+            $month = $form->get('mois')->getData();
+
             $factures = $this->factureHandler->generateByMonthForAll($month);
             if (count($factures) === 0) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');

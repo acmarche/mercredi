@@ -38,8 +38,13 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
-    public function search(?string $tuteur, ?Ecole $ecole, ?bool $paye, ?string $monthYear = null): array
-    {
+    public function search(
+        ?string $tuteur,
+        ?Ecole $ecole,
+        ?bool $paye,
+        ?string $monthYear = null,
+        ?string $communication = null
+    ): array {
         $queryBuilder = $this->createQueryBuilder('facture')
             ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
             ->leftJoin('facture.facturePresences', 'facturePresences', 'WITH')
@@ -61,8 +66,13 @@ final class FactureRepository extends ServiceEntityRepository
         }
 
         if ($monthYear !== null) {
-            $queryBuilder->andWhere('facture.month = :date')
+            $queryBuilder->andWhere('facture.mois = :date')
                 ->setParameter('date', $monthYear);
+        }
+
+        if ($communication !== null) {
+            $queryBuilder->andWhere('facture.communication LIKE :commu')
+                ->setParameter('commu', '%'.$communication.'%');
         }
 
         switch ($paye) {
