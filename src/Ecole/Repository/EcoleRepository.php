@@ -41,6 +41,16 @@ final class EcoleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return array|Ecole[]
+     */
+    public function findAllOrderByNom(): array
+    {
+        return $this->createQueryBuilder('ecole')
+            ->orderBy('ecole.nom')->getQuery()
+            ->getResult();
+    }
+
     public function remove(Ecole $ecole): void
     {
         $this->_em->remove($ecole);

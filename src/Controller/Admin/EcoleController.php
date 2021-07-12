@@ -22,9 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class EcoleController extends AbstractController
 {
-    private const MERCREDI_ADMIN_ECOLE_SHOW = 'mercredi_admin_ecole_show';
-    private const ID = 'id';
-    private const ECOLE = 'ecole';
     private EcoleRepository $ecoleRepository;
     private EnfantRepository $enfantRepository;
 
@@ -42,7 +39,7 @@ final class EcoleController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/ecole/index.html.twig',
             [
-                'ecoles' => $this->ecoleRepository->findAll(),
+                'ecoles' => $this->ecoleRepository->findAllOrderByNom(),
             ]
         );
     }
@@ -62,13 +59,13 @@ final class EcoleController extends AbstractController
 
             $this->dispatchMessage(new EcoleCreated($ecole->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ECOLE_SHOW, [self::ID => $ecole->getId()]);
+            return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/ecole/new.html.twig',
             [
-                self::ECOLE => $ecole,
+                'ecole' => $ecole,
                 'form' => $form->createView(),
             ]
         );
@@ -84,7 +81,7 @@ final class EcoleController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/ecole/show.html.twig',
             [
-                self::ECOLE => $ecole,
+                'ecole' => $ecole,
                 'enfants' => $enfants,
             ]
         );
@@ -103,13 +100,13 @@ final class EcoleController extends AbstractController
 
             $this->dispatchMessage(new EcoleUpdated($ecole->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ECOLE_SHOW, [self::ID => $ecole->getId()]);
+            return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/ecole/edit.html.twig',
             [
-                self::ECOLE => $ecole,
+                'ecole' => $ecole,
                 'form' => $form->createView(),
             ]
         );
@@ -124,7 +121,7 @@ final class EcoleController extends AbstractController
             if (count($this->enfantRepository->findByEcoles([$ecole])) > 0) {
                 $this->addFlash('danger', 'L\'école contient des enfants et ne peut être supprimée');
 
-                return $this->redirectToRoute(self::MERCREDI_ADMIN_ECOLE_SHOW, [self::ID => $ecole->getId()]);
+                return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
             }
             $ecoleId = $ecole->getId();
             $this->ecoleRepository->remove($ecole);

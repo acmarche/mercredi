@@ -38,6 +38,19 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
+    public function findFacturesByMonth(string $month): array
+    {
+        return $this->createQueryBuilder('facture')
+            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
+            ->addSelect('tuteur')
+            ->andWhere('facture.mois = :mois')
+            ->setParameter('mois', $month)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
     public function search(
         ?string $tuteur,
         ?Ecole $ecole,

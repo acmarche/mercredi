@@ -18,8 +18,10 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoAutorisationTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
+use AcMarche\Mercredi\Entity\Traits\PoidsTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\PresencesTrait;
+use AcMarche\Mercredi\Entity\Traits\RegistreNationalTrait;
 use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
@@ -41,35 +43,35 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface
 {
-    use IdTrait;
-    use NomTrait;
-    use PrenomTrait;
-    use BirthdayTrait;
-    use SexeTrait;
-    use PhotoAutorisationTrait;
-    use RemarqueTrait;
-    use OrdreTrait;
-    use PhotoTrait;
-    use UserAddTrait;
-    use SluggableTrait;
-    use EcoleTrait;
-    use RelationsTrait;
-    use ArchiveTrait;
-    use TimestampableTrait;
-    use TelephonesTrait;
-    use SanteFicheTrait;
-    use FicheSanteIsCompleteTrait;
-    use UuidableTrait;
-    use GroupeScolaireTrait;
-    use AnneeScolaireTrait;
-    use PresencesTrait;
-    use AccueilsTrait;
-    use EnfantNotesTrait;
-    use IsAccueilEcoleTrait;
+    use IdTrait,
+        NomTrait,
+        PrenomTrait,
+        BirthdayTrait,
+        SexeTrait,
+        PhotoAutorisationTrait,
+        RemarqueTrait,
+        OrdreTrait,
+        PhotoTrait,
+        UserAddTrait,
+        SluggableTrait,
+        EcoleTrait,
+        RelationsTrait,
+        ArchiveTrait,
+        TimestampableTrait,
+        TelephonesTrait,
+        SanteFicheTrait,
+        FicheSanteIsCompleteTrait,
+        UuidableTrait,
+        GroupeScolaireTrait,
+        AnneeScolaireTrait,
+        PresencesTrait,
+        AccueilsTrait,
+        EnfantNotesTrait,
+        IsAccueilEcoleTrait,
+        RegistreNationalTrait,
+        PoidsTrait;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false)
      */
     private bool $photo_autorisation;
@@ -85,7 +87,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     private ?GroupeScolaire $groupe_scolaire = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole")
+     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole", inversedBy="enfants")
      */
     private ?Ecole $ecole = null;
 

@@ -75,7 +75,7 @@ final class FactureHandler
         $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
 
         $this->finish($facture, $presences, $accueils);
-        $facture->setMois(date('d-Y'));
+        $facture->setMois(date('m-Y'));
         $this->flush();
 
         return $facture;
@@ -98,9 +98,9 @@ final class FactureHandler
      * @param $month
      * @return array|null
      */
-    public function generateByMonthForAll(string $month): array
+    public function generateByMonthForAll(string $monthSelected): array
     {
-        list($month, $year) = explode('-', $month);
+        list($month, $year) = explode('-', $monthSelected);
         $date = Carbon::createFromDate($year, $month, 01);
         $factures = [];
 
@@ -119,7 +119,7 @@ final class FactureHandler
     private function handleByTuteur(Tuteur $tuteur, CarbonInterface $date): ?Facture
     {
         $facture = $this->newInstance($tuteur);
-        $facture->setMois($date->format('d-Y'));
+        $facture->setMois($date->format('m-Y'));
         $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur, $date->toDateTime());
         $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur, $date->toDateTime());
 

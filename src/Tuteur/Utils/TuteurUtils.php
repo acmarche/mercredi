@@ -76,7 +76,9 @@ final class TuteurUtils
         $emails = [[]];
         foreach ($tuteurs as $tuteur) {
             if ($this->tuteurIsActif($tuteur)) {
-                $emails[] = self::getEmailsOfOneTuteur($tuteur);
+                if ($tmp = self::getEmailsOfOneTuteur($tuteur)) {
+                    $emails[] = $tmp;
+                }
             }
         }
 
@@ -107,7 +109,7 @@ final class TuteurUtils
     /**
      * @return string[]
      */
-    public static function getEmailsOfOneTuteur(Tuteur $tuteur): array
+    public static function getEmailsOfOneTuteur(Tuteur $tuteur): ?array
     {
         $emails = [];
 
@@ -127,7 +129,12 @@ final class TuteurUtils
             $emails[] = $tuteur->getEmailConjoint();
         }
 
-        return array_unique($emails);
+        $emails = array_unique($emails);
+        if (count($emails) === 0) {
+            return null;
+        }
+
+        return $emails;
     }
 
     /**
@@ -144,7 +151,7 @@ final class TuteurUtils
             if (!$this->tuteurIsActif($tuteur)) {
                 continue;
             }
-            if (0 !== count(self::getEmailsOfOneTuteur($tuteur))) {
+            if (!self::getEmailsOfOneTuteur($tuteur)) {
                 continue;
             }
             $data[] = $tuteur;

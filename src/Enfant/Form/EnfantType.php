@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Enfant\Form;
 
-use DateTime;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
@@ -11,6 +10,7 @@ use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
 use AcMarche\Mercredi\Security\MercrediSecurity;
+use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -24,18 +24,6 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 final class EnfantType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-    /**
-     * @var string
-     */
-    private const PLACEHOLDER = 'placeholder';
     private Security $security;
 
     public function __construct(Security $security)
@@ -54,32 +42,49 @@ final class EnfantType extends AbstractType
                 'nom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'birthday',
                 BirthdayType::class,
                 [
-                    self::LABEL => 'Né le',
-                    self::REQUIRED => $isAdmin,
+                    'label' => 'Né le',
+                    'required' => $isAdmin,
                     'years' => range($year - 15, $year),
+                ]
+            )
+            ->add(
+                'registre_national',
+                TextType::class,
+                [
+                    'label' => 'Numéro national',
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    self::REQUIRED => $isAdmin,
+                    'required' => $isAdmin,
                     'choices' => MercrediConstantes::SEXES,
-                    self::PLACEHOLDER => 'Choisissez son sexe',
+                    'placeholder' => 'Choisissez son sexe',
+                ]
+            )
+            ->add(
+                'poids',
+                TextType::class,
+                [
+                    'label' => 'Poids',
+                    'help' => 'en kg',
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
@@ -93,8 +98,8 @@ final class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    self::REQUIRED => $isAdmin,
-                    self::PLACEHOLDER => 'Choisissez son école',
+                    'required' => $isAdmin,
+                    'placeholder' => 'Choisissez son école',
                 ]
             )
             ->add(
@@ -102,8 +107,8 @@ final class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => AnneeScolaire::class,
-                    self::LABEL => 'Année scolaire',
-                    self::PLACEHOLDER => 'Choisissez son année scolaire',
+                    'label' => 'Année scolaire',
+                    'placeholder' => 'Choisissez son année scolaire',
                 ]
             )
             ->add(
@@ -111,9 +116,9 @@ final class EnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => GroupeScolaire::class,
-                    self::REQUIRED => false,
-                    self::LABEL => 'Forcer le groupe scolaire',
-                    self::PLACEHOLDER => 'Choisissez un groupe',
+                    'required' => false,
+                    'label' => 'Forcer le groupe scolaire',
+                    'placeholder' => 'Choisissez un groupe',
                     'help' => 'Utilisé pour le listing des présences',
                 ]
             )
@@ -125,8 +130,8 @@ final class EnfantType extends AbstractType
                 'photoAutorisation',
                 CheckboxType::class,
                 [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Autorisation de diffusion de ses photos',
+                    'required' => false,
+                    'label' => 'Autorisation de diffusion de ses photos',
                     'help' => 'Cochez si vous autorisez la diffusion des photos de l\'enfant',
                     'label_attr' => ['class' => 'switch-custom'],
                 ]
@@ -135,9 +140,9 @@ final class EnfantType extends AbstractType
                 'archived',
                 CheckboxType::class,
                 [
-                    self::LABEL => 'Archiver',
+                    'label' => 'Archiver',
                     'help' => 'Ces données seront toujours visibles, mais il ne pourra plus être inscrit nul part',
-                    self::REQUIRED => false,
+                    'required' => false,
                     'label_attr' => ['class' => 'switch-custom'],
                 ]
             )
@@ -145,8 +150,8 @@ final class EnfantType extends AbstractType
                 'accueilEcole',
                 CheckboxType::class,
                 [
-                    self::LABEL => 'Accueils des écoles',
-                    self::REQUIRED => false,
+                    'label' => 'Accueils des écoles',
+                    'required' => false,
                     'help' => 'L\'enfant vient-il en accueil dans les écoles ?',
                     'label_attr' => ['class' => 'switch-custom'],
                 ]
@@ -155,7 +160,7 @@ final class EnfantType extends AbstractType
                 'photo',
                 VichImageType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             );
     }

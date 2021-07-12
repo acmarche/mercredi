@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -17,10 +18,6 @@ use Symfony\Component\Security\Core\Security;
 
 final class TuteurType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
     private Security $security;
 
     public function __construct(Security $security)
@@ -30,77 +27,77 @@ final class TuteurType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $isAdmin = ! $this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
+        $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
 
         $formBuilder
             ->add(
                 'nom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    self::REQUIRED => $isAdmin,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    self::REQUIRED => $isAdmin,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    self::REQUIRED => $isAdmin,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    self::REQUIRED => $isAdmin,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    self::REQUIRED => $isAdmin,
+                    'required' => $isAdmin,
                 ]
             )
             ->add(
                 'telephone_bureau',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'gsm',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'choices' => MercrediConstantes::SEXES,
                     'placeholder' => 'Choisissez le sexe',
                 ]
@@ -109,8 +106,17 @@ final class TuteurType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'attr' => ['rows' => 4],
+                ]
+            )
+            ->add(
+                'facturePapier',
+                CheckboxType::class,
+                [
+                    'required' => false,
+                    'label' => 'Facture papier',
+                    'help' => 'Recevoir une copie papier ?',
                 ]
             )
             ->add(

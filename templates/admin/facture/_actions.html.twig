@@ -30,7 +30,7 @@
 <a href="{{ path('mercredi_commun_export_facture_pdf', {'uuid': facture.uuid}) }}" class="btn btn-primary"
    role='button'> <i class="fas fa-file-pdf"></i> Exporter en pdf</a>
 
-<a href="{{ path('mercredi_admin_facture_send', {'id': facture.id}) }}" class="btn btn-primary" role='button'>
+<a href="{{ path('mercredi_admin_facture_send_one', {'id': facture.id}) }}" class="btn btn-primary" role='button'>
     <i class="fas fa-envelope"></i> Envoyer par mail</a>
 
 <a href="{{ path('mercredi_admin_facture_index', {'id': tuteur.id}) }}" class="btn btn-primary" role='button'><i

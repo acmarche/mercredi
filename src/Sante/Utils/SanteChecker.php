@@ -41,6 +41,14 @@ final class SanteChecker
             return false;
         }
 
+        if (null === $enfant->getPoids()) {
+            return false;
+        }
+
+        if (null === $enfant->getRegistreNational()) {
+            return false;
+        }
+
         return (bool)$enfant->getAnneeScolaire();
     }
 

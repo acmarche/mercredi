@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
 use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
+use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
 use AcMarche\Mercredi\Facture\Form\FactureType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
@@ -19,6 +20,7 @@ use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -196,7 +198,7 @@ final class FactureController extends AbstractController
             if (count($factures) === 0) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
-                return $this->redirectToRoute('mercredi_admin_facture_index');
+                return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
             }
 
             $this->dispatchMessage(new FacturesCreated($factures));
@@ -204,9 +206,12 @@ final class FactureController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }
 
-        $this->addFlash('danger', 'Date non valide');
-
-        return $this->redirectToRoute('mercredi_admin_facture_index');
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/generate.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -276,7 +281,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/send", name="mercredi_admin_facture_send", methods={"GET","POST"})
+     * @Route("/{id}/sendone", name="mercredi_admin_facture_send_one", methods={"GET","POST"})
      */
     public function sendFacture(Request $request, Facture $facture): Response
     {
@@ -290,6 +295,8 @@ final class FactureController extends AbstractController
 
             try {
                 $this->factureMailer->sendFacture($facture, $data);
+                $facture->setEnvoyeA($data['to']);
+                $facture->setEnvoyeLe(new \DateTime());
                 $this->addFlash('success', 'La facture a bien été envoyée');
             } catch (TransportExceptionInterface $e) {
                 $this->addFlash('danger', 'Une erreur est survenue: '.$e->getMessage());
@@ -299,10 +306,60 @@ final class FactureController extends AbstractController
         }
 
         return $this->render(
-            '@AcMarcheMercrediAdmin/facture/send.html.twig',
+            '@AcMarcheMercrediAdmin/facture/send_one.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/send/all", name="mercredi_admin_facture_send_all", methods={"GET","POST"})
+     */
+    public function sendAllFacture(Request $request): Response
+    {
+        $data = $this->factureMailer->init();
+        $form = $this->createForm(FactureSendAllType::class, $data);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data2 = $form->getData();
+            $month = $data2['mois'];
+
+            $factures = $this->factureRepository->findFacturesByMonth($month);
+            if (count($factures) === 0) {
+                $this->addFlash('warning', 'Aucune facture trouvée pour ce mois');
+
+                return $this->redirectToRoute('mercredi_admin_facture_send_all');
+            }
+
+            foreach ($factures as $facture) {
+                try {
+                    $tuteur = $facture->getTuteur();
+                    if (!$emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
+                        $this->addFlash('danger', 'Pas de mail pour la facture: '.$facture->getId());
+                        continue;
+                    }
+                    $data['to'] = count($emails) > 0 ? $emails[0] : null;
+                    $this->factureMailer->sendFacture($facture, $data);
+                    $this->addFlash('success', 'La facture a bien été envoyée');
+                    $facture->setEnvoyeA($data['to']);
+                    $facture->setEnvoyeLe(new \DateTime());
+                } catch (TransportExceptionInterface $e) {
+                    $this->addFlash('danger', 'Une erreur est survenue: '.$e->getMessage());
+                }
+            }
+            $this->dispatchMessage(new FacturesCreated($factures));
+
+            return $this->redirectToRoute('mercredi_admin_facture_index');
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/send_all.html.twig',
+            [
                 'form' => $form->createView(),
             ]
         );

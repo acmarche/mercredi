@@ -26,13 +26,16 @@ final class FactureMailer
         $this->factureFactory = $factureFactory;
     }
 
-    public function init(Facture $facture): array
+    public function init(?Facture $facture = null): array
     {
         $data = [];
         $data['from'] = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
-        $tuteur = $facture->getTuteur();
-        $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
-        $data['to'] = count($emails) > 0 ? $emails[0] : null;
+        if ($facture) {
+            $tuteur = $facture->getTuteur();
+            if ($emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
+                $data['to'] = $emails[0];
+            }
+        }
 
         return $data;
     }
@@ -44,6 +47,7 @@ final class FactureMailer
      */
     public function sendFacture(Facture $facture, array $data): void
     {
+        $data['to'] = 'jf@marche.be';
         $templatedEmail = (new TemplatedEmail())
             ->subject($data['sujet'])
             ->from($data['from'])

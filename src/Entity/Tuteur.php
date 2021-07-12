@@ -14,6 +14,7 @@ use AcMarche\Mercredi\Entity\Traits\ConjointTrait;
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\PapierTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\PresencesTuteurTrait;
 use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
@@ -51,6 +52,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use RelationsTrait;
     use FacturesTrait;
     use AccueilsTraits;
+    use PapierTrait;
 
     /**
      * @var Relation[]

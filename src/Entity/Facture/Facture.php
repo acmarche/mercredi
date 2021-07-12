@@ -140,7 +140,7 @@ class Facture implements TimestampableInterface, UuidableInterface
         return $this->factureLe;
     }
 
-    public function setFactureLe(?\DateTimeInterface $factureLe): self
+    public function setFactureLe(\DateTimeInterface $factureLe): self
     {
         $this->factureLe = $factureLe;
 

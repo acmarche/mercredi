@@ -15,6 +15,7 @@
                     <th>Nom</th>
                     <th>Localité</th>
                     <th>Téléphone</th>
+                    <th>Enfants</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,6 +28,7 @@
                         </td>
                         <td>{{ ecole.localite }}</td>
                         <td>{{ ecole.telephone }}</td>
+                        <td>{{ ecole.enfants|length }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

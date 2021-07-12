@@ -4,11 +4,7 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Rechercher des factures
-                <button type="button" class="float-end btn btn-sm btn-primary"
-                        data-bs-toggle="modal" data-bs-target="#monthModal" aria-expanded="false">
-                    <i class="fas fa-plus"></i> Générer les factures pour le mois de
-                </button></h3>
+            <h3>Rechercher des factures</h3>
         </div>
 
         <div class="card-body">
@@ -23,18 +19,19 @@
                         <th>Facturé le</th>
                         <th>Facturé à</th>
                         <th>Payé le</th>
+                        <th>Communication</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for facture in factures %}
                         <tr>
                             <td>
-                                N° {{ facture.id }}
+                                <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
+                                    N° {{ facture.id }}
+                                </a>
                             </td>
                             <td>
-                                <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
-                                    {{ facture.factureLe | format_date('full') | title }}
-                                </a>
+                                {{ facture.factureLe | format_date('full') | title }}
                             </td>
                             <td>
                                 <a href="{{ path('mercredi_admin_tuteur_show', { 'id': facture.tuteur.id }) }}">
@@ -44,10 +41,13 @@
                             <td>
                                 {{ facture.payeLe ? facture.payeLe | format_date('full','full') }}
                             </td>
+                            <td>
+                                {{ facture.communication }}
+                            </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                                 Aucune facture trouvée
                             </td>
                         </tr>
@@ -58,6 +58,4 @@
 
         </div>
     </div>
-    {% include '@AcMarcheMercrediAdmin/facture/_month_modal.html.twig' with {'form': formMonth} %}
-
 {% endblock %}

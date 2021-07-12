@@ -33,14 +33,51 @@ class Ecole
      * @var User[]|Collection
      */
     private iterable $users;
+    /**
+     * @ORM\OneToMany(targetEntity=Enfant::class, mappedBy="ecole" )
+     *
+     * @var Enfant[]|Collection
+     */
+    private iterable $enfants;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->enfants = new ArrayCollection();
     }
 
     public function __toString()
     {
         return $this->nom;
+    }
+
+    /**
+     * @return Collection|Enfant[]
+     */
+    public function getEnfants(): Collection
+    {
+        return $this->enfants;
+    }
+
+    public function addEnfant(Enfant $enfant): self
+    {
+        if (!$this->enfants->contains($enfant)) {
+            $this->enfants[] = $enfant;
+            $enfant->setEcole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnfant(Enfant $enfant): self
+    {
+        if ($this->enfants->removeElement($enfant)) {
+            // set the owning side to null (unless already changed)
+            if ($enfant->getEcole() === $this) {
+                $enfant->setEcole(null);
+            }
+        }
+
+        return $this;
     }
 }

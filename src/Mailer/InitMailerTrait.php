@@ -9,10 +9,7 @@ use Symfony\Component\Mime\Email;
 
 trait InitMailerTrait
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
+    private MailerInterface $mailer;
 
     /**
      * @required
