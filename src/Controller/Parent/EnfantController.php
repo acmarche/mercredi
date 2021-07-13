@@ -30,7 +30,6 @@ final class EnfantController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private const ENFANT = 'enfant';
     private EnfantRepository $enfantRepository;
     private RelationUtils $relationUtils;
     private SanteHandler $santeHandler;
@@ -108,7 +107,7 @@ final class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/enfant/new.html.twig',
             [
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'form' => $form->createView(),
             ]
         );
@@ -129,7 +128,7 @@ final class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/enfant/show.html.twig',
             [
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'presences' => $presences,
                 'plaines' => $plaines,
                 'accueils' => $accueils,
@@ -158,7 +157,7 @@ final class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediParent/enfant/edit.html.twig',
             [
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'form' => $form->createView(),
             ]
         );

@@ -27,8 +27,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class EnfantController extends AbstractController
 {
-    private const FORM = 'form';
-    private const ENFANT = 'enfant';
     private EnfantRepository $enfantRepository;
     private EnfantHandler $enfantHandler;
     private RelationRepository $relationRepository;
@@ -74,7 +72,7 @@ final class EnfantController extends AbstractController
             '@AcMarcheMercrediAdmin/enfant/index.html.twig',
             [
                 'enfants' => $enfants,
-                self::FORM => $form->createView(),
+                'form' => $form->createView(),
                 'search' => $search,
             ]
         );
@@ -99,8 +97,8 @@ final class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/new.html.twig',
             [
-                self::ENFANT => $enfant,
-                self::FORM => $form->createView(),
+                'enfant' => $enfant,
+                'form' => $form->createView(),
             ]
         );
     }
@@ -118,7 +116,7 @@ final class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/show.html.twig',
             [
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'frateries' => $frateries,
                 'relations' => $relations,
                 'prensencesGrouped' => $presencesGrouped,
@@ -145,8 +143,8 @@ final class EnfantController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/edit.html.twig',
             [
-                self::ENFANT => $enfant,
-                self::FORM => $form->createView(),
+                'enfant' => $enfant,
+                'form' => $form->createView(),
             ]
         );
     }

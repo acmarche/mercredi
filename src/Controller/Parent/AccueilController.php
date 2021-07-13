@@ -28,7 +28,6 @@ final class AccueilController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private const UUID = 'uuid';
     private AccueilRepository $accueilRepository;
     private AccueilHandler $accueilHandler;
     private RelationUtils $relationUtils;
@@ -90,7 +89,7 @@ final class AccueilController extends AbstractController
         if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
-            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
         }
 
         $accueil = new Accueil($this->tuteur, $enfant);
@@ -102,7 +101,7 @@ final class AccueilController extends AbstractController
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatchMessage(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_parent_accueil_show', [self::UUID => $result->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_accueil_show', ['uuid' => $result->getUuid()]);
         }
 
         return $this->render(
@@ -144,7 +143,7 @@ final class AccueilController extends AbstractController
             if (! DeleteConstraint::accueilCanBeDeleted($accueil)) {
                 $this->addFlash('danger', 'Un accueil passé ne peut être supprimé');
 
-                return $this->redirectToRoute('mercredi_parent_enfant_show', [self::UUID => $enfant->getUuid()]);
+                return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
             }
             $accueilId = $accueil->getId();
             $this->accueilRepository->remove($accueil);
@@ -152,6 +151,6 @@ final class AccueilController extends AbstractController
             $this->dispatchMessage(new AccueilDeleted($accueilId));
         }
 
-        return $this->redirectToRoute('mercredi_parent_enfant_show', [self::UUID => $enfant->getUuid()]);
+        return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
     }
 }

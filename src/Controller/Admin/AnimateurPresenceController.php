@@ -17,8 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AnimateurPresenceController extends AbstractController
 {
-    private const  FORM = 'form';
-    private const ANIMATEUR = 'animateur';
     private AnimateurRepository $animateurRepository;
 
     public function __construct(
@@ -44,8 +42,8 @@ final class AnimateurPresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/presences_edit.html.twig',
             [
-                self::ANIMATEUR => $animateur,
-                self::FORM => $form->createView(),
+                'animateur' => $animateur,
+                'form' => $form->createView(),
             ]
         );
     }

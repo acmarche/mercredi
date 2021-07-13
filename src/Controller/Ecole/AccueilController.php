@@ -33,7 +33,6 @@ final class AccueilController extends AbstractController
 {
     use GetEcolesTrait;
 
-    private const ENFANT = 'enfant';
     private AccueilRepository $accueilRepository;
     private AccueilHandler $accueilHandler;
     private RelationRepository $relationRepository;
@@ -113,7 +112,7 @@ final class AccueilController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediEcole/accueil/new.html.twig',
             [
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'form' => $form->createView(),
             ]
         );
@@ -134,7 +133,7 @@ final class AccueilController extends AbstractController
             [
                 'accueil' => $accueil,
                 'cout' => $cout,
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'facture' => $factureAccueil,
             ]
         );

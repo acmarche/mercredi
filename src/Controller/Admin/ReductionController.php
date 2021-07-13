@@ -20,7 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ReductionController extends AbstractController
 {
-    private const REDUCTION = 'reduction';
     private ReductionRepository $reductionRepository;
 
     public function __construct(ReductionRepository $reductionRepository)
@@ -62,7 +61,7 @@ final class ReductionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/new.html.twig',
             [
-                self::REDUCTION => $reduction,
+                'reduction' => $reduction,
                 'form' => $form->createView(),
             ]
         );
@@ -76,7 +75,7 @@ final class ReductionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/show.html.twig',
             [
-                self::REDUCTION => $reduction,
+                'reduction' => $reduction,
             ]
         );
     }
@@ -100,7 +99,7 @@ final class ReductionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/edit.html.twig',
             [
-                self::REDUCTION => $reduction,
+                'reduction' => $reduction,
                 'form' => $form->createView(),
             ]
         );

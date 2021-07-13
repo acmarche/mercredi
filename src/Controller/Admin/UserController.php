@@ -24,11 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class UserController extends AbstractController
 {
-    private const FORM = 'form';
-    private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    private const ID = 'id';
-    private const USER = 'user';
-
     private UserRepository $userRepository;
     private UserPasswordHasherInterface $userPasswordEncoder;
 
@@ -64,7 +59,7 @@ final class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/index.html.twig',
             [
                 'users' => $users,
-                self::FORM => $form->createView(),
+                'form' => $form->createView(),
             ]
         );
     }
@@ -90,13 +85,13 @@ final class UserController extends AbstractController
             $this->userRepository->insert($user);
             $this->dispatchMessage(new UserCreated($user->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
-                self::FORM => $form->createView(),
+                'form' => $form->createView(),
             ]
         );
     }
@@ -111,7 +106,7 @@ final class UserController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
             [
-                self::USER => $user,
+                'user' => $user,
             ]
         );
     }
@@ -131,14 +126,14 @@ final class UserController extends AbstractController
             $this->userRepository->flush();
             $this->dispatchMessage(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/edit.html.twig',
             [
-                self::USER => $user,
-                self::FORM => $editForm->createView(),
+                'user' => $user,
+                'form' => $editForm->createView(),
             ]
         );
     }
@@ -158,14 +153,14 @@ final class UserController extends AbstractController
             $this->userRepository->flush();
             $this->dispatchMessage(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/roles_edit.html.twig',
             [
-                self::USER => $user,
-                self::FORM => $form->createView(),
+                'user' => $user,
+                'form' => $form->createView(),
             ]
         );
     }

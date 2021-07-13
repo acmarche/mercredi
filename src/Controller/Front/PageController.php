@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PageController extends AbstractController
 {
-    private const PAGE = 'page';
     private OrganisationRepository $organisationRepository;
     private PageRepository $pageRepository;
     private PageFactory $pageFactory;
@@ -53,7 +52,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/page.html.twig',
             [
-                self::PAGE => $page,
+                'page' => $page,
             ]
         );
     }
@@ -91,7 +90,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/contact.html.twig',
             [
-                self::PAGE => $page,
+                'page' => $page,
                 'organisation' => $this->organisationRepository->getOrganisation(),
                 'form' => $form->createView(),
             ]
@@ -111,7 +110,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/page.html.twig',
             [
-                self::PAGE => $page,
+                'page' => $page,
             ]
         );
     }

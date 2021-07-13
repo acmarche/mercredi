@@ -20,9 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class OrganisationController extends AbstractController
 {
-    private const MERCREDI_ADMIN_ORGANISATION_SHOW = 'mercredi_admin_organisation_show';
-    private const ID = 'id';
-    private const ORGANISATION = 'organisation';
     private OrganisationRepository $organisationRepository;
 
     public function __construct(OrganisationRepository $organisationRepository)
@@ -36,13 +33,13 @@ final class OrganisationController extends AbstractController
     public function index(): Response
     {
         if (null !== ($organisation = $this->organisationRepository->getOrganisation())) {
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ORGANISATION_SHOW, [self::ID => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/organisation/index.html.twig',
             [
-                self::ORGANISATION => $organisation,
+                'organisation' => $organisation,
             ]
         );
     }
@@ -55,7 +52,7 @@ final class OrganisationController extends AbstractController
         if (null !== ($organisation = $this->organisationRepository->getOrganisation())) {
             $this->addFlash('danger', 'Une seule organisation peut être enregistrée');
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ORGANISATION_SHOW, [self::ID => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         $organisation = new Organisation();
@@ -68,13 +65,13 @@ final class OrganisationController extends AbstractController
 
             $this->dispatchMessage(new OrganisationCreated($organisation->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ORGANISATION_SHOW, [self::ID => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/organisation/new.html.twig',
             [
-                self::ORGANISATION => $organisation,
+                'organisation' => $organisation,
                 'form' => $form->createView(),
             ]
         );
@@ -88,7 +85,7 @@ final class OrganisationController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/organisation/show.html.twig',
             [
-                self::ORGANISATION => $organisation,
+                'organisation' => $organisation,
             ]
         );
     }
@@ -106,13 +103,13 @@ final class OrganisationController extends AbstractController
 
             $this->dispatchMessage(new OrganisationUpdated($organisation->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ORGANISATION_SHOW, [self::ID => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/organisation/edit.html.twig',
             [
-                self::ORGANISATION => $organisation,
+                'organisation' => $organisation,
                 'form' => $form->createView(),
             ]
         );

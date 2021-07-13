@@ -23,8 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class TuteurController extends AbstractController
 {
-    private const FORM = 'form';
-    private const TUTEUR = 'tuteur';
     private TuteurRepository $tuteurRepository;
     private RelationRepository $relationRepository;
     private SearchHelper $searchHelper;
@@ -60,7 +58,7 @@ final class TuteurController extends AbstractController
             '@AcMarcheMercrediAdmin/tuteur/index.html.twig',
             [
                 'tuteurs' => $tuteurs,
-                self::FORM => $form->createView(),
+                'form' => $form->createView(),
                 'search' => $search,
             ]
         );
@@ -87,8 +85,8 @@ final class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/new.html.twig',
             [
-                self::TUTEUR => $tuteur,
-                self::FORM => $form->createView(),
+                'tuteur' => $tuteur,
+                'form' => $form->createView(),
             ]
         );
     }
@@ -103,7 +101,7 @@ final class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/show.html.twig',
             [
-                self::TUTEUR => $tuteur,
+                'tuteur' => $tuteur,
                 'relations' => $relations,
             ]
         );
@@ -128,8 +126,8 @@ final class TuteurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/edit.html.twig',
             [
-                self::TUTEUR => $tuteur,
-                self::FORM => $form->createView(),
+                'tuteur' => $tuteur,
+                'form' => $form->createView(),
             ]
         );
     }

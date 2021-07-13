@@ -30,8 +30,6 @@ final class PresenceController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private const UUID = 'uuid';
-    private const MERCREDI_PARENT_ENFANT_SHOW = 'mercredi_parent_enfant_show';
     private PresenceRepository $presenceRepository;
     private PresenceHandler $presenceHandler;
     private RelationUtils $relationUtils;
@@ -122,7 +120,7 @@ final class PresenceController extends AbstractController
         if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
-            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [self::UUID => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
         }
 
         $presenceSelectDays = new PresenceSelectDays($enfant);
@@ -137,7 +135,7 @@ final class PresenceController extends AbstractController
 
             $this->dispatchMessage(new PresenceCreated($days));
 
-            return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
         }
 
         return $this->render(
@@ -175,7 +173,7 @@ final class PresenceController extends AbstractController
             if (! DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
-                return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);
+                return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
             }
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
@@ -183,6 +181,6 @@ final class PresenceController extends AbstractController
             $this->dispatchMessage(new PresenceDeleted($presenceId));
         }
 
-        return $this->redirectToRoute(self::MERCREDI_PARENT_ENFANT_SHOW, [self::UUID => $enfant->getUuid()]);
+        return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
     }
 }

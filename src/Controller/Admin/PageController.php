@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PageController extends AbstractController
 {
-    private const PAGES = 'pages';
-    private const PAGE = 'page';
     private PageRepository $pageRepository;
 
     public function __construct(PageRepository $pageRepository)
@@ -38,7 +36,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/index.html.twig',
             [
-                self::PAGES => $this->pageRepository->findAll(),
+                'pages' => $this->pageRepository->findAll(),
             ]
         );
     }
@@ -64,7 +62,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/new.html.twig',
             [
-                self::PAGE => $page,
+                'page' => $page,
                 'form' => $form->createView(),
             ]
         );
@@ -78,7 +76,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/show.html.twig',
             [
-                self::PAGE => $page,
+                'page' => $page,
             ]
         );
     }
@@ -102,7 +100,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/edit.html.twig',
             [
-                self::PAGE => $page,
+                'page' => $page,
                 'form' => $form->createView(),
             ]
         );
@@ -129,7 +127,7 @@ final class PageController extends AbstractController
     public function trier(Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $pages = $request->request->get(self::PAGES);
+            $pages = $request->request->get('pages');
             if (is_array($pages)) {
                 foreach ($pages as $position => $pageId) {
                     $page = $this->pageRepository->find($pageId);
@@ -150,7 +148,7 @@ final class PageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/page/sort.html.twig',
             [
-                self::PAGES => $pages,
+                'pages' => $pages,
             ]
         );
     }

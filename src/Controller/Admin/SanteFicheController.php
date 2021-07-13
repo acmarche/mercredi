@@ -24,7 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SanteFicheController extends AbstractController
 {
-    private const ID = 'id';
     private SanteFicheRepository $santeFicheRepository;
     private SanteHandler $santeHandler;
     private SanteChecker $santeChecker;
@@ -55,7 +54,7 @@ final class SanteFicheController extends AbstractController
         if (! $santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', [self::ID => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', ['id' => $enfant->getId()]);
         }
 
         $isComplete = $this->santeChecker->isComplete($santeFiche);
@@ -90,7 +89,7 @@ final class SanteFicheController extends AbstractController
 
             $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', [self::ID => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $enfant->getId()]);
         }
 
         return $this->render(
@@ -115,6 +114,6 @@ final class SanteFicheController extends AbstractController
             $this->dispatchMessage(new SanteFicheDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
     }
 }

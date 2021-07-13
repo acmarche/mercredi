@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AssocierEcoleController extends AbstractController
 {
-    private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-       private const ID = 'id';
     private AssociationEcoleHandler $associationEcoleHandler;
     private EcoleRepository $ecoleRepository;
 
@@ -42,7 +40,7 @@ final class AssocierEcoleController extends AbstractController
         if (!$user->isEcole()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de école');
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         $associateUserEcoleDto = new AssociateUserEcoleDto($user);
@@ -53,7 +51,7 @@ final class AssocierEcoleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->associationEcoleHandler->handleAssociateEcole($associateUserEcoleDto);
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
@@ -75,13 +73,13 @@ final class AssocierEcoleController extends AbstractController
             if (0 === $ecoleId) {
                 $this->addFlash('danger', 'L\'école n\'a pas été trouvée');
 
-                return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+                return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
             }
 
             $ecole = $this->ecoleRepository->find($ecoleId);
             $this->associationEcoleHandler->handleDissociateEcole($user, $ecole);
         }
 
-        return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+        return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
     }
 }

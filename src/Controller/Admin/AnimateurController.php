@@ -22,8 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AnimateurController extends AbstractController
 {
-    private const FORM = 'form';
-    private const ANIMATEUR = 'animateur';
     private AnimateurRepository $animateurRepository;
     private SearchHelper $searchHelper;
 
@@ -56,7 +54,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/index.html.twig',
             [
                 'animateurs' => $animateurs,
-                self::FORM => $form->createView(),
+                'form' => $form->createView(),
                 'search' => $search,
             ]
         );
@@ -83,8 +81,8 @@ final class AnimateurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/new.html.twig',
             [
-                self::ANIMATEUR => $animateur,
-                self::FORM => $form->createView(),
+                'animateur' => $animateur,
+                'form' => $form->createView(),
             ]
         );
     }
@@ -97,7 +95,7 @@ final class AnimateurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/show.html.twig',
             [
-                self::ANIMATEUR => $animateur,
+                'animateur' => $animateur,
             ]
         );
     }
@@ -121,8 +119,8 @@ final class AnimateurController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/edit.html.twig',
             [
-                self::ANIMATEUR => $animateur,
-                self::FORM => $form->createView(),
+                'animateur' => $animateur,
+                'form' => $form->createView(),
             ]
         );
     }

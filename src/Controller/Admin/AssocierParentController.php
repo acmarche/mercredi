@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AssocierParentController extends AbstractController
 {
-    private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    private const ID = 'id';
     private AssociationTuteurHandler $associationHandler;
     private TuteurRepository $tuteurRepository;
 
@@ -42,7 +40,7 @@ final class AssocierParentController extends AbstractController
         if (! $user->isParent()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de parent');
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         $associateUserTuteurDto = new AssociateUserTuteurDto($user);
@@ -54,7 +52,7 @@ final class AssocierParentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->associationHandler->handleAssociateTuteur($associateUserTuteurDto);
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
@@ -76,13 +74,13 @@ final class AssocierParentController extends AbstractController
             if (0 === $tuteurId) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');
 
-                return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+                return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
             }
 
             $tuteur = $this->tuteurRepository->find($tuteurId);
             $this->associationHandler->handleDissociateTuteur($user, $tuteur);
         }
 
-        return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+        return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
     }
 }

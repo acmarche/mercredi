@@ -29,10 +29,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MessageController extends AbstractController
 {
-    private const FORM = 'form';
-    private const EMAILS = 'emails';
-    private const TUTEURS = 'tuteurs';
-    private const SUCCESS = 'success';
     private PresenceRepository $presenceRepository;
     private RelationRepository $relationRepository;
     private SearchHelper $searchHelper;
@@ -102,9 +98,9 @@ final class MessageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
-                self::FORM => $form->createView(),
-                self::EMAILS => $emails,
-                self::TUTEURS => $tuteursWithOutEmails,
+                'form' => $form->createView(),
+                'emails' => $emails,
+                'tuteurs' => $tuteursWithOutEmails,
             ]
         );
     }
@@ -129,7 +125,7 @@ final class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
-            $this->addFlash(self::SUCCESS, 'Le message a bien été envoyé');
+            $this->addFlash('success', 'Le message a bien été envoyé');
 
             return $this->redirectToRoute('mercredi_message_index');
         }
@@ -138,9 +134,9 @@ final class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                self::FORM => $form->createView(),
-                self::EMAILS => $emails,
-                self::TUTEURS => [],
+                'form' => $form->createView(),
+                'emails' => $emails,
+                'tuteurs' => [],
             ]
         );
     }
@@ -175,7 +171,7 @@ final class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
-            $this->addFlash(self::SUCCESS, 'Le message a bien été envoyé');
+            $this->addFlash('success', 'Le message a bien été envoyé');
 
             return $this->redirectToRoute('mercredi_admin_presence_index');
         }
@@ -184,9 +180,9 @@ final class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                self::FORM => $form->createView(),
-                self::EMAILS => $emails,
-                self::TUTEURS => [],
+                'form' => $form->createView(),
+                'emails' => $emails,
+                'tuteurs' => [],
             ]
         );
     }
@@ -207,7 +203,7 @@ final class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
-            $this->addFlash(self::SUCCESS, 'Le message a bien été envoyé');
+            $this->addFlash('success', 'Le message a bien été envoyé');
 
             $this->searchHelper->deleteSearch(SearchHelper::MESSAGE_INDEX);
 
@@ -217,8 +213,8 @@ final class MessageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
-                self::EMAILS => $emails,
-                self::FORM => $form->createView(),
+                'emails' => $emails,
+                'form' => $form->createView(),
             ]
         );
     }

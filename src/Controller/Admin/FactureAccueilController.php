@@ -23,7 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FactureAccueilController extends AbstractController
 {
-    private const FACTURE = 'facture';
     private FactureAccueilRepository $factureAccueilRepository;
     private FactureHandler $factureHandler;
     private AccueilRepository $accueilRepository;
@@ -61,7 +60,7 @@ final class FactureAccueilController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_accueil/attach.html.twig',
             [
-                self::FACTURE => $facture,
+                'facture' => $facture,
                 'accueils' => $accueils,
                 'form' => $form->createView(),
             ]
@@ -78,7 +77,7 @@ final class FactureAccueilController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_accueil/show.html.twig',
             [
-                self::FACTURE => $facture,
+                'facture' => $facture,
                 'factureAccueil' => $factureAccueil,
             ]
         );
@@ -100,7 +99,7 @@ final class FactureAccueilController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/edit.html.twig',
             [
-                self::FACTURE => $facture,
+                'facture' => $facture,
                 'form' => $form->createView(),
             ]
         );

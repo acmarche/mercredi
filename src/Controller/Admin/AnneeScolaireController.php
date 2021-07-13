@@ -20,8 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AnneeScolaireController extends AbstractController
 {
-    private const MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW = 'mercredi_admin_annee_scolaire_show';
-    private const ID = 'id';
     private AnneeScolaireRepository $anneeScolaireRepository;
 
     public function __construct(AnneeScolaireRepository $anneeScolaireRepository)
@@ -57,7 +55,7 @@ final class AnneeScolaireController extends AbstractController
 
             $this->dispatchMessage(new AnneeScolaireCreated($anneeScolaire->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW, [self::ID => $anneeScolaire->getId()]);
+            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
         }
 
         return $this->render(
@@ -95,7 +93,7 @@ final class AnneeScolaireController extends AbstractController
 
             $this->dispatchMessage(new AnneeScolaireUpdated($anneeScolaire->getId()));
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW, [self::ID => $anneeScolaire->getId()]);
+            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
         }
 
         return $this->render(
@@ -116,7 +114,7 @@ final class AnneeScolaireController extends AbstractController
             if (\count($anneeScolaire->getEnfants()) > 0) {
                 $this->addFlash('danger', 'Une année scolaire contenant des enfants ne peux pas être supprimée');
 
-                return $this->redirectToRoute(self::MERCREDI_ADMIN_ANNEE_SCOLAIRE_SHOW, [self::ID => $anneeScolaire->getId()]);
+                return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
             }
 
             $ecoleId = $anneeScolaire->getId();

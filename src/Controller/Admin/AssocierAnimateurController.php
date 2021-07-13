@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AssocierAnimateurController extends AbstractController
 {
-    private const MERCREDI_ADMIN_USER_SHOW = 'mercredi_admin_user_show';
-    private const ID = 'id';
     private AssociationAnimateurHandler $associationAnimateurHandler;
     private AnimateurRepository $animateurRepository;
 
@@ -42,7 +40,7 @@ final class AssocierAnimateurController extends AbstractController
         if (!$user->isAnimateur()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de animateur');
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         $associateUserAnimateurDto = new AssociateUserAnimateurDto($user);
@@ -53,7 +51,7 @@ final class AssocierAnimateurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->associationAnimateurHandler->handleAssociateAnimateur($associateUserAnimateurDto);
 
-            return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
@@ -75,13 +73,13 @@ final class AssocierAnimateurController extends AbstractController
             if (0 === $animateurId) {
                 $this->addFlash('danger', 'L\'animateur n\'a pas été trouvé');
 
-                return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+                return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
             }
 
             $animateur = $this->animateurRepository->find($animateurId);
             $this->associationAnimateurHandler->handleDissociateAnimateur($user, $animateur);
         }
 
-        return $this->redirectToRoute(self::MERCREDI_ADMIN_USER_SHOW, [self::ID => $user->getId()]);
+        return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
     }
 }

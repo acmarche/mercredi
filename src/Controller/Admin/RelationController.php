@@ -23,8 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class RelationController extends AbstractController
 {
-    private const DANGER = 'danger';
-      private const ID = 'id';
     private RelationRepository $relationRepository;
     private RelationHandler $relationHandler;
 
@@ -46,15 +44,15 @@ final class RelationController extends AbstractController
                 $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
                 $this->dispatchMessage(new RelationCreated($relation->getId()));
             } catch (Exception $e) {
-                $this->addFlash(self::DANGER, $e->getMessage());
+                $this->addFlash('danger', $e->getMessage());
 
-                return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
+                return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
             }
         } else {
-            $this->addFlash(self::DANGER, 'Formulaire non valide');
+            $this->addFlash('danger', 'Formulaire non valide');
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
     }
 
     /**
@@ -70,7 +68,7 @@ final class RelationController extends AbstractController
 
             $this->dispatchMessage(new RelationUpdated($relation->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $relation->getEnfant()->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $relation->getEnfant()->getId()]);
         }
 
         return $this->render(
@@ -90,13 +88,13 @@ final class RelationController extends AbstractController
         $relationId = $request->request->get('relationid');
 
         if (! $relationId) {
-            $this->addFlash(self::DANGER, 'Relation non trouvée');
+            $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
         if (null === $relation) {
-            $this->addFlash(self::DANGER, 'Relation non trouvée');
+            $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
@@ -109,6 +107,6 @@ final class RelationController extends AbstractController
             $this->dispatchMessage(new RelationDeleted($relationId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', [self::ID => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
     }
 }

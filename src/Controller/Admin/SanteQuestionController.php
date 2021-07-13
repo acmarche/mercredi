@@ -21,7 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SanteQuestionController extends AbstractController
 {
-    private const SANTE_QUESTION = 'sante_question';
     private SanteQuestionRepository $santeQuestionRepository;
 
     public function __construct(SanteQuestionRepository $santeQuestionRepository)
@@ -63,7 +62,7 @@ final class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/new.html.twig',
             [
-                self::SANTE_QUESTION => $santeQuestion,
+                'sante_question' => $santeQuestion,
                 'form' => $form->createView(),
             ]
         );
@@ -77,7 +76,7 @@ final class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/show.html.twig',
             [
-                self::SANTE_QUESTION => $santeQuestion,
+                'sante_question' => $santeQuestion,
             ]
         );
     }
@@ -101,7 +100,7 @@ final class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/edit.html.twig',
             [
-                self::SANTE_QUESTION => $santeQuestion,
+                'sante_question' => $santeQuestion,
                 'form' => $form->createView(),
             ]
         );
