@@ -4,7 +4,7 @@
     <ul class="nav nav-tabs" id="tabPresences" role="tablist">
         {% for year in prensencesGrouped|keys %}
             <li class="nav-item">
-                <a class="nav-link" id="tab-{{ year }}" data-toggle="tab" href="#year-{{ year }}" role="tab"
+                <a class="nav-link" id="tab-{{ year }}" data-bs-toggle="tab" href="#year-{{ year }}" role="tab"
                    aria-controls="home" aria-selected="true">{{ year }}</a>
             </li>
         {% endfor %}

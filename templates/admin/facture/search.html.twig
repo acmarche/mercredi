@@ -16,6 +16,7 @@
                     <thead>
                     <tr>
                         <th>Numéro</th>
+                        <th>Mois</th>
                         <th>Facturé le</th>
                         <th>Facturé à</th>
                         <th>Payé le</th>
@@ -30,6 +31,9 @@
                                 <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
                                     N° {{ facture.id }}
                                 </a>
+                            </td>
+                            <td>
+                                {{ facture.mois }}
                             </td>
                             <td>
                                 {{ facture.factureLe | format_date('full') | title }}

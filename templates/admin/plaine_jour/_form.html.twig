@@ -1,7 +1,6 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 
-
 <div class="row tags mb-2" id="lolo" data-prototype="{{ form_widget(form.jours.vars.prototype)|e('html_attr') }}">
     {% for jour in form.jours %}
         <div class="col-6 remove{{ loop.index }}">
@@ -13,7 +12,8 @@
     {% endfor %}
 </div>
 
-<button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+<button class="btn btn-primary" type="submit"><i class="far fa-save" aria-hidden="true"></i>
     Sauvegarder
 </button>
+
 {{ form_end(form) }}
