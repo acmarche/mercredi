@@ -28,8 +28,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AccueilController extends AbstractController
 {
-    private const ENFANT = 'enfant';
-    private const ID = 'id';
     private AccueilRepository $accueilRepository;
     private AccueilHandler $accueilHandler;
     private RelationRepository $relationRepository;
@@ -89,7 +87,7 @@ final class AccueilController extends AbstractController
             [
                 'accueils' => $accueils,
                 'relations' => $relations,
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
             ]
         );
     }
@@ -109,13 +107,13 @@ final class AccueilController extends AbstractController
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatchMessage(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', [self::ID => $result->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $result->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/new.html.twig',
             [
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'form' => $form->createView(),
             ]
         );
@@ -135,7 +133,7 @@ final class AccueilController extends AbstractController
             [
                 'accueil' => $accueil,
                 'cout' => $cout,
-                self::ENFANT => $enfant,
+                'enfant' => $enfant,
                 'facture' => $factureAccueil,
             ]
         );
@@ -146,6 +144,12 @@ final class AccueilController extends AbstractController
      */
     public function edit(Request $request, Accueil $accueil): Response
     {
+        if ($this->accueilHandler->isFactured($accueil)) {
+            $this->addFlash('danger', 'Un accueil déjà facturé ne peut être modifié');
+
+            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+        }
+
         $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
 
@@ -154,7 +158,7 @@ final class AccueilController extends AbstractController
 
             $this->dispatchMessage(new AccueilUpdated($accueil->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', [self::ID => $accueil->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
         }
 
         return $this->render(
@@ -172,6 +176,12 @@ final class AccueilController extends AbstractController
     public function delete(Request $request, Accueil $accueil): Response
     {
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
+
+            if ($this->accueilHandler->isFactured($accueil)) {
+                $this->addFlash('danger', 'Un accueil déjà facturé ne peut être supprimé');
+
+                return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+            }
             $id = $accueil->getId();
             $enfant = $accueil->getEnfant();
             $this->accueilRepository->remove($accueil);
@@ -179,6 +189,6 @@ final class AccueilController extends AbstractController
             $this->dispatchMessage(new AccueilDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', [self::ID => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
     }
 }

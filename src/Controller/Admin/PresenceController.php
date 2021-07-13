@@ -191,7 +191,7 @@ final class PresenceController extends AbstractController
     public function edit(Request $request, Presence $presence): Response
     {
         if ($this->presenceHandler->isFactured($presence)) {
-            $this->addFlash('danger', 'Une présence déjà facturée ne peut être editée');
+            $this->addFlash('danger', 'Une présence déjà facturée ne peut être éditée');
 
             return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
         }
@@ -222,6 +222,13 @@ final class PresenceController extends AbstractController
     public function delete(Request $request, Presence $presence): Response
     {
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
+
+            if ($this->presenceHandler->isFactured($presence)) {
+                $this->addFlash('danger', 'Une présence déjà facturée ne peut être supprimée');
+
+                return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
+            }
+
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
             $this->presenceRepository->flush();
