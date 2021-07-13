@@ -24,7 +24,7 @@ use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
  *
  * @ORM\Table("accueil")
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
- * @UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
+ * UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
  */
 class Accueil implements TimestampableInterface, UuidableInterface
 {
