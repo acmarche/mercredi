@@ -26,6 +26,22 @@ final class RegistrationFormType extends AbstractType
         $formBuilder
             ->remove('roles')
             ->add(
+                'nom',
+                TextType::class,
+                [
+                    'required' => true,
+                    'label' => 'Nom du parent',
+                ]
+            )
+            ->add(
+                'prenom',
+                TextType::class,
+                [
+                    'required' => true,
+                    'label' => 'Prénom du parent',
+                ]
+            )
+            ->add(
                 'telephone',
                 TextType::class,
                 [

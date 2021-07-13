@@ -24,7 +24,7 @@ Feature: Gestion des plaines
     Then I fill in "plaine_jour[jours][0][date_jour]" with "2020-02-10"
     Then I fill in "plaine_jour[jours][1][date_jour]" with "2020-02-11"
     And I press "Sauvegarder"
-    Then I should see "La plaine a bien été ajoutée"
+    Then I should see "les dates ont bien été enregistrées"
     Then I should see "lundi 10 février 2020"
     Then I should see "mardi 11 février 2020"
 
