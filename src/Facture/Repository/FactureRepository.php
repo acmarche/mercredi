@@ -80,7 +80,8 @@ final class FactureRepository extends ServiceEntityRepository
             ->leftJoin('facture.factureAccueils', 'factureAccueils', 'WITH')
             ->leftJoin('factureAccueils.accueil', 'accueil', 'WITH')
             ->leftJoin('accueil.enfant', 'enfantA', 'WITH')
-            ->addSelect('tuteur', 'facturePresences', 'factureAccueils', 'presence', 'enfantA', 'enfantE', 'accueil');
+            ->leftJoin('enfantA.sante_fiche', 'sante_fiche', 'WITH')
+            ->addSelect('tuteur', 'facturePresences', 'factureAccueils', 'presence', 'enfantA', 'enfantE', 'accueil', 'sante_fiche');
 
         if ($tuteur) {
             $queryBuilder->andWhere('tuteur.nom LIKE :tuteur')

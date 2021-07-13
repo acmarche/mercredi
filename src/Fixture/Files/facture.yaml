@@ -7,4 +7,6 @@ AcMarche\Mercredi\Entity\Facture\Facture:
     code_postal: '<postcode()>'
     localite: '<city()>'
     facture_le: '<carbonDateTime(2020,10,06,9,0)>'
+    mois: '06-2020'
+    communication: '123/4567/8910'
     userAdd: 'administrateur'

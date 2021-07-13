@@ -58,7 +58,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
      */
-    private ?Tuteur $tuteur ;
+    private ?Tuteur $tuteur  = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")

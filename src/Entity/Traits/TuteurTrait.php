@@ -6,14 +6,14 @@ use AcMarche\Mercredi\Entity\Tuteur;
 
 trait TuteurTrait
 {
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur = null;
 
-    public function getTuteur(): Tuteur
+    public function getTuteur(): ?Tuteur
     {
         return $this->tuteur;
     }
 
-    public function setTuteur(Tuteur $tuteur): void
+    public function setTuteur(?Tuteur $tuteur): void
     {
         $this->tuteur = $tuteur;
     }

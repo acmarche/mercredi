@@ -123,7 +123,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('presence.jour', 'jour', 'WITH')
             ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter('jour', $jours)
+            ->setParameter('jours', $jours)
             ->getQuery()->getResult();
     }
 
@@ -139,7 +139,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('presence.jour', 'jour', 'WITH')
             ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter('jour', $jours)
+            ->setParameter('jours', $jours)
             ->andWhere('presence.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
@@ -154,7 +154,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('presence.jour', 'jour', 'WITH')
             ->addSelect('enfant', 'jour')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter('jour', $jours)
+            ->setParameter('jours', $jours)
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
@@ -204,7 +204,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->join('presence.enfant', 'enfant', 'WITH')
             ->addSelect('enfant')
             ->andWhere('presence.jour IN (:jours)')
-            ->setParameter('jour', $jours)
+            ->setParameter('jours', $jours)
             ->getQuery()->getResult();
     }
 

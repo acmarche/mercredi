@@ -20,10 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PlaineJourController extends AbstractController
 {
-    /**
-     * @var string
-     */
-    private const PLAINE = 'plaine';
     private PlaineRepository $plaineRepository;
     private EnfantRepository $enfantRepository;
     private PlaineHandler $plaineHandler;
@@ -73,7 +69,7 @@ final class PlaineJourController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_jour/edit.html.twig',
             [
-                self::PLAINE => $plaine,
+                'plaine' => $plaine,
                 'form' => $form->createView(),
             ]
         );
@@ -87,7 +83,7 @@ final class PlaineJourController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',
             [
-                self::PLAINE => $plaine,
+                'plaine' => $plaine,
             ]
         );
     }
@@ -98,7 +94,7 @@ final class PlaineJourController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
-            if (count($this->enfantRepository->findBy([self::PLAINE => $plaine])) > 0) {
+            if (count($this->enfantRepository->findBy(['plaine' => $plaine])) > 0) {
                 $this->addFlash('danger', 'La plaine contient des enfants et ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);

@@ -41,7 +41,7 @@ class Facture implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="factures")
      */
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur = null;
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */

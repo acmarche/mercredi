@@ -16,7 +16,7 @@ interface PresenceInterface
 
     public function setAbsent(int $absent): void;
 
-    public function getEnfant(): Enfant;
+    public function getEnfant(): ?Enfant;
 
     public function setEnfant(Enfant $enfant): void;
 
@@ -52,7 +52,7 @@ interface PresenceInterface
 
     public function updateTimestamps(): void;
 
-    public function getTuteur(): Tuteur;
+    public function getTuteur(): ?Tuteur;
 
     public function setTuteur(Tuteur $tuteur): void;
 
