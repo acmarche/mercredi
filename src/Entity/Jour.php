@@ -24,8 +24,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ORM\Table(uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"date_jour", "pedagogique"})
+ * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Jour\Repository\JourRepository")
- * @UniqueEntity("date_jour")
+ * @UniqueEntity("date_jour", "pedagogique")
  */
 class Jour implements TimestampableInterface
 {
@@ -43,7 +46,7 @@ class Jour implements TimestampableInterface
     /**
      * @var DateTime|null
      *
-     * @ORM\Column(name="date_jour", type="date", unique=true)
+     * @ORM\Column(name="date_jour", type="date")
      * @Assert\Type("datetime")
      */
     private ?DateTimeInterface $date_jour;
