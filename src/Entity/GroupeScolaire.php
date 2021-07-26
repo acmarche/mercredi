@@ -29,6 +29,11 @@ class GroupeScolaire
     private ?int $age_maximum = null;
 
     /**
+     * @ORM\Column(type="boolean", length=10, nullable=false)
+     */
+    private ?bool $is_plaine = false;
+
+    /**
      * @var Enfant[]
      * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Enfant", mappedBy="groupe_scolaire")
      */
@@ -170,6 +175,18 @@ class GroupeScolaire
                 $plaineGroupe->setGroupeScolaire(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsPlaine(): ?bool
+    {
+        return $this->is_plaine;
+    }
+
+    public function setIsPlaine(bool $is_plaine): self
+    {
+        $this->is_plaine = $is_plaine;
 
         return $this;
     }

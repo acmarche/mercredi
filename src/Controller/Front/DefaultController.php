@@ -24,9 +24,7 @@ final class DefaultController extends AbstractController
         $this->pageFactory = $pageFactory;
     }
 
-    /**
-     * @Route("/", name="mercredi_front_home")
-     */
+    #[Route('/', name: 'mercredi_front_home')]
     public function index(): Response
     {
         $homePage = $this->pageRepository->findHomePage();

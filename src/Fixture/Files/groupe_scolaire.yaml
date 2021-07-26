@@ -5,3 +5,9 @@ AcMarche\Mercredi\Entity\GroupeScolaire:
     nom: 'Moyens'
   groupe_Grands:
     nom: 'Grands'
+  groupe_Petits_plaine:
+    nom: 'Petits_plaine'
+  groupe_Moyens_plaine:
+    nom: 'Moyens_plaine'
+  groupe_Grands_plaine:
+    nom: 'Grands_plaine'

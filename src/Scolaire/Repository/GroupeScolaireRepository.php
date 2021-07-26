@@ -15,11 +15,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class GroupeScolaireRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
-    private const GROUPE_SCOLAIRE = 'groupe_scolaire';
-
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, GroupeScolaire::class);
@@ -30,19 +25,19 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
      */
     public function findAllOrderByNom(): array
     {
-        return $this->createQueryBuilder(self::GROUPE_SCOLAIRE)
+        return $this->createQueryBuilder('groupe_scolaire')
             ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder(self::GROUPE_SCOLAIRE)
+        return $this->createQueryBuilder('groupe_scolaire')
             ->orderBy('groupe_scolaire.nom', 'DESC');
     }
 
     public function findByAnneeScolaire(?string $annee_scolaire): ?GroupeScolaire
     {
-        return $this->createQueryBuilder(self::GROUPE_SCOLAIRE)
+        return $this->createQueryBuilder('groupe_scolaire')
             ->andWhere(':annee MEMBER OF groupe_scolaire.annees_scolaires')
             ->setParameter('annee', $annee_scolaire)
             ->getQuery()->getOneOrNullResult();

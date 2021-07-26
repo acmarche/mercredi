@@ -2,11 +2,14 @@
 {{ form_errors(form) }}
 {{ form_row(form.nom) }}
 <div class="row">
-    <div class="col-6">
+    <div class="col-4">
         {{ form_row(form.age_minimum) }}
     </div>
-    <div class="col-6">
+    <div class="col-4">
         {{ form_row(form.age_maximum) }}
+    </div>
+    <div class="col-4">
+        {{ form_row(form.isPlaine) }}
     </div>
 </div>
 {{ form_row(form.remarque) }}
