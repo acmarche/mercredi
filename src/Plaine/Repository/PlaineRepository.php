@@ -20,10 +20,12 @@ final class PlaineRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Plaine::class);
     }
 
-    public function findPlaineOpen(): ?Plaine
+    public function findPlaineOpen(Plaine $plaine): ?Plaine
     {
         return $this->createQueryBuilder('plaine')
             ->andWhere('plaine.inscriptionOpen = 1')
+            ->andWhere('plaine != :plaine')
+            ->setParameter('plaine', $plaine)
             ->getQuery()
             ->getOneOrNullResult();
     }

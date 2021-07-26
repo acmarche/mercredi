@@ -13,19 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PlaineType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-    /**
-     * @var string
-     */
-    private const HELP = 'help';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -34,51 +21,42 @@ final class PlaineType extends AbstractType
                 'prix1',
                 MoneyType::class,
                 [
-                    self::REQUIRED => true,
-                    self::LABEL => 'Prix 1er enfant',
-                    self::HELP => 'Uniquement les chiffres',
+                    'required' => true,
+                    'label' => 'Prix 1er enfant',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
             ->add(
                 'prix2',
                 MoneyType::class,
                 [
-                    self::REQUIRED => true,
-                    self::LABEL => 'Prix 2iem enfant et suivant',
-                    self::HELP => 'Uniquement les chiffres',
+                    'required' => true,
+                    'label' => 'Prix 2iem enfant et suivant',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
-
             ->add(
                 'plaine_groupes',
                 CollectionType::class,
                 [
                     'entry_type' => PlaineGroupeType::class,
-                    self::LABEL => 'Maximum par groupe',
+                    'entry_options' => ['label' => false],
+                    'label' => 'Maximum par groupe',
                 ]
             )
             ->add(
                 'prematernelle',
                 CheckboxType::class,
                 [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Distinguer les prématernelles pour le listing ?',
-                ]
-            )
-            ->add(
-                'inscriptionOpen',
-                CheckboxType::class,
-                [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Ouvrir les inscriptions',
-                    self::HELP => 'Si cette case est cochée, les parents pourront inscrire leurs enfants à la plaine',
+                    'required' => false,
+                    'label' => 'Distinguer les prématernelles pour le listing ?',
                 ]
             )
             ->add(
                 'remarque',
                 TextareaType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'attr' => ['rows' => 8],
                 ]
             );

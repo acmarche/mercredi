@@ -2,7 +2,10 @@
 
 namespace AcMarche\Mercredi\Scolaire\Form;
 
+use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,7 +26,21 @@ final class GroupeScolaireType extends AbstractType
             )
             ->add('age_minimum')
             ->add('age_maximum')
-            ->add('remarque');
+            ->add('remarque')
+            ->add(
+                'annees_scolaires',
+                EntityType::class,
+                [
+                    'class' => AnneeScolaire::class,
+                    'query_builder' => function (AnneeScolaireRepository $anneeScolaireRepository) {
+                        $anneeScolaireRepository->getQbForListing();
+                    },
+                    'label' => 'Année(s) scolaire(s)',
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => true,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

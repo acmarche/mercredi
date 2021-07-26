@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Plaine\Form;
 
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
+use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -22,6 +23,9 @@ final class PlaineGroupeType extends AbstractType
                 EntityType::class,
                 [
                     'class' => GroupeScolaire::class,
+                    'query_builder' => function (GroupeScolaireRepository $groupeScolaireRepository) {
+                      return  $groupeScolaireRepository->getQbForListingPlaine();
+                    },
                     'attr' => ['readonly' => true],
                     'label' => false,
                 ]

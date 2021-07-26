@@ -52,7 +52,7 @@ final class PlaineHandler
     public function initJours(Plaine $plaine): void
     {
         $plaine->initJours();
-        $currentJours = $this->findPlaineJoursByPlaine($plaine);
+        $currentJours = $this->plaineJourRepository->findByPlaine($plaine);
         if (0 === count($currentJours)) {
             $today = new Jour(new DateTime('today'));
             $tomorrow = new Jour(new DateTime('+1day'));
@@ -63,14 +63,6 @@ final class PlaineHandler
                 $plaine->addJour($jour->getJour());
             }
         }
-    }
-
-    /**
-     * @return PlaineJour[]
-     */
-    public function findPlaineJoursByPlaine(Plaine $plaine): array
-    {
-        return $this->plaineJourRepository->findByPlaine($plaine);
     }
 
     private function getJourEntityByJour(Jour $jour): Jour
@@ -89,7 +81,7 @@ final class PlaineHandler
 
     private function getPlaineJourByPlaineAndJour(Plaine $plaine, Jour $jour): PlaineJour
     {
-        if (! $jour->getId()) {
+        if (!$jour->getId()) {
             $plaineJour = new PlaineJour($plaine, $jour);
             $this->plaineJourRepository->persist($plaineJour);
 
@@ -111,7 +103,7 @@ final class PlaineHandler
      */
     private function removePlaineJours(Plaine $plaine, iterable $newJours): void
     {
-        $currentPlaineJours = $this->findPlaineJoursByPlaine($plaine);
+        $currentPlaineJours = $this->plaineJourRepository->findByPlaine($plaine);
 
         foreach ($currentPlaineJours as $plaineJour) {
             $found = false;
@@ -123,10 +115,16 @@ final class PlaineHandler
                     break;
                 }
             }
-            if (! $found) {
+            if (!$found) {
                 $this->jourRepository->remove($jourEntity);
                 $this->plaineJourRepository->remove($plaineJour);
             }
         }
     }
+
+    public function handleOpeningRegistrations(Plaine $plaine): ?Plaine
+    {
+        return $this->plaineRepository->findPlaineOpen($plaine);
+    }
+
 }

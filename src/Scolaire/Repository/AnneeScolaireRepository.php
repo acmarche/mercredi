@@ -2,9 +2,6 @@
 
 namespace AcMarche\Mercredi\Scolaire\Repository;
 
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -34,20 +31,8 @@ final class AnneeScolaireRepository extends ServiceEntityRepository
 
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder('jour')
-            ->andWhere('jour.archived = 0')
-            ->orderBy('jour.date_jour', 'DESC');
-    }
-
-    /**
-     * @param DateTime|DateTimeImmutable $dateTime
-     */
-    public function findOneByDateGroupeScolaire(DateTimeInterface $dateTime): ?AnneeScolaire
-    {
-        return $this->createQueryBuilder('jour')
-            ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
-            ->getQuery()->getOneOrNullResult();
+        return $this->createQueryBuilder('annee_scolaire')
+            ->orderBy('annee_scolaire.ordre', 'ASC');
     }
 
     public function remove(AnneeScolaire $anneeScolaire): void

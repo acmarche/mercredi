@@ -23,24 +23,24 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     /**
      * @return GroupeScolaire[]
      */
-    public function findAllOrderByNom(): array
+    public function findAllForPlaineOrderByNom(): array
     {
-        return $this->createQueryBuilder('groupe_scolaire')
+        return $this->getQbForListingPlaine()
             ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
-    public function getQbForListing(): QueryBuilder
+    public function getQbForListingPresence(): QueryBuilder
     {
         return $this->createQueryBuilder('groupe_scolaire')
+            ->andWhere('groupe_scolaire.is_plaine != 1')
             ->orderBy('groupe_scolaire.nom', 'DESC');
     }
 
-    public function findByAnneeScolaire(?string $annee_scolaire): ?GroupeScolaire
+    public function getQbForListingPlaine()
     {
         return $this->createQueryBuilder('groupe_scolaire')
-            ->andWhere(':annee MEMBER OF groupe_scolaire.annees_scolaires')
-            ->setParameter('annee', $annee_scolaire)
-            ->getQuery()->getOneOrNullResult();
+            ->andWhere('groupe_scolaire.is_plaine = 1')
+            ->orderBy('groupe_scolaire.nom', 'DESC');
     }
 
     public function remove(GroupeScolaire $groupeScolaire): void
@@ -57,4 +57,5 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     {
         $this->_em->persist($groupeScolaire);
     }
+
 }

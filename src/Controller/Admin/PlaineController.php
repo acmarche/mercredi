@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
+use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
@@ -26,15 +28,18 @@ final class PlaineController extends AbstractController
     private PlaineRepository $plaineRepository;
     private PlainePresenceRepository $plainePresenceRepository;
     private GroupeScolaireRepository $groupeScolaireRepository;
+    private PlaineHandler $plaineHandler;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         PlainePresenceRepository $plainePresenceRepository,
-        GroupeScolaireRepository $groupeScolaireRepository
+        GroupeScolaireRepository $groupeScolaireRepository,
+        PlaineHandler $plaineHandler
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->groupeScolaireRepository = $groupeScolaireRepository;
+        $this->plaineHandler = $plaineHandler;
     }
 
     /**
@@ -56,7 +61,7 @@ final class PlaineController extends AbstractController
     public function new(Request $request): Response
     {
         $plaine = new Plaine();
-        foreach ($this->groupeScolaireRepository->findAllOrderByNom() as $groupe) {
+        foreach ($this->groupeScolaireRepository->findAllForPlaineOrderByNom() as $groupe) {
             $plaineGroupe = new PlaineGroupe($plaine, $groupe);
             $plaine->addPlaineGroupe($plaineGroupe);
         }
@@ -115,6 +120,38 @@ final class PlaineController extends AbstractController
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/edit.html.twig',
+            [
+                'plaine' => $plaine,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{id}/open", name="mercredi_admin_plaine_open", methods={"GET","POST"})
+     */
+    public function open(Request $request, Plaine $plaine): Response
+    {
+        $form = $this->createForm(PlaineOpenType::class, $plaine);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$plaineOpen = $this->plaineHandler->handleOpeningRegistrations($plaine)) {
+                $this->plaineRepository->flush();
+                $this->dispatchMessage(new PlaineUpdated($plaine->getId()));
+            } else {
+                $this->addFlash(
+                    'danger',
+                    'Les inscriptions n\'ont pas pu être ouvrir car la plaine '.$plaineOpen->getNom(
+                    ).' est toujours ouverte'
+                );
+            }
+
+            return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/plaine/open.html.twig',
             [
                 'plaine' => $plaine,
                 'form' => $form->createView(),

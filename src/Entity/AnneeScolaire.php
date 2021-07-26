@@ -19,7 +19,6 @@ class AnneeScolaire
     use RemarqueTrait;
 
     /**
-     * @var AnneeScolaire
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire")
      * @ORM\JoinColumn(onDelete="SET NULL", unique=true)
      */

@@ -17,6 +17,7 @@
                     <th>Groupe scolaire</th>
                     <th>Année suivante</th>
                     <th>Enfants</th>
+                    <th>Ordre</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,15 +28,10 @@
                                 {{ annee_scolaire.nom }}
                             </a>
                         </td>
-                        <td>
-                            {{ annee_scolaire.groupeScolaire }}
-                        </td>
-                        <td>
-                            {{ annee_scolaire.anneeSuivante }}
-                        </td>
-                        <td>
-                            {{ annee_scolaire.enfants | length }}
-                        </td>
+                        <td>{{ annee_scolaire.groupeScolaire }}</td>
+                        <td>{{ annee_scolaire.anneeSuivante }}</td>
+                        <td>{{ annee_scolaire.enfants | length }}</td>
+                        <td>{{ annee_scolaire.ordre }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
