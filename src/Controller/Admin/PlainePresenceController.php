@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -13,16 +12,18 @@ use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
-use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\Form\SearchNameType;
+use AcMarche\Mercredi\Utils\SortUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -34,20 +35,20 @@ final class PlainePresenceController extends AbstractController
     private EnfantRepository $enfantRepository;
     private PlainePresenceHandler $plainePresenceHandler;
     private RelationRepository $relationRepository;
-    private PlainePresenceRepository $plainePresenceRepository;
+    private PresenceRepository $presenceRepository;
     private PlaineCalculatorInterface $plaineCalculator;
 
     public function __construct(
         PlainePresenceHandler $plainePresenceHandler,
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
-        PlainePresenceRepository $plainePresenceRepository,
+        PresenceRepository $presenceRepository,
         PlaineCalculatorInterface $plaineCalculator
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->plainePresenceHandler = $plainePresenceHandler;
         $this->relationRepository = $relationRepository;
-        $this->plainePresenceRepository = $plainePresenceRepository;
+        $this->presenceRepository = $presenceRepository;
         $this->plaineCalculator = $plaineCalculator;
     }
 
@@ -125,7 +126,7 @@ final class PlainePresenceController extends AbstractController
     {
         $this->plainePresenceHandler->handleAddEnfant($plaine, $tuteur, $enfant);
 
-        $this->addFlash('success', "L'enfant a bien été ajouté");
+        $this->addFlash('success', "L'enfant a bien été inscrit");
 
         return $this->redirectToRoute(
             'mercredi_admin_plaine_presence_show',
@@ -141,7 +142,8 @@ final class PlainePresenceController extends AbstractController
      */
     public function show(Plaine $plaine, Enfant $enfant): Response
     {
-        $presences = $this->plainePresenceRepository->findPrecencesByPlaineAndEnfant($plaine, $enfant);
+        $presences = $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
+        $presences = SortUtils::sortPresences($presences);
         $cout = $this->plaineCalculator->calculate($plaine, $enfant);
 
         return $this->render(
@@ -243,7 +245,7 @@ final class PlainePresenceController extends AbstractController
     public function delete(Request $request, Plaine $plaine): Response
     {
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int) $request->request->get('presence');
+            $presenceId = (int)$request->request->get('presence');
             if (0 === $presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
 

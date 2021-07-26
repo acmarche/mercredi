@@ -49,11 +49,4 @@ final class PlainePresenceRepository
         return PresenceUtils::extractPlainesFromPresences($presences);
     }
 
-    /**
-     * @return Presence[]
-     */
-    public function findPrecencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant): iterable
-    {
-        return $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
-    }
 }

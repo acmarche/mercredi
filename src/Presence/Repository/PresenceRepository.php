@@ -145,7 +145,10 @@ final class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant)
+    /**
+     * @return Presence[]
+     */
+    public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant):array
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
