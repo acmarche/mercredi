@@ -35,19 +35,6 @@ final class PlaineJourController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_plaine_jour_index", methods={"GET"})
-     */
-    public function index(): Response
-    {
-        return $this->render(
-            '@AcMarcheMercrediAdmin/plaine/index.html.twig',
-            [
-                'plaines' => $this->plaineRepository->findAll(),
-            ]
-        );
-    }
-
-    /**
      * @Route("/edit/{id}", name="mercredi_admin_plaine_jour_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Plaine $plaine): Response

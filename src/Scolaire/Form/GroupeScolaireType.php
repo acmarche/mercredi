@@ -8,6 +8,9 @@ use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,10 +25,28 @@ final class GroupeScolaireType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Groupe pour les plaines ?',
+                    'required' => false,
                 ]
             )
-            ->add('age_minimum')
-            ->add('age_maximum')
+            ->add(
+                'age_minimum',
+                NumberType::class,
+                [
+                    'label' => 'Âge minimum',
+                    'help' => '',
+                    'scale' => 1,
+                ]
+            )
+            ->add(
+                'age_maximum',
+                NumberType::class,
+                [
+                    'label' => 'Âge maximum',
+                    'help' => '',
+                    'scale' => 1,
+                    'grouping' => false,
+                ]
+            )
             ->add('remarque')
             ->add(
                 'annees_scolaires',

@@ -20,13 +20,13 @@ class GroupeScolaire
     use RemarqueTrait;
 
     /**
-     * @ORM\Column(type="integer", length=10, nullable=true)
+     * @ORM\Column(type="decimal", precision=2, scale=1, nullable=true)
      */
-    private ?int $age_minimum = null;
+    private ?float $age_minimum = null;
     /**
-     * @ORM\Column(type="integer", length=10, nullable=true)
+     * @ORM\Column(type="decimal", precision=2, scale=1, nullable=true)
      */
-    private ?int $age_maximum = null;
+    private ?float $age_maximum = null;
 
     /**
      * @ORM\Column(type="boolean", length=10, nullable=false)
@@ -65,24 +65,24 @@ class GroupeScolaire
         return $this->nom;
     }
 
-    public function getAgeMinimum(): ?int
+    public function getAgeMinimum(): ?float
     {
         return $this->age_minimum;
     }
 
-    public function setAgeMinimum(?int $age_minimum): self
+    public function setAgeMinimum(?float $age_minimum): self
     {
         $this->age_minimum = $age_minimum;
 
         return $this;
     }
 
-    public function getAgeMaximum(): ?int
+    public function getAgeMaximum(): ?float
     {
         return $this->age_maximum;
     }
 
-    public function setAgeMaximum(?int $age_maximum): self
+    public function setAgeMaximum(?float $age_maximum): self
     {
         $this->age_maximum = $age_maximum;
 

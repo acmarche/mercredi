@@ -54,10 +54,10 @@ final class PlaineHandler
         $plaine->initJours();
         $currentJours = $this->plaineJourRepository->findByPlaine($plaine);
         if (0 === count($currentJours)) {
-            $today = new Jour(new DateTime('today'));
-            $tomorrow = new Jour(new DateTime('+1day'));
-            $plaine->addJour($today);
-            $plaine->addJour($tomorrow);
+            $plaine->addJour(new Jour(new DateTime('today')));
+            for ($i = 1; $i < 5; $i++) {
+                $plaine->addJour(new Jour(new DateTime('+'.$i.' day')));
+            }
         } else {
             foreach ($currentJours as $jour) {
                 $plaine->addJour($jour->getJour());
