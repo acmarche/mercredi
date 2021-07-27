@@ -2,13 +2,10 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
-use DateTimeInterface;
-use DateTime;
-use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use AcMarche\Mercredi\Entity\Traits\PresenceTrait;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -25,7 +22,6 @@ class FacturePresence
     use NomTrait;
     use PrenomTrait;
     use FactureTrait;
-    use PresenceTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", inversedBy="facturePresences")

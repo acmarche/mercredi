@@ -44,7 +44,7 @@ final class ExportPdfController extends AbstractController
     }
 
     /**
-     * @Route("/pdf/{uuid}", name="mercredi_commun_export_facture_pdf")
+     * @Route("/facture/{uuid}", name="mercredi_commun_export_facture_pdf")
      */
     public function facture(Facture $facture): Response
     {

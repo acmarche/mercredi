@@ -51,8 +51,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('facture_presence')
             ->leftJoin('facture_presence.facture', 'facture', 'WITH')
             ->addSelect('facture')
-         //   ->andWhere('facture_presence.presenceId IN (:presences)')
-         //   ->setParameter('presences', $presenceIds)
+            ->andWhere('facture_presence.presenceId IN (:presences)')
+            ->setParameter('presences', $presenceIds)
             ->andWhere('facture_presence.objectType = :type')
             ->setParameter('type', $type)
             ->getQuery()->getResult();
@@ -68,6 +68,22 @@ final class FacturePresenceRepository extends ServiceEntityRepository
             ->andWhere('facture_presence.objectType = :type')
             ->setParameter('type', $type)
             ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param string $type
+     * @return array|FacturePresence[]
+     */
+    public function findByFactureAndType(Facture $facture, string $type): array
+    {
+        return $this->createQueryBuilder('facture_presence')
+            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
+            ->addSelect('facture')
+            ->andWhere('facture_presence.facture = :fact')
+            ->setParameter('fact', $facture)
+            ->andWhere('facture_presence.objectType = :type')
+            ->setParameter('type', $type)
+            ->getQuery()->getResult();
     }
 
     public function findByPresence(Presence $presence): ?FacturePresence
