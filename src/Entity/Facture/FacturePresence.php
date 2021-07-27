@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\PedagogiqueTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +23,7 @@ class FacturePresence
     use NomTrait;
     use PrenomTrait;
     use FactureTrait;
+    use PedagogiqueTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", inversedBy="facturePresences")

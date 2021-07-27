@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
-use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -10,7 +9,6 @@ use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use DateTime;
 use Twig\Environment;
 
@@ -19,22 +17,17 @@ final class FactureFactory
     private Environment $environment;
     private OrganisationRepository $organisationRepository;
     private FactureUtils $factureUtils;
-    private PresenceRepository $presenceRepository;
     private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
         Environment $environment,
         OrganisationRepository $organisationRepository,
         FactureUtils $factureUtils,
-        PresenceRepository $presenceRepository,
-        AccueilRepository $accueilRepository,
         FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->environment = $environment;
         $this->organisationRepository = $organisationRepository;
         $this->factureUtils = $factureUtils;
-        $this->presenceRepository = $presenceRepository;
-        $this->accueilRepository = $accueilRepository;
         $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
@@ -155,13 +148,12 @@ final class FactureFactory
 
     private function groupPresences(FacturePresence $facturePresence, array $data): array
     {
-        $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
         $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
         $slug = $this->factureUtils->slugger->slug($enfant);
-        if ($presence->getJour()->isPedagogique()) {
+        if ($facturePresence->isPedagogique()) {
             $data['enfants'][$slug->toString()]['peda'] += 1;
         }
-        if (!$presence->getJour()->isPedagogique()) {
+        if (!$facturePresence->isPedagogique()) {
             $data['enfants'][$slug->toString()]['mercredi'] += 1;
         }
         $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCout();

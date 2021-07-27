@@ -167,6 +167,7 @@ final class FactureHandler
     {
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
+            $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
             $facturePresence->setNom($enfant->getNom());
