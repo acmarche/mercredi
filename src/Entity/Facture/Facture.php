@@ -65,6 +65,10 @@ class Facture implements TimestampableInterface, UuidableInterface
      * @ORM\Column(type="string", length=100,nullable=false, unique=true)
      */
     private ?string $communication = null;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $plaine = null;
 
     /**
      * @var Ecole[] $ecoles
@@ -155,6 +159,18 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function setCommunication(string $communication): self
     {
         $this->communication = $communication;
+
+        return $this;
+    }
+
+    public function getPlaine(): ?string
+    {
+        return $this->plaine;
+    }
+
+    public function setPlaine(?string $plaine): self
+    {
+        $this->plaine = $plaine;
 
         return $this;
     }

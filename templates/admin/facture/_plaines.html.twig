@@ -1,0 +1,23 @@
+{% if facturePlaines | length > 0 %}
+    <h4 class="text-success">Plaine</h4>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Enfant</th>
+            <th>Date</th>
+            <th>Coût</th>
+        </tr>
+        </thead>
+        {% for accueil in facturePlaines %}
+            <tr>
+                <td>{{ accueil.nom }} {{ accueil.prenom }}</td>
+                <td>
+                    <a href="{{ path('mercredi_admin_facture_presence_show', {'id': accueil.id}) }}">
+                        {{ accueil.presenceDate | format_date('full') }}
+                    </a>
+                </td>
+                <td>{{ accueil.cout }} €</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

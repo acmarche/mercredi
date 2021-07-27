@@ -84,7 +84,8 @@ class FactureHandler
     private function attachPresences(Facture $facture, Plaine $plaine, array $presences): void
     {
         foreach ($presences as $presence) {
-            $facturePresence = new FacturePresence($facture, $presence, FactureInterface::OBJECT_PLAINE);
+            $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
+            $facturePresence->setPlaine($plaine->getNom());
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
             $facturePresence->setNom($enfant->getNom());
@@ -137,8 +138,7 @@ class FactureHandler
 
     private function flush(): void
     {
-        //   $this->factureRepository->flush();
-        //   $this->facturePresenceRepository->flush();
+        $this->factureRepository->flush();
     }
 
 

@@ -221,6 +221,10 @@ final class FactureController extends AbstractController
             $facture,
             FactureInterface::OBJECT_ACCUEIL
         );
+        $facturePlaines = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_PLAINE
+        );
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
@@ -229,6 +233,7 @@ final class FactureController extends AbstractController
                 'tuteur' => $tuteur,
                 'facturePresences' => $facturePresences,
                 'factureAccueils' => $factureAccueils,
+                'facturePlaines' => $facturePlaines,
             ]
         );
     }

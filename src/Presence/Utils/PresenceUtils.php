@@ -159,7 +159,7 @@ final class PresenceUtils
      *
      * @return ArrayCollection|Plaine[]
      */
-    public static function extractPlainesFromPresences(array $presences): ArrayCollection
+    public static function extractPlainesFromPresences(array $presences): array
     {
         $plaines = new ArrayCollection();
         array_map(
@@ -180,6 +180,6 @@ final class PresenceUtils
             $presences
         );
 
-        return $plaines;
+        return $plaines->toArray();
     }
 }
