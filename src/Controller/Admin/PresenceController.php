@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
@@ -41,6 +43,7 @@ final class PresenceController extends AbstractController
     private ListingPresenceByMonth $listingPresenceByMonth;
     private PresenceCalculatorInterface $presenceCalculator;
     private FacturePresenceRepository $facturePresenceRepository;
+    private FactureHandler $factureHandler;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -48,7 +51,8 @@ final class PresenceController extends AbstractController
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
         PresenceCalculatorInterface $presenceCalculator,
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        FactureHandler $factureHandler
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -56,6 +60,7 @@ final class PresenceController extends AbstractController
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->presenceCalculator = $presenceCalculator;
         $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->factureHandler = $factureHandler;
     }
 
     /**
@@ -190,7 +195,7 @@ final class PresenceController extends AbstractController
      */
     public function edit(Request $request, Presence $presence): Response
     {
-        if ($this->presenceHandler->isFactured($presence)) {
+        if ($this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PRESENCE)) {
             $this->addFlash('danger', 'Une présence déjà facturée ne peut être éditée');
 
             return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
@@ -223,7 +228,7 @@ final class PresenceController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
 
-            if ($this->presenceHandler->isFactured($presence)) {
+            if ($this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PRESENCE)) {
                 $this->addFlash('danger', 'Une présence déjà facturée ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);

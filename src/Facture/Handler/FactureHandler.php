@@ -6,13 +6,13 @@ use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
-use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
@@ -29,10 +29,10 @@ final class FactureHandler
     private FacturePresenceRepository $facturePresenceRepository;
     private PresenceRepository $presenceRepository;
     private AccueilRepository $accueilRepository;
-    private FactureAccueilRepository $factureAccueilRepository;
     private AccueilCalculatorInterface $accueilCalculator;
     private TuteurRepository $tuteurRepository;
     private CommunicationFactory $communicationFactory;
+    private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -41,10 +41,10 @@ final class FactureHandler
         PresenceCalculatorInterface $presenceCalculator,
         PresenceRepository $presenceRepository,
         AccueilRepository $accueilRepository,
-        FactureAccueilRepository $factureAccueilRepository,
         AccueilCalculatorInterface $accueilCalculator,
         TuteurRepository $tuteurRepository,
-        CommunicationFactory $communicationFactory
+        CommunicationFactory $communicationFactory,
+        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureFactory = $factureFactory;
@@ -52,10 +52,10 @@ final class FactureHandler
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->presenceRepository = $presenceRepository;
         $this->accueilRepository = $accueilRepository;
-        $this->factureAccueilRepository = $factureAccueilRepository;
         $this->accueilCalculator = $accueilCalculator;
         $this->tuteurRepository = $tuteurRepository;
         $this->communicationFactory = $communicationFactory;
+        $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -120,8 +120,9 @@ final class FactureHandler
     {
         $facture = $this->newInstance($tuteur);
         $facture->setMois($date->format('m-Y'));
-        $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur, $date->toDateTime());
-        $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur, $date->toDateTime());
+
+        $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur, $date->toDateTime());
+        $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur, $date->toDateTime());
 
         if (count($presences) === 0 && count($accueils) === 0) {
             return null;
@@ -132,13 +133,22 @@ final class FactureHandler
         return $facture;
     }
 
+    public function isBilled(int $presenceId, string $type): bool
+    {
+        if ($this->facturePresenceRepository->findByIdAndType($presenceId, $type)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param Facture $facture
      * @param array|Presence[] $presences
      * @param array|Accueil[] $accueils
      * @return Facture
      */
-    private function finish(Facture $facture, array $presences, array $accueils)
+    private function finish(Facture $facture, array $presences, array $accueils): Facture
     {
         $facture->setCommunication($this->communicationFactory->generate($facture));
         $this->attachPresences($facture, $presences);
@@ -157,7 +167,7 @@ final class FactureHandler
     private function attachPresences(Facture $facture, array $presences): void
     {
         foreach ($presences as $presence) {
-            $facturePresence = new FacturePresence($facture, $presence);
+            $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
             $facturePresence->setNom($enfant->getNom());
@@ -175,23 +185,23 @@ final class FactureHandler
     private function attachAccueils(Facture $facture, array $accueils): void
     {
         foreach ($accueils as $accueil) {
-            $factureAccueil = new FactureAccueil($facture, $accueil);
-            $factureAccueil->setAccueilDate($accueil->getDateJour());
-            $factureAccueil->setHeure($accueil->getHeure());
+            $facturePresence = new FacturePresence($facture, $accueil, FactureInterface::OBJECT_ACCUEIL);
+            $facturePresence->setPresenceDate($accueil->getDateJour());
+            $facturePresence->setHeure($accueil->getHeure());
+            $facturePresence->setDuree($accueil->getDuree());
             $enfant = $accueil->getEnfant();
-            $factureAccueil->setNom($enfant->getNom());
-            $factureAccueil->setPrenom($enfant->getPrenom());
-            $factureAccueil->setCout($this->accueilCalculator->calculate($accueil));
-            $this->factureAccueilRepository->persist($factureAccueil);
-            $facture->addFactureAccueil($factureAccueil);
+            $facturePresence->setNom($enfant->getNom());
+            $facturePresence->setPrenom($enfant->getPrenom());
+            $facturePresence->setCout($this->accueilCalculator->calculate($accueil));
+            $this->facturePresenceRepository->persist($facturePresence);
+            $facture->addFacturePresence($facturePresence);
         }
     }
 
-    private function flush()
+    private function flush(): void
     {
         $this->factureRepository->flush();
         $this->facturePresenceRepository->flush();
-        $this->factureAccueilRepository->flush();
     }
 
 }

@@ -35,7 +35,6 @@ class Facture implements TimestampableInterface, UuidableInterface
     use RemarqueTrait;
     use UuidableTrait;
     use FacturePresencesTrait;
-    use FactureAccueilsTrait;
     use UserAddTrait;
 
     /**
@@ -81,46 +80,11 @@ class Facture implements TimestampableInterface, UuidableInterface
     {
         $this->tuteur = $tuteur;
         $this->facturePresences = new ArrayCollection();
-        $this->factureAccueils = new ArrayCollection();
     }
 
     public function __toString()
     {
         return 'Facture '.$this->id;
-    }
-
-    /**
-     * @return array|Enfant[]
-     */
-    public function getEnfants(): array
-    {
-        $enfants = [];
-        foreach ($this->facturePresences as $facturePresence) {
-            $presence = $facturePresence->getPresence();
-            $enfant = $presence->getEnfant();
-            $enfants[$enfant->getId()] = $enfant;
-        }
-        foreach ($this->getFactureAccueils() as $factureAccueil) {
-            $accueil = $factureAccueil->getAccueil();
-            $enfant = $accueil->getEnfant();
-            $enfants[$enfant->getId()] = $enfant;
-        }
-
-        return $enfants;
-    }
-
-    /**
-     * @return array|Ecole[]
-     */
-    public function getEcoles(): array
-    {
-        $ecoles = [];
-        foreach ($this->getEnfants() as $enfant) {
-            $ecole = $enfant->getEcole();
-            $ecoles[$ecole->getId()] = $ecole;
-        }
-
-        return $ecoles;
     }
 
     public function getPayeLe(): ?\DateTimeInterface

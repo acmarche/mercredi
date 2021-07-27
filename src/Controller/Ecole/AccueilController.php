@@ -15,7 +15,7 @@ use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -37,26 +37,26 @@ final class AccueilController extends AbstractController
     private AccueilHandler $accueilHandler;
     private RelationRepository $relationRepository;
     private AccueilCalculatorInterface $accueilCalculator;
-    private FactureAccueilRepository $factureAccueilRepository;
     private EnfantRepository $enfantRepository;
     private DateUtils $dateUtils;
+    private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
         AccueilRepository $accueilRepository,
         AccueilHandler $accueilHandler,
         RelationRepository $relationRepository,
         AccueilCalculatorInterface $accueilCalculator,
-        FactureAccueilRepository $factureAccueilRepository,
         EnfantRepository $enfantRepository,
-        DateUtils $dateUtils
+        DateUtils $dateUtils,
+        FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
         $this->relationRepository = $relationRepository;
         $this->accueilCalculator = $accueilCalculator;
-        $this->factureAccueilRepository = $factureAccueilRepository;
         $this->enfantRepository = $enfantRepository;
         $this->dateUtils = $dateUtils;
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     /**
@@ -126,7 +126,7 @@ final class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         $cout = $this->accueilCalculator->calculate($accueil);
-        $factureAccueil = $this->factureAccueilRepository->findByAccueil($accueil);
+        $factureAccueil = $this->facturePresenceRepository->findByAccueil($accueil);
 
         return $this->render(
             '@AcMarcheMercrediEcole/accueil/show.html.twig',

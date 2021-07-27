@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
@@ -15,8 +14,8 @@ use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,25 +32,22 @@ final class FactureController extends AbstractController
 {
     private FactureRepository $factureRepository;
     private FactureHandler $factureHandler;
-    private PresenceRepository $presenceRepository;
-    private AccueilRepository $accueilRepository;
+    private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
-        PresenceRepository $presenceRepository,
-        AccueilRepository $accueilRepository
+        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
-        $this->presenceRepository = $presenceRepository;
-        $this->accueilRepository = $accueilRepository;
+        $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
     }
 
     /**
      * @Route("/{id}/index", name="mercredi_admin_facture_index_by_tuteur", methods={"GET","POST"})
      */
-    public function index(Request $request, Tuteur $tuteur): Response
+    public function index(Tuteur $tuteur): Response
     {
         $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
         $form = $this->createForm(
@@ -120,8 +116,8 @@ final class FactureController extends AbstractController
     {
         $facture = $this->factureHandler->newInstance($tuteur);
 
-        $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur);
-        $accueils = $this->accueilRepository->getAccueilsNonPayesByTuteurAndMonth($tuteur);
+        $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur);
+        $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur);
 
         $form = $this->createForm(FactureType::class, $facture);
         $form->handleRequest($request);

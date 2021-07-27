@@ -7,8 +7,8 @@ use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,16 +25,16 @@ final class FacturePresenceController extends AbstractController
 {
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandler $factureHandler;
-    private PresenceRepository $presenceRepository;
+    private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
         FactureHandler $factureHandler,
-        PresenceRepository $presenceRepository
+        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureHandler = $factureHandler;
-        $this->presenceRepository = $presenceRepository;
+        $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
     }
 
     /**
@@ -43,7 +43,7 @@ final class FacturePresenceController extends AbstractController
     public function attach(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $presences = $this->presenceRepository->findPresencesNonPaysByTuteurAndMonth($tuteur);
+        $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur);
 
         $form = $this->createForm(FactureAttachType::class, $facture);
         $form->handleRequest($request);

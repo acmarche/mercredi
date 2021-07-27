@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use DateTime;
 use Twig\Environment;
@@ -14,11 +14,16 @@ final class FactureFactory
 {
     private Environment $environment;
     private OrganisationRepository $organisationRepository;
+    private FactureUtils $factureUtils;
 
-    public function __construct(Environment $environment, OrganisationRepository $organisationRepository)
-    {
+    public function __construct(
+        Environment $environment,
+        OrganisationRepository $organisationRepository,
+        FactureUtils $factureUtils
+    ) {
         $this->environment = $environment;
         $this->organisationRepository = $organisationRepository;
+        $this->factureUtils = $factureUtils;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -77,7 +82,7 @@ final class FactureFactory
             'cout' => 0,
         ];
         //init
-        foreach ($facture->getEnfants() as $enfant) {
+        foreach ($this->factureUtils->getEnfants($facture) as $enfant) {
             $data['enfants'][$enfant->getId()] = [
                 'enfant' => $enfant,
                 'cout' => 0,
@@ -113,13 +118,13 @@ final class FactureFactory
         );
     }
 
-    private function groupAccueils(FactureAccueil $factureAccueil, array $data): array
+    private function groupAccueils(FacturePresence $facturePresence, array $data): array
     {
-        $accueil = $factureAccueil->getAccueil();
+        $accueil = $facturePresence->getAccueil();
         $enfant = $accueil->getEnfant();
         $heure = $accueil->getHeure();
         $duree = $accueil->getDuree();
-        $data['enfants'][$enfant->getId()]['cout'] += $factureAccueil->getCout();
+        $data['enfants'][$enfant->getId()]['cout'] += $facturePresence->getCout();
         $data['enfants'][$enfant->getId()]['accueils'][$heure]['nb'] += $duree;
 
         return $data;

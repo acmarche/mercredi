@@ -9,11 +9,13 @@ use AcMarche\Mercredi\Entity\Traits\PrixTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Plaine\Repository\PlaineRepository")
  */
-class Plaine
+class Plaine implements SluggableInterface
 {
     use IdTrait;
     use NomTrait;
@@ -24,6 +26,7 @@ class Plaine
     use PrixTrait;
     use PrematernelleTrait;
     use PlaineGroupesTrait;
+    use SluggableTrait;
 
     /**
      * @var PlaineJour[]
@@ -51,5 +54,15 @@ class Plaine
     public function __toString()
     {
         return $this->nom;
+    }
+
+    public function getSluggableFields(): array
+    {
+        return ['nom'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
     }
 }

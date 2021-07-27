@@ -2,8 +2,13 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
+use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,18 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class FacturePresenceRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
-    private const FACTURE = 'facture';
-    /**
-     * @var string
-     */
-    private const WITH = 'WITH';
-    /**
-     * @var string
-     */
-    private const PRESENCE = 'presence';
+    use OrmCrudTrait;
 
     public function __construct(ManagerRegistry $managerRegistry)
     {
@@ -36,39 +30,58 @@ final class FacturePresenceRepository extends ServiceEntityRepository
     /**
      * @return FacturePresence[]
      */
-    public function findPaye(array $presences): array
+    public function findByFacture(Facture $facture): array
     {
         return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', self::FACTURE, self::WITH)
-            ->leftJoin('facture_presence.presence', self::PRESENCE, self::WITH)
-            ->addSelect(self::FACTURE, self::PRESENCE)
-            ->andWhere('facture_presence.presence IN (:presences)')
-            ->setParameter('presences', $presences)
+            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
+            ->leftJoin('facture_presence.presence', 'presence', 'WITH')
+            ->addSelect('facture', 'presence')
+            ->andWhere('facture_presence.facture = :fact')
+            ->setParameter('fact', $facture)
             ->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $presenceIds
+     * @param string $type
+     * @return array|FacturePresence[]
+     */
+    public function findByIdsAndType(array $presenceIds, string $type): array
+    {
+        return $this->createQueryBuilder('facture_presence')
+            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
+            ->addSelect('facture')
+         //   ->andWhere('facture_presence.presenceId IN (:presences)')
+         //   ->setParameter('presences', $presenceIds)
+            ->andWhere('facture_presence.objectType = :type')
+            ->setParameter('type', $type)
+            ->getQuery()->getResult();
+    }
+
+    public function findByIdAndType(int $presenceId, string $type): ?FacturePresence
+    {
+        return $this->createQueryBuilder('facture_presence')
+            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
+            ->addSelect('facture')
+            ->andWhere('facture_presence.presenceId = :presence')
+            ->setParameter('presence', $presenceId)
+            ->andWhere('facture_presence.objectType = :type')
+            ->setParameter('type', $type)
+            ->getQuery()->getOneOrNullResult();
     }
 
     public function findByPresence(Presence $presence): ?FacturePresence
     {
-        return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', self::FACTURE, self::WITH)
-            ->addSelect(self::FACTURE)
-            ->andWhere('facture_presence.presence = :presence')
-            ->setParameter(self::PRESENCE, $presence)
-            ->getQuery()->getOneOrNullResult();
+        return $this->findByIdAndType($presence->getId(), FactureInterface::OBJECT_PRESENCE);
     }
 
-    public function remove(FacturePresence $facturePresence): void
+    public function findByAccueil(Accueil $accueil): ?FacturePresence
     {
-        $this->_em->remove($facturePresence);
+        return $this->findByIdAndType($accueil->getId(), FactureInterface::OBJECT_ACCUEIL);
     }
 
-    public function flush(): void
+    public function findByPlaine(Plaine $plaine): ?FacturePresence
     {
-        $this->_em->flush();
-    }
-
-    public function persist(FacturePresence $facturePresence): void
-    {
-        $this->_em->persist($facturePresence);
+        return $this->findByIdAndType($plaine->getId(), FactureInterface::OBJECT_PLAINE);
     }
 }

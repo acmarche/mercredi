@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
-use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class FactureRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Facture::class);
@@ -117,20 +119,5 @@ final class FactureRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    public function remove(Facture $facture): void
-    {
-        $this->_em->remove($facture);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Facture $facture): void
-    {
-        $this->_em->persist($facture);
     }
 }

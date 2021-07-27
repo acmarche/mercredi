@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -17,18 +16,15 @@ final class PresenceHandler
 {
     private PresenceRepository $presenceRepository;
     private PresenceUtils $presenceUtils;
-    private FacturePresenceRepository $facturePresenceRepository;
     private PresenceConstraints $presenceConstraints;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         PresenceUtils $presenceUtils,
-        FacturePresenceRepository $facturePresenceRepository,
         PresenceConstraints $presenceConstraints
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceUtils = $presenceUtils;
-        $this->facturePresenceRepository = $facturePresenceRepository;
         $this->presenceConstraints = $presenceConstraints;
     }
 
@@ -44,7 +40,7 @@ final class PresenceHandler
                 continue;
             }
 
-            if (! $this->checkConstraints($jour)) {
+            if (!$this->checkConstraints($jour)) {
                 continue;
             }
 
@@ -68,7 +64,7 @@ final class PresenceHandler
     {
         $this->presenceConstraints->execute($jour);
         foreach ($this->presenceConstraints as $constraint) {
-            if (! $constraint->check($jour)) {
+            if (!$constraint->check($jour)) {
                 $constraint->addFlashError($jour);
 
                 return false;
@@ -76,10 +72,5 @@ final class PresenceHandler
         }
 
         return true;
-    }
-
-    public function isFactured(Presence $presence): bool
-    {
-        return (bool) $this->facturePresenceRepository->findByPresence($presence);
     }
 }

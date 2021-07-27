@@ -2,14 +2,12 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
@@ -17,7 +15,6 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use AcMarche\Mercredi\Entity\Facture\FactureAccueil;
 
 /**
  * Class Accueil.
@@ -66,17 +63,11 @@ class Accueil implements TimestampableInterface, UuidableInterface
      */
     private ?Tuteur $tuteur = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=FactureAccueil::class, mappedBy="accueil")
-     */
-    private ?iterable $facture_accueils;
-
     public function __construct(Tuteur $tuteur, Enfant $enfant)
     {
         $this->enfant = $enfant;
         $this->tuteur = $tuteur;
         $this->duree = 0;
-        $this->facture_accueils = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -116,36 +107,6 @@ class Accueil implements TimestampableInterface, UuidableInterface
     public function setHeure(string $heure): self
     {
         $this->heure = $heure;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|FactureAccueil[]
-     */
-    public function getFactureAccueils(): Collection
-    {
-        return $this->facture_accueils;
-    }
-
-    public function addFactureAccueil(FactureAccueil $factureAccueil): self
-    {
-        if (!$this->facture_accueils->contains($factureAccueil)) {
-            $this->facture_accueils[] = $factureAccueil;
-            $factureAccueil->setAccueil($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFactureAccueil(FactureAccueil $factureAccueil): self
-    {
-        if ($this->facture_accueils->removeElement($factureAccueil)) {
-            // set the owning side to null (unless already changed)
-            if ($factureAccueil->getAccueil() === $this) {
-                $factureAccueil->setAccueil(null);
-            }
-        }
 
         return $this;
     }

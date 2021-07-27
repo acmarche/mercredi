@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Accueil\Handler;
 
-use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use DateTime;
 use Exception;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
@@ -18,20 +17,17 @@ final class AccueilHandler
     private EnfantRepository $enfantRepository;
     private TuteurRepository $tuteurRepository;
     private FlashBagInterface $flashBag;
-    private FactureAccueilRepository $factureAccueilRepository;
 
     public function __construct(
         AccueilRepository $accueilRepository,
         EnfantRepository $enfantRepository,
         TuteurRepository $tuteurRepository,
-        FactureAccueilRepository $factureAccueilRepository,
         FlashBagInterface $flashBag
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->enfantRepository = $enfantRepository;
         $this->tuteurRepository = $tuteurRepository;
         $this->flashBag = $flashBag;
-        $this->factureAccueilRepository = $factureAccueilRepository;
     }
 
     public function handleNew(Enfant $enfant, Accueil $accueilSubmited): Accueil
@@ -96,10 +92,5 @@ final class AccueilHandler
             $accueilExistant->setRemarque($accueilSubmited->getRemarque());
         }
         $this->accueilRepository->flush();
-    }
-
-    public function isFactured(Accueil $accueil): bool
-    {
-        return (bool)$this->factureAccueilRepository->findByAccueil($accueil);
     }
 }

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Factory;
 
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 
 class CommunicationFactory
@@ -70,6 +71,11 @@ class CommunicationFactory
         }
 
         return $r;
+    }
+
+    public function generatePlaine(Plaine $plaine): string
+    {
+        return $plaine->getSlug();
     }
 
 

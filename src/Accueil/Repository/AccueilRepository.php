@@ -2,14 +2,14 @@
 
 namespace AcMarche\Mercredi\Accueil\Repository;
 
-use DateTime;
-use DateTimeInterface;
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Accueil|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +19,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class AccueilRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Accueil::class);
@@ -78,7 +80,7 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param DateTime $date
+     * @param \DateTimeInterface $date
      * @param string|null $heure
      * @param array $ecoles
      * @return Accueil[]
@@ -108,9 +110,8 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param DateTime $date
+     * @param DateTimeInterface $date
      * @param string|null $heure
-     * @param array $ecoles
      * @return Accueil[]
      */
     public function findByDateAndHeure(DateTimeInterface $date, ?string $heure): array
@@ -132,20 +133,18 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Tuteur $tuteur
-     * @param \DateTime|null $date
-     * @return Accueil[]
+     * @param \AcMarche\Mercredi\Entity\Tuteur $tuteur
+     * @param \DateTimeInterface|null $date
+     * @return array|Accueil[]
      */
-    public function getAccueilsNonPayesByTuteurAndMonth(Tuteur $tuteur, ?DateTime $date = null): array
+    public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null):array
     {
         $qb = $this->createQueryBuilder('accueil')
             ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')
             ->leftJoin('accueil.enfant', 'enfant', 'WITH')
-            ->leftJoin('accueil.facture_accueils', 'facture_accueils', 'WITH')
-            ->addSelect('tuteur', 'enfant', 'facture_accueils')
+            ->addSelect('tuteur', 'enfant')
             ->andWhere('accueil.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
-            ->andWhere('facture_accueils IS NULL');
+            ->setParameter('tuteur', $tuteur);
 
         if ($date) {
             $qb->andWhere('accueil.date_jour LIKE :date')
@@ -153,21 +152,6 @@ final class AccueilRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
-    }
-
-    public function remove(Accueil $accueil): void
-    {
-        $this->_em->remove($accueil);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Accueil $accueil): void
-    {
-        $this->_em->persist($accueil);
     }
 
 }

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Plaine\Calculator;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Presence;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
@@ -26,26 +27,35 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
         $this->reductionCalculator = $reductionCalculator;
     }
 
-    public function calculate(Plaine $plaine, Enfant $enfant): float
+    /**
+     * @param \AcMarche\Mercredi\Entity\Plaine\Plaine $plaine
+     * @param array|PresenceInterface[] $presences
+     * @return float
+     */
+    public function calculate(Plaine $plaine, array $presences): float
     {
-        $presences = $this->plainePresenceHandler->findPresencesByPlaineEnfant($plaine, $enfant);
         $total = 0;
         foreach ($presences as $presence) {
-            if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
-                continue;
-            }
-
-            $ordre = $this->ordreService->getOrdreOnPresence($presence);
-            $prix = $this->getPrixByOrdre($plaine, $ordre);
-            $cout = $this->reductionApplicate($presence, $prix);
-
+            $cout = $this->calculateOnePresence($plaine, $presence);
             $total += $cout;
         }
 
         return $total;
     }
 
-    private function reductionApplicate(PresenceInterface $presence, float $cout): float
+    public function calculateOnePresence(Plaine $plaine, PresenceInterface $presence): float
+    {
+        if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
+            return 0;
+        }
+        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $prix = $this->getPrixByOrdre($plaine, $ordre);
+        $cout = $this->applicateReduction($presence, $prix);
+
+        return $cout;
+    }
+
+    private function applicateReduction(PresenceInterface $presence, float $cout): float
     {
         if (null !== ($reduction = $presence->getReduction())) {
             return $this->reductionCalculator->applicate($reduction, $cout);

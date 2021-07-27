@@ -144,7 +144,7 @@ final class PlainePresenceController extends AbstractController
     {
         $presences = $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
         $presences = SortUtils::sortPresences($presences);
-        $cout = $this->plaineCalculator->calculate($plaine, $enfant);
+        $cout = $this->plaineCalculator->calculate($plaine, $presences);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/show.html.twig',

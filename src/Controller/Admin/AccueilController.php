@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Handler\FactureHandler;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
@@ -14,7 +17,6 @@ use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Repository\FactureAccueilRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -32,20 +34,23 @@ final class AccueilController extends AbstractController
     private AccueilHandler $accueilHandler;
     private RelationRepository $relationRepository;
     private AccueilCalculatorInterface $accueilCalculator;
-    private FactureAccueilRepository $factureAccueilRepository;
+    private FactureHandler $factureHandler;
+    private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
         AccueilRepository $accueilRepository,
         AccueilHandler $accueilHandler,
         RelationRepository $relationRepository,
         AccueilCalculatorInterface $accueilCalculator,
-        FactureAccueilRepository $factureAccueilRepository
+        FactureHandler $factureHandler,
+        FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
         $this->relationRepository = $relationRepository;
         $this->accueilCalculator = $accueilCalculator;
-        $this->factureAccueilRepository = $factureAccueilRepository;
+        $this->factureHandler = $factureHandler;
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     /**
@@ -126,7 +131,7 @@ final class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         $cout = $this->accueilCalculator->calculate($accueil);
-        $factureAccueil = $this->factureAccueilRepository->findByAccueil($accueil);
+        $facturePresence = $this->facturePresenceRepository->findByAccueil($accueil);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/show.html.twig',
@@ -134,7 +139,7 @@ final class AccueilController extends AbstractController
                 'accueil' => $accueil,
                 'cout' => $cout,
                 'enfant' => $enfant,
-                'facture' => $factureAccueil,
+                'facturePresence' => $facturePresence,
             ]
         );
     }
@@ -144,7 +149,7 @@ final class AccueilController extends AbstractController
      */
     public function edit(Request $request, Accueil $accueil): Response
     {
-        if ($this->accueilHandler->isFactured($accueil)) {
+        if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
             $this->addFlash('danger', 'Un accueil déjà facturé ne peut être modifié');
 
             return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
@@ -177,11 +182,12 @@ final class AccueilController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
 
-            if ($this->accueilHandler->isFactured($accueil)) {
+            if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
                 $this->addFlash('danger', 'Un accueil déjà facturé ne peut être supprimé');
 
                 return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
             }
+
             $id = $accueil->getId();
             $enfant = $accueil->getEnfant();
             $this->accueilRepository->remove($accueil);

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
@@ -12,8 +13,8 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Presence|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,6 +24,8 @@ use Doctrine\ORM\NonUniqueResultException;
  */
 final class PresenceRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     private JourRepository $jourRepository;
 
     public function __construct(ManagerRegistry $managerRegistry, JourRepository $jourRepository)
@@ -90,17 +93,15 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPresencesNonPaysByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
+    public function findPresencesByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $qb = $this->createQueryBuilder('presence')
             ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')
-            ->leftJoin('presence.facture_presences', 'facture_presences', 'WITH')
             ->leftJoin('presence.jour', 'jour', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'facture_presences', 'jour')
+            ->addSelect('enfant', 'tuteur', 'jour')
             ->andWhere('presence.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
-            ->andWhere('facture_presences IS NULL');
+            ->setParameter('tuteur', $tuteur);
 
         if ($date) {
             $qb->andWhere('jour.date_jour LIKE :date')
@@ -148,7 +149,7 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant):array
+    public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant): array
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
@@ -302,20 +303,5 @@ final class PresenceRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    public function remove(Presence $presence): void
-    {
-        $this->_em->remove($presence);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Presence $presence): void
-    {
-        $this->_em->persist($presence);
     }
 }

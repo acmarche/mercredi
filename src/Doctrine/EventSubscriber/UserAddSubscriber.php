@@ -52,7 +52,7 @@ final class UserAddSubscriber implements EventSubscriber
         }
 
         if ($user) {
-            $entity->setUserAdd($user->getUsername());
+            $entity->setUserAdd($user->getUserIdentifier());
         }
     }
 }
