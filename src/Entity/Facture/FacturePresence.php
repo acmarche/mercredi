@@ -43,14 +43,14 @@ class FacturePresence
     private ?string $objectType = null;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true)
      */
     private ?string $heure = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private int $duree;
+    private ?int $duree = null;
 
     /**
      * @ORM\Column(type="date", nullable=false)
@@ -129,12 +129,12 @@ class FacturePresence
         return $this;
     }
 
-    public function getDuree(): int
+    public function getDuree(): ?int
     {
         return $this->duree;
     }
 
-    public function setDuree(int $duree): self
+    public function setDuree(?int $duree): self
     {
         $this->duree = $duree;
 

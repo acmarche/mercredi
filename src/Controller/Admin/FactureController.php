@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
 use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
-use AcMarche\Mercredi\Facture\Form\FactureType;
+use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
@@ -119,7 +119,7 @@ final class FactureController extends AbstractController
         $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur);
         $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur);
 
-        $form = $this->createForm(FactureType::class, $facture);
+        $form = $this->createForm(FactureManualType::class, $facture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -129,7 +129,7 @@ final class FactureController extends AbstractController
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+         //   return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
 
         return $this->render(

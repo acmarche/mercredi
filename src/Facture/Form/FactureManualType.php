@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class FactureType extends AbstractType
+final class FactureManualType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
@@ -27,10 +27,7 @@ final class FactureType extends AbstractType
             )
             ->add(
                 'mois',
-                MonthWidgetType::class,
-                [
-                    'required' => true,
-                ]
+                MonthWidgetType::class
             )
             ->add(
                 'remarque',

@@ -75,7 +75,6 @@ final class FactureHandler
         $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
 
         $this->finish($facture, $presences, $accueils);
-        $facture->setMois(date('m-Y'));
         $this->flush();
 
         return $facture;
@@ -185,7 +184,7 @@ final class FactureHandler
     private function attachAccueils(Facture $facture, array $accueils): void
     {
         foreach ($accueils as $accueil) {
-            $facturePresence = new FacturePresence($facture, $accueil, FactureInterface::OBJECT_ACCUEIL);
+            $facturePresence = new FacturePresence($facture, $accueil->getId(), FactureInterface::OBJECT_ACCUEIL);
             $facturePresence->setPresenceDate($accueil->getDateJour());
             $facturePresence->setHeure($accueil->getHeure());
             $facturePresence->setDuree($accueil->getDuree());

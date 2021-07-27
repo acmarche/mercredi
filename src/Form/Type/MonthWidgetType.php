@@ -14,11 +14,12 @@ final class MonthWidgetType extends AbstractType
         $optionsResolver->setDefaults(
             [
                 'label' => 'Mois',
-                'required' => false,
+                'required' => true,
                 'attr' => [
                     'placeholder' => '06-2021',
                     'autocomplete' => 'off',
                 ],
+                'help' => 'Format: 06-2021',
                 'constraints' => [new Regex('#^\d{2}-\d{4}$#')],
             ]
         );

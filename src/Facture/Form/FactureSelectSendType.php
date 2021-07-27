@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class FactureSelectSendType extends AbstractType
 {
@@ -30,14 +29,5 @@ final class FactureSelectSendType extends AbstractType
                     'help' => 'Par papier, un pdf sera généré',
                 ]
             );
-    }
-
-    public function configureOptions(OptionsResolver $optionsResolver): void
-    {
-        $optionsResolver->setDefaults(
-            [
-
-            ]
-        );
     }
 }
