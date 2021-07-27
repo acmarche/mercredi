@@ -1,4 +1,4 @@
-{% if facture.facturePresences | length > 0 %}
+{% if facturePresences | length > 0 %}
     <h4 class="text-success">Présences</h4>
     <table class="table table-bordered table-hover">
         <thead>
@@ -8,7 +8,7 @@
             <th>Coût</th>
         </tr>
         </thead>
-        {% for presence in facture.facturePresences %}
+        {% for presence in facturePresences %}
             <tr>
                 <td>{{ presence.nom }} {{ presence.prenom }}</td>
                 <td>

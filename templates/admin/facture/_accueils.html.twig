@@ -1,4 +1,4 @@
-{% if facture.factureAccueils | length > 0 %}
+{% if factureAccueils | length > 0 %}
     <h4 class="text-success">Accueils</h4>
     <table class="table table-bordered table-hover">
         <thead>
@@ -8,12 +8,12 @@
             <th>Coût</th>
         </tr>
         </thead>
-        {% for accueil in facture.factureAccueils %}
+        {% for accueil in factureAccueils %}
             <tr>
                 <td>{{ accueil.nom }} {{ accueil.prenom }}</td>
                 <td>
-                    <a href="{{ path('mercredi_admin_facture_accueil_show', {'id': accueil.id}) }}">
-                        {{ accueil.accueilDate | format_date('full') }}
+                    <a href="{{ path('mercredi_admin_facture_presence_show', {'id': accueil.id}) }}">
+                        {{ accueil.presenceDate | format_date('full') }}
                     </a>
                 </td>
                 <td>{{ accueil.cout }} €</td>

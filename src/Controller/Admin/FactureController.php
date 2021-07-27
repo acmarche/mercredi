@@ -4,17 +4,19 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
+use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
 use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
-use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,15 +35,18 @@ final class FactureController extends AbstractController
     private FactureRepository $factureRepository;
     private FactureHandler $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
+    private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
+        FacturePresenceRepository $facturePresenceRepository,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     /**
@@ -129,7 +134,7 @@ final class FactureController extends AbstractController
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
 
-         //   return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
 
         return $this->render(
@@ -208,12 +213,22 @@ final class FactureController extends AbstractController
     public function show(Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
+        $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_PRESENCE
+        );
+        $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_ACCUEIL
+        );
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
+                'facturePresences' => $facturePresences,
+                'factureAccueils' => $factureAccueils,
             ]
         );
     }
