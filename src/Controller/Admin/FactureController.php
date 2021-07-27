@@ -162,7 +162,7 @@ final class FactureController extends AbstractController
             if (!$facture = $this->factureHandler->generateByMonth($tuteur, $month)) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
-                return $this->redirectToRoute('mercredi_admin_facture_index');
+                return $this->redirectToRoute('mercredi_admin_facture_index_by_tuteur', ['id' => $tuteur->getId()]);
             }
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
@@ -172,7 +172,7 @@ final class FactureController extends AbstractController
 
         $this->addFlash('danger', 'Date non valide');
 
-        return $this->redirectToRoute('mercredi_admin_facture_index');
+        return $this->redirectToRoute('mercredi_admin_facture_index_by_tuteur', ['id' => $tuteur->getId()]);
     }
 
     /**

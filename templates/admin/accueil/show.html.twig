@@ -14,9 +14,9 @@
                  <tr>
                     <th>Facturé</th>
                     <td>
-                        {% if facture %}
-                            <a href="{{ path('mercredi_admin_facture_show', {'id': facture.facture.id}) }}">
-                                {{ facture.facture }}
+                        {% if facturePresence %}
+                            <a href="{{ path('mercredi_admin_facture_show', {'id': facturePresence.facture.id}) }}">
+                                {{ facturePresence.facture }}
                             </a>
                         {% else %}
                             Non
