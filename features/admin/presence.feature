@@ -19,10 +19,11 @@ Feature: Gestion des présences
     Then I follow "Ajouter une présence"
     Then I should see "Nouvelle présence pour PERET Merlin"
     And I select "Mercredi 4 septembre 2024" from "presence_new_jours"
-    And I additionally select "Mardi 20 août 2024 (Pédagogique Champlon,Aye)" from "presence_new_jours"
+    And I additionally select "Mardi 20 août 2024 (Pédagogique Aye,Champlon)" from "presence_new_jours"
     And I press "Sauvegarder"
     Then I should see "La présence a bien été ajoutée"
     Then I should see "Mercredi 4 septembre 2024"
+    Then I should see "Mardi 20 août 2024 (P)"
 
   Scenario: Ajout une présence 2 tuteurs
     Then I fill in "search_enfant[nom]" with "Fernandel"
@@ -58,7 +59,7 @@ Feature: Gestion des présences
     Then I follow "Mercredi 6 mai 2020"
     Then I should see "Détail de la présence de SIMPSON Bart du mercredi 6 mai 2020"
     Then I follow "Modifier"
-    Then I should see "Une présence déjà facturée ne peut être editée"
+    Then I should see "Une présence déjà facturée ne peut être éditée"
 
   Scenario: Je supprime une présence
     Then I fill in "search_enfant[nom]" with "Peret"
