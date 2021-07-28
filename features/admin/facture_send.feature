@@ -26,7 +26,7 @@ Feature: Gestion des factures
   Scenario: J'envoie des factures par mail
     Given I am on "/admin/factur/send/select/month"
     Then I should see "Envoie de factures"
-    And I fill in "facture_select_send[mois]" with "09-2024"
+    And I fill in "facture_select_send[mois]" with "06-2020"
     And I select "Mail" from "facture_select_send_mode"
     Then I press "Sélectionner"
     Then I should see "Envoie des 1 factures pour 06-2020"
