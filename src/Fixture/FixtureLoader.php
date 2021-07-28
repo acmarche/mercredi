@@ -68,9 +68,6 @@ final class FixtureLoader
             $path.'plaine_jour.yaml',
             $path.'accueil.yaml',
             $path.'note.yaml',
-            //   $path.'facture.yaml',
-            //     $path.'facture_presence.yaml',
-            //      $path.'facture_accueil.yaml',
         ];
 
         $this->loader->load($files);

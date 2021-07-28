@@ -1,7 +1,0 @@
-AcMarche\Mercredi\Entity\Facture\FacturePresence:
-  facture_presence_simpson:
-    __construct: ['@facture_simpson','@presence_bart_06_05->id', 'presence']
-    nom: 'Simpson'
-    prenom: 'Bart'
-    presenceDate: '<carbonDateTime(2020,05,06,9,0)>'
-    cout: '25'
