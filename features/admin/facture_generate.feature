@@ -3,6 +3,7 @@ Feature: Gestion des factures
   Je génère pour tous pour un mois
   Je génère par mois pour un tuteur
   Je génère manuellement pour un tuteur
+  Je génère pour une plaine pour un tuteur
   Je modifie une facture
   Je supprime une facture
   Je détache une présence
@@ -61,6 +62,25 @@ Feature: Gestion des factures
     Then I should see "lundi 16 décembre 2024"
     Then I should see "vendredi 10 juillet 2020"
     Then I should see "mercredi 9 décembre 2020"
+
+  Scenario: Je génère pour une plaine pour un tuteur
+    Given I am on "/admin/tuteur/"
+    Then I should see "Liste des parents"
+    Then I fill in "search_tuteur[nom]" with "Simpson"
+    And I press "Rechercher"
+    Then I follow "Simpson"
+    Then I follow "Ses factures"
+    Then I follow "Pour la plaine..."
+    Then I follow "Plaine de noel"
+    Then I should see "Nouvelle facture pour Plaine de noel à SIMPSON Homer"
+    And I press "Générer la facture"
+    Then I should see "Facture générée"
+    Then I should see "SIMPSON Homer"
+    Then I should see "Simpson Bart"
+    Then I should see "lundi 16 décembre 2024"
+    Then I should see "mardi 17 décembre 2024"
+    Then I should see "mercredi 18 décembre 2024"
+    Then I should see "Plaine de noel"
 
   Scenario: Je modifie une facture
     Given I am on "/admin/tuteur/"
