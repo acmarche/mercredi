@@ -63,6 +63,7 @@ final class SanteChecker
                 return false;
             }
         }
+
         return count($santeFiche->getAccompagnateurs()) >= 1;
     }
 
@@ -86,13 +87,27 @@ final class SanteChecker
 
     public function checkQuestionOk(SanteQuestion $santeQuestion): bool
     {
-        if (!$santeQuestion->getComplement()) {
-            return true;
+        //pas repondu par oui ou non
+        if ($santeQuestion->getReponseTxt() === null) {
+            return false;
         }
-        if ($santeQuestion->getReponseTxt() === '') {
-            return true;
+        //si complement on verifie si mis
+        if ($santeQuestion->getComplement() === true) {
+            //on repond non
+            if ((int)$santeQuestion->getReponseTxt() === 0) {
+                return true;
+            }
+            if ($santeQuestion->getRemarque() === null) {
+                return false;
+            }
+            if (trim($santeQuestion->getRemarque()) != '') {
+                return true;
+            }
+
+            return false;
         }
-        return '' != trim($santeQuestion->getRemarque()) && null !== $santeQuestion->getRemarque();
+
+        return true;
     }
 
     /**

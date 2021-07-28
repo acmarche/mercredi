@@ -20,7 +20,7 @@ final class SanteQuestionType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Un complément d\'information est-il nécessaire ?',
-                    'help' => 'Si oui cochez la case',
+                    'help' => 'Cochez la case si c\'est le cas. ',
                     'required' => false,
                     'label_attr' => ['class' => 'switch-custom'],
                 ]
@@ -30,7 +30,8 @@ final class SanteQuestionType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Texte d\'aide pour le complément',
-                    'help' => 'Par ex: Date de vaccin, quel type de médicaments...',
+                    'help' => 'Par ex: Date de vaccin, quel type de médicaments...<br /><b>Ce champ ne devra être remplis par l\'utilisateur que si celui-ci à répondu oui à la question</b>',
+                    'help_html' => true,
                     'required' => false,
                 ]
             );

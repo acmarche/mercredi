@@ -29,10 +29,12 @@ final class SanteHandler
         $this->santeReponseRepository = $santeReponseRepository;
     }
 
-    public function init(Enfant $enfant): SanteFiche
+    public function init(Enfant $enfant, bool $bind = true): SanteFiche
     {
         $santeFiche = $this->santeFactory->getSanteFicheByEnfant($enfant);
-        $this->santeBinder->bindResponses($santeFiche);
+        if ($bind) {
+            $this->santeBinder->bindResponses($santeFiche);
+        }
 
         return $santeFiche;
     }

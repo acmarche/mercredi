@@ -50,7 +50,7 @@ class SanteQuestion
      */
     private iterable $reponse;
 
-    private ?string $reponseTxt = null;
+    private ?bool $reponseTxt = null;
 
     private ?string $remarque = null;
 
@@ -105,15 +105,12 @@ class SanteQuestion
         return $this->complement;
     }
 
-    public function getReponseTxt(): ?string
+    public function getReponseTxt(): ?bool
     {
         return $this->reponseTxt;
     }
 
-    /**
-     * @param mixed $reponseTxt
-     */
-    public function setReponseTxt(?string $reponseTxt): void
+    public function setReponseTxt(?bool $reponseTxt): void
     {
         $this->reponseTxt = $reponseTxt;
     }

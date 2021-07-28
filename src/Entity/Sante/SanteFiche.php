@@ -55,7 +55,7 @@ class SanteFiche implements TimestampableInterface
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="sante_fiche")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Enfant $enfant =null;
+    private ?Enfant $enfant = null;
 
     /**
      * Pour le cascade.

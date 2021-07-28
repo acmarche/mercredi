@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Sante\Form\SanteFicheFullType;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
-use AcMarche\Mercredi\Sante\Form\SanteFicheType;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Message\SanteFicheDeleted;
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
@@ -80,7 +80,7 @@ final class SanteFicheController extends AbstractController
     {
         $santeFiche = $this->santeHandler->init($enfant);
 
-        $form = $this->createForm(SanteFicheType::class, $santeFiche);
+        $form = $this->createForm(SanteFicheFullType::class, $santeFiche);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

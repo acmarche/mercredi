@@ -36,6 +36,7 @@ final class SanteBinder
             $question->setReponseTxt(null);
             if (null !== ($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question))) {
                 $question->setReponseTxt($reponse->getReponse());
+
                 $question->setRemarque($reponse->getRemarque());
             }
         }

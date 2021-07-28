@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Sante\Form;
+namespace AcMarche\Mercredi\Sante\Form\Etape;
 
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use Symfony\Component\Form\AbstractType;
@@ -10,13 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class SanteFicheType extends AbstractType
+final class SanteFicheEtape2Type extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -24,7 +19,7 @@ final class SanteFicheType extends AbstractType
                 'personne_urgence',
                 TextareaType::class,
                 [
-                    self::LABEL => 'Personne(s) en cas d\'urgence',
+                    'label' => 'Personne(s) en cas d\'urgence',
                     'help' => 'Nom, prénom et numéro de téléphone',
                 ]
             )
@@ -32,14 +27,14 @@ final class SanteFicheType extends AbstractType
                 'medecin_nom',
                 TextType::class,
                 [
-                    self::LABEL => 'Nom du médecin',
+                    'label' => 'Nom du médecin',
                 ]
             )
             ->add(
                 'medecin_telephone',
                 TextType::class,
                 [
-                    self::LABEL => 'Téléphone du médecin',
+                    'label' => 'Téléphone du médecin',
                 ]
             )
             ->add(
@@ -47,14 +42,16 @@ final class SanteFicheType extends AbstractType
                 CollectionType::class,
                 [
                     'entry_type' => TextType::class,
-                    'entry_options' => [],
+                    'entry_options' => [
+                        'label' => false,
+                    ],
                     'prototype' => true,
                     'required' => true,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
                     'label' => 'Personnes autorisées à reprendre l’enfant dans les accueils',
-                    'help' => 'Nom et téléphone'
+                    'help' => 'Nom et téléphone',
                 ]
             )
             ->add(
@@ -62,14 +59,7 @@ final class SanteFicheType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false,
-                    self::LABEL => "D'autres remarques",
-                ]
-            )
-            ->add(
-                'questions',
-                CollectionType::class,
-                [
-                    'entry_type' => SanteReponseType::class,
+                    'label' => "D'autres remarques",
                 ]
             );
     }

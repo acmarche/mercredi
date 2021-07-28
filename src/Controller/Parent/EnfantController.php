@@ -2,12 +2,10 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
 use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
-use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Notification\Mailer\NotificationMailer;
@@ -19,6 +17,7 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -133,32 +132,6 @@ final class EnfantController extends AbstractController
                 'plaines' => $plaines,
                 'accueils' => $accueils,
                 'ficheSanteComplete' => $ficheSanteComplete,
-            ]
-        );
-    }
-
-    /**
-     * @Route("/{uuid}/edit", name="mercredi_parent_enfant_edit", methods={"GET","POST"})
-     * @IsGranted("enfant_edit", subject="enfant")
-     */
-    public function edit(Request $request, Enfant $enfant): Response
-    {
-        $form = $this->createForm(EnfantEditForParentType::class, $enfant);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->enfantRepository->flush();
-
-            $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
-
-            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediParent/enfant/edit.html.twig',
-            [
-                'enfant' => $enfant,
-                'form' => $form->createView(),
             ]
         );
     }

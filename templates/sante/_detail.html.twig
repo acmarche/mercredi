@@ -31,8 +31,20 @@
     <tr>
         <th>Né le</th>
         <td>{{ enfant.birthday | date('d-m-Y') }}</td>
+        <th>Numéro national</th>
+        <td>{{ enfant.registreNational }}</td>
+    </tr>
+    <tr>
+        <th>Ecole</th>
+        <td>{{ enfant.ecole }}</td>
         <th>Année scolaire</th>
         <td>{{ enfant.anneescolaire }}</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td></td>
+        <th>Poids</th>
+        <td>{{ enfant.poids }} kg</td>
     </tr>
 </table>
 
@@ -50,7 +62,7 @@
             <ul class="list-group">
                 {% for accompagnateur in sante_fiche.accompagnateurs %}
                     <li class="list-group-item">{{ accompagnateur }}</li>
-                    {% else %}
+                {% else %}
                     <li class="list-group-item list-group-item-danger">Aucune personne encodée !</li>
                 {% endfor %}
             </ul>
@@ -93,7 +105,8 @@
             </td>
             <td>
                 {% if question.reponseTxt is null %}
-                    <img alt="Ko" src="{{ absolute_url(asset('bundles/acmarchemercredi/images/exclamation.png')) }}" height="50px">
+                    <img alt="Ko" src="{{ absolute_url(asset('bundles/acmarchemercredi/images/exclamation.png')) }}"
+                         height="50px">
                     <span class="text-danger">Non répondu</span>
                 {% endif %}
                 {{ question.remarque }}
