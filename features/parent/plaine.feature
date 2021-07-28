@@ -27,7 +27,7 @@ Feature: Test pour les présences des plaines
     Given I am on "/admin/plaine/"
     Then I should see "Liste des plaines"
     Then I follow "Plaine de noel"
-    Then I follow "Modifier"
+    Then I follow "Ouvrir les inscriptions"
     When I check "Ouvrir les inscriptions"
     And I press "Sauvegarder"
     Given I am on "/logout"
