@@ -40,8 +40,8 @@ final class DefaultController extends AbstractController
      */
     public function default(): Response
     {
-        if (($t = $this->hasTuteur()) !== null) {
-            return $t;
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
         }
 
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);

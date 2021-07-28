@@ -67,9 +67,10 @@ final class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine): Response
     {
-        if (($t = $this->hasTuteur()) !== null) {
-            return $t;
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
         }
+
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $this->tuteur);
 
         return $this->render(
@@ -88,7 +89,9 @@ final class PlaineController extends AbstractController
      */
     public function selectEnfant(): Response
     {
-        $this->hasTuteur();
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
+        }
 
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
 
@@ -105,12 +108,15 @@ final class PlaineController extends AbstractController
      */
     public function confirmation(Enfant $enfant): Response
     {
-        $this->hasTuteur();
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
+        }
+
         $plaine = $this->plaineRepository->findPlaineOpen();
 
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (! $this->santeChecker->isComplete($santeFiche)) {
+        if (!$this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);

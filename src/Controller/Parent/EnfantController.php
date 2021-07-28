@@ -68,8 +68,8 @@ final class EnfantController extends AbstractController
      */
     public function index(): Response
     {
-        if (($t = $this->hasTuteur()) !== null) {
-            return $t;
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
         }
 
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);

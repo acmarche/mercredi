@@ -19,27 +19,11 @@ trait GetTuteurTrait
         $this->tuteurUtils = $tuteurUtils;
     }
 
-    /*  public function __construct(TuteurUtils $tuteurUtils, Security $security, UrlGeneratorInterface $urlGenerator)
-      {
-          $this->tuteurUtils = $tuteurUtils;
-          $this->security = $security;
-          $this->urlGenerator = $urlGenerator;
-      }
-
-      /**
-       * @required
-       *
-      public function setSecurity(Security $security)
-      {
-          $this->security = $security;
-      }*/
-
     public function hasTuteur(): ?Response
     {
         $user = $this->getUser();
-        $this->tuteur = $this->tuteurUtils->getTuteurByUser($user);
 
-        if (! $this->tuteur) {
+        if (!$this->tuteur = $this->tuteurUtils->getTuteurByUser($user)) {
             return $this->redirectToRoute('mercredi_parent_nouveau');
         }
 

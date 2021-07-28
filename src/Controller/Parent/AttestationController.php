@@ -33,8 +33,8 @@ final class AttestationController extends AbstractController
      */
     public function default(int $year, Enfant $enfant): Response
     {
-        if (($t = $this->hasTuteur()) !== null) {
-            return $t;
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
         }
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
         $enfants = RelationUtils::extractEnfants($relations);

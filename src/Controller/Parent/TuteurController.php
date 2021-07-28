@@ -34,8 +34,8 @@ final class TuteurController extends AbstractController
      */
     public function show(): Response
     {
-        if (($t = $this->hasTuteur()) !== null) {
-            return $t;
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
         }
 
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
@@ -55,8 +55,8 @@ final class TuteurController extends AbstractController
      */
     public function edit(Request $request): Response
     {
-        if (($t = $this->hasTuteur()) !== null) {
-            return $t;
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
         }
 
         $form = $this->createForm(TuteurType::class, $this->tuteur);
