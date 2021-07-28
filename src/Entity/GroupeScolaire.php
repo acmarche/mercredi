@@ -20,11 +20,11 @@ class GroupeScolaire
     use RemarqueTrait;
 
     /**
-     * @ORM\Column(type="decimal", precision=2, scale=1, nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
      */
     private ?float $age_minimum = null;
     /**
-     * @ORM\Column(type="decimal", precision=2, scale=1, nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
      */
     private ?float $age_maximum = null;
 

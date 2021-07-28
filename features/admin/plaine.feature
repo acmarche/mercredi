@@ -2,6 +2,7 @@ Feature: Gestion des plaines
   Je suis connecté
   Ajout une plaine
   Modifier une plaine
+  Ouvrir une plaine
   Modifier les jours de la plaine
   Supprimer une plaine
 
@@ -23,10 +24,12 @@ Feature: Gestion des plaines
     Then I should see "Dates pour Carnaval 2020"
     Then I fill in "plaine_jour[jours][0][date_jour]" with "2020-02-10"
     Then I fill in "plaine_jour[jours][1][date_jour]" with "2020-02-11"
+    Then I fill in "plaine_jour[jours][2][date_jour]" with "2020-02-12"
     And I press "Sauvegarder"
     Then I should see "les dates ont bien été enregistrées"
     Then I should see "lundi 10 février 2020"
     Then I should see "mardi 11 février 2020"
+    Then I should see "mercredi 12 février 2020"
 
   Scenario: Modifier une plaine
     Then I follow "Plaine de noel"
@@ -36,6 +39,14 @@ Feature: Gestion des plaines
     And I press "Sauvegarder"
     Then I should see "6 €"
     Then I should see "22"
+
+  Scenario: Ouvrir une plaine
+    Then I follow "Plaine de noel"
+    Then I follow "Ouvrir les inscriptions"
+    And I check "Ouvrir les inscriptions"
+    And I press "Sauvegarder"
+    Then I should see "La plaine a bien été modifiée"
+    Then I should see "Les inscriptions sont ouvertes aux parents"
 
   Scenario: Modifier les jours de la plaine
     Then I follow "Plaine de noel"

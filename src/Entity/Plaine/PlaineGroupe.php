@@ -37,7 +37,7 @@ class PlaineGroupe
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $inscription_maximum = null;
+    private ?int $inscription_maximum = 0;
 
     public function __construct(Plaine $plaine, GroupeScolaire $groupe_scolaire)
     {
