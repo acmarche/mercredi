@@ -1,8 +1,8 @@
-AcMarche\Mercredi\Entity\Facture\FactureAccueil:
+AcMarche\Mercredi\Entity\Facture\FacturePresence:
   facture_accueil_simpson:
-    __construct: ['@facture_simpson','@acceuil__bart_09_12']
+    __construct: ['@facture_simpson','@acceuil__bart_09_12->id', 'accueil']
     nom: 'Simpson'
     prenom: 'Bart'
     heure: 'Soir'
-    accueilDate: '<carbonDateTime(2020,12,9,9,0)>'
+    presenceDate: '<carbonDateTime(2020,12,9,9,0)>'
     cout: '0.50'

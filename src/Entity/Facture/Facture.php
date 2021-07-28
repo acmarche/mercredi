@@ -73,10 +73,6 @@ class Facture implements TimestampableInterface, UuidableInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $ecoles = null;
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private ?string $enfants = null;
 
     public function __construct(Tuteur $tuteur)
     {
@@ -181,18 +177,6 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function setEcoles(?string $ecoles): self
     {
         $this->ecoles = $ecoles;
-
-        return $this;
-    }
-
-    public function getEnfants(): ?string
-    {
-        return $this->enfants;
-    }
-
-    public function setEnfants(?string $enfants): self
-    {
-        $this->enfants = $enfants;
 
         return $this;
     }
