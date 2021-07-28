@@ -2,15 +2,14 @@
 
 namespace AcMarche\Mercredi\Facture\Mailer;
 
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Factory\FactureFactory;
+use AcMarche\Mercredi\Facture\Render\FactureRender;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use function count;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final class FactureMailer
 {
@@ -18,12 +17,12 @@ final class FactureMailer
     use OrganisationPropertyInitTrait;
     use PdfDownloaderTrait;
 
-    private FactureFactory $factureFactory;
+    private FactureRender $factureRender;
 
     public function __construct(
-        FactureFactory $factureFactory
+        FactureRender $factureRender
     ) {
-        $this->factureFactory = $factureFactory;
+        $this->factureRender = $factureRender;
     }
 
     public function init(?Facture $facture = null): array
@@ -60,7 +59,7 @@ final class FactureMailer
                 ]
             );
 
-        $html = $this->factureFactory->generateOneHtml($facture);
+        $html = $this->factureRender->generateOneHtml($facture);
         $date = $facture->getFactureLe();
         $invoicepdf = $this->getPdf()->getOutputFromHtml($html);
 

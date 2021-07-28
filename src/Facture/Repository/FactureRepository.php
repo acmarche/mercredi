@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -69,7 +70,9 @@ final class FactureRepository extends ServiceEntityRepository
      */
     public function search(
         ?string $tuteur,
+        ?string $enfant,
         ?Ecole $ecole,
+        ?Plaine $plaine,
         ?bool $paye,
         ?string $monthYear = null,
         ?string $communication = null
@@ -77,22 +80,29 @@ final class FactureRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('facture')
             ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
             ->leftJoin('facture.facturePresences', 'facturePresences', 'WITH')
-            ->leftJoin('facturePresences.presence', 'presence', 'WITH')
-            ->leftJoin('presence.enfant', 'enfantE', 'WITH')
-            ->leftJoin('facture.factureAccueils', 'factureAccueils', 'WITH')
-            ->leftJoin('factureAccueils.accueil', 'accueil', 'WITH')
-            ->leftJoin('accueil.enfant', 'enfantA', 'WITH')
-            ->leftJoin('enfantA.sante_fiche', 'sante_fiche', 'WITH')
-            ->addSelect('tuteur', 'facturePresences', 'factureAccueils', 'presence', 'enfantA', 'enfantE', 'accueil', 'sante_fiche');
+            ->addSelect(
+                'tuteur',
+                'facturePresences',
+            );
 
         if ($tuteur) {
-            $queryBuilder->andWhere('tuteur.nom LIKE :tuteur')
+            $queryBuilder->andWhere('tuteur.nom LIKE :tuteur OR tuteur.prenom LIKE :tuteur')
                 ->setParameter('tuteur', '%'.$tuteur.'%');
         }
 
+        if ($enfant) {
+            $queryBuilder->andWhere('facturePresences.nom LIKE :enfant OR facturePresences.prenom LIKE :enfant')
+                ->setParameter('enfant', '%'.$enfant.'%');
+        }
+
         if ($ecole !== null) {
-            $queryBuilder->andWhere('enfantE.ecole = :ecole OR enfantA.ecole = :ecole')
-                ->setParameter('ecole', $ecole);
+            $queryBuilder->andWhere('facture.ecoles LIKE :ecole')
+                ->setParameter('ecole', '%'.$ecole.'%');
+        }
+
+        if ($plaine !== null) {
+            $queryBuilder->andWhere('facture.plaine = :plaine')
+                ->setParameter('plaine', $plaine->getNom());
         }
 
         if ($monthYear !== null) {

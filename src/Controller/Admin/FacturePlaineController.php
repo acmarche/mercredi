@@ -6,7 +6,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\FacturePlaine\Handler\FactureHandler;
+use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
 use AcMarche\Mercredi\Form\ValidateForm;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -19,18 +19,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FacturePlaineController extends AbstractController
 {
-    private FactureHandler $factureHandler;
+    private FacturePlaineHandler $facturePlaineHandler;
     private PresenceRepository $presenceRepository;
     private RelationRepository $relationRepository;
     private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
-        FactureHandler $factureHandler,
+        FacturePlaineHandler $facturePlaineHandler,
         PresenceRepository $presenceRepository,
         RelationRepository $relationRepository,
         PlainePresenceRepository $plainePresenceRepository
     ) {
-        $this->factureHandler = $factureHandler;
+        $this->facturePlaineHandler = $facturePlaineHandler;
         $this->presenceRepository = $presenceRepository;
         $this->relationRepository = $relationRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
@@ -69,8 +69,8 @@ class FacturePlaineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $facture = $this->factureHandler->newInstance($tuteur);
-            $this->factureHandler->handleManually($facture, $plaine);
+            $facture = $this->facturePlaineHandler->newInstance($tuteur);
+            $this->facturePlaineHandler->handleManually($facture, $plaine);
 
             $this->addFlash('success', 'Facture générée');
 

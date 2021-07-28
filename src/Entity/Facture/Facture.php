@@ -69,16 +69,14 @@ class Facture implements TimestampableInterface, UuidableInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $plaine = null;
-
     /**
-     * @var Ecole[] $ecoles
+     * @ORM\Column(type="string", nullable=true)
      */
-    private array $ecoles;
-
+    private ?string $ecoles = null;
     /**
-     * @var Enfant[] $enfants
+     * @ORM\Column(type="string", nullable=true)
      */
-    private array $enfants;
+    private ?string $enfants = null;
 
     public function __construct(Tuteur $tuteur)
     {
@@ -171,6 +169,30 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function setPlaine(?string $plaine): self
     {
         $this->plaine = $plaine;
+
+        return $this;
+    }
+
+    public function getEcoles(): ?string
+    {
+        return $this->ecoles;
+    }
+
+    public function setEcoles(?string $ecoles): self
+    {
+        $this->ecoles = $ecoles;
+
+        return $this;
+    }
+
+    public function getEnfants(): ?string
+    {
+        return $this->enfants;
+    }
+
+    public function setEnfants(?string $enfants): self
+    {
+        $this->enfants = $enfants;
 
         return $this;
     }

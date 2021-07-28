@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AcMarche\Mercredi\FacturePlaine\Handler;
+namespace AcMarche\Mercredi\Facture\Handler;
 
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
@@ -13,49 +13,38 @@ use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Facture\Utils\FactureUtils;
-use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use Twig\Environment;
 
-class FactureHandler
+class FacturePlaineHandler
 {
-    private FactureFactory $facturePlaineFactory;
-    private PresenceRepository $presenceRepository;
+    private FactureFactory $factureFactory;
     private CommunicationFactory $communicationFactory;
+    private PresenceRepository $presenceRepository;
+    private FactureRepository $factureRepository;
     private PlaineCalculatorInterface $plaineCalculator;
     private FacturePresenceRepository $facturePresenceRepository;
-    private FactureRepository $factureRepository;
-    private Environment $environment;
-    private OrganisationRepository $organisationRepository;
-    private FactureUtils $factureUtils;
+    private array $ecoles = [];
 
     public function __construct(
-        FactureFactory $facturePlaineFactory,
-        PresenceRepository $presenceRepository,
+        FactureFactory $factureFactory,
         CommunicationFactory $communicationFactory,
-        PlaineCalculatorInterface $plaineCalculator,
-        FacturePresenceRepository $facturePresenceRepository,
+        PresenceRepository $presenceRepository,
         FactureRepository $factureRepository,
-        Environment $environment,
-        OrganisationRepository $organisationRepository,
-        FactureUtils $factureUtils
+        PlaineCalculatorInterface $plaineCalculator,
+        FacturePresenceRepository $facturePresenceRepository
     ) {
-        $this->facturePlaineFactory = $facturePlaineFactory;
-        $this->presenceRepository = $presenceRepository;
+        $this->factureFactory = $factureFactory;
         $this->communicationFactory = $communicationFactory;
+        $this->presenceRepository = $presenceRepository;
+        $this->factureRepository = $factureRepository;
         $this->plaineCalculator = $plaineCalculator;
         $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->factureRepository = $factureRepository;
-        $this->environment = $environment;
-        $this->organisationRepository = $organisationRepository;
-        $this->factureUtils = $factureUtils;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
     {
-        return $this->facturePlaineFactory->newInstance($tuteur);
+        return $this->factureFactory->newInstance($tuteur);
     }
 
     /**
@@ -66,11 +55,13 @@ class FactureHandler
     public function handleManually(Facture $facture, Plaine $plaine): Facture
     {
         $facture->setMois(date('m-Y'));
+        $facture->setPlaine($plaine->getNom());
         $facture->setCommunication($this->communicationFactory->generatePlaine($plaine));
         $tuteur = $facture->getTuteur();
         $presences = $this->presenceRepository->findPresencesByPlaineAndTuteur($plaine, $tuteur);
 
         $this->attachPresences($facture, $plaine, $presences);
+        $this->factureFactory->setEcoles($facture,$this->ecoles);
 
         if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
@@ -85,9 +76,9 @@ class FactureHandler
     {
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
-            $facturePresence->setPlaine($plaine->getNom());
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
+            $this->ecoles[] = $enfant->getEcole()->getNom();
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCout($this->plaineCalculator->calculateOnePresence($plaine, $presence));
@@ -96,50 +87,9 @@ class FactureHandler
         }
     }
 
-    public function generateOneHtml(Facture $facture, Plaine $plaine): string
-    {
-        $content = $this->prepareContent($facture, $plaine);
-
-        return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/pdf.html.twig',
-            [
-                'content' => $content,
-            ]
-        );
-    }
-
-    private function prepareContent(Facture $facture, Plaine $plaine): string
-    {
-        $tuteur = $facture->getTuteur();
-        $organisation = $this->organisationRepository->getOrganisation();
-        $data = [
-            'enfants' => [],
-            'cout' => 0,
-        ];
-        //init
-        foreach ($this->factureUtils->getEnfants($facture) as $enfant) {
-            $data['enfants'][$enfant->getId()] = [
-                'enfant' => $enfant,
-                'cout' => 0,
-            ];
-        }
-
-        return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/plaine/hotton/_content.html.twig',
-            [
-                'facture' => $facture,
-                'plaine' => $plaine,
-                'tuteur' => $tuteur,
-                'organisation' => $organisation,
-                'data' => $data,
-            ]
-        );
-    }
 
     private function flush(): void
     {
         $this->factureRepository->flush();
     }
-
-
 }

@@ -33,6 +33,7 @@ final class FactureHandler
     private TuteurRepository $tuteurRepository;
     private CommunicationFactory $communicationFactory;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
+    private array $ecoles = [];
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -152,6 +153,7 @@ final class FactureHandler
         $facture->setCommunication($this->communicationFactory->generate($facture));
         $this->attachPresences($facture, $presences);
         $this->attachAccueils($facture, $accueils);
+        $this->factureFactory->setEcoles($facture, $this->ecoles);
         if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
@@ -170,6 +172,7 @@ final class FactureHandler
             $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
+            $this->ecoles[] = $enfant->getEcole()->getNom();
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCout($this->presenceCalculator->calculate($presence));
@@ -190,6 +193,7 @@ final class FactureHandler
             $facturePresence->setHeure($accueil->getHeure());
             $facturePresence->setDuree($accueil->getDuree());
             $enfant = $accueil->getEnfant();
+            $this->ecoles[] = $enfant->getEcole()->getNom();
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCout($this->accueilCalculator->calculate($accueil));

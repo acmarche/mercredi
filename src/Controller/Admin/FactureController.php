@@ -88,7 +88,9 @@ final class FactureController extends AbstractController
             $search = true;
             $factures = $this->factureRepository->search(
                 $dataForm['tuteur'],
+                $dataForm['enfant'],
                 $dataForm['ecole'],
+                $dataForm['plaine'],
                 $dataForm['paye'],
                 $dataForm['mois'],
                 $dataForm['communication'],

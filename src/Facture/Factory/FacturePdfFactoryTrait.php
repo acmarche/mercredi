@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Facture\Render\FactureRender;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,19 +11,19 @@ final class FacturePdfFactoryTrait
 {
     use PdfDownloaderTrait;
 
-    private FactureFactory $factureFactory;
+    private FactureRender $factureRender;
 
-    public function __construct(FactureFactory $factureFactory)
+    public function __construct(FactureRender $factureRender)
     {
-        $this->factureFactory = $factureFactory;
+        $this->factureRender = $factureRender;
     }
 
     public function generate(Facture $facture): Response
     {
         $date = $facture->getFactureLe();
-        $html = $this->factureFactory->generateOneHtml($facture);
+        $html = $this->factureRender->generateOneHtml($facture);
 
-       //   return new Response($html);
+        //   return new Response($html);
 
         return $this->downloadPdf($html, 'facture_'.$date->format('d-m-Y').'.pdf');
     }
@@ -34,7 +35,7 @@ final class FacturePdfFactoryTrait
      */
     public function generates(array $factures, string $month): Response
     {
-        $html = $this->factureFactory->generateMultipleHtml($factures);
+        $html = $this->factureRender->generateMultipleHtml($factures);
 
         //  return new Response($html);
 

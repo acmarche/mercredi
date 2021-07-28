@@ -4,22 +4,17 @@
 namespace AcMarche\Mercredi\Facture\Utils;
 
 
-use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FactureUtils
 {
     public SluggerInterface $slugger;
-    private PresenceRepository $presenceRepository;
 
-    public function __construct(SluggerInterface $slugger, PresenceRepository $presenceRepository)
+    public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
-        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -35,23 +30,5 @@ class FactureUtils
         }
 
         return $enfants;
-    }
-
-    /**
-     * @return array|Ecole[]
-     */
-    public function getEcoles(Facture $facture): array
-    {
-        $ecoles = [];
-        foreach ($facture->getFacturePresences() as $facturePresence) {
-            if ($facturePresence->getObjectType() == FactureInterface::OBJECT_PRESENCE) {
-                $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
-                $enfant = $presence->getEnfant();
-                $ecole = $enfant->getEcole();
-                $ecoles[$ecole->getId()] = $ecole;
-            }
-        }
-
-        return $ecoles;
     }
 }

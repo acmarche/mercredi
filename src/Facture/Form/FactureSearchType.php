@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -26,8 +27,20 @@ final class FactureSearchType extends AbstractType
                 ]
             )
             ->add(
+                'enfant',
+                SearchType::class,
+                [
+                    'required' => false,
+                    'attr' => ['placeholder' => 'Nom de l\'enfant'],
+                ]
+            )
+            ->add(
                 'mois',
-                MonthWidgetType::class
+                MonthWidgetType::class,
+                [
+                    'help' => null,
+                    'required' => false,
+                ]
             )
             ->add(
                 'communication',
@@ -44,6 +57,16 @@ final class FactureSearchType extends AbstractType
                     'class' => Ecole::class,
                     'required' => false,
                     'placeholder' => 'Choisissez une école',
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                ]
+            )
+            ->add(
+                'plaine',
+                EntityType::class,
+                [
+                    'class' => Plaine::class,
+                    'required' => false,
+                    'placeholder' => 'Choisissez une plaine',
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 ]
             )
