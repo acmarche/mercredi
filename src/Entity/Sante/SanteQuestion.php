@@ -33,7 +33,7 @@ class SanteQuestion
 
     /**
      * Texte d'aide pour le complement.
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     private ?string $complement_label = null;
 
@@ -41,6 +41,11 @@ class SanteQuestion
      * @ORM\Column(type="integer",nullable=true)
      */
     private ?int $display_order = null;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private ?string $categorie = null;
 
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
@@ -141,6 +146,18 @@ class SanteQuestion
                 $reponse->setQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?string $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
