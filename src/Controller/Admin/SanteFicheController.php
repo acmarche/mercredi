@@ -79,6 +79,9 @@ final class SanteFicheController extends AbstractController
     public function edit(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
+        if (count($santeFiche->getAccompagnateurs()) === 0) {
+            $santeFiche->addAccompagnateur(' ');
+        }
 
         $form = $this->createForm(SanteFicheFullType::class, $santeFiche);
         $form->handleRequest($request);
