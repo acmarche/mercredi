@@ -1,14 +1,11 @@
-<div class="btn-toolbar">
+<div class="d-grid gap-2 d-md-block mb-3">
 
     {% include '@AcMarcheMercredi/ecole/enfant/_btn_add_accueil.html.twig' %}
 
-    <div class="btn-group mb-2 mr-2 ">
-            <a href="{{ path('mercredi_commun_export_sante_fiche_pdf', { 'uuid': enfant.uuid }) }}" role="button"
-               class="btn btn-primary"><i class="far fa-file-pdf"></i> Fiche santé</a>
-    </div>
-    <div class="btn-group mb-2 ">
-        <a href="{{ path('mercredi_ecole_enfant_index') }}" class="btn btn-primary" role='button'><i
-                    class="fas fa-list"></i>
-            Retour à la Liste</a>
-    </div>
+    <a href="{{ path('mercredi_ecole_sante_fiche_show', { 'uuid': enfant.uuid }) }}" role="button"
+       class="btn btn-primary"><i class="fas fa-heartbeat"></i> Fiche santé</a>
+
+    <a href="{{ path('mercredi_ecole_enfant_index') }}" class="btn btn-primary" role='button'><i
+                class="fas fa-list"></i>
+        Retour à la Liste</a>
 </div>

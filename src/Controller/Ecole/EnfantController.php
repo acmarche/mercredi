@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Ecole;
 
+use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Form\EnfantEditForEcoleType;
@@ -33,6 +35,8 @@ final class EnfantController extends AbstractController
     private PresenceRepository $presenceRepository;
     private AccueilRepository $accueilRepository;
     private RelationRepository $relationRepository;
+    private SanteQuestionRepository $santeQuestionRepository;
+    private OrganisationRepository $organisationRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -40,7 +44,9 @@ final class EnfantController extends AbstractController
         SanteChecker $santeChecker,
         PresenceRepository $presenceRepository,
         AccueilRepository $accueilRepository,
-        RelationRepository $relationRepository
+        RelationRepository $relationRepository,
+        SanteQuestionRepository $santeQuestionRepository,
+        OrganisationRepository $organisationRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->santeHandler = $santeHandler;
@@ -48,6 +54,8 @@ final class EnfantController extends AbstractController
         $this->presenceRepository = $presenceRepository;
         $this->accueilRepository = $accueilRepository;
         $this->relationRepository = $relationRepository;
+        $this->santeQuestionRepository = $santeQuestionRepository;
+        $this->organisationRepository = $organisationRepository;
     }
 
     /**
@@ -128,6 +136,36 @@ final class EnfantController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/sante/{uuid}", name="mercredi_ecole_sante_fiche_show", methods={"GET"})
+     * @IsGranted("enfant_show", subject="enfant")
+     */
+    public function santeFiche(Enfant $enfant): Response
+    {
+        $santeFiche = $this->santeHandler->init($enfant);
+
+        if (!$santeFiche->getId()) {
+            $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
+
+            return $this->redirectToRoute('mercredi_ecole_enfant_show', ['uuid' => $enfant->getUuid()]);
+        }
+
+        $isComplete = $this->santeChecker->isComplete($santeFiche);
+        $questions = $this->santeQuestionRepository->findAll();
+        $organisation = $this->organisationRepository->getOrganisation();
+
+        return $this->render(
+            '@AcMarcheMercrediEcole/enfant/sante_fiche.html.twig',
+            [
+                'enfant' => $enfant,
+                'sante_fiche' => $santeFiche,
+                'is_complete' => $isComplete,
+                'questions' => $questions,
+                'organisation' => $organisation,
             ]
         );
     }
