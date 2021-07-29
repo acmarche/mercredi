@@ -47,7 +47,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
     private int $duree;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, length=50)
      */
     private ?string $heure = null;
 
