@@ -47,12 +47,10 @@ final class MigrationCommand extends Command
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
         $this->parametreImport->setIo($symfonyStyle);
-        //    $this->parametreImport->importAll();
-      //  $this->userImport->import($symfonyStyle);
-        //  $this->tuteurImport->import($symfonyStyle);
 
-        //   $this->enfantRepository->flush();
-
+        //  $this->userImport->import($symfonyStyle);
+        //     $this->tuteurImport->import($symfonyStyle);
+        $this->parametreImport->importAll();
 
         return Command::SUCCESS;
     }

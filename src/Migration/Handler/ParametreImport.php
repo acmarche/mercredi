@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Relation;
@@ -41,6 +42,9 @@ class ParametreImport
         $this->importJour();
         $this->importQuestions();
         $this->importReduction();
+        $this->importAnneeScolaire();
+
+        $this->enfantRepository->flush();
     }
 
     public function importEcole()
@@ -90,8 +94,8 @@ class ParametreImport
             $jour->setPrix1($data->prix1);
             $jour->setPrix2($data->prix2);
             $jour->setPrix3($data->prix3);
-            $jour->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s',$data->updated));
-            $jour->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s',$data->created));
+            $jour->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $jour->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $this->enfantRepository->persist($jour);
         }
     }
@@ -112,5 +116,24 @@ class ParametreImport
         }
     }
 
+    private function importAnneeScolaire()
+    {
+        $annees = ['PM', '1M', '2M', '3M', '1P', '2P', '3P', '4P', '5P', '6P'];
+        $i = 0;
+        foreach ($annees as $annee) {
+            $anneeScolaire = new AnneeScolaire();
+            $anneeScolaire->setNom($annee);
+            $anneeScolaire->setOrdre($i);
+            $this->enfantRepository->persist($anneeScolaire);
+            $i++;
+        }
+
+        $groupes = ['premats', 'petits', 'moyens', 'grands'];
+        foreach ($groupes as $data) {
+            $groupe = new GroupeScolaire();
+            $groupe->setNom($data);
+            $this->enfantRepository->persist($groupe);
+        }
+    }
 
 }
