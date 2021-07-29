@@ -9,8 +9,12 @@
 {% block body %}
     <div class="text-center">
         <main class="form-signin">
+
             {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             {% endif %}
 
             <form method="post" action="{{ path('app_login') }}">
