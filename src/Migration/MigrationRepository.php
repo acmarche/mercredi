@@ -7,10 +7,15 @@ namespace AcMarche\Mercredi\Migration;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Sante\SanteFiche;
+use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
+use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
@@ -25,6 +30,8 @@ class MigrationRepository
     private MercrediPdo $pdo;
     private TuteurRepository $tuteurRepository;
     private EnfantRepository $enfantRepository;
+    private SanteFicheRepository $santeFicheRepository;
+    private SanteQuestionRepository $santeQuestionRepository;
 
     public function __construct(
         UserRepository $userRepository,
@@ -32,7 +39,9 @@ class MigrationRepository
         AnneeScolaireRepository $anneeScolaireRepository,
         GroupeScolaireRepository $groupeScolaireRepository,
         TuteurRepository $tuteurRepository,
-        EnfantRepository $enfantRepository
+        EnfantRepository $enfantRepository,
+        SanteFicheRepository $santeFicheRepository,
+        SanteQuestionRepository $santeQuestionRepository
     ) {
         $this->userRepository = $userRepository;
         $this->ecoleRepository = $ecoleRepository;
@@ -41,6 +50,8 @@ class MigrationRepository
         $this->pdo = new MercrediPdo();
         $this->tuteurRepository = $tuteurRepository;
         $this->enfantRepository = $enfantRepository;
+        $this->santeFicheRepository = $santeFicheRepository;
+        $this->santeQuestionRepository = $santeQuestionRepository;
     }
 
     public function getUser(int $userId): User
@@ -90,5 +101,27 @@ class MigrationRepository
         }
 
         return $enfant;
+    }
+
+    public function getEcole(int $ecoleId): Ecole
+    {
+        $ecole = $this->pdo->getAllWhere('ecole', 'id = '.$ecoleId, true);
+
+        return $this->ecoleRepository->findOneBy(['nom' => $ecole->nom]);
+    }
+
+    public function getSanteFiche(int $santeFicheId): SanteFiche
+    {
+        $santeFiche = $this->pdo->getAllWhere('sante_fiche', 'id = '.$santeFicheId, true);
+        $enfant = $this->getEnfant($santeFiche->enfant_id);
+
+        return $this->santeFicheRepository->findOneBy(['enfant' => $enfant]);
+    }
+
+    public function getSanteQuestion($questionId): SanteQuestion
+    {
+        $question = $this->pdo->getAllWhere('sante_question', 'id = '.$questionId, true);
+
+        return $this->santeQuestionRepository->findOneBy(['nom' => $question->intitule]);
     }
 }

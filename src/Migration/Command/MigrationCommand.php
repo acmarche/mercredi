@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Migration\Command;
 
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
+use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 final class MigrationCommand extends Command
 {
@@ -25,17 +25,16 @@ final class MigrationCommand extends Command
     private EnfantImport $enfantImport;
     private TuteurImport $tuteurImport;
     private UserImport $userImport;
-    /**
-     * @var \AcMarche\Mercredi\User\Repository\UserRepository
-     */
     private UserRepository $userRepository;
     private UserPasswordHasherInterface $passwordHasher;
+    private FicheSanteImport $ficheSanteImport;
 
     public function __construct(
         ParametreImport $parametreImport,
         UserImport $userImport,
         TuteurImport $tuteurImport,
         EnfantImport $enfantImport,
+        FicheSanteImport $ficheSanteImport,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
         ?string $name = null
@@ -48,6 +47,7 @@ final class MigrationCommand extends Command
         $this->userImport = $userImport;
         $this->userRepository = $userRepository;
         $this->passwordHasher = $passwordHasher;
+        $this->ficheSanteImport = $ficheSanteImport;
     }
 
     protected function configure(): void
@@ -83,9 +83,14 @@ final class MigrationCommand extends Command
                 $this->enfantImport->importRelation($symfonyStyle);
 
                 return Command::SUCCESS;
+            case 'sante':
+                $this->ficheSanteImport->import($symfonyStyle);
+                $this->ficheSanteImport->importReponse($symfonyStyle);
+
+                return Command::SUCCESS;
             case 'password':
                 $user = $this->userRepository->findOneBy(['username' => 'jfsenechal']);
-               $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
+                $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
                 $this->userRepository->flush();
 
                 return Command::SUCCESS;

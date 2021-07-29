@@ -41,6 +41,8 @@ class EnfantImport
             }
             $anneeScolaire = $this->migrationRepository->getAnneeScolaire($data->annee_scolaire);
             $enfant->setAnneeScolaire($anneeScolaire);
+            $ecole = $this->migrationRepository->getEcole($data->ecole_id);
+            $enfant->setEcole($ecole);
             $enfant->setArchived($data->archive);
             if ($data->groupe_scolaire) {
                 $groupeScolaire = $this->migrationRepository->getGroupeScolaire($data->groupe_scolaire);
