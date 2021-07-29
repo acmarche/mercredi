@@ -9,11 +9,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class SanteFicheEtape2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
+        $countConstraint = new Count(0,1);
+        $countConstraint->minMessage = 'Il faut au moins un accompagnateur';
+
         $formBuilder
             ->add(
                 'personne_urgence',
@@ -44,6 +49,9 @@ final class SanteFicheEtape2Type extends AbstractType
                     'entry_type' => TextType::class,
                     'entry_options' => [
                         'label' => false,
+                        'constraints' => [
+                            new NotBlank(),
+                        ],
                     ],
                     'prototype' => true,
                     'required' => true,
@@ -52,6 +60,9 @@ final class SanteFicheEtape2Type extends AbstractType
                     'by_reference' => false,
                     'label' => 'Personnes autorisées à reprendre l’enfant dans les accueils',
                     'help' => 'Nom et téléphone',
+                    'constraints' => [
+                        $countConstraint,
+                    ],
                 ]
             )
             ->add(
