@@ -40,13 +40,14 @@ Feature: Gestion des fiches santés
     Then I follow "Fiche santé"
     Then I follow "Modifier"
     And I fill in "sante_fiche[medecin_nom]" with "Docteur maboulle"
+    And I fill in "sante_fiche[questions][0][reponseTxt]" with "1"
     And I fill in "sante_fiche[questions][0][remarque]" with "12-06-21"
-   # And I follow "Ajouter un accompagnateur"
-   # Then print last response
-   # And I fill in "sante_fiche[accompagnateurs][0]" with "La grande soeur"
+    And I fill in "sante_fiche[questions][1][reponseTxt]" with "0"
+    And I fill in "sante_fiche[questions][2][reponseTxt]" with "0"
+    And I fill in "sante_fiche[accompagnateurs][0]" with "Mamy 084 25 66 99"
     And I press "Sauvegarder"
     Then I should see "Le formulaire santé a bien été enregistré"
-   # Then I should see "La grande soeur"
+    Then I should see "Mamy 084 25 66 99"
     Then I should see "Docteur maboulle"
 
   Scenario: J'exporte une fiche en pdf
