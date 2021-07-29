@@ -1,7 +1,7 @@
 <?php
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Security\Authenticator\MercrediAuthenticator;
+use AcMarche\Mercredi\Security\Authenticator\MercrediAuthenticatorNew;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'firewalls' => [
                 'main' => [
                     'provider' => 'mercredi_user_provider',
-                    'guard' => ['authenticators' => [MercrediAuthenticator::class]],
+                    'custom_authenticator' => MercrediAuthenticatorNew::class,
                     'logout' => ['path' => 'app_logout'],
                 ],
             ],

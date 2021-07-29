@@ -6,11 +6,14 @@ use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 final class MigrationCommand extends Command
 {
@@ -22,12 +25,19 @@ final class MigrationCommand extends Command
     private EnfantImport $enfantImport;
     private TuteurImport $tuteurImport;
     private UserImport $userImport;
+    /**
+     * @var \AcMarche\Mercredi\User\Repository\UserRepository
+     */
+    private UserRepository $userRepository;
+    private UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
         ParametreImport $parametreImport,
         UserImport $userImport,
         TuteurImport $tuteurImport,
         EnfantImport $enfantImport,
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $passwordHasher,
         ?string $name = null
     ) {
         parent::__construct($name);
@@ -36,6 +46,8 @@ final class MigrationCommand extends Command
         $this->enfantImport = $enfantImport;
         $this->tuteurImport = $tuteurImport;
         $this->userImport = $userImport;
+        $this->userRepository = $userRepository;
+        $this->passwordHasher = $passwordHasher;
     }
 
     protected function configure(): void
@@ -69,6 +81,12 @@ final class MigrationCommand extends Command
                 return Command::SUCCESS;
             case 'relation':
                 $this->enfantImport->importRelation($symfonyStyle);
+
+                return Command::SUCCESS;
+            case 'password':
+                $user = $this->userRepository->findOneBy(['username' => 'jfsenechal']);
+               $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
+                $this->userRepository->flush();
 
                 return Command::SUCCESS;
 

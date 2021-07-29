@@ -22,14 +22,6 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 final class MercrediAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
-    /**
-     * @var string
-     */
-    private const EMAIL = 'email';
-    /**
-     * @var string
-     */
-    private const PASSWORD = 'password';
 
     private UrlGeneratorInterface $urlGenerator;
     private CsrfTokenManagerInterface $csrfTokenManager;
@@ -57,13 +49,13 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
     public function getCredentials(Request $request)
     {
         $credentials = [
-            self::EMAIL => $request->request->get('username'),
-            self::PASSWORD => $request->request->get(self::PASSWORD),
+            'email' => $request->request->get('username'),
+            'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            $credentials[self::EMAIL]
+            $credentials['email']
         );
 
         return $credentials;
@@ -72,11 +64,11 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $csrfToken = new CsrfToken('authenticate', $credentials['csrf_token']);
-        if (! $this->csrfTokenManager->isTokenValid($csrfToken)) {
+        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->userRepository->findOneBy([self::EMAIL => $credentials[self::EMAIL]]);
+        $user = $this->userRepository->findOneByEmailOrUserName($credentials['email']);
 
         if ($user === null) {
             // fail authentication with a custom error
@@ -88,7 +80,7 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials[self::PASSWORD]);
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
@@ -98,7 +90,7 @@ final class MercrediAuthenticator extends AbstractFormLoginAuthenticator impleme
      */
     public function getPassword($credentials): ?string
     {
-        return $credentials[self::PASSWORD];
+        return $credentials['password'];
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
