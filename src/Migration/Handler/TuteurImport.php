@@ -54,7 +54,7 @@ class TuteurImport
             $tuteur->setUserAdd($user->getUserIdentifier());
             $tuteur->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
             $tuteur->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
-            $tuteur->generateSlug();
+            $tuteur->setSlug($data->slugname);
             $this->tuteurRepository->persist($tuteur);
         }
         $this->tuteurRepository->flush();

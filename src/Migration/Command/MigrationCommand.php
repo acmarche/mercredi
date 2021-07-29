@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -40,7 +41,8 @@ final class MigrationCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Migration uuid');
+            ->setDescription('Migration uuid')
+            ->addArgument('name', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -48,9 +50,29 @@ final class MigrationCommand extends Command
         $symfonyStyle = new SymfonyStyle($input, $output);
         $this->parametreImport->setIo($symfonyStyle);
 
-        //  $this->userImport->import($symfonyStyle);
-        //     $this->tuteurImport->import($symfonyStyle);
-        $this->parametreImport->importAll();
+        switch ($input->getArgument('name')) {
+            case 'user':
+                $this->userImport->import($symfonyStyle);
+
+                return Command::SUCCESS;
+            case 'tuteur':
+                $this->tuteurImport->import($symfonyStyle);
+
+                return Command::SUCCESS;
+            case 'parametre':
+                $this->parametreImport->importAll();
+
+                return Command::SUCCESS;
+            case 'enfant':
+                $this->enfantImport->import($symfonyStyle);
+
+                return Command::SUCCESS;
+            case 'relation':
+                $this->enfantImport->importRelation($symfonyStyle);
+
+                return Command::SUCCESS;
+
+        }
 
         return Command::SUCCESS;
     }
