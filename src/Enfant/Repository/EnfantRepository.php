@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Enfant\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
@@ -20,8 +21,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class EnfantRepository extends ServiceEntityRepository
 {
-    private const ECOLE = 'ecole';
-    private const WITH = 'WITH';
+    use OrmCrudTrait;
 
     public function __construct(ManagerRegistry $managerRegistry)
     {
@@ -66,8 +66,8 @@ final class EnfantRepository extends ServiceEntityRepository
     public function findByEcoles(iterable $ecoles): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.relations', 'relations', self::WITH)
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
             ->addSelect('relations', 'annee_scolaire')
             ->andWhere('enfant.ecole IN (:ecoles)')
             ->setParameter('ecoles', $ecoles);
@@ -83,8 +83,8 @@ final class EnfantRepository extends ServiceEntityRepository
     public function findByEcolesForEcole(iterable $ecoles): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.relations', 'relations', self::WITH)
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
             ->addSelect('relations', 'annee_scolaire')
             ->andWhere('enfant.ecole IN (:ecoles)')
             ->setParameter('ecoles', $ecoles);
@@ -103,8 +103,8 @@ final class EnfantRepository extends ServiceEntityRepository
     public function findByEcolesForInscription(Ecole $ecole): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.relations', 'relations', self::WITH)
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
             ->addSelect('relations', 'annee_scolaire')
             ->andWhere('enfant.ecole = :ecole')
             ->setParameter('ecole', $ecole)
@@ -135,11 +135,11 @@ final class EnfantRepository extends ServiceEntityRepository
     public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $anneeScolaire): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.ecole', self::ECOLE, self::WITH)
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', self::WITH)
-            ->leftJoin('enfant.relations', 'relations', self::WITH)
-            ->addSelect(self::ECOLE, 'relations', 'sante_fiche', 'annee_scolaire');
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire');
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
@@ -148,7 +148,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         if (null !== $ecole) {
             $queryBuilder->andWhere('ecole = :ecole')
-                ->setParameter(self::ECOLE, $ecole);
+                ->setParameter('ecole', $ecole);
         }
 
         if ($anneeScolaire !== null) {
@@ -165,11 +165,11 @@ final class EnfantRepository extends ServiceEntityRepository
     public function searchForEcole(iterable $ecoles, ?string $nom, bool $strict = true)
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.ecole', self::ECOLE, self::WITH)
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', self::WITH)
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', self::WITH)
-            ->leftJoin('enfant.relations', 'relations', self::WITH)
-            ->addSelect(self::ECOLE, 'relations', 'sante_fiche', 'annee_scolaire');
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire');
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
@@ -195,7 +195,7 @@ final class EnfantRepository extends ServiceEntityRepository
     public function findAllForAnimateur(Animateur $animateur): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.presences', 'presences', self::WITH)
+            ->leftJoin('enfant.presences', 'presences', 'WITH')
             ->addSelect('presences');
 
         $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
@@ -223,7 +223,7 @@ final class EnfantRepository extends ServiceEntityRepository
     public function searchForAnimateur(Animateur $animateur, ?string $nom = null, ?Jour $jour = null): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.presences', 'presences', self::WITH)
+            ->leftJoin('enfant.presences', 'presences', 'WITH')
             ->addSelect('presences');
 
         if ($jour !== null) {
@@ -269,20 +269,5 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         return $this->getOrCreateQueryBuilder($qb)
             ->andWhere('enfant.archived = 0');
-    }
-
-    public function remove(Enfant $enfant): void
-    {
-        $this->_em->remove($enfant);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Enfant $enfant): void
-    {
-        $this->_em->persist($enfant);
     }
 }

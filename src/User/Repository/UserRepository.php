@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,6 +21,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, User::class);
@@ -87,26 +90,5 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             ->addOrderBy('user.nom', 'ASC')
             ->getQuery()
             ->getResult();
-    }
-
-    public function persist(User $user): void
-    {
-        $this->getEntityManager()->persist($user);
-    }
-
-    public function insert(User $user): void
-    {
-        $this->persist($user);
-        $this->flush();
-    }
-
-    public function flush(): void
-    {
-        $this->getEntityManager()->flush();
-    }
-
-    public function remove(User $user): void
-    {
-        $this->_em->remove($user);
     }
 }
