@@ -2,7 +2,10 @@
 
 namespace AcMarche\Mercredi\Migration\Command;
 
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Migration\Handler\EnfantImport;
+use AcMarche\Mercredi\Migration\Handler\ParametreImport;
+use AcMarche\Mercredi\Migration\Handler\TuteurImport;
+use AcMarche\Mercredi\Migration\Handler\UserImport;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,15 +17,24 @@ final class MigrationCommand extends Command
      * @var string
      */
     protected static $defaultName = 'mercredi:migration';
-    private EnfantRepository $enfantRepository;
+    private ParametreImport $parametreImport;
+    private EnfantImport $enfantImport;
+    private TuteurImport $tuteurImport;
+    private UserImport $userImport;
 
     public function __construct(
-        EnfantRepository $enfantRepository,
+        ParametreImport $parametreImport,
+        UserImport $userImport,
+        TuteurImport $tuteurImport,
+        EnfantImport $enfantImport,
         ?string $name = null
     ) {
         parent::__construct($name);
 
-        $this->enfantRepository = $enfantRepository;
+        $this->parametreImport = $parametreImport;
+        $this->enfantImport = $enfantImport;
+        $this->tuteurImport = $tuteurImport;
+        $this->userImport = $userImport;
     }
 
     protected function configure(): void
@@ -34,16 +46,15 @@ final class MigrationCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
+        $this->parametreImport->setIo($symfonyStyle);
+        //    $this->parametreImport->importAll();
+      //  $this->userImport->import($symfonyStyle);
+        //  $this->tuteurImport->import($symfonyStyle);
 
-        foreach ($this->enfantRepository->findAll() as $enfant) {
-            $enfant->generateUuid();
-            $enfant->generateSlug();
-        }
+        //   $this->enfantRepository->flush();
 
-        $this->enfantRepository->flush();
 
-        $symfonyStyle->success('User crée.');
-
-        return 0;
+        return Command::SUCCESS;
     }
+
 }
