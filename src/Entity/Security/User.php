@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity\Security;
 
 use AcMarche\Mercredi\Entity\Security\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
+use AcMarche\Mercredi\Entity\Security\Traits\LastLoginTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\PlainPasswordTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\RoleTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserNameTrait;
@@ -41,6 +42,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
     use TuteursTrait;
     use EcolesTrait;
     use AnimateursTrait;
+    use LastLoginTrait;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
