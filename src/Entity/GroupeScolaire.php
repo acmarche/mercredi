@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
@@ -35,13 +36,13 @@ class GroupeScolaire
 
     /**
      * @var Enfant[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Enfant", mappedBy="groupe_scolaire")
+     * @ORM\OneToMany(targetEntity=Enfant::class, mappedBy="groupe_scolaire")
      */
     private iterable $enfants;
 
     /**
      * @var AnneeScolaire[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", mappedBy="groupe_scolaire")
+     * @ORM\OneToMany(targetEntity=AnneeScolaire::class, mappedBy="groupe_scolaire")
      */
     private iterable $annees_scolaires;
 
@@ -49,7 +50,7 @@ class GroupeScolaire
      * Pour le cascade.
      *
      * @var PlaineGroupe[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="groupe_scolaire", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=PlaineGroupe::class, mappedBy="groupe_scolaire", cascade={"remove"})
      */
     private iterable $plaine_groupes;
 

@@ -11,7 +11,7 @@ trait TuteursTrait
 {
     /**
      * @var Tuteur[]|ArrayCollection
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity=Tuteur::class, inversedBy="users")
      */
     private iterable $tuteurs;
 

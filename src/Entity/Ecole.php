@@ -28,7 +28,7 @@ class Ecole
     use UsersTrait;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="ecoles" )
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="ecoles" )
      *
      * @var User[]|Collection
      */

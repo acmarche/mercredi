@@ -62,18 +62,18 @@ class Jour implements TimestampableInterface
 
     /**
      * Reverse
-     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="jour")
+     * @ORM\OneToOne(targetEntity=PlaineJour::class, mappedBy="jour")
      */
     private ?PlaineJour $plaine_jour = null;
 
     /**
      * @var Animateur[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", mappedBy="jours")
+     * @ORM\ManyToMany(targetEntity=Animateur::class, mappedBy="jours")
      */
     private iterable $animateurs;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Ecole")
+     * @ORM\ManyToMany(targetEntity=Ecole::class)
      */
     private iterable $ecoles;
 

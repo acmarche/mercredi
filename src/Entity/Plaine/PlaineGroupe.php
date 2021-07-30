@@ -24,12 +24,12 @@ class PlaineGroupe
     private ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="plaine_groupes")
+     * @ORM\ManyToOne(targetEntity=GroupeScolaire::class, inversedBy="plaine_groupes")
      */
     private ?GroupeScolaire $groupe_scolaire=null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_groupes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="plaine_groupes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Plaine $plaine=null;

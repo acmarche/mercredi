@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Scolaire\Repository;
 
-use AcMarche\Mercredi\Entity\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,7 +21,7 @@ final class AnneeScolaireRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return AnneeScolaire[]
+     * @return \AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire[]
      */
     public function findAllOrderByOrdre(): array
     {

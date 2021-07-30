@@ -51,7 +51,7 @@ class SanteQuestion
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="question", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=SanteReponse::class, mappedBy="question", cascade={"remove"})
      */
     private iterable $reponse;
 

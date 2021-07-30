@@ -29,14 +29,14 @@ class Relation
     private ?string $type = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="relations", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Enfant::class, inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      * */
     private ?Enfant $enfant = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="relations", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="relations", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      * */

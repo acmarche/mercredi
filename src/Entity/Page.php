@@ -36,7 +36,7 @@ class Page implements SluggableInterface
 
     /**
      * @var Document[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Document")
+     * @ORM\ManyToMany(targetEntity=Document::class)
      */
     private iterable $documents;
 

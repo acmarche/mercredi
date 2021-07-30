@@ -11,7 +11,7 @@ trait AnimateursTrait
 {
     /**
      * @var Animateur[]|ArrayCollection
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Animateur", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity=Animateur::class, inversedBy="users")
      */
     private iterable $animateurs;
 

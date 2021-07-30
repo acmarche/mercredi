@@ -52,7 +52,7 @@ class SanteFiche implements TimestampableInterface
     private ?string $medecin_telephone = null;
 
     /**
-     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="sante_fiche")
+     * @ORM\OneToOne(targetEntity=Enfant::class, inversedBy="sante_fiche")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Enfant $enfant = null;
@@ -61,7 +61,7 @@ class SanteFiche implements TimestampableInterface
      * Pour le cascade.
      *
      * @var SanteReponse[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteReponse", mappedBy="sante_fiche", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=SanteReponse::class, mappedBy="sante_fiche", cascade={"remove"})
      */
     private iterable $reponses;
 

@@ -18,13 +18,13 @@ class SanteReponse
     use IdTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteQuestion", inversedBy="reponse")
+     * @ORM\ManyToOne(targetEntity=SanteQuestion::class, inversedBy="reponse")
      * @ORM\JoinColumn(nullable=false)
      */
     private SanteQuestion $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Sante\SanteFiche", inversedBy="reponses", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity=SanteFiche::class, inversedBy="reponses", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private SanteFiche $sante_fiche;

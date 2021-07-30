@@ -19,12 +19,12 @@ class PlaineJour
     use IdTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\Plaine", inversedBy="plaine_jours")
+     * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="plaine_jours")
      */
     private ?Plaine $plaine=null;
 
     /**
-     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="plaine_jour")
+     * @ORM\OneToOne(targetEntity=Jour::class, inversedBy="plaine_jour")
      */
     private ?Jour $jour=null;
 

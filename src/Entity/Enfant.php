@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AccueilsTrait;
 use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;
@@ -29,7 +30,6 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -79,23 +79,23 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     private bool $photo_autorisation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire", inversedBy="enfants")
+     * @ORM\ManyToOne(targetEntity=AnneeScolaire::class, inversedBy="enfants")
      */
     private ?AnneeScolaire $annee_scolaire = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="enfants")
+     * @ORM\ManyToOne(targetEntity=GroupeScolaire::class, inversedBy="enfants")
      */
     private ?GroupeScolaire $groupe_scolaire = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Ecole", inversedBy="enfants")
+     * @ORM\ManyToOne(targetEntity=Ecole::class, inversedBy="enfants")
      */
     private ?Ecole $ecole = null;
 
     /**
      * @var Relation[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Relation", mappedBy="enfant", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Relation::class, mappedBy="enfant", cascade={"remove"})
      */
     private iterable $relations;
 

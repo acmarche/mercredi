@@ -38,7 +38,7 @@ class Facture implements TimestampableInterface, UuidableInterface
     use UserAddTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="factures")
+     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="factures")
      */
     private ?Tuteur $tuteur = null;
     /**

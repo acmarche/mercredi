@@ -41,14 +41,14 @@ class Animateur implements TimestampableInterface
     use JoursTrait;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Security\User", mappedBy="animateurs" )
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="animateurs" )
      *
      * @var User[]|Collection
      */
     private iterable $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="animateurs" )
+     * @ORM\ManyToMany(targetEntity=Jour::class, inversedBy="animateurs" )
      *
      * @var Jour[]|Collection
      */

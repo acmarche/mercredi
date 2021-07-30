@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Enfant\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
-use AcMarche\Mercredi\Entity\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;

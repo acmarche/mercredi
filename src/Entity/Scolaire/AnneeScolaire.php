@@ -1,7 +1,9 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity;
+namespace AcMarche\Mercredi\Entity\Scolaire;
 
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
@@ -19,7 +21,7 @@ class AnneeScolaire
     use RemarqueTrait;
 
     /**
-     * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\AnneeScolaire")
+     * @ORM\OneToOne(targetEntity=AnneeScolaire::class)
      * @ORM\JoinColumn(onDelete="SET NULL", unique=true)
      */
     private ?AnneeScolaire $annee_suivante = null;
@@ -31,12 +33,12 @@ class AnneeScolaire
 
     /**
      * @var Enfant[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Enfant", mappedBy="annee_scolaire")
+     * @ORM\OneToMany(targetEntity=Enfant::class, mappedBy="annee_scolaire")
      */
     private iterable $enfants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\GroupeScolaire", inversedBy="annees_scolaires")
+     * @ORM\ManyToOne(targetEntity=GroupeScolaire::class, inversedBy="annees_scolaires")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private ?GroupeScolaire $groupe_scolaire = null;

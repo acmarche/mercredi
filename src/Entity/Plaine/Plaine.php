@@ -30,13 +30,13 @@ class Plaine implements SluggableInterface
 
     /**
      * @var PlaineJour[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="plaine", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=PlaineJour::class, mappedBy="plaine", cascade={"remove"})
      */
     private iterable $plaine_jours;
 
     /**
      * @var PlaineGroupe[]|null
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineGroupe", mappedBy="plaine", cascade={"remove","persist"})
+     * @ORM\OneToMany(targetEntity=PlaineGroupe::class, mappedBy="plaine", cascade={"remove","persist"})
      */
     private iterable $plaine_groupes;
 

@@ -47,22 +47,22 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     use HalfTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Jour", inversedBy="presences")
+     * @ORM\ManyToOne(targetEntity=Jour::class, inversedBy="presences")
      */
     private ?Jour $jour = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="presences")
+     * @ORM\ManyToOne(targetEntity=Enfant::class, inversedBy="presences")
      */
     private ?Enfant $enfant = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="presences")
+     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="presences")
      */
     private ?Tuteur $tuteur  = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Reduction")
+     * @ORM\ManyToOne(targetEntity=Reduction::class)
      */
     private ?Reduction $reduction = null;
 

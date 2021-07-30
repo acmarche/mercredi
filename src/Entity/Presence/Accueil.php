@@ -54,13 +54,13 @@ class Accueil implements TimestampableInterface, UuidableInterface
     private ?string $heure = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Enfant", inversedBy="accueils")
+     * @ORM\ManyToOne(targetEntity=Enfant::class, inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Enfant $enfant = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Tuteur", inversedBy="accueils")
+     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="accueils")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Tuteur $tuteur = null;

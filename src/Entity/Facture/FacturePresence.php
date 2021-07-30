@@ -26,7 +26,7 @@ class FacturePresence
     use PedagogiqueTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Facture\Facture", inversedBy="facturePresences")
+     * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="facturePresences")
      */
     private Facture $facture;
 
