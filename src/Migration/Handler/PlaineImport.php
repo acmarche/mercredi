@@ -40,6 +40,7 @@ class PlaineImport
             $plaine->setPrix2($data->prix2);
             $plaine->setPrix3($data->prix3);
             $this->tuteurRepository->persist($plaine);
+            $io->writeln($plaine->getNom());
         }
         $this->tuteurRepository->flush();
     }

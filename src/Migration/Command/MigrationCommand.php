@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\PlaineImport;
+use AcMarche\Mercredi\Migration\Handler\PlainePresenceImport;
 use AcMarche\Mercredi\Migration\Handler\PresenceImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
@@ -32,6 +33,7 @@ final class MigrationCommand extends Command
     private FicheSanteImport $ficheSanteImport;
     private PresenceImport $presenceImport;
     private PlaineImport $plaineImport;
+    private PlainePresenceImport $plainePresenceImport;
 
     public function __construct(
         ParametreImport $parametreImport,
@@ -42,6 +44,7 @@ final class MigrationCommand extends Command
         PresenceImport $presenceImport,
         UserRepository $userRepository,
         PlaineImport $plaineImport,
+        PlainePresenceImport $plainePresenceImport,
         UserPasswordHasherInterface $passwordHasher,
         ?string $name = null
     ) {
@@ -56,6 +59,7 @@ final class MigrationCommand extends Command
         $this->ficheSanteImport = $ficheSanteImport;
         $this->presenceImport = $presenceImport;
         $this->plaineImport = $plaineImport;
+        $this->plainePresenceImport = $plainePresenceImport;
     }
 
     protected function configure(): void
@@ -114,8 +118,13 @@ final class MigrationCommand extends Command
 
                 return Command::SUCCESS;
             case 'plaine':
-                //$this->plaineImport->import($symfonyStyle);
+                $this->plaineImport->import($symfonyStyle);
+                $this->plaineImport->importGroupe($symfonyStyle);
                 $this->plaineImport->importJours($symfonyStyle);
+
+                return Command::SUCCESS;
+            case 'plainepresence':
+                $this->plainePresenceImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'password':
