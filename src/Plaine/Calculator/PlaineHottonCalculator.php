@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Plaine\Calculator;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;

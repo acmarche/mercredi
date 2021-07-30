@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Plaine\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
 use Symfony\Component\Form\AbstractType;

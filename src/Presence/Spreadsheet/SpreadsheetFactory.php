@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Presence\Spreadsheet;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;

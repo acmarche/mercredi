@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Presence\Utils;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;

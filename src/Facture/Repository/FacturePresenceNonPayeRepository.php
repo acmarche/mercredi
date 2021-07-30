@@ -5,8 +5,8 @@ namespace AcMarche\Mercredi\Facture\Repository;
 
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
-use AcMarche\Mercredi\Entity\Accueil;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;

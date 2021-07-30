@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Accueil\Form;
 
 use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
-use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use Doctrine\Common\Collections\Collection;
 
 trait PresencesTrait

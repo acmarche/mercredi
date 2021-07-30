@@ -6,7 +6,7 @@ use DateTime;
 use Exception;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;

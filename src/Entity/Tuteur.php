@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -64,7 +65,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Accueil[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="tuteur", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Accueil::class, mappedBy="tuteur", cascade={"remove"})
      */
     private iterable $accueils;
 

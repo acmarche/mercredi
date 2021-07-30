@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
 use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
-use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;

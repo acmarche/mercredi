@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;

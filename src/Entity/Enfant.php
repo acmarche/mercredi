@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Presence\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
@@ -101,7 +103,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="enfant", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Presence::class, mappedBy="enfant", cascade={"remove"})
      */
     private iterable $presences;
 
@@ -109,7 +111,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Accueil[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Accueil", mappedBy="enfant", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Accueil::class, mappedBy="enfant", cascade={"remove"})
      */
     private iterable $accueils;
 

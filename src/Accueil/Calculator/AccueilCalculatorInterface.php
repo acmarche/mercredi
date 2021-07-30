@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Calculator;
 
-use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 
 interface AccueilCalculatorInterface
 {

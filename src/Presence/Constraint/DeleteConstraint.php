@@ -2,8 +2,8 @@
 
 namespace AcMarche\Mercredi\Presence\Constraint;
 
-use AcMarche\Mercredi\Entity\Accueil;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use DateTime;
 use DateTimeInterface;
 

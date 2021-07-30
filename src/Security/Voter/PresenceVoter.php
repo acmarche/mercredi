@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Security\Voter;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Stringable;
 use Symfony\Component\Security\Core\User\UserInterface;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\MercrediSecurity;

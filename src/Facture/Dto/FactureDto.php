@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Dto;
 
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

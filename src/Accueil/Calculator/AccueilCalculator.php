@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Accueil\Calculator;
 
-use AcMarche\Mercredi\Entity\Accueil;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Parameter\Option;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 

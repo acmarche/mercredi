@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -55,7 +56,7 @@ class Jour implements TimestampableInterface
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence", mappedBy="jour", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Presence::class, mappedBy="jour", cascade={"remove"})
      */
     private iterable $presences;
 

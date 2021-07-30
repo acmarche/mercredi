@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Utils;
 
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Presence;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 
 final class SortUtils
 {
