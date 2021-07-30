@@ -26,21 +26,21 @@ final class EcoleType extends AbstractType
                 'rue',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add('telephone')
@@ -49,14 +49,14 @@ final class EcoleType extends AbstractType
                 'email',
                 EmailType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'remarque',
                 TextareaType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'attr' => ['rows' => 8],
                 ]
             );

@@ -31,7 +31,7 @@ final class SearchEnfantType extends AbstractType
                 'nom',
                 SearchType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     self::ATTR => [self::PLACEHOLDER => 'Nom', 'autocomplete' => 'off'],
                 ]
             )
@@ -40,7 +40,7 @@ final class SearchEnfantType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    self::REQUIRED => false,
+                    'required' => false,
                     self::PLACEHOLDER => 'Choisissez une école',
                     self::ATTR => ['class' => 'custom-select my-1 mr-sm-2'],
                 ]
@@ -53,7 +53,7 @@ final class SearchEnfantType extends AbstractType
                     'label' => 'Année scolaire',
                     self::PLACEHOLDER => 'Choisissez son année scolaire',
                     self::ATTR => ['class' => 'custom-select my-1 mr-sm-2'],
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             );
     }

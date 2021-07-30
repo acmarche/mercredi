@@ -26,8 +26,8 @@ final class ConjointType extends AbstractType
                 'relation_conjoint',
                 TextType::class,
                 [
-                    self::LABEL => 'Relation entre les conjoints',
-                    self::REQUIRED => false,
+                    'label' => 'Relation entre les conjoints',
+                    'required' => false,
                     'help' => 'Papa, Belle-mère, Maman, Oncle...',
                 ]
             )
@@ -35,48 +35,48 @@ final class ConjointType extends AbstractType
                 'nom_conjoint',
                 TextType::class,
                 [
-                    self::LABEL => 'Nom',
-                    self::REQUIRED => false,
+                    'label' => 'Nom',
+                    'required' => false,
                 ]
             )
             ->add(
                 'prenom_conjoint',
                 TextType::class,
                 [
-                    self::LABEL => 'Prénom',
-                    self::REQUIRED => false,
+                    'label' => 'Prénom',
+                    'required' => false,
                 ]
             )
             ->add(
                 'email_conjoint',
                 EmailType::class,
                 [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Email',
+                    'required' => false,
+                    'label' => 'Email',
                 ]
             )
             ->add(
                 'telephone_conjoint',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Téléphone',
+                    'required' => false,
+                    'label' => 'Téléphone',
                 ]
             )
             ->add(
                 'telephone_bureau_conjoint',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Téléphone du bureau',
+                    'required' => false,
+                    'label' => 'Téléphone du bureau',
                 ]
             )
             ->add(
                 'gsm_conjoint',
                 TextType::class,
                 [
-                    self::LABEL => 'Gsm',
-                    self::REQUIRED => false,
+                    'label' => 'Gsm',
+                    'required' => false,
                 ]
             );
     }

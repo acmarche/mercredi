@@ -24,42 +24,42 @@ final class TuteurQuickType extends AbstractType
                 'nom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'help' => 'Si une adresse mail est encodée, un compte sera créé',
                 ]
             )
@@ -67,7 +67,7 @@ final class TuteurQuickType extends AbstractType
                 'telephone',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             );
     }

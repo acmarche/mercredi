@@ -30,14 +30,14 @@ final class EnfantQuickType extends AbstractType
                 'nom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
@@ -45,7 +45,7 @@ final class EnfantQuickType extends AbstractType
                 BirthdayType::class,
                 [
                     'label' => 'Né le',
-                    self::REQUIRED => false,
+                    'required' => false,
                     'years' => range($year - 15, $year),
                 ]
             )
@@ -54,7 +54,7 @@ final class EnfantQuickType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    self::REQUIRED => true,
+                    'required' => true,
                     'placeholder' => 'Choisissez son école',
                 ]
             )

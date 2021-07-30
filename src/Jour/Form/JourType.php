@@ -10,22 +10,12 @@ use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class JourType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -33,15 +23,15 @@ final class JourType extends AbstractType
                 'date_jour',
                 DateWidgetType::class,
                 [
-                    self::LABEL => 'Date du jour de garde',
+                    'label' => 'Date du jour d\'accueil',
                 ]
             )
             ->add(
                 'pedagogique',
                 CheckboxType::class,
                 [
-                    self::LABEL => 'Journée pédagoque',
-                    self::REQUIRED => false,
+                    'label' => 'Journée pédagoque',
+                    'required' => false,
                     'label_attr' => ['class' => 'switch-custom'],
                 ]
             )
@@ -58,7 +48,7 @@ final class JourType extends AbstractType
                 [
                     'class' => Ecole::class,
                     'query_builder' => fn(EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
-                    'help' => 'Pour les journées pédagogiques',
+                    'help' => 'Utilsées pour les journées pédagogiques',
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
@@ -68,8 +58,8 @@ final class JourType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    self::REQUIRED => false,
-                    self::LABEL => 'Remarques',
+                    'required' => false,
+                    'label' => 'Remarques',
                     'help' => 'Cette donnée est visible par les parents et dans le listing des présences',
                     'attr' => [
                         'rows' => 5,

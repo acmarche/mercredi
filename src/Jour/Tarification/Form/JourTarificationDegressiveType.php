@@ -30,8 +30,8 @@ final class JourTarificationDegressiveType extends AbstractType
                 'prix1',
                 MoneyType::class,
                 [
-                    self::REQUIRED => true,
-                    self::LABEL => 'Prix 1er enfant',
+                    'required' => true,
+                    'label' => 'Prix 1er enfant',
                     self::HELP => 'Uniquement les chiffres',
                 ]
             )
@@ -39,8 +39,8 @@ final class JourTarificationDegressiveType extends AbstractType
                 'prix2',
                 MoneyType::class,
                 [
-                    self::REQUIRED => true,
-                    self::LABEL => 'Prix 2iem enfant',
+                    'required' => true,
+                    'label' => 'Prix 2iem enfant',
                     self::HELP => 'Uniquement les chiffres',
                 ]
             )
@@ -48,8 +48,8 @@ final class JourTarificationDegressiveType extends AbstractType
                 'prix3',
                 MoneyType::class,
                 [
-                    self::REQUIRED => true,
-                    self::LABEL => 'Prix des suivants',
+                    'required' => true,
+                    'label' => 'Prix des suivants',
                     self::HELP => 'Uniquement les chiffres',
                 ]
             );

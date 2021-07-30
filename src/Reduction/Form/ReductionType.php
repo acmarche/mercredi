@@ -26,7 +26,7 @@ final class ReductionType extends AbstractType
                 PercentType::class,
                 [
                     'label' => 'Pourcentage',
-                    self::REQUIRED => false,
+                    'required' => false,
                     'type' => 'integer',
                     'help' => 'Uniquement les chiffres',
                 ]
@@ -34,7 +34,7 @@ final class ReductionType extends AbstractType
                 'forfait',
                 MoneyType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'help' => 'Montant du forfait, uniquement les chiffres',
                 ]
             )
@@ -42,7 +42,7 @@ final class ReductionType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             );
     }

@@ -31,6 +31,10 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     public function findAllOrderByNom(): array
     {
         return $this->createQueryBuilder('user')
+            ->leftJoin('user.tuteurs','tuteurs','WITH')
+            ->leftJoin('user.ecoles','ecoles','WITH')
+            ->leftJoin('user.animateurs','animateurs','WITH')
+            ->addSelect('tuteurs', 'ecoles', 'animateurs')
             ->addOrderBy('user.nom', 'ASC')
             ->getQuery()
             ->getResult();

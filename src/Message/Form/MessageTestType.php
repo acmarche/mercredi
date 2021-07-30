@@ -37,14 +37,14 @@ final class MessageTestType extends AbstractType
                 'sujet',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'texte',
                 TextareaType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                     'attr' => ['rows' => 10, 'cols' => 50],
                 ]
             );

@@ -27,70 +27,70 @@ final class AnimateurType extends AbstractType
                 'nom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'prenom',
                 TextType::class,
                 [
-                    self::REQUIRED => true,
+                    'required' => true,
                 ]
             )
             ->add(
                 'rue',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'telephone_bureau',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'gsm',
                 TextType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                 ]
             )
             ->add(
                 'sexe',
                 ChoiceType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'choices' => MercrediConstantes::SEXES,
                     'placeholder' => 'Choisissez son sexe',
                 ]
@@ -99,7 +99,7 @@ final class AnimateurType extends AbstractType
                 'remarque',
                 TextareaType::class,
                 [
-                    self::REQUIRED => false,
+                    'required' => false,
                     'attr' => ['rows' => 8],
                 ]
             );
