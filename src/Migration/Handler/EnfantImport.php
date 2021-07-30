@@ -69,8 +69,8 @@ class EnfantImport
 
     public function importRelation(SymfonyStyle $io)
     {
-        $enfants = $this->pdo->getAll('enfant_tuteur');
-        foreach ($enfants as $data) {
+        $relations = $this->pdo->getAll('enfant_tuteur');
+        foreach ($relations as $data) {
 
             $tuteur = $this->migrationRepository->getTuteur($data->tuteur_id);
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);

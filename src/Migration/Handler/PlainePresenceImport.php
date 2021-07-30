@@ -13,6 +13,10 @@ class PlainePresenceImport
     private SymfonyStyle $io;
     private TuteurRepository $tuteurRepository;
     private MigrationRepository $migrationRepository;
+    /**
+     * @var \AcMarche\Mercredi\Migration\MercrediPdo
+     */
+    private MercrediPdo $pdo;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
@@ -20,22 +24,30 @@ class PlainePresenceImport
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->migrationRepository = $migrationRepository;
+        $this->pdo = new MercrediPdo();
     }
 
     public function import(SymfonyStyle $io)
     {
         $this->io = $io;
-        $pdo = new MercrediPdo();
-        $plaine_enfants = $pdo->getAll('plaine_enfant');
+        $plaine_enfants = $this->pdo->getAll('plaine_enfant');
         foreach ($plaine_enfants as $data) {
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
-            $plaine_enfants = $pdo->getAllWhere('plaine_presences', 'plaine_enfant_id = '.$data->id, false);
+            $plaine_enfants = $this->pdo->getAllWhere('plaine_presences', 'plaine_enfant_id = '.$data->id, false);
             foreach ($plaine_enfants as $plaineEnfant) {
                 $jour = $this->migrationRepository->getJourPlaine($plaineEnfant->jour_id);
                 if (!$plaineEnfant->tuteur_id) {
-                    continue;
+                    $relations = $this->pdo->getAllWhere('enfant_tuteur', 'enfant_id = '.$data->enfant_id, false);
+                    $count = count($relations);
+                    if ($count > 0) {
+                        $tuteur = $this->migrationRepository->getTuteur($relations[0]->tuteur_id);
+                    } else {
+                        $io->error($jour->getDateJour()->format('Y-m-d').' => '.$enfant.' : '.$count);
+                        continue;
+                    }
+                } else {
+                    $tuteur = $this->migrationRepository->getTuteur($plaineEnfant->tuteur_id);
                 }
-                $tuteur = $this->migrationRepository->getTuteur($plaineEnfant->tuteur_id);
                 $presence = new Presence($tuteur, $enfant, $jour);
                 $ordre = $plaineEnfant->ordre ?? 0;
                 $presence->setRemarque($plaineEnfant->remarques);
@@ -46,9 +58,9 @@ class PlainePresenceImport
                 $presence->generateUuid();
                 $presence->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->updated));
                 $presence->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->created));
-                $this->tuteurRepository->persist($presence);
+                //    $this->tuteurRepository->persist($presence);
             }
         }
-        $this->tuteurRepository->flush();
+        //   $this->tuteurRepository->flush();
     }
 }
