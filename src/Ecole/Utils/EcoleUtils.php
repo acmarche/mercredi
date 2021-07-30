@@ -3,7 +3,7 @@
 
 namespace AcMarche\Mercredi\Ecole\Utils;
 
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -19,7 +19,7 @@ class EcoleUtils
     }
 
     /**
-     * @param Ecole[]|ArrayCollection $ecoles
+     * @param \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|ArrayCollection $ecoles
      * @return string
      */
     public static function getNamesEcole(iterable $ecoles):string

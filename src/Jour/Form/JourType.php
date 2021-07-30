@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Jour\Form;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Form\Type\ArchivedType;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;

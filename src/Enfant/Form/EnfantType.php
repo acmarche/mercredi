@@ -4,9 +4,9 @@ namespace AcMarche\Mercredi\Enfant\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
 use AcMarche\Mercredi\Security\MercrediSecurity;

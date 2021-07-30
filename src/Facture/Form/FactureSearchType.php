@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Form;
 
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

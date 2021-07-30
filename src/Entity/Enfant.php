@@ -7,6 +7,8 @@ use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Sante\Traits\FicheSanteIsCompleteTrait;
 use AcMarche\Mercredi\Entity\Sante\Traits\SanteFicheTrait;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AccueilsTrait;
 use AcMarche\Mercredi\Entity\Traits\AnneeScolaireTrait;

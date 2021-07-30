@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Dto;
 
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,7 +41,7 @@ final class AssociateUserEcoleDto
     }
 
     /**
-     * @return Collection|Ecole[]
+     * @return Collection|\AcMarche\Mercredi\Entity\Scolaire\Ecole[]
      */
     public function getEcoles(): Collection
     {

@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Response;
-use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\GroupeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireCreated;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireDeleted;

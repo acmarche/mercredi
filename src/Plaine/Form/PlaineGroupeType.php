@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Form;
 
-use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

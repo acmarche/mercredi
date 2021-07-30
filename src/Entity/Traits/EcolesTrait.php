@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait EcolesTrait
 {
     /**
-     * @var Ecole[]|ArrayCollection
+     * @var \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity=Ecole::class, inversedBy="users")
      */
     private iterable $ecoles;

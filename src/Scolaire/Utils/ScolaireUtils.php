@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Scolaire\Utils;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 
 final class ScolaireUtils

@@ -1,7 +1,8 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity;
+namespace AcMarche\Mercredi\Entity\Scolaire;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;

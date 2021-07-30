@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Ecole\Repository;
 
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,7 +29,7 @@ final class EcoleRepository extends ServiceEntityRepository
 
     /**
      * @param User $user
-     * @return Ecole[]
+     * @return \AcMarche\Mercredi\Entity\Scolaire\Ecole[]
      */
     public function getEcolesByUser(User $user): array
     {
@@ -42,7 +42,7 @@ final class EcoleRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|Ecole[]
+     * @return array|\AcMarche\Mercredi\Entity\Scolaire\Ecole[]
      */
     public function findAllOrderByNom(): array
     {

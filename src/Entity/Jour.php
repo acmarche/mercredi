@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;

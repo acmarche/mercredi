@@ -1,7 +1,8 @@
 <?php
 
-namespace AcMarche\Mercredi\Entity;
+namespace AcMarche\Mercredi\Entity\Scolaire;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 
 /**
  * Trait GroupeScolaireNext todo
@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Entity\GroupeScolaire;
 trait GroupeScolaireNextTrait
 {
     /**
-     * @var GroupeScolaire
+     * @var \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
      */
     private GroupeScolaire $groupe_scolaire_nex;
 }

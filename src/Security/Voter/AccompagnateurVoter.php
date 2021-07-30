@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Security\Voter;
 
 use Doctrine\Common\Collections\Collection;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -38,7 +38,7 @@ final class AccompagnateurVoter extends Voter
     private FlashBagInterface $flashBag;
 
     /**
-     * @var Ecole[]|Collection
+     * @var \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|Collection
      */
     private $ecoles;
     /**

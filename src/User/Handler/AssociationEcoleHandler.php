@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\User\Handler;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;

@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Enfant\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -97,7 +97,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
     /**
      * J'exclus les enfants sans tuteur !
-     * @param Ecole $ecole
+     * @param \AcMarche\Mercredi\Entity\Scolaire\Ecole $ecole
      * @return Enfant[]
      */
     public function findByEcolesForInscription(Ecole $ecole): array

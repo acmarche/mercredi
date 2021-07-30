@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\User\Form;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

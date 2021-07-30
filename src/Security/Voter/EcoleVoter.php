@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\MercrediSecurity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

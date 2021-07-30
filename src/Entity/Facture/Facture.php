@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Entity\Facture;
 
 use DateTimeInterface;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;

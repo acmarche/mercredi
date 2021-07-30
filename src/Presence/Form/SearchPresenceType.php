@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Presence\Form;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

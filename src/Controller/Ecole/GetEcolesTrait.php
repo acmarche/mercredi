@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Ecole\Utils\EcoleUtils;
-use AcMarche\Mercredi\Entity\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Symfony\Component\HttpFoundation\Response;
 
 trait GetEcolesTrait

@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
-use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 
 trait GroupeScolaireTrait
 {
