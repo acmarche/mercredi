@@ -148,6 +148,14 @@ class MigrationRepository
         );
     }
 
+    public function getJourPlaine(int $jourId): Jour
+    {
+        $jour = $this->pdo->getAllWhere('plaine_jours', 'id = '.$jourId, true);
+
+        return $this->jourRepository->findOneBy(['date_jour' => \DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
+        );
+    }
+
     public function getReduction(int $reductionId): Reduction
     {
         $reduction = $this->pdo->getAllWhere('reduction', 'id = '.$reductionId, true);

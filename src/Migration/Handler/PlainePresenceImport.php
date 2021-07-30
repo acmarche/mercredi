@@ -31,21 +31,24 @@ class PlainePresenceImport
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
             $plaine_enfants = $pdo->getAllWhere('plaine_presences', 'plaine_enfant_id = '.$data->id, false);
             foreach ($plaine_enfants as $plaineEnfant) {
-                $tuteur = $plaineEnfant->tuteur_id;
-                $jour = $this->migrationRepository->getJour($plaineEnfant->jour_id);
+                $jour = $this->migrationRepository->getJourPlaine($plaineEnfant->jour_id);
+                if (!$plaineEnfant->tuteur_id) {
+                    continue;
+                }
+                $tuteur = $this->migrationRepository->getTuteur($plaineEnfant->tuteur_id);
                 $presence = new Presence($tuteur, $enfant, $jour);
-                $ordre = $data->ordre ?? 0;
-                $presence->setRemarque($data->remarques);
-                $presence->setAbsent($data->absent);
+                $ordre = $plaineEnfant->ordre ?? 0;
+                $presence->setRemarque($plaineEnfant->remarques);
+                $presence->setAbsent($plaineEnfant->absent);
                 $presence->setOrdre($ordre);
-                $user = $this->migrationRepository->getUser($data->user_add_id);
+                $user = $this->migrationRepository->getUser($plaineEnfant->user_add_id);
                 $presence->setUserAdd($user->getUserIdentifier());
                 $presence->generateUuid();
-                $presence->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-                $presence->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+                $presence->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->updated));
+                $presence->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->created));
                 $this->tuteurRepository->persist($presence);
             }
         }
-        //$this->tuteurRepository->flush();
+        $this->tuteurRepository->flush();
     }
 }
