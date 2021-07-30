@@ -33,6 +33,9 @@ class UserImport
             $user->setEnabled(true);
             $user->setRoles($this->getRoles($data->id));
             $user->setPassword($data->password);
+            if ($data->salt) {
+                $user->setSalt($data->salt);
+            }
             $user->setTelephone($data->telephone);
             $this->userRepository->persist($user);
         }

@@ -15,18 +15,19 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteursTrait;
 use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity("email")
  * @UniqueEntity("username")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use IdTrait;
     use EmailTrait;
@@ -58,6 +59,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @var string
+     */
+    protected $salt;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private bool $isVerified = false;
@@ -72,6 +80,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+    }
+
+    public function setSalt(string $salt)
+    {
+        $this->salt = $salt;
     }
 
     public function getUserIdentifier(): string
@@ -99,9 +112,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt(): void
+    public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return $this->salt;
     }
 
     /**
