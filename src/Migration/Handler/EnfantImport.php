@@ -6,6 +6,7 @@ namespace AcMarche\Mercredi\Migration\Handler;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Note;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
@@ -76,6 +77,25 @@ class EnfantImport
             $relation->setType($data->relation);
             $relation->setOrdre($data->ordre);
             $this->enfantRepository->persist($relation);
+        }
+        $this->enfantRepository->flush();
+    }
+
+    public function importNote(SymfonyStyle $io)
+    {
+        $enfants = $this->pdo->getAll('note');
+        foreach ($enfants as $data) {
+
+            $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
+
+            $note = new Note($enfant);
+            $note->setRemarque($data->contenu);
+            $note->setArchived($data->cloture);
+            $user = $this->migrationRepository->getUser($data->user_add_id);
+            $note->setUserAdd($user->getUserIdentifier());
+            $note->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $note->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $this->enfantRepository->persist($note);
         }
         $this->enfantRepository->flush();
     }

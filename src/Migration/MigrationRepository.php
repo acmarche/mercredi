@@ -10,10 +10,14 @@ use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
+use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
@@ -32,6 +36,14 @@ class MigrationRepository
     private EnfantRepository $enfantRepository;
     private SanteFicheRepository $santeFicheRepository;
     private SanteQuestionRepository $santeQuestionRepository;
+    /**
+     * @var \AcMarche\Mercredi\Jour\Repository\JourRepository
+     */
+    private JourRepository $jourRepository;
+    /**
+     * @var \AcMarche\Mercredi\Reduction\Repository\ReductionRepository
+     */
+    private ReductionRepository $reductionRepository;
 
     public function __construct(
         UserRepository $userRepository,
@@ -41,7 +53,9 @@ class MigrationRepository
         TuteurRepository $tuteurRepository,
         EnfantRepository $enfantRepository,
         SanteFicheRepository $santeFicheRepository,
-        SanteQuestionRepository $santeQuestionRepository
+        SanteQuestionRepository $santeQuestionRepository,
+        JourRepository $jourRepository,
+        ReductionRepository $reductionRepository
     ) {
         $this->userRepository = $userRepository;
         $this->ecoleRepository = $ecoleRepository;
@@ -52,6 +66,8 @@ class MigrationRepository
         $this->enfantRepository = $enfantRepository;
         $this->santeFicheRepository = $santeFicheRepository;
         $this->santeQuestionRepository = $santeQuestionRepository;
+        $this->jourRepository = $jourRepository;
+        $this->reductionRepository = $reductionRepository;
     }
 
     public function getUser(int $userId): User
@@ -123,5 +139,20 @@ class MigrationRepository
         $question = $this->pdo->getAllWhere('sante_question', 'id = '.$questionId, true);
 
         return $this->santeQuestionRepository->findOneBy(['nom' => $question->intitule]);
+    }
+
+    public function getJour(int $jourId): Jour
+    {
+        $jour = $this->pdo->getAllWhere('jour', 'id = '.$jourId, true);
+
+        return $this->jourRepository->findOneBy(['date_jour' => \DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
+        );
+    }
+
+    public function getReduction(int $reductionId): Reduction
+    {
+        $reduction = $this->pdo->getAllWhere('reduction', 'id = '.$reductionId, true);
+
+        return $this->reductionRepository->findOneBy(['nom' => $reduction->nom]);
     }
 }

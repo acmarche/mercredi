@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Migration\Command;
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
+use AcMarche\Mercredi\Migration\Handler\PresenceImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -28,6 +29,10 @@ final class MigrationCommand extends Command
     private UserRepository $userRepository;
     private UserPasswordHasherInterface $passwordHasher;
     private FicheSanteImport $ficheSanteImport;
+    /**
+     * @var \AcMarche\Mercredi\Migration\Handler\PresenceImport
+     */
+    private PresenceImport $presenceImport;
 
     public function __construct(
         ParametreImport $parametreImport,
@@ -35,6 +40,7 @@ final class MigrationCommand extends Command
         TuteurImport $tuteurImport,
         EnfantImport $enfantImport,
         FicheSanteImport $ficheSanteImport,
+        PresenceImport $presenceImport,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
         ?string $name = null
@@ -48,6 +54,7 @@ final class MigrationCommand extends Command
         $this->userRepository = $userRepository;
         $this->passwordHasher = $passwordHasher;
         $this->ficheSanteImport = $ficheSanteImport;
+        $this->presenceImport = $presenceImport;
     }
 
     protected function configure(): void
@@ -81,11 +88,14 @@ final class MigrationCommand extends Command
                 return Command::SUCCESS;
             case 'relation':
                 $this->enfantImport->importRelation($symfonyStyle);
+                $this->enfantImport->importNote($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'sante':
                 $this->ficheSanteImport->import($symfonyStyle);
                 $this->ficheSanteImport->importReponse($symfonyStyle);
+            case 'presence':
+                $this->presenceImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'password':

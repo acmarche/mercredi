@@ -33,13 +33,14 @@ class FicheSanteImport
         $fiches = $this->pdo->getAll('sante_fiche');
         foreach ($fiches as $data) {
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
+            $io->writeln($enfant->getPrenom());
             $ficheSante = new SanteFiche($enfant);
             $ficheSante->setRemarque($data->remarques);
             $ficheSante->setMedecinNom($data->medecin_nom);
             $ficheSante->setMedecinTelephone($data->medecin_telephone);
             $ficheSante->setPersonneUrgence($data->personne_urgence);
-            $ficheSante->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-            $ficheSante->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $ficheSante->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated_at));
+            $ficheSante->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created_at));
             $this->enfantRepository->persist($ficheSante);
         }
         $this->enfantRepository->flush();
