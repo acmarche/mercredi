@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Migration\Handler;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
@@ -39,6 +40,21 @@ class PlaineImport
             $plaine->setPrix2($data->prix2);
             $plaine->setPrix3($data->prix3);
             $this->tuteurRepository->persist($plaine);
+        }
+        $this->tuteurRepository->flush();
+    }
+
+    public function importGroupe(SymfonyStyle $io)
+    {
+        $this->io = $io;
+        $pdo = new MercrediPdo();
+        $jours = $pdo->getAll('plaine_max');
+        foreach ($jours as $data) {
+            $plaine = $this->migrationRepository->getPlaine($data->plaine_id);
+            $groupeScolaire = $this->migrationRepository->getGroupeScolaire($data->groupe);
+            $plaineGroupe = new PlaineGroupe($plaine, $groupeScolaire);
+            $plaineGroupe->setInscriptionMaximum($data->maximum);
+            $this->tuteurRepository->persist($plaineGroupe);
         }
         $this->tuteurRepository->flush();
     }

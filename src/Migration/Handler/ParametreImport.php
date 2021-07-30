@@ -7,11 +7,9 @@ namespace AcMarche\Mercredi\Migration\Handler;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Ecole;
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
-use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
@@ -43,6 +41,7 @@ class ParametreImport
         $this->importQuestions();
         $this->importReduction();
         $this->importAnneeScolaire();
+        $this->importGroupes();
 
         $this->enfantRepository->flush();
     }
@@ -127,11 +126,22 @@ class ParametreImport
             $this->enfantRepository->persist($anneeScolaire);
             $i++;
         }
+    }
 
+    private function importGroupes()
+    {
         $groupes = ['premats', 'petits', 'moyens', 'grands'];
         foreach ($groupes as $data) {
             $groupe = new GroupeScolaire();
             $groupe->setNom($data);
+            $this->enfantRepository->persist($groupe);
+        }
+
+        $groupes = ['petits', 'moyens', 'grands'];
+        foreach ($groupes as $data) {
+            $groupe = new GroupeScolaire();
+            $groupe->setNom($data);
+            $groupe->setIsPlaine(true);
             $this->enfantRepository->persist($groupe);
         }
     }
