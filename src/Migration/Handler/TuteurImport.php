@@ -52,12 +52,21 @@ class TuteurImport
             $tuteur->setSexe($data->sexe);
             $user = $this->migrationRepository->getUser($data->user_add_id);
             $tuteur->setUserAdd($user->getUserIdentifier());
+            $this->addUser($tuteur, $data->user_id);
             $tuteur->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
             $tuteur->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $tuteur->setSlug($data->slugname);
             $this->tuteurRepository->persist($tuteur);
         }
         $this->tuteurRepository->flush();
+    }
+
+    private function addUser(Tuteur $tuteur, ?int $userId)
+    {
+        if ($userId) {
+            $user = $this->migrationRepository->getUser($userId);
+            $user->addTuteur($tuteur);
+        }
     }
 
 }

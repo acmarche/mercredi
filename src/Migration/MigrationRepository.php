@@ -155,4 +155,11 @@ class MigrationRepository
 
         return $this->reductionRepository->findOneBy(['nom' => $reduction->nom]);
     }
+
+    public function getUserTuteur(): User
+    {
+        $user = $this->pdo->getAllWhere('users', 'id = '.$userId, true);
+
+        return $this->userRepository->findOneBy(['email' => $user->email]);
+    }
 }

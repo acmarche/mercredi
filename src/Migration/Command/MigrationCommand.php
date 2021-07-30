@@ -70,16 +70,16 @@ final class MigrationCommand extends Command
         $this->parametreImport->setIo($symfonyStyle);
 
         switch ($input->getArgument('name')) {
+            case 'parametre':
+                $this->parametreImport->importAll();
+
+                return Command::SUCCESS;
             case 'user':
                 $this->userImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'tuteur':
                 $this->tuteurImport->import($symfonyStyle);
-
-                return Command::SUCCESS;
-            case 'parametre':
-                $this->parametreImport->importAll();
 
                 return Command::SUCCESS;
             case 'enfant':
@@ -109,5 +109,14 @@ final class MigrationCommand extends Command
 
         return Command::SUCCESS;
     }
+
+    /**
+     * A REGARDER !!!!!!!!!!!!!!!
+     */
+
+    /**
+     * La table animateur
+     * Lier ecole et user
+     */
 
 }
