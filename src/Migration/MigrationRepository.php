@@ -11,12 +11,14 @@ use AcMarche\Mercredi\Entity\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
@@ -36,14 +38,9 @@ class MigrationRepository
     private EnfantRepository $enfantRepository;
     private SanteFicheRepository $santeFicheRepository;
     private SanteQuestionRepository $santeQuestionRepository;
-    /**
-     * @var \AcMarche\Mercredi\Jour\Repository\JourRepository
-     */
     private JourRepository $jourRepository;
-    /**
-     * @var \AcMarche\Mercredi\Reduction\Repository\ReductionRepository
-     */
     private ReductionRepository $reductionRepository;
+    private PlaineRepository $plaineRepository;
 
     public function __construct(
         UserRepository $userRepository,
@@ -55,6 +52,7 @@ class MigrationRepository
         SanteFicheRepository $santeFicheRepository,
         SanteQuestionRepository $santeQuestionRepository,
         JourRepository $jourRepository,
+        PlaineRepository $plaineRepository,
         ReductionRepository $reductionRepository
     ) {
         $this->userRepository = $userRepository;
@@ -68,6 +66,7 @@ class MigrationRepository
         $this->santeQuestionRepository = $santeQuestionRepository;
         $this->jourRepository = $jourRepository;
         $this->reductionRepository = $reductionRepository;
+        $this->plaineRepository = $plaineRepository;
     }
 
     public function getUser(int $userId): User
@@ -156,10 +155,10 @@ class MigrationRepository
         return $this->reductionRepository->findOneBy(['nom' => $reduction->nom]);
     }
 
-    public function getUserTuteur(): User
+    public function getPlaine(int $plaineId): Plaine
     {
-        $user = $this->pdo->getAllWhere('users', 'id = '.$userId, true);
+        $plaine = $this->pdo->getAllWhere('plaine', 'id = '.$plaineId, true);
 
-        return $this->userRepository->findOneBy(['email' => $user->email]);
+        return $this->plaineRepository->findOneBy(['nom' => $plaine->intitule]);
     }
 }

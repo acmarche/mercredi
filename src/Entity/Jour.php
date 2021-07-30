@@ -60,6 +60,7 @@ class Jour implements TimestampableInterface
     private iterable $presences;
 
     /**
+     * Reverse
      * @ORM\OneToOne(targetEntity="AcMarche\Mercredi\Entity\Plaine\PlaineJour", mappedBy="jour")
      */
     private ?PlaineJour $plaine_jour = null;

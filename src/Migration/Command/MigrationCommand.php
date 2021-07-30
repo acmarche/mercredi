@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Migration\Command;
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
+use AcMarche\Mercredi\Migration\Handler\PlaineImport;
 use AcMarche\Mercredi\Migration\Handler\PresenceImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
@@ -29,10 +30,8 @@ final class MigrationCommand extends Command
     private UserRepository $userRepository;
     private UserPasswordHasherInterface $passwordHasher;
     private FicheSanteImport $ficheSanteImport;
-    /**
-     * @var \AcMarche\Mercredi\Migration\Handler\PresenceImport
-     */
     private PresenceImport $presenceImport;
+    private PlaineImport $plaineImport;
 
     public function __construct(
         ParametreImport $parametreImport,
@@ -42,6 +41,7 @@ final class MigrationCommand extends Command
         FicheSanteImport $ficheSanteImport,
         PresenceImport $presenceImport,
         UserRepository $userRepository,
+        PlaineImport $plaineImport,
         UserPasswordHasherInterface $passwordHasher,
         ?string $name = null
     ) {
@@ -55,6 +55,7 @@ final class MigrationCommand extends Command
         $this->passwordHasher = $passwordHasher;
         $this->ficheSanteImport = $ficheSanteImport;
         $this->presenceImport = $presenceImport;
+        $this->plaineImport = $plaineImport;
     }
 
     protected function configure(): void
@@ -68,6 +69,20 @@ final class MigrationCommand extends Command
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
         $this->parametreImport->setIo($symfonyStyle);
+
+        if ($input->getArgument('name') == 'all') {
+            $this->parametreImport->importAll();
+            $this->userImport->import($symfonyStyle);
+            $this->tuteurImport->import($symfonyStyle);
+            $this->enfantImport->import($symfonyStyle);
+            $this->enfantImport->importRelation($symfonyStyle);
+            $this->enfantImport->importNote($symfonyStyle);
+            $this->ficheSanteImport->import($symfonyStyle);
+            $this->ficheSanteImport->importReponse($symfonyStyle);
+            $this->presenceImport->import($symfonyStyle);
+
+            return Command::SUCCESS;
+        }
 
         switch ($input->getArgument('name')) {
             case 'parametre':
@@ -98,19 +113,23 @@ final class MigrationCommand extends Command
                 $this->presenceImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
+            case 'plaine':
+                //$this->plaineImport->import($symfonyStyle);
+                $this->plaineImport->importJours($symfonyStyle);
+
+                return Command::SUCCESS;
             case 'password':
                 $user = $this->userRepository->findOneBy(['username' => 'jfsenechal']);
                 $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
                 $this->userRepository->flush();
 
                 return Command::SUCCESS;
-
         }
 
         return Command::SUCCESS;
     }
 
-    /**
+    /***********************************************
      * A REGARDER !!!!!!!!!!!!!!!
      */
 
