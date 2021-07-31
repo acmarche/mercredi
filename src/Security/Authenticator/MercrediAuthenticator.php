@@ -20,6 +20,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * Essayer de voir les events
+ * @see UserCheckerListener::postCheckCredentials
+ * @see UserProviderListener::checkPassport
+ * bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main
+ */
 class MercrediAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;

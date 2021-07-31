@@ -26,14 +26,29 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     }
 
     /**
+     * @see UserProviderListener::checkPassport
+     * @param string $username
+     * @return int|mixed|string|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function loadUserByIdentifier(string $username)
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.email = :username OR user.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * @return User[]
      */
     public function findAllOrderByNom(): array
     {
         return $this->createQueryBuilder('user')
-            ->leftJoin('user.tuteurs','tuteurs','WITH')
-            ->leftJoin('user.ecoles','ecoles','WITH')
-            ->leftJoin('user.animateurs','animateurs','WITH')
+            ->leftJoin('user.tuteurs', 'tuteurs', 'WITH')
+            ->leftJoin('user.ecoles', 'ecoles', 'WITH')
+            ->leftJoin('user.animateurs', 'animateurs', 'WITH')
             ->addSelect('tuteurs', 'ecoles', 'animateurs')
             ->addOrderBy('user.nom', 'ASC')
             ->getQuery()
