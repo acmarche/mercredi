@@ -19,6 +19,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'property' => 'username',
                     ],
                 ],
+                'ville_ldap' => [
+                    'ldap' => [
+                        'service' => 'Symfony\Component\Ldap\Ldap',
+                        'base_dn' => '%env(ACLDAP_DN)%',
+                        'search_dn' => '%env(ACLDAP_USER)%',
+                        'search_password' => '%env(ACLDAP_PASSWORD)%',
+                        'default_roles' => 'ROLE_BOTTIN_ADMIN',
+                        'uid_key' => 'sAMAccountName',
+                        'extra_fields' => ['mail'],
+                    ],
+                ],
+                'all_users' => [
+                    'chain' => [
+                        'providers' => ['ville_ldap', 'mercredi_user_provider'],
+                    ],
+                ],
             ],
         ]
     );
@@ -28,8 +44,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [
             'firewalls' => [
                 'main' => [
-                    'provider' => 'mercredi_user_provider',
+                    'provider' => 'all_users',
                     'custom_authenticator' => MercrediAuthenticator::class,
+                    'form_login_ldap' => [
+                        'service' => 'Symfony\Component\Ldap\Ldap',
+                        'search_dn' => '%env(ACLDAP_USER)%',
+                        'search_password' => '%env(ACLDAP_PASSWORD)%',
+                        'query_string' => '(&(|(sAMAccountName={username}))(objectClass=person))',
+                        'dn_string' => '%env(ACLDAP_DN)%',
+                        'check_path' => 'app_login',
+                        'username_parameter' => 'username',
+                        'password_parameter' => 'password',
+                    ],
                     'logout' => ['path' => 'app_logout'],
                 ],
             ],

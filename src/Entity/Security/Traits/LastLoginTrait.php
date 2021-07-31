@@ -9,14 +9,14 @@ trait LastLoginTrait
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private ?\DateTime $last_login = null;
+    private ?\DateTimeImmutable $last_login = null;
 
-    public function getLastLogin(): ?\DateTime
+    public function getLastLogin(): ?\DateTimeImmutable
     {
         return $this->last_login;
     }
 
-    public function setLastLogin(?\DateTime $last_login): void
+    public function setLastLogin(?\DateTimeImmutable $last_login): void
     {
         $this->last_login = $last_login;
     }

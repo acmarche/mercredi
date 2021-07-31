@@ -4,10 +4,13 @@
 namespace AcMarche\Mercredi\Security\Authenticator;
 
 
+use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Ldap\Ldap;
+use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -51,6 +54,7 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
             [
                 new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
                 new PasswordUpgradeBadge($request->request->get('password', UserRepository::class)),
+                new LdapBadge(LdapMercredi::class),
             ]
         );
     }

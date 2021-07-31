@@ -30,7 +30,7 @@ final class UserLoginSubscriber implements EventSubscriberInterface
          * @var User $user
          */
         $user = $event->getUser();
-        $user->setLastLogin(new \DateTime());
+        $user->setLastLogin(new \DateTimeImmutable());
         $this->entityManager->flush();
     }
 }
