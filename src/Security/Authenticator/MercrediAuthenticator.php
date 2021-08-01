@@ -52,20 +52,23 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
         $token = $request->request->get('_csrf_token', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
-        $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
 
         $badges =
             [
                 new CsrfTokenBadge('authenticate', $token),
                 new PasswordUpgradeBadge($password, $this->userRepository),
-                new LdapBadge(
-                    Ldap::class,
-                    $_ENV['ACLDAP_DN'],
-                    $_ENV['ACLDAP_USER'],
-                    $_ENV['ACLDAP_PASSWORD'],
-                    $query
-                ),
             ];
+
+        if (class_exists(LdapInterface::class)) {
+            $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
+            $badges[] = new LdapBadge(
+                LdapMercredi::class,
+                $_ENV['ACLDAP_DN'],
+                $_ENV['ACLDAP_USER'],
+                $_ENV['ACLDAP_PASSWORD'],
+                $query
+            );
+        }
 
         return new Passport(
             new UserBadge($email),

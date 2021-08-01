@@ -59,22 +59,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Register::class)
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
-    //$services->set(Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])->tag('ldap');
-    $services->set(Adapter::class)->args([
-        '$arguments' => [
-            '$host' => '%env(ACLDAP_URL)%',
-            '$port' => 636,
-            '$encryption' => 'ssl',
-            '$options' => [
-                '$protocole_version' => 3,
-                '$referrals' => false,
+    if (class_exists(LdapInterface::class)) {
+        //$services->set(Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])->tag('ldap');
+        $services->set(Adapter::class)->args([
+            '$arguments' => [
+                '$host' => '%env(ACLDAP_URL)%',
+                '$port' => 636,
+                '$encryption' => 'ssl',
+                '$options' => [
+                    '$protocole_version' => 3,
+                    '$referrals' => false,
+                ],
             ],
-        ],
-    ]);
+        ]);
 
-    $services->set(LdapMercredi::class)
-        ->arg('$adapter', service('Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'))
-        ->tag('ldap'); //necessairey for new LdapBadge(LdapMercredi::class)
+        $services->set(LdapMercredi::class)
+            ->arg('$adapter', service('Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'))
+            ->tag('ldap'); //necessairey for new LdapBadge(LdapMercredi::class)
+    }
 
     /*  $services->set(PresenceConstraints::class)
           ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));*/
