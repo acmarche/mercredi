@@ -3,14 +3,12 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
-use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-
 use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -54,12 +52,20 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
         $token = $request->request->get('_csrf_token', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
+        $email = 'jfsenechal';
+        $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
 
         $badges =
             [
                 new CsrfTokenBadge('authenticate', $token),
                 new PasswordUpgradeBadge($password, $this->userRepository),
-                new LdapBadge(LdapMercredi::class, $email),
+                new LdapBadge(
+                    LdapMercredi::class,
+                    $_ENV['ACLDAP_DN'],
+                    $_ENV['ACLDAP_USER'],
+                    $_ENV['ACLDAP_PASSWORD'],
+                    $query
+                ),
             ];
 
         return new Passport(
@@ -82,4 +88,3 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }
-
