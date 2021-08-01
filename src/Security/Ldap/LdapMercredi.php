@@ -5,14 +5,13 @@ namespace AcMarche\Mercredi\Security\Ldap;
 use Symfony\Component\Ldap\Adapter\AdapterInterface;
 use Symfony\Component\Ldap\Adapter\EntryManagerInterface;
 use Symfony\Component\Ldap\Adapter\QueryInterface;
-use Symfony\Component\Ldap\Entry;
-use Symfony\Component\Ldap\Exception\ConnectionException;
 use Symfony\Component\Ldap\Exception\DriverNotFoundException;
-use Symfony\Component\Ldap\Exception\LdapException;
-use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\LdapInterface;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
+/**
+ * Copy/Paste
+ * @see Ldap
+ */
 class LdapMercredi implements LdapInterface
 {
     private AdapterInterface $adapter;
@@ -62,33 +61,24 @@ class LdapMercredi implements LdapInterface
      * Creates a new Ldap instance.
      *
      * @param string $adapter The adapter name
-     * @param array  $config  The adapter's configuration
+     * @param array $config The adapter's configuration
      *
      * @return static
      */
     public static function create(string $adapter, array $config = []): self
     {
         if (!isset(self::ADAPTER_MAP[$adapter])) {
-            throw new DriverNotFoundException(sprintf('Adapter "%s" not found. You should use one of: "%s".', $adapter, implode('", "', self::ADAPTER_MAP)));
+            throw new DriverNotFoundException(
+                sprintf(
+                    'Adapter "%s" not found. You should use one of: "%s".',
+                    $adapter,
+                    implode('", "', self::ADAPTER_MAP)
+                )
+            );
         }
 
         $class = self::ADAPTER_MAP[$adapter];
 
         return new self(new $class($config));
     }
-
-    public function getEntry(string $uid): ?Entry
-    {
-        $this->bind($this->user, $this->password);
-        $filter = "(&(|(sAMAccountName=*$uid*))(objectClass=person))";
-        $query = $this->ldap->query($this->dn, $filter, ['maxItems' => 1]);
-        $results = $query->execute();
-
-        if ($results->count() > 0) {
-            return $results[0];
-        }
-
-        return null;
-    }
-
 }

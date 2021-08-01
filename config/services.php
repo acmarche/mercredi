@@ -14,7 +14,6 @@ use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
-use Symfony\Component\Ldap\Ldap;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -60,14 +59,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Register::class)
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
-    /*    $services->set(LdapMercredi::class)
-            ->arg('$host', '%env(ACLDAP_URL)%')
-            ->arg('$dn', '%env(ACLDAP_DN)%')
-            ->arg('$user', '%env(ACLDAP_USER)%')
-            ->arg('$password', '%env(ACLDAP_PASSWORD)%')
-            ->tag('ldap');*/
-
-    $services->set(Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']);
+    //$services->set(Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])->tag('ldap');
     $services->set(Adapter::class)->args([
         '$arguments' => [
             '$host' => '%env(ACLDAP_URL)%',
@@ -80,12 +72,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]);
 
-    /**
-     *
-     */
     $services->set(LdapMercredi::class)
         ->arg('$adapter', service('Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'))
-        ->tag('ldap');
+        ->tag('ldap'); //necessairey for new LdapBadge(LdapMercredi::class)
 
     /*  $services->set(PresenceConstraints::class)
           ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));*/
