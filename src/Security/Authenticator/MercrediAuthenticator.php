@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -27,6 +28,8 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  * Essayer de voir les events
  * @see UserCheckerListener::postCheckCredentials
  * @see UserProviderListener::checkPassport
+ * @see CheckCredentialsListener
+ * @see CheckLdapCredentialsListener
  * bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main
  */
 class MercrediAuthenticator extends AbstractLoginFormAuthenticator
@@ -36,26 +39,32 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private UserRepository $userRepository;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->userRepository = $userRepository;
     }
 
     public function authenticate(Request $request): PassportInterface
     {
         $email = $request->request->get('username', '');
+        $password = $request->request->get('password', '');
+        $token = $request->request->get('_csrf_token', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
+        $badges =
+            [
+                new CsrfTokenBadge('authenticate', $token),
+                new PasswordUpgradeBadge($password, $this->userRepository),
+                new LdapBadge(LdapMercredi::class, $email),
+            ];
+
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->request->get('password', '')),
-            [
-                new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
-                new PasswordUpgradeBadge($request->request->get('password', UserRepository::class)),
-                new LdapBadge(LdapMercredi::class),
-            ]
+            new PasswordCredentials($password), $badges
         );
     }
 

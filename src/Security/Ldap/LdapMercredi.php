@@ -66,11 +66,13 @@ class LdapMercredi implements LdapInterface
 
     public function bind(string $dn = null, string $password = null)
     {
+        dd($dn);
         // TODO: Implement bind() method.
     }
 
     public function query(string $dn, string $query, array $options = [])
     {
+        dd($query);
         // TODO: Implement query() method.
     }
 
