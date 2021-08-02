@@ -28,7 +28,6 @@ final class RelationType extends AbstractType
                 'ordre',
                 ChoiceType::class,
                 [
-                    'required' => false,
                     'choices' => MercrediConstantes::ORDRES,
                     'help' => 'Permet de forcer l\'ordre si celui est différent (Famille recomposée)',
                 ]

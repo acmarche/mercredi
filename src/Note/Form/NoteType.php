@@ -19,6 +19,7 @@ final class NoteType extends AbstractType
                 TextareaType::class,
                 [
                     'label' => 'Contenu',
+                    'attr' => ['rows' => 5],
                 ]
             )
             ->add('archived', ArchivedType::class);

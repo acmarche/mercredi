@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\User\Form;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +13,7 @@ final class UserRoleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $roles = array_flip(MercrediSecurity::ROLES);
+        $roles = array_flip(MercrediSecurityRole::ROLES);
         $formBuilder
             ->add(
                 'roles',

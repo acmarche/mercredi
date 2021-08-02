@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\User\Command;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use function strlen;
 use Symfony\Component\Console\Command\Command;
@@ -76,7 +76,7 @@ final class CreateUserCommand extends Command
         $user->setUsername($email);
         $user->setNom($name);
         $user->setPassword($this->userPasswordEncoder->encodePassword($user, $password));
-        $user->addRole(MercrediSecurity::ROLE_ADMIN);
+        $user->addRole(MercrediSecurityRole::ROLE_ADMIN);
 
         $this->userRepository->insert($user);
 

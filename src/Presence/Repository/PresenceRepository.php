@@ -69,8 +69,10 @@ final class PresenceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')
-            ->addSelect('enfant')
-            ->addSelect('tuteur')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->leftJoin('jour.plaine_jour', 'plaine_jour', 'WITH')
+            ->leftJoin('presence.reduction', 'reduction', 'WITH')
+            ->addSelect('enfant', 'tuteur', 'jour', 'reduction', 'plaine_jour')
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
@@ -121,8 +123,9 @@ final class PresenceRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')//why
             ->leftJoin('presence.jour', 'jour', 'WITH')
-            ->addSelect('enfant', 'jour')
+            ->addSelect('enfant', 'jour', 'sante_fiche')
             ->andWhere('presence.jour IN (:jours)')
             ->setParameter('jours', $jours)
             ->getQuery()->getResult();

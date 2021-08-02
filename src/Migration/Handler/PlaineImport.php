@@ -75,7 +75,6 @@ class PlaineImport
             $plaineJour = new PlaineJour($plaine, $jour);
             $this->tuteurRepository->persist($plaineJour);
 
-            $plaine->addPlaineJour($plaineJour);
         }
         $this->tuteurRepository->flush();
     }

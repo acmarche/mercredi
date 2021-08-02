@@ -30,7 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'logout' => ['path' => 'app_logout'],
     ];
 
-    if (class_exists(LdapInterface::class)) {
+    if (interface_exists(LdapInterface::class)) {
         $main['form_login_ldap'] = [];
     }
 

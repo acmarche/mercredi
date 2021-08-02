@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Tuteur\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,7 +27,7 @@ final class TuteurType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
+        $isAdmin = !$this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
 
         $formBuilder
             ->add(

@@ -47,10 +47,15 @@ final class PlaineController extends AbstractController
      */
     public function index(): Response
     {
+        $plaines = $this->plaineRepository->findPlaineByDateDesc();
+        array_map(function ($plaine) {
+            $plaine->enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
+        }, $plaines);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/index.html.twig',
             [
-                'plaines' => $this->plaineRepository->findAll(),
+                'plaines' => $plaines,
             ]
         );
     }

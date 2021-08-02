@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -67,7 +67,7 @@ final class PresenceVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
         }
 
@@ -91,7 +91,7 @@ final class PresenceVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -103,7 +103,7 @@ final class PresenceVoter extends Voter
      */
     private function canEdit(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -121,7 +121,7 @@ final class PresenceVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
@@ -130,7 +130,7 @@ final class PresenceVoter extends Voter
 
     private function checkTuteur(): bool
     {
-        if (! $this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return false;
         }
 

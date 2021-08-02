@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -76,7 +76,7 @@ final class EnfantVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
         }
 
@@ -96,10 +96,10 @@ final class EnfantVoter extends Voter
 
     private function canView(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE) && $this->checkEcoles()) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ECOLE) && $this->checkEcoles()) {
             return true;
         }
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR) && $this->checkAnimateur()) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR) && $this->checkAnimateur()) {
             return true;
         }
         return $this->canEdit();
@@ -107,10 +107,10 @@ final class EnfantVoter extends Voter
 
     private function canEdit(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE) && $this->checkEcoles()) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ECOLE) && $this->checkEcoles()) {
             return true;
         }
-        return $this->security->isGranted(MercrediSecurity::ROLE_PARENT) && $this->checkTuteur();
+        return $this->security->isGranted(MercrediSecurityRole::ROLE_PARENT) && $this->checkTuteur();
     }
 
     private function canAdd(): bool
@@ -139,7 +139,7 @@ final class EnfantVoter extends Voter
      */
     private function checkTuteur(): bool
     {
-        if (!$this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return false;
         }
 

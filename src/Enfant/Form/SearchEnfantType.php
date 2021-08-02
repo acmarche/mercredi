@@ -6,24 +6,12 @@ use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 final class SearchEnfantType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-    /**
-     * @var string
-     */
-    private const ATTR = 'attr';
-    /**
-     * @var string
-     */
-    private const PLACEHOLDER = 'placeholder';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -32,7 +20,7 @@ final class SearchEnfantType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    self::ATTR => [self::PLACEHOLDER => 'Nom', 'autocomplete' => 'off'],
+                    'attr' => ['placeholder' => 'Nom', 'autocomplete' => 'off'],
                 ]
             )
             ->add(
@@ -41,8 +29,8 @@ final class SearchEnfantType extends AbstractType
                 [
                     'class' => Ecole::class,
                     'required' => false,
-                    self::PLACEHOLDER => 'Choisissez une école',
-                    self::ATTR => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'placeholder' => 'Choisissez une école',
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 ]
             )
             ->add(
@@ -51,9 +39,18 @@ final class SearchEnfantType extends AbstractType
                 [
                     'class' => AnneeScolaire::class,
                     'label' => 'Année scolaire',
-                    self::PLACEHOLDER => 'Choisissez son année scolaire',
-                    self::ATTR => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'placeholder' => 'Choisissez son année scolaire',
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                     'required' => false,
+                ]
+            )
+            ->add(
+                'archived',
+                CheckboxType::class,
+                [
+                    'label' => 'Afficher les enfants archivés',
+                    'required' => false,
+                    'label_attr' => ['class' => 'switch-custom'],
                 ]
             );
     }

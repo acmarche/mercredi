@@ -1,8 +1,8 @@
 <?php
 
-namespace AcMarche\Mercredi\Security;
+namespace AcMarche\Mercredi\Security\Role;
 
-final class MercrediSecurity
+final class MercrediSecurityRole
 {
     public const ROLE_ADMIN = 'ROLE_MERCREDI_ADMIN';
     public const ROLE_PARENT = 'ROLE_MERCREDI_PARENT';

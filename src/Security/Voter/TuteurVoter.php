@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -67,7 +67,7 @@ final class TuteurVoter extends Voter
 
         $this->tuteurToCheck = $tuteur;
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
         }
 
@@ -89,7 +89,7 @@ final class TuteurVoter extends Voter
 
     private function canShow(): bool
     {
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR)) {
             return true;
         }
 
@@ -113,7 +113,7 @@ final class TuteurVoter extends Voter
 
     private function checkOwnTuteur(): bool
     {
-        if (!$this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return false;
         }
 

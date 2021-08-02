@@ -21,12 +21,12 @@ class PlaineJour
     /**
      * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="plaine_jours")
      */
-    private ?Plaine $plaine=null;
+    private ?Plaine $plaine;
 
     /**
      * @ORM\OneToOne(targetEntity=Jour::class, inversedBy="plaine_jour")
      */
-    private ?Jour $jour=null;
+    private ?Jour $jour;
 
     public function __construct(Plaine $plaine, Jour $jour)
     {

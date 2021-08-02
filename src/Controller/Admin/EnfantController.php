@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Form\SearchEnfantType;
@@ -33,6 +34,7 @@ final class EnfantController extends AbstractController
     private PresenceRepository $presenceRepository;
     private PresenceUtils $presenceUtils;
     private SearchHelper $searchHelper;
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -40,7 +42,8 @@ final class EnfantController extends AbstractController
         RelationRepository $relationRepository,
         PresenceRepository $presenceRepository,
         PresenceUtils $presenceUtils,
-        SearchHelper $searchHelper
+        SearchHelper $searchHelper,
+        PlainePresenceRepository $plainePresenceRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->enfantHandler = $enfantHandler;
@@ -48,6 +51,7 @@ final class EnfantController extends AbstractController
         $this->presenceRepository = $presenceRepository;
         $this->presenceUtils = $presenceUtils;
         $this->searchHelper = $searchHelper;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -65,7 +69,12 @@ final class EnfantController extends AbstractController
             $data = $form->getData();
             $this->searchHelper->saveSearch(SearchHelper::ENFANT_LIST, $data);
             $search = true;
-            $enfants = $this->enfantRepository->search($data['nom'], $data['ecole'], $data['annee_scolaire']);
+            $enfants = $this->enfantRepository->search(
+                $data['nom'],
+                $data['ecole'],
+                $data['annee_scolaire'],
+                $data['archived']
+            );
         }
 
         return $this->render(
@@ -112,6 +121,7 @@ final class EnfantController extends AbstractController
         $data = $this->presenceRepository->findPresencesByEnfant($enfant);
         $presencesGrouped = $this->presenceUtils->groupByYear($data);
         $frateries = $this->relationRepository->findFrateries($enfant);
+        $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/show.html.twig',
@@ -120,6 +130,7 @@ final class EnfantController extends AbstractController
                 'frateries' => $frateries,
                 'relations' => $relations,
                 'prensencesGrouped' => $presencesGrouped,
+                'plaines' => $plaines,
             ]
         );
     }

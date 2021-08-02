@@ -20,6 +20,20 @@ final class PlaineRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Plaine::class);
     }
 
+    /**
+     * @return array|Plaine[]
+     */
+    public function findPlaineByDateDesc(): array
+    {
+        return $this->createQueryBuilder('plaine')
+            ->leftJoin('plaine.plaine_jours', 'plaine_jours', 'WITH')
+            ->leftJoin('plaine_jours.jour', 'jour', 'WITH')
+            ->addSelect('plaine_jours', 'jour')
+            ->orderBy('jour.date_jour', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findPlaineOpen(?Plaine $plaine = null): ?Plaine
     {
         $qb = $this->createQueryBuilder('plaine')

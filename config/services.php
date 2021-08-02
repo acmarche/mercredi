@@ -14,6 +14,7 @@ use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
+use Symfony\Component\Ldap\LdapInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -24,6 +25,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
     $parameters->set(Option::PRESENCE_DEADLINE_DAYS, '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%');
     $parameters->set(Option::PEDAGOGIQUE_DEADLINE_DAYS, '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%');
+    $parameters->set(Option::LDAP_DN, '%env(ACLDAP_DN)%');
+    $parameters->set(Option::LDAP_USER, '%env(ACLDAP_USER)%');
+    $parameters->set(Option::LDAP_PASSWORD, '%env(ACLDAP_PASSWORD)%');
 
     /**
      * Pour envoie de mail en mode console
@@ -59,7 +63,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Register::class)
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
-    if (class_exists(LdapInterface::class)) {
+    if (interface_exists(LdapInterface::class)) {
         //$services->set(Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])->tag('ldap');
         $services->set(Adapter::class)->args([
             '$arguments' => [

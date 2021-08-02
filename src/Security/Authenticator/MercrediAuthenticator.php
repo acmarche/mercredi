@@ -3,12 +3,14 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
+use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Ldap\Ldap;
+use Symfony\Component\Ldap\LdapInterface;
 use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -38,11 +40,16 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
     private UserRepository $userRepository;
+    private ParameterBagInterface $parameterBag;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
-    {
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator,
+        UserRepository $userRepository,
+        ParameterBagInterface $parameterBag
+    ) {
         $this->urlGenerator = $urlGenerator;
         $this->userRepository = $userRepository;
+        $this->parameterBag = $parameterBag;
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -59,13 +66,13 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
                 new PasswordUpgradeBadge($password, $this->userRepository),
             ];
 
-        if (class_exists(LdapInterface::class)) {
+        if (interface_exists(LdapInterface::class)) {
             $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
             $badges[] = new LdapBadge(
                 LdapMercredi::class,
-                $_ENV['ACLDAP_DN'],
-                $_ENV['ACLDAP_USER'],
-                $_ENV['ACLDAP_PASSWORD'],
+                $this->parameterBag->get(Option::LDAP_DN),
+                $this->parameterBag->get(Option::LDAP_USER),
+                $this->parameterBag->get(Option::LDAP_PASSWORD),
                 $query
             );
         }

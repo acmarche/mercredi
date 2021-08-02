@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -71,11 +71,11 @@ final class JourVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
         }
 
-        if (!$this->security->isGranted(MercrediSecurity::ROLE_ANIMATEUR)) {
+        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR)) {
             return false;
         }
 

@@ -2,17 +2,16 @@
 
 namespace AcMarche\Mercredi\Jour\Repository;
 
-use DateTimeImmutable;
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
-use function count;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use function count;
 
 /**
  * @method Jour|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,9 +21,22 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class JourRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Jour::class);
+    }
+
+    public function getQlNotPlaine(bool $archive = false): QueryBuilder
+    {
+        return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
+            ->addSelect('plaineJour')
+            ->andwhere('jour.archived = :archive')
+            ->setParameter('archive', $archive)
+            ->andWhere('plaineJour IS NULL')
+            ->addOrderBy('jour.date_jour', 'DESC');
     }
 
     public function getQbDaysNotRegisteredByEnfant(Enfant $enfant): QueryBuilder
@@ -33,20 +45,13 @@ final class JourRepository extends ServiceEntityRepository
             $enfant
         );
 
-        $queryBuilder = $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
-            ->addSelect('plaineJour');
+        $queryBuilder = $this->getQlNotPlaine();
 
         if (count($joursRegistered) > 0) {
             $queryBuilder
                 ->andWhere('jour.id NOT IN (:jours)')
                 ->setParameter('jours', $joursRegistered);
         }
-
-        $queryBuilder
-            ->andwhere('jour.archived = 0')
-            ->andWhere('plaineJour IS NULL')
-            ->orderBy('jour.date_jour', 'DESC');
 
         return $queryBuilder;
     }
@@ -69,33 +74,33 @@ final class JourRepository extends ServiceEntityRepository
     /**
      * @return Jour[]
      */
-    public function findNotArchived(): array
+    public function search(bool $archive, ?bool $pedagogique): array
     {
-        return $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
-            ->addSelect('plaineJour')
-            ->andWhere('jour.archived = 0')
-            ->orderBy('jour.date_jour', 'ASC')
-            ->andWhere('plaineJour IS NULL')
-            ->getQuery()->getResult();
+        $qb = $this->getQlNotPlaine($archive);
+        switch ($pedagogique) {
+            case true | false:
+                $qb->andwhere('jour.pedagogique = :pedagogique')
+                    ->setParameter('pedagogique', $pedagogique);
+                break;
+            default:
+                break;
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
-    public function getQbForListing(): QueryBuilder
+    /**
+     * @return Jour[]
+     */
+    public function findNotArchived(): array
     {
-        return $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
-            ->addSelect('plaineJour')
-            ->andWhere('jour.archived = 0')
-            ->andWhere('plaineJour IS NULL')
-            ->orderBy('jour.date_jour', 'DESC');
+        return $this->getQlNotPlaine()
+            ->getQuery()->getResult();
     }
 
     public function getQbForListingAnimateur(Animateur $animateur): QueryBuilder
     {
-        return $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
-            ->addSelect('plaineJour')
-            ->andWhere('jour.archived = 0')
+        return $this->getQlNotPlaine()
             ->andWhere('plaineJour IS NULL')
             ->andWhere(':animateur MEMBER OF jour.animateurs')
             ->setParameter('animateur', $animateur)
@@ -107,13 +112,10 @@ final class JourRepository extends ServiceEntityRepository
      */
     public function findPedagogiqueByDateGreatherOrEqual(DateTimeInterface $dateTime, Enfant $enfant): array
     {
-        $queryBuilder = $this->getQbDaysNotRegisteredByEnfant($enfant);
-
-        return $queryBuilder
+        return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->andWhere('jour.pedagogique = 1')
-            ->orderBy('jour.date_jour', 'DESC')
             ->getQuery()->getResult();
     }
 
@@ -122,18 +124,15 @@ final class JourRepository extends ServiceEntityRepository
      */
     public function findJourByDateGreatherOrEqual(DateTimeInterface $dateTime, Enfant $enfant): array
     {
-        $queryBuilder = $this->getQbDaysNotRegisteredByEnfant($enfant);
-
-        return $queryBuilder
+        return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->andWhere('jour.pedagogique = 0')
-            ->orderBy('jour.date_jour', 'DESC')
             ->getQuery()->getResult();
     }
 
     /**
-     * TODO not unique !!!!! ou pas pour plaine ??
+     * use in Handler plaine
      * @param \DateTimeInterface $dateTime
      * @return \AcMarche\Mercredi\Entity\Jour|null
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -142,6 +141,7 @@ final class JourRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')
+            ->andWhere('jour.plaine_jour IS NOT NULL')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->getQuery()->getOneOrNullResult();
     }
@@ -152,26 +152,10 @@ final class JourRepository extends ServiceEntityRepository
      */
     public function findByAnimateur(Animateur $animateur): array
     {
-        return $this->createQueryBuilder('jour')
+        return $this->getQlNotPlaine()
             ->andWhere(':animateur MEMBER OF jour.animateurs')
             ->setParameter('animateur', $animateur)
-            ->andWhere('jour.archived = 0')
-            ->addOrderBy('jour.date_jour', 'DESC')
             ->getQuery()->getResult();
     }
 
-    public function remove(Jour $jour): void
-    {
-        $this->_em->remove($jour);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Jour $jour): void
-    {
-        $this->_em->persist($jour);
-    }
 }

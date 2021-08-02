@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Data;
 final class MercrediConstantes
 {
     public const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
-    public const ORDRES = ['' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
+    public const ORDRES = ['0' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
 
     public const ABSENCE_NON = 0;
     public const ABSENCE_AVEC_CERTIF = 1;

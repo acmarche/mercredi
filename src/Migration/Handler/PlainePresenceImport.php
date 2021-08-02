@@ -13,9 +13,6 @@ class PlainePresenceImport
     private SymfonyStyle $io;
     private TuteurRepository $tuteurRepository;
     private MigrationRepository $migrationRepository;
-    /**
-     * @var \AcMarche\Mercredi\Migration\MercrediPdo
-     */
     private MercrediPdo $pdo;
 
     public function __construct(

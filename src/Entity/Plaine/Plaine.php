@@ -40,6 +40,8 @@ class Plaine implements SluggableInterface
      */
     private iterable $plaine_groupes;
 
+    public array $enfants = [];
+
     public function __construct()
     {
         $this->jours = new ArrayCollection();

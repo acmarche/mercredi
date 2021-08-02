@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Jour\Form\SearchJourType;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Form\JourType;
@@ -33,14 +34,28 @@ final class JourController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_jour_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_jour_index", methods={"GET","POST"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $form = $this->createForm(SearchJourType::class);
+        $form->handleRequest($request);
+        $archived = false;
+        $pedagogique = null;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $archived = $data['archived'];
+            $pedagogique = $data['pedagogique'];
+        }
+
+        $jours = $this->jourRepository->search($archived, $pedagogique);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/index.html.twig',
             [
-                'jours' => $this->jourRepository->findNotArchived(),
+                'jours' => $jours,
+                'form' => $form->createView(),
             ]
         );
     }

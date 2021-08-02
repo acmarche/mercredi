@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -80,17 +80,17 @@ final class AccueilVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ADMIN)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
         }
 
         $this->enfant = $accueil->getEnfant();
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_PARENT)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return $this->checkTuteur();
         }
 
-        if ($this->security->isGranted(MercrediSecurity::ROLE_ECOLE)) {
+        if ($this->security->isGranted(MercrediSecurityRole::ROLE_ECOLE)) {
             return $this->checkEcoles();
         }
 

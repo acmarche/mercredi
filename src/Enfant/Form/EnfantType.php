@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -35,7 +35,7 @@ final class EnfantType extends AbstractType
     {
         $year = new DateTime('today');
         $year = $year->format('Y');
-        $isAdmin = !$this->security->isGranted(MercrediSecurity::ROLE_ADMIN);
+        $isAdmin = !$this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
 
         $formBuilder
             ->add(

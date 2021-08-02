@@ -132,7 +132,7 @@ final class EnfantRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $anneeScolaire): array
+    public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $anneeScolaire, ?bool $archived): array
     {
         $queryBuilder = $this->addNotArchivedQueryBuilder()
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
@@ -154,6 +154,17 @@ final class EnfantRepository extends ServiceEntityRepository
         if ($anneeScolaire !== null) {
             $queryBuilder->andWhere('enfant.annee_scolaire = :annee')
                 ->setParameter('annee', $anneeScolaire);
+        }
+
+        switch ($archived) {
+            case true | false:
+                $queryBuilder->andwhere('enfant.archived = :archive')
+                    ->setParameter('archive', $archived);
+                break;
+            default:
+                $queryBuilder->andwhere('enfant.archived = :archive')
+                    ->setParameter('archive', 0);
+                break;
         }
 
         $this->addOrderByNameQueryBuilder($queryBuilder);

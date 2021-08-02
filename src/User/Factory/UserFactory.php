@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\User\Factory;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Security\MercrediSecurity;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Security\PasswordGenerator;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -52,7 +52,7 @@ final class UserFactory
         $user->setUsername($user->getEmail());
         $user->setPlainPassword(PasswordGenerator::generatePassword());
         $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
-        $user->addRole(MercrediSecurity::ROLE_ANIMATEUR);
+        $user->addRole(MercrediSecurityRole::ROLE_ANIMATEUR);
         //$user->addAnimateur($animateur);
 
         $this->userRepository->insert($user);
@@ -76,7 +76,7 @@ final class UserFactory
         $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
 
         $user->addTuteur($tuteur);
-        $user->addRole(MercrediSecurity::ROLE_PARENT);
+        $user->addRole(MercrediSecurityRole::ROLE_PARENT);
         $this->userRepository->insert($user);
 
         return $user;
