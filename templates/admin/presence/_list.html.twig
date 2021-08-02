@@ -22,6 +22,10 @@
             </td>
             <td class="text-muted">
                 {{ presence.remarque }}
+
+                {% if presence.jour.plaineJour %}
+                    {{ presence.jour.plaineJour.plaine }}
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

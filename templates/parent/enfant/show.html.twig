@@ -16,19 +16,15 @@
             {% endif %}
             {% include '@AcMarcheMercrediParent/enfant/_actions.html.twig' %}
 
-            <div class="row pl-1">
-                <div class="col-md-3 mt-2">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
                     {% include '@AcMarcheMercrediParent/enfant/_photo.html.twig' %}
                 </div>
-                <div class="col-md-9">
+                <div class="flex-grow-1 ms-3">
                     {% include '@AcMarcheMercrediParent/enfant/_identite.html.twig' %}
                 </div>
             </div>
-
             <br/>
-            <div class="pl-1">
-
-            </div>
         </div>
         <div class="card-footer text-muted mt-3">
             Crée le {{ enfant.createdAt | format_date('full') }} par {{ enfant.userAdd }}. Mis à jour

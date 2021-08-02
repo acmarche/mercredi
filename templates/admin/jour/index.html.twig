@@ -4,12 +4,14 @@
 
     <div class="card">
         <div class="card-header">
-            <h3>Liste des jours d'accueil</h3>
+            <h3>Liste des jours d'accueil
+                <a class="btn btn-primary float-end" role="button"
+                   href="{{ path('mercredi_admin_jour_new') }}"><i class="fas fa-plus"></i> Ajouter une date</a>
+            </h3>
         </div>
         <div class="card-body">
 
-            <a class="btn btn-primary m-2" role="button"
-               href="{{ path('mercredi_admin_jour_new') }}"><i class="fas fa-plus"></i> Ajouter une date</a>
+            {% include '@AcMarcheMercrediAdmin/jour/_search.html.twig' %}
 
             <div class="alert alert-info">
                 Jours d'accueils des mercredis récréatifs et journées pédagogiques
