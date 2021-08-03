@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use function count;
 
 final class TuteurUtils
@@ -151,7 +150,8 @@ final class TuteurUtils
             if (!$this->tuteurIsActif($tuteur)) {
                 continue;
             }
-            if (!self::getEmailsOfOneTuteur($tuteur)) {
+            $t = self::getEmailsOfOneTuteur($tuteur);
+            if ($t !== null) {
                 continue;
             }
             $data[] = $tuteur;

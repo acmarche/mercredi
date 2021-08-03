@@ -2,11 +2,13 @@
 
 namespace AcMarche\Mercredi\Relation\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,30 +19,21 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class RelationRepository extends ServiceEntityRepository
 {
-    /**
-     * @var string
-     */
-    private const RELATION = 'relation';
-    /**
-     * @var string
-     */
-    private const TUTEUR = 'tuteur';
-    /**
-     * @var string
-     */
-    private const WITH = 'WITH';
-    /**
-     * @var string
-     */
-    private const ENFANT = 'enfant';
-    /**
-     * @var string
-     */
-    private const ASC = 'ASC';
+    use OrmCrudTrait;
 
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Relation::class);
+    }
+
+    private function getQlB(): QueryBuilder
+    {
+        return $this->createQueryBuilder('relation')
+            ->leftJoin('relation.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('relation.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('tuteur.users', 'users', 'WITH')
+            ->addSelect('tuteur', 'enfant', 'sante_fiche', 'users');
     }
 
     /**
@@ -48,12 +41,10 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findByEnfant(Enfant $enfant)
     {
-        return $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.tuteur', self::TUTEUR, self::WITH)
-            ->addSelect(self::TUTEUR)
+        return $this->getQlB()
             ->andWhere('relation.enfant = :enfant')
-            ->setParameter(self::ENFANT, $enfant)
-            ->orderBy('tuteur.nom', self::ASC)
+            ->setParameter('enfant', $enfant)
+            ->orderBy('tuteur.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -63,12 +54,10 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findByTuteur(Tuteur $tuteur)
     {
-        return $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        return $this->getQlB()
             ->andWhere('relation.tuteur = :tuteur')
-            ->setParameter(self::TUTEUR, $tuteur)
-            ->orderBy('enfant.prenom', self::ASC)
+            ->setParameter('tuteur', $tuteur)
+            ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -78,12 +67,10 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findByEcole(Ecole $ecole)
     {
-        return $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        return $this->getQlB()
             ->andWhere('enfant.ecole = :ecole')
             ->setParameter('ecole', $ecole)
-            ->orderBy('enfant.prenom', self::ASC)
+            ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -103,24 +90,10 @@ final class RelationRepository extends ServiceEntityRepository
         return $tuteurs;
     }
 
-    /**
-     * @return Enfant[] Returns an array of RelationEnfant objects
-     */
-    public function findEnfantsByTuteur(Tuteur $tuteur): array
-    {
-        $enfants = [];
-        $relations = $this->findByTuteur($tuteur);
-
-        foreach ($relations as $relation) {
-            $enfants[] = $relation->getTuteur();
-        }
-
-        return $enfants;
-    }
 
     public function findOneByTuteurAndEnfant(Tuteur $tuteur, Enfant $enfant): ?Relation
     {
-        return $this->findOneBy([self::TUTEUR => $tuteur, self::ENFANT => $enfant]);
+        return $this->findOneBy(['tuteur' => $tuteur, 'enfant' => $enfant]);
     }
 
     /**
@@ -133,14 +106,12 @@ final class RelationRepository extends ServiceEntityRepository
             $tuteurs = $this->findTuteursByEnfant($enfant);
         }
 
-        $relations = $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        $relations = $this->getQlB()
             ->andWhere('relation.tuteur IN (:tuteurs)')
             ->setParameter('tuteurs', $tuteurs)
             ->andWhere('relation.enfant != :enfant')
-            ->setParameter(self::ENFANT, $enfant)
-            ->orderBy('enfant.prenom', self::ASC)
+            ->setParameter('enfant', $enfant)
+            ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
 
@@ -156,11 +127,9 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findEnfantsActifs(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
-            ->addSelect(self::ENFANT)
+        return $this->getQlB()
             ->andwhere('relation.tuteur = :tuteur')
-            ->setParameter(self::TUTEUR, $tuteur)
+            ->setParameter('tuteur', $tuteur)
             ->andwhere('enfant.archived != 1')
             ->getQuery()
             ->getResult();
@@ -171,10 +140,7 @@ final class RelationRepository extends ServiceEntityRepository
      */
     public function findTuteursActifs(): array
     {
-        return $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
-            ->leftJoin('relation.tuteur', self::TUTEUR, self::WITH)
-            ->addSelect(self::ENFANT, self::TUTEUR)
+        return $this->getQlB()
             ->andwhere('enfant.archived != 1')
             ->getQuery()
             ->getResult();
@@ -182,28 +148,10 @@ final class RelationRepository extends ServiceEntityRepository
 
     public function findByEnfants(array $enfants)
     {
-        return $this->createQueryBuilder(self::RELATION)
-            ->leftJoin('relation.enfant', self::ENFANT, self::WITH)
-            ->leftJoin('relation.tuteur', self::TUTEUR, self::WITH)
-            ->addSelect(self::ENFANT, self::TUTEUR)
+        return $this->getQlB()
             ->andwhere('relation.enfant IN (:enfants)')
             ->setParameter('enfants', $enfants)
             ->getQuery()
             ->getResult();
-    }
-
-    public function remove(Relation $relation): void
-    {
-        $this->_em->remove($relation);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Relation $relation): void
-    {
-        $this->_em->persist($relation);
     }
 }

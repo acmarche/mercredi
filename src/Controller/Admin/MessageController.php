@@ -15,12 +15,12 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use function count;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function count;
 
 /**
  * Class DefaultController.
@@ -76,7 +76,7 @@ final class MessageController extends AbstractController
             }
 
             if ($ecole) {
-                $relations = $enfants = $this->relationRepository->findByEcole($ecole);
+                $relations = $this->relationRepository->findByEcole($ecole);
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
@@ -93,7 +93,6 @@ final class MessageController extends AbstractController
 
         $emails = $this->tuteurUtils->getEmails($tuteurs);
         $tuteursWithOutEmails = $this->tuteurUtils->filterTuteursWithOutEmail($tuteurs);
-
         $this->searchHelper->saveSearch(SearchHelper::MESSAGE_INDEX, $emails);
 
         return $this->render(
@@ -119,7 +118,7 @@ final class MessageController extends AbstractController
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
 
-        $form = $form = $this->createForm(MessageType::class, $message);
+        $form = $this->createForm(MessageType::class, $message);
 
         $form->handleRequest($request);
 
@@ -137,6 +136,7 @@ final class MessageController extends AbstractController
                 'emailuser' => $this->getUser()->getEmail(),
                 'form' => $form->createView(),
                 'emails' => $emails,
+                'jour' => $jour,
                 'tuteurs' => [],
             ]
         );
@@ -145,7 +145,7 @@ final class MessageController extends AbstractController
     /**
      * @Route("/groupe/{id}", name="mercredi_message_new_groupescolaire")
      */
-    public function groupeScolaire(Request $request, GroupeScolaire $groupeScolaire): Response
+    public function fromGroupeScolaire(Request $request, GroupeScolaire $groupeScolaire): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
         if (count($args) < 1) {
