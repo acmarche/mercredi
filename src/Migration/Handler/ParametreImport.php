@@ -149,6 +149,7 @@ class ParametreImport
         $groupes = ['premats', 'petits', 'moyens', 'grands'];
         foreach ($groupes as $data) {
             $groupe = new GroupeScolaire();
+            $groupe->setOrdre(0);
             $groupe->setNom($data);
             $this->enfantRepository->persist($groupe);
         }
@@ -156,6 +157,7 @@ class ParametreImport
         $groupes = ['petits plaine', 'moyens plaine', 'grands plaine'];
         foreach ($groupes as $data) {
             $groupe = new GroupeScolaire();
+            $groupe->setOrdre(0);
             $groupe->setNom($data);
             $groupe->setIsPlaine(true);
             $this->enfantRepository->persist($groupe);

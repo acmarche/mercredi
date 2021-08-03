@@ -2,14 +2,11 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
-use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
@@ -20,6 +17,7 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -48,39 +46,6 @@ final class PresenceController extends AbstractController
         $this->relationUtils = $relationUtils;
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
-    }
-
-    /**
-     * Route("/", name="mercredi_parent_presence_index", methods={"GET","POST"}).
-     */
-    public function index(Request $request): Response
-    {
-        $form = $this->createForm(SearchPresenceType::class);
-        $form->handleRequest($request);
-        $data = [];
-        $search = $displayRemarque = false;
-        $jour = $remarques = null;
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $dataForm = $form->getData();
-            /** @var Jour $jour */
-            $jour = $dataForm['jour'];
-            $displayRemarque = $dataForm['displayRemarque'];
-
-            $search = true;
-            $data = $this->presenceHandler->handleForGrouping($jour, $dataForm['ecole'], $displayRemarque);
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediParent/presence/index.html.twig',
-            [
-                'data' => $data,
-                'form' => $form->createView(),
-                'search' => $search,
-                'jour' => $jour,
-                'display_remarques' => $displayRemarque,
-            ]
-        );
     }
 
     /**
@@ -117,7 +82,7 @@ final class PresenceController extends AbstractController
         }
         $santeFiche = $this->santeHandler->init($enfant);
 
-        if (! $this->santeChecker->isComplete($santeFiche)) {
+        if (!$this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
@@ -170,7 +135,7 @@ final class PresenceController extends AbstractController
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
-            if (! DeleteConstraint::canBeDeleted($presence)) {
+            if (!DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
                 return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);

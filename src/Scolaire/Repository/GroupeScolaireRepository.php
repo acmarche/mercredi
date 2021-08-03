@@ -23,10 +23,11 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     /**
      * @return GroupeScolaire[]
      */
-    public function findAllOrderByNom(): array
+    public function findAllOrderByOrdre(): array
     {
         return $this->createQueryBuilder('groupe_scolaire')
             ->addOrderBy('groupe_scolaire.is_plaine')
+            ->addOrderBy('groupe_scolaire.ordre', 'ASC')
             ->addOrderBy('groupe_scolaire.nom', 'ASC')
             ->getQuery()
             ->getResult();

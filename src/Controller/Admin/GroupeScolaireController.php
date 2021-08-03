@@ -35,7 +35,7 @@ final class GroupeScolaireController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/groupe_scolaire/index.html.twig',
             [
-                'groupes' => $this->groupeScolaireRepository->findAllOrderByNom(),
+                'groupes' => $this->groupeScolaireRepository->findAllOrderByOrdre(),
             ]
         );
     }

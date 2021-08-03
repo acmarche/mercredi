@@ -8,9 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait OrdreTrait
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(type="smallint", length=2, nullable=true, options={"comment" = "1,2, suviant", "default" = "0"})
+     * @ORM\Column(type="smallint", length=2, nullable=true)
      * @Assert\NotBlank()
      */
     private int $ordre = 0;
@@ -20,7 +18,7 @@ trait OrdreTrait
         return $this->ordre;
     }
 
-    public function setOrdre(int $ordre): void
+    public function setOrdre(?int $ordre): void
     {
         $this->ordre = $ordre;
     }

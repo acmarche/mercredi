@@ -9,7 +9,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,6 +33,7 @@ final class GroupeScolaireType extends AbstractType
                 [
                     'label' => 'Âge minimum',
                     'help' => '',
+                    'required' => false,
                     'scale' => 1,
                 ]
             )
@@ -43,6 +43,7 @@ final class GroupeScolaireType extends AbstractType
                 [
                     'label' => 'Âge maximum',
                     'help' => '',
+                    'required' => false,
                     'scale' => 1,
                     'grouping' => false,
                 ]
@@ -61,7 +62,10 @@ final class GroupeScolaireType extends AbstractType
                     'multiple' => true,
                     'expanded' => true,
                 ]
-            );
+            )
+            ->add('ordre', IntegerType::class, [
+                'label' => 'Ordre d\'affichage',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

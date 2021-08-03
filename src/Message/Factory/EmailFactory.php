@@ -24,7 +24,7 @@ final class EmailFactory
                 ]
             );
 
-        /*
+        /**
          * Pieces jointes.
          */
         if (null !== ($uploadedFile = $message->getFile())) {

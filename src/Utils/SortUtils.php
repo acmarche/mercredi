@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Utils;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 
 final class SortUtils
 {
@@ -58,5 +59,25 @@ final class SortUtils
         );
 
         return $presences;
+    }
+
+    public static function sortGroupesScolaires(array $groups)
+    {
+        uasort(
+            $groups,
+            function ($dataA, $dataB) {
+
+                $groupeA = $dataA['groupe'];
+                $groupeB = $dataB['groupe'];
+
+                if ($groupeA->getOrdre() === $groupeB->getOrdre()) {
+                    return 0;
+                }
+
+                return $groupeA->getOrdre() > $groupeB->getOrdre() ? 1 : -1;
+            }
+        );
+
+        return $groups;
     }
 }

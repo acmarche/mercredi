@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,6 +21,7 @@ class GroupeScolaire
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
+    use OrdreTrait;
 
     /**
      * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)

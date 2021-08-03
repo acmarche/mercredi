@@ -88,7 +88,7 @@ final class PresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index.html.twig',
             [
-                'data' => $data,
+                'datas' => $data,
                 'form' => $form->createView(),
                 'search' => $search,
                 'jour' => $jour,

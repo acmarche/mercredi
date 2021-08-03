@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use AcMarche\Mercredi\Utils\SortUtils;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -133,8 +134,11 @@ final class PresenceUtils
         $groups = [];
         foreach ($enfants as $enfant) {
             $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
-            $groups[$groupe->getNom()][] = $enfant;
+            $groups[$groupe->getId()]['groupe'] = $groupe;
+            $groups[$groupe->getId()]['enfants'][] = $enfant;
         }
+
+        $groups = SortUtils::sortGroupesScolaires($groups);
 
         return $groups;
     }

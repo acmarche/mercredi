@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Message\Factory\MessageFactory;
 use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
@@ -79,7 +80,7 @@ final class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if (! $jour && ! $ecole) {
+            if (!$jour && !$ecole) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
@@ -142,12 +143,14 @@ final class MessageController extends AbstractController
     }
 
     /**
-     * @Route("/groupe/{groupe}", name="mercredi_message_new_groupescolaire")
+     * @Route("/groupe/{id}", name="mercredi_message_new_groupescolaire")
      */
-    public function groupeScolaire(Request $request, string $groupe): Response
+    public function groupeScolaire(Request $request, GroupeScolaire $groupeScolaire): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
         if (count($args) < 1) {
+            $this->addFlash('danger', 'Aucun critère de recherche encodé');
+
             return $this->redirectToRoute('mercredi_admin_presence_index');
         }
 
@@ -155,8 +158,7 @@ final class MessageController extends AbstractController
         $ecole = $args['ecole'];
 
         $data = $this->presenceHandler->handleForGrouping($jour, $ecole, false);
-        $groupe = urldecode($groupe);
-        $enfants = $data[$groupe] ?? [];
+        $enfants = $data[$groupeScolaire->getId()]['enfants'] ?? [];
 
         $tuteurs = $this->tuteurUtils->getTuteursByEnfants($enfants);
         $emails = $this->tuteurUtils->getEmails($tuteurs);

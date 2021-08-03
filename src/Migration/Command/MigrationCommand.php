@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Migration\Command;
 
+use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
@@ -88,6 +89,7 @@ final class MigrationCommand extends Command
             $this->plaineImport->importGroupe($symfonyStyle);
             $this->plaineImport->importJours($symfonyStyle);
             $this->plainePresenceImport->import($symfonyStyle);
+            $this->organisation();
 
             return Command::SUCCESS;
         }
@@ -131,6 +133,10 @@ final class MigrationCommand extends Command
                 $this->plainePresenceImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
+            case 'oranisation':
+                $this->organisation();
+
+                return Command::SUCCESS;
             case 'password':
                 $user = $this->userRepository->findOneBy(['username' => 'jfsenechal']);
                 $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
@@ -140,6 +146,19 @@ final class MigrationCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function organisation()
+    {
+        $oranisation = new Organisation();
+        $oranisation->setNom('Espace parents enfants');
+        $oranisation->setEmail('epe@marche.be');
+        $oranisation->setCodePostal(6900);
+        $oranisation->setInitiale('Epe');
+        $oranisation->setRue('Rue Victor Libert 20');
+        $oranisation->setLocalite('Marche');
+        $this->userRepository->persist($oranisation);
+        $this->userRepository->flush();
     }
 
     /***********************************************
