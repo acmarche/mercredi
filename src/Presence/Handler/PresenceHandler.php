@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Doctrine\ORM\NonUniqueResultException;
 
 final class PresenceHandler
@@ -17,15 +18,18 @@ final class PresenceHandler
     private PresenceRepository $presenceRepository;
     private PresenceUtils $presenceUtils;
     private PresenceConstraints $presenceConstraints;
+    private GroupingInterface $grouping;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         PresenceUtils $presenceUtils,
-        PresenceConstraints $presenceConstraints
+        PresenceConstraints $presenceConstraints,
+        GroupingInterface $grouping
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceUtils = $presenceUtils;
         $this->presenceConstraints = $presenceConstraints;
+        $this->grouping = $grouping;
     }
 
     /**
@@ -50,14 +54,14 @@ final class PresenceHandler
         $this->presenceRepository->flush();
     }
 
-    public function handleForGrouping(Jour $jour, ?Ecole $ecole, bool $displayRemarque): array
+    public function searchAndGrouping(Jour $jour, ?Ecole $ecole, bool $displayRemarque): array
     {
         $presences = $this->presenceRepository->findPresencesByJourAndEcole($jour, $ecole);
 
         $enfants = PresenceUtils::extractEnfants($presences, $displayRemarque);
         $this->presenceUtils->addTelephonesOnEnfants($enfants);
 
-        return $this->presenceUtils->groupByGroupScolaire($enfants);
+        return $this->grouping->groupEnfantsForPresence($enfants);
     }
 
     public function checkConstraints(Jour $jour): bool

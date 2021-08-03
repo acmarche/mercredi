@@ -31,29 +31,30 @@ trait BirthdayTrait
     }
 
     /**
-     * @param DateTime|DateTimeImmutable|null $date_reference
+     * @param \DateTimeInterface|null $dateReference
+     * @param bool $rounded arrondi à 0.5
+     * @return float|null
      */
-    public function getAge(?DateTimeInterface $date_reference = null, $month = false): string
+    public function getAge(?DateTimeInterface $dateReference = null, bool $rounded = false): ?float
     {
         $birthday = $this->birthday;
 
         if (!$birthday) {
-            return '';
+            return null;
         }
 
-        $today = new DateTime();
+        $today = Carbon::now();
 
-        if (null !== $date_reference) {
-            $today = $date_reference;
+        if (null !== $dateReference) {
+            $today = Carbon::instance($dateReference);
         }
 
-        $date = $birthday->diff($today);
-
-        if ($month) {
-            return $date->format('%y ans et %m mois');
+        $age = (float)Carbon::parse($birthday)->diff($today)->format('%y.%m');
+        if ($rounded) {
+            return floor($age * 2) / 2;
         }
 
-        return $date->format('%y');
+        return $age;
     }
 
     /**

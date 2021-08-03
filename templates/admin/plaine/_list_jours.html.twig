@@ -1,15 +1,10 @@
 <h4 class="text-success">Les jours</h4>
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>Date</th>
-    </tr>
-    </thead>
-    <tbody>
+<ul class="list-group list-group-horizontal mb-3">
     {% for plaineJour in plaine.plaineJours %}
-        <tr>
-            <td>{{ plaineJour.jour.dateJour|format_date('full') }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <li class="list-group-item">
+        <a href="{{ path('mercredi_admin_plaine_jour_show', {'id': plaineJour.id}) }}">
+            {{ plaineJour.jour.dateJour|format_date('full') }}
+        </a>
+        {% endfor %}
+    </li>
+</ul>

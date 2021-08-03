@@ -12,9 +12,17 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ORM\Table(uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"age_minimum", "is_plaine"}),
+ *     @ORM\UniqueConstraint(columns={"age_maximum", "is_plaine"})
+ * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository")
+ * @UniqueEntity(fields={"age_minimum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge minimum")
+ * @UniqueEntity(fields={"age_maximum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge maximum")
  */
 class GroupeScolaire
 {
@@ -25,10 +33,12 @@ class GroupeScolaire
 
     /**
      * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
+     * @Assert\LessThan(propertyPath="age_maximum")
      */
     private ?float $age_minimum = null;
     /**
      * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
+     * @Assert\GreaterThan(propertyPath="age_minimum")
      */
     private ?float $age_maximum = null;
 

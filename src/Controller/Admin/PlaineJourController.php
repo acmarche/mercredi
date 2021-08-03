@@ -2,6 +2,12 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
+use AcMarche\Mercredi\Plaine\Repository\PlaineJourRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
+use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -23,15 +29,27 @@ final class PlaineJourController extends AbstractController
     private PlaineRepository $plaineRepository;
     private EnfantRepository $enfantRepository;
     private PlaineHandler $plaineHandler;
+    private PlainePresenceRepository $plainePresenceRepository;
+    private PresenceHandler $presenceHandler;
+    private PresenceUtils $presenceUtils;
+    private GroupingInterface $grouping;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         EnfantRepository $enfantRepository,
-        PlaineHandler $plaineHandler
+        PlaineHandler $plaineHandler,
+        PlainePresenceRepository $plainePresenceRepository,
+        PresenceHandler $presenceHandler,
+        PresenceUtils $presenceUtils,
+        GroupingInterface $grouping
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->enfantRepository = $enfantRepository;
         $this->plaineHandler = $plaineHandler;
+        $this->plainePresenceRepository = $plainePresenceRepository;
+        $this->presenceHandler = $presenceHandler;
+        $this->presenceUtils = $presenceUtils;
+        $this->grouping = $grouping;
     }
 
     /**
@@ -65,12 +83,20 @@ final class PlaineJourController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_plaine_jour_show", methods={"GET"})
      */
-    public function show(Plaine $plaine): Response
+    public function show(PlaineJour $plaineJour): Response
     {
+        $plaine = $plaineJour->getPlaine();
+        $jour = $plaineJour->getJour();
+        $enfants = $this->plainePresenceRepository->findEnfantsByJour($jour);
+        $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+
         return $this->render(
-            '@AcMarcheMercrediAdmin/plaine/show.html.twig',
+            '@AcMarcheMercrediAdmin/plaine_jour/show.html.twig',
             [
+                'jour' => $plaineJour->getJour(),
                 'plaine' => $plaine,
+                'datas' => $data,
+                'plaineJour' => $plaineJour,
             ]
         );
     }

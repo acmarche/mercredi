@@ -129,23 +129,6 @@ final class PresenceUtils
     /**
      * @param Enfant[] $enfants
      */
-    public function groupByGroupScolaire(array $enfants): array
-    {
-        $groups = [];
-        foreach ($enfants as $enfant) {
-            $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
-            $groups[$groupe->getId()]['groupe'] = $groupe;
-            $groups[$groupe->getId()]['enfants'][] = $enfant;
-        }
-
-        $groups = SortUtils::sortGroupesScolaires($groups);
-
-        return $groups;
-    }
-
-    /**
-     * @param Enfant[] $enfants
-     */
     public function addTelephonesOnEnfants(array $enfants): void
     {
         foreach ($enfants as $enfant) {

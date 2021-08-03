@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Plaine\Repository;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -47,6 +47,13 @@ final class PlainePresenceRepository
         $presences = $this->presenceRepository->findPlainesByEnfant($enfant);
 
         return PresenceUtils::extractPlainesFromPresences($presences);
+    }
+
+    public function findEnfantsByJour(Jour $jour)
+    {
+        $presences = $this->presenceRepository->findByDay($jour);
+
+        return PresenceUtils::extractEnfants($presences);
     }
 
 }

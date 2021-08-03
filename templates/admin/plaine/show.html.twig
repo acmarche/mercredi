@@ -26,12 +26,12 @@
                 </tr>
             </table>
 
-            {% if plaine.remarque %}
+            {% if plaine.remarque != '' %}
                 <p class="text-muted">
                     {{ plaine.remarque | nl2br }}
                 </p>
             {% endif %}
-            <br/>
+
             {% include '@AcMarcheMercrediAdmin/plaine/_list_jours.html.twig' %}
             {% include '@AcMarcheMercrediAdmin/plaine/_list_groupes.html.twig' %}
             {% include '@AcMarcheMercrediAdmin/plaine/_enfants.html.twig' %}

@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Scolaire\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class GroupeScolaireRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, GroupeScolaire::class);
@@ -39,7 +41,9 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     public function findAllForPlaineOrderByNom(): array
     {
         return $this->getQbForListingPlaine()
-            ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
+            ->orderBy('groupe_scolaire.nom', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -52,26 +56,19 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
             ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
+    public function findGroupePlaineByAge(float $age): ?GroupeScolaire
+    {
+        return $this->createQueryBuilder('groupe_scolaire')
+            ->andWhere('groupe_scolaire.is_plaine = 1')
+            ->andWhere('groupe_scolaire.age_minimum <= :age AND groupe_scolaire.age_maximum >= :age')
+            ->setParameter('age', $age)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     public function getQbForListingPlaine()
     {
         return $this->createQueryBuilder('groupe_scolaire')
             ->andWhere('groupe_scolaire.is_plaine = 1')
             ->orderBy('groupe_scolaire.nom', 'DESC');
     }
-
-    public function remove(GroupeScolaire $groupeScolaire): void
-    {
-        $this->_em->remove($groupeScolaire);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(GroupeScolaire $groupeScolaire): void
-    {
-        $this->_em->persist($groupeScolaire);
-    }
-
 }

@@ -5,7 +5,7 @@
 {% endif %}
 
 {% if enfants | length > 0 %}
-    <table class='table table-bordered table-hover'>
+    <table class="table table-bordered table-hover">
         <thead>
         <tr>
             <th>Nom</th>
@@ -23,8 +23,9 @@
         {% for enfant in enfants %}
             <tr>
                 <td>
-                    <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">{{ enfant.nom | upper }}</a>
-                    {{ enfant.prenom }} <br/>
+                    <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">{{ enfant.nom | upper }}
+                        {{ enfant.prenom }}</a>
+                    <br/>
                     <span class='text-muted'>{{ enfant.telephones }}</span>
                 </td>
                 <td style="text-align: center">{{ enfant.age(jour.dateJour) }} ans</td>

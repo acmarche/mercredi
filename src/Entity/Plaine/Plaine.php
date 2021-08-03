@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -33,6 +34,7 @@ class Plaine implements SluggableInterface
     /**
      * @var PlaineJour[]
      * @ORM\OneToMany(targetEntity=PlaineJour::class, mappedBy="plaine", cascade={"remove"})
+     * @ORM\OrderBy({"jour" = "ASC"})
      */
     private iterable $plaine_jours;
 
@@ -68,5 +70,12 @@ class Plaine implements SluggableInterface
     public function shouldGenerateUniqueSlugs(): bool
     {
         return true;
+    }
+
+    public function getFirstDay(): Jour
+    {
+        $first = $this->plaine_jours[0];
+
+        return $first->getJour();
     }
 }

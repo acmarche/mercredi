@@ -61,7 +61,7 @@ final class SortUtils
         return $presences;
     }
 
-    public static function sortGroupesScolaires(array $groups)
+    public static function sortGroupesScolairesByOrder(array $groups)
     {
         uasort(
             $groups,

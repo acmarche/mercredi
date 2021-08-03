@@ -62,7 +62,7 @@ final class PlaineController extends AbstractController
 
         $plaines = $this->plaineRepository->search($nom, $archived);
         array_map(function ($plaine) {
-            $plaine->enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
+            $plaine->enfants = $this->plainePresenceRepository->findEnfantsByJour($plaine);
         }, $plaines);
 
         return $this->render(

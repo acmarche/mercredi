@@ -38,4 +38,24 @@ final class ScolaireUtils
 
         return $groupes[0];
     }
+
+    /**
+     * todo groupe forcer
+     * @param Enfant $enfant
+     * @return GroupeScolaire
+     */
+    public function findGroupeScolaireEnfantByAge(?float $age): ?GroupeScolaire
+    {
+        if (!$age) {
+            return null;
+        }
+
+        $groupe = $this->groupeScolaireRepository->findGroupePlaineByAge($age);
+        if (!$groupe) {
+            $groupes = $this->groupeScolaireRepository->findAllForPlaineOrderByNom();
+            $groupe = $groupes[0];
+        }
+
+        return $groupe;
+    }
 }

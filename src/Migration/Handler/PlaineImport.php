@@ -53,7 +53,7 @@ class PlaineImport
         $jours = $pdo->getAll('plaine_max');
         foreach ($jours as $data) {
             $plaine = $this->migrationRepository->getPlaine($data->plaine_id);
-            $groupeScolaire = $this->migrationRepository->getGroupeScolaire($data->groupe);
+            $groupeScolaire = $this->migrationRepository->getGroupeScolaire($data->groupe.' plaine');
             $plaineGroupe = new PlaineGroupe($plaine, $groupeScolaire);
             $plaineGroupe->setInscriptionMaximum($data->maximum);
             $this->tuteurRepository->persist($plaineGroupe);

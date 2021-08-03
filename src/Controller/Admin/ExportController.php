@@ -63,7 +63,8 @@ final class ExportController extends AbstractController
     public function presenceByMonthXls(bool $one): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST_BY_MONTH);
-        $mois = isset($args['mois']) ?? null;
+
+        $mois = $args['mois'] ?? null;
         if (!$mois) {
             $this->addFlash('danger', 'Indiquez un mois');
             return $this->redirectToRoute('mercredi_admin_presence_by_month');
