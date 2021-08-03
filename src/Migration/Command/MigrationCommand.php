@@ -84,8 +84,10 @@ final class MigrationCommand extends Command
             $this->ficheSanteImport->import($symfonyStyle);
             $this->ficheSanteImport->importReponse($symfonyStyle);
             $this->presenceImport->import($symfonyStyle);
-           // $this->plaineImport->import($symfonyStyle);
-           // $this->plainePresenceImport->import($symfonyStyle);
+            $this->plaineImport->import($symfonyStyle);
+            $this->plaineImport->importGroupe($symfonyStyle);
+            $this->plaineImport->importJours($symfonyStyle);
+            $this->plainePresenceImport->import($symfonyStyle);
 
             return Command::SUCCESS;
         }

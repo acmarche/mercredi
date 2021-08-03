@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
+use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -27,6 +28,7 @@ class Plaine implements SluggableInterface
     use PrematernelleTrait;
     use PlaineGroupesTrait;
     use SluggableTrait;
+    use ArchiveTrait;
 
     /**
      * @var PlaineJour[]

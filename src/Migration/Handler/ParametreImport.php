@@ -40,8 +40,8 @@ class ParametreImport
         $this->importJour();
         $this->importQuestions();
         $this->importReduction();
-        $this->importAnneeScolaire();
         $this->importGroupes();
+        $this->importAnneeScolaire();
 
         $this->enfantRepository->flush();
     }
@@ -123,9 +123,25 @@ class ParametreImport
             $anneeScolaire = new AnneeScolaire();
             $anneeScolaire->setNom($annee);
             $anneeScolaire->setOrdre($i);
+            $groupeScolaire = $this->getGroupeScolaire($anneeScolaire);
+            $anneeScolaire->setGroupeScolaire($groupeScolaire);
             $this->enfantRepository->persist($anneeScolaire);
             $i++;
         }
+    }
+
+    private function getGroupeScolaire(AnneeScolaire $anneeScolaire): GroupeScolaire
+    {
+        $groupeName = 'grands';
+        if (in_array($anneeScolaire->getNom(), ['PM', '1M', '2M'])) {
+            $groupeName = 'petits';
+        }
+
+        if (in_array($anneeScolaire->getNom(), ['3M', '1P', '2P'])) {
+            $groupeName = 'moyens';
+        }
+
+        return $this->migrationRepository->getGroupeScolaire($groupeName);
     }
 
     private function importGroupes()
@@ -137,13 +153,15 @@ class ParametreImport
             $this->enfantRepository->persist($groupe);
         }
 
-        $groupes = ['petits', 'moyens', 'grands'];
+        $groupes = ['petits plaine', 'moyens plaine', 'grands plaine'];
         foreach ($groupes as $data) {
             $groupe = new GroupeScolaire();
             $groupe->setNom($data);
             $groupe->setIsPlaine(true);
             $this->enfantRepository->persist($groupe);
         }
+
+        $this->enfantRepository->flush();
     }
 
 }

@@ -35,6 +35,7 @@ class PlaineImport
             $plaine->setNom($data->intitule);
             $plaine->setSlug($data->slugname);
             $plaine->setRemarque($data->remarques);
+            $plaine->setArchived($data->archive);
             $plaine->setPrematernelle($data->premat);
             $plaine->setPrix1($data->prix1);
             $plaine->setPrix2($data->prix2);

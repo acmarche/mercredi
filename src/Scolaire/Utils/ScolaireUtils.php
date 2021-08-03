@@ -15,6 +15,13 @@ final class ScolaireUtils
         $this->groupeScolaireRepository = $groupeScolaireRepository;
     }
 
+    /**
+     * Retourne le groupe scolaire de l'enfant
+     * Si a pas retourne le groupe scolaire de son année
+     * Si a pas retourne un groupe au hasard
+     * @param \AcMarche\Mercredi\Entity\Enfant $enfant
+     * @return \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
+     */
     public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): GroupeScolaire
     {
         if (null !== ($groupeScolaire = $enfant->getGroupeScolaire())) {
@@ -27,7 +34,7 @@ final class ScolaireUtils
             return $groupeScolaire;
         }
 
-        $groupes = $this->groupeScolaireRepository->findAll();
+        $groupes = $this->groupeScolaireRepository->findGroupesNotPlaine();
 
         return $groupes[0];
     }

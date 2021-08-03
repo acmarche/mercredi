@@ -23,17 +23,32 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     /**
      * @return GroupeScolaire[]
      */
+    public function findAllOrderByNom(): array
+    {
+        return $this->createQueryBuilder('groupe_scolaire')
+            ->addOrderBy('groupe_scolaire.is_plaine')
+            ->addOrderBy('groupe_scolaire.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return GroupeScolaire[]
+     */
     public function findAllForPlaineOrderByNom(): array
     {
         return $this->getQbForListingPlaine()
             ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
-    public function getQbForListingPresence(): QueryBuilder
+    /**
+     * @return GroupeScolaire[]
+     */
+    public function findGroupesNotPlaine(): array
     {
         return $this->createQueryBuilder('groupe_scolaire')
             ->andWhere('groupe_scolaire.is_plaine != 1')
-            ->orderBy('groupe_scolaire.nom', 'DESC');
+            ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
     public function getQbForListingPlaine()

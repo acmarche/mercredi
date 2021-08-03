@@ -15,6 +15,7 @@
                 <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Année scolaire</th>
                     <th>Age minimum</th>
                     <th>Age maximum</th>
                     <th>Plaine</th>
@@ -28,6 +29,7 @@
                                 {{ groupe_scolaire.nom }}
                             </a>
                         </td>
+                        <td>{{ groupe_scolaire.anneesScolaires|join(', ') }}</td>
                         <td>{{ groupe_scolaire.ageMinimum ? groupe_scolaire.ageMinimum ~ ' ans' }}</td>
                         <td>{{ groupe_scolaire.ageMaximum ? groupe_scolaire.ageMaximum ~ ' ans' }}</td>
                         <td>{{ groupe_scolaire.isPlaine ? 'Oui' : 'non' }}</td>

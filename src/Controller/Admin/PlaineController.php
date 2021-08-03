@@ -2,12 +2,12 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
-use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
+use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
+use AcMarche\Mercredi\Plaine\Form\SearchPlaineType;
+use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
 use AcMarche\Mercredi\Plaine\Message\PlaineCreated;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -43,11 +44,23 @@ final class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_plaine_index", methods={"GET"})
+     * @Route("/", name="mercredi_admin_plaine_index", methods={"GET","POST"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $plaines = $this->plaineRepository->findPlaineByDateDesc();
+        $nom = null;
+        $archived = false;
+
+        $form = $this->createForm(SearchPlaineType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $archived = $data['archived'];
+            $nom = $data['nom'];
+        }
+
+        $plaines = $this->plaineRepository->search($nom, $archived);
         array_map(function ($plaine) {
             $plaine->enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
         }, $plaines);
@@ -56,6 +69,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine/index.html.twig',
             [
                 'plaines' => $plaines,
+                'form' => $form->createView(),
             ]
         );
     }

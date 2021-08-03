@@ -23,7 +23,6 @@ final class SearchPresenceType extends AbstractType
                     'class' => Jour::class,
                     'placeholder' => 'Choisissez une date',
                     'query_builder' => fn(JourRepository $jourRepository) => $jourRepository->getQlNotPlaine(),
-                    //todo display name day
                     'group_by' => fn($jour, $key, $id) => $jour->getDateJour()->format('Y'),
                 ]
             )

@@ -249,7 +249,11 @@ final class PresenceRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('presence')
             ->join('presence.enfant', 'enfant', 'WITH')
-            ->addSelect('enfant');
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')//why
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->leftJoin('relations.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire', 'WITH')
+            ->addSelect('enfant', 'sante_fiche','relations', 'tuteur', 'groupe_scolaire');
 
         if ($jour) {
             $queryBuilder->andWhere('presence.jour = :jour')

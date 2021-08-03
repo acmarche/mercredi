@@ -68,11 +68,12 @@ final class PresenceController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $form = $this->createForm(SearchPresenceType::class);
-        $form->handleRequest($request);
         $data = [];
         $search = $displayRemarque = false;
         $jour = null;
+
+        $form = $this->createForm(SearchPresenceType::class);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();

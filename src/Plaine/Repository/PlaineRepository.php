@@ -4,8 +4,8 @@ namespace AcMarche\Mercredi\Plaine\Repository;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Plaine|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +18,29 @@ final class PlaineRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Plaine::class);
+    }
+
+    /**
+     * @return array|Plaine[]
+     */
+    public function search(?string $nom, bool $archived = false): array
+    {
+        $qb = $this->createQueryBuilder('plaine')
+            ->leftJoin('plaine.plaine_jours', 'plaine_jours', 'WITH')
+            ->leftJoin('plaine_jours.jour', 'jour', 'WITH')
+            ->addSelect('plaine_jours', 'jour')
+            ->orderBy('jour.date_jour', 'DESC');
+
+        if ($nom) {
+            $qb->andWhere('plaine.nom LIKE :nom')
+                ->setParameter('nom', '%'.$nom.'%');
+        }
+
+        $qb->andWhere('plaine.archived = :archive')
+            ->setParameter('archive', $archived);
+
+        return $qb->getQuery()
+            ->getResult();
     }
 
     /**
