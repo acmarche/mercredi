@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Form\UserEditType;
@@ -82,7 +85,43 @@ final class UserController extends AbstractController
                 $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
             );
             $user->setUsername($user->getEmail());
-            $this->userRepository->insert($user);
+            $this->userRepository->persist($user);
+            $this->userRepository->flush();
+            $this->dispatchMessage(new UserCreated($user->getId()));
+
+            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/user/new.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * Displays a form to create a new User utilisateur.
+     *
+     * @Route("/new/tuteur/{id}", name="mercredi_admin_user_new_from_tuteur", methods={"GET","POST"})
+     */
+    public function newFromTuteur(Request $request, Tuteur $tuteur): Response
+    {
+        $user = User::newFromObject($tuteur);
+        $user->addRole(MercrediSecurityRole::ROLE_PARENT);
+        $user->addTuteur($tuteur);
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
+            );
+            $user->setUsername($user->getEmail());
+            $this->userRepository->persist($user);
+            $this->userRepository->flush();
             $this->dispatchMessage(new UserCreated($user->getId()));
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);

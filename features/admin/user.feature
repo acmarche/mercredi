@@ -1,5 +1,7 @@
 Feature: Gestion des utilisateurs
   Je suis connecté
+  Ajout un utilisateur administrateur
+  Ajout d'un utilisateur via le tuteur
   Je modifie un utilisateur
   Je modifie les rôles d'un utilisateur
   Je change le mot de passe et je me connecte avec le nouveau mot de passe
@@ -22,6 +24,20 @@ Feature: Gestion des utilisateurs
     Then I should see "bob@mail.com"
     Then I should see "Botteman"
     Then I should see "ROLE_MERCREDI_ADMIN"
+
+  Scenario: Ajout un utilisateur tuteur
+    Given I am logged in as an admin
+    Given I am on "/admin/tuteur/"
+    Then I should see "Liste des parents"
+    Then I fill in "search_tuteur[nom]" with "Peret"
+    And I press "Rechercher"
+    Then I follow "Peret"
+    Then I follow "Créer un compte"
+    And I fill in "user[plainPassword]" with "homer123"
+    And I press "Sauvegarder"
+    Then I should see "L'utilisateur a bien été ajouté"
+    Then I should see "Dissocier"
+    Then I should see "Parent"
 
   Scenario: Modifier un utilisateur
     When I follow "Cohen Leonard"

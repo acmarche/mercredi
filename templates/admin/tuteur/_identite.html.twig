@@ -1,5 +1,17 @@
 <table class='table table-bordered table-hover'>
     <tbody>
+    {% if is_granted('ROLE_MERCREDI_ADMIN') %}
+        <tr>
+            <th>Compte utilisateur</th>
+            <td>
+                {% for user in tuteur.users %}
+                    <a href="{{ path('mercredi_admin_user_show', {'id': user.id}) }}">{{ user }}</a>
+                {% else %}
+                    <a href="{{ path('mercredi_admin_user_new_from_tuteur', {'id': tuteur.id}) }}">Créer un compte</a>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
     <tr>
         <th><span class="fas fa-phone"></span> Téléphone</th>
         <td>{{ tuteur.telephone }}</td>

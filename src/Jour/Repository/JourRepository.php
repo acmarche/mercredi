@@ -110,7 +110,7 @@ final class JourRepository extends ServiceEntityRepository
     /**
      * @return Jour[]
      */
-    public function findPedagogiqueByDateGreatherOrEqual(DateTimeInterface $dateTime, Enfant $enfant): array
+    public function findPedagogiqueByDateGreatherOrEqualAndNotRegister(DateTimeInterface $dateTime, Enfant $enfant): array
     {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
@@ -122,13 +122,21 @@ final class JourRepository extends ServiceEntityRepository
     /**
      * @return Jour[]
      */
-    public function findJourByDateGreatherOrEqual(DateTimeInterface $dateTime, Enfant $enfant): array
+    public function findJourNotPedagogiqueByDateGreatherOrEqualAndNotRegister(DateTimeInterface $dateTime, Enfant $enfant): array
     {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->andWhere('jour.pedagogique = 0')
             ->getQuery()->getResult();
+    }
+
+    public function getQlJourByDateGreatherOrEqualAndNotRegister( Enfant $enfant,DateTimeInterface $dateTime): QueryBuilder
+    {
+        return $this->getQbDaysNotRegisteredByEnfant($enfant)
+            ->andWhere('jour.date_jour >= :date')
+            ->setParameter('date', $dateTime->format('Y-m-d').'%')
+            ->andWhere('jour.pedagogique = 0');
     }
 
     /**

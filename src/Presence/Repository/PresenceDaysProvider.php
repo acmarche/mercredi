@@ -25,10 +25,10 @@ final class PresenceDaysProvider implements PresenceDaysProviderInterface
     public function getAllDaysToSubscribe(Enfant $enfant): array
     {
         $deadLineDatePresence = $this->presenceUtils->getDeadLineDatePresence();
-        $jours = $this->jourRepository->findJourByDateGreatherOrEqual($deadLineDatePresence, $enfant);
+        $jours = $this->jourRepository->findJourNotPedagogiqueByDateGreatherOrEqualAndNotRegister($deadLineDatePresence, $enfant);
 
         $deadLineDatePedagogique = $this->presenceUtils->getDeadLineDatePedagogique();
-        $pedagogiques = $this->jourRepository->findPedagogiqueByDateGreatherOrEqual($deadLineDatePedagogique, $enfant);
+        $pedagogiques = $this->jourRepository->findPedagogiqueByDateGreatherOrEqualAndNotRegister($deadLineDatePedagogique, $enfant);
 
         $all = array_merge($jours, $pedagogiques);
 

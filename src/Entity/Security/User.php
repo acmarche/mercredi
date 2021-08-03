@@ -15,6 +15,7 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteursTrait;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -77,6 +78,21 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
         $this->tuteurs = new ArrayCollection();
         $this->ecoles = new ArrayCollection();
         $this->animateurs = new ArrayCollection();
+    }
+
+    /**
+     * @param object|Tuteur| $object
+     * @return static
+     */
+    public static function newFromObject(object $object): self
+    {
+        $user = new self();
+        $user->setNom($object->getNom());
+        $user->setPrenom($object->getPrenom());
+        $user->setEmail($object->getEmail());
+        $user->setTelephone($object->getTelephone());
+
+        return $user;
     }
 
     public function __toString()

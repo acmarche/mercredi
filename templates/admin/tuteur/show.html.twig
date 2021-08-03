@@ -23,13 +23,6 @@
 
             {% include '@AcMarcheMercrediAdmin/tuteur/_actions.html.twig' %}
 
-            <div class="m-2">
-                <strong>Compte utilisateur: </strong>
-                {% for user in tuteur.users %}
-                    <a href="{{ path('mercredi_admin_user_show', {'id': user.id}) }}">{{ user }}</a>
-                {% endfor %}
-            </div>
-
             <div class="row">
                 <div class="col-6">
                     {% include '@AcMarcheMercrediAdmin/tuteur/_identite.html.twig' %}
