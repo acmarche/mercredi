@@ -29,13 +29,15 @@ final class TuteurRepository extends ServiceEntityRepository
      *
      * @return Tuteur[]
      */
-    public function search(?string $keyword): array
+    public function search(?string $keyword, bool $archived = false): array
     {
         return $this->createQueryBuilder('tuteur')
             ->leftJoin('tuteur.relations', 'relations', 'WITH')
             ->addSelect('relations')
             ->andWhere('tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%')
+            ->andwhere('tuteur.archived = :archive')
+            ->setParameter('archive', $archived)
             ->addOrderBy('tuteur.nom', 'ASC')
             ->getQuery()->getResult();
     }
@@ -81,6 +83,18 @@ final class TuteurRepository extends ServiceEntityRepository
     public function findAllOrderByNom(): array
     {
         return $this->createQueryBuilder('tuteur')
+            ->orderBy('tuteur.nom')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Tuteur[]
+     */
+    public function findAllActif(): array
+    {
+        return $this->createQueryBuilder('tuteur')
+            ->andWhere('tuteur.archived = 0')
             ->orderBy('tuteur.nom')
             ->getQuery()
             ->getResult();

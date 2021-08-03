@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Notification\Mailer;
 
+use AcMarche\Mercredi\Entity\Tuteur;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -32,12 +33,13 @@ final class NotificationMailer
     }
 
     /**
-     * @param array $enfants
+     * @param array|Enfant[] $enfants
      * @throws TransportExceptionInterface
      */
     public function sendMessagEnfantsOrphelins(array $enfants): void
     {
-        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
+        ) : 'nomail@domain.be';
         $templatedEmail = (new TemplatedEmail())
             ->from($email)
             ->to($email)
@@ -46,6 +48,28 @@ final class NotificationMailer
             ->context(
                 [
                     'enfants' => $enfants,
+                ]
+            );
+
+        $this->sendMail($templatedEmail);
+    }
+
+    /**
+     * @param array|Tuteur[] $tuteurs
+     * @throws TransportExceptionInterface
+     */
+    public function sendMessagTuteurArchived(array $tuteurs): void
+    {
+        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
+        ) : 'nomail@domain.be';
+        $templatedEmail = (new TemplatedEmail())
+            ->from($email)
+            ->to($email)
+            ->subject('Les tuteurs ont été archivés')
+            ->textTemplate('@AcMarcheMercredi/front/mail/_mail_tuteurs_archived.html.twig')
+            ->context(
+                [
+                    'tuteurs' => $tuteurs,
                 ]
             );
 

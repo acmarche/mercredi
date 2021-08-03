@@ -2,6 +2,7 @@
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Authenticator\MercrediAuthenticator;
+use AcMarche\Mercredi\Security\Authenticator\MercrediLdapAuthenticator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Ldap\LdapInterface;
 
@@ -24,15 +25,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]
     );
 
-    $main = [
-        'provider' => 'mercredi_user_provider',
-        'custom_authenticator' => MercrediAuthenticator::class,
-        'logout' => ['path' => 'app_logout'],
-    ];
+    $authenticators = [MercrediAuthenticator::class];
 
     if (interface_exists(LdapInterface::class)) {
+        $authenticators[] = MercrediLdapAuthenticator::class;
         $main['form_login_ldap'] = [];
     }
+
+    $main = [
+        'provider' => 'mercredi_user_provider',
+        'custom_authenticator' => $authenticators,
+        'logout' => ['path' => 'app_logout'],
+        'form_login' => [],
+        'entry_point' => 'form_login',
+    ];
 
     $containerConfigurator->extension(
         'security',

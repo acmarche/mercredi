@@ -3,11 +3,14 @@
 
 namespace AcMarche\Mercredi\Security\Authenticator;
 
+use AcMarche\Mercredi\Parameter\Option;
+use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -25,9 +28,10 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  * @see UserCheckerListener::postCheckCredentials
  * @see UserProviderListener::checkPassport
  * @see CheckCredentialsListener
+ * @see CheckLdapCredentialsListener
  * bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main
  */
-class MercrediAuthenticator extends AbstractLoginFormAuthenticator
+class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
@@ -58,8 +62,17 @@ class MercrediAuthenticator extends AbstractLoginFormAuthenticator
         $badges =
             [
                 new CsrfTokenBadge('authenticate', $token),
-                new PasswordUpgradeBadge($password, $this->userRepository),
+                new PasswordUpgradeBadge($password, $this->userRepository),//SelfValidatingPassport?
             ];
+
+        $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
+        $badges[] = new LdapBadge(
+            LdapMercredi::class,
+            $this->parameterBag->get(Option::LDAP_DN),
+            $this->parameterBag->get(Option::LDAP_USER),
+            $this->parameterBag->get(Option::LDAP_PASSWORD),
+            $query
+        );
 
         return new Passport(
             new UserBadge($email),

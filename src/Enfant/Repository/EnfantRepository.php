@@ -4,14 +4,14 @@ namespace AcMarche\Mercredi\Enfant\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
-use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Enfant|null find($id, $lockMode = null, $lockVersion = null)
@@ -33,10 +33,7 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findAllActif(): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder();
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
-        return $queryBuilder->getQuery()->getResult();
+        return $this->getNotArchivedQueryBuilder()->getQuery()->getResult();
     }
 
     /**
@@ -54,8 +51,6 @@ final class EnfantRepository extends ServiceEntityRepository
             $queryBuilder->andWhere('enfant.archived = 0');
         }
 
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -65,14 +60,9 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findByEcoles(iterable $ecoles): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
-            ->addSelect('relations', 'annee_scolaire')
+        return $this->getNotArchivedQueryBuilder()
             ->andWhere('enfant.ecole IN (:ecoles)')
-            ->setParameter('ecoles', $ecoles);
-
-        return $this->addOrderByNameQueryBuilder($queryBuilder)
+            ->setParameter('ecoles', $ecoles)
             ->getQuery()->getResult();
     }
 
@@ -82,16 +72,9 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findByEcolesForEcole(iterable $ecoles): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
-            ->addSelect('relations', 'annee_scolaire')
+        return $this->getNotArchivedQueryBuilder()
             ->andWhere('enfant.ecole IN (:ecoles)')
-            ->setParameter('ecoles', $ecoles);
-
-        $queryBuilder->andWhere('enfant.accueil_ecole = 1');
-
-        return $this->addOrderByNameQueryBuilder($queryBuilder)
+            ->setParameter('ecoles', $ecoles)->andWhere('enfant.accueil_ecole = 1')
             ->getQuery()->getResult();
     }
 
@@ -102,17 +85,10 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findByEcolesForInscription(Ecole $ecole): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
-            ->addSelect('relations', 'annee_scolaire')
+        return $this->getNotArchivedQueryBuilder()
             ->andWhere('enfant.ecole = :ecole')
             ->setParameter('ecole', $ecole)
-            ->andWhere('relations IS NOT NULL');
-
-        $queryBuilder->andWhere('enfant.accueil_ecole = 1');
-
-        return $this->addOrderByNameQueryBuilder($queryBuilder)
+            ->andWhere('relations IS NOT NULL')->andWhere('enfant.accueil_ecole = 1')
             ->getQuery()->getResult();
     }
 
@@ -121,12 +97,9 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findOrphelins()
     {
-        $queryBuilder = $this->getOrCreateQueryBuilder()
-            ->andWhere('enfant.relations IS EMPTY');
-
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
-        return $queryBuilder->getQuery()->getResult();
+        return $this->getOrCreateQueryBuilder()
+            ->andWhere('enfant.relations IS EMPTY')
+            ->getQuery()->getResult();
     }
 
     /**
@@ -134,12 +107,7 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $anneeScolaire, ?bool $archived): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
-            ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire');
+        $queryBuilder = $this->getOrCreateQueryBuilder();
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
@@ -167,20 +135,13 @@ final class EnfantRepository extends ServiceEntityRepository
                 break;
         }
 
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
         return $queryBuilder->getQuery()->getResult();
     }
 
 
     public function searchForEcole(iterable $ecoles, ?string $nom, bool $strict = true)
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
-            ->leftJoin('enfant.relations', 'relations', 'WITH')
-            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire');
+        $queryBuilder = $this->getNotArchivedQueryBuilder();
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
@@ -194,8 +155,6 @@ final class EnfantRepository extends ServiceEntityRepository
             $queryBuilder->andWhere('enfant.accueil_ecole = 1');
         }
 
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -205,9 +164,7 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findAllForAnimateur(Animateur $animateur): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.presences', 'presences', 'WITH')
-            ->addSelect('presences');
+        $queryBuilder = $this->getNotArchivedQueryBuilder();
 
         $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
 
@@ -217,12 +174,9 @@ final class EnfantRepository extends ServiceEntityRepository
 
         $presences = $this->getEntityManager()->getRepository(Presence::class)->findPresencesByJours($jours);
 
-        $queryBuilder->andWhere('presences IN (:presences)')
-            ->setParameter('presences', $presences);
-
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->andWhere('presences IN (:presences)')
+            ->setParameter('presences', $presences)->getQuery()->getResult();
     }
 
     /**
@@ -233,9 +187,7 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function searchForAnimateur(Animateur $animateur, ?string $nom = null, ?Jour $jour = null): array
     {
-        $queryBuilder = $this->addNotArchivedQueryBuilder()
-            ->leftJoin('enfant.presences', 'presences', 'WITH')
-            ->addSelect('presences');
+        $queryBuilder = $this->getNotArchivedQueryBuilder();
 
         if ($jour !== null) {
             $jours = [$jour];
@@ -253,32 +205,26 @@ final class EnfantRepository extends ServiceEntityRepository
                 ->setParameter('keyword', '%'.$nom.'%');
         }
 
-        $queryBuilder->andWhere('presences IN (:presences)')
-            ->setParameter('presences', $presences);
-
-        $this->addOrderByNameQueryBuilder($queryBuilder);
-
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->andWhere('presences IN (:presences)')
+            ->setParameter('presences', $presences)->getQuery()->getResult();
     }
 
-    private function getOrCreateQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
+    private function getOrCreateQueryBuilder(): QueryBuilder
     {
-        if ($qb !== null) {
-            return $qb;
-        }
-
-        return $this->createQueryBuilder('enfant');
-    }
-
-    private function addOrderByNameQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
-    {
-        return $this->getOrCreateQueryBuilder($qb)
+        return $this->createQueryBuilder('enfant')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('enfant.relations', 'relations', 'WITH')
+            ->leftJoin('enfant.presences', 'presences', 'WITH')
+            ->addSelect('ecole', 'relations', 'sante_fiche', 'annee_scolaire', 'presences')
             ->addOrderBy('enfant.nom', 'ASC');
     }
 
-    private function addNotArchivedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
+    private function getNotArchivedQueryBuilder(): QueryBuilder
     {
-        return $this->getOrCreateQueryBuilder($qb)
+        return $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.archived = 0');
     }
 }

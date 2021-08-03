@@ -1,0 +1,6 @@
+Les tuteurs suivant on été archivés car ils n'ont plus d'enfants actifs
+
+{% for tuteur in tuteurs %}
+    {{ tuteur }}
+    {{ absolute_url(path('mercredi_admin_tuteur_show', {'id': tuteur.id})) }}
+{% endfor %}

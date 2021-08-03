@@ -51,7 +51,7 @@ final class TuteurController extends AbstractController
             $data = $form->getData();
             $this->searchHelper->saveSearch(SearchHelper::TUTEUR_LIST, $data);
             $search = true;
-            $tuteurs = $this->tuteurRepository->search($data['nom']);
+            $tuteurs = $this->tuteurRepository->search($data['nom'], $data['archived']);
         }
 
         return $this->render(
