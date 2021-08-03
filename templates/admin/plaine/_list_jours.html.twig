@@ -3,7 +3,7 @@
     {% for plaineJour in plaine.plaineJours %}
     <li class="list-group-item">
         <a href="{{ path('mercredi_admin_plaine_jour_show', {'id': plaineJour.id}) }}">
-            {{ plaineJour.jour.dateJour|format_date('full') }}
+            {{ plaineJour.jour.dateJour|format_date('long') }}
         </a>
         {% endfor %}
     </li>

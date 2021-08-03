@@ -7,10 +7,10 @@
     </tr>
     </thead>
     <tbody>
-    {% for groupe in plaine.plaineGroupes %}
+    {% for plaineGroupe in plaine.plaineGroupes %}
         <tr>
-            <td>{{ groupe.groupeScolaire.nom }}</td>
-            <td>{{ groupe.inscriptionMaximum }}</td>
+            <td>{{ plaineGroupe.groupeScolaire.nom }}</td>
+            <td>{{ datas[plaineGroupe.groupeScolaire.id]['enfants']|length}} /{{ groupe.inscriptionMaximum }}</td>
         </tr>
     {% endfor %}
     </tbody>

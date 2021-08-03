@@ -13,6 +13,7 @@ use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,17 +31,20 @@ final class PlaineController extends AbstractController
     private PlainePresenceRepository $plainePresenceRepository;
     private GroupeScolaireRepository $groupeScolaireRepository;
     private PlaineHandler $plaineHandler;
+    private GroupingInterface $grouping;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         PlainePresenceRepository $plainePresenceRepository,
         GroupeScolaireRepository $groupeScolaireRepository,
-        PlaineHandler $plaineHandler
+        PlaineHandler $plaineHandler,
+        GroupingInterface $grouping
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->groupeScolaireRepository = $groupeScolaireRepository;
         $this->plaineHandler = $plaineHandler;
+        $this->grouping = $grouping;
     }
 
     /**
@@ -111,12 +115,19 @@ final class PlaineController extends AbstractController
     public function show(Plaine $plaine): Response
     {
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
+        $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+        dump($data);
+
+        array_map(function ($groupe){
+            dump($groupe->getGroupeScolaire()->getId());
+        }, $plaine->getPlaineGroupes()->toArray());
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',
             [
                 'plaine' => $plaine,
                 'enfants' => $enfants,
+                'datas' => $data,
             ]
         );
     }
