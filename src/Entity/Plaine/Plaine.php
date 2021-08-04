@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
+use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -73,8 +74,6 @@ class Plaine implements SluggableInterface
 
     public function getFirstDay(): Jour
     {
-        $first = $this->plaine_jours[0];
-
-        return $first->getJour();
+        return PlaineUtils::extractJoursFromPlaine($this)[0];
     }
 }

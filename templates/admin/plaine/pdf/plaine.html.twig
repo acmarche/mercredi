@@ -26,6 +26,17 @@
     </style>
 </head>
 <body>
+{% for data in datas %}
+    {% set groupe = data.groupe %}
+    {% set enfants = data.enfants %}
+    <h3>{{ plaine }} {{ groupe.nom | title }}</h3>
+
+    {% if plaine.remarque %}
+        <p class="text-muted">
+            {{ plaine.remarque | nl2br }}
+        </p>
+    {% endif %}
+
     <table class="table table-bordered table-hover" autosize="1">
         <thead>
         <tr>
@@ -36,17 +47,15 @@
         </tr>
         </thead>
         <tbody>
-        {% for data in datas %}
-            {% set enfant = data.enfant %}
-            {% set tuteur = data.tuteur %}
-            {% set jours = data.jours %}
+        {% for row in enfants %}
+            {% set enfant = row.enfant %}
+            {% set tuteur = row.tuteur %}
+            {% set jours = row.jours %}
             <tr>
                 {% set absent = '' %}
-                {% set jour = jours | first %}
-                {% set age = enfant.age(jour.datejour) %}
-                {% set agecomplet = enfant.age(jour.datejour, true) %}
+                {% set age = enfant.age(firstDay, true) %}
                 <td style="width: 45%;">
-                    <strong>{{ enfant }}</strong> ({{ agecomplet }})
+                    <strong>{{ enfant }}</strong> ({{ age }})
                     <br/>
                     {% include 'plaine/pdf/_coordonnees.html.twig' %}
                 </td>
@@ -67,22 +76,17 @@
         </tbody>
         <tfoot>
         <tr>
-            <td><strong>Nombre d'enfants par jour</strong></td>
+            <td><strong>Nombre d'enfants par jour (moins6/total)</strong></td>
             {% for date in dates %}
                 <td class='text-center'>
-
-                        date.enfantsmoins6  /  date.enfants
-
-                        date.enfants
-
+                    {{ stats[groupe.id][date.id]['moins6'] }} /
+                    {{ stats[groupe.id][date.id]['total'] }}
                 </td>
             {% endfor %}
         </tr>
         </tfoot>
     </table>
-
     <div class="page-breaker"></div>
-
-
+{% endfor %}
 </body>
 </html>

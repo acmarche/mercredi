@@ -19,6 +19,6 @@ final class PlaineUtils
             $jours[] = $plaineJour->getJour();
         }
 
-     return   SortUtils::sortJoursByDateTime($jours);
+        return SortUtils::sortJoursByDateTime($jours);
     }
 }

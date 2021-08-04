@@ -111,6 +111,8 @@ final class ExportController extends AbstractController
     public function plainePdf(Plaine $plaine): Response
     {
         $images = $this->getImagesBase64();
+        $dates = PlaineUtils::extractJoursFromPlaine($plaine);
+        $firstDay = $plaine->getFirstDay()->getDateJour();
 
         $presences = $this->presenceRepository->findPresencesByPlaine($plaine);
         /**
@@ -118,25 +120,48 @@ final class ExportController extends AbstractController
          * jours presents
          */
         $data = [];
+        $dataEnfants = [];
+        $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
+        $groupeForce->setNom('Non classé');
+        $stats = [];
+        foreach ($plaine->getPlaineGroupes() as $plaineGroupe) {
+            foreach ($dates as $date) {
+                $stats[$plaineGroupe->getGroupeScolaire()->getId()][$date->getId()]['total'] = 0;
+                $stats[$plaineGroupe->getGroupeScolaire()->getId()][$date->getId()]['moins6'] = 0;
+            }
+        }
         foreach ($presences as $presence) {
             $enfant = $presence->getEnfant();
             $tuteur = $presence->getTuteur();
             $jour = $presence->getJour();
             $enfantId = $enfant->getId();
-            $data[$enfantId]['enfant'] = $enfant;
-            $data[$enfantId]['tuteur'] = $tuteur;
-            $data[$enfantId]['jours'][] = $jour;
+            $age = $enfant->getAge($firstDay, true);
+            $groupeScolaire = $this->grouping->findGroupeScolaireByAge($age);
+            if (!$groupeScolaire) {
+                $groupeScolaire = $groupeForce;
+            }
+            $stats[$groupeScolaire->getId()][$jour->getId()]['total'] += 1;
+            if ($age < 6) {
+                $stats[$groupeScolaire->getId()][$jour->getId()]['moins6'] += 1;
+            }
+            $dataEnfants[$enfantId]['enfant'] = $enfant;
+            $dataEnfants[$enfantId]['tuteur'] = $tuteur;
+            $dataEnfants[$enfantId]['jours'][] = $jour;
+            $data[$groupeScolaire->getId()]['groupe'] = $groupeScolaire;
+            $data[$groupeScolaire->getId()]['enfants'] = $dataEnfants;
+            $data[$groupeScolaire->getId()]['stats'] = $stats;
         }
+        dump($stats);
         dump($data);
-
-        $dates = PlaineUtils::extractJoursFromPlaine($plaine);
 
         $html = $this->renderView(
             '@AcMarcheMercrediAdmin/plaine/pdf/plaine.html.twig',
             [
                 'plaine' => $plaine,
+                'firstDay' => $firstDay,
                 'dates' => $dates,
                 'datas' => $data,
+                'stats' => $stats,
                 'images' => $images,
             ]
         );
