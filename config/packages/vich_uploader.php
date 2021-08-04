@@ -27,6 +27,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'namer' => 'vich_uploader.namer_uniqid',
                     'inject_on_load' => false,
                 ],
+                'mercredi_groupe' => [
+                    'uri_prefix' => '/files/groupes',
+                    'upload_destination' => '%kernel.project_dir%/public/files/groupes',
+                    'namer' => 'vich_uploader.namer_uniqid',
+                    'inject_on_load' => false,
+                ],
             ],
         ]
     );

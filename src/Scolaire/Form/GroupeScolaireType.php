@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 final class GroupeScolaireType extends AbstractType
 {
@@ -24,6 +25,7 @@ final class GroupeScolaireType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Groupe pour les plaines ?',
+                    'help' => 'Groupe utilisé pour les plaines',
                     'required' => false,
                 ]
             )
@@ -65,7 +67,17 @@ final class GroupeScolaireType extends AbstractType
             )
             ->add('ordre', IntegerType::class, [
                 'label' => 'Ordre d\'affichage',
-            ]);
+                'help' => 'Ordre dans le listing',
+            ])
+            ->add(
+                'file',
+                VichFileType::class,
+                [
+                    'label' => 'Fichier',
+                    'help' => 'Uniquement images ou pdf. Fichier qui sera envoyé aux parents pour les modalités',
+                    'required' => false,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

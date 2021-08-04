@@ -10,7 +10,7 @@
 
             {% include '@AcMarcheMercrediAdmin/groupe_scolaire/_actions.html.twig' %}
             <div class="alert alert-info">
-                Les âges sont utilisés pour les plaines.<br />
+                Les âges sont utilisés pour les plaines.<br/>
                 Les années scolaires pour les accueils
             </div>
 
@@ -35,6 +35,18 @@
                     <td>{{ groupe_scolaire.isPlaine ? 'Oui' : 'non' }}</td>
                 </tr>
             </table>
+
+            {% if groupe_scolaire.fileName %}
+                <h4 class="text-success">Document joint</h4>
+                {% if groupe_scolaire.mimeType|u.containsAny('image') %}
+                    <a href="{{ vich_uploader_asset(groupe_scolaire,'file') }}">
+                        <img src="{{ vich_uploader_asset(groupe_scolaire, 'file') | imagine_filter('mercredi_thumb') }}" alt="img" class="img-thumbnail mb-3"/>
+                    </a>
+                {% else %}
+                    <a href="{{ vich_uploader_asset(groupe_scolaire,'file') }}">Télécharger</a>
+                    <br /><br />
+                {% endif %}
+            {% endif %}
 
             <h4 class="text-success">Années scolaires</h4>
             {{ groupe_scolaire.anneesScolaires  | join(',') }}
