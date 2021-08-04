@@ -7,20 +7,8 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 
 trait OrganisationPropertyInitTrait
 {
-    /**
-     * @var OrganisationRepository
-     */
-    private $organisationRepository;
-    /**
-     * @var Organisation|null
-     */
-    private $organisation;
-
-    public function __construct(
-        OrganisationRepository $organisationRepository
-    ) {
-        $this->organisationRepository = $organisationRepository;
-    }
+    private OrganisationRepository $organisationRepository;
+    private ?Organisation $organisation;
 
     /**
      * @required

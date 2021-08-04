@@ -83,7 +83,7 @@ final class MessageController extends AbstractController
             }
 
             if ($plaine) {
-                $presences = $this->presenceRepository->findByPlaine( $plaine);
+                $presences = $this->presenceRepository->findByPlaine($plaine);
                 $tuteurs[] = PresenceUtils::extractTuteurs($presences);
             }
 
@@ -214,7 +214,7 @@ final class MessageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->messageHandler->handle($message);
+            $this->messageHandler->handleFromPlaine($plaine, $message);
 
             $this->addFlash('success', 'Le message a bien été envoyé');
 

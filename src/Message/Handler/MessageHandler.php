@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Message\Handler;
 
 use AcMarche\Mercredi\Entity\Message;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Message\Factory\EmailFactory;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
@@ -43,5 +44,24 @@ final class MessageHandler
 
         $this->messageRepository->persist($message);
         $this->messageRepository->flush();
+    }
+
+    public function handleFromPlaine(Plaine $plaine, Message $message): void
+    {
+        $templatedEmail = $this->emailFactory->createForPlaine($plaine, $message);
+
+        foreach ($message->getDestinataires() as $addressEmail) {
+            $templatedEmail->to($addressEmail);
+
+            try {
+                $this->sendMail($templatedEmail);
+            } catch (TransportExceptionInterface $e) {
+                $this->flashBag->add('danger', 'Erreur pour l\'email '.$addressEmail.': '.$e->getMessage());
+            }
+            break;
+        }
+
+      //  $this->messageRepository->persist($message);
+     //   $this->messageRepository->flush();
     }
 }
