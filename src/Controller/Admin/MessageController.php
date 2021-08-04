@@ -3,12 +3,14 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Message\Factory\MessageFactory;
 use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
 use AcMarche\Mercredi\Message\Handler\MessageHandler;
+use AcMarche\Mercredi\Message\Repository\MessageRepository;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -38,10 +40,12 @@ final class MessageController extends AbstractController
     private MessageFactory $messageFactory;
     private MessageHandler $messageHandler;
     private PresenceHandler $presenceHandler;
+    private MessageRepository $messageRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
         RelationRepository $relationRepository,
+        MessageRepository $messageRepository,
         SearchHelper $searchHelper,
         TuteurUtils $tuteurUtils,
         MessageFactory $messageFactory,
@@ -55,6 +59,7 @@ final class MessageController extends AbstractController
         $this->messageFactory = $messageFactory;
         $this->messageHandler = $messageHandler;
         $this->presenceHandler = $presenceHandler;
+        $this->messageRepository = $messageRepository;
     }
 
     /**
@@ -261,6 +266,34 @@ final class MessageController extends AbstractController
             [
                 'emails' => $emails,
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("archive", name="mercredi_message_archive")
+     */
+    public function archive()
+    {
+        $messages = $this->messageRepository->findall();
+
+        return $this->render(
+            '@AcMarcheMercredi/admin/message/archive.html.twig',
+            [
+                'messages' => $messages,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/show/{id}", name="mercredi_message_show", methods={"GET"})
+     */
+    public function show(Message $message)
+    {
+        return $this->render(
+            '@AcMarcheMercredi/admin/message/show.html.twig',
+            [
+                'message' => $message,
             ]
         );
     }

@@ -61,7 +61,7 @@ final class MessageHandler
             break;
         }
 
-      //  $this->messageRepository->persist($message);
-     //   $this->messageRepository->flush();
+        $this->messageRepository->persist($message);
+        $this->messageRepository->flush();
     }
 }
