@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class PlaineRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Plaine::class);
@@ -29,18 +32,16 @@ final class PlaineRepository extends ServiceEntityRepository
             ->leftJoin('plaine.plaine_jours', 'plaine_jours', 'WITH')
             ->leftJoin('plaine_jours.jour', 'jour', 'WITH')
             ->addSelect('plaine_jours', 'jour')
-            ->orderBy('jour.date_jour', 'DESC');
+            ->orderBy('jour.date_jour', 'DESC')
+            ->andWhere('plaine.archived = :archive')
+            ->setParameter('archive', $archived);
 
         if ($nom) {
             $qb->andWhere('plaine.nom LIKE :nom')
                 ->setParameter('nom', '%'.$nom.'%');
         }
 
-        $qb->andWhere('plaine.archived = :archive')
-            ->setParameter('archive', $archived);
-
-        return $qb->getQuery()
-            ->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -75,20 +76,5 @@ final class PlaineRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('plaine')
             ->orderBy('plaine.nom', 'ASC');
-    }
-
-    public function remove(Plaine $plaine): void
-    {
-        $this->_em->remove($plaine);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Plaine $plaine): void
-    {
-        $this->_em->persist($plaine);
     }
 }

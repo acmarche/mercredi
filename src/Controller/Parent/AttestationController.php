@@ -29,7 +29,7 @@ final class AttestationController extends AbstractController
 
     /**
      * @Route("/{year}/{uuid}", name="mercredi_parent_attestation")
-     * @IsGranted("ROLE_MERCREDI_PARENT")
+     * @IsGranted("enfant_show", subject="enfant")
      */
     public function default(int $year, Enfant $enfant): Response
     {

@@ -34,7 +34,6 @@ class Plaine implements SluggableInterface
     /**
      * @var PlaineJour[]
      * @ORM\OneToMany(targetEntity=PlaineJour::class, mappedBy="plaine", cascade={"remove"})
-     * @ORM\OrderBy({"jour" = "ASC"})
      */
     private iterable $plaine_jours;
 

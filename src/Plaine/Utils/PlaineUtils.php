@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Plaine\Utils;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Utils\SortUtils;
 
 final class PlaineUtils
 {
@@ -18,6 +19,6 @@ final class PlaineUtils
             $jours[] = $plaineJour->getJour();
         }
 
-        return $jours;
+     return   SortUtils::sortJoursByDateTime($jours);
     }
 }

@@ -167,7 +167,7 @@ final class PlainePresenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->plainePresenceHandler->handleEditPresence();
+            $this->presenceRepository->flush();
 
             $this->dispatchMessage(new PresenceUpdated($presence->getId()));
 
@@ -199,7 +199,7 @@ final class PlainePresenceController extends AbstractController
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
         $plainePresencesDto = new PlainePresencesDto($plaine, $enfant, $jours);
 
-        $presences = $this->plainePresenceHandler->findPresencesByPlaineEnfant($plaine, $enfant);
+        $presences = $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
         $plainePresencesDto->setJours($currentJours);
 
@@ -251,14 +251,15 @@ final class PlainePresenceController extends AbstractController
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
-            $presence = $this->plainePresenceHandler->findPresence($presenceId);
+            $presence = $this->presenceRepository->find($presenceId);
             if (null === $presence) {
                 $this->addFlash('danger', 'Présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
             $enfant = $presence->getEnfant();
-            $this->plainePresenceHandler->remove($presence);
+            $this->presenceRepository->remove($presence);
+            $this->presenceRepository->flush();
 
             $this->addFlash('success', 'La présence à bien été supprimée');
         }

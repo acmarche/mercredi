@@ -66,7 +66,7 @@ final class PlaineController extends AbstractController
 
         $plaines = $this->plaineRepository->search($nom, $archived);
         array_map(function ($plaine) {
-            $plaine->enfants = $this->plainePresenceRepository->findEnfantsByJour($plaine);
+            $plaine->enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
         }, $plaines);
 
         return $this->render(
@@ -115,11 +115,8 @@ final class PlaineController extends AbstractController
     public function show(Plaine $plaine): Response
     {
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
-        $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
 
-        array_map(function ($groupe){
-            dump($groupe->getGroupeScolaire()->getId());
-        }, $plaine->getPlaineGroupes()->toArray());
+        $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',

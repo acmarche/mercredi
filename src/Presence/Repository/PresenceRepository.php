@@ -207,6 +207,7 @@ final class PresenceRepository extends ServiceEntityRepository
     {
         return $this->createQBl()
             ->andWhere('presence.jour = :jour')
+            ->addOrderBy('enfant.nom')
             ->setParameter('jour', $jour)
             ->getQuery()->getResult();
     }

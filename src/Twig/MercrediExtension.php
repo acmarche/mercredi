@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Twig;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 final class MercrediExtension extends AbstractExtension
 {
@@ -34,6 +35,12 @@ final class MercrediExtension extends AbstractExtension
         ];
     }
 
+    public function getFunctions()
+    {
+        return [new TwigFunction('inIds', fn(int $number, array $objects) => $this->inIds($number, $objects))];
+    }
+
+
     public function absenceFilter($number): string
     {
         return MercrediConstantes::getAbsenceTxt($number);
@@ -42,5 +49,14 @@ final class MercrediExtension extends AbstractExtension
     public function monthFr(int $number)
     {
         return isset(self::MONTHS[$number]) ? self::MONTHS[$number] : $number;
+    }
+
+    private function inIds(int $number, array $objects): bool
+    {
+        $ids = array_map(function ($object) {
+            return $object->getId();
+        }, $objects);
+
+        return in_array($number, $ids);
     }
 }

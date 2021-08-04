@@ -28,30 +28,6 @@ final class PlainePresenceHandler
         $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
     }
 
-    public function findPresence(int $presenceId): ?Presence
-    {
-        return $this->presenceRepository->find($presenceId);
-    }
-
-    /**
-     * @return Presence[]
-     */
-    public function findPresencesByPlaineEnfant(Plaine $plaine, Enfant $enfant): array
-    {
-        return $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
-    }
-
-    public function remove(Presence $presence): void
-    {
-        $this->presenceRepository->remove($presence);
-        $this->presenceRepository->flush();
-    }
-
-    public function handleEditPresence(): void
-    {
-        $this->presenceRepository->flush();
-    }
-
     public function handleEditPresences(
         Tuteur $tuteur,
         Enfant $enfant,
@@ -78,7 +54,7 @@ final class PlainePresenceHandler
 
     public function removeEnfant(Plaine $plaine, Enfant $enfant): void
     {
-        $presences = $this->findPresencesByPlaineEnfant($plaine, $enfant);
+        $presences = $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
         foreach ($presences as $presence) {
             $this->presenceRepository->remove($presence);
         }
