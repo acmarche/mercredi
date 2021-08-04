@@ -40,7 +40,6 @@ final class ScolaireUtils
     }
 
     /**
-     * todo groupe forcer
      * @param Enfant $enfant
      * @return GroupeScolaire
      */
@@ -50,12 +49,6 @@ final class ScolaireUtils
             return null;
         }
 
-        $groupe = $this->groupeScolaireRepository->findGroupePlaineByAge($age);
-        if (!$groupe) {
-            $groupes = $this->groupeScolaireRepository->findAllForPlaineOrderByNom();
-            $groupe = $groupes[0];
-        }
-
-        return $groupe;
+       return $this->groupeScolaireRepository->findGroupePlaineByAge($age);
     }
 }

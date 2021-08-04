@@ -116,7 +116,6 @@ final class PlaineController extends AbstractController
     {
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
         $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
-        dump($data);
 
         array_map(function ($groupe){
             dump($groupe->getGroupeScolaire()->getId());

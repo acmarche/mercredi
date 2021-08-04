@@ -40,14 +40,18 @@ class GroupingMarche implements GroupingInterface
         $groups = [];
         $jour = $plaine->getFirstDay();
         $date = $jour->getDateJour();
+        $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
+        $groupeForce->setNom('Non classé');
+
         foreach ($enfants as $enfant) {
             $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAge($enfant->getAge($date, true));
+            if (!$groupe) {
+                $groupe = $groupeForce;
+            }
             $groups[$groupe->getId()]['groupe'] = $groupe;
             $groups[$groupe->getId()]['enfants'][] = $enfant;
         }
 
-        $groups = SortUtils::sortGroupesScolairesByOrder($groups);
-
-        return $groups;
+        return SortUtils::sortGroupesScolairesByOrder($groups);
     }
 }

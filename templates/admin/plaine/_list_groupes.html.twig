@@ -8,9 +8,13 @@
     </thead>
     <tbody>
     {% for plaineGroupe in plaine.plaineGroupes %}
+        {% set inscrits = 0 %}
+        {% if datas[plaineGroupe.groupeScolaire.id] is defined %}
+            {% set inscrits = datas[plaineGroupe.groupeScolaire.id]['enfants']|length %}
+        {% endif %}
         <tr>
             <td>{{ plaineGroupe.groupeScolaire.nom }}</td>
-            <td>{{ datas[plaineGroupe.groupeScolaire.id]['enfants']|length}} /{{ groupe.inscriptionMaximum }}</td>
+            <td>{{ inscrits }} /{{ plaineGroupe.inscriptionMaximum }}</td>
         </tr>
     {% endfor %}
     </tbody>

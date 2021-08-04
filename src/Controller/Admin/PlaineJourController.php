@@ -2,22 +2,19 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
-use AcMarche\Mercredi\Plaine\Repository\PlaineJourRepository;
-use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
-use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
-use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use AcMarche\Mercredi\Plaine\Form\PlaineJourType;
 use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,8 +27,6 @@ final class PlaineJourController extends AbstractController
     private EnfantRepository $enfantRepository;
     private PlaineHandler $plaineHandler;
     private PlainePresenceRepository $plainePresenceRepository;
-    private PresenceHandler $presenceHandler;
-    private PresenceUtils $presenceUtils;
     private GroupingInterface $grouping;
 
     public function __construct(
@@ -39,16 +34,12 @@ final class PlaineJourController extends AbstractController
         EnfantRepository $enfantRepository,
         PlaineHandler $plaineHandler,
         PlainePresenceRepository $plainePresenceRepository,
-        PresenceHandler $presenceHandler,
-        PresenceUtils $presenceUtils,
         GroupingInterface $grouping
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->enfantRepository = $enfantRepository;
         $this->plaineHandler = $plaineHandler;
         $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->presenceHandler = $presenceHandler;
-        $this->presenceUtils = $presenceUtils;
         $this->grouping = $grouping;
     }
 
