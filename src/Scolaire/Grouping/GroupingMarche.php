@@ -41,9 +41,14 @@ class GroupingMarche implements GroupingInterface
         $groups = [];
         $jour = $plaine->getFirstDay();
         $date = $jour->getDateJour();
-        $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
-        $groupeForce->setNom('Non classé');
-
+        if ($plaine->getPlaineGroupes()->count() > 0) {
+            $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
+            $groupeForce->setNom('Non classé');
+        }
+        else {
+            $groupeForce = new GroupeScolaire();
+            $groupeForce->setNom('Inexistant');
+        }
         foreach ($enfants as $enfant) {
             $groupe = $this->findGroupeScolaireByAge($enfant->getAge($date, true));
             if (!$groupe) {
@@ -63,6 +68,6 @@ class GroupingMarche implements GroupingInterface
 
     public function findGroupeScolaireByAnneeScolaire(Enfant $enfant): ?GroupeScolaire
     {
-     return   $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
+        return $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
     }
 }

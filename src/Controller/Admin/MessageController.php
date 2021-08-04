@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Message\Factory\MessageFactory;
 use AcMarche\Mercredi\Message\Form\MessageType;
@@ -68,6 +69,7 @@ final class MessageController extends AbstractController
             $data = $form->getData();
             $ecole = $data['ecole'];
             $jour = $data['jour'];
+            $plaine = $data['plaine'];
             $tuteurs = [[]];
 
             if ($jour) {
@@ -80,7 +82,12 @@ final class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if (!$jour && !$ecole) {
+            if ($plaine) {
+                $presences = $this->presenceRepository->findByPlaine( $plaine);
+                $tuteurs[] = PresenceUtils::extractTuteurs($presences);
+            }
+
+            if (!$jour && !$ecole && !$plaine) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
@@ -184,6 +191,43 @@ final class MessageController extends AbstractController
                 'emailuser' => $this->getUser()->getEmail(),
                 'form' => $form->createView(),
                 'emails' => $emails,
+                'tuteurs' => [],
+            ]
+        );
+    }
+
+    /**
+     * @Route("/plaine/{id}", name="mercredi_message_new_plaine")
+     */
+    public function fromPlaine(Request $request, Plaine $plaine): Response
+    {
+        $presences = $this->presenceRepository->findByPlaine($plaine);
+
+        $tuteurs = PresenceUtils::extractTuteurs($presences);
+        $emails = $this->tuteurUtils->getEmails($tuteurs);
+
+        $message = $this->messageFactory->createInstance();
+        $message->setDestinataires($emails);
+
+        $form = $this->createForm(MessageType::class, $message);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->messageHandler->handle($message);
+
+            $this->addFlash('success', 'Le message a bien été envoyé');
+
+            return $this->redirectToRoute('mercredi_message_index');
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/message/new_from_plaine.html.twig',
+            [
+                'emailuser' => $this->getUser()->getEmail(),
+                'form' => $form->createView(),
+                'emails' => $emails,
+                'plaine' => $plaine,
                 'tuteurs' => [],
             ]
         );

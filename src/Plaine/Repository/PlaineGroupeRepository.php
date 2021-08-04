@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,32 +16,11 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class PlaineGroupeRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, PlaineGroupe::class);
-    }
-
-    public function findPlaineOpen(): ?PlaineGroupe
-    {
-        return $this->createQueryBuilder('plaine')
-            ->andWhere('plaine.inscriptionOpen = 1')
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function remove(PlaineGroupe $plaineGroupe): void
-    {
-        $this->_em->remove($plaineGroupe);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(PlaineGroupe $plaineGroupe): void
-    {
-        $this->_em->persist($plaineGroupe);
     }
 
     public function getQbForListing(): QueryBuilder

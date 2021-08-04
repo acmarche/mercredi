@@ -24,7 +24,7 @@ final class PlainePresenceRepository
      */
     public function findEnfantsByPlaine(Plaine $plaine): array
     {
-        $presences = $this->presenceRepository->findPresencesByPlaine($plaine);
+        $presences = $this->presenceRepository->findByPlaine($plaine);
 
         return PresenceUtils::extractEnfants($presences);
     }
@@ -34,7 +34,7 @@ final class PlainePresenceRepository
      */
     public function findEnfantsByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
     {
-        $presences = $this->presenceRepository->findPresencesByPlaineAndTuteur($plaine, $tuteur);
+        $presences = $this->presenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
 
         return PresenceUtils::extractEnfants($presences);
     }
@@ -44,7 +44,7 @@ final class PlainePresenceRepository
      */
     public function findPlainesByEnfant(Enfant $enfant): iterable
     {
-        $presences = $this->presenceRepository->findPlainesByEnfant($enfant);
+        $presences = $this->presenceRepository->findByEnfantAndIsPlaine($enfant);
 
         return PresenceUtils::extractPlainesFromPresences($presences);
     }

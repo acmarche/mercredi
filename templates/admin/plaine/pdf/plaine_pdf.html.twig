@@ -29,7 +29,7 @@
 {% for data in datas %}
     {% set groupe = data.groupe %}
     {% set enfants = data.enfants %}
-    <h3>{{ plaine }} {{ groupe.nom | title }}</h3>
+    <h2 class="text-success">{{ plaine }} {{ groupe.nom | title }}</h2>
 
     {% if plaine.remarque %}
         <p class="text-muted">

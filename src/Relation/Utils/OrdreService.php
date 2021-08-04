@@ -66,7 +66,7 @@ final class OrdreService
 
         $presents = [];
         foreach ($fratries as $fratry) {
-            if (null !== $this->presenceRepository->findPresencesByEnfantAndJour($fratry, $jour)) {
+            if (null !== $this->presenceRepository->findByEnfantAndJour($fratry, $jour)) {
                 $presents[] = $fratry;
             }
         }

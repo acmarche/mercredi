@@ -53,7 +53,7 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findDaysRegisteredByEnfant(Enfant $enfant): array
     {
-        $presences = $this->findPresencesByEnfant($enfant);
+        $presences = $this->findByEnfant($enfant);
         $jours = [];
         foreach ($presences as $presence) {
             $jours[] = $presence->getJour();
@@ -62,7 +62,7 @@ final class PresenceRepository extends ServiceEntityRepository
         return $jours;
     }
 
-    public function findPresencesByEnfantAndJour(Enfant $enfant, Jour $jour): ?Presence
+    public function findByEnfantAndJour(Enfant $enfant, Jour $jour): ?Presence
     {
         return $this->createQBl()
             ->andWhere('presence.enfant = :enfant')
@@ -75,7 +75,7 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPresencesByEnfant(Enfant $enfant): array
+    public function findByEnfant(Enfant $enfant): array
     {
         return $this->createQBl()
             ->addSelect('enfant', 'tuteur', 'jour', 'reduction', 'plaine_jour')
@@ -87,7 +87,21 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPresencesByTuteur(Tuteur $tuteur): array
+    public function findByPlaine(Plaine $plaine): array
+    {
+        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+
+        return $this->createQBl()
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours)
+            ->addOrderBy('enfant.nom')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findByTuteur(Tuteur $tuteur): array
     {
         return $this->createQBl()
             ->andWhere('presence.tuteur = :tuteur')
@@ -96,9 +110,42 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param DateTimeInterface $dateTime mm/YYYY
+     *
      * @return Presence[]
      */
-    public function findPresencesByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
+    public function findByMonth(DateTimeInterface $dateTime): array
+    {
+        $jours = $this->jourRepository->findDaysByMonth($dateTime);
+
+        return $this->createQBl()
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $jours)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findByDay(Jour $jour)
+    {
+        $qb = $this->createQBl()
+            ->andWhere('presence.jour = :jour')
+            ->addOrderBy('enfant.nom')
+            ->setParameter('jour', $jour);
+
+        /* if ($archived !== null) {
+             $qb->andWhere('enfant.archived = :archive')
+                 ->setParameter('archive', $archived);
+         }*/
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $qb = $this->createQBl()
             ->andWhere('presence.tuteur = :tuteur')
@@ -112,24 +159,10 @@ final class PresenceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-
     /**
      * @return Presence[]
      */
-    public function findPresencesByPlaine(Plaine $plaine): array
-    {
-        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
-
-        return $this->createQBl()
-            ->andWhere('presence.jour IN (:jours)')
-            ->setParameter('jours', $jours)
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @return Presence[]
-     */
-    public function findPresencesByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
+    public function findByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
@@ -144,7 +177,7 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPresencesByPlaineAndEnfant(Plaine $plaine, Enfant $enfant): array
+    public function findByPlaineAndEnfant(Plaine $plaine, Enfant $enfant): array
     {
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
 
@@ -159,7 +192,7 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPlainesByEnfant(Enfant $enfant): array
+    public function findByEnfantAndIsPlaine(Enfant $enfant): array
     {
         return $this->createQBl()
             ->andWhere('plaine_jour IS NOT NULL')
@@ -181,35 +214,6 @@ final class PresenceRepository extends ServiceEntityRepository
             ->andWhere('presence.jour = :jour')
             ->setParameter('jour', $jour)
             ->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * @param DateTimeInterface $dateTime mm/YYYY
-     *
-     * @return Presence[]
-     */
-    public function findByMonth(DateTimeInterface $dateTime): array
-    {
-        $jours = $this->jourRepository->findDaysByMonth($dateTime);
-
-        return $this->createQBl()
-            ->andWhere('presence.jour IN (:jours)')
-            ->setParameter('jours', $jours)
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @param $jour
-     *
-     * @return Presence[]
-     */
-    public function findByDay($jour)
-    {
-        return $this->createQBl()
-            ->andWhere('presence.jour = :jour')
-            ->addOrderBy('enfant.nom')
-            ->setParameter('jour', $jour)
-            ->getQuery()->getResult();
     }
 
     public function findOneByEnfantJour(Enfant $enfant, $jour): ?Presence

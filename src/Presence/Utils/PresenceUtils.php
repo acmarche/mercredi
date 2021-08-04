@@ -69,13 +69,15 @@ final class PresenceUtils
      */
     public static function extractTuteurs(array $presences): array
     {
-        return array_unique(
-            array_map(
-                fn($presence) => $presence->getTuteur(),
-                $presences
-            ),
-            SORT_REGULAR
+        $tuteurs = array_map(
+            fn($presence) => $presence->getTuteur(),
+            $presences
         );
+        $data = [];
+        foreach ($tuteurs as $tuteur) {
+            $data[$tuteur->getId()] = $tuteur;
+        }
+        return $data;
     }
 
     /**
@@ -117,13 +119,17 @@ final class PresenceUtils
      */
     public static function extractJours(array $presences): array
     {
-        return array_unique(
+        $jours =
             array_map(
                 fn($presence) => $presence->getJour(),
                 $presences
-            ),
-            SORT_REGULAR
-        );
+            );
+        $data = [];
+        foreach ($jours as $jour) {
+            $data[$jour->getId()] = $jour;
+        }
+
+        return $data;
     }
 
     /**

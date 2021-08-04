@@ -118,7 +118,7 @@ final class EnfantController extends AbstractController
     public function show(Enfant $enfant): Response
     {
         $relations = $this->relationRepository->findByEnfant($enfant);
-        $data = $this->presenceRepository->findPresencesByEnfant($enfant);
+        $data = $this->presenceRepository->findByEnfant($enfant);
         $presencesGrouped = $this->presenceUtils->groupByYear($data);
         $frateries = $this->relationRepository->findFrateries($enfant);
         $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);

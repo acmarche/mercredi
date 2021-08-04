@@ -3,13 +3,10 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
-use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
+use AcMarche\Mercredi\Plaine\Factory\PlainePdfFactory;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Spreadsheet\SpreadsheetFactory;
-use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Exception;
@@ -26,29 +23,24 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ExportController extends AbstractController
 {
-    use PdfDownloaderTrait;
-
     private SpreadsheetFactory $spreadsheetFactory;
     private ListingPresenceByMonth $listingPresenceByMonth;
     private SearchHelper $searchHelper;
     private PresenceRepository $presenceRepository;
-    private PlainePresenceRepository $plainePresenceRepository;
-    private GroupingInterface $grouping;
+    private PlainePdfFactory $plainePdfFactory;
 
     public function __construct(
         SpreadsheetFactory $spreadsheetFactory,
         ListingPresenceByMonth $listingPresenceByMonth,
         PresenceRepository $presenceRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        GroupingInterface $grouping,
+        PlainePdfFactory $plainePdfFactory,
         SearchHelper $searchHelper
     ) {
         $this->spreadsheetFactory = $spreadsheetFactory;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->searchHelper = $searchHelper;
         $this->presenceRepository = $presenceRepository;
-        $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->grouping = $grouping;
+        $this->plainePdfFactory = $plainePdfFactory;
     }
 
     /**
@@ -110,83 +102,7 @@ final class ExportController extends AbstractController
      */
     public function plainePdf(Plaine $plaine): Response
     {
-        $images = $this->getImagesBase64();
-        $dates = PlaineUtils::extractJoursFromPlaine($plaine);
-        $firstDay = $plaine->getFirstDay()->getDateJour();
-
-        $presences = $this->presenceRepository->findPresencesByPlaine($plaine);
-        /**
-         * par enfant je dois avoir quel tuteur en garde
-         * jours presents
-         */
-        $data = [];
-        $dataEnfants = [];
-        $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
-        $groupeForce->setNom('Non classé');
-        $stats = [];
-        foreach ($plaine->getPlaineGroupes() as $plaineGroupe) {
-            foreach ($dates as $date) {
-                $stats[$plaineGroupe->getGroupeScolaire()->getId()][$date->getId()]['total'] = 0;
-                $stats[$plaineGroupe->getGroupeScolaire()->getId()][$date->getId()]['moins6'] = 0;
-            }
-        }
-        foreach ($presences as $presence) {
-            $enfant = $presence->getEnfant();
-            $tuteur = $presence->getTuteur();
-            $jour = $presence->getJour();
-            $enfantId = $enfant->getId();
-            $age = $enfant->getAge($firstDay, true);
-            $groupeScolaire = $this->grouping->findGroupeScolaireByAge($age);
-            if (!$groupeScolaire) {
-                $groupeScolaire = $groupeForce;
-            }
-            $stats[$groupeScolaire->getId()][$jour->getId()]['total'] += 1;
-            if ($age < 6) {
-                $stats[$groupeScolaire->getId()][$jour->getId()]['moins6'] += 1;
-            }
-            $dataEnfants[$enfantId]['enfant'] = $enfant;
-            $dataEnfants[$enfantId]['tuteur'] = $tuteur;
-            $dataEnfants[$enfantId]['jours'][] = $jour;
-            $data[$groupeScolaire->getId()]['groupe'] = $groupeScolaire;
-            $data[$groupeScolaire->getId()]['enfants'] = $dataEnfants;
-            $data[$groupeScolaire->getId()]['stats'] = $stats;
-        }
-        dump($stats);
-        dump($data);
-
-        $html = $this->renderView(
-            '@AcMarcheMercrediAdmin/plaine/pdf/plaine.html.twig',
-            [
-                'plaine' => $plaine,
-                'firstDay' => $firstDay,
-                'dates' => $dates,
-                'datas' => $data,
-                'stats' => $stats,
-                'images' => $images,
-            ]
-        );
-
-        return new Response($html);
-
-        $name = $plaine->getSlug();
-
-        $this->pdf->setOption('footer-right', '[page]/[toPage]');
-        if (count($dates) > 6) {
-            $this->pdf->setOption('orientation', 'landscape');
-        }
-
-        return $this->downloadPdf($html, $name.'.pdf');
+        return $this->plainePdfFactory->generate($plaine);
     }
 
-    private function getImagesBase64()
-    {
-        $root = $this->getParameter('kernel.project_dir').'/public/bundles/acmarchemercredi/images/';
-        $ok = $root.'check_ok.jpg';
-        $ko = $root.'check_ko.jpg';
-        $data = [];
-        $data['ok'] = base64_encode(file_get_contents($ok));
-        $data['ko'] = base64_encode(file_get_contents($ko));
-
-        return $data;
-    }
 }

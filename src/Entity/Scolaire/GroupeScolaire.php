@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Entity\Scolaire;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
-use AcMarche\Mercredi\Entity\Traits\FileTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
@@ -12,12 +11,9 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Table(uniqueConstraints={
@@ -27,16 +23,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository")
  * @UniqueEntity(fields={"age_minimum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge minimum")
  * @UniqueEntity(fields={"age_maximum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge maximum")
- * @Vich\Uploadable
  */
-class GroupeScolaire  implements TimestampableInterface
+class GroupeScolaire
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
     use OrdreTrait;
-    use TimestampableTrait;
-    use FileTrait;
 
     /**
      * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
@@ -67,19 +60,7 @@ class GroupeScolaire  implements TimestampableInterface
     private iterable $annees_scolaires;
 
     /**
-     * @Vich\UploadableField(mapping="mercredi_groupe", fileNameProperty="fileName", mimeType="mimeType", size="fileSize")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = {"application/pdf", "application/x-pdf", "image/*"},
-     *     mimeTypesMessage = "Uniquement des images ou Pdf"
-     * )
-     */
-    private ?File $file = null;
-
-    /**
-     * Pour le cascade.
+     * Pour la cascade.
      *
      * @var PlaineGroupe[]
      * @ORM\OneToMany(targetEntity=PlaineGroupe::class, mappedBy="groupe_scolaire", cascade={"remove"})

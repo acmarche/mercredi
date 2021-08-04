@@ -4,6 +4,8 @@
     <tr>
         <th>Nom</th>
         <th>Maximum inscrits par groupe</th>
+        <th>Courrier</th>
+        <th>Modifier</th>
     </tr>
     </thead>
     <tbody>
@@ -15,6 +17,16 @@
         <tr>
             <td>{{ plaineGroupe.groupeScolaire.nom }}</td>
             <td>{{ inscrits }} /{{ plaineGroupe.inscriptionMaximum }}</td>
+            <td>
+                {% if plaineGroupe.fileName %}
+                    <a href="{{ vich_uploader_asset(plaineGroupe,'file') }}" target="_blank">Télécharger</a>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ path('mercredi_admin_plaine_groupe_edit', {'id': plaineGroupe.id}) }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-pen-alt"></i> Modifier
+                </a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

@@ -142,7 +142,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function show(Plaine $plaine, Enfant $enfant): Response
     {
-        $presences = $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
+        $presences = $this->presenceRepository->findByPlaineAndEnfant($plaine, $enfant);
         $presences = SortUtils::sortPresences($presences);
         $cout = $this->plaineCalculator->calculate($plaine, $presences);
 
@@ -199,7 +199,7 @@ final class PlainePresenceController extends AbstractController
         $jours = PlaineUtils::extractJoursFromPlaine($plaine);
         $plainePresencesDto = new PlainePresencesDto($plaine, $enfant, $jours);
 
-        $presences = $this->presenceRepository->findPresencesByPlaineAndEnfant($plaine, $enfant);
+        $presences = $this->presenceRepository->findByPlaineAndEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
         $plainePresencesDto->setJours($currentJours);
 

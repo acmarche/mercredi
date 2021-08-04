@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 final class PlaineGroupeType extends AbstractType
 {
@@ -24,13 +25,24 @@ final class PlaineGroupeType extends AbstractType
                 [
                     'class' => GroupeScolaire::class,
                     'query_builder' => function (GroupeScolaireRepository $groupeScolaireRepository) {
-                      return  $groupeScolaireRepository->getQbForListingPlaine();
+                        return $groupeScolaireRepository->getQbForListingPlaine();
                     },
                     'attr' => ['readonly' => true],
                     'label' => false,
                 ]
             )
-            ->add('inscription_maximum', IntegerType::class);
+            ->add('inscription_maximum', IntegerType::class, [
+                'label' => 'Nombre maximum d\'inscrits',
+            ])
+            ->add(
+                'file',
+                VichFileType::class,
+                [
+                    'label' => 'Fichier',
+                    'help' => 'Uniquement images ou pdf. Fichier qui sera envoyé aux parents pour les modalités',
+                    'required' => false,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

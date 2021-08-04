@@ -75,6 +75,7 @@ final class PlaineRepository extends ServiceEntityRepository
     public function getQbForListing(): QueryBuilder
     {
         return $this->createQueryBuilder('plaine')
+            ->andWhere('plaine.archived = 0')
             ->orderBy('plaine.nom', 'ASC');
     }
 }

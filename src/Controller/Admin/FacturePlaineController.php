@@ -64,7 +64,7 @@ class FacturePlaineController extends AbstractController
      */
     public function newManual(Request $request, Tuteur $tuteur, Plaine $plaine): Response
     {
-        $presences = $this->presenceRepository->findPresencesByPlaineAndTuteur($plaine, $tuteur);
+        $presences = $this->presenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
         $form = $this->createForm(ValidateForm::class);
         $form->handleRequest($request);
 

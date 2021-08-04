@@ -58,7 +58,7 @@ class FacturePlaineHandler
         $facture->setPlaine($plaine->getNom());
         $facture->setCommunication($this->communicationFactory->generatePlaine($plaine));
         $tuteur = $facture->getTuteur();
-        $presences = $this->presenceRepository->findPresencesByPlaineAndTuteur($plaine, $tuteur);
+        $presences = $this->presenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
 
         $this->attachPresences($facture, $plaine, $presences);
         $this->factureFactory->setEcoles($facture,$this->ecoles);

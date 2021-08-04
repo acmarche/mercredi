@@ -33,7 +33,7 @@ class FacturePresenceNonPayeRepository
      */
     public function findPresencesNonPayes(Tuteur $tuteur, ?\DateTimeInterface $date = null): array
     {
-        $presences = $this->presenceRepository->findPresencesByTuteurAndMonth($tuteur, $date);
+        $presences = $this->presenceRepository->findByTuteurAndMonth($tuteur, $date);
         $ids = array_map(
             function ($presence) {
                 return $presence->getId();
