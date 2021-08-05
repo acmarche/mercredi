@@ -12,11 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class TuteurQuickType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -60,7 +55,7 @@ final class TuteurQuickType extends AbstractType
                 EmailType::class,
                 [
                     'required' => false,
-                    'help' => 'Si une adresse mail est encodée, un compte sera créé',
+                    'help' => 'Si une adresse mail est encodée, un compte sera créé et le parent sera notifié par mail',
                 ]
             )
             ->add(

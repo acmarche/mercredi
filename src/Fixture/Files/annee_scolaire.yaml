@@ -1,4 +1,4 @@
-AcMarche\Mercredi\Entity\AnneeScolaire:
+AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire:
   annee_PM:
     nom: 'PM'
     ordre: '1'

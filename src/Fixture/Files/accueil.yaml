@@ -1,4 +1,4 @@
-AcMarche\Mercredi\Entity\Accueil:
+AcMarche\Mercredi\Entity\Presence\Accueil:
   acceuil_merlin_09_07:
     __construct: ['@tuteur_Peret','@enfant_merlin']
     date_jour: '<carbonDateTime(2020,7,9,9,0)>'

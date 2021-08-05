@@ -26,7 +26,6 @@ Feature: Gestion des utilisateurs
     Then I should see "ROLE_MERCREDI_ADMIN"
 
   Scenario: Ajout un utilisateur tuteur
-    Given I am logged in as an admin
     Given I am on "/admin/tuteur/"
     Then I should see "Liste des parents"
     Then I fill in "search_tuteur[nom]" with "Peret"

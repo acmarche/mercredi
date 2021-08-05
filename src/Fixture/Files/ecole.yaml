@@ -1,4 +1,4 @@
-AcMarche\Mercredi\Entity\Ecole:
+AcMarche\Mercredi\Entity\Scolaire\Ecole:
   ecole_{Aye, Waha, Champlon, Hollogne}:
     nom: '<current()>'
     email: '<email()>'

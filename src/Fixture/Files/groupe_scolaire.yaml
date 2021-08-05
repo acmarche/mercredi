@@ -1,4 +1,4 @@
-AcMarche\Mercredi\Entity\GroupeScolaire:
+AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire:
   groupe_Petits:
     nom: 'Petits'
   groupe_Moyens:

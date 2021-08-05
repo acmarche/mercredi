@@ -74,7 +74,8 @@ final class CreateUserCommand extends Command
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
         $user->addRole(MercrediSecurityRole::ROLE_ADMIN);
 
-        $this->userRepository->insert($user);
+        $this->userRepository->persist($user);
+        $this->userRepository->flush();
 
         $symfonyStyle->success('User crée.');
 

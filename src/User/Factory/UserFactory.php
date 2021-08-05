@@ -26,7 +26,7 @@ final class UserFactory
     public function getInstance(?string $email = null): ?User
     {
         $user = new User();
-        if ($email && ! $user = $this->userRepository->findOneByEmailOrUserName($email)) {
+        if ($email && !$user = $this->userRepository->findOneByEmailOrUserName($email)) {
             $user = new User();
             $user->setEmail($email);
             $user->setUsername($email);
@@ -54,7 +54,8 @@ final class UserFactory
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
         $user->addRole(MercrediSecurityRole::ROLE_ANIMATEUR);
 
-        $this->userRepository->insert($user);
+        $this->userRepository->persist($user);
+        $this->userRepository->flush();
 
         return $user;
     }
@@ -76,7 +77,8 @@ final class UserFactory
 
         $user->addTuteur($tuteur);
         $user->addRole(MercrediSecurityRole::ROLE_PARENT);
-        $this->userRepository->insert($user);
+        $this->userRepository->persist($user);
+        $this->userRepository->flush();
 
         return $user;
     }
