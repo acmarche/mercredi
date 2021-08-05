@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Mailer;
+namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Render\FactureRender;
@@ -8,10 +8,9 @@ use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 
-final class FactureMailer
+class FactureEmailFactory
 {
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
@@ -25,7 +24,7 @@ final class FactureMailer
         $this->factureRender = $factureRender;
     }
 
-    public function init(?Facture $facture = null): array
+    public function initFromAndTo(?Facture $facture = null): array
     {
         $data = [];
         $data['from'] = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
@@ -42,12 +41,12 @@ final class FactureMailer
     /**
      * @param Facture $facture
      * @param array $data
-     * @throws TransportExceptionInterface
      */
-    public function sendFacture(Facture $facture, array $data): void
+    public function messageFacture(Facture $facture, array $data): NotificationEmail
     {
         $data['to'] = 'jf@marche.be';
-        $templatedEmail = (new TemplatedEmail())
+        $message = NotificationEmail::asPublicEmail();
+        $message
             ->subject($data['sujet'])
             ->from($data['from'])
             ->to($data['to'])
@@ -63,8 +62,8 @@ final class FactureMailer
         $date = $facture->getFactureLe();
         $invoicepdf = $this->getPdf()->getOutputFromHtml($html);
 
-        $templatedEmail->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
+        $message->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
 
-        $this->sendMail($templatedEmail);
+        return $message;
     }
 }

@@ -2,34 +2,36 @@
 
 namespace AcMarche\Mercredi\User\Handler;
 
-use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
+use AcMarche\Mercredi\Entity\Animateur;
+use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Mailer\Factory\UserEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
-use AcMarche\Mercredi\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-
 use function count;
 
 final class AssociationAnimateurHandler
 {
     private AnimateurRepository $animateurRepository;
-    private UserMailer $userMailer;
     private FlashBagInterface $flashBag;
     private UserFactory $userFactory;
+    private NotificationMailer $notificationMailer;
+    private UserEmailFactory $userEmailFactory;
 
     public function __construct(
         AnimateurRepository $animateurRepository,
-        UserMailer $userMailer,
         UserFactory $userFactory,
+        NotificationMailer $notificationMailer,
+        UserEmailFactory $userEmailFactory,
         FlashBagInterface $flashBag
     ) {
         $this->animateurRepository = $animateurRepository;
-        $this->userMailer = $userMailer;
         $this->flashBag = $flashBag;
         $this->userFactory = $userFactory;
+        $this->notificationMailer = $notificationMailer;
+        $this->userEmailFactory = $userEmailFactory;
     }
 
     public function suggestAnimateur(User $user, AssociateUserAnimateurDto $associateUserAnimateurDto): void
@@ -56,12 +58,9 @@ final class AssociationAnimateurHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserAnimateurDto->isSendEmail()) {
-            try {
-                $this->userMailer->sendNewAccountToAnimateur($user, $animateur);
-                $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
-            } catch (TransportExceptionInterface $e) {
-                $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
-            }
+            $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur);
+            $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
+            $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
         }
     }
 
@@ -80,11 +79,8 @@ final class AssociationAnimateurHandler
         $user = $this->userFactory->newFromAnimateur($animateur);
         $plainPassword = $user->getPlainPassword();
 
-        try {
-            $this->userMailer->sendNewAccountToAnimateur($user, $animateur, $plainPassword);
-        } catch (TransportExceptionInterface $e) {
-            $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
-        }
+        $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $plainPassword);
+        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         return $user;
     }

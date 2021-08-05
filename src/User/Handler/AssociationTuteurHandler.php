@@ -4,32 +4,35 @@ namespace AcMarche\Mercredi\User\Handler;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Mailer\Factory\UserEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
-use AcMarche\Mercredi\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 use function count;
 
 final class AssociationTuteurHandler
 {
     private TuteurRepository $tuteurRepository;
-    private UserMailer $userMailer;
     private FlashBagInterface $flashBag;
     private UserFactory $userFactory;
+    private NotificationMailer $notificationMailer;
+    private UserEmailFactory $userEmailFactory;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
-        UserMailer $userMailer,
         UserFactory $userFactory,
+        NotificationMailer $notificationMailer,
+        UserEmailFactory $userEmailFactory,
         FlashBagInterface $flashBag
     ) {
         $this->tuteurRepository = $tuteurRepository;
-        $this->userMailer = $userMailer;
         $this->flashBag = $flashBag;
         $this->userFactory = $userFactory;
+        $this->notificationMailer = $notificationMailer;
+        $this->userEmailFactory = $userEmailFactory;
     }
 
     public function suggestTuteur(User $user, AssociateUserTuteurDto $associateUserTuteurDto): void
@@ -56,12 +59,9 @@ final class AssociationTuteurHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserTuteurDto->isSendEmail()) {
-            try {
-                $this->userMailer->sendNewAccountToTuteur($user, $tuteur);
-                $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
-            } catch (TransportExceptionInterface $e) {
-                $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
-            }
+            $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur);
+            $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
+            $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
         }
     }
 
@@ -80,11 +80,9 @@ final class AssociationTuteurHandler
         $user = $this->userFactory->newFromTuteur($tuteur);
         $plainPassword = $user->getPlainPassword();
 
-        try {
-            $this->userMailer->sendNewAccountToTuteur($user, $tuteur, $plainPassword);
-        } catch (TransportExceptionInterface $e) {
-            $this->flashBag->add('danger', 'Erreur lors de l\'envoie du mail: '.$e->getMessage());
-        }
+        $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $plainPassword);
+        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
+        $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
 
         return $user;
     }

@@ -183,8 +183,7 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
-        $recipient = new Recipient($user->getEmail());
-        $this->notificationMailer->sendAsEmailNotification($email, $recipient);
+        $this->notificationMailer->sendAsEmailNotification($email, $user->getEmail());
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);

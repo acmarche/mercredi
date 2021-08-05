@@ -42,7 +42,7 @@ class HealthCommand extends Command
     {
         $enfants = $this->enfantRepository->findOrphelins();
         if (count($enfants) > 0) {
-            $email = $this->adminEmailFactory->sendMessagEnfantsOrphelins($enfants);
+            $email = $this->adminEmailFactory->messagEnfantsOrphelins($enfants);
             $this->notifcationMailer->sendAsEmailNotification($email);
         }
 
@@ -65,7 +65,7 @@ class HealthCommand extends Command
         }
         //  $this->tuteurRepository->flush();
         if (count($enfants) > 0) {
-            $email = $this->adminEmailFactory->sendMessagTuteurArchived($tuteurs);
+            $email = $this->adminEmailFactory->messagTuteurArchived($tuteurs);
             $this->notifcationMailer->sendAsEmailNotification($email);
         }
 

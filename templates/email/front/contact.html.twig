@@ -6,12 +6,9 @@
 {% endblock %}
 
 {% block content %}
-    Les tuteurs suivant on été archivés car ils n'ont plus d'enfants actifs
-<br /><br />
-    {% for tuteur in tuteurs %}
-        {{ tuteur }}<br />
-        {{ absolute_url(path('mercredi_admin_tuteur_show', {'id': tuteur.id})) }}
-    {% endfor %}
+
+    {{ body|nl2br }}
+
 {% endblock %}
 
 {% block footer_content %}

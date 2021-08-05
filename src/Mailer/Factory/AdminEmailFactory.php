@@ -7,20 +7,25 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminEmailFactory
 {
     use OrganisationPropertyInitTrait;
 
-    public function sendMessagEnfantCreated(User $user, Enfant $enfant): NotificationEmail
+    /**
+     * @param UserInterface|User $user
+     * @param Enfant $enfant
+     * @return NotificationEmail
+     */
+    public function messagEnfantCreated(UserInterface $user, Enfant $enfant): NotificationEmail
     {
         $message = NotificationEmail::asPublicEmail();
         $message
             ->from($user->getEmail())
             ->to($this->organisation->getEmail())
             ->subject('Un enfant a été ajouté par '.$user->getNom().' '.$user->getPrenom())
-            ->textTemplate('@AcMarcheMercredi/parent/enfant/_mail_add_enfant.txt.twig')
+            ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_add_enfant.html.twig')
             ->context(
                 [
                     'user' => $user,
@@ -33,9 +38,8 @@ class AdminEmailFactory
 
     /**
      * @param array|Enfant[] $enfants
-     * @throws TransportExceptionInterface
      */
-    public function sendMessagEnfantsOrphelins(array $enfants): NotificationEmail
+    public function messagEnfantsOrphelins(array $enfants): NotificationEmail
     {
         $message = NotificationEmail::asPublicEmail();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
@@ -44,7 +48,7 @@ class AdminEmailFactory
             ->from($email)
             ->to($email)
             ->subject('Des enfants orphelins ont été trouvés')
-            ->textTemplate('@AcMarcheMercredi/front/mail/_mail_orphelins.html.twig')
+            ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_orphelins.html.twig')
             ->context(
                 [
                     'enfants' => $enfants,
@@ -56,9 +60,8 @@ class AdminEmailFactory
 
     /**
      * @param array|Tuteur[] $tuteurs
-     * @throws TransportExceptionInterface
      */
-    public function sendMessagTuteurArchived(array $tuteurs): NotificationEmail
+    public function messagTuteurArchived(array $tuteurs): NotificationEmail
     {
         $message = NotificationEmail::asPublicEmail();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
@@ -67,7 +70,7 @@ class AdminEmailFactory
             ->from($email)
             ->to($email)
             ->subject('Les tuteurs ont été archivés')
-            ->textTemplate('@AcMarcheMercredi/front/mail/_mail_tuteurs_archived.html.twig')
+            ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_tuteurs_archived.html.twig')
             ->context(
                 [
                     'tuteurs' => $tuteurs,

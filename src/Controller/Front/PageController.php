@@ -2,16 +2,16 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Contact\Form\ContactType;
-use AcMarche\Mercredi\Mailer\ContactMailer;
 use AcMarche\Mercredi\Entity\Page;
+use AcMarche\Mercredi\Mailer\Factory\ContactEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,18 +22,21 @@ final class PageController extends AbstractController
     private OrganisationRepository $organisationRepository;
     private PageRepository $pageRepository;
     private PageFactory $pageFactory;
-    private ContactMailer $contactMailer;
+    private ContactEmailFactory $contactEmailFactory;
+    private NotificationMailer $notificationMailer;
 
     public function __construct(
         OrganisationRepository $organisationRepository,
         PageRepository $pageRepository,
         PageFactory $pageFactory,
-        ContactMailer $contactMailer
+        ContactEmailFactory $contactEmailFactory,
+        NotificationMailer $notificationMailer
     ) {
         $this->organisationRepository = $organisationRepository;
         $this->pageRepository = $pageRepository;
         $this->pageFactory = $pageFactory;
-        $this->contactMailer = $contactMailer;
+        $this->contactEmailFactory = $contactEmailFactory;
+        $this->notificationMailer = $notificationMailer;
     }
 
     /**
@@ -77,12 +80,9 @@ final class PageController extends AbstractController
             $email = $data['email'];
             $body = $data['texte'];
 
-            try {
-                $this->contactMailer->sendContactForm($email, $nom, $body);
-                $this->addFlash('success', 'Le message a bien été envoyé.');
-            } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', 'Le message n\'a pas pu être envoyé !'.$e->getMessage());
-            }
+            $message = $this->contactEmailFactory->sendContactForm($email, $nom, $body);
+            $this->notificationMailer->sendAsEmailNotification($message);
+            $this->addFlash('success', 'Le message a bien été envoyé.');
 
             return $this->redirectToRoute('mercredi_front_contact');
         }

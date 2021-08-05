@@ -1,33 +1,30 @@
 <?php
 
-namespace AcMarche\Mercredi\Mailer;
+namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 
-final class UserMailer
+class UserEmailFactory
 {
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    /**
-     * @throws TransportExceptionInterface
-     */
-    public function sendNewAccountToTuteur(User $user, Tuteur $tuteur, ?string $password = null): void
+    public function messageNewAccountToTuteur(User $user, Tuteur $tuteur, ?string $password = null): NotificationEmail
     {
         $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
-        $templatedEmail = (new TemplatedEmail())
+        $message = NotificationEmail::asPublicEmail();
+        $message
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
             ->to($user->getEmail())
             ->bcc($from)
-            ->htmlTemplate('@AcMarcheMercredi/front/mail/_mail_welcome_parent.html.twig')
+            ->htmlTemplate('@AcMarcheMercrediEmail/welcome/_mail_welcome_parent.html.twig')
             ->context(
                 [
                     'tuteur' => $tuteur,
@@ -37,19 +34,23 @@ final class UserMailer
                 ]
             );
 
-        $this->sendMail($templatedEmail);
+        return $message;
     }
 
-    public function sendNewAccountToAnimateur(User $user, Animateur $animateur, ?string $password = null): void
-    {
+    public function messageNewAccountToAnimateur(
+        User $user,
+        Animateur $animateur,
+        ?string $password = null
+    ): NotificationEmail {
         $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
-        $templatedEmail = (new TemplatedEmail())
+        $message = NotificationEmail::asPublicEmail();
+        $message
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
             ->to($user->getEmail())
             ->bcc($from)
-            ->htmlTemplate('@AcMarcheMercredi/front/mail/_mail_welcome_animateur.html.twig')
+            ->htmlTemplate('@AcMarcheMercrediEmail/welcome/_mail_welcome_animateur.html.twig')
             ->context(
                 [
                     'animateur' => $animateur,
@@ -59,6 +60,6 @@ final class UserMailer
                 ]
             );
 
-        $this->sendMail($templatedEmail);
+        return $message;
     }
 }

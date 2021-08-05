@@ -7,14 +7,14 @@ use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Form\FactureSelectSendType;
 use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
-use AcMarche\Mercredi\Mailer\FactureMailer;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,17 +26,20 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FactureSendController extends AbstractController
 {
     private FactureRepository $factureRepository;
-    private FactureMailer $factureMailer;
     private FacturePdfFactoryTrait $facturePdfFactory;
+    private FactureEmailFactory $factureEmailFactory;
+    private NotificationMailer $notificationMailer;
 
     public function __construct(
         FactureRepository $factureRepository,
-        FactureMailer $factureMailer,
-        FacturePdfFactoryTrait $facturePdfFactory
+        FacturePdfFactoryTrait $facturePdfFactory,
+        FactureEmailFactory $factureEmailFactory,
+        NotificationMailer $notificationMailer
     ) {
         $this->factureRepository = $factureRepository;
-        $this->factureMailer = $factureMailer;
         $this->facturePdfFactory = $facturePdfFactory;
+        $this->factureEmailFactory = $factureEmailFactory;
+        $this->notificationMailer = $notificationMailer;
     }
 
     /**
@@ -73,22 +76,19 @@ final class FactureSendController extends AbstractController
     public function sendOneFacture(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $data = $this->factureMailer->init($facture);
+        $data = $this->factureEmailFactory->initFromAndTo($facture);
         $form = $this->createForm(FactureSendType::class, $data);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            try {
-                $this->factureMailer->sendFacture($facture, $data);
-                $facture->setEnvoyeA($data['to']);
-                $facture->setEnvoyeLe(new \DateTime());
-                $this->addFlash('success', 'La facture a bien été envoyée');
-                $this->factureRepository->flush();
-            } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', 'Une erreur est survenue: '.$e->getMessage());
-            }
+            $message = $this->factureEmailFactory->messageFacture($facture, $data);
+            $this->notificationMailer->sendAsEmailNotification($message);
+            $facture->setEnvoyeA($data['to']);
+            $facture->setEnvoyeLe(new \DateTime());
+            $this->addFlash('success', 'La facture a bien été envoyée');
+            $this->factureRepository->flush();
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
@@ -109,7 +109,7 @@ final class FactureSendController extends AbstractController
     public function sendAllFacture(Request $request, string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
-        $form = $this->createForm(FactureSendAllType::class, $this->factureMailer->init());
+        $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndTo());
 
         $form->handleRequest($request);
 
@@ -122,19 +122,16 @@ final class FactureSendController extends AbstractController
             }
 
             foreach ($factures as $facture) {
-                try {
-                    $tuteur = $facture->getTuteur();
-                    if (!$emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
-                        $this->addFlash('danger', 'Pas de mail pour la facture: '.$facture->getId());
-                        continue;
-                    }
-                    $data['to'] = count($emails) > 0 ? $emails[0] : null;
-                    $this->factureMailer->sendFacture($facture, $data);
-                    $facture->setEnvoyeA($data['to']);
-                    $facture->setEnvoyeLe(new \DateTime());
-                } catch (TransportExceptionInterface $e) {
-                    $this->addFlash('danger', 'Une erreur est survenue pour: '.$e->getMessage());
+                $tuteur = $facture->getTuteur();
+                if (!$emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
+                    $this->addFlash('danger', 'Pas de mail pour la facture: '.$facture->getId());
+                    continue;
                 }
+                $data['to'] = count($emails) > 0 ? $emails[0] : null;
+                $message = $this->factureEmailFactory->messageFacture($facture, $data);
+                $this->notificationMailer->sendAsEmailNotification($message);
+                $facture->setEnvoyeA($data['to']);
+                $facture->setEnvoyeLe(new \DateTime());
             }
 
             $this->addFlash('success', 'Les factures ont bien été envoyées');
@@ -156,7 +153,7 @@ final class FactureSendController extends AbstractController
     /**
      * @Route("/all/paper/{month}", name="mercredi_admin_facture_send_all_by_paper", methods={"GET"})
      */
-    public function sendAllFacturePapier(string $month): Response
+    public function facturesPapier(string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);
         if (count($factures) === 0) {

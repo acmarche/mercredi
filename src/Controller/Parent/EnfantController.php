@@ -102,7 +102,7 @@ final class EnfantController extends AbstractController
             $this->enfantHandler->newHandle($enfant, $this->tuteur);
             $this->dispatchMessage(new EnfantCreated($enfant->getId()));
             $enfant->setPhoto(null);//bug serialize
-            $email = $this->adminEmailFactory->sendMessagEnfantCreated($this->getUser(), $enfant);
+            $email = $this->adminEmailFactory->messagEnfantCreated($this->getUser(), $enfant);
             $this->notifcationMailer->sendAsEmailNotification($email);
 
             return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
