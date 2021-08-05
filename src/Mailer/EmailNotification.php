@@ -22,8 +22,6 @@ class EmailNotification extends Notification implements EmailNotificationInterfa
 
     public function asEmailMessage(EmailRecipientInterface $recipient, string $transport = null): ?EmailMessage
     {
-        $this->templatedEmail->markAsPublic();//remove importance, footer
-
         return new EmailMessage($this->templatedEmail);
     }
 
