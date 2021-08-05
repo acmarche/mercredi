@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Mailer\Factory;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Render\FactureRender;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -45,7 +46,7 @@ class FactureEmailFactory
     public function messageFacture(Facture $facture, array $data): NotificationEmail
     {
         $data['to'] = 'jf@marche.be';
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject($data['sujet'])
             ->from($data['from'])

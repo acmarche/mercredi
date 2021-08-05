@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 
@@ -18,7 +19,7 @@ class UserEmailFactory
     {
         $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
@@ -44,7 +45,7 @@ class UserEmailFactory
     ): NotificationEmail {
         $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
 
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject('informations sur votre compte de '.$this->organisation->getNom())
             ->from($from)
@@ -55,7 +56,7 @@ class UserEmailFactory
                 [
                     'animateur' => $animateur,
                     'user' => $user,
-                    'password' => null,
+                    'password' => $password,
                     'organisation' => $this->organisation,
                 ]
             );

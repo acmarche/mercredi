@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
-use Symfony\Component\Notifier\Notification\Notification;
 
 class ContactEmailFactory
 {
@@ -22,8 +22,7 @@ class ContactEmailFactory
     {
         $to = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
         ) : 'nomail@domain.be';
-        $message = NotificationEmail::asPublicEmail();
-        $message->importance(Notification::IMPORTANCE_HIGH);
+        $message = NotificationEmailJf::asPublicEmailJf();
 
         $message
             ->subject('[Mercredi] '.$nom.' vous contact via le site')

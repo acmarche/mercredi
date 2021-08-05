@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Mime\Address;
@@ -20,7 +21,7 @@ final class RegistrationMailerFactory
         VerifyEmailSignatureComponents $verifyEmailSignatureComponents
     ): NotificationEmail {
 
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
             ->subject('Inscription Accueil Temps Libre')
@@ -36,7 +37,7 @@ final class RegistrationMailerFactory
     public function generateMessageToAdminAccountCreated(User $user): NotificationEmail
     {
         $email = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->to($email)
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
@@ -52,7 +53,7 @@ final class RegistrationMailerFactory
 
     public function messageSendLinkLostPassword(User $user, ResetPasswordToken $resetPasswordToken): NotificationEmail
     {
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
             ->to($user->getEmail())
             ->subject('Votre demande de changement de mot de passe')

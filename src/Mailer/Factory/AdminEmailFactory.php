@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Mailer\Factory;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,7 +21,7 @@ class AdminEmailFactory
      */
     public function messagEnfantCreated(UserInterface $user, Enfant $enfant): NotificationEmail
     {
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->from($user->getEmail())
             ->to($this->organisation->getEmail())
@@ -41,7 +42,7 @@ class AdminEmailFactory
      */
     public function messagEnfantsOrphelins(array $enfants): NotificationEmail
     {
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
         ) : 'nomail@domain.be';
         $message
@@ -63,7 +64,7 @@ class AdminEmailFactory
      */
     public function messagTuteurArchived(array $tuteurs): NotificationEmail
     {
-        $message = NotificationEmail::asPublicEmail();
+        $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
         ) : 'nomail@domain.be';
         $message
