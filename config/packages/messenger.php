@@ -9,14 +9,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'async' => [
                 'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                 'options' => [
-                    'auto_setup' => false,
-                    'use_notify' => true,
+                    'auto_setup' => true,
+                    'use_notify' => true,//PostgreSQL’s
                     'check_delayed_interval' => 60000,
                 ],
                 'retry_strategy' => [
                     'max_retries' => 3,
                     'multiplier' => 2,
                 ],
+            ],
+            'routing' => [
+                'Symfony\Component\Mailer\Messenger\SendEmailMessage' => 'async',
             ],
         ],
     ]);
