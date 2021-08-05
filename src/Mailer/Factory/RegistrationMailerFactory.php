@@ -1,0 +1,51 @@
+<?php
+
+namespace AcMarche\Mercredi\Mailer\Factory;
+
+use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Component\Mime\Address;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
+
+final class RegistrationMailerFactory
+{
+    use InitMailerTrait;
+    use OrganisationPropertyInitTrait;
+
+    public function generateMessagRegisgerSuccess(
+        User $user,
+        VerifyEmailSignatureComponents $verifyEmailSignatureComponents
+    ): NotificationEmail {
+
+        $message = NotificationEmail::asPublicEmail();
+        $message
+            ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
+            ->subject('Inscription Accueil Temps Libre')
+            ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_register_success.html.twig')
+            ->context([
+                'signedUrl' => $verifyEmailSignatureComponents->getSignedUrl(),
+                'expiresAt' => $verifyEmailSignatureComponents->getExpiresAt(),
+            ]);
+
+        return $message;
+    }
+
+    public function generateMessageToAdminAccountCreated(User $user): NotificationEmail
+    {
+        $email = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $message = NotificationEmail::asPublicEmail();
+        $message
+            ->to($email)
+            ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
+            ->subject('Un nouveau compte a été crée sur Accueil Temps Libre')
+            ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_new_account_created.html.twig')
+            ->context([
+                    'user' => $user,
+                ]
+            );
+
+        return $message;
+    }
+}

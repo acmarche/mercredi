@@ -8,10 +8,18 @@
             {% include '@AcMarcheMercrediEcole/enfant/_actions.html.twig' %}
             <div class="d-flex">
                 <div class="flex-shrink-0">
-                    {% include '@AcMarcheMercrediEcole/enfant/_photo.html.twig' %}
+                    {% include '@AcMarcheMercredi/commun/enfant/_photo.html.twig' %}
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    {% include '@AcMarcheMercrediEcole/enfant/_identite.html.twig' %}
+                    {% include '@AcMarcheMercredi/commun/enfant/_identite.html.twig' %}
+                    <br/>
+                    Inscris aux accueil du matin et soir:
+                    {% if enfant.isAccueilEcole %}
+                        Oui
+                    {% else %}
+                        Non
+                    {% endif %}
+                    <br/>
                 </div>
             </div>
             <br/>

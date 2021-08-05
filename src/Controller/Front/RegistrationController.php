@@ -2,32 +2,32 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Registration\EmailVerifier;
 use AcMarche\Mercredi\Registration\Form\RegistrationFormType;
 use AcMarche\Mercredi\Registration\Message\RegisterCreated;
+use AcMarche\Mercredi\Registration\MessageHandler\RegisterCreatedHandler;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 final class RegistrationController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
     private UserPasswordHasherInterface $userPasswordEncoder;
     private UserRepository $userRepository;
+    private RegisterCreatedHandler $registerCreatedHandler;
 
     public function __construct(
-        EmailVerifier $emailVerifier,
+        RegisterCreatedHandler $registerCreatedHandler,
         UserPasswordHasherInterface $userPasswordEncoder,
         UserRepository $userRepository
     ) {
-        $this->emailVerifier = $emailVerifier;
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->userRepository = $userRepository;
+        $this->registerCreatedHandler = $registerCreatedHandler;
     }
 
     /**
@@ -74,7 +74,7 @@ final class RegistrationController extends AbstractController
     {
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->registerCreatedHandler->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 

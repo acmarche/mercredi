@@ -1,23 +1,22 @@
 <?php
 
-namespace AcMarche\Mercredi\Notification\Mailer;
+namespace AcMarche\Mercredi\Mailer\Factory;
 
-use AcMarche\Mercredi\Entity\Tuteur;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class NotificationMailer
+class AdminEmailFactory
 {
-    use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    public function sendMessagEnfantCreated(User $user, Enfant $enfant): void
+    public function sendMessagEnfantCreated(User $user, Enfant $enfant): NotificationEmail
     {
-        $templatedEmail = (new TemplatedEmail())
+        $message = NotificationEmail::asPublicEmail();
+        $message
             ->from($user->getEmail())
             ->to($this->organisation->getEmail())
             ->subject('Un enfant a été ajouté par '.$user->getNom().' '.$user->getPrenom())
@@ -29,18 +28,19 @@ final class NotificationMailer
                 ]
             );
 
-        $this->sendMail($templatedEmail);
+        return $message;
     }
 
     /**
      * @param array|Enfant[] $enfants
      * @throws TransportExceptionInterface
      */
-    public function sendMessagEnfantsOrphelins(array $enfants): void
+    public function sendMessagEnfantsOrphelins(array $enfants): NotificationEmail
     {
+        $message = NotificationEmail::asPublicEmail();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
         ) : 'nomail@domain.be';
-        $templatedEmail = (new TemplatedEmail())
+        $message
             ->from($email)
             ->to($email)
             ->subject('Des enfants orphelins ont été trouvés')
@@ -51,18 +51,19 @@ final class NotificationMailer
                 ]
             );
 
-        $this->sendMail($templatedEmail);
+        return $message;
     }
 
     /**
      * @param array|Tuteur[] $tuteurs
      * @throws TransportExceptionInterface
      */
-    public function sendMessagTuteurArchived(array $tuteurs): void
+    public function sendMessagTuteurArchived(array $tuteurs): NotificationEmail
     {
+        $message = NotificationEmail::asPublicEmail();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
         ) : 'nomail@domain.be';
-        $templatedEmail = (new TemplatedEmail())
+        $message
             ->from($email)
             ->to($email)
             ->subject('Les tuteurs ont été archivés')
@@ -73,6 +74,6 @@ final class NotificationMailer
                 ]
             );
 
-        $this->sendMail($templatedEmail);
+        return $message;
     }
 }

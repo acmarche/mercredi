@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
-use AcMarche\Mercredi\User\Mailer\UserMailer;
+use AcMarche\Mercredi\Mailer\UserMailer;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 

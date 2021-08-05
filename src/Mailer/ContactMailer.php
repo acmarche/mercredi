@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Contact\Mailer;
+namespace AcMarche\Mercredi\Mailer;
 
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;

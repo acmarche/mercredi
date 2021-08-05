@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Controller\Front;
 
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Contact\Form\ContactType;
-use AcMarche\Mercredi\Contact\Mailer\ContactMailer;
+use AcMarche\Mercredi\Mailer\ContactMailer;
 use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Page\Factory\PageFactory;

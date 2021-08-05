@@ -2,9 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Notification\EmailNotification;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Tuteur\Form\SearchTuteurType;
@@ -16,10 +15,7 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Notifier\Notification\Notification;
-use Symfony\Component\Notifier\NotifierInterface;
-use Symfony\Component\Notifier\Recipient\NoRecipient;
-use Symfony\Component\Notifier\Recipient\Recipient;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -31,18 +27,18 @@ final class TuteurController extends AbstractController
     private TuteurRepository $tuteurRepository;
     private RelationRepository $relationRepository;
     private SearchHelper $searchHelper;
-    private NotifierInterface $notifier;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
-        NotifierInterface $notifier,
+        PresenceRepository $presenceRepository,
         SearchHelper $searchHelper
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
         $this->searchHelper = $searchHelper;
-        $this->notifier = $notifier;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -104,25 +100,6 @@ final class TuteurController extends AbstractController
      */
     public function show(Tuteur $tuteur): Response
     {
-
-        $notification = (new Notification('New Invoice', ['email']))
-            ->content('You got a new invoice for 15 EUR.')
-            ->importance(Notification::IMPORTANCE_HIGH)
-            ->emoji('🤩');
-
-        // The receiver of the Notification
-        $recipient = new Recipient(
-            'jf@marche.be',
-            '+32476662615'
-        );
-
-        $norecipient = new NoRecipient();
-        // Send the notification to the recipient
-       // $this->notifier->send($notification, $recipient);
-
-        $emailNotification = new EmailNotification($tuteur, 'coucou');
-        $this->notifier->send($emailNotification, $recipient);
-
         $relations = $this->relationRepository->findByTuteur($tuteur);
 
         return $this->render(
@@ -160,13 +137,18 @@ final class TuteurController extends AbstractController
     }
 
     /**
-     * //todo que faire si presence.
-     *
      * @Route("/{id}/delete", name="mercredi_admin_tuteur_delete", methods={"POST"})
      */
     public function delete(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
+
+            if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
+                $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');
+
+                return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+            }
+
             $id = $tuteur->getId();
             $this->tuteurRepository->remove($tuteur);
             $this->tuteurRepository->flush();

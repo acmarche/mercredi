@@ -3,7 +3,8 @@
 namespace AcMarche\Mercredi\Command;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Notification\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,10 +16,12 @@ class HealthCommand extends Command
     private EnfantRepository $enfantRepository;
     private NotificationMailer $notifcationMailer;
     private TuteurRepository $tuteurRepository;
+    private AdminEmailFactory $adminEmailFactory;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         TuteurRepository $tuteurRepository,
+        AdminEmailFactory $adminEmailFactory,
         NotificationMailer $notifcationMailer,
         string $name = null
     ) {
@@ -26,6 +29,7 @@ class HealthCommand extends Command
         $this->enfantRepository = $enfantRepository;
         $this->notifcationMailer = $notifcationMailer;
         $this->tuteurRepository = $tuteurRepository;
+        $this->adminEmailFactory = $adminEmailFactory;
     }
 
     protected function configure()
@@ -38,7 +42,8 @@ class HealthCommand extends Command
     {
         $enfants = $this->enfantRepository->findOrphelins();
         if (count($enfants) > 0) {
-            $this->notifcationMailer->sendMessagEnfantsOrphelins($enfants);
+            $email = $this->adminEmailFactory->sendMessagEnfantsOrphelins($enfants);
+            $this->notifcationMailer->sendAsEmailNotification($email);
         }
 
         $tuteurs = [];
@@ -58,9 +63,10 @@ class HealthCommand extends Command
                 $tuteur->setArchived(true);
             }
         }
-      //  $this->tuteurRepository->flush();
+        //  $this->tuteurRepository->flush();
         if (count($enfants) > 0) {
-            $this->notifcationMailer->sendMessagTuteurArchived($tuteurs);
+            $email = $this->adminEmailFactory->sendMessagTuteurArchived($tuteurs);
+            $this->notifcationMailer->sendAsEmailNotification($email);
         }
 
         return Command::SUCCESS;

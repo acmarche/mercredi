@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Facture\Mailer;
+namespace AcMarche\Mercredi\Mailer;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Render\FactureRender;

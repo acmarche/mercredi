@@ -5,36 +5,32 @@ namespace AcMarche\Mercredi\User\Command;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use function strlen;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use function strlen;
 
 final class CreateUserCommand extends Command
 {
     /**
      * @var string
      */
-    private const EMAIL = 'email';
-    /**
-     * @var string
-     */
     protected static $defaultName = 'mercredi:create-user';
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordHasher;
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserPasswordHasherInterface $userPasswordHasher,
         ?string $name = null
     ) {
         parent::__construct($name);
 
         $this->userRepository = $userRepository;
-        $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->userPasswordHasher = $userPasswordHasher;
     }
 
     protected function configure(): void
@@ -42,7 +38,7 @@ final class CreateUserCommand extends Command
         $this
             ->setDescription('Création d\'un utilisateur')
             ->addArgument('name', InputArgument::REQUIRED, 'nom')
-            ->addArgument(self::EMAIL, InputArgument::REQUIRED, 'Email')
+            ->addArgument('email', InputArgument::REQUIRED, 'Email')
             ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe');
     }
 
@@ -50,11 +46,11 @@ final class CreateUserCommand extends Command
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
 
-        $email = $input->getArgument(self::EMAIL);
+        $email = $input->getArgument('email');
         $name = $input->getArgument('name');
         $password = $input->getArgument('password');
 
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $symfonyStyle->error('Adresse email non valide');
 
             return Command::FAILURE;
@@ -65,7 +61,7 @@ final class CreateUserCommand extends Command
 
             return Command::FAILURE;
         }
-        if (null !== $this->userRepository->findOneBy([self::EMAIL => $email])) {
+        if (null !== $this->userRepository->findOneBy(['email' => $email])) {
             $symfonyStyle->error('Un utilisateur existe déjà avec cette adresse email');
 
             return Command::FAILURE;
@@ -75,7 +71,7 @@ final class CreateUserCommand extends Command
         $user->setEmail($email);
         $user->setUsername($email);
         $user->setNom($name);
-        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $password));
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
         $user->addRole(MercrediSecurityRole::ROLE_ADMIN);
 
         $this->userRepository->insert($user);

@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\User\Mailer;
+namespace AcMarche\Mercredi\Mailer;
 
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;

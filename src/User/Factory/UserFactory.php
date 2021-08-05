@@ -8,19 +8,19 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Security\PasswordGenerator;
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserFactory
 {
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordHasher;
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder
+        UserPasswordHasherInterface $userPasswordHasher
     ) {
         $this->userRepository = $userRepository;
-        $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->userPasswordHasher = $userPasswordHasher;
     }
 
     public function getInstance(?string $email = null): ?User
@@ -51,9 +51,8 @@ final class UserFactory
         $user->setUsername($user->getEmail());
         $user->setUsername($user->getEmail());
         $user->setPlainPassword(PasswordGenerator::generatePassword());
-        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
         $user->addRole(MercrediSecurityRole::ROLE_ANIMATEUR);
-        //$user->addAnimateur($animateur);
 
         $this->userRepository->insert($user);
 
@@ -73,7 +72,7 @@ final class UserFactory
 
         $user->setUsername($user->getEmail());
         $user->setPlainPassword(PasswordGenerator::generatePassword());
-        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
 
         $user->addTuteur($tuteur);
         $user->addRole(MercrediSecurityRole::ROLE_PARENT);

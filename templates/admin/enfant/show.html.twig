@@ -14,10 +14,18 @@
 
             <div class="d-flex">
                 <div class="flex-shrink-0">
-                    {% include '@AcMarcheMercrediAdmin/enfant/_photo.html.twig' %}
+                    {% include '@AcMarcheMercredi/commun/enfant/_photo.html.twig' %}
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    {% include '@AcMarcheMercrediAdmin/enfant/_identite.html.twig' %}
+                    {% include '@AcMarcheMercredi/commun/enfant/_identite.html.twig' %}
+                    <br/>
+                    <i class="fas fa-list-ol"></i>
+                    Ordre par défaut: {{ enfant.ordre }}
+                    {% if enfant.remarque %}
+                        <p class="card-text text-muted pt-2">
+                            {{ enfant.remarque | nl2br }}
+                        </p>
+                    {% endif %}
                     {% include '@AcMarcheMercrediAdmin/enfant/_frateries.html.twig' %}
                     {% if enfant.accueilEcole %}
                         <br/>
@@ -29,9 +37,9 @@
 
             <br/>
 
-                {% include '@AcMarcheMercrediAdmin/enfant/_tuteurs.html.twig' %}
-                {% include '@AcMarcheMercrediAdmin/enfant/_presences.html.twig' %}
-                {% include '@AcMarcheMercrediAdmin/enfant/_plaines.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/enfant/_tuteurs.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/enfant/_presences.html.twig' %}
+            {% include '@AcMarcheMercrediAdmin/enfant/_plaines.html.twig' %}
 
         </div>
         <div class="card-footer text-muted mt-3">

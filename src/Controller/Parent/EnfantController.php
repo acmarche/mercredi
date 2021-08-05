@@ -8,7 +8,8 @@ use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
 use AcMarche\Mercredi\Enfant\Message\EnfantCreated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Notification\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
@@ -37,6 +38,7 @@ final class EnfantController extends AbstractController
     private PlainePresenceRepository $plainePresenceRepository;
     private AccueilRepository $accueilRepository;
     private EnfantHandler $enfantHandler;
+    private AdminEmailFactory $adminEmailFactory;
     private NotificationMailer $notifcationMailer;
 
     public function __construct(
@@ -48,6 +50,7 @@ final class EnfantController extends AbstractController
         PlainePresenceRepository $plainePresenceRepository,
         AccueilRepository $accueilRepository,
         EnfantHandler $enfantHandler,
+        AdminEmailFactory $adminEmailFactory,
         NotificationMailer $notifcationMailer
     ) {
         $this->enfantRepository = $enfantRepository;
@@ -58,6 +61,7 @@ final class EnfantController extends AbstractController
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->accueilRepository = $accueilRepository;
         $this->enfantHandler = $enfantHandler;
+        $this->adminEmailFactory = $adminEmailFactory;
         $this->notifcationMailer = $notifcationMailer;
     }
 
@@ -98,7 +102,8 @@ final class EnfantController extends AbstractController
             $this->enfantHandler->newHandle($enfant, $this->tuteur);
             $this->dispatchMessage(new EnfantCreated($enfant->getId()));
             $enfant->setPhoto(null);//bug serialize
-            $this->notifcationMailer->sendMessagEnfantCreated($this->getUser(), $enfant);
+            $email = $this->adminEmailFactory->sendMessagEnfantCreated($this->getUser(), $enfant);
+            $this->notifcationMailer->sendAsEmailNotification($email);
 
             return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
         }

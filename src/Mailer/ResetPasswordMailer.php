@@ -1,13 +1,11 @@
 <?php
 
-namespace AcMarche\Mercredi\ResetPassword\Mailer;
+namespace AcMarche\Mercredi\Mailer;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Message;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 
 final class ResetPasswordMailer

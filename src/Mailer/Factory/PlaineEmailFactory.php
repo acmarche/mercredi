@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Plaine\Factory;
+namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
