@@ -143,11 +143,11 @@ final class TuteurController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
 
-            if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
+      /*      if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
                 $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');
 
                 return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
-            }
+            }*/
 
             $id = $tuteur->getId();
             $this->tuteurRepository->remove($tuteur);
