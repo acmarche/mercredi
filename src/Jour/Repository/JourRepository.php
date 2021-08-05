@@ -135,8 +135,7 @@ final class JourRepository extends ServiceEntityRepository
     {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
-            ->andWhere('jour.pedagogique = 0');
+            ->setParameter('date', $dateTime->format('Y-m-d').'%');
     }
 
     /**
