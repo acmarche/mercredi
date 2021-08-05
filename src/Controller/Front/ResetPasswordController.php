@@ -3,14 +3,16 @@
 namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Mailer\Factory\RegistrationMailerFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
 use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
-use AcMarche\Mercredi\Mailer\ResetPasswordMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -24,13 +26,18 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private $resetPasswordHelper;
-    private ResetPasswordMailer $resetPasswordMailer;
+    private ResetPasswordHelperInterface $resetPasswordHelper;
+    private RegistrationMailerFactory $registrationMailerFactory;
+    private NotificationMailer $notificationMailer;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, ResetPasswordMailer $resetPasswordMailer)
-    {
+    public function __construct(
+        ResetPasswordHelperInterface $resetPasswordHelper,
+        RegistrationMailerFactory $registrationMailerFactory,
+        NotificationMailer $notificationMailer
+    ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->resetPasswordMailer = $resetPasswordMailer;
+        $this->registrationMailerFactory = $registrationMailerFactory;
+        $this->notificationMailer = $notificationMailer;
     }
 
     /**
@@ -147,7 +154,7 @@ class ResetPasswordController extends AbstractController
         );
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData): RedirectResponse
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(
             [
@@ -175,7 +182,9 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('mercredi_front_check_email');
         }
 
-        $this->resetPasswordMailer->sendLink($user, $resetToken);
+        $email = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
+        $recipient = new Recipient($user->getEmail());
+        $this->notificationMailer->sendAsEmailNotification($email, $recipient);
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
