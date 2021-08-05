@@ -50,7 +50,7 @@ class FactureEmailFactory
             ->subject($data['sujet'])
             ->from($data['from'])
             ->to($data['to'])
-            ->textTemplate('@AcMarcheMercrediAdmin/facture/mail/_send.txt.twig')
+            ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->context(
                 [
                     'texte' => $data['texte'],
