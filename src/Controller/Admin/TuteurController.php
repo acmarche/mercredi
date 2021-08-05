@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Notification\EmailNotification;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -15,6 +16,10 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\NotifierInterface;
+use Symfony\Component\Notifier\Recipient\NoRecipient;
+use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,15 +31,18 @@ final class TuteurController extends AbstractController
     private TuteurRepository $tuteurRepository;
     private RelationRepository $relationRepository;
     private SearchHelper $searchHelper;
+    private NotifierInterface $notifier;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
+        NotifierInterface $notifier,
         SearchHelper $searchHelper
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
         $this->searchHelper = $searchHelper;
+        $this->notifier = $notifier;
     }
 
     /**
@@ -96,6 +104,25 @@ final class TuteurController extends AbstractController
      */
     public function show(Tuteur $tuteur): Response
     {
+
+        $notification = (new Notification('New Invoice', ['email']))
+            ->content('You got a new invoice for 15 EUR.')
+            ->importance(Notification::IMPORTANCE_HIGH)
+            ->emoji('🤩');
+
+        // The receiver of the Notification
+        $recipient = new Recipient(
+            'jf@marche.be',
+            '+32476662615'
+        );
+
+        $norecipient = new NoRecipient();
+        // Send the notification to the recipient
+       // $this->notifier->send($notification, $recipient);
+
+        $emailNotification = new EmailNotification($tuteur, 'coucou');
+        $this->notifier->send($emailNotification, $recipient);
+
         $relations = $this->relationRepository->findByTuteur($tuteur);
 
         return $this->render(

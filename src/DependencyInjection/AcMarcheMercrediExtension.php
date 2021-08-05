@@ -57,6 +57,10 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
                         $this->loadConfig($containerBuilder, 'vich_uploader');
 
                         break;
+                    case 'messenger':
+                        $this->loadConfig($containerBuilder, 'messenger');
+
+                        break;
                     case 'api_platform':
                         //$this->loadConfig($container, 'api_platform');
                         break;

@@ -22,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use function count;
 
@@ -41,6 +42,7 @@ final class MessageController extends AbstractController
     private MessageHandler $messageHandler;
     private PresenceHandler $presenceHandler;
     private MessageRepository $messageRepository;
+    private NotifierInterface $notifier;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -50,7 +52,8 @@ final class MessageController extends AbstractController
         TuteurUtils $tuteurUtils,
         MessageFactory $messageFactory,
         MessageHandler $messageHandler,
-        PresenceHandler $presenceHandler
+        PresenceHandler $presenceHandler,
+        NotifierInterface $notifier
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->relationRepository = $relationRepository;
@@ -60,6 +63,7 @@ final class MessageController extends AbstractController
         $this->messageHandler = $messageHandler;
         $this->presenceHandler = $presenceHandler;
         $this->messageRepository = $messageRepository;
+        $this->notifier = $notifier;
     }
 
     /**

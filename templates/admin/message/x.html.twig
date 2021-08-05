@@ -1,0 +1,22 @@
+{% extends '@email/default/notification/body.html.twig' %}
+
+{% block lead %}
+    <p class="lead">
+        {{ email.subject }}
+    </p>
+{% endblock %}
+
+{% block content %}
+
+    Fait par: {{ tuteur }}<br/>
+
+{% endblock %}
+
+{% block action %}
+    <spacer size="16"></spacer>
+    <button href="{{ url('mercredi_admin_tuteur_show', { id: tuteur.id }) }}">Consulter</button>
+{% endblock %}
+
+{% block footer_content %}
+    <p><small>Notification e-mail de Esquare planning</small></p>
+{% endblock %}
