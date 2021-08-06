@@ -8,9 +8,9 @@
         <div class="card-body">
             <h4 class="text-success">Dates de la plaine</h4>
             <ul class="list-group list-group-horizontal">
-                {% for plaineJour in plaine.plaineJours %}
+                {% for jour in plaine.jours %}
                     <li class="list-group-item">
-                        {{ plaineJour.jour.dateJour|format_date('full') }}
+                        {{ jour.dateJour|format_date('full') }}
                     </li>
                 {% endfor %}
             </ul>

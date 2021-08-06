@@ -29,3 +29,19 @@ Feature: Test de la gestion des présences
     Then I should see "Détail de la présence de SIMPSON Bart du mercredi 6 mai 2020"
     Then I press "Supprimer la présence"
     Then I should see "Une présence passée ne peut être supprimée"
+
+ Scenario: Je ne peux pas supprimer une présence facturée
+    Then I follow "SIMPSON Bart"
+    Then I should see "Mercredi 6 mai 2020"
+    Then I follow "Mercredi 6 mai 2020"
+    Then I should see "Détail de la présence de SIMPSON Bart du mercredi 6 mai 2020"
+    Then I press "Supprimer la présence"
+    Then I should see "Une présence passée ne peut être facturée"
+
+ Scenario: J'ajoute une présence dont la date a expirée
+    Then I follow "SIMPSON Bart"
+    Then I should see "Mercredi 6 mai 2020"
+    Then I follow "Mercredi 6 mai 2020"
+    Then I should see "Détail de la présence de SIMPSON Bart du mercredi 6 mai 2020"
+    Then I press "Supprimer la présence"
+    Then I should see "Une présence passée ne peut être date dépassée"

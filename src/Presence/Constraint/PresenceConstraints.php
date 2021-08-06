@@ -7,7 +7,7 @@ final class PresenceConstraints
     /**
      * @var iterable|PresenceConstraintInterface
      */
-    private $constraints;
+    private iterable $constraints;
 
     public function __construct()
     {
