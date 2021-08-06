@@ -110,8 +110,10 @@ final class JourRepository extends ServiceEntityRepository
     /**
      * @return Jour[]
      */
-    public function findPedagogiqueByDateGreatherOrEqualAndNotRegister(DateTimeInterface $dateTime, Enfant $enfant): array
-    {
+    public function findPedagogiqueByDateGreatherOrEqualAndNotRegister(
+        DateTimeInterface $dateTime,
+        Enfant $enfant
+    ): array {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
@@ -122,8 +124,10 @@ final class JourRepository extends ServiceEntityRepository
     /**
      * @return Jour[]
      */
-    public function findJourNotPedagogiqueByDateGreatherOrEqualAndNotRegister(DateTimeInterface $dateTime, Enfant $enfant): array
-    {
+    public function findJourNotPedagogiqueByDateGreatherOrEqualAndNotRegister(
+        DateTimeInterface $dateTime,
+        Enfant $enfant
+    ): array {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
@@ -131,8 +135,10 @@ final class JourRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function getQlJourByDateGreatherOrEqualAndNotRegister( Enfant $enfant,DateTimeInterface $dateTime): QueryBuilder
-    {
+    public function getQlJourByDateGreatherOrEqualAndNotRegister(
+        Enfant $enfant,
+        DateTimeInterface $dateTime
+    ): QueryBuilder {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%');
@@ -147,8 +153,10 @@ final class JourRepository extends ServiceEntityRepository
     public function findOneByDate(\DateTimeInterface $dateTime): ?Jour
     {
         return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine_jour', 'plaine_jour', 'WITH')
+            ->addSelect('plaine_jour')
             ->andWhere('jour.date_jour LIKE :date')
-            ->andWhere('jour.plaine_jour IS NOT NULL')
+            ->andWhere('plaine_jour IS NOT NULL')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->getQuery()->getOneOrNullResult();
     }

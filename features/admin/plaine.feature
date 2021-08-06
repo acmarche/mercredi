@@ -31,6 +31,20 @@ Feature: Gestion des plaines
     Then I should see "mardi 11 février 2020"
     Then I should see "mercredi 12 février 2020"
 
+  Scenario: Ajout une plaine sans dates
+    Then I follow "Ajouter une plaine"
+    And I fill in "plaine[nom]" with "Paques 2030"
+    And I fill in "plaine[prix1]" with "8"
+    And I fill in "plaine[prix1]" with "5"
+    And I fill in "plaine[plaine_groupes][0][inscription_maximum]" with "20"
+    And I fill in "plaine[plaine_groupes][1][inscription_maximum]" with "15"
+    And I fill in "plaine[plaine_groupes][2][inscription_maximum]" with "12"
+    And I press "Sauvegarder"
+    Then I should see "La plaine a bien été ajoutée"
+    Given I am on "/admin/plaine/"
+    Then I follow "Paques 2030"
+    And I should see "Vous devez encoder des dates"
+
   Scenario: Modifier une plaine
     Then I follow "Plaine de noel"
     Then I follow "Modifier"

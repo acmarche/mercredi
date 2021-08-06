@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Matrix\add;
 
 /**
  * @Route("/plaine")
@@ -114,6 +115,11 @@ final class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine): Response
     {
+        if (count($plaine->getPlaineJours()) === 0) {
+            $this->addFlash('danger', 'Vous devez encoder des dates');
+
+            return $this->redirectToRoute('mercredi_admin_plaine_jour_edit', ['id' => $plaine->getId()]);
+        }
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
 
         $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
