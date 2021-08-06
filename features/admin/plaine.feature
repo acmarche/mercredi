@@ -22,14 +22,14 @@ Feature: Gestion des plaines
     And I press "Sauvegarder"
     Then I should see "La plaine a bien été ajoutée"
     Then I should see "Dates pour Carnaval 2020"
-    Then I fill in "plaine_jour[jours][0][date_jour]" with "2020-02-10"
-    Then I fill in "plaine_jour[jours][1][date_jour]" with "2020-02-11"
-    Then I fill in "plaine_jour[jours][2][date_jour]" with "2020-02-12"
+    Then I fill in "plaine_jours[jours][0][date_jour]" with "2020-02-10"
+    Then I fill in "plaine_jours[jours][1][date_jour]" with "2020-02-11"
+    Then I fill in "plaine_jours[jours][2][date_jour]" with "2020-02-12"
     And I press "Sauvegarder"
     Then I should see "les dates ont bien été enregistrées"
-    Then I should see "lundi 10 février 2020"
-    Then I should see "mardi 11 février 2020"
-    Then I should see "mercredi 12 février 2020"
+    Then I should see "10 février 2020"
+    Then I should see "11 février 2020"
+    Then I should see "12 février 2020"
 
   Scenario: Ajout une plaine sans dates
     Then I follow "Ajouter une plaine"
@@ -68,7 +68,7 @@ Feature: Gestion des plaines
   #  Then I follow "Ajouter une date"
   #  And I fill in "plaine_jour[jours][3][date_jour]" with "2020-12-24"
     And I press "Sauvegarder"
-    Then I should see "mercredi 18 décembre"
+    Then I should see "18 décembre"
 
   Scenario: Supprimer une plaine
     Then I follow "Plaine de noel"

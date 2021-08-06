@@ -1,31 +1,32 @@
-<a href="{{ path('mercredi_admin_plaine_edit', { 'id': plaine.id }) }}" role="button"
-   class="btn btn-primary"><i
-            class="far fa-edit"></i> Modifier</a>
+<div class="d-grid gap-2 d-md-block mb-3">
+    <a href="{{ path('mercredi_admin_plaine_edit', { 'id': plaine.id }) }}" role="button"
+       class="btn btn-primary"><i
+                class="far fa-edit"></i> Modifier</a>
 
-<a href="{{ path('mercredi_admin_plaine_jour_edit', { 'id': plaine.id }) }}" role="button"
-   class="btn btn-primary"><i
-            class="far fa-edit"></i> Jours</a>
+    <a href="{{ path('mercredi_admin_plaine_jour_edit', { 'id': plaine.id }) }}" role="button"
+       class="btn btn-primary"><i
+                class="far fa-edit"></i> Jours</a>
 
-<a href="{{ path('mercredi_admin_plaine_pdf', { 'id': plaine.id } ) }}" class="btn btn-primary" role="button">
-    <span class="far fa-file-pdf"></span> Exporter en pdf
-</a>
+    <a href="{{ path('mercredi_admin_plaine_pdf', { 'id': plaine.id } ) }}" class="btn btn-primary" role="button">
+        <span class="far fa-file-pdf"></span> Exporter en pdf
+    </a>
 
-<a href="{{ path('mercredi_message_new_plaine', { 'id': plaine.id } ) }}" class="btn btn-primary" role="button">
-    <span class="far fa-file-pdf"></span> Envoyer un message
-</a>
+    <a href="{{ path('mercredi_message_new_plaine', { 'id': plaine.id } ) }}" class="btn btn-primary" role="button">
+        <span class="far fa-file-pdf"></span> Envoyer un message
+    </a>
 
-<a href="{{ path('mercredi_admin_plaine_presence_new', { 'id': plaine.id }) }}" role="button"
-   class="btn btn-primary"><i
-            class="fas fa-plus"></i> Inscrire un enfant</a>
+    <a href="{{ path('mercredi_admin_plaine_presence_new', { 'id': plaine.id }) }}" role="button"
+       class="btn btn-primary"><i
+                class="fas fa-plus"></i> Inscrire un enfant</a>
 
-<a href="{{ path('mercredi_admin_plaine_open', { 'id': plaine.id }) }}" role="button"
-   class="btn btn-primary"><i class="fas fa-user-edit"></i> Ouvrir les inscriptions</a>
+    <a href="{{ path('mercredi_admin_plaine_open', { 'id': plaine.id }) }}" role="button"
+       class="btn btn-primary"><i class="fas fa-user-edit"></i> Ouvrir les inscriptions</a>
 
-<a href="{{ path('mercredi_admin_plaine_index') }}" class="btn btn-primary" role='button'><i class="fas fa-list"></i>
-    Retour à la Liste</a>
+    <a href="{{ path('mercredi_admin_plaine_index') }}" class="btn btn-primary" role='button'><i
+                class="fas fa-list"></i>
+        Retour à la Liste</a>
 
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-    <i class="fas fa-trash"></i> Supprimer
-</button>
-
-<br/><br/>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <i class="fas fa-trash"></i> Supprimer
+    </button>
+</div>
