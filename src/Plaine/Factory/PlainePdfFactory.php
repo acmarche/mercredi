@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Plaine\Factory;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
-use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -35,7 +34,7 @@ class PlainePdfFactory
     public function generate(Plaine $plaine): Response
     {
         $images = $this->getImagesBase64();
-        $dates = PlaineUtils::extractJoursFromPlaine($plaine);
+        $dates = $plaine->getJours();
         $firstDay = $plaine->getFirstDay()->getDateJour();
 
         $presences = $this->presenceRepository->findByPlaine($plaine);

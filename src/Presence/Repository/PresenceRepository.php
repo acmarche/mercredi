@@ -3,14 +3,13 @@
 namespace AcMarche\Mercredi\Presence\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -43,9 +42,9 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
             ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire', 'WITH')
             ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('jour.plaine_jour', 'plaine_jour', 'WITH')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->leftJoin('presence.reduction', 'reduction', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine_jour');
+            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
     }
 
     /**
@@ -89,7 +88,7 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findByPlaine(Plaine $plaine): array
     {
-        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $jours = $plaine->getJours();
 
         return $this->createQBl()
             ->andWhere('presence.jour IN (:jours)')
@@ -127,12 +126,17 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findByDay(Jour $jour)
+    public function findByDay(Jour $jour, ?Plaine $plaine)
     {
         $qb = $this->createQBl()
             ->andWhere('presence.jour = :jour')
-            ->addOrderBy('enfant.nom')
-            ->setParameter('jour', $jour);
+            ->setParameter('jour', $jour)
+            ->addOrderBy('enfant.nom');
+
+        if ($plaine) {
+            $qb->andWhere('jour.plaine = :plaine')
+                ->setParameter('plaine', $plaine);
+        }
 
         /* if ($archived !== null) {
              $qb->andWhere('enfant.archived = :archive')
@@ -164,7 +168,7 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
     {
-        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $jours = $plaine->getJours();
 
         return $this->createQBl()
             ->andWhere('presence.jour IN (:jours)')
@@ -179,7 +183,7 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findByPlaineAndEnfant(Plaine $plaine, Enfant $enfant): array
     {
-        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $jours = $plaine->getJours();
 
         return $this->createQBl()
             ->andWhere('presence.jour IN (:jours)')
@@ -195,7 +199,7 @@ final class PresenceRepository extends ServiceEntityRepository
     public function findByEnfantAndIsPlaine(Enfant $enfant): array
     {
         return $this->createQBl()
-            ->andWhere('plaine_jour IS NOT NULL')
+            ->andWhere('plaine IS NOT NULL')
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();

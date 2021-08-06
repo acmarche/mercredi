@@ -2,14 +2,11 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
-use AcMarche\Mercredi\Plaine\Form\PlaineJourType;
+use AcMarche\Mercredi\Plaine\Form\PlaineJoursType;
 use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
-use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,21 +20,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PlaineJourController extends AbstractController
 {
-    private PlaineRepository $plaineRepository;
-    private EnfantRepository $enfantRepository;
     private PlaineHandler $plaineHandler;
     private PlainePresenceRepository $plainePresenceRepository;
     private GroupingInterface $grouping;
 
     public function __construct(
-        PlaineRepository $plaineRepository,
-        EnfantRepository $enfantRepository,
         PlaineHandler $plaineHandler,
         PlainePresenceRepository $plainePresenceRepository,
         GroupingInterface $grouping
     ) {
-        $this->plaineRepository = $plaineRepository;
-        $this->enfantRepository = $enfantRepository;
         $this->plaineHandler = $plaineHandler;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->grouping = $grouping;
@@ -50,7 +41,7 @@ final class PlaineJourController extends AbstractController
     {
         $this->plaineHandler->initJours($plaine);
 
-        $form = $this->createForm(PlaineJourType::class, $plaine);
+        $form = $this->createForm(PlaineJoursType::class, $plaine);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,41 +65,19 @@ final class PlaineJourController extends AbstractController
     /**
      * @Route("/{id}", name="mercredi_admin_plaine_jour_show", methods={"GET"})
      */
-    public function show(PlaineJour $plaineJour): Response
+    public function show(Jour $jour): Response
     {
-        $plaine = $plaineJour->getPlaine();
-        $jour = $plaineJour->getJour();
-        $enfants = $this->plainePresenceRepository->findEnfantsByJour($jour);
+        $plaine = $jour->getPlaine();
+        $enfants = $this->plainePresenceRepository->findEnfantsByJour($jour, $plaine);
         $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_jour/show.html.twig',
             [
-                'jour' => $plaineJour->getJour(),
+                'jour' => $jour,
                 'plaine' => $plaine,
                 'datas' => $data,
-                'plaineJour' => $plaineJour,
             ]
         );
-    }
-
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_plaine_jour_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Plaine $plaine): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
-            if (count($this->enfantRepository->findBy(['plaine' => $plaine])) > 0) {
-                $this->addFlash('danger', 'La plaine contient des enfants et ne peut être supprimée');
-
-                return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
-            }
-            $plaineId = $plaine->getId();
-            $this->plaineRepository->remove($plaine);
-            $this->plaineRepository->flush();
-            $this->dispatchMessage(new PlaineDeleted($plaineId));
-        }
-
-        return $this->redirectToRoute('mercredi_admin_plaine_index');
     }
 }

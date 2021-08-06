@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -31,11 +32,11 @@ final class JourRepository extends ServiceEntityRepository
     public function getQlNotPlaine(bool $archive = false): QueryBuilder
     {
         return $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
-            ->addSelect('plaineJour')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
+            ->addSelect('plaine')
             ->andwhere('jour.archived = :archive')
             ->setParameter('archive', $archive)
-            ->andWhere('plaineJour IS NULL')
+            ->andWhere('jour.plaine IS NULL')
             ->addOrderBy('jour.date_jour', 'DESC');
     }
 
@@ -150,14 +151,13 @@ final class JourRepository extends ServiceEntityRepository
      * @return \AcMarche\Mercredi\Entity\Jour|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByDate(\DateTimeInterface $dateTime): ?Jour
+    public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?Jour
     {
         return $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaine_jour', 'WITH')
-            ->addSelect('plaine_jour')
             ->andWhere('jour.date_jour LIKE :date')
-            ->andWhere('plaine_jour IS NOT NULL')
             ->setParameter('date', $dateTime->format('Y-m-d').'%')
+            ->andWhere('jour.plaine = :plaine')
+            ->setParameter('plaine', $plaine)
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -170,6 +170,21 @@ final class JourRepository extends ServiceEntityRepository
         return $this->getQlNotPlaine()
             ->andWhere(':animateur MEMBER OF jour.animateurs')
             ->setParameter('animateur', $animateur)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @param Plaine $plaine
+     * @return array|Jour[]
+     */
+    public function findByPlaine(Plaine $plaine): array
+    {
+        return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
+            ->addSelect('plaine')
+            ->setParameter('plaine', $plaine)
+            ->andWhere('jour.plaine = :plaine')
+            ->addOrderBy('jour.date_jour', 'ASC')
             ->getQuery()->getResult();
     }
 

@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
-use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -57,7 +56,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        if (0 === count($plaine->getPlaineJours())) {
+        if (0 === count($plaine->getJours())) {
             $this->addFlash('danger', 'La plaine n\'a aucune date');
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
@@ -196,7 +195,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function jours(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
-        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $jours = $plaine->getJours();
         $plainePresencesDto = new PlainePresencesDto($plaine, $enfant, $jours);
 
         $presences = $this->presenceRepository->findByPlaineAndEnfant($plaine, $enfant);

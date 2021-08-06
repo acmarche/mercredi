@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Doctrine\Common\Collections\Collection;
@@ -24,7 +23,7 @@ final class PlainePresenceHandler
 
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): void
     {
-        $jours = PlaineUtils::extractJoursFromPlaine($plaine);
+        $jours = $plaine->getJours();
         $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
     }
 

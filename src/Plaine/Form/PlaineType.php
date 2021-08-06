@@ -39,9 +39,9 @@ final class PlaineType extends AbstractType
                 'plaine_groupes',
                 CollectionType::class,
                 [
-                    'entry_type' => PlaineGroupeType::class,
+                    'entry_type' => PlaineGroupeEditWithoutFileType::class,
                     'entry_options' => ['label' => false],
-                    'label' => 'Maximum par groupe',
+                    'label' => 'xx',
                 ]
             )
             ->add(

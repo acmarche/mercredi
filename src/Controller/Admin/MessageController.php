@@ -82,7 +82,7 @@ final class MessageController extends AbstractController
             $tuteurs = [[]];
 
             if ($jour) {
-                $presences = $this->presenceRepository->findByDay($jour);
+                $presences = $this->presenceRepository->findByDay($jour, null);
                 $tuteurs[] = PresenceUtils::extractTuteurs($presences);
             }
 
@@ -126,7 +126,7 @@ final class MessageController extends AbstractController
      */
     public function fromJour(Request $request, Jour $jour): Response
     {
-        $presences = $this->presenceRepository->findByDay($jour);
+        $presences = $this->presenceRepository->findByDay($jour, null);
 
         $tuteurs = PresenceUtils::extractTuteurs($presences);
         $emails = $this->tuteurUtils->getEmails($tuteurs);

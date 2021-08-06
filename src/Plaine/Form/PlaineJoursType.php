@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class PlaineJourType extends AbstractType
+final class PlaineJoursType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {

@@ -4,8 +4,6 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
-use AcMarche\Mercredi\Plaine\Utils\PlaineUtils;
-use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -23,20 +21,19 @@ class Plaine implements SluggableInterface
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
-    use PlaineJoursTrait;
-    use JoursTrait;
     use InscriptionOpenTrait;
     use PrixTrait;
     use PrematernelleTrait;
     use PlaineGroupesTrait;
     use SluggableTrait;
     use ArchiveTrait;
+    use \AcMarche\Mercredi\Entity\Traits\JoursTrait;
 
     /**
-     * @var PlaineJour[]
-     * @ORM\OneToMany(targetEntity=PlaineJour::class, mappedBy="plaine", cascade={"remove"})
+     * @var Jour[]
+     * @ORM\OneToMany(targetEntity=Jour::class, mappedBy="plaine", cascade={"remove"})
      */
-    private iterable $plaine_jours;
+    private iterable $jours;
 
     /**
      * @var PlaineGroupe[]|null
@@ -50,7 +47,6 @@ class Plaine implements SluggableInterface
     {
         $this->jours = new ArrayCollection();
         $this->plaine_groupes = new ArrayCollection();
-        $this->plaine_jours = new ArrayCollection();
         $this->inscriptionOpen = false;
         $this->prix1 = 0;
         $this->prix2 = 0;
@@ -74,6 +70,6 @@ class Plaine implements SluggableInterface
 
     public function getFirstDay(): Jour
     {
-        return PlaineUtils::extractJoursFromPlaine($this)[0];
+        return $this->jours[0];
     }
 }

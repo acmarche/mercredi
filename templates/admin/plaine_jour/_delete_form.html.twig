@@ -10,16 +10,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                Supprimer {{ plaineJour }} ?
+                Supprimer {{ jour|format_date('full') }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('mercredi_admin_plaine_jour_delete', {'id': plaineJour.id}) }}">
-
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ plaineJour.id) }}">
+                <form method="post" action="{{ path('mercredi_admin_jour_delete', {'id': jour.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jour.id) }}">
                     <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Annuler
                     </button>
-                    <button type="submit" class="btn btn-danger">Supprimer cette journée</button>
+                    <button type="submit" class="btn btn-danger">Supprimer cette date</button>
                 </form>
             </div>
         </div>

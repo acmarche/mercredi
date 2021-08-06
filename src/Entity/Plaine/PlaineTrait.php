@@ -4,9 +4,6 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 
 trait PlaineTrait
 {
-    /**
-     * @var Plaine|null
-     */
     private ?Plaine $plaine = null;
 
     public function getPlaine(): ?Plaine

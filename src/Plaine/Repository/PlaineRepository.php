@@ -29,10 +29,9 @@ final class PlaineRepository extends ServiceEntityRepository
     public function search(?string $nom, bool $archived = false): array
     {
         $qb = $this->createQueryBuilder('plaine')
-            ->leftJoin('plaine.plaine_jours', 'plaine_jours', 'WITH')
-            ->leftJoin('plaine_jours.jour', 'jour', 'WITH')
-            ->addSelect('plaine_jours', 'jour')
-            ->orderBy('jour.date_jour', 'DESC')
+            ->leftJoin('plaine.jours', 'jours', 'WITH')
+            ->addSelect('jours')
+            ->orderBy('jours.date_jour', 'DESC')
             ->andWhere('plaine.archived = :archive')
             ->setParameter('archive', $archived);
 
@@ -50,10 +49,9 @@ final class PlaineRepository extends ServiceEntityRepository
     public function findPlaineByDateDesc(): array
     {
         return $this->createQueryBuilder('plaine')
-            ->leftJoin('plaine.plaine_jours', 'plaine_jours', 'WITH')
-            ->leftJoin('plaine_jours.jour', 'jour', 'WITH')
-            ->addSelect('plaine_jours', 'jour')
-            ->orderBy('jour.date_jour', 'DESC')
+            ->leftJoin('plaine.jours', 'jours', 'WITH')
+            ->addSelect('jours')
+            ->orderBy('jours.date_jour', 'DESC')
             ->getQuery()
             ->getResult();
     }

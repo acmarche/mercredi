@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineTrait;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
-use AcMarche\Mercredi\Entity\Plaine\PlaineJourTrait;
 use AcMarche\Mercredi\Entity\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\ColorTrait;
@@ -27,10 +27,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"date_jour", "pedagogique"})
+ *     @ORM\UniqueConstraint(columns={"date_jour", "pedagogique", "plaine_id"}),
  * })
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Jour\Repository\JourRepository")
- * @UniqueEntity("date_jour", "pedagogique")
+ * @UniqueEntity("date_jour", "pedagogique", "plaine")
  */
 class Jour implements TimestampableInterface
 {
@@ -42,8 +42,8 @@ class Jour implements TimestampableInterface
     use ArchiveTrait;
     use PedagogiqueTrait;
     use ForfaitTrait;
-    use PlaineJourTrait;
     use AnimateursTrait;
+    use PlaineTrait;
 
     /**
      * @var DateTime|null
@@ -62,10 +62,9 @@ class Jour implements TimestampableInterface
     private iterable $presences;
 
     /**
-     * Reverse
-     * @ORM\OneToOne(targetEntity=PlaineJour::class, mappedBy="jour")
+     * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="jours")
      */
-    private ?PlaineJour $plaine_jour = null;
+    private ?Plaine $plaine = null;
 
     /**
      * @var Animateur[]

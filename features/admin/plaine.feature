@@ -43,7 +43,7 @@ Feature: Gestion des plaines
     Then I should see "La plaine a bien été ajoutée"
     Given I am on "/admin/plaine/"
     Then I follow "Paques 2030"
-    And I should see "Vous devez encoder des dates"
+    And I should see "La plaine doit contenir des dates"
 
   Scenario: Modifier une plaine
     Then I follow "Plaine de noel"

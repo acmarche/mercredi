@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Migration\Handler;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
-use AcMarche\Mercredi\Entity\Plaine\PlaineJour;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
@@ -71,11 +70,8 @@ class PlaineImport
             $jourDate = \DateTime::createFromFormat('Y-m-d', $data->date_jour);
             $jour = new Jour();
             $jour->setDateJour($jourDate);
+            $jour->setPlaine($plaine);
             $this->tuteurRepository->persist($jour);
-
-            $plaineJour = new PlaineJour($plaine, $jour);
-            $this->tuteurRepository->persist($plaineJour);
-
         }
         $this->tuteurRepository->flush();
     }

@@ -1,7 +1,22 @@
-AcMarche\Mercredi\Entity\Plaine\PlaineJour:
-  jour_carnaval1:
-    __construct: ['@plaine_noel','@jour_2024_12_16']
-  jour_carnaval2:
-    __construct: ['@plaine_noel','@jour_2024_12_17']
-  jour_carnaval3:
-    __construct: ['@plaine_noel','@jour_2024_12_18']
+AcMarche\Mercredi\Entity\Jour:
+  jour_2024_12_16:
+    date_jour: '<carbonDateTime(2024,12,16,9,0)>'
+    plaine: '@plaine_noel'
+    color: '<hexcolor()>'
+    prix1: '0'
+    prix2: '0'
+    prix3: '0'
+  jour_2024_12_17:
+    date_jour: '<carbonDateTime(2024,12,17,9,0)>'
+    plaine: '@plaine_noel'
+    color: '<hexcolor()>'
+    prix1: '0'
+    prix2: '0'
+    prix3: '0'
+  jour_2024_12_18:
+    date_jour: '<carbonDateTime(2024,12,18,9,0)>'
+    plaine: '@plaine_noel'
+    color: '<hexcolor()>'
+    prix1: '0'
+    prix2: '0'
+    prix3: '0'

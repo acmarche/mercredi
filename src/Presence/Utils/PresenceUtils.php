@@ -9,9 +9,7 @@ use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use AcMarche\Mercredi\Utils\SortUtils;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -19,16 +17,13 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 final class PresenceUtils
 {
     private RelationRepository $relationRepository;
-    private ScolaireUtils $scolaireUtils;
     private ParameterBagInterface $parameterBag;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
-        RelationRepository $relationRepository,
-        ScolaireUtils $scolaireUtils
+        RelationRepository $relationRepository
     ) {
         $this->relationRepository = $relationRepository;
-        $this->scolaireUtils = $scolaireUtils;
         $this->parameterBag = $parameterBag;
     }
 
@@ -77,6 +72,7 @@ final class PresenceUtils
         foreach ($tuteurs as $tuteur) {
             $data[$tuteur->getId()] = $tuteur;
         }
+
         return $data;
     }
 
@@ -161,11 +157,10 @@ final class PresenceUtils
                 if (!$jour) {
                     return null;
                 }
-                $plaineJour = $jour->getPlaineJour();
-                if (null === $plaineJour) {
+                $plaine = $jour->getPlaine();
+                if (!$plaine) {
                     return null;
                 }
-                $plaine = $plaineJour->getPlaine();
                 if (!$plaines->contains($plaine)) {
                     $plaines->add($plaine);
                 }

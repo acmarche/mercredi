@@ -49,9 +49,9 @@ final class PlainePresenceRepository
         return PresenceUtils::extractPlainesFromPresences($presences);
     }
 
-    public function findEnfantsByJour(Jour $jour)
+    public function findEnfantsByJour(Jour $jour, Plaine $plaine)
     {
-        $presences = $this->presenceRepository->findByDay($jour);
+        $presences = $this->presenceRepository->findByDay($jour, $plaine);
 
         return PresenceUtils::extractEnfants($presences);
     }
