@@ -4,8 +4,9 @@ namespace AcMarche\Mercredi\Message\Factory;
 
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 final class EmailFactory
@@ -19,13 +20,12 @@ final class EmailFactory
         $this->storage = $storage;
     }
 
-    public function create(Message $message): TemplatedEmail
+    public function create(Message $message): NotificationEmail
     {
-        $templatedEmail = (new TemplatedEmail())
-            ->subject($message->getSujet())
+        $notification = NotificationEmailJf::asPublicEmailJf();
+        $notification->subject($message->getSujet())
             ->from($message->getFrom())
-            //  ->htmlTemplate('@AcMarcheMercrediAdmin/mail/mail.html.twig')
-            ->textTemplate('@AcMarcheMercrediAdmin/message/_mail.txt.twig')
+            ->htmlTemplate('@AcMarcheMercrediEmail/admin/mail.html.twig')
             ->context(
                 [
                     'texte' => $message->getTexte(),
@@ -37,23 +37,22 @@ final class EmailFactory
          * Pieces jointes.
          */
         if (null !== ($uploadedFile = $message->getFile())) {
-            $templatedEmail->attachFromPath(
+            $notification->attachFromPath(
                 $uploadedFile->getRealPath(),
                 $uploadedFile->getClientOriginalName(),
                 $uploadedFile->getClientMimeType()
             );
         }
 
-        return $templatedEmail;
+        return $notification;
     }
 
-    public function createForPlaine(Plaine $plaine, Message $message): TemplatedEmail
+    public function createForPlaine(Plaine $plaine, Message $message, bool $attachCourriers): NotificationEmail
     {
-        $templatedEmail = (new TemplatedEmail())
-            ->subject($message->getSujet())
+        $notification = NotificationEmailJf::asPublicEmailJf();
+        $notification->subject($message->getSujet())
             ->from($message->getFrom())
-            //  ->htmlTemplate('@AcMarcheMercrediAdmin/mail/mail.html.twig')
-            ->textTemplate('@AcMarcheMercrediAdmin/message/_mail.txt.twig')
+            ->htmlTemplate('@AcMarcheMercrediAdmin/admin/mail.html.twig')
             ->context(
                 [
                     'texte' => $message->getTexte(),
@@ -64,17 +63,19 @@ final class EmailFactory
         /**
          * Pieces jointes.
          */
-        foreach ($plaine->getPlaineGroupes() as $plaineGroupe) {
-            if($plaineGroupe->getFileName()){
-                $path = $this->storage->resolvePath($plaineGroupe, 'file');
-                $templatedEmail->attachFromPath(
-                    $path,
-                    $plaineGroupe->getGroupeScolaire()->getNom(),
-                    $plaineGroupe->getMimeType()
-                );
+        if ($attachCourriers) {
+            foreach ($plaine->getPlaineGroupes() as $plaineGroupe) {
+                if ($plaineGroupe->getFileName()) {
+                    $path = $this->storage->resolvePath($plaineGroupe, 'file');
+                    $notification->attachFromPath(
+                        $path,
+                        $plaineGroupe->getGroupeScolaire()->getNom(),
+                        $plaineGroupe->getMimeType()
+                    );
+                }
             }
         }
 
-        return $templatedEmail;
+        return $notification;
     }
 }

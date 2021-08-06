@@ -5,10 +5,10 @@ namespace AcMarche\Mercredi\Message\Handler;
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Message\Factory\EmailFactory;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final class MessageHandler
 {
@@ -17,15 +17,18 @@ final class MessageHandler
     private MessageRepository $messageRepository;
     private EmailFactory $emailFactory;
     private FlashBagInterface $flashBag;
+    private NotificationMailer $notificationMailer;
 
     public function __construct(
         MessageRepository $messageRepository,
         EmailFactory $emailFactory,
+        NotificationMailer $notificationMailer,
         FlashBagInterface $flashBag
     ) {
         $this->messageRepository = $messageRepository;
         $this->emailFactory = $emailFactory;
         $this->flashBag = $flashBag;
+        $this->notificationMailer = $notificationMailer;
     }
 
     public function handle(Message $message): void
@@ -34,31 +37,20 @@ final class MessageHandler
 
         foreach ($message->getDestinataires() as $addressEmail) {
             $templatedEmail->to($addressEmail);
-
-            try {
-                $this->sendMail($templatedEmail);
-            } catch (TransportExceptionInterface $e) {
-                $this->flashBag->add('danger', 'Erreur pour l\'email '.$addressEmail.': '.$e->getMessage());
-            }
+            $this->notificationMailer->sendAsEmailNotification($templatedEmail, $addressEmail);
         }
 
         $this->messageRepository->persist($message);
         $this->messageRepository->flush();
     }
 
-    public function handleFromPlaine(Plaine $plaine, Message $message): void
+    public function handleFromPlaine(Plaine $plaine, Message $message, bool $attachCourrier): void
     {
-        $templatedEmail = $this->emailFactory->createForPlaine($plaine, $message);
+        $templatedEmail = $this->emailFactory->createForPlaine($plaine, $message, $attachCourrier);
 
         foreach ($message->getDestinataires() as $addressEmail) {
             $templatedEmail->to($addressEmail);
-
-            try {
-                $this->sendMail($templatedEmail);
-            } catch (TransportExceptionInterface $e) {
-                $this->flashBag->add('danger', 'Erreur pour l\'email '.$addressEmail.': '.$e->getMessage());
-            }
-            break;
+            $this->notificationMailer->sendAsEmailNotification($addressEmail);
         }
 
         $this->messageRepository->persist($message);

@@ -51,6 +51,8 @@ class Message implements TimestampableInterface
      */
     private iterable $destinataires;
 
+    public bool $attachCourriers;
+
     public function getFrom(): ?string
     {
         return $this->from;

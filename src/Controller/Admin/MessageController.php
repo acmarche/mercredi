@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Message\Factory\MessageFactory;
+use AcMarche\Mercredi\Message\Form\MessagePlaineType;
 use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
 use AcMarche\Mercredi\Message\Handler\MessageHandler;
@@ -218,12 +219,13 @@ final class MessageController extends AbstractController
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
 
-        $form = $this->createForm(MessageType::class, $message);
+        $form = $this->createForm(MessagePlaineType::class, $message);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->messageHandler->handleFromPlaine($plaine, $message);
+            $attachCourrier = (bool)$form->get('attachCourriers')->getData();
+            $this->messageHandler->handleFromPlaine($plaine, $message, $attachCourrier);
 
             $this->addFlash('success', 'Le message a bien été envoyé');
 
