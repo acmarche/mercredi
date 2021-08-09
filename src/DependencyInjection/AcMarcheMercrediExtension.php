@@ -20,6 +20,7 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
     {
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__.'/../../config'));
         $phpFileLoader->load('services.php');
+        //  $phpFileLoader->load('packages/messenger.php');
 
         //auto tag PresenceConstraintInterface
         $containerBuilder->registerForAutoconfiguration(PresenceConstraintInterface::class)
@@ -31,40 +32,28 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
      */
     public function prepend(ContainerBuilder $containerBuilder): void
     {
-        // get all bundles
-        $bundles = $containerBuilder->getParameter('kernel.bundles');
+        foreach (array_keys($containerBuilder->getExtensions()) as $name) {
+            switch ($name) {
+                case 'doctrine':
+                    $this->loadConfig($containerBuilder, 'doctrine');
 
-        if (isset($bundles['DoctrineBundle'])) {
-            foreach (array_keys($containerBuilder->getExtensions()) as $name) {
-                switch ($name) {
-                    case 'doctrine':
-                        $this->loadConfig($containerBuilder, 'doctrine');
+                    break;
+                case 'twig':
+                    $this->loadConfig($containerBuilder, 'twig');
 
-                        break;
-                    case 'twig':
-                        $this->loadConfig($containerBuilder, 'twig');
+                    break;
+                case 'liip_imagine':
+                    $this->loadConfig($containerBuilder, 'liip_imagine');
 
-                        break;
-                    case 'liip_imagine':
-                        $this->loadConfig($containerBuilder, 'liip_imagine');
+                    break;
+                case 'framework':
+                    $this->loadConfig($containerBuilder, 'security');
 
-                        break;
-                    case 'framework':
-                        $this->loadConfig($containerBuilder, 'security');
+                    break;
+                case 'vich_uploader':
+                    $this->loadConfig($containerBuilder, 'vich_uploader');
 
-                        break;
-                    case 'vich_uploader':
-                        $this->loadConfig($containerBuilder, 'vich_uploader');
-
-                        break;
-                    case 'messenger':
-                        $this->loadConfig($containerBuilder, 'messenger');
-
-                        break;
-                    case 'api_platform':
-                        //$this->loadConfig($container, 'api_platform');
-                        break;
-                }
+                    break;
             }
         }
     }
