@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
@@ -33,19 +34,22 @@ final class PresenceController extends AbstractController
     private RelationUtils $relationUtils;
     private SanteChecker $santeChecker;
     private SanteHandler $santeHandler;
+    private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
         RelationUtils $relationUtils,
         PresenceRepository $presenceRepository,
         PresenceHandler $presenceHandler,
         SanteChecker $santeChecker,
-        SanteHandler $santeHandler
+        SanteHandler $santeHandler,
+        FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
         $this->relationUtils = $relationUtils;
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     /**
@@ -118,10 +122,13 @@ final class PresenceController extends AbstractController
      */
     public function show(Presence $presence): Response
     {
+        $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
+
         return $this->render(
             '@AcMarcheMercrediParent/presence/show.html.twig',
             [
                 'presence' => $presence,
+                'facturePresence' => $facturePresence,
                 'enfant' => $presence->getEnfant(),
             ]
         );
