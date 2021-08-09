@@ -45,7 +45,6 @@ class FactureImport
         $pdo = new MercrediPdo();
         $paiements = $pdo->getAll('paiement');
         foreach ($paiements as $paiement) {
-            dump($paiement);
             $io->writeln($paiement->date_paiement);
             $tuteur = $this->migrationRepository->getTuteur((int)$paiement->tuteur_id);
             $facture = $this->createFacture($paiement, $tuteur);
@@ -55,13 +54,15 @@ class FactureImport
             }
             foreach ($pdo->getAllWhere('presence', 'paiement_id = '.$paiement->id, false) as $row) {
                 $enfant = $this->migrationRepository->getEnfant($row->enfant_id);
-                $presence = $this->migrationRepository->getPresence($row->tuteur_id, $row->enfant_id, $row->jour_id);
+                $presence = $this->migrationRepository->getPresence($row->tuteur_id, $enfant, $row->jour_id);
                 $this->attachPresence($facture, $presence, $type);
             }
-            $facture->setEcoles($enfant->getEcole()->getNom());
+            if ($enfant->getEcole()) {
+                $facture->setEcoles($enfant->getEcole()->getNom());
+            }
         }
 
-        // $this->tuteurRepository->flush();
+        $this->tuteurRepository->flush();
     }
 
     private function createFacture($paiement, Tuteur $tuteur): Facture

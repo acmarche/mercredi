@@ -94,9 +94,6 @@ class MigrationRepository
     public function getTuteur(int $tuteurId): Tuteur
     {
         $tuteurOld = $this->pdo->getAllWhere('tuteur', 'id = '.$tuteurId, true);
-        if (!$tuteurOld) {
-            dump($tuteurId);
-        }
         $slug = preg_replace("#_#", '-', $tuteurOld->slugname);
 
         if (!$tuteur = $this->tuteurRepository->findOneBy(['slug' => $slug])) {
@@ -178,11 +175,10 @@ class MigrationRepository
         return $this->plaineRepository->findOneBy(['nom' => $plaine->intitule]);
     }
 
-    public function getPresence(int $tuteurId, int $enfantId, int $jourId): Presence
+    public function getPresence(int $tuteurId, Enfant $enfant, int $jourId): Presence
     {
-        $enfant = $this->getEnfant($enfantId);
         $tuteur = $this->getTuteur($tuteurId);
-        $jour = $this->getTuteur($jourId);
+        $jour = $this->getJour($jourId);
 
         return $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
     }
