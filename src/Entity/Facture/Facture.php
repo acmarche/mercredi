@@ -2,9 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
-use DateTimeInterface;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -13,6 +10,7 @@ use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -73,6 +71,16 @@ class Facture implements TimestampableInterface, UuidableInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $ecoles = null;
+
+    /**
+     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private float $montant_obsolete;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private float $cloture_obsolete;
 
     public function __construct(Tuteur $tuteur)
     {
@@ -177,6 +185,30 @@ class Facture implements TimestampableInterface, UuidableInterface
     public function setEcoles(?string $ecoles): self
     {
         $this->ecoles = $ecoles;
+
+        return $this;
+    }
+
+    public function getMontantObsolete(): ?string
+    {
+        return $this->montant_obsolete;
+    }
+
+    public function setMontantObsolete(?string $montant_obsolete): self
+    {
+        $this->montant_obsolete = $montant_obsolete;
+
+        return $this;
+    }
+
+    public function getClotureObsolete(): ?bool
+    {
+        return $this->cloture_obsolete;
+    }
+
+    public function setClotureObsolete(?bool $cloture_obsolete): self
+    {
+        $this->cloture_obsolete = $cloture_obsolete;
 
         return $this;
     }

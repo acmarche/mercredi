@@ -6,19 +6,21 @@ namespace AcMarche\Mercredi\Migration;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
@@ -41,6 +43,7 @@ class MigrationRepository
     private JourRepository $jourRepository;
     private ReductionRepository $reductionRepository;
     private PlaineRepository $plaineRepository;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(
         UserRepository $userRepository,
@@ -53,7 +56,8 @@ class MigrationRepository
         SanteQuestionRepository $santeQuestionRepository,
         JourRepository $jourRepository,
         PlaineRepository $plaineRepository,
-        ReductionRepository $reductionRepository
+        ReductionRepository $reductionRepository,
+        PresenceRepository $presenceRepository
     ) {
         $this->userRepository = $userRepository;
         $this->ecoleRepository = $ecoleRepository;
@@ -67,6 +71,7 @@ class MigrationRepository
         $this->jourRepository = $jourRepository;
         $this->reductionRepository = $reductionRepository;
         $this->plaineRepository = $plaineRepository;
+        $this->presenceRepository = $presenceRepository;
     }
 
     public function getUser(int $userId): User
@@ -89,6 +94,9 @@ class MigrationRepository
     public function getTuteur(int $tuteurId): Tuteur
     {
         $tuteurOld = $this->pdo->getAllWhere('tuteur', 'id = '.$tuteurId, true);
+        if (!$tuteurOld) {
+            dump($tuteurId);
+        }
         $slug = preg_replace("#_#", '-', $tuteurOld->slugname);
 
         if (!$tuteur = $this->tuteurRepository->findOneBy(['slug' => $slug])) {
@@ -168,5 +176,14 @@ class MigrationRepository
         $plaine = $this->pdo->getAllWhere('plaine', 'id = '.$plaineId, true);
 
         return $this->plaineRepository->findOneBy(['nom' => $plaine->intitule]);
+    }
+
+    public function getPresence(int $tuteurId, int $enfantId, int $jourId): Presence
+    {
+        $enfant = $this->getEnfant($enfantId);
+        $tuteur = $this->getTuteur($tuteurId);
+        $jour = $this->getTuteur($jourId);
+
+        return $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
     }
 }

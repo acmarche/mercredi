@@ -8,21 +8,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait PrixTrait
 {
     /**
-     * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
     private float $prix1;
 
     /**
-     * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
     private float $prix2;
 
     /**
-     * @var float
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      * @Assert\NotBlank()
      */

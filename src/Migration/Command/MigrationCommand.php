@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Migration\Command;
 
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
+use AcMarche\Mercredi\Migration\Handler\FactureImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\PlaineImport;
@@ -35,6 +36,7 @@ final class MigrationCommand extends Command
     private PresenceImport $presenceImport;
     private PlaineImport $plaineImport;
     private PlainePresenceImport $plainePresenceImport;
+    private FactureImport $factureImport;
 
     public function __construct(
         ParametreImport $parametreImport,
@@ -46,6 +48,7 @@ final class MigrationCommand extends Command
         UserRepository $userRepository,
         PlaineImport $plaineImport,
         PlainePresenceImport $plainePresenceImport,
+        FactureImport $factureImport,
         UserPasswordHasherInterface $passwordHasher,
         ?string $name = null
     ) {
@@ -61,6 +64,7 @@ final class MigrationCommand extends Command
         $this->presenceImport = $presenceImport;
         $this->plaineImport = $plaineImport;
         $this->plainePresenceImport = $plainePresenceImport;
+        $this->factureImport = $factureImport;
     }
 
     protected function configure(): void
@@ -135,6 +139,10 @@ final class MigrationCommand extends Command
                 return Command::SUCCESS;
             case 'oranisation':
                 $this->organisation();
+
+                return Command::SUCCESS;
+            case 'facture':
+                $this->factureImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'password':
