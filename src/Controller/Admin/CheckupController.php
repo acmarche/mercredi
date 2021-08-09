@@ -28,6 +28,19 @@ final class CheckupController extends AbstractController
     }
 
     /**
+     * @Route("/", name="mercredi_admin_checkup_index")
+     */
+    public function checkup(): Response
+    {
+        return $this->render(
+            '@AcMarcheMercrediAdmin/checkup/index.html.twig',
+            [
+
+            ]
+        );
+    }
+
+    /**
      * @Route("/orphelin", name="mercredi_admin_orphelin")
      */
     public function orphelin(): Response
