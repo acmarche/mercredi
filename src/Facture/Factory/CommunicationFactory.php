@@ -35,10 +35,10 @@ class CommunicationFactory
     public function generate(Facture $facture): string
     {
         list($month, $year) = explode('-', $facture->getMois());
-        $digits = 4;
+        $digits = 6;
         $factureId = str_pad(rand(0, pow(10, $digits) - 1), $digits, '0', STR_PAD_LEFT);
         //4(Y) +2(m) + 4(id) + 2(last)
-        $numbers = $year.$month.$factureId;
+        $numbers = substr($year, -2, 2).$month.$factureId;
         $numbers .= $this->getModulo($numbers);
         $communication = substr($numbers, 0, 3).'/'.substr($numbers, 3, 4).'/'.substr($numbers, 7, 5);
         if ($this->factureRepository->findOneBy(['communication' => $communication])) {

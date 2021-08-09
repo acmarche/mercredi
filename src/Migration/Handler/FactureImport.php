@@ -83,6 +83,7 @@ class FactureImport
         $facture->setUserAdd($user);
         $facture->setCommunication($this->communicationFactory->generate($facture));
         $this->tuteurRepository->persist($facture);
+        $this->tuteurRepository->flush();
 
         return $facture;
     }
