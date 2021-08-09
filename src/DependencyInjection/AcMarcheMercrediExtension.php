@@ -4,8 +4,11 @@ namespace AcMarche\Mercredi\DependencyInjection;
 
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -16,11 +19,21 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 final class AcMarcheMercrediExtension extends Extension implements PrependExtensionInterface
 {
+    private PhpFileLoader $loader;
+
     public function load(array $configs, ContainerBuilder $containerBuilder): void
     {
-        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__.'/../../config'));
-        $phpFileLoader->load('services.php');
-        //  $phpFileLoader->load('packages/messenger.php');
+        $this->loader->load('services.php');
+        // $phpFileLoader->load('packages/messenger.php');
+
+        $resolver = new LoaderResolver([
+            $this->loader,
+            new ClosureLoader($containerBuilder),
+        ]);
+
+        $delegatingLoader = new DelegatingLoader($resolver);
+        //  $delegatingLoader->load('packages/messenger.php');
+        // $delegatingLoader->import('packages/messenger.php');
 
         //auto tag PresenceConstraintInterface
         $containerBuilder->registerForAutoconfiguration(PresenceConstraintInterface::class)
@@ -32,46 +45,44 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
      */
     public function prepend(ContainerBuilder $containerBuilder): void
     {
+        $this->loader = $this->initPhpFilerLoader($containerBuilder);
+
         foreach (array_keys($containerBuilder->getExtensions()) as $name) {
             switch ($name) {
                 case 'doctrine':
-                    $this->loadConfig($containerBuilder, 'doctrine');
+                    $this->loadConfig('doctrine');
 
                     break;
                 case 'twig':
-                    $this->loadConfig($containerBuilder, 'twig');
+                    $this->loadConfig('twig');
 
                     break;
                 case 'liip_imagine':
-                    $this->loadConfig($containerBuilder, 'liip_imagine');
+                    $this->loadConfig('liip_imagine');
 
                     break;
                 case 'framework':
-                    $this->loadConfig($containerBuilder, 'security');
+                    $this->loadConfig('security');
 
                     break;
                 case 'vich_uploader':
-                    $this->loadConfig($containerBuilder, 'vich_uploader');
+                    $this->loadConfig('vich_uploader');
 
                     break;
             }
         }
     }
 
-    protected function loadConfig(ContainerBuilder $containerBuilder, string $name): void
+    protected function loadConfig(string $name): void
     {
-        //https://symfony.com/doc/current/bundles/prepend_extension.html
-        //$containerBuilder->prependExtensionConfig($name, $config);
-        $configs = $this->loadConfigFile($containerBuilder);
-
-        $configs->load($name.'.php');
+        $this->loader->load('packages/'.$name.'.php');
     }
 
-    protected function loadConfigFile(ContainerBuilder $containerBuilder): PhpFileLoader
+    protected function initPhpFilerLoader(ContainerBuilder $containerBuilder): PhpFileLoader
     {
         return new PhpFileLoader(
             $containerBuilder,
-            new FileLocator(__DIR__.'/../../config/packages/')
+            new FileLocator(__DIR__.'/../../config/')
         );
     }
 }
