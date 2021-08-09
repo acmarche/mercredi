@@ -115,7 +115,7 @@ final class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine): Response
     {
-        if (count($plaine->getJours()) === 0) {
+        if (count($plaine->getJours()) < 1) {
             $this->addFlash('danger', 'La plaine doit contenir des dates');
 
             return $this->redirectToRoute('mercredi_admin_plaine_jour_edit', ['id' => $plaine->getId()]);
