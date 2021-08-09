@@ -39,7 +39,7 @@ final class AttestationController extends AbstractController
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
         $enfants = RelationUtils::extractEnfants($relations);
         $factures = [];
-        $html = $this->render(
+        $html = $this->renderView(
             '@AcMarcheMercredi/commun/attestation/index.html.Twig',
             [
                 'enfants' => $enfants,

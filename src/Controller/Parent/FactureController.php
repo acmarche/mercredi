@@ -2,6 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +22,14 @@ final class FactureController extends AbstractController
     use GetTuteurTrait;
 
     private FactureRepository $factureRepository;
+    private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
-        FactureRepository $factureRepository
+        FactureRepository $factureRepository,
+        FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->factureRepository = $factureRepository;
+        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     /**
@@ -41,6 +47,41 @@ final class FactureController extends AbstractController
             [
                 'factures' => $factures,
                 'tuteur' => $this->tuteur,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{uuid}/show", name="mercredi_parent_facture_show", methods={"GET"})
+     */
+    public function show(Facture $facture): Response
+    {
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
+        }
+        $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_PRESENCE
+        );
+        $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_ACCUEIL
+        );
+        $facturePlaines = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_PLAINE
+        );
+
+        $tuteur = $this->tuteur;
+
+        return $this->render(
+            '@AcMarcheMercrediParent/facture/show.html.twig',
+            [
+                'facture' => $facture,
+                'tuteur' => $tuteur,
+                'facturePresences' => $facturePresences,
+                'factureAccueils' => $factureAccueils,
+                'facturePlaines' => $facturePlaines,
             ]
         );
     }

@@ -11,4 +11,6 @@ Feature: Gestion des factures
     Then I follow "Mes factures"
     Then I should see "Liste de vos factures"
     Then I should see "Mardi 6 Octobre 2020"
-
+    Then I follow "Détails"
+    Then I should see "mercredi 6 mai 2020"
+    Then I should see "mercredi 9 décembre 2020"

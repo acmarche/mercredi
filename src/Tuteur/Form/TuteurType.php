@@ -27,7 +27,7 @@ final class TuteurType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $isAdmin = !$this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
+        $isAdmin = $this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
 
         $formBuilder
             ->add(
@@ -48,35 +48,35 @@ final class TuteurType extends AbstractType
                 'rue',
                 TextType::class,
                 [
-                    'required' => $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    'required' => $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    'required' => $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
@@ -111,21 +111,25 @@ final class TuteurType extends AbstractType
                 ]
             )
             ->add(
-                'facturePapier',
-                CheckboxType::class,
-                [
-                    'required' => false,
-                    'label' => 'Facture papier',
-                    'help' => 'Recevoir une copie papier ?',
-                ]
-            )
-            ->add(
                 'conjoint',
                 ConjointType::class,
                 [
                     'data_class' => Tuteur::class,
                 ]
             );
+
+        if ($isAdmin) {
+            $formBuilder
+                ->add(
+                    'facturePapier',
+                    CheckboxType::class,
+                    [
+                        'required' => false,
+                        'label' => 'Facture papier',
+                        'help' => 'Recevoir une copie papier ?',
+                    ]
+                );
+        }
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void
