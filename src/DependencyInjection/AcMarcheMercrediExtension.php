@@ -3,12 +3,10 @@
 namespace AcMarche\Mercredi\DependencyInjection;
 
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
+use Symfony\Component\Config\Builder\ConfigBuilderGenerator;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Loader\DelegatingLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -24,16 +22,7 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
     public function load(array $configs, ContainerBuilder $containerBuilder): void
     {
         $this->loader->load('services.php');
-        // $phpFileLoader->load('packages/messenger.php');
-
-        $resolver = new LoaderResolver([
-            $this->loader,
-            new ClosureLoader($containerBuilder),
-        ]);
-
-        $delegatingLoader = new DelegatingLoader($resolver);
-        //  $delegatingLoader->load('packages/messenger.php');
-        // $delegatingLoader->import('packages/messenger.php');
+        $this->loader->load('packages/messenger.php');
 
         //auto tag PresenceConstraintInterface
         $containerBuilder->registerForAutoconfiguration(PresenceConstraintInterface::class)
@@ -82,7 +71,11 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
     {
         return new PhpFileLoader(
             $containerBuilder,
-            new FileLocator(__DIR__.'/../../config/')
+            new FileLocator(__DIR__.'/../../config/'),
+            null,
+            class_exists(ConfigBuilderGenerator::class) ? new ConfigBuilderGenerator(
+                $containerBuilder->getParameter('kernel.cache_dir')
+            ) : null
         );
     }
 }
