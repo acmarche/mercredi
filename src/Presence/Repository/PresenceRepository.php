@@ -77,7 +77,6 @@ final class PresenceRepository extends ServiceEntityRepository
     public function findByEnfant(Enfant $enfant): array
     {
         return $this->createQBl()
-            ->addSelect('enfant', 'tuteur', 'jour', 'reduction', 'plaine_jour')
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();

@@ -63,12 +63,12 @@ final class JourRepository extends ServiceEntityRepository
     public function findDaysByMonth(DateTimeInterface $dateTime): array
     {
         return $this->createQueryBuilder('jour')
-            ->leftJoin('jour.plaine_jour', 'plaineJour', 'WITH')
-            ->addSelect('plaineJour')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
+            ->addSelect('plaine')
             ->andWhere('jour.date_jour LIKE :date')
             ->setParameter('date', $dateTime->format('Y-m').'%')
             ->addOrderBy('jour.date_jour', 'ASC')
-            ->andWhere('plaineJour IS NULL')
+            ->andWhere('plaine IS NULL')
             ->getQuery()->getResult();
     }
 
