@@ -90,7 +90,6 @@ final class RelationRepository extends ServiceEntityRepository
         return $tuteurs;
     }
 
-
     public function findOneByTuteurAndEnfant(Tuteur $tuteur, Enfant $enfant): ?Relation
     {
         return $this->findOneBy(['tuteur' => $tuteur, 'enfant' => $enfant]);

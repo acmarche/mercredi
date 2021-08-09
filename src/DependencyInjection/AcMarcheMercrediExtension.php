@@ -23,6 +23,7 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
     {
         $this->loader->load('services.php');
         $this->loader->load('packages/messenger.php');
+        //$this->loader->load('routes/routes.php');
 
         //auto tag PresenceConstraintInterface
         $containerBuilder->registerForAutoconfiguration(PresenceConstraintInterface::class)

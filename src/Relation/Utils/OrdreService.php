@@ -24,27 +24,34 @@ final class OrdreService
     /**
      * Ordre de l'enfant par importance decroissante.
      */
-    public function getOrdreEnfant(Enfant $enfant, Tuteur $tuteur): int
+    public function getOrdreOnRelation(Enfant $enfant, Tuteur $tuteur): ?int
     {
         $relation = $this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant);
-        if (null !== $relation && ($ordre = $relation->getOrdre())) {
-            return $ordre;
+        if (null !== $relation && $relation->getOrdre() !== 0) {
+            return $relation->getOrdre();
         }
 
-        return $enfant->getOrdre();
+        return null;
     }
 
     public function getOrdreOnPresence(PresenceInterface $presence): float
     {
-        //on a forcé l'ordre
-        if (0 !== ($ordre = $presence->getOrdre())) {
-            return $ordre;
+        /**
+         * Ordre force sur la presence
+         */
+        if (0 !== ($presence->getOrdre())) {
+            return $presence->getOrdre();
         }
 
         $tuteur = $presence->getTuteur();
         $enfant = $presence->getEnfant();
-        $ordreBase = $this->getOrdreEnfant($enfant, $tuteur);
-        //quand enfant premier, fraterie pas d'importance
+        $ordreBase = $enfant->getOrdre();
+        if ($ordreRelation = $this->getOrdreOnRelation($enfant, $tuteur)) {
+            $ordreBase = $ordreRelation;
+        }
+        /**
+         * quand enfant premier, fraterie pas d'importance
+         */
         if (1 === $ordreBase) {
             return $ordreBase;
         }
@@ -57,7 +64,9 @@ final class OrdreService
             [$tuteur]
         );
 
-        //pas de fraterie ce jour là
+        /**
+         * Pas de frateries
+         */
         if (0 === count($fratries)) {
             return $ordreBase;
         }
@@ -66,16 +75,53 @@ final class OrdreService
 
         $presents = [];
         foreach ($fratries as $fratry) {
-            if (null !== $this->presenceRepository->findByEnfantAndJour($fratry, $jour)) {
+            if (null !== $this->presenceRepository->findByTuteurEnfantAndJour($tuteur, $fratry, $jour)) {
                 $presents[] = $fratry;
             }
         }
 
-        if (0 === count($presents)) {
+        /**
+         * Pas de frateries ce jour là
+         */
+        $countPresents = count($presents);
+        if (0 === $countPresents) {
+            return 1;
+        }
+        if ($countPresents >= $ordreBase) {
             return $ordreBase;
         }
 
-        //todo verifier calcul
-        return $ordreBase - count($presents);
+        /**
+         * ordre    nbre frateries    Final
+         *
+         * 6    1    2
+         * 6    2    3
+         * 6    3    4
+         * 6    4    5
+         * 6    5    6
+         * 6    6    6
+         *
+         * 5    1    2
+         * 5    2    3
+         * 5    3    4
+         * 5    4    5
+         * 5    5    5
+         *
+         * 4    1    2
+         * 4    2    3
+         * 4    3    4
+         * 4    4    4
+         *
+         * 3    1    2
+         * 3    2    3
+         * 3    3    3
+         * 3    4    3
+         *
+         * 2    1    2
+         * 2    2    2
+         * 2    3    2
+         * 2    4    2
+         */
+        return count($presents) + 1;
     }
 }

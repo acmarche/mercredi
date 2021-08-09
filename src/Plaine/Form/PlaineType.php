@@ -31,7 +31,16 @@ final class PlaineType extends AbstractType
                 MoneyType::class,
                 [
                     'required' => true,
-                    'label' => 'Prix 2iem enfant et suivant',
+                    'label' => 'Prix 2iem enfant',
+                    'help' => 'Uniquement les chiffres',
+                ]
+            )
+            ->add(
+                'prix3',
+                MoneyType::class,
+                [
+                    'required' => true,
+                    'label' => 'Prix 3iem enfant et suivant',
                     'help' => 'Uniquement les chiffres',
                 ]
             )

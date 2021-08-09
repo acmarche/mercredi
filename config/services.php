@@ -14,7 +14,6 @@ use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
-use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\LdapInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
@@ -24,6 +23,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_FROM)%');
     $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
+    $parameters->set(Option::PRESENCE_PRIX1, '%env(MERCREDI_PRESENCE_PRIX1)%');
+    $parameters->set(Option::PRESENCE_PRIX2, '%env(MERCREDI_PRESENCE_PRIX2)%');
+    $parameters->set(Option::PRESENCE_PRIX3, '%env(MERCREDI_PRESENCE_PRIX3)%');
+    $parameters->set(Option::PLAINE_PRIX1, '%env(MERCREDI_PLAINE_PRIX1)%');
+    $parameters->set(Option::PLAINE_PRIX2, '%env(MERCREDI_PLAINE_PRIX2)%');
+    $parameters->set(Option::PLAINE_PRIX3, '%env(MERCREDI_PLAINE_PRIX3)%');
     $parameters->set(Option::PRESENCE_DEADLINE_DAYS, '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%');
     $parameters->set(Option::PEDAGOGIQUE_DEADLINE_DAYS, '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%');
     $parameters->set(Option::LDAP_DN, '%env(ACLDAP_DN)%');
@@ -65,7 +70,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
     if (interface_exists(LdapInterface::class)) {
-        $services->set(Symfony\Component\Ldap\Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])->tag('ldap');
+        $services->set(Symfony\Component\Ldap\Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+        )->tag('ldap');
         $services->set(Adapter::class)->args([
             '$arguments' => [
                 '$host' => '%env(ACLDAP_URL)%',

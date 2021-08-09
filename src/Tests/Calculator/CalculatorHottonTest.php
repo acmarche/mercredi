@@ -2,38 +2,36 @@
 
 namespace AcMarche\Mercredi\Tests\Calculator;
 
-use PHPUnit\Framework\TestCase;
+use AcMarche\Mercredi\Data\MercrediConstantes;
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
+use AcMarche\Mercredi\Presence\Calculator\PrenceHottonCalculator;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CalculatorHottonTest extends TestCase
+class CalculatorHottonTest extends KernelTestCase
 {
     public function testSettingCustomerFirstName(): void
     {
-        $customer = new Customer();
-        $firstName = 'John';
+        $container = static::getContainer();
+        $calculator = $container->get(PrenceHottonCalculator::class);
 
-        $customer->setFirstName($firstName);
-
-        $this->assertSame($firstName, $customer->getFirstName());
+        $presence = new Presence();
+        $calculator->calculate($presence);
     }
 
-    public function testSettingCustomerLastName(): void
+    public function testAbsent()
     {
-        $customer = new Customer();
-        $lastName = 'Doe';
+        $container = static::getContainer();
+        $calculator = $container->get(PrenceHottonCalculator::class);
+        $tuteur = new Tuteur();
+        $enfant = new Enfant();
+        $jour = new Jour();
 
-        $customer->setLastName($lastName);
-
-        $this->assertSame($lastName, $customer->getLastName());
-    }
-
-    public function testReturnsCustomerFullName(): void
-    {
-        $customer = new Customer();
-        $customer->setFirstName('John');
-        $customer->setLastName('Deo');
-
-        $fullName = $customer->getFirstName().''.$customer->getLastName();
-
-        $this->assertSame($fullName, $customer->getCustomerFullName());
+        $presence = new Presence($tuteur, $enfant, $jour);
+        $presence->setAbsent(MercrediConstantes::ABSENCE_AVEC_CERTIF);
+        self::assertSame(0, $calculator->calculate($presence));
     }
 }
