@@ -61,6 +61,7 @@ class FactureImport
                     $facture->setEcoles($enfant->getEcole()->getNom());
                 }
             }
+        $this->tuteurRepository->flush();
         }
 
         $this->tuteurRepository->flush();
