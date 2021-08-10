@@ -53,7 +53,6 @@ class FactureImport
             if ($paiement->type_paiement == 'Plaine') {
                 $type = FactureInterface::OBJECT_PLAINE;
             }
-            $this->io->writeln("paiement id: ".$paiement->id);
             $this->treatment($facture, $paiement, $type);
             if ($paiement->enfant_id) {
                 $enfant = $this->migrationRepository->getEnfant($paiement->enfant_id);
@@ -126,8 +125,6 @@ class FactureImport
             );
             $jour = $this->migrationRepository->getJourPlaine($row->jour_id);
             $enfant = $this->migrationRepository->getEnfant($plaineEnfant->enfant_id);
-            $this->io->writeln("plaine enfant id: ".$row->plaine_enfant_id);
-            $this->io->writeln("jour id: ".$row->jour_id);
             $presence = $this->migrationRepository->getPresence($row->tuteur_id, $enfant, $jour);
             $this->attachPresence($facture, $presence, $type);
         }
