@@ -55,13 +55,15 @@ class FactureImport
             }
             $this->io->writeln("paiement id: ".$paiement->id);
             $this->treatment($facture, $paiement, $type);
-            $enfant = $this->migrationRepository->getEnfant($paiement->enfant_id);
-            if ($enfant->getEcole()) {
-                $facture->setEcoles($enfant->getEcole()->getNom());
+            if ($paiement->enfant_id) {
+                $enfant = $this->migrationRepository->getEnfant($paiement->enfant_id);
+                if ($enfant->getEcole()) {
+                    $facture->setEcoles($enfant->getEcole()->getNom());
+                }
             }
         }
 
-        //   $this->tuteurRepository->flush();
+        $this->tuteurRepository->flush();
     }
 
     private function createFacture($paiement, Tuteur $tuteur): Facture
