@@ -12,8 +12,8 @@ use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\Form\SearchNameType;
@@ -34,21 +34,21 @@ final class PlainePresenceController extends AbstractController
     private EnfantRepository $enfantRepository;
     private PlainePresenceHandler $plainePresenceHandler;
     private RelationRepository $relationRepository;
-    private PresenceRepository $presenceRepository;
     private PlaineCalculatorInterface $plaineCalculator;
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         PlainePresenceHandler $plainePresenceHandler,
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
-        PresenceRepository $presenceRepository,
+        PlainePresenceRepository $plainePresenceRepository,
         PlaineCalculatorInterface $plaineCalculator
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->plainePresenceHandler = $plainePresenceHandler;
         $this->relationRepository = $relationRepository;
-        $this->presenceRepository = $presenceRepository;
         $this->plaineCalculator = $plaineCalculator;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -141,7 +141,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function show(Plaine $plaine, Enfant $enfant): Response
     {
-        $presences = $this->presenceRepository->findByPlaineAndEnfant($plaine, $enfant);
+        $presences = $this->plainePresenceRepository->findByPlaineAndEnfant($plaine, $enfant);
         $presences = SortUtils::sortPresences($presences);
         $cout = $this->plaineCalculator->calculate($plaine, $presences);
 
@@ -166,7 +166,7 @@ final class PlainePresenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->presenceRepository->flush();
+            $this->plainePresenceRepository->flush();
 
             $this->dispatchMessage(new PresenceUpdated($presence->getId()));
 
@@ -198,7 +198,7 @@ final class PlainePresenceController extends AbstractController
         $jours = $plaine->getJours();
         $plainePresencesDto = new PlainePresencesDto($plaine, $enfant, $jours);
 
-        $presences = $this->presenceRepository->findByPlaineAndEnfant($plaine, $enfant);
+        $presences = $this->plainePresenceRepository->findByPlaineAndEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
         $plainePresencesDto->setJours($currentJours);
 
@@ -250,15 +250,15 @@ final class PlainePresenceController extends AbstractController
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
-            $presence = $this->presenceRepository->find($presenceId);
+            $presence = $this->plainePresenceRepository->find($presenceId);
             if (null === $presence) {
                 $this->addFlash('danger', 'Présence non trouvée');
 
                 return $this->redirectToRoute('mercredi_admin_plaine_index');
             }
             $enfant = $presence->getEnfant();
-            $this->presenceRepository->remove($presence);
-            $this->presenceRepository->flush();
+            $this->plainePresenceRepository->remove($presence);
+            $this->plainePresenceRepository->flush();
 
             $this->addFlash('success', 'La présence à bien été supprimée');
         }

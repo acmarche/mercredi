@@ -14,32 +14,33 @@ use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 
 class FacturePlaineHandler
 {
     private FactureFactory $factureFactory;
     private CommunicationFactory $communicationFactory;
-    private PresenceRepository $presenceRepository;
     private FactureRepository $factureRepository;
     private PlaineCalculatorInterface $plaineCalculator;
     private FacturePresenceRepository $facturePresenceRepository;
     private array $ecoles = [];
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         FactureFactory $factureFactory,
         CommunicationFactory $communicationFactory,
-        PresenceRepository $presenceRepository,
+        PlainePresenceRepository $plainePresenceRepository,
         FactureRepository $factureRepository,
         PlaineCalculatorInterface $plaineCalculator,
         FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->factureFactory = $factureFactory;
         $this->communicationFactory = $communicationFactory;
-        $this->presenceRepository = $presenceRepository;
         $this->factureRepository = $factureRepository;
         $this->plaineCalculator = $plaineCalculator;
         $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -58,7 +59,7 @@ class FacturePlaineHandler
         $facture->setPlaine($plaine->getNom());
         $facture->setCommunication($this->communicationFactory->generatePlaine($plaine));
         $tuteur = $facture->getTuteur();
-        $presences = $this->presenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
+        $presences = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
 
         $this->attachPresences($facture, $plaine, $presences);
         $this->factureFactory->setEcoles($facture,$this->ecoles);

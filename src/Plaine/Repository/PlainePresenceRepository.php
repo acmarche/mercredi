@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Plaine\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class PlainePresenceRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(
         ManagerRegistry $managerRegistry
     ) {

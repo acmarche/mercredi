@@ -9,7 +9,6 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
 use AcMarche\Mercredi\Form\ValidateForm;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,18 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class FacturePlaineController extends AbstractController
 {
     private FacturePlaineHandler $facturePlaineHandler;
-    private PresenceRepository $presenceRepository;
     private RelationRepository $relationRepository;
     private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         FacturePlaineHandler $facturePlaineHandler,
-        PresenceRepository $presenceRepository,
         RelationRepository $relationRepository,
         PlainePresenceRepository $plainePresenceRepository
     ) {
         $this->facturePlaineHandler = $facturePlaineHandler;
-        $this->presenceRepository = $presenceRepository;
         $this->relationRepository = $relationRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
     }
@@ -64,7 +60,7 @@ class FacturePlaineController extends AbstractController
      */
     public function newManual(Request $request, Tuteur $tuteur, Plaine $plaine): Response
     {
-        $presences = $this->presenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
+        $presences = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
         $form = $this->createForm(ValidateForm::class);
         $form->handleRequest($request);
 
