@@ -39,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'service' => 'Symfony\Component\Ldap\Ldap',
             'check_path' => 'app_login',
         ];
-        $main['entry_point'] = MercrediLdapAuthenticator::class;
+        $main['entry_point'] = MercrediAuthenticator::class;
     }
 
     $main['custom_authenticator'] = $authenticators;

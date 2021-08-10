@@ -52,7 +52,7 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function authenticate(Request $request): PassportInterface
-    {dd(123);
+    {
         $email = $request->request->get('username', '');
         $password = $request->request->get('password', '');
         $token = $request->request->get('_csrf_token', '');
