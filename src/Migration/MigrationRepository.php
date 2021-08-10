@@ -63,7 +63,6 @@ class MigrationRepository
         $this->ecoleRepository = $ecoleRepository;
         $this->anneeScolaireRepository = $anneeScolaireRepository;
         $this->groupeScolaireRepository = $groupeScolaireRepository;
-        $this->pdo = new MercrediPdo();
         $this->tuteurRepository = $tuteurRepository;
         $this->enfantRepository = $enfantRepository;
         $this->santeFicheRepository = $santeFicheRepository;
@@ -72,6 +71,7 @@ class MigrationRepository
         $this->reductionRepository = $reductionRepository;
         $this->plaineRepository = $plaineRepository;
         $this->presenceRepository = $presenceRepository;
+        $this->pdo = new MercrediPdo();
     }
 
     public function getUser(int $userId): User
@@ -175,11 +175,20 @@ class MigrationRepository
         return $this->plaineRepository->findOneBy(['nom' => $plaine->intitule]);
     }
 
-    public function getPresence(int $tuteurId, Enfant $enfant, int $jourId): Presence
+    public function getPresence(int $tuteurId, Enfant $enfant, Jour $jour): Presence
     {
         $tuteur = $this->getTuteur($tuteurId);
-        $jour = $this->getJour($jourId);
 
-        return $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
+        $presence = $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
+        if (!$presence) {
+            dd(
+                $enfant->getId().' '.$enfant->getNom().' '.$enfant->getPrenom().' '.$tuteur->getId(
+                ).' '.' '.$tuteur->getNom().' '.$tuteur->getPrenom().' '.$jour->getDateJour()->format(
+                    'Y-m-d'
+                ).' '.$jour->getId()
+            );
+        }
+
+        return $presence;
     }
 }

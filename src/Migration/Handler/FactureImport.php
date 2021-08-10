@@ -18,12 +18,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class FactureImport
 {
-    private SymfonyStyle $io;
     private TuteurRepository $tuteurRepository;
     private MigrationRepository $migrationRepository;
     private FactureHandler $factureHandler;
     private CommunicationFactory $communicationFactory;
     private PresenceCalculatorInterface $presenceCalculator;
+    private MercrediPdo $pdo;
+    private SymfonyStyle $io;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
@@ -42,27 +43,25 @@ class FactureImport
     public function import(SymfonyStyle $io)
     {
         $this->io = $io;
-        $pdo = new MercrediPdo();
-        $paiements = $pdo->getAll('paiement');
+        $this->pdo = new MercrediPdo();
+        $paiements = $this->pdo->getAll('paiement');
         foreach ($paiements as $paiement) {
-            $io->writeln($paiement->date_paiement);
+            $this->io->writeln($paiement->date_paiement);
             $tuteur = $this->migrationRepository->getTuteur((int)$paiement->tuteur_id);
             $facture = $this->createFacture($paiement, $tuteur);
             $type = FactureInterface::OBJECT_PRESENCE;
             if ($paiement->type_paiement == 'Plaine') {
                 $type = FactureInterface::OBJECT_PLAINE;
             }
-            foreach ($pdo->getAllWhere('presence', 'paiement_id = '.$paiement->id, false) as $row) {
-                $enfant = $this->migrationRepository->getEnfant($row->enfant_id);
-                $presence = $this->migrationRepository->getPresence($row->tuteur_id, $enfant, $row->jour_id);
-                $this->attachPresence($facture, $presence, $type);
-            }
+            $this->io->writeln("paiement id: ".$paiement->id);
+            $this->treatment($facture, $paiement, $type);
+            $enfant = $this->migrationRepository->getEnfant($paiement->enfant_id);
             if ($enfant->getEcole()) {
                 $facture->setEcoles($enfant->getEcole()->getNom());
             }
         }
 
-        $this->tuteurRepository->flush();
+        //   $this->tuteurRepository->flush();
     }
 
     private function createFacture($paiement, Tuteur $tuteur): Facture
@@ -83,7 +82,8 @@ class FactureImport
         $facture->setUserAdd($user);
         $facture->setCommunication($this->communicationFactory->generate($facture));
         $this->tuteurRepository->persist($facture);
-        $this->tuteurRepository->flush();
+
+        // $this->tuteurRepository->flush();
 
         return $facture;
     }
@@ -100,6 +100,34 @@ class FactureImport
         $facturePresence->setCout($this->presenceCalculator->calculate($presence));
         $this->tuteurRepository->persist($facturePresence);
         $facture->addFacturePresence($facturePresence);
+    }
+
+    /**
+     * Parcourir les présences dans presences
+     * et parcourir les presences dans plaines_presences
+     */
+    private function treatment(Facture $facture, object $paiement, string $type)
+    {
+        foreach ($this->pdo->getAllWhere('presence', 'paiement_id = '.$paiement->id, false) as $row) {
+            $enfant = $this->migrationRepository->getEnfant($row->enfant_id);
+            $jour = $this->migrationRepository->getJour($row->jour_id);
+            $presence = $this->migrationRepository->getPresence($row->tuteur_id, $enfant, $jour);
+            $this->attachPresence($facture, $presence, $type);
+        }
+
+        foreach ($this->pdo->getAllWhere('plaine_presences', 'paiement_id = '.$paiement->id, false) as $row) {
+            $plaineEnfant = $this->pdo->getAllWhere(
+                'plaine_enfant',
+                'id = '.$row->plaine_enfant_id,
+                true
+            );
+            $jour = $this->migrationRepository->getJourPlaine($row->jour_id);
+            $enfant = $this->migrationRepository->getEnfant($plaineEnfant->enfant_id);
+            $this->io->writeln("plaine enfant id: ".$row->plaine_enfant_id);
+            $this->io->writeln("jour id: ".$row->jour_id);
+            $presence = $this->migrationRepository->getPresence($row->tuteur_id, $enfant, $jour);
+            $this->attachPresence($facture, $presence, $type);
+        }
     }
 
 }
