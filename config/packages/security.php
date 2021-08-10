@@ -31,6 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'provider' => 'mercredi_user_provider',
         'logout' => ['path' => 'app_logout'],
         'form_login' => [],
+        'entry_point' => MercrediAuthenticator::class,
     ];
 
     if (interface_exists(LdapInterface::class)) {
@@ -39,7 +40,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'service' => 'Symfony\Component\Ldap\Ldap',
             'check_path' => 'app_login',
         ];
-        $main['entry_point'] = MercrediAuthenticator::class;
     }
 
     $main['custom_authenticator'] = $authenticators;

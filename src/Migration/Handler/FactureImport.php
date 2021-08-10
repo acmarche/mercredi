@@ -72,6 +72,7 @@ class FactureImport
         if ($paiement->date_paiement) {
             $facture->setPayeLe(\DateTime::createFromFormat('Y-m-d', $paiement->date_paiement));
         }
+        $facture->setFactureLe(\DateTime::createFromFormat('Y-m-d H:i:s', $paiement->created));
         $facture->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $paiement->created));
         $facture->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $paiement->updated));
         $facture->setMontantObsolete($paiement->montant);
