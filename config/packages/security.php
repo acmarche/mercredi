@@ -27,18 +27,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $authenticators = [MercrediAuthenticator::class];
 
-    if (interface_exists(LdapInterface::class)) {
-        $authenticators[] = MercrediLdapAuthenticator::class;
-        $main['form_login_ldap'] = [];
-    }
-
     $main = [
         'provider' => 'mercredi_user_provider',
-        'custom_authenticator' => $authenticators,
         'logout' => ['path' => 'app_logout'],
         'form_login' => [],
-        'entry_point' => 'form_login',
     ];
+
+    if (interface_exists(LdapInterface::class)) {
+        $authenticators[] = MercrediLdapAuthenticator::class;
+        $main['form_login_ldap'] = [
+            'service' => 'Symfony\Component\Ldap\Ldap',
+            'check_path' => 'app_login',
+        ];
+        $main['entry_point'] = MercrediLdapAuthenticator::class;
+    }
+
+    $main['custom_authenticator'] = $authenticators;
 
     $containerConfigurator->extension(
         'security',

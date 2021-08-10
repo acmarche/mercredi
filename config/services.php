@@ -86,7 +86,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
         $services->set(LdapMercredi::class)
             ->arg('$adapter', service('Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'))
-            ->tag('ldap'); //necessairey for new LdapBadge(LdapMercredi::class)
+            ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
     }
 
     /*  $services->set(PresenceConstraints::class)
