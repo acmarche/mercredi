@@ -22,6 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'twig',
         [
             'globals' => [
+                'mercredi_register' => '%env(MERCREDI_REGISTER)%',
                 'presence_nb_days' => '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%',
                 'pedagogique_nb_days' => '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%',
             ],

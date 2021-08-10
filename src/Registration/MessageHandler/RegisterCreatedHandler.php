@@ -4,12 +4,13 @@ namespace AcMarche\Mercredi\Registration\MessageHandler;
 
 use AcMarche\Mercredi\Mailer\Factory\RegistrationMailerFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -21,19 +22,29 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
     private RegistrationMailerFactory $registrationMailerFactory;
     private VerifyEmailHelperInterface $verifyEmailHelper;
     private NotificationMailer $notificationMailer;
+    private ParameterBagInterface $parameterBag;
 
     public function __construct(
         UserRepository $userRepository,
         FlashBagInterface $flashBag,
         RegistrationMailerFactory $registrationMailerFactory,
         VerifyEmailHelperInterface $verifyEmailHelper,
-        NotificationMailer $notificationMailer
+        NotificationMailer $notificationMailer,
+        ParameterBagInterface $parameterBag
     ) {
         $this->flashBag = $flashBag;
         $this->userRepository = $userRepository;
         $this->registrationMailerFactory = $registrationMailerFactory;
         $this->verifyEmailHelper = $verifyEmailHelper;
         $this->notificationMailer = $notificationMailer;
+        $this->parameterBag = $parameterBag;
+    }
+
+    public function isOpen(): bool
+    {
+        $register = (bool)$this->parameterBag->get(Option::REGISTER);
+
+        return $register == true;
     }
 
     public function __invoke(RegisterCreated $registerCreated): void

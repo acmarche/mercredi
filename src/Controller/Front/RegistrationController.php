@@ -35,6 +35,9 @@ final class RegistrationController extends AbstractController
      */
     public function register(Request $request): Response
     {
+        if (!$this->registerCreatedHandler->isOpen()) {
+            return $this->redirectToRoute('mercredi_front_home');
+        }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
