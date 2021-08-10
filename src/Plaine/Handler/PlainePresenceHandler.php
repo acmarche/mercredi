@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Doctrine\Common\Collections\Collection;
@@ -14,11 +15,13 @@ final class PlainePresenceHandler
 {
     private PresenceRepository $presenceRepository;
     private PresenceHandler $presenceHandler;
+    private PlainePresenceRepository $plainePresenceRepository;
 
-    public function __construct(PresenceRepository $presenceRepository, PresenceHandler $presenceHandler)
+    public function __construct(PresenceRepository $presenceRepository,PlainePresenceRepository $plainePresenceRepository,PresenceHandler $presenceHandler)
     {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): void
@@ -42,7 +45,7 @@ final class PlainePresenceHandler
         }
 
         foreach ($enMoins as $jour) {
-            $presence = $this->presenceRepository->findOneByEnfantJour($enfant, $jour);
+            $presence = $this->plainePresenceRepository->findOneByEnfantJour($enfant, $jour);
             if (null !== $presence) {
                 $this->presenceRepository->remove($presence);
             }

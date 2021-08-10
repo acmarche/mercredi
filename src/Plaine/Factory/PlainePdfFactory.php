@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Plaine\Factory;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -18,10 +19,12 @@ class PlainePdfFactory
     private PresenceRepository $presenceRepository;
     private ParameterBagInterface $parameterBag;
     private Environment $environment;
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         GroupingInterface $grouping,
         PresenceRepository $presenceRepository,
+        PlainePresenceRepository $plainePresenceRepository,
         ParameterBagInterface $parameterBag,
         Environment $environment
     ) {
@@ -29,6 +32,7 @@ class PlainePdfFactory
         $this->presenceRepository = $presenceRepository;
         $this->parameterBag = $parameterBag;
         $this->environment = $environment;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     public function generate(Plaine $plaine): Response
@@ -37,7 +41,7 @@ class PlainePdfFactory
         $dates = $plaine->getJours();
         $firstDay = $plaine->getFirstDay()->getDateJour();
 
-        $presences = $this->presenceRepository->findByPlaine($plaine);
+        $presences = $this->plainePresenceRepository->findByPlaine($plaine);
         /**
          * par enfant je dois avoir quel tuteur en garde
          * jours presents

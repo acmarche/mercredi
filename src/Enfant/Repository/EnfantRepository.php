@@ -6,9 +6,10 @@ use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,9 +24,17 @@ final class EnfantRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
+    private JourRepository $jourRepository;
+    private PresenceRepository $presenceRepository;
+
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        JourRepository $jourRepository,
+        PresenceRepository $presenceRepository
+    ) {
         parent::__construct($managerRegistry, Enfant::class);
+        $this->jourRepository = $jourRepository;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -166,13 +175,13 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
-        $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
+        $jours = $this->jourRepository->findByAnimateur($animateur);
 
         if (count($jours) == 0) {
             return [];
         }
 
-        $presences = $this->getEntityManager()->getRepository(Presence::class)->findPresencesByJours($jours);
+        $presences = $this->presenceRepository->findPresencesByJours($jours);
 
         return $queryBuilder
             ->andWhere('presences IN (:presences)')
@@ -192,13 +201,13 @@ final class EnfantRepository extends ServiceEntityRepository
         if ($jour !== null) {
             $jours = [$jour];
         } else {
-            $jours = $this->getEntityManager()->getRepository(Jour::class)->findByAnimateur($animateur);
+            $jours = $this->jourRepository->findByAnimateur($animateur);
         }
         if (count($jours) == 0) {
             return [];
         }
 
-        $presences = $this->getEntityManager()->getRepository(Presence::class)->findPresencesByJours($jours);
+        $presences = $this->presenceRepository->findPresencesByJours($jours);
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')

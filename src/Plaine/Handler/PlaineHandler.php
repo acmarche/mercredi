@@ -7,8 +7,8 @@ use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use function count;
@@ -17,19 +17,19 @@ final class PlaineHandler
 {
     private PlaineRepository $plaineRepository;
     private JourRepository $jourRepository;
-    private PresenceRepository $presenceRepository;
     private FactureHandler $factureHandler;
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         JourRepository $jourRepository,
-        PresenceRepository $presenceRepository,
+        PlainePresenceRepository $plainePresenceRepository,
         FactureHandler $factureHandler
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->jourRepository = $jourRepository;
-        $this->presenceRepository = $presenceRepository;
         $this->factureHandler = $factureHandler;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -78,7 +78,7 @@ final class PlaineHandler
                 }
             }
             if (!$found) {
-                if ($presences = $this->presenceRepository->findByDay($jour, $plaine)) {
+                if ($presences = $this->plainePresenceRepository->findByDay($jour, $plaine)) {
                     foreach ($presences as $presence) {
                         if (!$this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PLAINE)) {
                             $this->jourRepository->remove($presence);

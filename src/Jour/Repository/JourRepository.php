@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -24,9 +25,12 @@ final class JourRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $managerRegistry)
+    private PresenceRepository $presenceRepository;
+
+    public function __construct(ManagerRegistry $managerRegistry, PresenceRepository $presenceRepository)
     {
         parent::__construct($managerRegistry, Jour::class);
+        $this->presenceRepository = $presenceRepository;
     }
 
     public function getQlNotPlaine(bool $archive = false): QueryBuilder
@@ -42,7 +46,7 @@ final class JourRepository extends ServiceEntityRepository
 
     public function getQbDaysNotRegisteredByEnfant(Enfant $enfant): QueryBuilder
     {
-        $joursRegistered = $this->getEntityManager()->getRepository(Presence::class)->findDaysRegisteredByEnfant(
+        $joursRegistered = $this->presenceRepository->findDaysRegisteredByEnfant(
             $enfant
         );
 

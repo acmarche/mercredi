@@ -41,7 +41,7 @@ final class ListingPresenceByMonth
         $joursListing = [];
 
         foreach ($daysOfMonth as $jour) {
-            $presences = $this->presenceRepository->findByDay($jour, null);
+            $presences = $this->presenceRepository->findByDay($jour);
             $enfantsByday = array_map(
                 fn($presence) => $presence->getEnfant(),
                 $presences
@@ -90,7 +90,9 @@ final class ListingPresenceByMonth
      */
     private function getPresencesOfMonth(DateTimeInterface $dateTime): array
     {
-        return $this->presenceRepository->findByMonth($dateTime);
+        $jours = $this->jourRepository->findDaysByMonth($dateTime);
+
+        return $this->presenceRepository->findByDays($jours);
     }
 
     /**

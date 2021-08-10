@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
 use AcMarche\Mercredi\Message\Handler\MessageHandler;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -44,9 +45,11 @@ final class MessageController extends AbstractController
     private PresenceHandler $presenceHandler;
     private MessageRepository $messageRepository;
     private NotifierInterface $notifier;
+    private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         PresenceRepository $presenceRepository,
+        PlainePresenceRepository $plainePresenceRepository,
         RelationRepository $relationRepository,
         MessageRepository $messageRepository,
         SearchHelper $searchHelper,
@@ -65,6 +68,7 @@ final class MessageController extends AbstractController
         $this->presenceHandler = $presenceHandler;
         $this->messageRepository = $messageRepository;
         $this->notifier = $notifier;
+        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -83,7 +87,7 @@ final class MessageController extends AbstractController
             $tuteurs = [[]];
 
             if ($jour) {
-                $presences = $this->presenceRepository->findByDay($jour, null);
+                $presences = $this->presenceRepository->findByDay($jour);
                 $tuteurs[] = PresenceUtils::extractTuteurs($presences);
             }
 
@@ -93,7 +97,7 @@ final class MessageController extends AbstractController
             }
 
             if ($plaine) {
-                $presences = $this->presenceRepository->findByPlaine($plaine);
+                $presences = $this->plainePresenceRepository->findByPlaine($plaine);
                 $tuteurs[] = PresenceUtils::extractTuteurs($presences);
             }
 
@@ -127,7 +131,7 @@ final class MessageController extends AbstractController
      */
     public function fromJour(Request $request, Jour $jour): Response
     {
-        $presences = $this->presenceRepository->findByDay($jour, null);
+        $presences = $this->presenceRepository->findByDay($jour);
 
         $tuteurs = PresenceUtils::extractTuteurs($presences);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
@@ -211,7 +215,7 @@ final class MessageController extends AbstractController
      */
     public function fromPlaine(Request $request, Plaine $plaine): Response
     {
-        $presences = $this->presenceRepository->findByPlaine($plaine);
+        $presences = $this->plainePresenceRepository->findByPlaine($plaine);
 
         $tuteurs = PresenceUtils::extractTuteurs($presences);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
