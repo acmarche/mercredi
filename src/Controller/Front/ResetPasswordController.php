@@ -45,15 +45,14 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="mercredi_front_forgot_password_request")
      */
-    public function request(Request $request, MailerInterface $mailer): Response
+    public function request(Request $request): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
-                $form->get('email')->getData(),
-                $mailer
+                $form->get('email')->getData()
             );
         }
 

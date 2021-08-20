@@ -71,8 +71,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
     if (interface_exists(LdapInterface::class)) {
-        $services->set(Symfony\Component\Ldap\Ldap::class)->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
-        )->tag('ldap');
+        $services
+            ->set(Symfony\Component\Ldap\Ldap::class)
+            ->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])
+            ->tag('ldap');
         $services->set(Adapter::class)->args([
             '$arguments' => [
                 '$host' => '%env(ACLDAP_URL)%',
