@@ -11,8 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -164,6 +162,7 @@ class ResetPasswordController extends AbstractController
         // Do not reveal whether a user account was found or not.
         if (!$user) {
             $this->addFlash('danger', 'Utilisateur non trouvé');
+
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
@@ -174,12 +173,15 @@ class ResetPasswordController extends AbstractController
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-             $this->addFlash('danger', sprintf(
-                 'There was a problem handling your password reset request - %s',
-                 $e->getReason()
-             ));
+            $this->addFlash(
+                'danger',
+                sprintf(
+                    'There was a problem handling your password reset request - %s',
+                    $e->getReason()
+                )
+            );
 
-            return $this->redirectToRoute('mercredi_front_check_email');
+            return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
         $email = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
