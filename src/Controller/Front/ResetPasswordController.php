@@ -112,7 +112,7 @@ class ResetPasswordController extends AbstractController
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash(
-                'reset_password_error',
+                'danger',
                 sprintf(
                     'There was a problem validating your reset request - %s',
                     $e->getReason()
@@ -163,6 +163,7 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
+            $this->addFlash('danger', 'Utilisateur non trouvé');
             return $this->redirectToRoute('mercredi_front_check_email');
         }
 
@@ -173,7 +174,7 @@ class ResetPasswordController extends AbstractController
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-             $this->addFlash('reset_password_error', sprintf(
+             $this->addFlash('danger', sprintf(
                  'There was a problem handling your password reset request - %s',
                  $e->getReason()
              ));
