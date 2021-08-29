@@ -20,5 +20,4 @@ trait LastLoginTrait
     {
         $this->last_login = $last_login;
     }
-
 }
