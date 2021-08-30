@@ -1,0 +1,5 @@
+{% for enfant in enfants %}
+    <li class="list-group-item" role="option" data-autocomplete-value="{{ enfant.id }}">
+        {{ enfant.prenom }} {{ enfant.nom }}
+    </li>
+{% endfor %}

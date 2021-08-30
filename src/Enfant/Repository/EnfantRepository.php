@@ -50,7 +50,7 @@ final class EnfantRepository extends ServiceEntityRepository
      *
      * @return Enfant[]
      */
-    public function findByName(string $keyword, bool $actif = true): array
+    public function findByName(string $keyword, bool $actif = true, int $max = 50): array
     {
         $queryBuilder = $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
@@ -59,6 +59,8 @@ final class EnfantRepository extends ServiceEntityRepository
         if ($actif) {
             $queryBuilder->andWhere('enfant.archived = 0');
         }
+
+        $queryBuilder->setMaxResults($max);
 
         return $queryBuilder->getQuery()->getResult();
     }

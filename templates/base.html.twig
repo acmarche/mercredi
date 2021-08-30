@@ -9,13 +9,9 @@
     <meta name="author" content="Cst">
 
     {{ encore_entry_link_tags('app') }}
-    {% block stylesheets %}
+    {{ encore_entry_script_tags('app') }}
 
-    {% endblock %}
-
-    {% block javascripts22 %}
-        {{ encore_entry_script_tags('app') }}
-    {% endblock %}
+    {% block stylesheets %}{% endblock %}
 
     <link href="{{ asset('bundles/acmarchemercredi/css/app.css') }}" rel="stylesheet">
 

@@ -1,9 +1,5 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
-{% block stylesheets %}
-    <link href="{{ asset('bundles/acmarchemercredi/css/typeahead.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block body -%}
 
     <div class="card mb-3">
@@ -13,64 +9,20 @@
         <div class="card-body">
             <div class="alert alert-info">Ecrivez le nom de l'enfant pour un accès rapide</div>
 
-            <div id="bloodhound">
-                <form>
-                    <label>
-                        <input class="typeahead" type="text" placeholder="Nom de l'enfant">
-                    </label>
-                    <input type='hidden' name='enfant_id' id='enfant_id'>
-                </form>
+            <div {{ stimulus_controller('autocomplete', {url: path('mercredi_admin_ajax_enfants')}) }}>
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{ form_row(form.nom) }}
+                <input type='hidden' name='enfant_id' data-autocomplete-target="hidden">
+                <ul class="list-group" data-autocomplete-target="results"></ul>
+                {{ form_end(form) }}
             </div>
-
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('mercredi_front_home') }}">
+                <i class="fas fa-arrow-left"></i>
+                Retour au site public
+            </a>
         </div>
     </div>
-
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3>Retour au site</h3>
-        </div>
-        <div class="card-body">
-           <a href="{{ path('mercredi_front_home') }}">Retour au site public</a>
-        </div>
-    </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript">
-
-        var enfants = new Bloodhound({
-            datumTokenizer: function (datum) {
-                return Bloodhound.tokenizers.whitespace(datum.value);
-            },
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: "{{ path('mercredi_admin_ajax_enfants') }}/%QUERY",
-                wildcard: '%QUERY'
-            }
-        });
-
-        var options = {
-            hint: true,
-            highlight: true,
-            minLength: 2
-        };
-
-        var dataSetEnfant = {
-            display: 'label',
-            limit: 10,
-            source: enfants,
-            templates: {
-                suggestion: function (data) {
-                    var value = data.nom + ' ' + data.prenom + ' ' + data.birthday;
-                    var url = '{{ path("mercredi_admin_enfant_show", {'id': 'id'}) }}';
-                    url = url.replace("id", data.id);
-                    return '<p><a href="' + url + '">' + value + '</a></p>';
-                }
-            }
-        };
-
-        $('.typeahead').typeahead(options, dataSetEnfant);
-
-    </script>
 {% endblock %}

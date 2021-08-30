@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Search\Form\SearchNameType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +20,12 @@ final class DefaultController extends AbstractController
      */
     public function default(): Response
     {
+        $form = $this->createForm(SearchNameType::class);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/default/index.html.twig',
             [
+                'form' => $form->createView(),
             ]
         );
     }

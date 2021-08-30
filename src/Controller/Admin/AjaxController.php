@@ -6,7 +6,8 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,49 +28,45 @@ final class AjaxController extends AbstractController
     }
 
     /**
-     * @Route("/tuteurs/{keyword}", name="mercredi_admin_ajax_tuteurs")
+     * not use
+     * @Route("/tuteurs", name="mercredi_admin_ajax_tuteurs")
      */
-    public function tuteurs(?string $keyword = null): JsonResponse
+    public function tuteurs(Request $request): Response
     {
-        $tuteurs = $data = [];
+        $keyword = $request->get('q');
+        $tuteurs = [];
         if ($keyword) {
             $tuteurs = $this->tuteurRepository->search($keyword);
         }
-        $i = 0;
-        foreach ($tuteurs as $tuteur) {
-            $data[$i]['id'] = $tuteur->getId();
-            $data[$i]['nom'] = $tuteur->getNom().' '.$tuteur->getPrenom();
-            ++$i;
-        }
 
-        return $this->json($data);
+        return $this->render('@AcMarcheMercredi/commun/tuteur/_list.html.twig', ['tuteurs' => $tuteurs]);
     }
 
     /**
-     * @Route("/enfants/{keyword}", name="mercredi_admin_ajax_enfants")
+     * @Route("/enfants/link", name="mercredi_admin_ajax_enfants", methods={"GET"})
      */
-    public function enfants(?string $keyword = null): JsonResponse
+    public function enfants(Request $request): Response
     {
-        $enfants = $data = [];
+        $keyword = $request->get('q');
+        $enfants = [];
         if ($keyword) {
-            $enfants = $this->enfantRepository->findByName($keyword);
+            $enfants = $this->enfantRepository->findByName($keyword, true, 10);
         }
 
-        $i = 0;
-        foreach ($enfants as $enfant) {
-            $data[$i]['id'] = $enfant->getId();
-            $data[$i]['nom'] = $enfant->getNom();
-            $data[$i]['prenom'] = $enfant->getPrenom();
-            $data[$i]['value'] = $enfant->getNom().' '.$enfant->getPrenom();
-            $data[$i]['label'] = $enfant->getNom().' '.$enfant->getPrenom();
-            $birthday = '';
-            if (null !== $enfant->getBirthday()) {
-                $birthday = $enfant->getBirthday()->format('d-m-Y');
-            }
-            $data[$i]['birthday'] = $birthday;
-            ++$i;
+        return $this->render('@AcMarcheMercredi/commun/enfant/_list.html.twig', ['enfants' => $enfants]);
+    }
+
+    /**
+     * @Route("/enfants/nolink", name="mercredi_admin_ajax_enfants_no_link", methods={"GET"})
+     */
+    public function enfantsNoLink(Request $request): Response
+    {
+        $keyword = $request->get('q');
+        $enfants = [];
+        if ($keyword) {
+            $enfants = $this->enfantRepository->findByName($keyword, true, 10);
         }
 
-        return $this->json($data);
+        return $this->render('@AcMarcheMercredi/commun/enfant/_list_not_link.html.twig', ['enfants' => $enfants]);
     }
 }
