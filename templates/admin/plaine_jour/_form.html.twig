@@ -1,16 +1,20 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 
-<div class="row tags mb-2" id="email-fields-list"
+<div class=" tags mb-2" id="email-fields-list"
      data-prototype="{{ form_widget(form.jours.vars.prototype)|e }}"
      data-widgetTags="{{ '<li class="list-group-item"></li>'|e }}"
      data-widgetCounter="{{ form.jours|length }}">
     {% for jour in form.jours %}
-        <div class="col-6 remove{{ loop.index }}">
-            {{ form_row(jour) }}
-        </div>
-        <div class="col-4 remove{{ loop.index }}">
-            <a href="#" class="btn btn-danger remove-tag"><i class="fas fa-trash"></i></a>
+        <div id="el{{ loop.index }}" class="row">
+            <div class="col-6">
+                {{ form_row(jour) }}
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-danger remove-tag" data-elementid="{{ loop.index }}"><i
+                            class="fas fa-trash"></i>
+                </button>
+            </div>
         </div>
     {% endfor %}
 </div>
