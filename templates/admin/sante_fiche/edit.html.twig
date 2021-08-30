@@ -1,16 +1,5 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
-{% block stylesheets %}
-    <style>
-        #accompagnateurs-list li * {
-            display: inline-block;
-            margin: 0 10px;
-        }
 
-        #accompagnateurs-list li input {
-            width: 50%;
-        }
-    </style>
-{% endblock %}
 {% block body %}
 
     <div class="card mb-3">
@@ -27,5 +16,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('/bundles/acmarchemercredi/js/accompagnateur.js') }}"></script>
+  {% include '@AcMarcheMercredi/commun/_js_add_field.html.twig' %}
 {% endblock %}

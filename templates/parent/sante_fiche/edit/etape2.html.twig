@@ -1,16 +1,5 @@
 {% extends '@AcMarcheMercrediParent/layout.html.twig' %}
-{% block stylesheets %}
-    <style>
-        #accompagnateurs-list li * {
-            display: inline-block;
-            margin: 0 10px;
-        }
 
-        #accompagnateurs-list li input {
-            width: 50%;
-        }
-    </style>
-{% endblock %}
 {% block body %}
 
     <div class="card mb-3">
@@ -30,30 +19,27 @@
                     {{ form_row(form.medecin_telephone) }}
                 </div>
             </div>
+            {{ form_row(form.personne_urgence) }}
 
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.personne_urgence) }}
-                </div>
-                <div class="col-12">
-                    {{ form_label(form.accompagnateurs, null, {'label_attr': {'class': 'required'}}) }}
-                    {{ form_help(form.accompagnateurs) }}
-                    <ul class="list-group" id="accompagnateurs-list"
-                        data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}">
-                        {% for accompagnateurField in form.accompagnateurs %}
-                            <li class="list-group-item">
-                                {{ form_errors(accompagnateurField) }}
-                                {{ form_widget(accompagnateurField) }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="offset-md-8">
-                        <a href="#" id="add-another-accompagnateur" class="btn btn-success btn-xs">
-                            <i class="fas fa-plus"></i> Ajouter une personne
-                        </a>
-                    </div>
-                </div>
-            </div>
+            {{ form_label(form.accompagnateurs, null, {'label_attr': {'class': 'required'}}) }}
+            {{ form_help(form.accompagnateurs) }}
+            <ul class="list-group" id="email-fields-list"
+                data-prototype="{{ form_widget(form.accompagnateurs.vars.prototype)|e }}"
+                data-widgetTags="{{ '<li class="list-group-item"></li>'|e }}"
+                data-widgetCounter="{{ form.accompagnateurs|length }}">
+                {% for accompagnateurField in form.accompagnateurs %}
+                    <li class="list-group-item">
+                        {{ form_errors(accompagnateurField) }}
+                        {{ form_widget(accompagnateurField) }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="button"
+                    id="add-another-accompagnateur"
+                    class="my-2 add-another-collection-widget btn btn-primary btn-sm"
+                    data-list-selector="#email-fields-list">
+                <i class="fas fa-plus"></i> Ajouter un personne
+            </button>
 
             {{ form_row(form.remarque) }}
 
@@ -71,5 +57,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('/bundles/acmarchemercredi/js/accompagnateur.js') }}"></script>
+    {% include '@AcMarcheMercredi/commun/_js_add_field.html.twig' %}
 {% endblock %}
