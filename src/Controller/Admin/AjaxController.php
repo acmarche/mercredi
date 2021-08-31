@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,11 +21,16 @@ final class AjaxController extends AbstractController
 {
     private EnfantRepository $enfantRepository;
     private TuteurRepository $tuteurRepository;
+    private SanteQuestionRepository $santeQuestionRepository;
 
-    public function __construct(EnfantRepository $enfantRepository, TuteurRepository $tuteurRepository)
-    {
+    public function __construct(
+        EnfantRepository $enfantRepository,
+        TuteurRepository $tuteurRepository,
+        SanteQuestionRepository $santeQuestionRepository
+    ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurRepository = $tuteurRepository;
+        $this->santeQuestionRepository = $santeQuestionRepository;
     }
 
     /**
@@ -76,9 +82,28 @@ final class AjaxController extends AbstractController
      */
     public function plaineDate(Request $request): Response
     {
-        $index = $request->get('index',0);
+        $index = $request->get('index', 0);
 
-        return $this->render('@AcMarcheMercrediAdmin/plaine/_new_line.html.twig', ['index'=>$index]);
+        return $this->render('@AcMarcheMercrediAdmin/plaine/_new_line.html.twig', ['index' => $index]);
     }
 
+    /**
+     * @Route("/q/sort/{id}", name="mercredi_admin_ajax_question_sort", methods={"POST", "PATCH"})
+     */
+    public function trier(Request $request, int $id): Response
+    {
+        $isAjax = $request->isXmlHttpRequest();
+return new Response('eee.'.$request->request->get('position'));
+        if ($isAjax) {
+            $position = $request->request->get('position');
+            if (($santeQuestion = $this->santeQuestionRepository->find($id)) !== null) {
+                $santeQuestion->setDisplayOrder($position);
+                $this->santeQuestionRepository->flush();
+            }
+
+            return new Response('<div class="alert alert-success">Tri enregistré</div>');
+        }
+
+        return new Response('<div class="alert alert-danger">Faill</div>');
+    }
 }

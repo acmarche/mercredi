@@ -16,47 +16,18 @@
 
     <div class="" id="success"></div>
 
-    <ul class="list-group" id="sortable">
+    <ul class="list-group" id="sortable"
+        data-controller="sortable"
+        data-sortable-animation-value="150">
         {% for question in questions %}
-            <li id="questions-{{ question.id }}" class="list-group-item">
-                <i class="fas fa-sort" style="margin-right: 0.3em;"></i>{{ question }}
+            <li
+                    data-sortable-update-url="{{ path('mercredi_admin_ajax_question_sort', {'id': question.id }) }}"
+                    id="{{ question.id }}"
+                    class="list-group-item"
+                    style="cursor: move;">
+                <i class="fas fa-sort me-2"></i>{{ question }}
             </li>
         {% endfor %}
     </ul>
 
-{% endblock %}
-
-{% block javascripts %}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $("#sortable").sortable({
-                // limitons les déplacements sur l'axe des ordonnées, ce sera plus propre
-                axis: 'y',
-                update: function (event, ui) {
-                    // Construit un tableau des ids des stories
-                    serial = $(this).sortable('serialize');
-                    // Appelle une action en ajax
-                    $.ajax({
-                        url: '{{ path('mercredi_admin_sante_question_sort') }}',
-                        type: "post",
-                        data: serial,
-                        success: function (html) {
-                            $('#success').append(html);
-                            $('#success').fadeIn(500);
-                            //       $('#success').fadeOut(2000);
-                        },
-                        error: function () {
-                            alert("Oups le tri ne s'est pas enregistré");
-                        }
-                    })
-                }
-            });
-
-            $("#sortable").disableSelection();
-        });
-
-    </script>
 {% endblock %}

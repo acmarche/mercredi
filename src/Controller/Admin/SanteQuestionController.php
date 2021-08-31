@@ -122,27 +122,10 @@ final class SanteQuestionController extends AbstractController
     }
 
     /**
-     * @Route("/q/sort", name="mercredi_admin_sante_question_sort", methods={"GET","POST"})
+     * @Route("/q/sort", name="mercredi_admin_sante_question_sort", methods={"GET"})
      */
-    public function trier(Request $request): Response
+    public function trier(): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $questions = $request->request->get('questions');
-            if (is_array($questions)) {
-                foreach ($questions as $position => $questionId) {
-                    $santeQuestion = $this->santeQuestionRepository->find($questionId);
-                    if (null !== $santeQuestion) {
-                        $santeQuestion->setDisplayOrder($position);
-                    }
-                }
-                $this->santeQuestionRepository->flush();
-
-                return new Response('<div class="alert alert-success">Tri enregistré</div>');
-            }
-
-            return new Response('<div class="alert alert-error">Erreur</div>');
-        }
-
         $questions = $this->santeQuestionRepository->findAll();
 
         return $this->render(
