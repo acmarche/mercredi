@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Sante\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -13,12 +14,17 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class SanteQuestionRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, SanteQuestion::class);
     }
 
-    public function findAll()
+    /**
+     * @return SanteQuestion[]
+     */
+    public function findAllOrberByPosition():array
     {
         return $this->findBy([], ['display_order' => 'ASC']);
     }
@@ -42,20 +48,5 @@ final class SanteQuestionRepository extends ServiceEntityRepository
         $query = $queryBuilder->getQuery();
 
         return $query->getResult();
-    }
-
-    public function persist(SanteQuestion $santeQuestion): void
-    {
-        $this->_em->persist($santeQuestion);
-    }
-
-    public function remove(SanteQuestion $santeQuestion): void
-    {
-        $this->_em->remove($santeQuestion);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
     }
 }

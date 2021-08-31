@@ -51,7 +51,7 @@ final class SanteChecker
         }
 
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->santeQuestionRepository->findAllOrberByPosition();
 
         if (count($reponses) < count($questions)) {
             return false;

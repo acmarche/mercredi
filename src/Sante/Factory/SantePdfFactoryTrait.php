@@ -34,7 +34,7 @@ final class SantePdfFactoryTrait
     public function santeFiche(SanteFiche $santeFiche): Response
     {
         $isComplete = $this->santeChecker->isComplete($santeFiche);
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->santeQuestionRepository->findAllOrberByPosition();
         $organisation = $this->organisationRepository->getOrganisation();
         $enfant = $santeFiche->getEnfant();
         $html = $this->environment->render(

@@ -98,6 +98,7 @@ final class AjaxController extends AbstractController
     {
         $isAjax = $request->isXmlHttpRequest();
         if ($isAjax) {
+
             $position = $request->request->get('position');
             if (($santeQuestion = $this->santeQuestionRepository->find($id)) !== null) {
                 $santeQuestion->setDisplayOrder($position);

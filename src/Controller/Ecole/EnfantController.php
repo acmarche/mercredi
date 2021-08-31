@@ -155,7 +155,7 @@ final class EnfantController extends AbstractController
         }
 
         $isComplete = $this->santeChecker->isComplete($santeFiche);
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->santeQuestionRepository->findAllOrberByPosition();
         $organisation = $this->organisationRepository->getOrganisation();
 
         return $this->render(

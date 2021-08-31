@@ -36,7 +36,7 @@ final class SanteQuestionController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/index.html.twig',
             [
-                'sante_questions' => $this->santeQuestionRepository->findAll(),
+                'sante_questions' => $this->santeQuestionRepository->findAllOrberByPosition(),
             ]
         );
     }
@@ -126,7 +126,7 @@ final class SanteQuestionController extends AbstractController
      */
     public function trier(): Response
     {
-        $questions = $this->santeQuestionRepository->findAll();
+        $questions = $this->santeQuestionRepository->findAllOrberByPosition();
 
         return $this->render(
             '@AcMarcheMercrediAdmin/sante_question/sort.html.twig',
