@@ -105,7 +105,7 @@ final class AjaxController extends AbstractController
                 $this->santeQuestionRepository->flush();
             }
 
-            return new Response('<div class="alert alert-success">Tri enregistré</div>');
+            return new Response('<div class="alert alert-success">Tri enregistré '.$position.'</div>');
         }
 
         return new Response('<div class="alert alert-danger">Faill</div>');
@@ -124,7 +124,7 @@ final class AjaxController extends AbstractController
                 $this->pageRepository->flush();
             }
 
-            return new Response('<div class="alert alert-success">Tri enregistré</div>');
+            return new Response('<div class="alert alert-success">Tri enregistré '.$position.'</div>');
         }
 
         return new Response('<div class="alert alert-danger">Faill</div>');

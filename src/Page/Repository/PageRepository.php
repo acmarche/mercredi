@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Page\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Page;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class PageRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     /**
      * @var string
      */
@@ -45,20 +48,5 @@ final class PageRepository extends ServiceEntityRepository
     public function findModalitePage(): ?Page
     {
         return $this->findOneBy([self::SLUG_SYSTEM => 'modalites-pratiques']);
-    }
-
-    public function remove(Page $page): void
-    {
-        $this->_em->remove($page);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Page $page): void
-    {
-        $this->_em->persist($page);
     }
 }

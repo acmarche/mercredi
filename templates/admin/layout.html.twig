@@ -1,7 +1,10 @@
 {% extends '@AcMarcheMercredi/base.html.twig' %}
 
 {% block brand %}
-    <a class="navbar-brand" href="{{ path('mercredi_admin_home') }}">Mercredi</a>
+    <a class="navbar-brand" href="{{ path('mercredi_admin_home') }}">
+        <i class="fas fa-frog icon-rose d-inline-block align-text-top"></i>
+        <span class="ms-2 fs-4 navbar-text">Mercredi</span>
+    </a>
 {% endblock %}
 
 {% block menu_top %}

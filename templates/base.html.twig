@@ -18,34 +18,39 @@
 </head>
 <body class="d-flex flex-column h-100 {% block body_class %}{% endblock %}">
 <!-- Top nav bar -->
-<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top border-bottom shadow-sm d-print-none">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-to2p shadow-sm border-bottom d-print-none">
+    <div class="container">
+        {% block brand %}
+            <a class="navbar-brand" href="{{ path('mercredi_front_home') }}">
+                <i class="fas fa-frog icon-rose d-inline-block align-text-top"></i>
+                <span class="ms-2 fs-4 navbar-text">Mercredi</span>
+            </a>
+        {% endblock %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% block menu_top %}
 
-    <i class="fas fa-frog icon-rose"></i>
-    {% block brand %}
-        <a class="navbar-brand" href="{{ path('mercredi_front_home') }}">Mercredi</a>
-    {% endblock %}
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
-            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto ml-auto">
-            {% block menu_top %}
-
-            {% endblock %}
-        </ul>
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            {% include '@AcMarcheMercredi/_menu_user.html.twig' %}
-        {% else %}
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="{{ path('app_login') }}" class="nav-link" title="Connexion">
-                        <i class="fas fa-sign-in-alt"></i> Me connecter</a>
-                </li>
+                {% endblock %}
             </ul>
-        {% endif %}
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i>
+                            Se connecter</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{{ path('mercredi_front_user_show') }}" class="nav-link"><i
+                                    class="fas fa-user"></i>
+                            Compte</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
 <!-- Begin page content -->
