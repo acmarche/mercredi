@@ -7,6 +7,15 @@ Feature: Test de la gestion des présences
     Given I am login with user "albert@marche.be" and password "homer"
     Given I am on "/parent"
 
+  Scenario: Je vois les presences
+    Then I follow "SIMPSON Bart"
+    Then I should see "Mercredi 6 mai 2020"
+    Then I should see "jeudi 9 juillet 2020"
+    Then I should see "vendredi 10 juillet 2020"
+    Then I should see "lundi 21 septembre 2020"
+    Then I should see "Mercredi 6 mars 2024"
+    Then I should not see "Lundi 16 décembre 2024"
+
   Scenario: J' ajoute une présence pour un enfant qui n'a pas de fiche santé
     When I follow "Inscription Mer-rec/Péda"
     Then I follow "SIMPSON Lisa"
@@ -22,7 +31,7 @@ Feature: Test de la gestion des présences
     And I press "Sauvegarder"
     Then I should see "La présence a bien été ajoutée"
 
- Scenario: Je ne peux pas supprimer une présence passée
+  Scenario: Je ne peux pas supprimer une présence passée
     Then I follow "SIMPSON Bart"
     Then I should see "Mercredi 6 mai 2020"
     Then I follow "Mercredi 6 mai 2020"
@@ -30,7 +39,7 @@ Feature: Test de la gestion des présences
     Then I press "Supprimer la présence"
     Then I should see "Une présence passée ne peut être supprimée"
 
- Scenario: Je ne peux pas supprimer une présence facturée
+  Scenario: Je ne peux pas supprimer une présence facturée
     Then I follow "SIMPSON Bart"
     Then I should see "Mercredi 6 mai 2020"
     Then I follow "Mercredi 6 mai 2020"
@@ -39,8 +48,8 @@ Feature: Test de la gestion des présences
     Then I press "Supprimer la présence"
     Then I should see "Une présence passée ne peut être supprimée"
 
- Scenario: Je supprime une présence
+  Scenario: Je supprime une présence
     Then I follow "SIMPSON Bart"
-    Then I follow "Lundi 16 décembre 2024"
+    Then I follow "Mercredi 6 mars 2024"
     Then I press "Supprimer la présence"
     Then I should see "La présence a bien été supprimée"

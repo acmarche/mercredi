@@ -111,3 +111,9 @@ AcMarche\Mercredi\Entity\Jour:
     prix1: '<randomFloat(2, 2, 7)>'
     prix2: '<randomFloat(2, 2, 7)>'
     prix3: '<randomFloat(2, 2, 7)>'
+  jour_2024_03_06:
+    date_jour: '<carbonDateTime(2024,3,6,9,0)>'
+    color: '<hexcolor()>'
+    prix1: '<randomFloat(2, 2, 7)>'
+    prix2: '<randomFloat(2, 2, 7)>'
+    prix3: '<randomFloat(2, 2, 7)>'
