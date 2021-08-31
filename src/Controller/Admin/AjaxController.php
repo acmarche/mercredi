@@ -93,7 +93,6 @@ final class AjaxController extends AbstractController
     public function trier(Request $request, int $id): Response
     {
         $isAjax = $request->isXmlHttpRequest();
-return new Response('eee.'.$request->request->get('position'));
         if ($isAjax) {
             $position = $request->request->get('position');
             if (($santeQuestion = $this->santeQuestionRepository->find($id)) !== null) {
