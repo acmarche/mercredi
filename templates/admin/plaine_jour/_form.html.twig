@@ -1,34 +1,31 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
+<div {{ stimulus_controller('plaine', {url: path('mercredi_admin_ajax_plaine_new_date')}) }}>
+    <div
+            class="mb-2" id="email-fields-list"
+            data-plaine-target="list">
+        {% for jour in form.jours %}
+            <div id="el{{ loop.index0 }}" class="row">
+                <div class="col-6">
+                    {{ form_row(jour) }}
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn btn-danger remove-tag" data-elementid="{{ loop.index0 }}"><i
+                                class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
-<div class=" tags mb-2" id="email-fields-list"
-     data-prototype="{{ form_widget(form.jours.vars.prototype)|e }}"
-     data-widgetTags="{{ '<li class="list-group-item"></li>'|e }}"
-     data-widgetCounter="{{ form.jours|length }}">
-    {% for jour in form.jours %}
-        <div id="el{{ loop.index0 }}" class="row">
-            <div class="col-6">
-                {{ form_row(jour) }}
-            </div>
-            <div class="col-4">
-                <button type="button" class="btn btn-danger remove-tag" data-elementid="{{ loop.index0 }}"><i
-                            class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    {% endfor %}
+    <button
+            type="button"
+            id="add-another-accompagnateur"
+            class="mt-2 btn btn-primary float-end"
+            data-action="plaine#selectX">
+        <i class="fas fa-plus"></i> Ajouter une date
+    </button>
 </div>
-
-<button {{ stimulus_controller('plaine', {url: path('mercredi_admin_ajax_plaine_new_date')})}}
-        type="button"
-        id="add-another-accompagnateur"
-        class="mt-2 add-another-collection-widget btn btn-primary float-end"
-        data-action="plaine#selectX"
-        data-index="{{ form.jours|length }}"
-        data-list-selector="#email-fields-list">
-    <i class="fas fa-plus"></i> Ajouter une date
-</button>
-
 <button class="btn btn-primary" type="submit"><i class="far fa-save" aria-hidden="true"></i>
     Sauvegarder
 </button>
