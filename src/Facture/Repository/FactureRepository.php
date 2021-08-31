@@ -41,6 +41,20 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
+    public function findFacturesByTuteurWhoIsSend(Tuteur $tuteur): array
+    {
+        return $this->createQueryBuilder('facture')
+            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
+            ->addSelect('tuteur')
+            ->andWhere('facture.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture.envoyeLe IS NOT NULL')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
     public function findFacturesByMonth(string $month): array
     {
         return $this->createQueryBuilder('facture')

@@ -47,7 +47,7 @@ final class DefaultController extends AbstractController
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
         $this->santeChecker->isCompleteForEnfants($enfants);
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
-        $factures = $this->factureRepository->findFacturesByTuteur($this->tuteur);
+        $factures = $this->factureRepository->findFacturesByTuteurWhoIsSend($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/default/index.html.twig',

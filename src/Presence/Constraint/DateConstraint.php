@@ -35,7 +35,7 @@ final class DateConstraint implements PresenceConstraintInterface
      */
     public function check(Jour $jour): bool
     {
-        return true;
+        return true;//todo reactivate
         $datePresence = $jour->getDateJour();
 
         $deadLinePedagogique = $this->presenceUtils->getDeadLineDatePedagogique();

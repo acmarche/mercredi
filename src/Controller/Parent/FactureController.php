@@ -40,7 +40,7 @@ final class FactureController extends AbstractController
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-        $factures = $this->factureRepository->findFacturesByTuteur($this->tuteur);
+        $factures = $this->factureRepository->findFacturesByTuteurWhoIsSend($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/facture/index.html.twig',
