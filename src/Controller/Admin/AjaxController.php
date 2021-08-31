@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Page\Repository\PageRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -22,15 +23,18 @@ final class AjaxController extends AbstractController
     private EnfantRepository $enfantRepository;
     private TuteurRepository $tuteurRepository;
     private SanteQuestionRepository $santeQuestionRepository;
+    private PageRepository $pageRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         TuteurRepository $tuteurRepository,
-        SanteQuestionRepository $santeQuestionRepository
+        SanteQuestionRepository $santeQuestionRepository,
+        PageRepository $pageRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurRepository = $tuteurRepository;
         $this->santeQuestionRepository = $santeQuestionRepository;
+        $this->pageRepository = $pageRepository;
     }
 
     /**
@@ -90,7 +94,7 @@ final class AjaxController extends AbstractController
     /**
      * @Route("/q/sort/{id}", name="mercredi_admin_ajax_question_sort", methods={"POST", "PATCH"})
      */
-    public function trier(Request $request, int $id): Response
+    public function trierQuestion(Request $request, int $id): Response
     {
         $isAjax = $request->isXmlHttpRequest();
         if ($isAjax) {
@@ -98,6 +102,25 @@ final class AjaxController extends AbstractController
             if (($santeQuestion = $this->santeQuestionRepository->find($id)) !== null) {
                 $santeQuestion->setDisplayOrder($position);
                 $this->santeQuestionRepository->flush();
+            }
+
+            return new Response('<div class="alert alert-success">Tri enregistré</div>');
+        }
+
+        return new Response('<div class="alert alert-danger">Faill</div>');
+    }
+
+    /**
+     * @Route("/q/sort/{id}", name="mercredi_admin_ajax_page_sort", methods={"POST", "PATCH"})
+     */
+    public function trierPage(Request $request, int $id): Response
+    {
+        $isAjax = $request->isXmlHttpRequest();
+        if ($isAjax) {
+            $position = $request->request->get('position');
+            if (($page = $this->pageRepository->find($id)) !== null) {
+                $page->setPosition($position);
+                $this->pageRepository->flush();
             }
 
             return new Response('<div class="alert alert-success">Tri enregistré</div>');

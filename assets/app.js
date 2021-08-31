@@ -12,6 +12,7 @@ import './styles/app.css';
 import './bootstrap';
 
 import 'bootstrap';
+import '@popperjs/core';
 
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';

@@ -122,27 +122,10 @@ final class PageController extends AbstractController
     }
 
     /**
-     * @Route("/s/sort", name="mercredi_admin_page_sort", methods={"GET","POST"})
+     * @Route("/s/sort", name="mercredi_admin_page_sort", methods={"GET"})
      */
-    public function trier(Request $request): Response
+    public function trier(): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $pages = $request->request->get('pages');
-            if (is_array($pages)) {
-                foreach ($pages as $position => $pageId) {
-                    $page = $this->pageRepository->find($pageId);
-                    if (null !== $page) {
-                        $page->setPosition($position);
-                    }
-                }
-                $this->pageRepository->flush();
-
-                return new Response('<div class="alert alert-success">Tri enregistré</div>');
-            }
-
-            return new Response('<div class="alert alert-error">Erreur</div>');
-        }
-
         $pages = $this->pageRepository->findAll();
 
         return $this->render(

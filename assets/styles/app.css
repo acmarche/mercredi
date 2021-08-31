@@ -1,1 +1,18 @@
 @import '~bootstrap';
+
+.search-preview {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    top: 84px;
+}
+
+label.required:after {
+    content: " *";
+    color: red;
+}
+
+legend.required:after {
+    content: " *";
+    color: red;
+}
