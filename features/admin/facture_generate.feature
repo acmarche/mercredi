@@ -50,7 +50,7 @@ Feature: Gestion des factures
     Then I follow "Ses factures"
     Then I follow "Manuellement"
     Then I should see "Mercredi 4 septembre 2024"
-    Then I should see "Lundi 16 décembre 2024"
+    Then I should not see "Lundi 16 décembre 2024"
     Then I should see "Vendredi 10 juillet 2020"
     Then I should not see "Mercredi 6 mai 2020"
     Then I should see "Mercredi 9 décembre 2020"
@@ -59,7 +59,7 @@ Feature: Gestion des factures
     Then I should see "La facture a bien été crée"
     Then I should see "Simpson Lisa"
     Then I should see "mercredi 4 septembre 2024"
-    Then I should see "lundi 16 décembre 2024"
+    Then I should not see "lundi 16 décembre 2024"
     Then I should see "vendredi 10 juillet 2020"
     Then I should see "mercredi 9 décembre 2020"
 

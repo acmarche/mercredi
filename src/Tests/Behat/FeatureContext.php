@@ -11,16 +11,6 @@ use Exception;
 class FeatureContext extends RawMinkContext
 {
     /**
-     * @var EnfantRepository
-     */
-    private $enfantRepository;
-
-    public function __construct(EnfantRepository $enfantRepository)
-    {
-        $this->enfantRepository = $enfantRepository;
-    }
-
-    /**
      * @Given I am logged in as an admin
      */
     public function iAmLoggedInAsAnAdmin(): void
@@ -213,26 +203,6 @@ class FeatureContext extends RawMinkContext
         if ($iExpected !== $iFound) {
             throw new Exception('Found '.$iFound.' occurences of "'.$sText.'" when expecting '.$iExpected);
         }
-    }
-
-    /**
-     * @Given /^I am on the page show entry "([^"]*)"$/
-     */
-    public function iAmOnThePageShowEntry(string $name): void
-    {
-        $entry = $this->entryRepository->findOneBy(['name' => $name]);
-        $path = '/fr/front/entry/'.$entry->getId();
-        $this->visitPath($path);
-    }
-
-    /**
-     * @Given /^I am on the page month view of month (\d+)-(\d+) and area "([^"]*)"$/
-     */
-    public function iAmOnThePageMonthView(int $month, int $year, string $areaName): void
-    {
-        $area = $this->areaRepository->findOneBy(['name' => $areaName]);
-        $path = '/fr/front/monthview/area/'.$area->getId().'/year/'.$year.'/month/'.$month.'/room';
-        $this->visitPath($path);
     }
 
     /**
