@@ -6,12 +6,12 @@
      data-widgetTags="{{ '<li class="list-group-item"></li>'|e }}"
      data-widgetCounter="{{ form.jours|length }}">
     {% for jour in form.jours %}
-        <div id="el{{ loop.index }}" class="row">
+        <div id="el{{ loop.index0 }}" class="row">
             <div class="col-6">
                 {{ form_row(jour) }}
             </div>
             <div class="col-4">
-                <button type="button" class="btn btn-danger remove-tag" data-elementid="{{ loop.index }}"><i
+                <button type="button" class="btn btn-danger remove-tag" data-elementid="{{ loop.index0 }}"><i
                             class="fas fa-trash"></i>
                 </button>
             </div>
@@ -19,9 +19,12 @@
     {% endfor %}
 </div>
 
-<button type="button"
+<button {{ stimulus_controller('plaine', {url: path('mercredi_admin_ajax_plaine_new_date')})}}
+        type="button"
         id="add-another-accompagnateur"
         class="mt-2 add-another-collection-widget btn btn-primary float-end"
+        data-action="plaine#selectX"
+        data-index="{{ form.jours|length }}"
         data-list-selector="#email-fields-list">
     <i class="fas fa-plus"></i> Ajouter une date
 </button>

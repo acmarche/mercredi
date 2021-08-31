@@ -20,13 +20,12 @@
 
 {% endblock %}
 {% block javascripts %}
-    {% include '@AcMarcheMercredi/commun/_js_add_field.html.twig' %}
     <script>
         let elements = document.querySelectorAll('.remove-tag');
 
         Array.prototype.forEach.call(elements, function (element, i) {
             element.addEventListener('click', () => {
-                var elementId = element.dataset.elementid;
+                const elementId = element.dataset.elementid;
                 let line = document.querySelector('#el' + elementId)
                 console.log(line);
                 line.remove()

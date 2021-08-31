@@ -69,4 +69,16 @@ final class AjaxController extends AbstractController
 
         return $this->render('@AcMarcheMercredi/commun/enfant/_list_not_link.html.twig', ['enfants' => $enfants]);
     }
+
+    /**
+     * not use
+     * @Route("/plaine/date", name="mercredi_admin_ajax_plaine_new_date")
+     */
+    public function plaineDate(Request $request): Response
+    {
+        $index = $request->get('index',0);
+
+        return $this->render('@AcMarcheMercrediAdmin/plaine/_new_line.html.twig', ['index'=>$index]);
+    }
+
 }
