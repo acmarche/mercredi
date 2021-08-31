@@ -114,29 +114,27 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        $('#dissocierModalTuteur').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var tuteurId = button.data('id'); // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this);
-            modal.find('#modal-tuteur').val(tuteurId)
+        document.querySelector('#dissocierModalTuteur').addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const tuteurId = button.dataset.id;
+            let modal = document.querySelector('#dissocierModalTuteur');
+            modal.querySelector('#modal-tuteur').value=tuteurId;
         })
     </script>
     <script type="text/javascript">
-        $('#dissocierModalEcole').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var ecoleId = button.data('id'); // Extract info from data-* attributes
-            var modal = $(this);
-            modal.find('#modal-ecole').val(ecoleId)
+        document.querySelector('#dissocierModalEcole').addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            let ecoleId = button.dataset.id;
+            let modal = document.querySelector('#dissocierModalEcole');
+            modal.querySelector('#modal-ecole').val(ecoleId)
         })
     </script>
     <script type="text/javascript">
-        $('#dissocierModalAnimateur').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var animateurId = button.data('id'); // Extract info from data-* attributes
-            var modal = $(this);
-            modal.find('#modal-animateur').val(animateurId)
+        document.querySelector('#dissocierModalAnimateur').addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            let animateurId = button.dataset.id;
+            let modal = document.querySelector('#dissocierModalAnimateur');
+            modal.querySelector('#modal-animateur').val(animateurId)
         })
     </script>
 {% endblock %}
