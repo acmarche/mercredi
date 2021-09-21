@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
@@ -35,6 +36,7 @@ final class PresenceController extends AbstractController
     private SanteChecker $santeChecker;
     private SanteHandler $santeHandler;
     private FacturePresenceRepository $facturePresenceRepository;
+    private PresenceCalculatorInterface $presenceCalculator;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -42,6 +44,7 @@ final class PresenceController extends AbstractController
         PresenceHandler $presenceHandler,
         SanteChecker $santeChecker,
         SanteHandler $santeHandler,
+        PresenceCalculatorInterface $presenceCalculator,
         FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->presenceRepository = $presenceRepository;
@@ -50,6 +53,7 @@ final class PresenceController extends AbstractController
         $this->santeChecker = $santeChecker;
         $this->santeHandler = $santeHandler;
         $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->presenceCalculator = $presenceCalculator;
     }
 
     /**

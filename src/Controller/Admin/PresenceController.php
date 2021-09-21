@@ -228,6 +228,7 @@ final class PresenceController extends AbstractController
      */
     public function delete(Request $request, Presence $presence): Response
     {
+        $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
 
             if ($this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PRESENCE)) {
@@ -242,6 +243,6 @@ final class PresenceController extends AbstractController
             $this->dispatchMessage(new PresenceDeleted($presenceId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_presence_index');
+        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id'=>$enfant->getId()]);
     }
 }
