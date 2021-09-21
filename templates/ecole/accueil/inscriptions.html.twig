@@ -17,12 +17,6 @@
                 <div class="col-12 col-lg-6">
                     {{ calendar|raw }}
                 </div>
-                <div class="col-12 col-lg-6">
-                    <div class="alert alert-info">
-                        Choisissez sur quelle semaine vous souhaitez travailler<br/>
-                        Indiquez par un chiffre le nombre de demi-heure que l'élève est resté
-                    </div>
-                </div>
             </div>
             {{ form_start(form) }}
             {{ form_errors(form) }}
@@ -36,13 +30,12 @@
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>Nom</th>
-                    <th>Année scolaire</th>
                     <th>Garde</th>
                     {% for day in week.days %}
                         {% if day|date('N') != 7 and day|date('N') != 6 %}
                             <td class="text-center">
                                 {{ day|date('j') }}<br/>
-                                {{ day|date('D') }}
+                                {{ day|date('D')|trans }}
                             </td>
                         {% endif %}
                     {% endfor %}

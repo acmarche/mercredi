@@ -1,8 +1,9 @@
 <tr>
     <td>
         {{ enfant }}
+        <br>
+        <span class="text-muted">({{ enfant.anneeScolaire }})</span>
     </td>
-    <td>{{ enfant.anneeScolaire }}</td>
     <td>
         {% if enfant.relations|length > 1 %}
             {% set tuteurSelected = data[enfant.id]['tuteur'] %}
@@ -33,12 +34,29 @@
                 {% set value = 0 %}
             {% endif %}
             <td>
-                <label for="accueilsaccueils[{{ enfant.id }}][]">
-                    <input type="number" min="0" max="6"
-                           name="accueils[{{ enfant.id }}][{{ format }}]"
-                           value="{{ value }}"
-                           class="form-control" style="width: 70px;">
-                </label>
+                <div class="row" {{ stimulus_controller('btns') }}>
+                    <div class="col mt-sm-1">
+                        <label for="accueilsaccueils[{{ enfant.id }}][]">
+                            <input type="number" min="0" max="6"
+                                   name="accueils[{{ enfant.id }}][{{ format }}]"
+                                   value="{{ value }}"
+                                   data-btns-target="duree"
+                                   class="form-control" style="width: 70px;">
+                        </label>
+                    </div>
+                    <div class="col mt-1">
+                        <button type="button"
+                                data-action="btns#up"
+                                class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-plus-square"></i>
+                        </button>
+                       <button type="button"
+                                data-action="btns#down"
+                               class="btn btn-sm btn-outline-primary">
+                           <i class="fas fa-minus-square"></i>
+                       </button>
+                    </div>
+                </div>
             </td>
         {% endif %}
     {% endfor %}

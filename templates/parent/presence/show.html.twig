@@ -31,14 +31,18 @@
                         </a>
                     </td>
                 </tr>
+                {% if presence.absent %}
                 <tr>
                     <th>Absent</th>
                     <td>{{ presence.absent|mercredi_absence_text }}</td>
                 </tr>
+                {% endif %}
+                {% if presence.reduction %}
                 <tr>
                     <th>Réduction</th>
                     <td>{{ presence.reduction }} </td>
                 </tr>
+                {% endif %}
             </table>
 
             {% if presence.remarque %}
