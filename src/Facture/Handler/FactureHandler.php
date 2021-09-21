@@ -172,7 +172,9 @@ final class FactureHandler
             $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
-            $this->ecoles[] = $enfant->getEcole()->getNom();
+            if ($enfant->getEcole()) {
+                $this->ecoles[] = $enfant->getEcole()->getNom();
+            }
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCout($this->presenceCalculator->calculate($presence));
@@ -193,7 +195,9 @@ final class FactureHandler
             $facturePresence->setHeure($accueil->getHeure());
             $facturePresence->setDuree($accueil->getDuree());
             $enfant = $accueil->getEnfant();
-            $this->ecoles[] = $enfant->getEcole()->getNom();
+            if ($enfant->getEcole()) {
+                $this->ecoles[] = $enfant->getEcole()->getNom();
+            }
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCout($this->accueilCalculator->calculate($accueil));
