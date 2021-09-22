@@ -43,4 +43,28 @@ class FactureReduction
     {
         $this->facture = $facture;
     }
+
+    public function getForfait(): ?float
+    {
+        return $this->forfait;
+    }
+
+    public function setForfait(?float $forfait): self
+    {
+        $this->forfait = $forfait;
+
+        return $this;
+    }
+
+    public function getPourcentage(): ?float
+    {
+        return $this->pourcentage;
+    }
+
+    public function setPourcentage(?float $pourcentage): self
+    {
+        $this->pourcentage = $pourcentage;
+
+        return $this;
+    }
 }
