@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
+use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,5 +22,18 @@ class FactureComplementRepository extends ServiceEntityRepository
     {
         parent::__construct($managerRegistry, FactureComplement::class);
     }
+
+    /**
+     * @param Facture $facture
+     * @return array|FactureComplement[]
+     */
+    public function findByFacture(Facture $facture): array
+    {
+        return $this->createQueryBuilder('facture_complement')
+            ->andWhere('facture_complement.facture = :fact')
+            ->setParameter('fact', $facture)
+            ->getQuery()->getResult();
+    }
+
 
 }

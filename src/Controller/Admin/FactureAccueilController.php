@@ -55,6 +55,7 @@ final class FactureAccueilController extends AbstractController
             '@AcMarcheMercrediAdmin/facture_accueil/attach.html.twig',
             [
                 'facture' => $facture,
+                'tuteur' => $facture->getTuteur(),
                 'accueils' => $accueils,
                 'form' => $form->createView(),
             ]

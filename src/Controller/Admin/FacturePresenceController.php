@@ -61,6 +61,7 @@ final class FacturePresenceController extends AbstractController
             '@AcMarcheMercrediAdmin/facture_presence/attach.html.twig',
             [
                 'facture' => $facture,
+                'tuteur' => $facture->getTuteur(),
                 'presences' => $presences,
                 'form' => $form->createView(),
             ]
@@ -110,8 +111,9 @@ final class FacturePresenceController extends AbstractController
      */
     public function delete(Request $request, FacturePresence $facturePresence): Response
     {
+        $facture = $facturePresence->getFacture();
         if ($this->isCsrfTokenValid('delete'.$facturePresence->getId(), $request->request->get('_token'))) {
-            $facture = $facturePresence->getFacture();
+
             $this->facturePresenceRepository->remove($facturePresence);
             $this->facturePresenceRepository->flush();
 

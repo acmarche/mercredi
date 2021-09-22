@@ -15,8 +15,10 @@ use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
+use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,17 +38,23 @@ final class FactureController extends AbstractController
     private FactureHandler $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
     private FacturePresenceRepository $facturePresenceRepository;
+    private FactureReductionRepository $factureReductionRepository;
+    private FactureComplementRepository $factureComplementRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
         FacturePresenceRepository $facturePresenceRepository,
-        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
+        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
+        FactureReductionRepository $factureReductionRepository,
+        FactureComplementRepository $factureComplementRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
         $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->factureReductionRepository = $factureReductionRepository;
+        $this->factureComplementRepository = $factureComplementRepository;
     }
 
     /**
@@ -227,6 +235,8 @@ final class FactureController extends AbstractController
             $facture,
             FactureInterface::OBJECT_PLAINE
         );
+        $factureReductions = $this->factureReductionRepository->findByFacture($facture);
+        $factureComplements = $this->factureComplementRepository->findByFacture($facture);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
@@ -236,6 +246,8 @@ final class FactureController extends AbstractController
                 'facturePresences' => $facturePresences,
                 'factureAccueils' => $factureAccueils,
                 'facturePlaines' => $facturePlaines,
+                'factureReductions' => $factureReductions,
+                'factureComplements' => $factureComplements,
             ]
         );
     }
