@@ -3,11 +3,12 @@
 namespace AcMarche\Mercredi\Facture\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -25,14 +26,22 @@ final class FactureRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Facture::class);
     }
 
+    public function getQBl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('facture')
+            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('facture.reductions', 'reductions', 'WITH')
+            ->leftJoin('facture.complements', 'complements', 'WITH')
+            ->leftJoin('facture.facturePresences', 'facturePresences', 'WITH')
+            ->addSelect('tuteur', 'reductions', 'complements', 'facturePresences');
+    }
+
     /**
      * @return Facture[]
      */
     public function findFacturesByTuteur(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->addSelect('tuteur')
+        return $this->getQBl()
             ->andWhere('facture.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
@@ -43,9 +52,7 @@ final class FactureRepository extends ServiceEntityRepository
      */
     public function findFacturesByTuteurWhoIsSend(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->addSelect('tuteur')
+        return $this->getQBl()
             ->andWhere('facture.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
             ->andWhere('facture.envoyeLe IS NOT NULL')
@@ -57,9 +64,7 @@ final class FactureRepository extends ServiceEntityRepository
      */
     public function findFacturesByMonth(string $month): array
     {
-        return $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->addSelect('tuteur')
+        return $this->getQBl()
             ->andWhere('facture.mois = :mois')
             ->setParameter('mois', $month)
             ->getQuery()->getResult();
@@ -70,9 +75,7 @@ final class FactureRepository extends ServiceEntityRepository
      */
     public function findFacturesByMonthOnlyPaper(string $month): array
     {
-        return $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->addSelect('tuteur')
+        return $this->getQBl()
             ->andWhere('facture.mois = :mois')
             ->setParameter('mois', $month)
             ->andWhere('tuteur.facture_papier = 1')
@@ -91,13 +94,7 @@ final class FactureRepository extends ServiceEntityRepository
         ?string $monthYear = null,
         ?string $communication = null
     ): array {
-        $queryBuilder = $this->createQueryBuilder('facture')
-            ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('facture.facturePresences', 'facturePresences', 'WITH')
-            ->addSelect(
-                'tuteur',
-                'facturePresences',
-            );
+        $queryBuilder = $this->getQBl();
 
         if ($tuteur) {
             $queryBuilder->andWhere('tuteur.nom LIKE :tuteur OR tuteur.prenom LIKE :tuteur')
