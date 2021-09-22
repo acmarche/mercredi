@@ -185,21 +185,31 @@ final class AccueilController extends AbstractController
     ): Response {
         if ($week !== 0) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
+            $weekSelected = $week;
         } else {
             $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);
+            $weekSelected = $date->format('W');
         }
 
+        $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);
         $data = [];
         $enfants = $this->enfantRepository->findByEcolesForInscription($ecole);
+
         foreach ($enfants as $enfant) {
-            $accueils = $this->accueilRepository->findByEnfantAndHeure($enfant, $heure);
+            $tuteurSelected = 0;
+            $accueils = $this->accueilRepository->findByEnfantAndDaysAndHeure($enfant, $weekPeriod, $heure);
             $rows = ['accueils' => [], 'tuteurs' => []];
             foreach ($accueils as $accueil) {
                 $rows['accueils'][$accueil->getDateJour()->format('Y-m-d')] = [
                     'duree' => $accueil->getDuree(),
                     'tuteur' => $accueil->getTuteur()->getId(),
                 ];
+                $weekAccueil = $accueil->getDateJour()->format('W');
+                if ($weekSelected == $weekAccueil) {
+                    $tuteurSelected = $accueil->getTuteur()->getId();
+                }
             }
+            $rows['tuteurSelected'] = $tuteurSelected;
             $data[$enfant->getId()] = $rows;
         }
 
@@ -211,8 +221,7 @@ final class AccueilController extends AbstractController
             $tuteurs = $request->request->get('tuteurs');
 
             $this->accueilHandler->handleCollections($accueils, $tuteurs, $heure);
-
-            $this->addFlash('success', "Les acceuils ont bien été ajoutés");
+            $this->addFlash('success', "Les acceuils ont bien été sauvegardés");
 
             return $this->redirectToRoute('mercredi_ecole_accueil_inscriptions', [
                 'id' => $ecole->getId(),
@@ -223,7 +232,7 @@ final class AccueilController extends AbstractController
             ]);
         }
 
-        $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);
+
         $calendar = $this->dateUtils->renderMonth($ecole, $heure, $week, $date);
 
         return $this->render(

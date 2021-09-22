@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
+use Carbon\CarbonPeriod;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -58,11 +59,17 @@ final class AccueilRepository extends ServiceEntityRepository
     /**
      * @return Accueil[]
      */
-    public function findByEnfantAndHeure(Enfant $enfant, string $heure): array
+    public function findByEnfantAndDaysAndHeure(Enfant $enfant, CarbonPeriod $weekPeriod, string $heure): array
     {
+        $days = array_map(function ($date) {
+            return $date->toDateString();
+        }, $weekPeriod->toArray());
+
         return $this->createQueryBuilder('accueil')
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
+            ->andWhere('accueil.date_jour IN (:dates)')
+            ->setParameter('dates', $days)
             ->andWhere('accueil.heure = :heure')
             ->setParameter('heure', $heure)
             ->getQuery()->getResult();
@@ -137,7 +144,7 @@ final class AccueilRepository extends ServiceEntityRepository
      * @param \DateTimeInterface|null $date
      * @return array|Accueil[]
      */
-    public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null):array
+    public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $qb = $this->createQueryBuilder('accueil')
             ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')

@@ -58,11 +58,14 @@ final class AccueilHandler
                     continue;
                 }
                 $tuteurId = (int)$tuteurs[$enfantId][0];
-                if (($tuteur = $this->tuteurRepository->find($tuteurId)) === null) {
-                    $this->flashBag->add('danger', '"Spécifié sous quelle garde pour '.$enfant);
 
+                if (($tuteur = $this->tuteurRepository->find($tuteurId)) === null) {
+                    if ($duree > 0) {
+                        $this->flashBag->add('danger', 'Spécifié sous quelle garde pour '.$enfant);
+                    }
                     continue;
                 }
+
                 $accueil = new Accueil($tuteur, $enfant);
                 $accueil->setDuree($duree);
                 $accueil->setHeure($heure);

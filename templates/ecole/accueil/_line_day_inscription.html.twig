@@ -5,22 +5,19 @@
         <span class="text-muted">({{ enfant.anneeScolaire }})</span>
     </td>
     <td>
+        {% set tuteurSelected = data[enfant.id]['tuteurSelected'] %}
         {% if enfant.relations|length > 1 %}
-            {% set tuteurSelected = 0 %}
-            <label for="tuteurs[{{ enfant.id }}][]" class="required">
-                <select name="tuteurs[{{ enfant.id }}][]" class="custom-select" required="required">
-                    <option value="0" {% if tuteurSelected ==0 %}selected="selected" {% endif %}>
-                        Sous la garde de
+            <select name="tuteurs[{{ enfant.id }}][]" class="form-select" required="required">
+                <option value="0" {% if tuteurSelected ==0 %}selected="selected" {% endif %}>
+                    Sous la garde de
+                </option>
+                {% for relation in enfant.relations %}
+                    <option value="{{ relation.tuteur.id }}"{% if tuteurSelected == relation.tuteur.id %} selected="selected" {% endif %}>
+                        {{ relation.tuteur }}
                     </option>
-                    {% for relation in enfant.relations %}
-                        <option value="{{ relation.tuteur.id }}"{% if tuteurSelected == relation.tuteur.id %} selected="selected" {% endif %}>
-                            {{ relation.tuteur }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </label>
+                {% endfor %}
+            </select>
         {% else %}
-            {{ enfant.relations[0].tuteur }}
             <input type="hidden" name="tuteurs[{{ enfant.id }}][]"
                    value="{{ enfant.relations[0].tuteur.id }}">
         {% endif %}
