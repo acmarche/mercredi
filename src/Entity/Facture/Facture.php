@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -33,6 +34,8 @@ class Facture implements TimestampableInterface, UuidableInterface
     use RemarqueTrait;
     use UuidableTrait;
     use FacturePresencesTrait;
+    use FactureReductionsTrait;
+    use FactureComplementsTrait;
     use UserAddTrait;
 
     /**
@@ -86,6 +89,8 @@ class Facture implements TimestampableInterface, UuidableInterface
     {
         $this->tuteur = $tuteur;
         $this->facturePresences = new ArrayCollection();
+        $this->factureReductions = new ArrayCollection();
+        $this->factureComplements = new ArrayCollection();
     }
 
     public function __toString()

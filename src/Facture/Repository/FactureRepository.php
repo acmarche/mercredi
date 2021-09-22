@@ -30,10 +30,10 @@ final class FactureRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('facture')
             ->leftJoin('facture.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('facture.reductions', 'reductions', 'WITH')
-            ->leftJoin('facture.complements', 'complements', 'WITH')
+            ->leftJoin('facture.factureReductions', 'factureReductions', 'WITH')
+            ->leftJoin('facture.factureComplements', 'factureComplements', 'WITH')
             ->leftJoin('facture.facturePresences', 'facturePresences', 'WITH')
-            ->addSelect('tuteur', 'reductions', 'complements', 'facturePresences');
+            ->addSelect('tuteur', 'factureReductions', 'factureComplements', 'facturePresences');
     }
 
     /**
