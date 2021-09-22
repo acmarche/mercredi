@@ -11,9 +11,9 @@ use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -195,10 +195,12 @@ final class AccueilController extends AbstractController
             $accueils = $this->accueilRepository->findByEnfantAndHeure($enfant, $heure);
             $rows = ['accueils' => [], 'tuteurs' => []];
             foreach ($accueils as $accueil) {
-                $rows['accueils'][$accueil->getDateJour()->format('Y-m-d')] = $accueil->getDuree();
-                $rows['tuteur'] = $accueil->getTuteur()->getId();
-                $data[$enfant->getId()] = $rows;
+                $rows['accueils'][$accueil->getDateJour()->format('Y-m-d')] = [
+                    'duree' => $accueil->getDuree(),
+                    'tuteur' => $accueil->getTuteur()->getId(),
+                ];
             }
+            $data[$enfant->getId()] = $rows;
         }
 
         $form = $this->createForm(InscriptionsType::class, $data);
@@ -212,7 +214,13 @@ final class AccueilController extends AbstractController
 
             $this->addFlash('success', "Les acceuils ont bien été ajoutés");
 
-            return $this->redirectToRoute('mercredi_ecole_ecole_show', ['id' => $ecole->getId()]);
+            return $this->redirectToRoute('mercredi_ecole_accueil_inscriptions', [
+                'id' => $ecole->getId(),
+                'year' => $year,
+                'month' => $month,
+                'heure' => $heure,
+                'week' => $week,
+            ]);
         }
 
         $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);

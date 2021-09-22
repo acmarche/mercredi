@@ -26,7 +26,7 @@ final class DefaultController extends AbstractController
             return $response;
         }
 
-        return $this->redirectToRoute('mercredi_ecole_enfant_index');
+        return $this->redirectToRoute('mercredi_ecole_ecole_index');
     }
 
     /**
