@@ -232,7 +232,6 @@ final class AccueilController extends AbstractController
             ]);
         }
 
-
         $calendar = $this->dateUtils->renderMonth($ecole, $heure, $week, $date);
 
         return $this->render(
