@@ -7,28 +7,29 @@
             <h3>Détails de la présence du {{ facturePresence.presenceDate | format_date('full') }} facturée</h3>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="fas fa-trash"></i> Détacher de la facture
+            </button>
+            <button type="button" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#editModal">
+                <i class="fas fa-edit"></i> Modifier la présence
+            </button>
+
+            <table class="table table-bordered table-hover mt-3">
                 <tr>
                     <th>Enfant</th>
                     <td>{{ facturePresence.nom }} {{ facturePresence.prenom }}</td>
                 </tr>
                 <tr>
-                    <th>Coût après calcule</th>
+                    <th>Coût après calcul</th>
                     <td>
                         {{ facturePresence.cout }} €<br/>
                         <span class="text-muted"></span>
                     </td>
                 </tr>
             </table>
-            <h4 class="text-success">Informations utiles</h4>
+            <h5 class="text-success">Informations utiles</h5>
+            <p class="text-muted">Le coût a été calculé suivant les données ci-dessous</p>
             <table class="table table-bordered table-hover">
-                <tr>
-                    <th>Coût brut</th>
-                    <td>
-                        {{ facturePresence.coutBrut }} €<br/>
-                        <span class="text-muted">Coût suivant l'ordre</span>
-                    </td>
-                </tr>
                 <tr>
                     <th>Ordre</th>
                     <td>
@@ -36,18 +37,28 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Absent</th>
+                    <th>Coût brut de la journée</th>
                     <td>
-                        {{ facturePresence.absent }}<br/>
+                        {{ facturePresence.coutBrut }} €<br/>
+                        <span class="text-muted">Coût suivant l'ordre</span>
                     </td>
                 </tr>
                 <tr>
-                    <th>Type</th>
-                    <td>{{ facturePresence.objectType }}</td>
+                    <th>Absent</th>
+                    <td>
+                        {{ facturePresence.absent|mercredi_absence_text }}<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Réduction</th>
+                    <td>
+                        {{ facturePresence.reduction ? facturePresence.reduction : 'Aucune' }}<br/>
+                        <span class="text-muted"><a href="{{ path('mercredi_admin_reduction_index') }}">Liste des réductions</a></span>
+                    </td>
                 </tr>
                 <tr>
                     <th>Pédagogique</th>
-                    <td>{{ facturePresence.pedagogique }}</td>
+                    <td>{{ facturePresence.pedagogique ? 'Oui' : 'Non' }}</td>
                 </tr>
                 {% if presence %}
                     <tr>
@@ -59,15 +70,24 @@
                         </td>
                     </tr>
                 {% endif %}
+                {% if acceuil %}
+                    <tr>
+                        <th>Acceuil liée</th>
+                        <td>
+                            <a href="{{ path('mercredi_admin_accueil_show', {'id': acceuil.id}) }}">
+                                {{ acceuil.dateJour | format_date('full') }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Type</th>
+                    <td>
+                        {{ facturePresence.objectType }}<br>
+                        <span class="text-muted">présence ou plaine ou accueil</span>
+                    </td>
+                </tr>
             </table>
-
-            <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#deleteModal">
-                <i class="fas fa-trash"></i> Détacher de la facture
-            </button>
-            <button type="button" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#editModal">
-                <i class="fas fa-edit"></i> Modifier la présence
-            </button>
-
         </div>
         <div class="card-footer">
             <a href="{{ path('mercredi_admin_facture_show',{'id':facture.id}) }}" class="mt-4">

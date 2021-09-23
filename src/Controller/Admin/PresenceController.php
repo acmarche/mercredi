@@ -2,15 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
@@ -29,6 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,7 +40,6 @@ final class PresenceController extends AbstractController
     private PresenceHandler $presenceHandler;
     private SearchHelper $searchHelper;
     private ListingPresenceByMonth $listingPresenceByMonth;
-    private PresenceCalculatorInterface $presenceCalculator;
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandler $factureHandler;
 
@@ -50,7 +48,6 @@ final class PresenceController extends AbstractController
         PresenceHandler $presenceHandler,
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
-        PresenceCalculatorInterface $presenceCalculator,
         FacturePresenceRepository $facturePresenceRepository,
         FactureHandler $factureHandler
     ) {
@@ -58,7 +55,6 @@ final class PresenceController extends AbstractController
         $this->presenceHandler = $presenceHandler;
         $this->searchHelper = $searchHelper;
         $this->listingPresenceByMonth = $listingPresenceByMonth;
-        $this->presenceCalculator = $presenceCalculator;
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureHandler = $factureHandler;
     }
@@ -178,7 +174,6 @@ final class PresenceController extends AbstractController
      */
     public function show(Presence $presence): Response
     {
-        $cout = $this->presenceCalculator->calculate($presence);
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
 
         return $this->render(
@@ -186,7 +181,6 @@ final class PresenceController extends AbstractController
             [
                 'presence' => $presence,
                 'facturePresence' => $facturePresence,
-                'cout' => $cout,
                 'enfant' => $presence->getEnfant(),
             ]
         );
@@ -243,6 +237,6 @@ final class PresenceController extends AbstractController
             $this->dispatchMessage(new PresenceDeleted($presenceId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id'=>$enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
     }
 }

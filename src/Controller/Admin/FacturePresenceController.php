@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
@@ -28,27 +29,23 @@ final class FacturePresenceController extends AbstractController
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandler $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
-    /**
-     * @var \AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface
-     */
-    private PresenceCalculatorInterface $presenceCalculator;
-    /**
-     * @var \AcMarche\Mercredi\Presence\Repository\PresenceRepository
-     */
     private PresenceRepository $presenceRepository;
+    private AccueilRepository $accueilRepository;
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
         FactureHandler $factureHandler,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         PresenceCalculatorInterface $presenceCalculator,
-        PresenceRepository $presenceRepository
+        PresenceRepository $presenceRepository,
+        AccueilRepository $accueilRepository
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureHandler = $factureHandler;
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
         $this->presenceCalculator = $presenceCalculator;
         $this->presenceRepository = $presenceRepository;
+        $this->accueilRepository = $accueilRepository;
     }
 
     /**
@@ -88,8 +85,13 @@ final class FacturePresenceController extends AbstractController
     public function show(FacturePresence $facturePresence): Response
     {
         $facture = $facturePresence->getFacture();
-        $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
-        dump($this->presenceCalculator->calculate($presence));
+        $presence = $accueil = null;
+        if ($facturePresence->getObjectType() == 'presence') {
+            $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
+        }
+        if ($facturePresence->getObjectType() == 'accueil') {
+            $accueil = $this->accueilRepository->find($facturePresence->getPresenceId());
+        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_presence/show.html.twig',
@@ -97,6 +99,7 @@ final class FacturePresenceController extends AbstractController
                 'facture' => $facture,
                 'facturePresence' => $facturePresence,
                 'presence' => $presence,
+                'acceuil' => $accueil,
             ]
         );
     }

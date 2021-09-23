@@ -11,7 +11,7 @@ trait AbsentTrait
      * @see MercrediConstantes::ABSENCE_AVEC_CERTIF
      * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
      */
-    private int $absent;
+    private int $absent = 0;
 
     public function getAbsent(): int
     {

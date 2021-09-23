@@ -50,7 +50,7 @@ final class OrdreService
             $ordreBase = $ordreRelation;
         }
         /**
-         * quand enfant premier, fraterie pas d'importance
+         * quand enfant premier, fratrie pas d'importance
          */
         if (1 === $ordreBase) {
             return $ordreBase;
@@ -65,7 +65,7 @@ final class OrdreService
         );
 
         /**
-         * Pas de frateries
+         * Pas de fratries
          */
         if (0 === count($fratries)) {
             return $ordreBase;
@@ -81,7 +81,7 @@ final class OrdreService
         }
 
         /**
-         * Pas de frateries ce jour là
+         * Pas de fratries ce jour là
          */
         $countPresents = count($presents);
         if (0 === $countPresents) {
@@ -92,7 +92,7 @@ final class OrdreService
         }
 
         /**
-         * ordre    nbre frateries    Final
+         * ordre    nbre fratries    Final
          *
          * 6    1    2
          * 6    2    3

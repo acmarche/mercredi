@@ -30,7 +30,7 @@ final class PresenceType extends AbstractType
                 'ordre',
                 OrdreType::class,
                 [
-                    'help' => 'En forçant l\ordre, la fraterie présente ne sera pas tenu en compte',
+                    'help' => 'En forçant l\'ordre, la fratrie présente ne sera pas tenue en compte',
                 ]
             )
             ->add('remarque', RemarqueType::class)
