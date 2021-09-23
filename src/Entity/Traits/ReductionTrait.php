@@ -3,11 +3,12 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Reduction;
+use Doctrine\ORM\Mapping as ORM;
 
 trait ReductionTrait
 {
     /**
-     * @var Reduction|null
+     * @ORM\ManyToOne(targetEntity=Reduction::class)
      */
     private ?Reduction $reduction = null;
 

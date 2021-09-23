@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Presence\Calculator;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
+use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
@@ -34,13 +35,13 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
             return $this->calculatePlaine($presence, $jour);
         }
 
-        return $this->calculatePresence($presence, $jour);
+        return $this->calculatePresence($presence);
     }
 
-    private function calculatePresence(PresenceInterface $presence, Jour $jour): float
+    private function calculatePresence(PresenceInterface $presence): float
     {
         $ordre = $this->ordreService->getOrdreOnPresence($presence);
-        $prix = $this->getPrixByOrdre($jour, $ordre);
+        $prix = $this->getPrixByOrdre($presence, $ordre);
 
         return $this->reductionApplicate($presence, $prix);
     }
@@ -48,7 +49,7 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
     private function calculatePlaine(PresenceInterface $presence, Jour $jour): float
     {
         $plaine = $jour->getPlaine();
-        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $ordre = $this->getOrdreOnPresence($presence);
 
         switch ($ordre) {
             case 2:
@@ -74,8 +75,30 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         return $cout;
     }
 
-    private function getPrixByOrdre(Jour $jour, $ordre): float
+    public function setMetaDatas(PresenceInterface $presence, FacturePresence $facturePresence): void
     {
+        $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
+        $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
+        $enfant = $presence->getEnfant();
+        if ($enfant->getEcole()) {
+            $this->ecoles[] = $enfant->getEcole()->getNom();
+        }
+        $facturePresence->setNom($enfant->getNom());
+        $facturePresence->setPrenom($enfant->getPrenom());
+        $ordre = $this->getOrdreOnPresence($presence);
+        $facturePresence->setOrdre($ordre);
+        $facturePresence->setAbsent($presence->getAbsent());
+        $facturePresence->setCoutBrut($this->getPrixByOrdre($presence, $ordre));
+    }
+
+    public function getOrdreOnPresence(PresenceInterface $presence): int
+    {
+        return $this->ordreService->getOrdreOnPresence($presence);
+    }
+
+    public function getPrixByOrdre(PresenceInterface $presence, int $ordre): float
+    {
+        $jour = $presence->getJour();
         switch ($ordre) {
             case 2:
                 return $jour->getPrix2();
@@ -84,5 +107,6 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
             default:
                 return $jour->getPrix1();
         }
+
     }
 }

@@ -95,7 +95,6 @@ final class FactureHandler
     }
 
     /**
-     * @param $month
      * @return array|null
      */
     public function generateByMonthForAll(string $monthSelected): array
@@ -169,14 +168,7 @@ final class FactureHandler
     {
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
-            $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
-            $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
-            $enfant = $presence->getEnfant();
-            if ($enfant->getEcole()) {
-                $this->ecoles[] = $enfant->getEcole()->getNom();
-            }
-            $facturePresence->setNom($enfant->getNom());
-            $facturePresence->setPrenom($enfant->getPrenom());
+            $this->presenceCalculator->setMetaDatas($presence, $facturePresence);
             $facturePresence->setCout($this->presenceCalculator->calculate($presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
@@ -200,6 +192,7 @@ final class FactureHandler
             }
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
+            $facturePresence->setCoutBrut($this->accueilCalculator->getPrix($accueil));
             $facturePresence->setCout($this->accueilCalculator->calculate($accueil));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);

@@ -17,8 +17,13 @@ final class AccueilCalculator implements AccueilCalculatorInterface
 
     public function calculate(Accueil $accueil): float
     {
-        $prix = $this->parameterBag->get(Option::ACCUEIL_PRIX) ?? 0;
+        $prix = $this->getPrix($accueil);
 
         return $accueil->getDuree() * $prix;
+    }
+
+    public function getPrix(Accueil $accueil): float
+    {
+        return $this->parameterBag->get(Option::ACCUEIL_PRIX) ?? 0;
     }
 }

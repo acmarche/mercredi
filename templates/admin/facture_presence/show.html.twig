@@ -7,16 +7,58 @@
             <h3>Détails de la présence du {{ facturePresence.presenceDate | format_date('full') }} facturée</h3>
         </div>
         <div class="card-body">
-
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>Enfant</th>
                     <td>{{ facturePresence.nom }} {{ facturePresence.prenom }}</td>
                 </tr>
                 <tr>
-                    <th>Coût</th>
-                    <td>{{ facturePresence.cout }} €</td>
+                    <th>Coût après calcule</th>
+                    <td>
+                        {{ facturePresence.cout }} €<br/>
+                        <span class="text-muted"></span>
+                    </td>
                 </tr>
+            </table>
+            <h4 class="text-success">Informations utiles</h4>
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Coût brut</th>
+                    <td>
+                        {{ facturePresence.coutBrut }} €<br/>
+                        <span class="text-muted">Coût suivant l'ordre</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Ordre</th>
+                    <td>
+                        {{ facturePresence.ordre }}<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Absent</th>
+                    <td>
+                        {{ facturePresence.absent }}<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ facturePresence.objectType }}</td>
+                </tr>
+                <tr>
+                    <th>Pédagogique</th>
+                    <td>{{ facturePresence.pedagogique }}</td>
+                </tr>
+                {% if presence %}
+                    <tr>
+                        <th>Présence liée</th>
+                        <td>
+                            <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                                {{ presence.jour | format_date('full') }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
             </table>
 
             <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#deleteModal">

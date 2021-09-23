@@ -9,6 +9,8 @@ use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,15 +28,27 @@ final class FacturePresenceController extends AbstractController
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandler $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
+    /**
+     * @var \AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface
+     */
+    private PresenceCalculatorInterface $presenceCalculator;
+    /**
+     * @var \AcMarche\Mercredi\Presence\Repository\PresenceRepository
+     */
+    private PresenceRepository $presenceRepository;
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
         FactureHandler $factureHandler,
-        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
+        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
+        PresenceCalculatorInterface $presenceCalculator,
+        PresenceRepository $presenceRepository
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureHandler = $factureHandler;
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
+        $this->presenceCalculator = $presenceCalculator;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -49,7 +63,7 @@ final class FacturePresenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = $request->request->get('presences', []);
+            $presencesF = (array)$request->request->get('presences', []);
             $this->factureHandler->handleManually($facture, $presencesF, []);
 
             $this->addFlash('success', 'Les présences ont bien été attachées');
@@ -74,12 +88,15 @@ final class FacturePresenceController extends AbstractController
     public function show(FacturePresence $facturePresence): Response
     {
         $facture = $facturePresence->getFacture();
+        $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
+        dump($this->presenceCalculator->calculate($presence));
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_presence/show.html.twig',
             [
                 'facture' => $facture,
                 'facturePresence' => $facturePresence,
+                'presence' => $presence,
             ]
         );
     }

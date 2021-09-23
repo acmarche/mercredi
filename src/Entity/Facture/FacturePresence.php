@@ -2,10 +2,13 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use AcMarche\Mercredi\Entity\Traits\AbsentTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PedagogiqueTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
+use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -24,6 +27,9 @@ class FacturePresence
     use PrenomTrait;
     use FactureTrait;
     use PedagogiqueTrait;
+    use OrdreTrait;
+    use AbsentTrait;
+    use ReductionTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="facturePresences")
@@ -58,6 +64,11 @@ class FacturePresence
     /**
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      */
+    private ?float $cout_brut = null;
+
+    /**
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
+     */
     private ?float $cout = null;
 
     public function __construct(Facture $facture, int $presenceId, string $objectType)
@@ -79,14 +90,25 @@ class FacturePresence
         return $this;
     }
 
-    public function getCout(): ?string
+    public function getCout(): ?float
     {
         return $this->cout;
     }
 
-    public function setCout(string $cout): self
+    public function setCout(float $cout): self
     {
         $this->cout = $cout;
+
+        return $this;
+    }
+    public function getCoutBrut(): ?float
+    {
+        return $this->cout_brut;
+    }
+
+    public function setCoutBrut(float $coutBrut): self
+    {
+        $this->cout_brut = $coutBrut;
 
         return $this;
     }

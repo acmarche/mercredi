@@ -61,16 +61,6 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
      */
     private ?Tuteur $tuteur  = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Reduction::class)
-     */
-    private ?Reduction $reduction = null;
-
-    /**
-     * @ORM\Column(type="smallint", length=2, nullable=false, options={"comment" = "-1 sans certif, 1 avec certfi"})
-     */
-    private int $absent;
-
     public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
     {
         $this->tuteur = $tuteur;
