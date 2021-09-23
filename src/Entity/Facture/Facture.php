@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +24,7 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureRepository")
  *
  */
-class Facture implements TimestampableInterface, UuidableInterface
+class Facture implements TimestampableInterface, UuidableInterface, FactureInterface
 {
     use IdTrait;
     use NomTrait;

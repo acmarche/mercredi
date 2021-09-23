@@ -103,6 +103,14 @@ final class TuteurType extends AbstractType
                 ]
             )
             ->add(
+                'iban',
+                TextType::class,
+                [
+                    'required' => false,
+                    'help' => 'Compte bancaire pour les remboursements',
+                ]
+            )
+            ->add(
                 'remarque',
                 TextareaType::class,
                 [

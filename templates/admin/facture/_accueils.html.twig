@@ -16,7 +16,7 @@
                         {{ accueil.presenceDate | format_date('full') }}
                     </a>
                 </td>
-                <td>{{ accueil.cout }} €</td>
+                <td>{{ accueil.cout|format_currency('eur') }}</td>
             </tr>
         {% endfor %}
     </table>

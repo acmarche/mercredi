@@ -45,6 +45,10 @@
                 <th>Envoyé à</th>
                 <td>{{ facture.envoyeA }}</td>
             </tr>
+            <tr>
+                <th>Total à payer</th>
+                <td>{{ totalFacture|format_currency('eur') }}</td>
+            </tr>
             </thead>
         </table>
     </div>

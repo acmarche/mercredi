@@ -20,7 +20,7 @@
                     {% endif %}
 
                     {% if complement.forfait %}
-                        {{ complement.forfait | format_number }} €
+                        {{ complement.forfait|format_currency('eur') }}
                     {% endif %}
                 </td>
             </tr>

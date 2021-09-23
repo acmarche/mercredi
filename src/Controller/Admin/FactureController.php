@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FactureManualType;
@@ -40,6 +41,7 @@ final class FactureController extends AbstractController
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureReductionRepository $factureReductionRepository;
     private FactureComplementRepository $factureComplementRepository;
+    private FactureCalculatorInterface $factureCalculator;
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -47,7 +49,8 @@ final class FactureController extends AbstractController
         FacturePresenceRepository $facturePresenceRepository,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         FactureReductionRepository $factureReductionRepository,
-        FactureComplementRepository $factureComplementRepository
+        FactureComplementRepository $factureComplementRepository,
+        FactureCalculatorInterface $factureCalculator
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
@@ -55,6 +58,7 @@ final class FactureController extends AbstractController
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureReductionRepository = $factureReductionRepository;
         $this->factureComplementRepository = $factureComplementRepository;
+        $this->factureCalculator = $factureCalculator;
     }
 
     /**
@@ -238,6 +242,8 @@ final class FactureController extends AbstractController
         $factureReductions = $this->factureReductionRepository->findByFacture($facture);
         $factureComplements = $this->factureComplementRepository->findByFacture($facture);
 
+        $totalFacture = $this->factureCalculator->coutTotal($facture);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [
@@ -248,6 +254,7 @@ final class FactureController extends AbstractController
                 'facturePlaines' => $facturePlaines,
                 'factureReductions' => $factureReductions,
                 'factureComplements' => $factureComplements,
+                'totalFacture' => $totalFacture,
             ]
         );
     }
