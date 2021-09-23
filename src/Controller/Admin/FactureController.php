@@ -242,8 +242,8 @@ final class FactureController extends AbstractController
         $factureReductions = $this->factureReductionRepository->findByFacture($facture);
         $factureComplements = $this->factureComplementRepository->findByFacture($facture);
 
-        $totalFacture = $this->factureCalculator->coutTotal($facture);
-
+        $dto = $this->factureCalculator->createDetail($facture);
+dump($dto);
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [
@@ -254,7 +254,7 @@ final class FactureController extends AbstractController
                 'facturePlaines' => $facturePlaines,
                 'factureReductions' => $factureReductions,
                 'factureComplements' => $factureComplements,
-                'totalFacture' => $totalFacture,
+                'dto' => $dto,
             ]
         );
     }

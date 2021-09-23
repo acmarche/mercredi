@@ -19,5 +19,9 @@
                 <td>{{ presence.cout|format_currency('eur') }}</td>
             </tr>
         {% endfor %}
+        <tr>
+            <td colspan="2"><strong>Total</strong></td>
+            <td><strong>{{ dto.totalPresences|format_currency('eur') }}</strong></td>
+        </tr>
     </table>
 {% endif %}
