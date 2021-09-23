@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "AcMarche\\Mercredi\\": "src/AcMarche/Mercredi/src"
+      "AcMarche\\Mercredi\\": "src/"
     }
   },
   "extra": {
