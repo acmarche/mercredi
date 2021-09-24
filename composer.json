@@ -22,7 +22,8 @@
   },
   "extra": {
     "symfony": {
-      "allow-contrib": "true"
+      "allow-contrib": "true",
+      "endpoint": "https://github.com/jfsenechal/recipes/mercredi"
     }
   }
 }
