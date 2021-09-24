@@ -6,6 +6,10 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Facture\Validator as AcMarcheValidator;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,11 +17,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table("facture_complement")
  * @AcMarcheValidator\PourcentageOrForfait()
  */
-class FactureComplement
+class FactureComplement implements TimestampableInterface, UuidableInterface
 {
     use IdTrait;
     use NomTrait;
     use FactureTrait;
+    use UuidableTrait;
+    use TimestampableTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="factureComplements")

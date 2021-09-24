@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Entity\Facture\CreancesTrait;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
@@ -56,6 +57,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use AccueilsTraits;
     use PapierTrait;
     use IbanTrait;
+    use CreancesTrait;
 
     /**
      * @var Relation[]

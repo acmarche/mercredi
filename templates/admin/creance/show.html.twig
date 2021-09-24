@@ -1,0 +1,18 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>{{ creance }}</h3>
+        </div>
+        <div class="card-body">
+            {% include '@AcMarcheMercredi/admin/creance/_actions.html.twig' %}
+
+            <p>{{ creance.montant|format_currency('eur') }}</p>
+            <p>   {{ creance.dateLe|format_date('full') }}</p>
+            {{ creance.remarque|nl2br }}
+        </div>
+    </div>
+    {% include '@AcMarcheMercredi/admin/creance/_delete_form.html.twig' %}
+{% endblock %}
