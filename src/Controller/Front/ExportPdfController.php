@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Facture\Creance;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Sante\Factory\SantePdfFactoryTrait;
@@ -52,5 +53,17 @@ final class ExportPdfController extends AbstractController
         $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
 
         return $this->facturePdfFactory->generate($facture);
+    }
+
+    /**
+     * @Route("/creance/{uuid}", name="mercredi_commun_export_creance_pdf")
+     */
+    public function creance(Creance $creance): Response
+    {
+        return new Response('todo');
+        $tuteur = $creance->getTuteur();
+        $this->denyAccessUnlessGranted('tuteur_show', $tuteur);
+
+        return $this->facturePdfFactory->generate($creance);
     }
 }

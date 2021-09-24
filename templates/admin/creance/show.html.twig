@@ -7,10 +7,26 @@
             <h3>{{ creance }}</h3>
         </div>
         <div class="card-body">
+
             {% include '@AcMarcheMercredi/admin/creance/_actions.html.twig' %}
 
-            <p>{{ creance.montant|format_currency('eur') }}</p>
-            <p>   {{ creance.dateLe|format_date('full') }}</p>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Montant</th>
+                    <td>{{ creance.montant|format_currency('eur') }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ creance.dateLe|format_date('full') }}</td>
+                </tr>
+                <tr>
+                    <th>Payé le</th>
+                    <td>{{ creance.payeLe ? creance.payeLe|format_date('full') :'' }}</td>
+                </tr>
+                </thead>
+            </table>
+
             {{ creance.remarque|nl2br }}
         </div>
     </div>
