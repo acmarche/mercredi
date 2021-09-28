@@ -243,7 +243,7 @@ final class FactureController extends AbstractController
         $factureComplements = $this->factureComplementRepository->findByFacture($facture);
 
         $dto = $this->factureCalculator->createDetail($facture);
-dump($dto);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [
