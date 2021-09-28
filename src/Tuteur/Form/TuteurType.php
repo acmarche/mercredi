@@ -124,20 +124,16 @@ final class TuteurType extends AbstractType
                 [
                     'data_class' => Tuteur::class,
                 ]
+            )
+            ->add(
+                'facturePapier',
+                CheckboxType::class,
+                [
+                    'required' => false,
+                    'label' => 'Facture papier',
+                    'help' => 'Recevoir une copie papier ?',
+                ]
             );
-
-        if ($isAdmin) {
-            $formBuilder
-                ->add(
-                    'facturePapier',
-                    CheckboxType::class,
-                    [
-                        'required' => false,
-                        'label' => 'Facture papier',
-                        'help' => 'Recevoir une copie papier ?',
-                    ]
-                );
-        }
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void
