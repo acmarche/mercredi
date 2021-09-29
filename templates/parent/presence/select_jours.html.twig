@@ -9,7 +9,7 @@
         <div class="card-body">
 
             <div class="alert alert-info">
-                Les inscriptions pour les mercredis récréatifs se font {{ presence_nb_days }} jours à l'avance. <br />
+                Les inscriptions pour les mercredis récréatifs se font {{ presence_nb_days }} jours à l'avance. <br/>
                 Les inscriptions pour journées pédagogiques (P) se font {{ pedagogique_nb_days }} jours à l’avance.
             </div>
 
@@ -21,6 +21,9 @@
                 Sauvegarder
             </button>
             {{ form_end(form) }}
+
+            <p>jours</p>
+            {{ dates|length }}
         </div>
     </div>
 

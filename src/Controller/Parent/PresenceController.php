@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
 use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
+use AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
@@ -37,6 +38,10 @@ final class PresenceController extends AbstractController
     private SanteHandler $santeHandler;
     private FacturePresenceRepository $facturePresenceRepository;
     private PresenceCalculatorInterface $presenceCalculator;
+    /**
+     * @var \AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface
+     */
+    private PresenceDaysProviderInterface $presenceDaysProvider;
 
     public function __construct(
         RelationUtils $relationUtils,
@@ -45,6 +50,7 @@ final class PresenceController extends AbstractController
         SanteChecker $santeChecker,
         SanteHandler $santeHandler,
         PresenceCalculatorInterface $presenceCalculator,
+        PresenceDaysProviderInterface $presenceDaysProvider,
         FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->presenceRepository = $presenceRepository;
@@ -54,6 +60,7 @@ final class PresenceController extends AbstractController
         $this->santeHandler = $santeHandler;
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->presenceCalculator = $presenceCalculator;
+        $this->presenceDaysProvider = $presenceDaysProvider;
     }
 
     /**
@@ -99,6 +106,7 @@ final class PresenceController extends AbstractController
         $presenceSelectDays = new PresenceSelectDays($enfant);
         $form = $this->createForm(PresenceNewForParentType::class, $presenceSelectDays);
 
+        $dates = $this->presenceDaysProvider->getAllDaysToSubscribe($enfant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -116,6 +124,7 @@ final class PresenceController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
+                'dates' => $dates,
             ]
         );
     }
