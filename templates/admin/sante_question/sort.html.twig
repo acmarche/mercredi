@@ -16,13 +16,12 @@
 
     <div class="" id="success"></div>
 
-    <ul class="list-group"
-        data-controller="sortable"
+    <ul class="list-group" {{ stimulus_controller('sortable', {'updateUrl': path('mercredi_admin_ajax_question_sort')})}}
         data-sortable-animation-value="150">
         {% for question in questions %}
             <li
-                    data-sortable-update-url="{{ path('mercredi_admin_ajax_question_sort', {'id': question.id }) }}"
                     id="{{ question.id }}"
+                    data-questionid="{{ question.id }}"
                     class="list-group-item"
                     style="cursor: move;">
                 <i class="fas fa-sort me-2"></i>{{ question }}

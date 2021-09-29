@@ -92,23 +92,24 @@ final class AjaxController extends AbstractController
     }
 
     /**
-     * @Route("/q/sort/{id}", name="mercredi_admin_ajax_question_sort", methods={"POST", "PATCH"})
+     * @Route("/q/sort/", name="mercredi_admin_ajax_question_sort", methods={"POST"})
      */
-    public function trierQuestion(Request $request, int $id): Response
+    public function trierQuestion(Request $request): Response
     {
-        $isAjax = $request->isXmlHttpRequest();
-        if ($isAjax) {
-
-            $position = $request->request->get('position');
-            if (($santeQuestion = $this->santeQuestionRepository->find($id)) !== null) {
-                $santeQuestion->setDisplayOrder($position);
-                $this->santeQuestionRepository->flush();
+        //    $isAjax = $request->isXmlHttpRequest();
+        //    if ($isAjax) {
+        //
+        $data = json_decode($request->getContent());
+        $questions = $data->questions;
+        foreach ($questions as $position => $questionId) {
+            $question = $this->santeQuestionRepository->find($questionId);
+            if ($question) {
+                $question->setDisplayOrder($position);
             }
-
-            return new Response('<div class="alert alert-success">Tri enregistré '.$position.'</div>');
         }
+        $this->santeQuestionRepository->flush();
 
-        return new Response('<div class="alert alert-danger">Faill</div>');
+        return $this->json('<div class="alert alert-success">Tri enregistré</div>');
     }
 
     /**
