@@ -37,6 +37,7 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     use FacturePresencesTrait;
     use FactureReductionsTrait;
     use FactureComplementsTrait;
+    use FactureDecomptesTrait;
     use UserAddTrait;
 
     /**
@@ -92,6 +93,7 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
         $this->facturePresences = new ArrayCollection();
         $this->factureReductions = new ArrayCollection();
         $this->factureComplements = new ArrayCollection();
+        $this->factureDecomptes = new ArrayCollection();
     }
 
     public function __toString()

@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
@@ -42,6 +43,7 @@ final class FactureController extends AbstractController
     private FactureReductionRepository $factureReductionRepository;
     private FactureComplementRepository $factureComplementRepository;
     private FactureCalculatorInterface $factureCalculator;
+    private FactureDecompteRepository $factureDecompteRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -50,7 +52,8 @@ final class FactureController extends AbstractController
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         FactureReductionRepository $factureReductionRepository,
         FactureComplementRepository $factureComplementRepository,
-        FactureCalculatorInterface $factureCalculator
+        FactureCalculatorInterface $factureCalculator,
+        FactureDecompteRepository $factureDecompteRepository
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
@@ -59,6 +62,7 @@ final class FactureController extends AbstractController
         $this->factureReductionRepository = $factureReductionRepository;
         $this->factureComplementRepository = $factureComplementRepository;
         $this->factureCalculator = $factureCalculator;
+        $this->factureDecompteRepository = $factureDecompteRepository;
     }
 
     /**
@@ -241,6 +245,7 @@ final class FactureController extends AbstractController
         );
         $factureReductions = $this->factureReductionRepository->findByFacture($facture);
         $factureComplements = $this->factureComplementRepository->findByFacture($facture);
+        $factureDecomptes = $this->factureDecompteRepository->findByFacture($facture);
 
         $dto = $this->factureCalculator->createDetail($facture);
 
@@ -254,6 +259,7 @@ final class FactureController extends AbstractController
                 'facturePlaines' => $facturePlaines,
                 'factureReductions' => $factureReductions,
                 'factureComplements' => $factureComplements,
+                'factureDecomptes' => $factureDecomptes,
                 'dto' => $dto,
             ]
         );

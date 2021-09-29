@@ -79,7 +79,7 @@ final class FactureReductionController extends AbstractController
     }
 
     /**
-     * Route("/{id}/edit", name="mercredi_admin_facture_reduction_edit", methods={"GET","POST"}).
+     * @Route("/{id}/edit", name="mercredi_admin_facture_reduction_edit", methods={"GET","POST"}).
      */
     public function edit(Request $request, FactureReduction $factureReduction): Response
     {
@@ -90,6 +90,11 @@ final class FactureReductionController extends AbstractController
 
             $this->factureReductionRepository->flush();
             $this->addFlash('success', 'La réduction a bien été modifiée');
+
+            return $this->redirectToRoute(
+                'mercredi_admin_facture_reduction_show',
+                ['id' => $factureReduction->getId()]
+            );
         }
 
         return $this->render(

@@ -47,7 +47,7 @@ final class FactureComplementController extends AbstractController
             $this->factureComplementRepository->persist($factureComplement);
             $this->factureComplementRepository->flush();
 
-            $this->addFlash('success', 'La réduction a bien été ajoutée');
+            $this->addFlash('success', 'Le complément a bien été ajouté');
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
@@ -79,7 +79,7 @@ final class FactureComplementController extends AbstractController
     }
 
     /**
-     * Route("/{id}/edit", name="mercredi_admin_facture_complement_edit", methods={"GET","POST"}).
+     * @Route("/{id}/edit", name="mercredi_admin_facture_complement_edit", methods={"GET","POST"}).
      */
     public function edit(Request $request, FactureComplement $factureComplement): Response
     {
@@ -89,7 +89,12 @@ final class FactureComplementController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->factureComplementRepository->flush();
-            $this->addFlash('success', 'La réduction a bien été modifiée');
+            $this->addFlash('success', 'Le complément a bien été modifié');
+
+            return $this->redirectToRoute(
+                'mercredi_admin_facture_complement_show',
+                ['id' => $factureComplement->getId()]
+            );
         }
 
         return $this->render(
@@ -113,7 +118,7 @@ final class FactureComplementController extends AbstractController
             $this->factureComplementRepository->remove($factureComplement);
             $this->factureComplementRepository->flush();
 
-            $this->addFlash('success', 'La réduction a bien été supprimée');
+            $this->addFlash('success', 'Le complément a bien été supprimé');
         }
 
         return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);

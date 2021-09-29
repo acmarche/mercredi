@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Calculator;
 use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
@@ -15,17 +16,20 @@ class FactureCalculator implements FactureCalculatorInterface
     private FactureReductionRepository $factureReductionRepository;
     private FactureComplementRepository $factureComplementRepository;
     private ReductionCalculator $reductionCalculator;
+    private FactureDecompteRepository $factureDecompteRepository;
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
         FactureReductionRepository $factureReductionRepository,
         FactureComplementRepository $factureComplementRepository,
+        FactureDecompteRepository $factureDecompteRepository,
         ReductionCalculator $reductionCalculator
     ) {
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureReductionRepository = $factureReductionRepository;
         $this->factureComplementRepository = $factureComplementRepository;
         $this->reductionCalculator = $reductionCalculator;
+        $this->factureDecompteRepository = $factureDecompteRepository;
     }
 
     public function total(FactureInterface $facture): float
@@ -44,6 +48,7 @@ class FactureCalculator implements FactureCalculatorInterface
         $factureDetail->totalReductionPourcentage = $this->totalReductionPourcentage($facture);
         $factureDetail->totalComplementForfaits = $this->totalComplementForfaits($facture);
         $factureDetail->totalComplementPourcentage = $this->totalComplementPourcentage($facture);
+        $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
 
         $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalComplementForfaits;
         $factureDetail->total = $factureDetail->total - $factureDetail->totalReductionForfaits;
@@ -61,6 +66,7 @@ class FactureCalculator implements FactureCalculatorInterface
 
         $factureDetail->total += $factureDetail->pourcentageEnPlus;
         $factureDetail->total -= $factureDetail->pourcentageEnMoins;
+        $factureDetail->total -= $factureDetail->totalDecomptes;
 
         return $factureDetail;
     }
@@ -106,6 +112,16 @@ class FactureCalculator implements FactureCalculatorInterface
         }
 
         return $reductionForfait;
+    }
+
+    public function totalDecomptes(FactureInterface $facture): float
+    {
+        $total = 0;
+        foreach ($this->factureDecompteRepository->findByFacture($facture) as $decompte) {
+            $total += $decompte->getMontant();
+        }
+
+        return $total;
     }
 
     public function totalReductionPourcentage(FactureInterface $facture): float
