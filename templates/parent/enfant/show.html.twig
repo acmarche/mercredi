@@ -16,22 +16,21 @@
             {% endif %}
             {% include '@AcMarcheMercrediParent/enfant/_actions.html.twig' %}
 
-            <div class="d-flex">
-                <div class="flex-shrink-0">
+            <div class="row">
+                <div class="col-12 col-lg-3">
                     {% include '@AcMarcheMercredi/commun/enfant/_photo.html.twig' %}
                 </div>
-                <div class="flex-grow-1 ms-3">
+                <div class="mt-3 col-12 col-lg-9">
                     {% include '@AcMarcheMercredi/commun/enfant/_identite.html.twig' %}
                 </div>
             </div>
             <br/>
         </div>
         <div class="card-footer text-muted mt-3">
-            Crée le {{ enfant.createdAt | format_date('full') }} par {{ enfant.userAdd }}. Mis à jour
-            le {{ enfant.updatedAt | format_date('full') }}
+
         </div>
     </div>
-    <br />
+    <br/>
     {% include '@AcMarcheMercrediParent/enfant/_presences.html.twig' %}
     {% include '@AcMarcheMercrediParent/enfant/_plaines.html.twig' %}
     {% include '@AcMarcheMercrediParent/enfant/_accueils.html.twig' %}

@@ -1,7 +1,7 @@
 {% include '@AcMarcheMercredi/commun/_sexe.html.twig' with {'entity':enfant} %}
 <span class="fas fa-birthday-cake"></span>
 Né le {{ enfant.birthday ? enfant.birthday|format_datetime('full', 'none') }}
-(Âge : {{ enfant.age }} ans)
+(Âge : {{ enfant.age(null, true) }} ans)
 
 <br/>
 <i class="fas fa-university"></i> Scolarisé à <strong>{{ enfant.ecole }}</strong> en

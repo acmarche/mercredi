@@ -1,9 +1,7 @@
-<div class="card">
-
-    <h5 class="card-header">Ses plaines</h5>
-    <div class="card-body">
-
-
+{% if plaines | length > 0 %}
+    <div class="card">
+        <h5 class="card-header">Ses plaines</h5>
+        <div class="card-body">
             <ul class="list-group">
                 {% for plaine in plaines %}
                     <li class="list-group-item">
@@ -12,5 +10,6 @@
                 {% endfor %}
 
             </ul>
+        </div>
     </div>
-</div>
+{% endif %}

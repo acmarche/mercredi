@@ -17,6 +17,10 @@
                 {{ presence.remarque }}
             </td>
         </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">Aucune</td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>
