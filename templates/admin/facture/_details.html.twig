@@ -46,8 +46,11 @@
                 <td>{{ facture.envoyeA }}</td>
             </tr>
             <tr>
-                <th>Total à payer</th>
-                <td>{{ dto.total|format_currency('eur') }} / {{ dto.totalDecomptes|format_currency('eur') }}</td>
+                <th>
+                    Total à payer<br />
+                    Total - décompte
+                </th>
+                <td>{{ dto.total|format_currency('eur') }} - {{ dto.totalDecomptes|format_currency('eur') }}</td>
             </tr>
             </thead>
         </table>
