@@ -9,6 +9,18 @@ final class PresenceConstraints
      */
     private iterable $constraints;
 
+    /**
+     * @var PresenceConstraintInterface[]
+     */
+    private array $constraints2;
+
+    //todo try it
+    //https://woutercarabain.com/webdevelopment/how-to-inject-multiple-instances-of-an-interface-in-a-service-using-symfony-5/
+    public function construct(PresenceConstraintInterface ...$providers)
+    {
+        $this->constraints2 = $providers;
+    }
+
     public function __construct()
     {
         $this->constraints = [];
