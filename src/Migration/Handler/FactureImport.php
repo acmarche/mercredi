@@ -100,7 +100,7 @@ class FactureImport
         $enfant = $presence->getEnfant();
         $facturePresence->setNom($enfant->getNom());
         $facturePresence->setPrenom($enfant->getPrenom());
-        $facturePresence->setCout($this->presenceCalculator->calculate($presence));
+        $facturePresence->setCoutCalculated($this->presenceCalculator->calculate($presence));
         $this->tuteurRepository->persist($facturePresence);
         $facture->addFacturePresence($facturePresence);
     }

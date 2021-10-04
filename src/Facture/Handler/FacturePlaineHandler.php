@@ -82,7 +82,7 @@ class FacturePlaineHandler
             $this->ecoles[] = $enfant->getEcole()->getNom();
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
-            $facturePresence->setCout($this->plaineCalculator->calculateOnePresence($plaine, $presence));
+            $facturePresence->setCoutCalculated($this->plaineCalculator->calculateOnePresence($plaine, $presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }

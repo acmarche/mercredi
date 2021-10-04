@@ -1,3 +1,5 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
 {% block body %}
     <div class="card">
         <h3 class="card-header">Détails de la réduction {{ factureComplement.dateLe|format_date('full') }}</h3>
@@ -8,12 +10,12 @@
                 <tr>
                     <th>Montant</th>
                     <td>
-                        {% if complement.pourcentage %}
-                            {{ complement.pourcentage|format_number }} %
+                        {% if factureComplement.pourcentage %}
+                            {{ factureComplement.pourcentage|format_number }} %
                         {% endif %}
 
-                        {% if complement.forfait %}
-                            {{ complement.forfait|format_currency('eur') }}
+                        {% if factureComplement.forfait %}
+                            {{ factureComplement.forfait|format_currency('eur') }}
                         {% endif %}
                     </td>
                 </tr>

@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureReduction;
 use AcMarche\Mercredi\Facture\Form\FactureReductionType;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,14 +20,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FactureReductionController extends AbstractController
 {
-    private FactureHandler $factureHandler;
     private FactureReductionRepository $factureReductionRepository;
 
     public function __construct(
-        FactureReductionRepository $factureReductionRepository,
-        FactureHandler $factureHandler
+        FactureReductionRepository $factureReductionRepository
     ) {
-        $this->factureHandler = $factureHandler;
         $this->factureReductionRepository = $factureReductionRepository;
     }
 
@@ -37,6 +33,12 @@ final class FactureReductionController extends AbstractController
      */
     public function new(Request $request, Facture $facture): Response
     {
+        if ($facture->getEnvoyeLe()) {
+            $this->addFlash('danger', 'La facture a déjà été envoyée');
+
+            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+        }
+
         $factureReduction = new FactureReduction($facture);
 
         $form = $this->createForm(FactureReductionType::class, $factureReduction);
@@ -73,7 +75,7 @@ final class FactureReductionController extends AbstractController
             '@AcMarcheMercrediAdmin/facture_reduction/show.html.twig',
             [
                 'facture' => $facture,
-                'facturePresence' => $factureReduction,
+                'factureReduction' => $factureReduction,
             ]
         );
     }
@@ -83,6 +85,12 @@ final class FactureReductionController extends AbstractController
      */
     public function edit(Request $request, FactureReduction $factureReduction): Response
     {
+        if ($factureReduction->getFacture()->getEnvoyeLe()) {
+            $this->addFlash('danger', 'La facture a déjà été envoyée');
+
+            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $factureReduction->getFacture()->getId()]);
+        }
+
         $form = $this->createForm(FactureReductionType::class, $factureReduction);
         $form->handleRequest($request);
 

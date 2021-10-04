@@ -10,12 +10,12 @@
                 <tr>
                     <th>Montant</th>
                     <td>
-                        {% if reduction.pourcentage %}
-                            {{ reduction.pourcentage|format_number }} %
+                        {% if factureReduction.pourcentage %}
+                            {{ factureReduction.pourcentage|format_number }} %
                         {% endif %}
 
-                        {% if reduction.forfait %}
-                            {{ reduction.forfait|format_currency('eur') }}
+                        {% if factureReduction.forfait %}
+                            {{ factureReduction.forfait|format_currency('eur') }}
                         {% endif %}
                     </td>
                 </tr>

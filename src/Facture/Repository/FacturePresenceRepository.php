@@ -74,7 +74,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      * @param string $type
      * @return array|FacturePresence[]
      */
-    public function findByFactureAndType(Facture $facture, string $type): array
+    public function findByFactureAndType(FactureInterface $facture, string $type): array
     {
         return $this->createQueryBuilder('facture_presence')
             ->leftJoin('facture_presence.facture', 'facture', 'WITH')

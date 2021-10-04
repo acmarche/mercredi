@@ -10,7 +10,7 @@
         {% for complement in factureComplements %}
             <tr>
                 <td>
-                    <a href="{{ path('mercredi_admin_facture_reduction_show', {'id': complement.id}) }}">
+                    <a href="{{ path('mercredi_admin_facture_complement_show', {'id': complement.id}) }}">
                         {{ complement.nom }}
                     </a>
                 </td>

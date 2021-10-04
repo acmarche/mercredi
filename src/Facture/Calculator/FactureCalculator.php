@@ -80,7 +80,7 @@ class FactureCalculator implements FactureCalculatorInterface
 
         $cout = 0;
         foreach ($facturePresences as $facturePresence) {
-            $cout += $facturePresence->getCout();
+            $cout += $facturePresence->getCoutCalculated();
         }
 
         return $cout;
@@ -96,7 +96,7 @@ class FactureCalculator implements FactureCalculatorInterface
         $cout = 0;
 
         foreach ($factureAccueils as $factureAccueil) {
-            $cout += $factureAccueil->getCout();
+            $cout += $factureAccueil->getCoutCalculated();
         }
 
         return $cout;
@@ -106,8 +106,8 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $reductionForfait = 0;
         foreach ($this->factureReductionRepository->findByFacture($facture) as $reduction) {
-            if ($forfait = $reduction->getForfait() > 0) {
-                $reductionForfait += $forfait;
+            if ($reduction->getForfait() > 0) {
+                $reductionForfait += $reduction->getForfait();
             }
         }
 
@@ -128,8 +128,8 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $reductionPourcentage = 0;
         foreach ($this->factureReductionRepository->findByFacture($facture) as $reduction) {
-            if ($pourcentage = $reduction->getPourcentage() > 0) {
-                $reductionPourcentage += $pourcentage;
+            if ($reduction->getPourcentage() > 0) {
+                $reductionPourcentage += $reduction->getPourcentage();
             }
         }
 
@@ -140,8 +140,8 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $complementForfait = 0;
         foreach ($this->factureComplementRepository->findByFacture($facture) as $complement) {
-            if ($forfait = $complement->getForfait() > 0) {
-                $complementForfait += $forfait;
+            if ($complement->getForfait() > 0) {
+                $complementForfait += $complement->getForfait();
             }
         }
 
@@ -152,8 +152,8 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $complementPourcentage = 0;
         foreach ($this->factureComplementRepository->findByFacture($facture) as $complement) {
-            if ($pourcentage = $complement->getPourcentage() > 0) {
-                $complementPourcentage += $pourcentage;
+            if ($complement->getPourcentage() > 0) {
+                $complementPourcentage += $complement->getPourcentage();
             }
         }
 

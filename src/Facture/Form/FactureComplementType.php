@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,6 +41,16 @@ final class FactureComplementType extends AbstractType
                 [
                     'required' => false,
                     'help' => 'Montant du forfait, uniquement les chiffres',
+                ]
+            )
+            ->add(
+                'dateLe',
+                DateType::class,
+                [
+                    'label' => 'Date',
+                    'widget' => 'single_text',
+                    'required' => true,
+                    'attr' => ['autocomplete' => 'off'],
                 ]
             );
     }

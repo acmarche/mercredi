@@ -24,7 +24,7 @@ class CommunicationFactoryTest extends KernelTestCase
         $short = substr($year, -2, 2);
         self::assertSame('21', $short);
         $communication = $communicationFactory->generate($facture);
-        dump($communication);
+
         self::assertSame('ez', $communication);
     }
 }

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureReduction;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,10 +25,9 @@ class FactureReductionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Facture\Facture $facture
      * @return array|FactureReduction[]
      */
-    public function findByFacture(Facture $facture): array
+    public function findByFacture(FactureInterface $facture): array
     {
         return $this->createQueryBuilder('facture_reduction')
             ->andWhere('facture_reduction.facture = :fact')

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Facture\Validator as AcMarcheValidator;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
@@ -45,6 +46,11 @@ class FactureReduction implements TimestampableInterface, UuidableInterface
      */
     private ?float $pourcentage = null;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private ?DateTimeInterface $dateLe = null;
+
     public function __construct(Facture $facture)
     {
         $this->facture = $facture;
@@ -70,6 +76,18 @@ class FactureReduction implements TimestampableInterface, UuidableInterface
     public function setPourcentage(?float $pourcentage): self
     {
         $this->pourcentage = $pourcentage;
+
+        return $this;
+    }
+
+    public function getDateLe(): ?\DateTimeInterface
+    {
+        return $this->dateLe;
+    }
+
+    public function setDateLe(\DateTimeInterface $dateLe): self
+    {
+        $this->dateLe = $dateLe;
 
         return $this;
     }

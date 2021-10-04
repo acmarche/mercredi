@@ -18,11 +18,13 @@ AcMarche\Mercredi\Entity\Facture\FacturePresence:
     nom: 'Simpson'
     prenom: 'Bart'
     presenceDate: '<carbonDateTime(2020,05,06,9,0)>'
-    cout: '25'
+    cout_calculated: '25'
+    cout_brut: '25'
   facture_accueil_simpson:
     __construct: [ '@facture_simpson','@acceuil__bart_09_12->id', 'accueil' ]
     nom: 'Simpson'
     prenom: 'Bart'
     heure: 'Soir'
     presenceDate: '<carbonDateTime(2020,12,9,9,0)>'
-    cout: '0.50'
+    cout_calculated: '0.50'
+    cout_brut: '0.50'

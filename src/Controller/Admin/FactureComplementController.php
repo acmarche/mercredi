@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use AcMarche\Mercredi\Facture\Form\FactureComplementType;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,14 +20,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FactureComplementController extends AbstractController
 {
-    private FactureHandler $factureHandler;
     private FactureComplementRepository $factureComplementRepository;
 
     public function __construct(
-        FactureComplementRepository $factureComplementRepository,
-        FactureHandler $factureHandler
+        FactureComplementRepository $factureComplementRepository
     ) {
-        $this->factureHandler = $factureHandler;
         $this->factureComplementRepository = $factureComplementRepository;
     }
 
@@ -73,7 +69,7 @@ final class FactureComplementController extends AbstractController
             '@AcMarcheMercrediAdmin/facture_complement/show.html.twig',
             [
                 'facture' => $facture,
-                'facturePresence' => $factureComplement,
+                'factureComplement' => $factureComplement,
             ]
         );
     }

@@ -69,7 +69,7 @@ class FacturePresence
     /**
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
      */
-    private ?float $cout = null;
+    private ?float $cout_calculated = null;
 
     public function __construct(Facture $facture, int $presenceId, string $objectType)
     {
@@ -90,14 +90,14 @@ class FacturePresence
         return $this;
     }
 
-    public function getCout(): ?float
+    public function getCoutCalculated(): ?float
     {
-        return $this->cout;
+        return $this->cout_calculated;
     }
 
-    public function setCout(float $cout): self
+    public function setCoutCalculated(float $cout_calculated): self
     {
-        $this->cout = $cout;
+        $this->cout_calculated = $cout_calculated;
 
         return $this;
     }

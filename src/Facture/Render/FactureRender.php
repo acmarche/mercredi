@@ -125,7 +125,7 @@ class FactureRender
         $slug = $this->factureUtils->slugger->slug($enfant);
         $heure = $facturePresence->getHeure();
         $duree = $facturePresence->getDuree();
-        $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCout();
+        $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCoutCalculated();
         $data['enfants'][$slug->toString()]['accueils'][$heure]['nb'] += $duree;
 
         return $data;
@@ -141,7 +141,7 @@ class FactureRender
         if (!$facturePresence->isPedagogique()) {
             $data['enfants'][$slug->toString()]['mercredi'] += 1;
         }
-        $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCout();
+        $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCoutCalculated();
 
         return $data;
     }

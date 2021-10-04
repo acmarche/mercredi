@@ -169,7 +169,7 @@ final class FactureHandler
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
             $this->presenceCalculator->setMetaDatas($presence, $facturePresence);
-            $facturePresence->setCout($this->presenceCalculator->calculate($presence));
+            $facturePresence->setCoutCalculated($this->presenceCalculator->calculate($presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }
@@ -193,7 +193,7 @@ final class FactureHandler
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $facturePresence->setCoutBrut($this->accueilCalculator->getPrix($accueil));
-            $facturePresence->setCout($this->accueilCalculator->calculate($accueil));
+            $facturePresence->setCoutCalculated($this->accueilCalculator->calculate($accueil));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }
