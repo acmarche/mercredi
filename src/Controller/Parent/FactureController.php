@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
@@ -23,13 +24,16 @@ final class FactureController extends AbstractController
 
     private FactureRepository $factureRepository;
     private FacturePresenceRepository $facturePresenceRepository;
+    private FactureCalculatorInterface $factureCalculator;
 
     public function __construct(
         FactureRepository $factureRepository,
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        FactureCalculatorInterface $factureCalculator
     ) {
         $this->factureRepository = $factureRepository;
         $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->factureCalculator = $factureCalculator;
     }
 
     /**
@@ -74,6 +78,8 @@ final class FactureController extends AbstractController
 
         $tuteur = $this->tuteur;
 
+        $dto = $this->factureCalculator->createDetail($facture);
+
         return $this->render(
             '@AcMarcheMercrediParent/facture/show.html.twig',
             [
@@ -82,6 +88,7 @@ final class FactureController extends AbstractController
                 'facturePresences' => $facturePresences,
                 'factureAccueils' => $factureAccueils,
                 'facturePlaines' => $facturePlaines,
+                'dto' => $dto,
             ]
         );
     }

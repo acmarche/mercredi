@@ -19,10 +19,12 @@
                 <th>Pour le mois</th>
                 <td>{{ facture.mois }}</td>
             </tr>
-            <tr>
-                <th>Pour la plaine</th>
-                <td>{{ facture.plaine }}</td>
-            </tr>
+            {% if facture.plaine %}
+                <tr>
+                    <th>Pour la plaine</th>
+                    <td>{{ facture.plaine }}</td>
+                </tr>
+            {% endif %}
             </thead>
         </table>
     </div>
@@ -54,7 +56,7 @@
             {% if dto.totalDecomptes > 0 %}
                 <tr>
                     <th>
-                        Décompte
+                        Total du décompte des paiements
                     </th>
                     <td>{{ dto.totalDecomptes|format_currency('eur') }}</td>
                 </tr>

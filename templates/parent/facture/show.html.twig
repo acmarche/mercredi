@@ -17,7 +17,7 @@
             <a href="{{ path('mercredi_commun_export_facture_pdf', {'uuid': facture.uuid}) }}" class="btn btn-primary mb-3"
                role='button'> <i class="fas fa-file-pdf"></i> Exporter en pdf</a>
 
-            {% include '@AcMarcheMercrediAdmin/facture/_details.html.twig' %}
+            {% include '@AcMarcheMercrediParent/facture/_details.html.twig' %}
             {% include '@AcMarcheMercrediParent/facture/_presences.html.twig' %}
             {% include '@AcMarcheMercrediParent/facture/_accueils.html.twig' %}
             {% include '@AcMarcheMercrediParent/facture/_plaines.html.twig' %}
