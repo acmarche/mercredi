@@ -66,7 +66,6 @@ class FactureCalculator implements FactureCalculatorInterface
 
         $factureDetail->total += $factureDetail->pourcentageEnPlus;
         $factureDetail->total -= $factureDetail->pourcentageEnMoins;
-        $factureDetail->total -= $factureDetail->totalDecomptes;
 
         return $factureDetail;
     }

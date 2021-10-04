@@ -250,7 +250,6 @@ final class FactureController extends AbstractController
 
         $dto = $this->factureCalculator->createDetail($facture);
 
-
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [

@@ -34,10 +34,6 @@
                 <td>{{ facture.factureLe | format_date('full') }}</td>
             </tr>
             <tr>
-                <th>Payé le</th>
-                <td>{{ facture.payeLe ? facture.payeLe | format_date('full') }}</td>
-            </tr>
-            <tr>
                 <th>Envoyé le</th>
                 <td>{{ facture.envoyeLe ? facture.envoyeLe | format_datetime('full', 'medium') }}</td>
             </tr>
@@ -46,12 +42,23 @@
                 <td>{{ facture.envoyeA }}</td>
             </tr>
             <tr>
-                <th>
-                    Total à payer<br />
-                    Total - décompte
-                </th>
-                <td>{{ dto.total|format_currency('eur') }} - {{ dto.totalDecomptes|format_currency('eur') }}</td>
+                <th>Payé le</th>
+                <td>{{ facture.payeLe ? facture.payeLe | format_date('full') }}</td>
             </tr>
+            <tr>
+                <th>
+                    Total à payer
+                </th>
+                <td>{{ dto.total|format_currency('eur') }}</td>
+            </tr>
+            {% if dto.totalDecomptes > 0 %}
+                <tr>
+                    <th>
+                        Décompte
+                    </th>
+                    <td>{{ dto.totalDecomptes|format_currency('eur') }}</td>
+                </tr>
+            {% endif %}
             </thead>
         </table>
     </div>
