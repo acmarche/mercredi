@@ -62,7 +62,7 @@ class FacturePlaineHandler
         $presences = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
 
         $this->attachPresences($facture, $plaine, $presences);
-        $this->factureFactory->setEcoles($facture,$this->ecoles);
+        $this->factureFactory->setEcoles($facture, $this->ecoles);
 
         if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
@@ -82,6 +82,8 @@ class FacturePlaineHandler
             $this->ecoles[] = $enfant->getEcole()->getNom();
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
+            $ordre = $this->plaineCalculator->getOrdreOnePresence($presence);
+            $facturePresence->setCoutBrut($this->plaineCalculator->getPrixByOrdre($plaine, $ordre));
             $facturePresence->setCoutCalculated($this->plaineCalculator->calculateOnePresence($plaine, $presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);

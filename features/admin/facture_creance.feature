@@ -1,7 +1,6 @@
 Feature: Gestion des factures
   Je suis connecté
-  Je consulte une facture
-  Je cherche une facture
+  Je crée une créance
 
   Background:
     Given I am logged in as an admin
@@ -10,20 +9,16 @@ Feature: Gestion des factures
     Then I fill in "search_tuteur[nom]" with "Simpson"
     And I press "Rechercher"
     Then I should see "Simpson"
-
-  Scenario: Je consulte une facture
     Then I follow "Simpson"
-    Then I follow "Ses factures"
-    Then I should see "Mardi 6 Octobre 2020"
-    Then I follow "Mardi 6 Octobre 2020"
-    Then I should see "mercredi 6 mai 2020"
-    Then I should see "25 €"
+    Then I follow "Ses créances"
 
-  Scenario: Je cherche une facture
-    Given I am on "/admin/facture/search"
-    And I fill in "facture_search[tuteur]" with "simps"
-    And I fill in "facture_search[mois]" with "06-2020"
-    And I select "Non payée" from "facture_search[paye]"
-    And I press "Rechercher"
-    Then I should see "Mardi 6 Octobre 2020"
-    Then I should see "SIMPSON Homer"
+  Scenario: Je crée une créance
+    Then I follow "Nouvelle créance"
+    And I fill in "creance[nom]" with "Absence a rembourser"
+    And I fill in "creance[montant]" with "20"
+    And I fill in "creance[dateLe]" with "2021-10-05"
+    And I press "Sauvegarder"
+    Then I should see "La créance a bien été ajoutée"
+    Then I should see "mardi 5 octobre 2021"
+    Then I should see "20,00 €"
+

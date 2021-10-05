@@ -17,7 +17,7 @@ Feature: Gestion des factures
     Then I should see "Mardi 6 Octobre 2020"
     Then I follow "Mardi 6 Octobre 2020"
     Then I should see "mercredi 6 mai 2020"
-    Then I should see "25 €"
+    Then I should see "25,50 €"
 
   Scenario: Je cherche une facture
     Given I am on "/admin/facture/search"

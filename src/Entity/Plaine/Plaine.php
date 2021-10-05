@@ -27,7 +27,7 @@ class Plaine implements SluggableInterface
     use PlaineGroupesTrait;
     use SluggableTrait;
     use ArchiveTrait;
-    use \AcMarche\Mercredi\Entity\Traits\JoursTrait;
+    use JoursTrait;
 
     /**
      * @var Jour[]

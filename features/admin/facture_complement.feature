@@ -21,7 +21,7 @@ Feature: Gestion des factures
     Then I follow "Ajouter un complément"
     Then I should see "Nouveau complément pour la facture du mardi 6 octobre 2020 de SIMPSON Homer"
     Then I fill in "facture_complement[nom]" with "En retard"
-    Then I fill in "facture_reduction[dateLe]" with "2021-10-04"
+    Then I fill in "facture_complement[dateLe]" with "2021-10-04"
     And I press "Sauvegarder"
     Then I should see "Vous devez appliquer un pourcentage ou une réduction"
 
