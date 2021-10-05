@@ -3,7 +3,7 @@ Feature: M'enregistrer
 
   Background:
     Given I am on "/login"
-    Then I should see "Authentification"
+    Then I should see "Authentifiez-vous"
 
   Scenario: J'ai perdu mon mot de passe'
     Then I follow "Mot de passe perdu?"
