@@ -2,7 +2,8 @@ Feature: Test pour les présences des plaines
 
   Je teste si plaine ouverte
   J' inscris pour un enfant qui n'a pas de fiche santé
-  J' inscris pour un enfant qui a une fiche santé
+  J' inscris pour un enfant qui a une fiche santé et est déjà inscrit
+  J' inscris pour un enfant qui a une fiche santé et est pas inscrit
 
   Scenario: Je teste si plaine ouverte
     Given I am login with user "albert@marche.be" and password "homer"
@@ -58,3 +59,24 @@ Feature: Test pour les présences des plaines
     Then I should see "Liste de mes enfants"
     Then I follow "SIMPSON Bart"
     Then I should see "Plaine de noel"
+
+  Scenario: J' inscris pour un enfant qui a une fiche santé
+    Given I am logged in as an admin
+    Given I am on "/admin/plaine/"
+    Then I should see "Liste des plaines"
+    Then I follow "Plaine de Jésus"
+    Then I follow "Ouvrir les inscriptions"
+    And I check "Ouvrir les inscriptions"
+    And I press "Sauvegarder"
+    Given I am on "/logout"
+    Given I am login with user "albert@marche.be" and password "homer"
+    Given I am on "/parent"
+    Then I follow "Plaine de Jésus est ouverte aux inscriptions"
+    Then I follow "Inscrire mes enfants"
+    Then I follow "SIMPSON Bart"
+    Then I should see "Votre enfant a bien été inscrits à la plaine"
+    Then I should see "SIMPSON Bart"
+    Given I am on "/parent/enfant/"
+    Then I should see "Liste de mes enfants"
+    Then I follow "SIMPSON Bart"
+    Then I should see "Plaine de Jésus"

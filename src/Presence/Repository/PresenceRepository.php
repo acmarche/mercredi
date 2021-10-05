@@ -29,7 +29,7 @@ final class PresenceRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Presence::class);
     }
 
-    private function createQBl(): QueryBuilder
+    private function createQBlBase(): QueryBuilder
     {
         return $this->createQueryBuilder('presence')
             ->leftJoin('presence.jour', 'jour', 'WITH')
@@ -39,8 +39,19 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
             ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->leftJoin('presence.reduction', 'reduction', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine')
+            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
+    }
+
+    private function createQBl(): QueryBuilder
+    {
+        return $this->createQBlBase()
             ->andWhere('jour.plaine IS NULL');
+    }
+
+    private function createQBlPlaine(): QueryBuilder
+    {
+        return $this->createQBlBase()
+            ->andWhere('jour.plaine IS NOT NULL');
     }
 
     /**
@@ -131,9 +142,9 @@ final class PresenceRepository extends ServiceEntityRepository
      *
      * @throws NonUniqueResultException
      */
-    public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
+    public function isRegisteredForPlaine(Enfant $enfant, Jour $jour): ?Presence
     {
-        return $this->createQBl()
+        return $this->createQBlPlaine()
             ->andWhere('presence.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('presence.jour = :jour')

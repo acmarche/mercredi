@@ -40,7 +40,7 @@ final class PresenceHandler
     public function handleNew(Tuteur $tuteur, Enfant $enfant, iterable $days): void
     {
         foreach ($days as $jour) {
-            if (null !== $this->presenceRepository->isRegistered($enfant, $jour)) {
+            if (null !== $this->presenceRepository->isRegisteredForPlaine($enfant, $jour)) {
                 continue;
             }
 

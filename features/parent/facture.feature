@@ -7,7 +7,12 @@ Feature: Gestion des factures
     Given I am on "/parent/tuteur/"
     Then I should see "SIMPSON Homer"
 
-  Scenario: Je consulte une facture
+  Scenario: Je ne vois pas une facture non envoyee
+    Then I follow "Mes factures"
+    Then I should see "Liste de vos factures"
+    Then I should not see "Mardi 6 Octobre 2020"
+
+  Scenario: Je consulte une facture envoyee
     Then I follow "Mes factures"
     Then I should see "Liste de vos factures"
     Then I should see "Mardi 6 Octobre 2020"

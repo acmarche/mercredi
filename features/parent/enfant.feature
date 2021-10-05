@@ -92,6 +92,6 @@ Feature: Test des pages parents
     Then I follow "SIMPSON Bart"
     Then I should not see "Attention la fiche santé n'est pas complète, veuillez la remplir."
 
-  Scenario: J'affiche une attestation fiscale
-    Then I follow "Télécharger 2021"
-    And the response status code should be 200
+  #Scenario: J'affiche une attestation fiscale
+    #Then I follow "Télécharger 2021"
+    #And the response status code should be 200
