@@ -24,7 +24,7 @@ final class FactureFactory
     public function setEcoles(Facture $facture): void
     {
         $ecoles = array_unique($facture->ecolesListing);
-        $facture->setEcoles(join('', $ecoles));
+        $facture->setEcoles(join(' ', $ecoles));
     }
 
 }

@@ -6,14 +6,17 @@
                     <td>
                         <img height="90px"
                              src="{{ absolute_url(asset('bundles/acmarchemercredi/images/logo-hotton.png')) }}"
-                             alt="logo hotton" class="float-left mr-3">
+                             alt="logo hotton" class="float-start me-3">
                         Administration communale de Hotton<br>
                         Rue des Ecoles, 50
                         6990 Hotton<br>
                         Contact: Samantha Herman<br>
                         Mail: cartouba@hotton.be<br>
+                        <br clear="all">
+                        Facture numéro {{ facture.id }}<br/>
+                        Communication: {{ facture.communication }}
                     </td>
-                    <td class="text-right">
+                    <td class="me-4 float-end">
                         Hotton, le {{ facture.createdAt|format_date('full') }}
                         <br><br>
                         {{ facture.nom }} {{ facture.prenom }}<br>
@@ -30,10 +33,24 @@
                 <br/>
                 <div>Implantation scolaire {{ facture.ecoles }}</div>
             </div>
-            <p class="mt-5 text-muted">
-                Nous vous invitons à verser le montant total mentionné ci-dessous dans les 30 jours.
-                <br/>En cas de rappel, nous appliquerons
-                des frais administratifs de selon les factures dues à l’échéance.
+            <p class="mt-5">
+                Nous vous invitons à verser le montant mentionné ci-dessous dans les 30 jours.
+                <br/><br/>
+                Un détail peut être envoyé sur simple demande adressée auprès du service ATL.
+                <br/><br/>
+                Toute réclamation à l’encontre de cette facture doit être adressée par écrit, <br/>à l’attention du
+                Collège
+                Communal (rue des Ecoles 50 à 6990 HOTTON ou cartourba@hotton.be) <br/>dans les 15 jours calendrier qui
+                suivent la date d’expiration de la facture.
+                <br/><br/>
+                En cas de non-paiement, les fais de rappel s’élèveront à 1,00€ par facture mensuelle de retard et 10,00€
+                en cas de rappel par voie recommandée.
+                <br/><br/>
+                <span class="text-muted">
+                    Texte de référence : « Règlement redevance sur les accueils extrascolaire » adopté par le conseil en sa
+                séance du 27.08.2021
+                </span>
+                <br>
             </p>
             <table class="table table-bordered">
                 <thead>
