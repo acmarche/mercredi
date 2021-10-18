@@ -12,8 +12,9 @@
 
             <table class="table table-bordered">
                 <tr>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Enfants</th>
+                    <th>Date</th>
+                    <th>Ecoles (Journée pédagogique)</th>
+                    <th>Enfants</th>
                 </tr>
                 {% for jour in jours %}
                     <tr>
@@ -22,6 +23,7 @@
                                 {{ jour.dateJour|format_date('full')|title }}
                             </a>
                         </td>
+                        <td>{{ jour.ecoles|join(', ') }}</td>
                         <td>
                             {{ jour.presences|length }}
                         </td>

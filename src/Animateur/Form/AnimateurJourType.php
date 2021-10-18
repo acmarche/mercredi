@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Animateur\Form;
 
+use AcMarche\Mercredi\Ecole\Utils\EcoleUtils;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
@@ -28,9 +29,9 @@ final class AnimateurJourType extends AbstractType
                     'choice_label' => function (Jour $jour) {
                         $peda = '';
                         if ($jour->isPedagogique()) {
-                            $peda = '(P)';
+                            $ecoles = EcoleUtils::getNamesEcole($jour->getEcoles());
+                            $peda = '(Pédagogique '.$ecoles.')';
                         }
-
                         return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
                     },
                     'multiple' => true,
