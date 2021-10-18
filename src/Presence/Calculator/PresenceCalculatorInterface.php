@@ -7,8 +7,6 @@ use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 
 interface PresenceCalculatorInterface
 {
-    public function setMetaDatas(PresenceInterface $presence, FacturePresence $facturePresence): void;
-
     public function calculate(PresenceInterface $presence): float;
 
     public function getOrdreOnPresence(PresenceInterface $presence): int;

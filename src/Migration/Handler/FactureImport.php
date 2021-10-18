@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
+use AcMarche\Mercredi\Facture\Factory\CommunicationFactoryInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Migration\MercrediPdo;
@@ -21,7 +21,7 @@ class FactureImport
     private TuteurRepository $tuteurRepository;
     private MigrationRepository $migrationRepository;
     private FactureHandler $factureHandler;
-    private CommunicationFactory $communicationFactory;
+    private CommunicationFactoryInterface $communicationFactory;
     private PresenceCalculatorInterface $presenceCalculator;
     private MercrediPdo $pdo;
     private SymfonyStyle $io;
@@ -30,7 +30,7 @@ class FactureImport
         TuteurRepository $tuteurRepository,
         MigrationRepository $migrationRepository,
         FactureHandler $factureHandler,
-        CommunicationFactory $communicationFactory,
+        CommunicationFactoryInterface $communicationFactory,
         PresenceCalculatorInterface $presenceCalculator
     ) {
         $this->tuteurRepository = $tuteurRepository;

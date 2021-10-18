@@ -4,18 +4,19 @@ namespace AcMarche\Mercredi\Facture\Handler;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
-use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
+use AcMarche\Mercredi\Facture\Factory\CommunicationFactoryInterface;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Carbon\Carbon;
@@ -31,9 +32,8 @@ final class FactureHandler
     private AccueilRepository $accueilRepository;
     private AccueilCalculatorInterface $accueilCalculator;
     private TuteurRepository $tuteurRepository;
-    private CommunicationFactory $communicationFactory;
+    private CommunicationFactoryInterface $communicationFactory;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
-    private array $ecoles = [];
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -44,7 +44,7 @@ final class FactureHandler
         AccueilRepository $accueilRepository,
         AccueilCalculatorInterface $accueilCalculator,
         TuteurRepository $tuteurRepository,
-        CommunicationFactory $communicationFactory,
+        CommunicationFactoryInterface $communicationFactory,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
         $this->factureRepository = $factureRepository;
@@ -77,6 +77,8 @@ final class FactureHandler
 
         $this->finish($facture, $presences, $accueils);
         $this->flush();
+        $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
+        $this->flush();
 
         return $facture;
     }
@@ -88,6 +90,8 @@ final class FactureHandler
 
         $facture = $this->handleByTuteur($tuteur, $date);
         if ($facture) {
+            $this->flush();
+            $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
             $this->flush();
         }
 
@@ -110,6 +114,10 @@ final class FactureHandler
             }
         }
 
+        $this->flush();
+        foreach ($factures as $facture) {
+            $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
+        }
         $this->flush();
 
         return $factures;
@@ -149,10 +157,10 @@ final class FactureHandler
      */
     private function finish(Facture $facture, array $presences, array $accueils): Facture
     {
-        $facture->setCommunication($this->communicationFactory->generate($facture));
         $this->attachPresences($facture, $presences);
         $this->attachAccueils($facture, $accueils);
-        $this->factureFactory->setEcoles($facture, $this->ecoles);
+        $this->factureFactory->setEcoles($facture);
+
         if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
@@ -168,7 +176,7 @@ final class FactureHandler
     {
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
-            $this->presenceCalculator->setMetaDatas($presence, $facturePresence);
+            $this->setMetaDatas($facture, $presence, $facturePresence);
             $facturePresence->setCoutCalculated($this->presenceCalculator->calculate($presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
@@ -187,8 +195,8 @@ final class FactureHandler
             $facturePresence->setHeure($accueil->getHeure());
             $facturePresence->setDuree($accueil->getDuree());
             $enfant = $accueil->getEnfant();
-            if ($enfant->getEcole()) {
-                $this->ecoles[] = $enfant->getEcole()->getNom();
+            if ($ecole = $enfant->getEcole()) {
+                $facture->ecolesListing[$ecole->getId()] = $ecole;
             }
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
@@ -197,6 +205,25 @@ final class FactureHandler
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }
+    }
+
+    public function setMetaDatas(
+        FactureInterface $facture,
+        PresenceInterface $presence,
+        FacturePresence $facturePresence
+    ): void {
+        $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
+        $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
+        $enfant = $presence->getEnfant();
+        if ($ecole = $enfant->getEcole()) {
+            $facture->ecolesListing[$ecole->getId()] = $ecole;
+        }
+        $facturePresence->setNom($enfant->getNom());
+        $facturePresence->setPrenom($enfant->getPrenom());
+        $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
+        $facturePresence->setOrdre($ordre);
+        $facturePresence->setAbsent($presence->getAbsent());
+        $facturePresence->setCoutBrut($this->presenceCalculator->getPrixByOrdre($presence, $ordre));
     }
 
     private function flush(): void

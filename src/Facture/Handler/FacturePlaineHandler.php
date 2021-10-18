@@ -8,28 +8,26 @@ use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
+use AcMarche\Mercredi\Facture\Factory\CommunicationFactoryInterface;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 
 class FacturePlaineHandler
 {
     private FactureFactory $factureFactory;
-    private CommunicationFactory $communicationFactory;
+    private CommunicationFactoryInterface $communicationFactory;
     private FactureRepository $factureRepository;
     private PlaineCalculatorInterface $plaineCalculator;
     private FacturePresenceRepository $facturePresenceRepository;
-    private array $ecoles = [];
     private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         FactureFactory $factureFactory,
-        CommunicationFactory $communicationFactory,
+        CommunicationFactoryInterface $communicationFactory,
         PlainePresenceRepository $plainePresenceRepository,
         FactureRepository $factureRepository,
         PlaineCalculatorInterface $plaineCalculator,
@@ -57,12 +55,12 @@ class FacturePlaineHandler
     {
         $facture->setMois(date('m-Y'));
         $facture->setPlaine($plaine->getNom());
-        $facture->setCommunication($this->communicationFactory->generatePlaine($plaine));
+        $facture->setCommunication($this->communicationFactory->generateForPlaine($plaine));
         $tuteur = $facture->getTuteur();
         $presences = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
 
         $this->attachPresences($facture, $plaine, $presences);
-        $this->factureFactory->setEcoles($facture, $this->ecoles);
+        $this->factureFactory->setEcoles($facture);
 
         if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
@@ -79,7 +77,9 @@ class FacturePlaineHandler
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
-            $this->ecoles[] = $enfant->getEcole()->getNom();
+            if ($ecole = $enfant->getEcole()) {
+                $facture->ecolesListing[$ecole->getId()] = $ecole;
+            }
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $ordre = $this->plaineCalculator->getOrdreOnePresence($presence);

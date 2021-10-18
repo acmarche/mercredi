@@ -29,6 +29,11 @@ class Ecole
     use UsersTrait;
 
     /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private ?string $abreviation = null;
+
+    /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="ecoles" )
      *
      * @var User[]|Collection
@@ -78,6 +83,18 @@ class Ecole
                 $enfant->setEcole(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAbreviation(): ?string
+    {
+        return $this->abreviation;
+    }
+
+    public function setAbreviation(?string $abreviation): self
+    {
+        $this->abreviation = $abreviation;
 
         return $this;
     }

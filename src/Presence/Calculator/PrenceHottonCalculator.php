@@ -22,22 +22,6 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
         $this->reductionCalculator = $reductionCalculator;
     }
 
-    public function setMetaDatas(PresenceInterface $presence, FacturePresence $facturePresence): void
-    {
-        $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
-        $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
-        $enfant = $presence->getEnfant();
-        if ($enfant->getEcole()) {
-            $this->ecoles[] = $enfant->getEcole()->getNom();
-        }
-        $facturePresence->setNom($enfant->getNom());
-        $facturePresence->setPrenom($enfant->getPrenom());
-        $ordre = $this->getOrdreOnPresence($presence);
-        $facturePresence->setOrdre($ordre);
-        $facturePresence->setAbsent($presence->getAbsent());
-        $facturePresence->setCoutBrut($this->getPrixByOrdre($presence, $ordre));
-    }
-
     public function calculate(PresenceInterface $presence): float
     {
         /*

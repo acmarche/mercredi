@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Tests\Communication;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Factory\CommunicationFactory;
+use AcMarche\Mercredi\Facture\Factory\CommunicationFactoryHotton;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CommunicationFactoryTest extends KernelTestCase
@@ -17,7 +17,7 @@ class CommunicationFactoryTest extends KernelTestCase
         //$routerService = self::$container->get('router');
         //$myCustomService = self::$container->get(CustomService::class);
         $container = static::getContainer();
-        $communicationFactory = $container->get(CommunicationFactory::class);
+        $communicationFactory = $container->get(CommunicationFactoryHotton::class);
         $facture = new Facture(new Tuteur());
         $facture->setMois('09-2021');
         $year = 2021;

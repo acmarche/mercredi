@@ -3,12 +3,11 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
-
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 
-class CommunicationFactory
+class CommunicationFactoryHotton implements CommunicationFactoryInterface
 {
     private FactureRepository $factureRepository;
 
@@ -18,6 +17,21 @@ class CommunicationFactory
     }
 
     /**
+     * Pour la communication à faire apparaitre :
+     *
+     * Raccourci de l’école + n° facture + année (année, non pas d’émission de la facture, mais du mois de garderie)
+     *
+     * Exemple : COM HAMP 1/2021
+     *
+     * Raccourcis des écoles :
+     *
+     * Communale de Hampteau : COMHAM
+     * Communale de Hotton : COMHOT
+     * Libre Bourdon : LB
+     * Libre Hotton : LH
+     * Libre Melreux : LM
+     * Enrico Macias : EM
+     *
      * La structure imposée par le standard bancaire belge est la suivante :
      *
      * +++ 000 / 0000 / 000XX +++
@@ -32,7 +46,27 @@ class CommunicationFactory
      *
      * Exemple : La communication structurée suivante +++ 201 / 8000 / 53522 +++ se rapporte donc à la facture n° 535 de l’année 2018.
      */
-    public function generate(Facture $facture): string
+    public function generateForPresence(FactureInterface $facture): string
+    {
+        $ecoles = '';
+        foreach ($facture->ecolesListing as $ecole) {
+            if ($ecole->getAbreviation()) {
+                $ecoles .= $ecole->getAbreviation().' ';
+            } else {
+                $ecoles .= $ecole->getLocalite();
+            }
+        }
+
+        //list($month, $year) = explode('-', $facture->getMois());
+        $communication = $ecoles.' '.$facture->getId().' '.$facture->getMois();
+
+        return $communication;
+    }
+
+    /**
+     *
+     */
+    public function old($facture)
     {
         list($month, $year) = explode('-', $facture->getMois());
         $digits = 6;
@@ -42,10 +76,10 @@ class CommunicationFactory
         $numbers .= $this->getModulo($numbers);
         $communication = substr($numbers, 0, 3).'/'.substr($numbers, 3, 4).'/'.substr($numbers, 7, 5);
         if ($this->factureRepository->findOneBy(['communication' => $communication])) {
-            return $this->generate($facture);
+            return $this->generateForPresence($facture);
         }
 
-        return $communication;
+        return null;
     }
 
     /**
@@ -73,7 +107,7 @@ class CommunicationFactory
         return $r;
     }
 
-    public function generatePlaine(Plaine $plaine): string
+    public function generateForPlaine(Plaine $plaine): string
     {
         return $plaine->getSlug();
     }

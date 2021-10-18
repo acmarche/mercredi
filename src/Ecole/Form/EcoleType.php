@@ -13,15 +13,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class EcoleType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
             ->add('nom')
+            ->add('abreviation', TextType::class, [
+                'label' => 'Abréviation',
+                'help' => 'Actuellement utilisé pour la communication de facture',
+                'required' => false,
+            ])
             ->add(
                 'rue',
                 TextType::class,

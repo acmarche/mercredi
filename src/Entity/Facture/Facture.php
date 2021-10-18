@@ -2,12 +2,12 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
-use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -22,7 +22,6 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureRepository")
- *
  */
 class Facture implements TimestampableInterface, UuidableInterface, FactureInterface
 {
@@ -65,7 +64,7 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
      */
     private ?string $mois = null;
     /**
-     * @ORM\Column(type="string", length=100,nullable=false, unique=true)
+     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
      */
     private ?string $communication = null;
     /**
@@ -76,16 +75,19 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $ecoles = null;
-
     /**
      * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
      */
     private float $montant_obsolete;
-
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private float $cloture_obsolete;
+    /**
+     * Use for commu factory
+     * @var array|Ecole[]
+     */
+    public array $ecolesListing = [];
 
     public function __construct(Tuteur $tuteur)
     {
