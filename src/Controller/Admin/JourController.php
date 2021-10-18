@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Jour\Form\SearchJourType;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Form\JourType;
@@ -24,13 +25,16 @@ final class JourController extends AbstractController
 {
     private JourRepository $jourRepository;
     private TarificationFormGeneratorInterface $tarificationFormGenerator;
+    private PresenceRepository $presenceRepository;
 
     public function __construct(
         JourRepository $jourRepository,
-        TarificationFormGeneratorInterface $tarificationFormGenerator
+        TarificationFormGeneratorInterface $tarificationFormGenerator,
+        PresenceRepository $presenceRepository
     ) {
         $this->jourRepository = $jourRepository;
         $this->tarificationFormGenerator = $tarificationFormGenerator;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -120,12 +124,14 @@ final class JourController extends AbstractController
     public function show(Jour $jour): Response
     {
         $tarifs = $this->tarificationFormGenerator->generateTarifsHtml($jour);
+        $presences = $this->presenceRepository->findByDay($jour);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/show.html.twig',
             [
                 'jour' => $jour,
                 'tarifs' => $tarifs,
+                'presences' => $presences,
             ]
         );
     }

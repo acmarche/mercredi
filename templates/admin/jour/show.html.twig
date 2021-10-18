@@ -22,6 +22,8 @@
             {{ tarifs|raw }}
 
             {{ jour.remarque|nl2br }}
+
+            {% include '@AcMarcheMercrediAdmin/jour/_presences.html.twig' %}
         </div>
     </div>
 
