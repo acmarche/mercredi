@@ -55,6 +55,7 @@ class FactureRender
         $content = '';
         foreach ($factures as $facture) {
             $content .= $this->prepareContent($facture);
+            $content .= '<div class="page-breaker"></div>';
         }
 
         return $this->environment->render(
