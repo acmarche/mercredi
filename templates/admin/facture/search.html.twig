@@ -17,8 +17,8 @@
                     <tr>
                         <th>Numéro</th>
                         <th>Mois</th>
-                        <th>Facturé le</th>
                         <th>Facturé à</th>
+                        <th>Enfants</th>
                         <th>Payé le</th>
                         <th>Envoyé le</th>
                         <th>Communication</th>
@@ -36,13 +36,11 @@
                                 {{ facture.mois }}
                             </td>
                             <td>
-                                {{ facture.factureLe | format_date('full') | title }}
-                            </td>
-                            <td>
                                 <a href="{{ path('mercredi_admin_tuteur_show', { 'id': facture.tuteur.id }) }}">
                                     {{ facture.tuteur }}
                                 </a>
                             </td>
+                            <td>{{ facture.enfants|join(',') }}</td>
                             <td>
                                 {{ facture.payeLe ? facture.payeLe | format_date('full','full') }}
                             </td>

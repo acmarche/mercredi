@@ -103,6 +103,17 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
         return 'Facture '.$this->id;
     }
 
+    public function getEnfants(): array
+    {
+        $enfants = [];
+        foreach ($this->facturePresences as $presence) {
+            $nom = $presence->getNom().' '.$presence->getPrenom();
+            $enfants[$nom] = $nom;
+        }
+
+        return $enfants;
+    }
+
     public function getPayeLe(): ?\DateTimeInterface
     {
         return $this->payeLe;
