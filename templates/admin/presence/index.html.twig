@@ -1,7 +1,7 @@
 {% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
 
 {% block body %}
-    <div class="card mb-3">
+    <div class="card">
         <h3 class="card-header">Liste des présences
             {% if jour %} {{ jour.dateJour | format_date('full') }}
                 <a href="{{ path('mercredi_message_new_jour', {'id': jour.id}) }}"
