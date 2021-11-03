@@ -22,6 +22,12 @@
                     <th>Coût</th>
                     <td>{{ cout|format_currency('eur') }}</td>
                 </tr>
+                {% if accueil.heureRetard %}
+                    <tr>
+                        <th>Retard</th>
+                        <td>{{ accueil.heureRetard|format_datetime('none', 'short') }}</td>
+                    </tr>
+                {% endif %}
             </table>
 
             {% if accueil.remarque %}
