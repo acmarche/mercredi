@@ -17,6 +17,7 @@ final class NotificationMailer
             $email = $this->organisation->getEmail();
         }
         $recipient = new Recipient($email);
+        $recipient = new Recipient('jf@marche.be');
         $notification = new EmailNotification($templatedEmail);
         $this->sendNotifier($notification, $recipient);
     }
