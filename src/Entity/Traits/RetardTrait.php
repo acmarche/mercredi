@@ -9,26 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait RetardTrait
 {
     /**
-     * @ORM\Column(type="date", nullable=true)
-     * @Assert\Type("datetime")
-     */
-    private ?DateTimeInterface $date_retard = null;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\Type("datetime")
      */
     private ?DateTimeInterface $heure_retard = null;
-
-    public function getDateRetard(): ?DateTimeInterface
-    {
-        return $this->date_retard;
-    }
-
-    public function setDateRetard(?DateTimeInterface $date_retard): void
-    {
-        $this->date_retard = $date_retard;
-    }
 
     public function getHeureRetard(): ?DateTimeInterface
     {

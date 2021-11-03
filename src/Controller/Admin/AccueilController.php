@@ -2,10 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
-use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
@@ -14,14 +10,18 @@ use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
-use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Handler\FactureHandler;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -131,6 +131,7 @@ final class AccueilController extends AbstractController
     {
         $enfant = $accueil->getEnfant();
         $cout = $this->accueilCalculator->calculate($accueil);
+        $coutRetard = $this->accueilCalculator->calculateRetard($accueil);
         $facturePresence = $this->facturePresenceRepository->findByAccueil($accueil);
 
         return $this->render(
@@ -138,6 +139,7 @@ final class AccueilController extends AbstractController
             [
                 'accueil' => $accueil,
                 'cout' => $cout,
+                'coutRetard' => $coutRetard,
                 'enfant' => $enfant,
                 'facturePresence' => $facturePresence,
             ]

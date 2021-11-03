@@ -263,18 +263,21 @@ final class AccueilController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $dateRetard = $data['date_retard'];
+            $heureRetard = $data['heure_retard'];
             if (!$accueil = $this->accueilRepository->findOneByEnfantAndDayAndHour(
                 $enfant,
-                $data['date_retard'],
+                $dateRetard,
                 AccueilInterface::SOIR
             )) {
                 $this->addFlash('danger', 'Aucun accueil encodé pour ce jour là. Veuillez d\'abord ajouté un accueil');
             } else {
-                $accueil->setDateRetard($data['date_retard']);
-                $accueil->setHeureRetard($data['heure_retard']);
+                $dateRetard->setTime($heureRetard->format('H'), $heureRetard->format('i'));
+                $accueil->setHeureRetard($dateRetard);
                 $this->accueilRepository->flush();
-                $this->addFlash('success','Le retard a bien été ajouté');
+                $this->addFlash('success', 'Le retard a bien été ajouté');
             }
+
             return $this->redirectToRoute('mercredi_ecole_enfant_show', ['uuid' => $enfant->getUuid()]);
         }
 

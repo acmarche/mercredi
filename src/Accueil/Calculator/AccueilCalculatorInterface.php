@@ -9,4 +9,6 @@ interface AccueilCalculatorInterface
     public function getPrix(Accueil $accueil): float;
 
     public function calculate(Accueil $accueil): float;
+
+    public function calculateRetard(Accueil $accueil): float;
 }

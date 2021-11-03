@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Handler;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -159,6 +160,7 @@ final class FactureHandler
     {
         $this->attachPresences($facture, $presences);
         $this->attachAccueils($facture, $accueils);
+        $this->attachRetard($facture, $accueils);
         $this->factureFactory->setEcoles($facture);
 
         if (!$facture->getId()) {
@@ -232,4 +234,26 @@ final class FactureHandler
         $this->facturePresenceRepository->flush();
     }
 
+    /**
+     * @param array|Accueil[] $accueils
+     */
+    private function attachRetard(Facture $facture, array $accueils)
+    {
+        $retards = [];
+        $total = 0;
+        foreach ($accueils as $accueil) {
+            if ($accueil->getHeureRetard()) {
+                $total += $this->accueilCalculator->calculateRetard($accueil);
+                $retards[] = $accueil->getDateJour()->format('d-m');
+            }
+        }
+        if ($total > 0) {
+            $complement = new FactureComplement($facture);
+            $complement->setDateLe(new \DateTime());
+            $complement->setForfait($total);
+            $complement->setNom('Retard pour les accueils: '.join(', ', $retards));
+            $facture->addFactureComplement($complement);
+            $this->factureRepository->persist($complement);
+        }
+    }
 }

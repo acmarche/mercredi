@@ -205,7 +205,14 @@ final class FactureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $month = $form->get('mois')->getData();
 
-            $factures = $this->factureHandler->generateByMonthForAll($month);
+            try {
+                $factures = $this->factureHandler->generateByMonthForAll($month);
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', 'Erreur survenue: '.$exception->getMessage());
+
+                return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
+            }
+
             if (count($factures) === 0) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 

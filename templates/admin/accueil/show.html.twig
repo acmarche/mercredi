@@ -11,7 +11,7 @@
             {% include '@AcMarcheMercrediAdmin/accueil/_actions.html.twig' %}
 
             <table class="table table-bordered">
-                 <tr>
+                <tr>
                     <th>Facturé</th>
                     <td>
                         {% if facturePresence %}
@@ -23,7 +23,7 @@
                         {% endif %}
                     </td>
                 </tr>
-                 <tr>
+                <tr>
                     <th>Sous la garde de</th>
                     <td>
                         <a href="{{ path('mercredi_admin_tuteur_show', {'id': accueil.tuteur.id}) }}">
@@ -45,7 +45,12 @@
                 </tr>
                 <tr>
                     <th>Coût</th>
-                    <td>{{ cout|format_currency('eur') }}</td>
+                    <td>
+                        {{ cout|format_currency('eur') }}
+                        {% if coutRetard > 0 %}
+                            + retard: {{ coutRetard|format_currency('eur') }}
+                        {% endif %}
+                    </td>
                 </tr>
             </table>
             {% if accueil.remarque %}
