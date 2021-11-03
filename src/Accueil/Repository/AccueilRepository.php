@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Accueil\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
-use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Carbon\CarbonPeriod;
 use DateTimeInterface;
@@ -27,15 +27,24 @@ final class AccueilRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Accueil::class);
     }
 
-    public function getQbForListing(): QueryBuilder
+    private function createQbl(): QueryBuilder
     {
         return $this->createQueryBuilder('accueil')
-            ->orderBy('accueil.date_jour', 'ASC');
+            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
+            ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->addSelect('enfant', 'ecole', 'tuteur')
+            ->orderBy('accueil.date_jour', 'DESC');
+    }
+
+    public function getQbForListing(): QueryBuilder
+    {
+        return $this->createQbl();
     }
 
     public function isRegistered(Accueil $accueil, Enfant $enfant): ?Accueil
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQbl()
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour = :date')
@@ -50,7 +59,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByEnfant(Enfant $enfant): array
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQbl()
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
@@ -65,7 +74,7 @@ final class AccueilRepository extends ServiceEntityRepository
             return $date->toDateString();
         }, $weekPeriod->toArray());
 
-        return $this->createQueryBuilder('accueil')
+        return $this->createQbl()
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour IN (:dates)')
@@ -75,12 +84,24 @@ final class AccueilRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    public function findOneByEnfantAndDayAndHour(Enfant $enfant, DateTimeInterface $date, string $heure): ?Accueil
+    {
+        return $this->createQbl()
+            ->andWhere('accueil.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->andWhere('accueil.date_jour LIKE :date')
+            ->setParameter('date', $date->format('Y-m-d').'%')
+            ->andWhere('accueil.heure = :heure')
+            ->setParameter('heure', $heure)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * @return Accueil[]
      */
     public function findByTuteur(Tuteur $tuteur): array
     {
-        return $this->createQueryBuilder('accueil')
+        return $this->createQbl()
             ->andWhere('accueil.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
             ->getQuery()->getResult();
@@ -94,10 +115,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByDateAndHeureAndEcoles(DateTimeInterface $date, ?string $heure, iterable $ecoles): array
     {
-        $qb = $this->createQueryBuilder('accueil')
-            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
-            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->addSelect('enfant', 'ecole')
+        $qb = $this->createQbl()
             ->andWhere('accueil.date_jour = :date')
             ->setParameter('date', $date);
 
@@ -123,10 +141,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByDateAndHeure(DateTimeInterface $date, ?string $heure): array
     {
-        $qb = $this->createQueryBuilder('accueil')
-            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
-            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->addSelect('enfant', 'ecole')
+        $qb = $this->createQbl()
             ->andWhere('accueil.date_jour = :date')
             ->setParameter('date', $date);
 
@@ -146,10 +161,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
-        $qb = $this->createQueryBuilder('accueil')
-            ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
-            ->addSelect('tuteur', 'enfant')
+        $qb = $this->createQbl()
             ->andWhere('accueil.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur);
 
@@ -159,6 +171,17 @@ final class AccueilRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return array|Accueil[]
+     */
+    public function findRetardByEnfant(Enfant $enfant): array
+    {
+        return $this->createQbl()
+            ->andWhere('accueil.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->getQuery()->getResult();
     }
 
 }

@@ -40,6 +40,10 @@
                     <td>{{ accueil.heure }}</td>
                 </tr>
                 <tr>
+                    <th>Retard</th>
+                    <td>{{ accueil.heureRetard ? accueil.heureRetard|format_datetime('none', 'short') : 'Non' }}</td>
+                </tr>
+                <tr>
                     <th>Coût</th>
                     <td>{{ cout|format_currency('eur') }}</td>
                 </tr>

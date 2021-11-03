@@ -5,6 +5,9 @@
     <a href="{{ path('mercredi_ecole_sante_fiche_show', { 'uuid': enfant.uuid }) }}" role="button"
        class="btn btn-primary"><i class="fas fa-heartbeat"></i> Fiche santé</a>
 
+    <a href="{{ path('mercredi_ecole_accueil_retard', { 'uuid': enfant.uuid }) }}" role="button"
+       class="btn btn-primary"><i class="fas fa-hourglass-half"></i> Retard</a>
+
     <a href="{{ path('mercredi_ecole_enfant_index') }}" class="btn btn-primary" role='button'><i
                 class="fas fa-list"></i>
         Retour à la Liste</a>

@@ -3,6 +3,8 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
+use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
+use AcMarche\Mercredi\Accueil\Form\AccueilRetardTpe;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\InscriptionsType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
@@ -245,6 +247,42 @@ final class AccueilController extends AbstractController
                 'form' => $form->createView(),
                 'calendar' => $calendar,
                 'data' => $data,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{uuid}/retard", name="mercredi_ecole_accueil_retard", methods={"GET","POST"})
+     * @IsGranted("enfant_show", subject="enfant")
+     */
+    public function retard(Request $request, Enfant $enfant): Response
+    {
+        $args = ['date_retard' => new \DateTime(), 'heure_retard' => new \DateTime()];
+        $form = $this->createForm(AccueilRetardTpe::class, $args);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (!$accueil = $this->accueilRepository->findOneByEnfantAndDayAndHour(
+                $enfant,
+                $data['date_retard'],
+                AccueilInterface::SOIR
+            )) {
+                $this->addFlash('danger', 'Aucun accueil encodé pour ce jour là. Veuillez d\'abord ajouté un accueil');
+            } else {
+                $accueil->setDateRetard($data['date_retard']);
+                $accueil->setHeureRetard($data['heure_retard']);
+                $this->accueilRepository->flush();
+                $this->addFlash('success','Le retard a bien été ajouté');
+            }
+            return $this->redirectToRoute('mercredi_ecole_enfant_show', ['uuid' => $enfant->getUuid()]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediEcole/accueil/retard.html.twig',
+            [
+                'enfant' => $enfant,
+                'form' => $form->createView(),
             ]
         );
     }

@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Entity\Traits\RetardTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
 use DateTimeInterface;
@@ -36,9 +37,10 @@ class Accueil implements TimestampableInterface, UuidableInterface
     use TuteurTrait;
     use RemarqueTrait;
     use UserAddTrait;
+    use RetardTrait;
 
     /**
-     * @ORM\Column(name="date_jour", type="date")
+     * @ORM\Column(type="date")
      * @Assert\Type("datetime")
      */
     private ?DateTimeInterface $date_jour = null;

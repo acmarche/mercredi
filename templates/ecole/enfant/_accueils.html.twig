@@ -9,6 +9,7 @@
                     <th>Date</th>
                     <th title="Nombre de demi heure">Nb d'unité</th>
                     <th>Matin/soir</th>
+                    <th>Retard ?</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,6 +25,9 @@
                         </td>
                         <td>
                             {{ accueil.heure }}
+                        </td>
+                        <td>
+                            {{ accueil.heureRetard ? accueil.heureRetard|format_datetime('none', 'short') }}
                         </td>
                     </tr>
                 {% endfor %}

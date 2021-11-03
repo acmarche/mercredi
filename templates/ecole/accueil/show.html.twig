@@ -25,6 +25,10 @@
                     <th>Quand</th>
                     <td>{{ accueil.heure }}</td>
                 </tr>
+                <tr>
+                    <th>Retard</th>
+                    <td>{{ accueil.heureRetard ? accueil.heureRetard|format_datetime('none', 'short') : 'Non' }}</td>
+                </tr>
             </table>
             {% if accueil.remarque %}
                 <p class="text-muted">

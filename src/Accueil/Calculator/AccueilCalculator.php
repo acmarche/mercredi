@@ -26,4 +26,11 @@ final class AccueilCalculator implements AccueilCalculatorInterface
     {
         return $this->parameterBag->get(Option::ACCUEIL_PRIX) ?? 0;
     }
+
+    public function retard(Accueil $accueil):float {
+        if($accueil->getDateRetard() !== null){
+
+        }
+        return 0;
+    }
 }
