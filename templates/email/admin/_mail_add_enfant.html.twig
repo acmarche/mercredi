@@ -21,5 +21,5 @@ Vous pouvez consulter la fiche de l'enfant :{{ absolute_url(path('mercredi_admin
 {% endblock %}
 
 {% block footer_content %}
-    <p><small>{{ render(path('mercredi_organisation_short')) }}</small></p>
+    {% include '@AcMarcheMercrediAdmin/organisation/_signature.html.twig' %}
 {% endblock %}

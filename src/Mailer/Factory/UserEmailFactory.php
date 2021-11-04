@@ -31,6 +31,7 @@ class UserEmailFactory
                     'tuteur' => $tuteur,
                     'user' => $user,
                     'password' => $password,
+                    'footer_text' => 'orga',
                     'organisation' => $this->organisation,
                 ]
             );
@@ -57,6 +58,7 @@ class UserEmailFactory
                     'animateur' => $animateur,
                     'user' => $user,
                     'password' => $password,
+                    'footer_text' => 'orga',
                     'organisation' => $this->organisation,
                 ]
             );

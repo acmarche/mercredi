@@ -12,10 +12,9 @@
     Votre compte a bien été créé sur le site internet.
     <br>
     <br>
-    Un administrateur va valider votre compte.
+    <strong>Un administrateur va valider votre compte.</strong>
     <br>
-    <br>
-    Vous recevrez un autre mail indiquant la procédure à suivre
+    <strong>Vous recevrez un autre mail indiquant la procédure à suivre</strong>
     <br>
     <br>
     Bien à vous,
@@ -25,10 +24,9 @@
 {% endblock %}
 
 {% block action %}
-    <spacer size="16"></spacer>
-    <button href="{{ absolute_url(path('mercredi_front_home')) }}">Voir</button>
+
 {% endblock %}
 
 {% block footer_content %}
-    <p><small>{{ render(path('mercredi_organisation_short')) }}</small></p>
+    {% include '@AcMarcheMercrediAdmin/organisation/_signature.html.twig' %}
 {% endblock %}

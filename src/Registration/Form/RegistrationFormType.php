@@ -53,7 +53,7 @@ final class RegistrationFormType extends AbstractType
                 'agreeTerms',
                 CheckboxType::class,
                 [
-                    'label' => 'Conditions d\'utilisation',
+                    'label' => 'J\'accepte les conditions d\'utilisation',
                     'help_html' => true,
                     'help' => '<a href="'.$url.'" target="_blank">Lire les conditions</a>',
                     'mapped' => false,

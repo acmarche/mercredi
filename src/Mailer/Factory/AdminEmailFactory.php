@@ -31,6 +31,8 @@ class AdminEmailFactory
                 [
                     'user' => $user,
                     'enfant' => $enfant,
+                    'footer_text' => 'orga',
+                    'organisation' => $this->organisation,
                 ]
             );
 
@@ -53,6 +55,8 @@ class AdminEmailFactory
             ->context(
                 [
                     'enfants' => $enfants,
+                    'footer_text' => 'orga',
+                    'organisation' => $this->organisation,
                 ]
             );
 
@@ -75,6 +79,8 @@ class AdminEmailFactory
             ->context(
                 [
                     'tuteurs' => $tuteurs,
+                    'footer_text' => 'orga',
+                    'organisation' => $this->organisation,
                 ]
             );
 

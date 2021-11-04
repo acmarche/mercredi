@@ -24,11 +24,13 @@ final class RegistrationMailerFactory
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
-            ->subject('Inscription Accueil Temps Libre')
+            ->subject('Votre inscription Accueil Temps Libre')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_register_success.html.twig')
             ->context([
+                'footer_text' => 'orga',
                 'signedUrl' => $verifyEmailSignatureComponents->getSignedUrl(),
                 'expiresAt' => $verifyEmailSignatureComponents->getExpiresAt(),
+                'organisation' => $this->organisation,
             ]);
 
         return $message;
@@ -45,6 +47,8 @@ final class RegistrationMailerFactory
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_new_account_created.html.twig')
             ->context([
                     'user' => $user,
+                    'footer_text' => 'orga',
+                    'organisation' => $this->organisation,
                 ]
             );
 
@@ -61,6 +65,8 @@ final class RegistrationMailerFactory
             ->context(
                 [
                     'resetToken' => $resetPasswordToken,
+                    'footer_text' => 'orga',
+                    'organisation' => $this->organisation,
                 ]
             );
 
