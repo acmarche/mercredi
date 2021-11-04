@@ -53,6 +53,7 @@ class FactureEmailFactory
             ->from($data['from'])
             ->to($data['to'])
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
+            ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(
                 [
                     "importance" => "low",
