@@ -42,6 +42,7 @@ class FactureEmailFactory
     /**
      * @param Facture $facture
      * @param array $data
+     * @return \Symfony\Bridge\Twig\Mime\NotificationEmail
      */
     public function messageFacture(Facture $facture, array $data): NotificationEmail
     {
@@ -51,17 +52,19 @@ class FactureEmailFactory
             ->subject($data['sujet'])
             ->from($data['from'])
             ->to($data['to'])
-            ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
+            ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->context(
                 [
+                    "importance" => "low",
                     'texte' => $data['texte'],
                     'organisation' => $this->organisation,
+                    'footer_text' => 'orga',
                 ]
             );
 
-        $html = $this->factureRender->generateOneHtml($facture);
+        $htmlInvoice = $this->factureRender->generateOneHtml($facture);
+        $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
         $date = $facture->getFactureLe();
-        $invoicepdf = $this->getPdf()->getOutputFromHtml($html);
 
         $message->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
 

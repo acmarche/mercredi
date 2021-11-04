@@ -1,20 +1,20 @@
 {% extends '@email/default/notification/body.html.twig' %}
 {% block lead %}
     <p class="lead">
-        {{ email.subject }}
+        {{ email.subject }} 66
     </p>
 {% endblock %}
 
 {% block content %}
 
-{{ texte }}
+{{ texte|nl2br }}
 
 {% endblock %}
 
 {% block footer_content %}
     <p>
     <small>
-    {% include '@AcMarcheMercrediAdmin/organisation/_identite.txt.twig' %}
+    {% include '@AcMarcheMercrediAdmin/organisation/_signature.html.twig' %}
    </small>
    </p>
 {% endblock %}
