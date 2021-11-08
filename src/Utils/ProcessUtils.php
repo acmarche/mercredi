@@ -9,7 +9,7 @@ class ProcessUtils
 {
     public static function lunchSend()
     {
-        $process = new Process(['~/tools/symfony', 'console mercredi:test-mail jf@marche.be jf@marche.be']);
+        $process = new Process(['/homez.76/atlhotq/www/atl/tools/symfony', 'console mercredi:test-mail jf@marche.be jf@marche.be']);
         $process->run();
 
         // executes after the command finishes
