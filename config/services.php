@@ -36,12 +36,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::LDAP_USER, '%env(ACLDAP_USER)%');
     $parameters->set(Option::LDAP_PASSWORD, '%env(ACLDAP_PASSWORD)%');
 
-    /**
-     * Pour envoie de mail en mode console
-     */
-    $parameters->set('router.request_context.scheme', '%env(MERCREDI_HTTP_SCHEME)%');
-    $parameters->set('router.request_context.host', '%env(MERCREDI_HTTP_HOST)%');
-
     $services = $containerConfigurator->services();
 
     $services
