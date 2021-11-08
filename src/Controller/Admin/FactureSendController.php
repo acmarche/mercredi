@@ -110,7 +110,7 @@ final class FactureSendController extends AbstractController
     public function sendAllFacture(Request $request, string $month): Response
     {
         try {
-            ProcessUtils::ls();
+            ProcessUtils::lunchSend();
 
         } catch (\Exception$exception) {
             var_dump($exception->getMessage());
