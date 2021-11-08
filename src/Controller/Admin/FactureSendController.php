@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use AcMarche\Mercredi\Utils\ProcessUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,6 +109,7 @@ final class FactureSendController extends AbstractController
      */
     public function sendAllFacture(Request $request, string $month): Response
     {
+        ProcessUtils::ls();
         $factures = $this->factureRepository->findFacturesByMonth($month);
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndTo());
 
