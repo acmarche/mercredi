@@ -109,7 +109,12 @@ final class FactureSendController extends AbstractController
      */
     public function sendAllFacture(Request $request, string $month): Response
     {
-        ProcessUtils::ls();
+        try {
+            ProcessUtils::ls();
+
+        } catch (\Exception$exception) {
+            var_dump($exception->getMessage());
+        }
         $factures = $this->factureRepository->findFacturesByMonth($month);
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndTo());
 
