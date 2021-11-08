@@ -7,9 +7,9 @@ use Symfony\Component\Process\Process;
 
 class ProcessUtils
 {
-    public static function ls()
+    public static function lunchSend()
     {
-        $process = new Process(['ls', '-lsa']);
+        $process = new Process(['~/tools/symfony', 'console mercredi:test-mail jf@marche.be jf@marche.be']);
         $process->run();
 
         // executes after the command finishes
