@@ -86,4 +86,21 @@ class AdminEmailFactory
 
         return $message;
     }
+
+    /**
+     * @param array|Tuteur[] $tuteurs
+     */
+    public function messagAlert(string $subject, string $texte): NotificationEmail
+    {
+        $message = NotificationEmailJf::asPublicEmailJf();
+        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
+        ) : 'nomail@domain.be';
+        $message
+            ->from($email)
+            ->to($email)
+            ->subject($subject)
+            ->content($texte);
+
+        return $message;
+    }
 }

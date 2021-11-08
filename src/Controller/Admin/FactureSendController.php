@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Facture\FactureCron;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Form\FactureSelectSendType;
 use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
@@ -10,8 +11,6 @@ use AcMarche\Mercredi\Facture\Form\FactureSendType;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use AcMarche\Mercredi\Utils\ProcessUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,12 +108,6 @@ final class FactureSendController extends AbstractController
      */
     public function sendAllFacture(Request $request, string $month): Response
     {
-        try {
-            ProcessUtils::lunchSend();
-
-        } catch (\Exception$exception) {
-            var_dump($exception->getMessage());
-        }
         $factures = $this->factureRepository->findFacturesByMonth($month);
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndTo());
 
@@ -128,21 +121,11 @@ final class FactureSendController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
             }
 
-            foreach ($factures as $facture) {
-                $tuteur = $facture->getTuteur();
-                if (!$emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
-                    $this->addFlash('danger', 'Pas de mail pour la facture: '.$facture->getId());
-                    continue;
-                }
-                $data['to'] = count($emails) > 0 ? $emails[0] : null;
-                $message = $this->factureEmailFactory->messageFacture($facture, $data);
-                $this->notificationMailer->sendAsEmailNotification($message);
-                $facture->setEnvoyeA($data['to']);
-                $facture->setEnvoyeLe(new \DateTime());
-            }
-
-            $this->addFlash('success', 'Les factures ont bien été envoyées');
+            $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
+            $this->factureRepository->persist($cron);
             $this->factureRepository->flush();
+
+            $this->addFlash('success', 'Les factures sont en cours d\'envoie.');
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }

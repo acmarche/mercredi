@@ -46,12 +46,12 @@ class FactureEmailFactory
      */
     public function messageFacture(Facture $facture, array $data): NotificationEmail
     {
-        $data['to'] = 'jf@marche.be';
+        $data['to'] = ['jf@marche.be'];
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject($data['sujet'])
             ->from($data['from'])
-            ->to($data['to'])
+            ->to('jf@marche.be')
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(

@@ -53,6 +53,7 @@ final class AcMarcheMercrediExtension extends Extension implements PrependExtens
                     break;
                 case 'framework':
                     $this->loadConfig('security');
+                    $this->loadConfig('framework');
 
                     break;
                 case 'vich_uploader':

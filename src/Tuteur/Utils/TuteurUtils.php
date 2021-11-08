@@ -108,7 +108,7 @@ final class TuteurUtils
     /**
      * @return string[]
      */
-    public static function getEmailsOfOneTuteur(Tuteur $tuteur): ?array
+    public static function getEmailsOfOneTuteur(Tuteur $tuteur): array
     {
         $emails = [];
 
@@ -130,7 +130,7 @@ final class TuteurUtils
 
         $emails = array_unique($emails);
         if (count($emails) === 0) {
-            return null;
+            return [];
         }
 
         return $emails;
