@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class SendFactureCommand extends Command
@@ -58,9 +59,13 @@ class SendFactureCommand extends Command
              return Command::FAILURE;
          }*/
 
+        $io = new SymfonyStyle($input, $output);
         $crons = $this->factureCronRepository->findNotDone();
         foreach ($crons as $cron) {
+            $i = 0;
             $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
+            $count = count($factures);
+            $io->writeln($count.' factures trouvées');
             foreach ($factures as $facture) {
                 $tuteur = $facture->getTuteur();
                 $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
@@ -85,7 +90,8 @@ class SendFactureCommand extends Command
                 }
                 $facture->setEnvoyeA(join(', ', $data['tos']));
                 $facture->setEnvoyeLe(new \DateTime());
-                break;
+                $i++;
+                $io->writeln($i.'/'.$count);
             }
             $cron->setDone(true);
         }
