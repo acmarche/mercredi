@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureCron;
+use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Form\FactureSelectSendType;
 use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
@@ -31,19 +32,22 @@ final class FactureSendController extends AbstractController
     private FactureEmailFactory $factureEmailFactory;
     private NotificationMailer $notificationMailer;
     private FactureCronRepository $factureCronRepository;
+    private FactureFactory $factureFactory;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureCronRepository $factureCronRepository,
         FacturePdfFactoryTrait $facturePdfFactory,
         FactureEmailFactory $factureEmailFactory,
-        NotificationMailer $notificationMailer
+        NotificationMailer $notificationMailer,
+        FactureFactory $factureFactory
     ) {
         $this->factureRepository = $factureRepository;
         $this->facturePdfFactory = $facturePdfFactory;
         $this->factureEmailFactory = $factureEmailFactory;
         $this->notificationMailer = $notificationMailer;
         $this->factureCronRepository = $factureCronRepository;
+        $this->factureFactory = $factureFactory;
     }
 
     /**
@@ -133,6 +137,8 @@ final class FactureSendController extends AbstractController
 
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
             }
+
+            $this->factureFactory->createAllPdf($factures);
 
             $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
             $this->factureCronRepository->persist($cron);
