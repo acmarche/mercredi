@@ -31,7 +31,7 @@ class FactureEmailFactory
         $this->parameterBag = $parameterBag;
     }
 
-    public function initFromAndTo(?Facture $facture = null): array
+    public function initFromAndToForForm(?Facture $facture = null): array
     {
         $data = [];
         $data['from'] = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
@@ -47,45 +47,53 @@ class FactureEmailFactory
 
     /**
      * @param Facture $facture
-     * @param array $data
+     * @param string $from
+     * @param string $sujet
+     * @param string $body
      * @return \Symfony\Bridge\Twig\Mime\NotificationEmail
      */
-    public function messageFacture(Facture $facture, array $data): NotificationEmail
+    public function messageFacture(string $from, string $sujet, string $body): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
-            ->subject($data['sujet'])
-            ->from($data['from'])
+            ->subject($sujet)
+            ->from($from)
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(
                 [
                     "importance" => Notification::IMPORTANCE_HIGH,
-                    'texte' => $data['texte'],
+                    'texte' => $body,
                     'organisation' => $this->organisation,
                     'footer_text' => 'orga',
                 ]
             );
 
-        foreach ($data['tos'] as $email) {
+        return $message;
+    }
+
+    public function setTos(NotificationEmail $message, array $tos):void
+    {
+        foreach ($tos as $email) {
             $message->addTo(new Address('jf@marche.be', $email));
         }
+    }
+
+    public function attachFactureFromPath(NotificationEmail $message, Facture $facture):void
+    {
         $path = $this->parameterBag->get('kernel.project_dir').'/var/factures/';
         $factureFile = $path.'facture-'.$facture->getId().'.pdf';
 
         $date = $facture->getFactureLe();
         $message->attachFromPath($factureFile, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
-
-        return $message;
     }
 
     /**
-     * bug sur ovh si genere depuis console
      * acces refuse wget https://assetx
      * @param $facture
      * @param $message
      */
-    private function genereatAlavolee($facture, $message)
+    public function attachFactureOnTheFly($facture, $message)
     {
         $htmlInvoice = $this->factureRender->generateOneHtml($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);

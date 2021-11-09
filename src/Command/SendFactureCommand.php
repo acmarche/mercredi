@@ -66,20 +66,27 @@ class SendFactureCommand extends Command
             $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
             $count = count($factures);
             $io->writeln($count.' factures trouvées');
+
+            $message = $this->factureEmailFactory->messageFacture(
+                $cron->getFromAdresse(),
+                $cron->getSubject(),
+                $cron->getBody()
+            );
+
             foreach ($factures as $facture) {
                 $tuteur = $facture->getTuteur();
                 $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
+
                 if (count($emails) < 1) {
                     $error = 'Pas de mail pour la facture: '.$facture->getId();
                     $message = $this->adminEmailFactory->messagAlert("Erreur envoie facture", $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
-                $data['tos'] = $emails;
-                $data['sujet'] = $cron->getSubject();
-                $data['from'] = $cron->getFromAdresse();
-                $data['texte'] = $cron->getBody();
-                $message = $this->factureEmailFactory->messageFacture($facture, $data);
+
+                $this->factureEmailFactory->setTos($message, $emails);
+                $this->factureEmailFactory->attachFactureFromPath($message, $facture);
+
                 try {
                     $this->notificationMailer->sendMail($message);
                 } catch (TransportExceptionInterface $e) {
@@ -88,7 +95,8 @@ class SendFactureCommand extends Command
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
-                $facture->setEnvoyeA(join(', ', $data['tos']));
+
+                $facture->setEnvoyeA(join(', ', $emails));
                 $facture->setEnvoyeLe(new \DateTime());
                 $i++;
                 $io->writeln($i.'/'.$count);

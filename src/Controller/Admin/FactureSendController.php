@@ -84,14 +84,17 @@ final class FactureSendController extends AbstractController
     public function sendOneFacture(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $data = $this->factureEmailFactory->initFromAndTo($facture);
-        $form = $this->createForm(FactureSendType::class, $data);
+        $args = $this->factureEmailFactory->initFromAndToForForm($facture);
+        $form = $this->createForm(FactureSendType::class, $args);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $message = $this->factureEmailFactory->messageFacture($facture, $data);
+            $message = $this->factureEmailFactory->messageFacture($data['from'], $data['sujet'], $data['texte']);
+            $this->factureEmailFactory->setTos($message, [$data['to']]);
+            $this->factureEmailFactory->attachFactureOnTheFly($message, $facture);
+
             $this->notificationMailer->sendAsEmailNotification($message);
             $facture->setEnvoyeA($data['to']);
             $facture->setEnvoyeLe(new \DateTime());
@@ -117,7 +120,7 @@ final class FactureSendController extends AbstractController
     public function sendAllFacture(Request $request, string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
-        $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndTo());
+        $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndToForForm());
 
         $form->handleRequest($request);
 
