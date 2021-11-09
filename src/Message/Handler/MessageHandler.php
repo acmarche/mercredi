@@ -50,7 +50,7 @@ final class MessageHandler
 
         foreach ($message->getDestinataires() as $addressEmail) {
             $templatedEmail->to($addressEmail);
-            $this->notificationMailer->sendAsEmailNotification($addressEmail);
+            $this->notificationMailer->sendAsEmailNotification($templatedEmail);
         }
 
         $this->messageRepository->persist($message);

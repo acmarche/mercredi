@@ -38,6 +38,9 @@ trait InitMailerTrait
         $this->mailer->send($email);
     }
 
+    /**
+     * @todo multiple recipients ??
+     */
     public function sendNotifier(Notification $notification, RecipientInterface $recipients): void
     {
         $this->notifier->send($notification, $recipients);

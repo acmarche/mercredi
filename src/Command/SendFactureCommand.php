@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class SendFactureCommand extends Command
 {
@@ -48,14 +49,14 @@ class SendFactureCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-       /* $month = $input->getArgument('month');
+        /* $month = $input->getArgument('month');
 
-        if (preg_match("#^\d{2}-\d{4}$#", $month) == false) {
-            $message = $this->adminEmailFactory->messagAlert("Mauvais format de date", "Date: ".$month);
-            $this->notificationMailer->sendAsEmailNotification($message);
+         if (preg_match("#^\d{2}-\d{4}$#", $month) == false) {
+             $message = $this->adminEmailFactory->messagAlert("Mauvais format de date", "Date: ".$month);
+             $this->notificationMailer->sendAsEmailNotification($message);
 
-            return Command::FAILURE;
-        }*/
+             return Command::FAILURE;
+         }*/
 
         $crons = $this->factureCronRepository->findNotDone();
         foreach ($crons as $cron) {
@@ -69,14 +70,22 @@ class SendFactureCommand extends Command
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
-                $data['to'] = $emails;
+                $data['tos'] = $emails;
                 $data['sujet'] = $cron->getSubject();
                 $data['from'] = $cron->getFromAdresse();
                 $data['texte'] = $cron->getBody();
                 $message = $this->factureEmailFactory->messageFacture($facture, $data);
-                $this->notificationMailer->sendAsEmailNotification($message);
-                $facture->setEnvoyeA(join(', ', $data['to']));
+                try {
+                    $this->notificationMailer->sendMail($message);
+                } catch (TransportExceptionInterface $e) {
+                    $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
+                    $message = $this->adminEmailFactory->messagAlert("Erreur envoie facture", $error);
+                    $this->notificationMailer->sendAsEmailNotification($message);
+                    continue;
+                }
+                $facture->setEnvoyeA(join(', ', $data['tos']));
                 $facture->setEnvoyeLe(new \DateTime());
+                break;
             }
             $cron->setDone(true);
         }

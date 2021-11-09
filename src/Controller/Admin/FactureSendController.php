@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\Form\FactureSelectSendType;
 use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
+use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
@@ -29,9 +30,11 @@ final class FactureSendController extends AbstractController
     private FacturePdfFactoryTrait $facturePdfFactory;
     private FactureEmailFactory $factureEmailFactory;
     private NotificationMailer $notificationMailer;
+    private FactureCronRepository $factureCronRepository;
 
     public function __construct(
         FactureRepository $factureRepository,
+        FactureCronRepository $factureCronRepository,
         FacturePdfFactoryTrait $facturePdfFactory,
         FactureEmailFactory $factureEmailFactory,
         NotificationMailer $notificationMailer
@@ -40,6 +43,7 @@ final class FactureSendController extends AbstractController
         $this->facturePdfFactory = $facturePdfFactory;
         $this->factureEmailFactory = $factureEmailFactory;
         $this->notificationMailer = $notificationMailer;
+        $this->factureCronRepository = $factureCronRepository;
     }
 
     /**
@@ -121,11 +125,23 @@ final class FactureSendController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
             }
 
-            $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
-            $this->factureRepository->persist($cron);
-            $this->factureRepository->flush();
+            if ($this->factureCronRepository->findOneByMonth($month)) {
+                $this->addFlash(
+                    'danger',
+                    'La demande d\'envoie des factures pour le mois de '.$month.' est déjà programmée'
+                );
 
-            $this->addFlash('success', 'Les factures sont en cours d\'envoie.');
+                return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
+            }
+
+            $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
+            $this->factureCronRepository->persist($cron);
+            $this->factureCronRepository->flush();
+
+            $this->addFlash(
+                'success',
+                'La demande d\'envoie des factures a bien été programmée. Vous pouvez quitter cette page'
+            );
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }

@@ -42,8 +42,8 @@ class HealthCommand extends Command
     {
         $enfants = $this->enfantRepository->findOrphelins();
         if (count($enfants) > 0) {
-            $email = $this->adminEmailFactory->messagEnfantsOrphelins($enfants);
-            $this->notifcationMailer->sendAsEmailNotification($email);
+            $message = $this->adminEmailFactory->messagEnfantsOrphelins($enfants);
+            $this->notifcationMailer->sendAsEmailNotification($message);
         }
 
         $tuteurs = [];
@@ -65,8 +65,8 @@ class HealthCommand extends Command
         }
         //  $this->tuteurRepository->flush();
         if (count($enfants) > 0) {
-            $email = $this->adminEmailFactory->messagTuteurArchived($tuteurs);
-            $this->notifcationMailer->sendAsEmailNotification($email);
+            $message = $this->adminEmailFactory->messageTuteurArchived($tuteurs);
+            $this->notifcationMailer->sendAsEmailNotification($message);
         }
 
         return Command::SUCCESS;

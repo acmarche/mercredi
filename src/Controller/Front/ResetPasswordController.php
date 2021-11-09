@@ -184,8 +184,8 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
-        $email = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
-        $this->notificationMailer->sendAsEmailNotification($email, $user->getEmail());
+        $message = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
+        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);

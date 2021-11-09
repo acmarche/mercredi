@@ -10,6 +10,8 @@ use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Notifier\Notification\Notification;
 
 class FactureEmailFactory
 {
@@ -46,22 +48,24 @@ class FactureEmailFactory
      */
     public function messageFacture(Facture $facture, array $data): NotificationEmail
     {
-        $data['to'] = ['jf@marche.be'];
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject($data['sujet'])
             ->from($data['from'])
-            ->to('jf@marche.be')
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(
                 [
-                    "importance" => "low",
+                    "importance" => Notification::IMPORTANCE_HIGH,
                     'texte' => $data['texte'],
                     'organisation' => $this->organisation,
                     'footer_text' => 'orga',
                 ]
             );
+
+        foreach ($data['tos'] as $email) {
+            $message->addTo(new Address('jf@marche.be', $email));
+        }
 
         $htmlInvoice = $this->factureRender->generateOneHtml($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);

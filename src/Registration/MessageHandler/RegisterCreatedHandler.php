@@ -65,14 +65,14 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
             $user->getEmail()
         );
 
-        $email = $this->registrationMailerFactory->generateMessagRegisgerSuccess(
+        $message = $this->registrationMailerFactory->generateMessagRegisgerSuccess(
             $user,
             $verifyEmailSignatureComponents
         );
-        $this->notificationMailer->sendAsEmailNotification($email, $user->getEmail());
+        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
-        $email = $this->registrationMailerFactory->generateMessageToAdminAccountCreated($user);
-        $this->notificationMailer->sendAsEmailNotification($email, $user->getEmail());
+        $message = $this->registrationMailerFactory->generateMessageToAdminAccountCreated($user);
+        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         $this->flashBag->add('success', 'Votre compte a bien été créé, consultez votre boite mail');
     }

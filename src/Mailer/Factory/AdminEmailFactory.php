@@ -19,7 +19,7 @@ class AdminEmailFactory
      * @param Enfant $enfant
      * @return NotificationEmail
      */
-    public function messagEnfantCreated(UserInterface $user, Enfant $enfant): NotificationEmail
+    public function messageEnfantCreated(UserInterface $user, Enfant $enfant): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
@@ -66,7 +66,7 @@ class AdminEmailFactory
     /**
      * @param array|Tuteur[] $tuteurs
      */
-    public function messagTuteurArchived(array $tuteurs): NotificationEmail
+    public function messageTuteurArchived(array $tuteurs): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(

@@ -22,14 +22,6 @@ final class FactureCronRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, FactureCron::class);
     }
 
-    public function findByMonth(string $month): ?FactureCron
-    {
-        return $this->createQueryBuilder('cron')
-            ->andWhere('cron.month = :month')
-            ->setParameter('month', $month)
-            ->getQuery()->getOneOrNullResult();
-    }
-
     /**
      * @return array|FactureCron[]
      */
@@ -38,6 +30,14 @@ final class FactureCronRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('cron')
             ->andWhere('cron.done = 0')
             ->getQuery()->getResult();
+    }
+
+    public function findOneByMonth(string $month): ?FactureCron
+    {
+        return $this->createQueryBuilder('cron')
+            ->andWhere('cron.month = :month')
+            ->setParameter('month', $month)
+            ->getQuery()->getOneOrNullResult();
     }
 
 }
