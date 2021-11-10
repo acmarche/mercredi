@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -45,11 +46,13 @@ class SendFactureCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('month', InputArgument::OPTIONAL, 'Mois format mm-yyyy');
+            ->addArgument('month', InputArgument::OPTIONAL, 'Mois format mm-yyyy')
+            ->addOption('force', null, InputOption::VALUE_OPTIONAL, 'Envoye facture déjà envoyée', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $force = (bool)$input->getOption('force');
         /* $month = $input->getArgument('month');
 
          if (preg_match("#^\d{2}-\d{4}$#", $month) == false) {
@@ -75,7 +78,7 @@ class SendFactureCommand extends Command
 
             foreach ($factures as $facture) {
 
-                if ($facture->getEnvoyeLe() != null) {
+                if ($facture->getEnvoyeLe() != null && $force === false) {
                     continue;
                 }
 
@@ -114,6 +117,7 @@ class SendFactureCommand extends Command
                 $facture->setEnvoyeLe(new \DateTime());
                 $i++;
                 $io->writeln($i.'/'.$count);
+                $this->factureRepository->flush();
             }
             $cron->setDone(true);
         }
