@@ -79,19 +79,26 @@ class SendFactureCommand extends Command
 
                 if (count($emails) < 1) {
                     $error = 'Pas de mail pour la facture: '.$facture->getId();
-                    $message = $this->adminEmailFactory->messagAlert("Erreur envoie facture", $error);
+                    $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
 
                 $this->factureEmailFactory->setTos($message, $emails);
-                $this->factureEmailFactory->attachFactureFromPath($message, $facture);
+                try {
+                    $this->factureEmailFactory->attachFactureFromPath($message, $facture);
+                } catch (\Exception $e) {
+                    $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
+                    $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                    $this->notificationMailer->sendAsEmailNotification($message);
+                    continue;
+                }
 
                 try {
                     $this->notificationMailer->sendMail($message);
                 } catch (TransportExceptionInterface $e) {
                     $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
-                    $message = $this->adminEmailFactory->messagAlert("Erreur envoie facture", $error);
+                    $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }

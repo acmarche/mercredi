@@ -78,7 +78,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('facture_presence')
             ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->addSelect('facture')
+            ->leftJoin('facture_presence.reduction', 'reduction', 'WITH')
+            ->addSelect('facture', 'reduction')
             ->andWhere('facture_presence.facture = :fact')
             ->setParameter('fact', $facture)
             ->andWhere('facture_presence.objectType = :type')

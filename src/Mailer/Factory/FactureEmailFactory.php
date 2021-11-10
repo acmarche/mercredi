@@ -72,19 +72,25 @@ class FactureEmailFactory
         return $message;
     }
 
-    public function setTos(NotificationEmail $message, array $tos):void
+    public function setTos(NotificationEmail $message, array $tos): void
     {
         foreach ($tos as $email) {
             $message->addTo(new Address('jf@marche.be', $email));
         }
     }
 
-    public function attachFactureFromPath(NotificationEmail $message, Facture $facture):void
+    /**
+     * @throws \Exception
+     */
+    public function attachFactureFromPath(NotificationEmail $message, Facture $facture): void
     {
         $path = $this->parameterBag->get('kernel.project_dir').'/var/factures/';
         $factureFile = $path.'facture-'.$facture->getId().'.pdf';
 
         $date = $facture->getFactureLe();
+        if (!is_readable($factureFile)) {
+            throw new \Exception('Pdf non trouvé '.$factureFile);
+        }
         $message->attachFromPath($factureFile, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
     }
 

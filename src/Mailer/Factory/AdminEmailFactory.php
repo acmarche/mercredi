@@ -90,7 +90,7 @@ class AdminEmailFactory
     /**
      * @param array|Tuteur[] $tuteurs
      */
-    public function messagAlert(string $subject, string $texte): NotificationEmail
+    public function messageAlert(string $subject, string $texte): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
