@@ -44,9 +44,10 @@ final class FactureFactory
     /**
      * @param array|Facture[] $factures
      */
-    public function createAllPdf(array $factures)
+    public function createAllPdf(array $factures, int $max = 30): bool
     {
         $path = $this->parameterBag->get('kernel.project_dir').'/var/factures/';
+        $i = 0;
         foreach ($factures as $facture) {
             $fileName = $path.'facture-'.$facture->getId().'.pdf';
             if (is_readable($fileName)) {
@@ -54,7 +55,13 @@ final class FactureFactory
             }
             $htmlInvoice = $this->factureRender->generateOneHtml($facture);
             $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
+            if ($i > $max) {
+                return false;
+            }
+            $i++;
         }
+
+        return true;
     }
 
 }

@@ -132,27 +132,18 @@ final class FactureSendController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
             }
 
-            if ($this->factureCronRepository->findOneByMonth($month)) {
-                $this->addFlash(
-                    'danger',
-                    'La demande d\'envoie des factures pour le mois de '.$month.' est déjà programmée'
-                );
-
-                return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
+            if ($cron = $this->factureCronRepository->findOneByMonth($month)) {
+                $cron->setFromAdresse($data['from']);
+                $cron->setSubject($data['sujet']);
+                $cron->setBody($data['texte']);
+            } else {
+                $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
+                $this->factureCronRepository->persist($cron);
             }
-
-            $this->factureFactory->createAllPdf($factures);
-
-            $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
-            $this->factureCronRepository->persist($cron);
             $this->factureCronRepository->flush();
 
-            $this->addFlash(
-                'success',
-                'La demande d\'envoie des factures a bien été programmée. Vous pouvez quitter cette page'
+            return $this->redirectToRoute('mercredi_admin_facture_create_pdf_all', ['month' => $month, 'pause' => 0]
             );
-
-            return $this->redirectToRoute('mercredi_admin_facture_index');
         }
 
         return $this->render(
@@ -161,6 +152,49 @@ final class FactureSendController extends AbstractController
                 'form' => $form->createView(),
                 'factures' => $factures,
                 'month' => $month,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/all/pdf/{month}/{pause}", name="mercredi_admin_facture_create_pdf_all", methods={"GET"})
+     */
+    public function pdfAll(string $month, int $pause): Response
+    {
+        $factures = $this->factureRepository->findFacturesByMonth($month);
+
+        if (!$cron = $this->factureCronRepository->findOneByMonth($month)) {
+            $this->addFlash('danger', 'Erreur aucun cron trouvé');
+
+            return $this->redirectToRoute('mercredi_admin_facture_index');
+        }
+        if ($pause == 1) {
+            return $this->render(
+                '@AcMarcheMercrediAdmin/facture/create_pdf.html.twig',
+                [
+                    'pause' => $pause,
+                    'month' => $month,
+                    'finish' => false,
+                ]
+            );
+        }
+        $finish = $this->factureFactory->createAllPdf($factures);
+        if ($finish) {
+            $this->addFlash(
+                'success',
+                'La demande d\'envoie des factures a bien été programmée. Vous pouvez quitter cette page'
+            );
+        } else {
+            return $this->redirectToRoute('mercredi_admin_facture_create_pdf_all', ['month' => $month, 'pause' => 1]
+            );
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/create_pdf.html.twig',
+            [
+                'pause' => $pause,
+                'month' => $month,
+                'finish' => $finish,
             ]
         );
     }

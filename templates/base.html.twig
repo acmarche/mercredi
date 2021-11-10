@@ -15,6 +15,7 @@
 
     <link href="{{ asset('bundles/acmarchemercredi/css/print.css') }}" rel="stylesheet" media="print">
     <meta name="theme-color" content="#563d7c">
+    {% block head %}{% endblock %}
 </head>
 <body class="d-flex flex-column h-100 {% block body_class %}{% endblock %}">
 <!-- Top nav bar -->
