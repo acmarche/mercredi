@@ -67,13 +67,20 @@ class SendFactureCommand extends Command
             $count = count($factures);
             $io->writeln($count.' factures trouvées');
 
-            $messageFacture = $this->factureEmailFactory->messageFacture(
+            $messageBase = $this->factureEmailFactory->messageFacture(
                 $cron->getFromAdresse(),
                 $cron->getSubject(),
                 $cron->getBody()
             );
 
             foreach ($factures as $facture) {
+
+                if ($facture->getEnvoyeLe() != null) {
+                    continue;
+                }
+
+                $messageFacture = clone $messageBase;//sinon attachs multiple
+
                 $tuteur = $facture->getTuteur();
                 $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
 
@@ -112,6 +119,7 @@ class SendFactureCommand extends Command
         }
 
         $this->factureRepository->flush();
+
         return Command::SUCCESS;
     }
 }
