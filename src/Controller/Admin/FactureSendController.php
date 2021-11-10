@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class FactureController.
  *
  * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/factur/send")
+ * @Route("/facture/send")
  */
 final class FactureSendController extends AbstractController
 {
