@@ -67,7 +67,7 @@ class SendFactureCommand extends Command
             $count = count($factures);
             $io->writeln($count.' factures trouvées');
 
-            $message = $this->factureEmailFactory->messageFacture(
+            $messageFacture = $this->factureEmailFactory->messageFacture(
                 $cron->getFromAdresse(),
                 $cron->getSubject(),
                 $cron->getBody()
@@ -84,9 +84,9 @@ class SendFactureCommand extends Command
                     continue;
                 }
 
-                $this->factureEmailFactory->setTos($message, $emails);
+                $this->factureEmailFactory->setTos($messageFacture, $emails);
                 try {
-                    $this->factureEmailFactory->attachFactureFromPath($message, $facture);
+                    $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
                 } catch (\Exception $e) {
                     $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
                     $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
@@ -95,7 +95,7 @@ class SendFactureCommand extends Command
                 }
 
                 try {
-                    $this->notificationMailer->sendMail($message);
+                    $this->notificationMailer->sendMail($messageFacture);
                 } catch (TransportExceptionInterface $e) {
                     $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
                     $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
@@ -111,7 +111,7 @@ class SendFactureCommand extends Command
             $cron->setDone(true);
         }
 
-        //   $this->factureRepository->flush();
+        $this->factureRepository->flush();
         return Command::SUCCESS;
     }
 }
