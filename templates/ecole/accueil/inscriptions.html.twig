@@ -28,21 +28,25 @@
                     fiche santé est complète.</strong><br/>
             </div>
             <table class="table table-bordered table-hover">
+                <thead class="bg-secondary" style="position: sticky;  top: 0; inset-block-start: 0;">
                 <tr>
                     <th>Nom</th>
                     <th>Garde</th>
                     {% for day in week.days %}
                         {% if day|date('N') != 7 and day|date('N') != 6 %}
-                            <td class="text-center">
+                            <th class="text-center">
                                 {{ day|date('j') }}<br/>
                                 {{ day|date('D')|trans }}
-                            </td>
+                            </th>
                         {% endif %}
                     {% endfor %}
                 </tr>
+                </thead>
+                <tbody>
                 {% for enfant in enfants %}
                     {% include '@AcMarcheMercredi/ecole/accueil/_line_day_inscription.html.twig' %}
                 {% endfor %}
+                </tbody>
             </table>
             <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
                 Sauvegarder
