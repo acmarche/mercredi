@@ -11,12 +11,15 @@ use AcMarche\Mercredi\Facture\Form\FactureSendAllType;
 use AcMarche\Mercredi\Facture\Form\FactureSendType;
 use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,6 +36,7 @@ final class FactureSendController extends AbstractController
     private NotificationMailer $notificationMailer;
     private FactureCronRepository $factureCronRepository;
     private FactureFactory $factureFactory;
+    private AdminEmailFactory $adminEmailFactory;
 
     public function __construct(
         FactureRepository $factureRepository,
@@ -40,7 +44,8 @@ final class FactureSendController extends AbstractController
         FacturePdfFactoryTrait $facturePdfFactory,
         FactureEmailFactory $factureEmailFactory,
         NotificationMailer $notificationMailer,
-        FactureFactory $factureFactory
+        FactureFactory $factureFactory,
+        AdminEmailFactory $adminEmailFactory
     ) {
         $this->factureRepository = $factureRepository;
         $this->facturePdfFactory = $facturePdfFactory;
@@ -48,6 +53,7 @@ final class FactureSendController extends AbstractController
         $this->notificationMailer = $notificationMailer;
         $this->factureCronRepository = $factureCronRepository;
         $this->factureFactory = $factureFactory;
+        $this->adminEmailFactory = $adminEmailFactory;
     }
 
     /**
@@ -195,6 +201,78 @@ final class FactureSendController extends AbstractController
                 'pause' => $pause,
                 'month' => $month,
                 'finish' => $finish,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/all/sending/{month}/{pause}", name="mercredi_admin_facture_sending_all", methods={"GET"})
+     */
+    public function sendAll(string $month, int $pause): Response
+    {
+        $i = 0;
+
+        $cron = $this->factureCronRepository->findOneByMonth($month);
+        $factures = $this->factureRepository->findFacturesByMonthNotSend($month);
+        $count = count($factures);
+        $finish = $count === 0;
+
+        $messageBase = $this->factureEmailFactory->messageFacture(
+            $cron->getFromAdresse(),
+            $cron->getSubject(),
+            $cron->getBody()
+        );
+
+        foreach ($factures as $facture) {
+
+            $messageFacture = clone $messageBase;//sinon attachs multiple
+
+            $tuteur = $facture->getTuteur();
+            $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
+
+            if (count($emails) < 1) {
+                $error = 'Pas de mail pour la facture: '.$facture->getId();
+                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $this->notificationMailer->sendAsEmailNotification($message);
+                continue;
+            }
+
+            $this->factureEmailFactory->setTos($messageFacture, $emails);
+            try {
+                $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
+            } catch (\Exception $e) {
+                $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
+                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $this->notificationMailer->sendAsEmailNotification($message);
+                continue;
+            }
+
+            try {
+                $this->notificationMailer->sendMail($messageFacture);
+            } catch (TransportExceptionInterface $e) {
+                $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
+                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $this->notificationMailer->sendAsEmailNotification($message);
+                continue;
+            }
+
+            $facture->setEnvoyeA(join(', ', $emails));
+            $facture->setEnvoyeLe(new \DateTime());
+            $i++;
+            $this->factureRepository->flush();
+            $pause = 1;
+            if ($i > 30) {
+                break;
+            }
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/sending_all.html.twig',
+            [
+                'pause' => $pause,
+                'month' => $month,
+                'finish' => $finish,
+                'count' => $count,
             ]
         );
     }

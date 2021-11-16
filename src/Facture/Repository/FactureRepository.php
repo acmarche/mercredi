@@ -73,6 +73,18 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
+    public function findFacturesByMonthNotSend(string $month): array
+    {
+        return $this->getQBl()
+            ->andWhere('facture.mois = :mois')
+            ->setParameter('mois', $month)
+            ->andWhere('facture.envoyeLe IS NULL')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
     public function findFacturesByMonthOnlyPaper(string $month): array
     {
         return $this->getQBl()
