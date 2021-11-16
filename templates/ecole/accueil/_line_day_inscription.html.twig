@@ -33,7 +33,12 @@
                 {% set value = 0 %}
             {% endif %}
             <td>
-                <div class="row" {{ stimulus_controller('btns') }}>
+                <div class="row" {{ stimulus_controller('btns', {
+                    updateUrl: path('mercredi_ecole_ajax_duree'),
+                    heure: heure,
+                    enfant: enfant.id,
+                    date: dateFormate
+                }) }} >
                     <div class="col mt-sm-1 text-center">
                         <span class="text-muted text-center">{{ day|date('D')|trans }}</span>
                         <br/>

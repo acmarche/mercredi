@@ -85,6 +85,10 @@ final class AccueilHandler
         }
     }
 
+    public function handleOne() {
+
+    }
+
     private function updateAccueil(Accueil $accueilExistant, Accueil $accueilSubmited): void
     {
         if ($accueilSubmited->getDuree() == 0) {

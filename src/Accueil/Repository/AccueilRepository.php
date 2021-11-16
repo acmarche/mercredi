@@ -134,6 +134,19 @@ final class AccueilRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findByEnfantDateAndHeure(Enfant $enfant, string $date, string $heure): ?Accueil
+    {
+        return $this->createQbl()
+            ->andWhere('accueil.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->andWhere('accueil.date_jour = :date')
+            ->setParameter('date', $date)
+            ->andWhere('accueil.heure = :heure')
+            ->setParameter('heure', $heure)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+
     /**
      * @param DateTimeInterface $date
      * @param string|null $heure
