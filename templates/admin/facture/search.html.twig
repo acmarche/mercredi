@@ -4,7 +4,7 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Rechercher des factures</h3>
+            <h3>Rechercher des factures {% if search %} <span class="badge bg-info">{{ factures|length}}</span> {% endif %}</h3>
         </div>
 
         <div class="card-body">
