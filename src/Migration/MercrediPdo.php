@@ -9,9 +9,9 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class MercrediPdo
 {
-    private PDO $bdd;
+    private ?PDO $bdd = null;
 
-    public function __construct()
+    public function connect()
     {
         new Dotenv();
         $dsn = 'mysql:host=localhost;dbname=mercredi';
@@ -45,6 +45,9 @@ class MercrediPdo
 
     public function execQuery($sql)
     {
+        if (!$this->bdd) {
+            $this->connect();
+        }
         // var_dump($sql);
         $query = $this->bdd->query($sql);
         $error = $this->bdd->errorInfo();
@@ -53,7 +56,7 @@ class MercrediPdo
             // mail('jf@marche.be', 'duobac error sql', $error[2]);
 
             throw new \Exception($error[2]);
-        };
+        }
 
         return $query;
     }
