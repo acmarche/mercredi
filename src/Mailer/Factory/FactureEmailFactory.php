@@ -75,9 +75,9 @@ class FactureEmailFactory
     public function setTos(NotificationEmail $message, array $tos): void
     {
         foreach ($tos as $email) {
-            $message->addBcc(new Address('cartourba@hotton.be', $email));
+            $message->addBcc(new Address('cartourba@hotton.be'));
             $message->addBcc(new Address('jf@marche.be', $email));
-            $message->to(new Address($email));
+            $message->addTo(new Address($email));
         }
     }
 
