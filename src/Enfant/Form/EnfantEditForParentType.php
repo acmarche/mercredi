@@ -11,7 +11,6 @@ final class EnfantEditForParentType extends AbstractType
     {
         $formBuilder
             ->remove('archived')
-            ->remove('accueilEcole')
             ->remove('ordre')
             ->remove('groupe_scolaire');
     }
