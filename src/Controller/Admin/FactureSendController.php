@@ -232,6 +232,7 @@ final class FactureSendController extends AbstractController
 
             if (count($emails) < 1) {
                 $error = 'Pas de mail pour la facture: '.$facture->getId();
+                $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;
@@ -242,6 +243,7 @@ final class FactureSendController extends AbstractController
                 $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
             } catch (\Exception $e) {
                 $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
+                $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;
