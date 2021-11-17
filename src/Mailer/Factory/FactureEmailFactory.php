@@ -77,7 +77,7 @@ class FactureEmailFactory
         foreach ($tos as $email) {
             $message->addBcc(new Address('cartourba@hotton.be', $email));
             $message->addBcc(new Address('jf@marche.be', $email));
-            $message->addTo(new Address($email));
+            $message->to(new Address($email));
         }
     }
 
