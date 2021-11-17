@@ -48,7 +48,7 @@ final class CheckupController extends AbstractController
     }
 
     /**
-     * @Route("/orphelin", name="mercredi_admin_orphelin")
+     * @Route("/orphelin", name="mercredi_admin_checkup_orphelin")
      */
     public function orphelin(): Response
     {
@@ -61,7 +61,7 @@ final class CheckupController extends AbstractController
     }
 
     /**
-     * @Route("/sansenfants", name="mercredi_admin_sansenfant")
+     * @Route("/sansenfants", name="mercredi_admin_checkup_sansenfant")
      */
     public function sansenfant(): Response
     {
@@ -89,7 +89,7 @@ final class CheckupController extends AbstractController
     }
 
     /**
-     * @Route("/accounts", name="mercredi_admin_accounts")
+     * @Route("/accounts", name="mercredi_admin_checkup_accounts")
      */
     public function accounts(): Response
     {
@@ -124,6 +124,23 @@ final class CheckupController extends AbstractController
             '@AcMarcheMercrediAdmin/checkup/accounts.html.twig',
             [
                 'users' => $bad,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/doublons", name="mercredi_admin_checkup_doublons")
+     */
+    public function doublon(): Response
+    {
+        $tuteurs = $this->tuteurRepository->findDoublon();
+        $enfants = $this->enfantRepository->findDoublon();
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/checkup/doublons.html.twig',
+            [
+                'tuteurs' => $tuteurs,
+                'enfants' => $enfants,
             ]
         );
     }

@@ -67,6 +67,9 @@ final class TuteurRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return array|Tuteur[]
+     */
     public function getTuteursByUser(User $user): array
     {
         return $this->createQueryBuilder('tuteur')
@@ -98,5 +101,17 @@ final class TuteurRepository extends ServiceEntityRepository
             ->orderBy('tuteur.nom')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return Tuteur[]
+     */
+    public function findDoublon(): array
+    {
+        return $this->createQueryBuilder('tuteur')
+            ->select('count(tuteur.nom) as lignes, tuteur.nom, tuteur.prenom')
+            ->addGroupBy('tuteur.nom')
+            ->addGroupBy('tuteur.prenom')
+            ->getQuery()->getResult();
     }
 }

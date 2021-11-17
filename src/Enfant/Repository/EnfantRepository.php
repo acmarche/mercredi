@@ -238,4 +238,13 @@ final class EnfantRepository extends ServiceEntityRepository
         return $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.archived = 0');
     }
+
+    public function findDoublon():array
+    {
+        return $this->createQueryBuilder('enfant')
+            ->select('count(enfant.nom) as lignes, enfant.nom, enfant.prenom')
+            ->addGroupBy('enfant.nom')
+            ->addGroupBy('enfant.prenom')
+            ->getQuery()->getResult();
+    }
 }
