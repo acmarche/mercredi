@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Accueil\Form;
 use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
+use AcMarche\Mercredi\Presence\Form\AddFieldTuteurSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -60,6 +61,7 @@ final class AccueilType extends AbstractType
                     'attr' => ['rows' => 2],
                 ]
             );
+        $formBuilder->addEventSubscriber(new AddFieldTuteurSubscriber());
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void
