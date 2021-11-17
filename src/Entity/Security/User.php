@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -72,6 +73,11 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private bool $isVerified = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ResetPasswordRequest::class, mappedBy="user", cascade={"remove"})
+     */
+    private $request_password;
 
     public function __construct()
     {
