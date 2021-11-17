@@ -14,6 +14,7 @@ class Option
     const PLAINE_PRIX2 = 'mercredi.plaine_prix2';
     const PLAINE_PRIX3 = 'mercredi.plaine_prix3';
     const EMAIL_SENDER = 'mercredi.email_sender';
+    const EMAILS_FACTURE = 'mercredi.emails_facture';
     const PRESENCE_DEADLINE_DAYS = 'mercredi.presence_deadline_days';
     const PEDAGOGIQUE_DEADLINE_DAYS = 'mercredi.pedagogique_deadline_days';
     const LDAP_DN = 'mercredi.ldap.dn';

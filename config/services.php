@@ -21,7 +21,8 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_FROM)%');
+    $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_EMAILS_FACTURE)%');
+    $parameters->set(Option::EMAILS_FACTURE, '%env(MERCREDI_EMAILS_FACTURE)%');
     $parameters->set(Option::REGISTER, (bool)'%env(MERCREDI_REGISTER)%');
     $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
     $parameters->set(Option::PRESENCE_PRIX1, '%env(MERCREDI_PRESENCE_PRIX1)%');
