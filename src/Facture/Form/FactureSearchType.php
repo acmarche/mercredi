@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,6 +19,14 @@ final class FactureSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
+            ->add(
+                'numero',
+                IntegerType::class,
+                [
+                    'required' => false,
+                    'attr' => ['placeholder' => 'Numéro'],
+                ]
+            )
             ->add(
                 'tuteur',
                 SearchType::class,

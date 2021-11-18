@@ -98,6 +98,7 @@ final class FactureRepository extends ServiceEntityRepository
      * @return Facture[]
      */
     public function search(
+        ?int $numero,
         ?string $tuteur,
         ?string $enfant,
         ?Ecole $ecole,
@@ -107,6 +108,11 @@ final class FactureRepository extends ServiceEntityRepository
         ?string $communication = null
     ): array {
         $queryBuilder = $this->getQBl();
+
+        if ($numero !== null) {
+            $queryBuilder->andWhere('facture.id = :numero')
+                ->setParameter('numero', $numero);
+        }
 
         if ($tuteur) {
             $queryBuilder->andWhere('tuteur.nom LIKE :tuteur OR tuteur.prenom LIKE :tuteur')
@@ -138,17 +144,11 @@ final class FactureRepository extends ServiceEntityRepository
                 ->setParameter('commu', '%'.$communication.'%');
         }
 
-        switch ($paye) {
-            case true:
-                $queryBuilder->andWhere('facture.payeLe IS NOT NULL');
-
-                break;
-            case false:
-                $queryBuilder->andWhere('facture.payeLe IS NULL');
-
-                break;
-            default:
-                break;
+        if ($paye === false) {
+            $queryBuilder->andWhere('facture.payeLe IS NULL');
+        }
+        if ($paye === true) {
+            $queryBuilder->andWhere('facture.payeLe IS NOT NULL');
         }
 
         return $queryBuilder->getQuery()->getResult();

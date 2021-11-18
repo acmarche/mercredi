@@ -68,7 +68,7 @@ final class FactureController extends AbstractController
     /**
      * @Route("/{id}/index", name="mercredi_admin_facture_index_by_tuteur", methods={"GET","POST"})
      */
-    public function index(Tuteur $tuteur): Response
+    public function indexByTuteur(Tuteur $tuteur): Response
     {
         $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
         $form = $this->createForm(
@@ -98,11 +98,13 @@ final class FactureController extends AbstractController
         $form = $this->createForm(FactureSearchType::class);
         $form->handleRequest($request);
         $search = false;
+        $total = 0;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
             $search = true;
             $factures = $this->factureRepository->search(
+                $dataForm['numero'],
                 $dataForm['tuteur'],
                 $dataForm['enfant'],
                 $dataForm['ecole'],
@@ -128,6 +130,7 @@ final class FactureController extends AbstractController
                 'form' => $form->createView(),
                 'formMonth' => $formMonth->createView(),
                 'search' => $search,
+                'total' => $total,
             ]
         );
     }
