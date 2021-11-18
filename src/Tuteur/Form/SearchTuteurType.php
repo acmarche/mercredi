@@ -17,7 +17,7 @@ final class SearchTuteurType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom', 'autocomplete' => 'off'],
+                    'attr' => ['placeholder' => 'Nom, prénom ou email', 'autocomplete' => 'off'],
                 ]
             )
             ->add(
