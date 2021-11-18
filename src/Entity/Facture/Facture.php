@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -88,6 +89,8 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
      * @var array|Ecole[]
      */
     public array $ecolesListing = [];
+
+    public ?FactureDetailDto $factureDetailDto = null;
 
     public function __construct(Tuteur $tuteur)
     {

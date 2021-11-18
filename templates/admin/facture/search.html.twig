@@ -4,7 +4,8 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Rechercher des factures {% if search %} <span class="badge bg-info">{{ factures|length}}</span> {% endif %}</h3>
+            <h3>Rechercher des factures {% if search %} <span
+                        class="badge bg-info">{{ factures|length }}</span> {% endif %}</h3>
         </div>
 
         <div class="card-body">
@@ -22,6 +23,7 @@
                         <th>Payé le</th>
                         <th>Envoyé le</th>
                         <th>Communication</th>
+                        <th>Montant</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -50,15 +52,26 @@
                             <td>
                                 {{ facture.communication }}
                             </td>
+                            <td>
+                                {% if facture.factureDetailDto %}
+                                    {{ facture.factureDetailDto.total|format_currency('euro') }}
+                                {% endif %}
+                            </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="5">
+                            <td colspan="8">
                                 Aucune facture trouvée
                             </td>
                         </tr>
                     {% endfor %}
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="7"><strong>Total des factures</strong></th>
+                        <td>{{ total|format_currency('euro') }}</td>
+                    </tr>
+                    </tfoot>
                 </table>
             {% endif %}
 

@@ -115,6 +115,11 @@ final class FactureController extends AbstractController
             );
         }
 
+        foreach ($factures as $facture) {
+            $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
+            $total += $facture->factureDetailDto->total;
+        }
+
         $formMonth = $this->createForm(
             FactureSelectMonthType::class,
             null,
