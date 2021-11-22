@@ -13,7 +13,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use function count;
 
-final class PlaineHandler
+final class PlaineAdminHandler
 {
     private PlaineRepository $plaineRepository;
     private JourRepository $jourRepository;

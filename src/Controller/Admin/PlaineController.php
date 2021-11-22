@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
 use AcMarche\Mercredi\Plaine\Form\SearchPlaineType;
-use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
+use AcMarche\Mercredi\Plaine\Handler\PlaineAdminHandler;
 use AcMarche\Mercredi\Plaine\Message\PlaineCreated;
 use AcMarche\Mercredi\Plaine\Message\PlaineDeleted;
 use AcMarche\Mercredi\Plaine\Message\PlaineUpdated;
@@ -30,20 +30,20 @@ final class PlaineController extends AbstractController
     private PlaineRepository $plaineRepository;
     private PlainePresenceRepository $plainePresenceRepository;
     private GroupeScolaireRepository $groupeScolaireRepository;
-    private PlaineHandler $plaineHandler;
+    private PlaineAdminHandler $plaineAdminHandler;
     private GroupingInterface $grouping;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         PlainePresenceRepository $plainePresenceRepository,
         GroupeScolaireRepository $groupeScolaireRepository,
-        PlaineHandler $plaineHandler,
+        PlaineAdminHandler $plaineHandler,
         GroupingInterface $grouping
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->groupeScolaireRepository = $groupeScolaireRepository;
-        $this->plaineHandler = $plaineHandler;
+        $this->plaineAdminHandler = $plaineHandler;
         $this->grouping = $grouping;
     }
 
@@ -168,7 +168,7 @@ final class PlaineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$plaineOpen = $this->plaineHandler->handleOpeningRegistrations($plaine)) {
+            if (!$plaineOpen = $this->plaineAdminHandler->handleOpeningRegistrations($plaine)) {
                 $this->plaineRepository->flush();
                 $this->dispatchMessage(new PlaineUpdated($plaine->getId()));
             } else {

@@ -6,31 +6,51 @@
             <h3>{{ plaine }}</h3>
         </div>
         <div class="card-body">
-            <h4 class="text-success">Dates de la plaine</h4>
-            <ul class="list-group list-group-horizontal">
-                {% for jour in plaine.jours %}
-                    <li class="list-group-item">
-                        {{ jour.dateJour|format_date('full') }}
-                    </li>
-                {% endfor %}
-            </ul>
-            <br/>
-            <h4 class="text-success">Vos enfants inscrits</h4>
-            <ul class="list-group list-group-horizontal">
-                {% for enfant in enfants %}
-                    <li class="list-group-item">
-                        {{ enfant }}
-                    </li>
-                {% else %}
-                    <li class="list-group-item">Aucun</li>
-                {% endfor %}
-            </ul>
 
-            {% if plaine.inscriptionOpen %}
+            {% if plaine.inscriptionOpen and resteEnfants == true %}
                 <br/>
-                <a href="{{ path('mercredi_parent_plaine_select_enfant') }}" role="button" class="btn btn-primary"><i
+                <a href="{{ path('mercredi_parent_plaine_select_enfant') }}" role="button" class="btn btn-primary mb-3"><i
                             class="fas fa-user-plus"></i> Inscrire mes enfants</a>
+
             {% endif %}
+
+            <h4 class="text-success">Vos enfants inscrits</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nom</th>
+                    <th>Inscrits aux dates</th>
+                </tr>
+                {% for enfant in enfants %}
+                    <tr>
+                        <td>{{ enfant }}</td>
+                        <td>
+                            {% for inscription in inscriptions %}
+                                {% if inscription.enfant.id == enfant.id %}
+                                    {{ inscription.jour.dateJour| date('d/m') }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Aucun</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            {% if enfants|length > 0 %}
+                <a href="{{ path('mercredi_parent_plaine_presence_confirmation') }}" class="btn btn-primary my-3">
+                    <i class="fas fa-save"></i> Confirmer les inscriptions à la plaine
+                </a>
+            {% endif %}
+
+            <hr>
+            <h5 class="text-success">Dates de la plaine</h5>
+            <div class="text-muted">
+                {% for jour in plaine.jours %}
+                    {{ jour.dateJour|format_date('full')|title }},
+                {% endfor %}
+            </div>
 
         </div>
     </div>

@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,6 +18,10 @@ final class PlaineType extends AbstractType
     {
         $formBuilder
             ->add('nom')
+            ->add('communication', TextType::class, [
+                'required' => true,
+                'help' => 'Communication pour les virements bancaires',
+            ])
             ->add(
                 'prix1',
                 MoneyType::class,

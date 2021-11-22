@@ -109,7 +109,12 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
 
     public function generateForPlaine(Plaine $plaine): string
     {
-        return $plaine->getSlug();
+        $communication = $plaine->getCommunication();
+        if (!$communication) {
+            return $plaine->getSlug();
+        }
+
+        return $communication;
     }
 
 

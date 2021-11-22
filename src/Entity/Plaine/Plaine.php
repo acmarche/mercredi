@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
+use AcMarche\Mercredi\Entity\Traits\CommunicationTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -28,6 +29,7 @@ class Plaine implements SluggableInterface
     use SluggableTrait;
     use ArchiveTrait;
     use JoursTrait;
+    use CommunicationTrait;
 
     /**
      * @var Jour[]
@@ -40,6 +42,11 @@ class Plaine implements SluggableInterface
      * @ORM\OneToMany(targetEntity=PlaineGroupe::class, mappedBy="plaine", cascade={"remove","persist"})
      */
     private iterable $plaine_groupes;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true, unique=false)
+     */
+    private ?string $communication = null;
 
     public array $enfants = [];
 

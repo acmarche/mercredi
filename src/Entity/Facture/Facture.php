@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
+use AcMarche\Mercredi\Entity\Traits\CommunicationTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
@@ -39,6 +40,7 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     use FactureComplementsTrait;
     use FactureDecomptesTrait;
     use UserAddTrait;
+    use CommunicationTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="factures")
@@ -64,10 +66,6 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
      * @ORM\Column(type="string", length=100,nullable=false)
      */
     private ?string $mois = null;
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
-     */
-    private ?string $communication = null;
     /**
      * @ORM\Column(type="string", nullable=true)
      */
@@ -173,18 +171,6 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     public function setMois(string $mois): self
     {
         $this->mois = $mois;
-
-        return $this;
-    }
-
-    public function getCommunication(): ?string
-    {
-        return $this->communication;
-    }
-
-    public function setCommunication(string $communication): self
-    {
-        $this->communication = $communication;
 
         return $this;
     }

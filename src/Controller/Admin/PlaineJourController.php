@@ -5,7 +5,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Plaine\Form\PlaineJoursType;
-use AcMarche\Mercredi\Plaine\Handler\PlaineHandler;
+use AcMarche\Mercredi\Plaine\Handler\PlaineAdminHandler;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -20,16 +20,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class PlaineJourController extends AbstractController
 {
-    private PlaineHandler $plaineHandler;
+    private PlaineAdminHandler $plaineAdminHandler;
     private PlainePresenceRepository $plainePresenceRepository;
     private GroupingInterface $grouping;
 
     public function __construct(
-        PlaineHandler $plaineHandler,
+        PlaineAdminHandler $plaineHandler,
         PlainePresenceRepository $plainePresenceRepository,
         GroupingInterface $grouping
     ) {
-        $this->plaineHandler = $plaineHandler;
+        $this->plaineAdminHandler = $plaineHandler;
         $this->plainePresenceRepository = $plainePresenceRepository;
         $this->grouping = $grouping;
     }
@@ -39,14 +39,14 @@ final class PlaineJourController extends AbstractController
      */
     public function edit(Request $request, Plaine $plaine): Response
     {
-        $this->plaineHandler->initJours($plaine);
+        $this->plaineAdminHandler->initJours($plaine);
 
         $form = $this->createForm(PlaineJoursType::class, $plaine);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $jours = $form->get('jours')->getData();
-            $this->plaineHandler->handleEditJours($plaine, $jours);
+            $this->plaineAdminHandler->handleEditJours($plaine, $jours);
 
             $this->addFlash('success', 'les dates ont bien été enregistrées');
 
