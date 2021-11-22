@@ -159,4 +159,22 @@ final class DateUtils
 
         return Carbon::parse($firstDayOfWeek)->monthsUntil($lastDayOffWeek);
     }
+
+
+    /**
+     * @param \AcMarche\Mercredi\Entity\Enfant[] $enfants
+     *
+     * @return boolean
+     */
+    public static function hasTwins(array $enfants): bool
+    {
+        $birthdays = [];
+        foreach ($enfants as $enfant) {
+            if ($birthday = $enfant->getBirthday()) {
+                $birthdays[] = $birthday->format('Y-m-d');
+            }
+        }
+
+        return count($birthdays) !== count(array_unique($birthdays));
+    }
 }
