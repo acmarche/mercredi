@@ -12,6 +12,10 @@
 
             <table class="table table-bordered">
                 <tr>
+                    <th>Né le</th>
+                    <td>{{ enfant.birthday ? enfant.birthday|date('d-m-Y') }}</td>
+                </tr>
+                <tr>
                     <th>Facturé</th>
                     <td>
                         {% if facturePresence %}
@@ -45,7 +49,21 @@
                 </tr>
                 <tr>
                     <th>Ordre</th>
-                    <td>{{ presence.ordre }} </td>
+                    <td>
+                        {{ ordre }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Fratries présentent</th>
+                    <td> {% for fraterie in fratries %}
+                            <a href="{{ path('mercredi_admin_enfant_show', {'id': fraterie.id}) }}">
+                                {{ fraterie }}
+                            </a><span
+                                    class="text-muted">({{ fraterie.birthday ? fraterie.birthday|date('d-m-Y') }})</span>
+                        {% else %}
+                            Aucune
+                        {% endfor %}
+                    </td>
                 </tr>
             </table>
 
@@ -55,7 +73,6 @@
                 </p>
             {% endif %}
             <br/>
-
         </div>
         <div class="card-footer text-muted mt-3">
             Crée le {{ presence.createdAt | format_date('full') }} par {{ presence.userAdd }}. Mis à jour

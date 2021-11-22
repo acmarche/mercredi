@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Relation\Utils;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -11,7 +12,6 @@ use function count;
 
 final class OrdreService
 {
-    public $ordreService;
     private RelationRepository $relationRepository;
     private PresenceRepository $presenceRepository;
 
@@ -66,30 +66,42 @@ final class OrdreService
 
         /**
          * Pas de fratries
+         * Force 1
          */
         if (0 === count($fratries)) {
-            return $ordreBase;
+            return 1;
         }
 
-        $jour = $presence->getJour();
-
-        $presents = [];
-        foreach ($fratries as $fratry) {
-            if (null !== $this->presenceRepository->findByTuteurEnfantAndJour($tuteur, $fratry, $jour)) {
-                $presents[] = $fratry;
-            }
-        }
+        $presents = $this->getFrateriesPresents($presence);
 
         /**
          * Pas de fratries ce jour là
+         * Force premier
          */
         $countPresents = count($presents);
         if (0 === $countPresents) {
             return 1;
         }
-        if ($countPresents >= $ordreBase) {
-            return $ordreBase;
+
+        $birthdayOrigine = $enfant->getBirthday();
+        if ($birthdayOrigine) {
+            $place = count($fratries);
+            foreach ($presents as $present) {
+                if ($birthday = $present->getBirthday()) {
+                    if ($birthdayOrigine->format('Y-m-d') > $birthday->format('Y-m-d')) {
+                        $place--;
+                    } else {
+                        $place++;
+                    }
+                }
+            }
+            if ($place === 0) {
+                return 1;
+            }
         }
+
+        //force prix plein si on a pas de date naissance
+        return 1;
 
         /**
          * ordre    nbre fratries    Final
@@ -122,6 +134,35 @@ final class OrdreService
          * 2    3    2
          * 2    4    2
          */
-        return count($presents) + 1;
+    }
+
+    /**
+     * @param \AcMarche\Mercredi\Entity\Presence\Presence $presence
+     * @return array|Enfant[]
+     */
+    public function getFrateriesPresents(Presence $presence): array
+    {
+        $tuteur = $presence->getTuteur();
+        /**
+         * Ordre suivant la fratries.
+         */
+        $fratries = $this->relationRepository->findFrateries(
+            $presence->getEnfant(),
+            [$tuteur]
+        );
+
+        if (0 === count($fratries)) {
+            return [];
+        }
+
+        $jour = $presence->getJour();
+        $presents = [];
+        foreach ($fratries as $fratry) {
+            if (null !== $this->presenceRepository->findByTuteurEnfantAndJour($tuteur, $fratry, $jour)) {
+                $presents[] = $fratry;
+            }
+        }
+
+        return $presents;
     }
 }
