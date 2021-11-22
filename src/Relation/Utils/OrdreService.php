@@ -8,6 +8,8 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Utils\DateUtils;
+use AcMarche\Mercredi\Utils\SortUtils;
 use function count;
 
 final class OrdreService
@@ -72,7 +74,7 @@ final class OrdreService
             return 1;
         }
 
-        $presents = $this->getFrateriesPresents($presence);
+        $presents = $this->getFratriesPresents($presence);
 
         /**
          * Pas de fratries ce jour là
@@ -83,64 +85,33 @@ final class OrdreService
             return 1;
         }
 
-        $birthdayOrigine = $enfant->getBirthday();
-        if ($birthdayOrigine) {
-            $place = count($fratries);
-            foreach ($presents as $present) {
-                if ($birthday = $present->getBirthday()) {
-                    if ($birthdayOrigine->format('Y-m-d') > $birthday->format('Y-m-d')) {
-                        $place--;
-                    } else {
-                        $place++;
-                    }
-                }
-            }
-            if ($place === 0) {
+        $presents[] = $enfant;
+        /**
+         * si pas de date naissance on force 1;
+         */
+        foreach ($presents as $present) {
+            if (!$present->getBirthday()) {
                 return 1;
+            }
+        }
+
+        $presents = SortUtils::sortByBirthday($presents);
+
+        foreach ($presents as $key => $present) {
+                      if ($present->getId() === $enfant->getId()) {
+               return $key + 1;
             }
         }
 
         //force prix plein si on a pas de date naissance
         return 1;
-
-        /**
-         * ordre    nbre fratries    Final
-         *
-         * 6    1    2
-         * 6    2    3
-         * 6    3    4
-         * 6    4    5
-         * 6    5    6
-         * 6    6    6
-         *
-         * 5    1    2
-         * 5    2    3
-         * 5    3    4
-         * 5    4    5
-         * 5    5    5
-         *
-         * 4    1    2
-         * 4    2    3
-         * 4    3    4
-         * 4    4    4
-         *
-         * 3    1    2
-         * 3    2    3
-         * 3    3    3
-         * 3    4    3
-         *
-         * 2    1    2
-         * 2    2    2
-         * 2    3    2
-         * 2    4    2
-         */
     }
 
     /**
      * @param \AcMarche\Mercredi\Entity\Presence\Presence $presence
      * @return array|Enfant[]
      */
-    public function getFrateriesPresents(Presence $presence): array
+    public function getFratriesPresents(Presence $presence): array
     {
         $tuteur = $presence->getTuteur();
         /**
