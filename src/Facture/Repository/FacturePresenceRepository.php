@@ -28,20 +28,6 @@ final class FacturePresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return FacturePresence[]
-     */
-    public function findByFacture(Facture $facture): array
-    {
-        return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->leftJoin('facture_presence.presence', 'presence', 'WITH')
-            ->addSelect('facture', 'presence')
-            ->andWhere('facture_presence.facture = :fact')
-            ->setParameter('fact', $facture)
-            ->getQuery()->getResult();
-    }
-
-    /**
      * @param array $presenceIds
      * @param string $type
      * @return array|FacturePresence[]
