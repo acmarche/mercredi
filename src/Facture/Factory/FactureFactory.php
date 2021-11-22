@@ -44,7 +44,7 @@ final class FactureFactory
     /**
      * @param array|Facture[] $factures
      */
-    public function createAllPdf(array $factures, int $max = 30, string $month): bool
+    public function createAllPdf(array $factures, string $month, int $max = 30 ): bool
     {
         $path = $this->parameterBag->get('kernel.project_dir').'/var/factures/'.$month.'/';
         $i = 0;

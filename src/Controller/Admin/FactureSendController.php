@@ -184,7 +184,7 @@ final class FactureSendController extends AbstractController
                 ]
             );
         }
-        $finish = $this->factureFactory->createAllPdf($factures, 30, $month);
+        $finish = $this->factureFactory->createAllPdf($factures, $month);
         if ($finish) {
             $this->addFlash(
                 'success',
