@@ -3,6 +3,9 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -22,16 +25,25 @@ final class CheckupController extends AbstractController
     private EnfantRepository $enfantRepository;
     private TuteurRepository $tuteurRepository;
     private UserRepository $userRepository;
+    private PresenceRepository $presenceRepository;
     private $tutru = null;
+    private OrdreService $ordreService;
+    private JourRepository $jourRepository;
 
     public function __construct(
         EnfantRepository $enfantRepository,
         TuteurRepository $tuteurRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        PresenceRepository $presenceRepository,
+        OrdreService $ordreService,
+        JourRepository $jourRepository
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurRepository = $tuteurRepository;
         $this->userRepository = $userRepository;
+        $this->presenceRepository = $presenceRepository;
+        $this->ordreService = $ordreService;
+        $this->jourRepository = $jourRepository;
     }
 
     /**
@@ -141,6 +153,28 @@ final class CheckupController extends AbstractController
             [
                 'tuteurs' => $tuteurs,
                 'enfants' => $enfants,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/presences", name="mercredi_admin_checkup_presence")
+     */
+    public function presences(): Response
+    {
+        $dateTime = new \DateTime('01-10-2021');
+        $jours = $this->jourRepository->findDaysByMonth($dateTime);
+        $presences = $this->presenceRepository->findByDays($jours);
+        foreach ($presences as $presence) {
+            $ordre = $this->ordreService->getOrdreOnPresence($presence);
+            $presence->ordreTmp = $ordre;
+            $presence->fratries = $this->ordreService->getFratriesPresents($presence);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/checkup/presences.html.twig',
+            [
+                'presences' => $presences,
             ]
         );
     }
