@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
@@ -20,6 +21,7 @@ use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Exception;
@@ -42,6 +44,8 @@ final class PresenceController extends AbstractController
     private ListingPresenceByMonth $listingPresenceByMonth;
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandler $factureHandler;
+    private PresenceCalculatorInterface $presenceCalculator;
+    private OrdreService $ordreService;
 
     public function __construct(
         PresenceRepository $presenceRepository,
@@ -49,7 +53,9 @@ final class PresenceController extends AbstractController
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
         FacturePresenceRepository $facturePresenceRepository,
-        FactureHandler $factureHandler
+        FactureHandler $factureHandler,
+        PresenceCalculatorInterface $presenceCalculator,
+        OrdreService $ordreService
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -57,6 +63,8 @@ final class PresenceController extends AbstractController
         $this->listingPresenceByMonth = $listingPresenceByMonth;
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureHandler = $factureHandler;
+        $this->presenceCalculator = $presenceCalculator;
+        $this->ordreService = $ordreService;
     }
 
     /**
@@ -175,12 +183,16 @@ final class PresenceController extends AbstractController
     public function show(Presence $presence): Response
     {
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
+        $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
+        $fratries = $this->ordreService->getFratriesPresents($presence);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/show.html.twig',
             [
                 'presence' => $presence,
                 'facturePresence' => $facturePresence,
+                'fratries' => $fratries,
+                'ordre' => $ordre,
                 'enfant' => $presence->getEnfant(),
             ]
         );
