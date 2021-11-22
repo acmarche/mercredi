@@ -4,7 +4,7 @@
     {% for fratrie in fratries %}
         <a href="{{ path('mercredi_admin_enfant_show', {'id': fratrie.id}) }}">
             {{ fratrie }}
-        </a>
+        </a>&nbsp;
     {% endfor %}
 {% else %}
     Aucune
