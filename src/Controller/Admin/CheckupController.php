@@ -216,9 +216,14 @@ final class CheckupController extends AbstractController
                 $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
                 $prix = $this->presenceCalculator->getPrixByOrdre($presence, $ordre);
                 $prixFactured = $presenceFactured->getCoutBrut();
+                $ordreFactured = $presenceFactured->getOrdre();
                 if ($prix != $prixFactured) {
                     $data[$i]['tuteur'] = $tuteur;
-                    $data[$i]['presences'][] = ['object' => $presence, 'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €'];
+                    $data[$i]['presences'][] = [
+                        'object' => $presence,
+                        'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €',
+                        'ordre'=> 'Passe de '.$ordreFactured.' à '.$ordre
+                    ];
                 }
             }
             $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);

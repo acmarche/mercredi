@@ -10,7 +10,16 @@
                 <thead>
                 <tr>
                     <th>Parent</th>
-                    <th>Présences</th>
+                    <th>Présences
+                        <br/>
+                        <table class="table">
+                            <tr>
+                                <th>Date</th>
+                                <th>Prix</th>
+                                <th>Ordre</th>
+                            </tr>
+                        </table>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,11 +29,15 @@
                             {{ row.tuteur }}
                         </td>
                         <td>
-                            {% for presence in row.presences %}
-                                {{ presence.object.jour }}
-                                {{ presence.prix }}
-                                <br/>
-                            {% endfor %}
+                            <table class="table">
+                                {% for presence in row.presences %}
+                                    <tr>
+                                        <td>{{ presence.object.jour }}</td>
+                                        <td>{{ presence.prix }}</td>
+                                        <td>{{ presence.ordre }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
                         </td>
                     </tr>
                 {% endfor %}
