@@ -169,7 +169,7 @@ final class FactureSendController extends AbstractController
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
 
-        if (!$cron = $this->factureCronRepository->findOneByMonth($month)) {
+        if (!$this->factureCronRepository->findOneByMonth($month)) {
             $this->addFlash('danger', 'Erreur aucun cron trouvé');
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
