@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Entity\Presence;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AbsentTrait;
 use AcMarche\Mercredi\Entity\Traits\ConfirmedTrait;
@@ -61,11 +60,11 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     /**
      * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="presences")
      */
-    private ?Tuteur $tuteur  = null;
+    private ?Tuteur $tuteur = null;
     /**
      * @var array|Enfant[]
      */
-    public array $fratries=[];
+    public array $fratries = [];
     public int $ordreTmp = 0;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
