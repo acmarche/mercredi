@@ -80,4 +80,36 @@ final class SortUtils
 
         return $groups;
     }
+
+    /**
+     * @param \AcMarche\Mercredi\Entity\Enfant[] $data
+     *
+     * @return \AcMarche\Mercredi\Entity\Enfant[]
+     */
+    public static function sortByBirthday(array $data): array
+    {
+        usort(
+            $data,
+            function ($enfantA, $enfantB) {
+                $dateA = $enfantA->getBirthday();
+                $dateA->format('Y-m-d');
+
+                $dateB = $enfantB->getBirthday();
+                $dateB->format('Y-m-d');
+
+                if ($dateA == $dateB) {
+                    if($enfantA->getPrenom() > $enfantB->getPrenom()) {
+                        return +1;
+                    }
+                    else {
+                        return -1;
+                    }
+                }
+
+                return $dateA > $dateB ? +1 : -1;
+            }
+        );
+
+        return $data;
+    }
 }
