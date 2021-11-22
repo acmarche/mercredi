@@ -3,7 +3,12 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -26,9 +31,13 @@ final class CheckupController extends AbstractController
     private TuteurRepository $tuteurRepository;
     private UserRepository $userRepository;
     private PresenceRepository $presenceRepository;
-    private $tutru = null;
     private OrdreService $ordreService;
     private JourRepository $jourRepository;
+    private FactureRepository $factureRepository;
+    private FactureCalculatorInterface $factureCalculator;
+    private FacturePresenceRepository $facturePresenceRepository;
+    private PresenceCalculatorInterface $presenceCalculator;
+    private $tutru = null;
 
     public function __construct(
         EnfantRepository $enfantRepository,
@@ -36,7 +45,11 @@ final class CheckupController extends AbstractController
         UserRepository $userRepository,
         PresenceRepository $presenceRepository,
         OrdreService $ordreService,
-        JourRepository $jourRepository
+        JourRepository $jourRepository,
+        FactureRepository $factureRepository,
+        FactureCalculatorInterface $factureCalculator,
+        FacturePresenceRepository $facturePresenceRepository,
+        PresenceCalculatorInterface $presenceCalculator
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->tuteurRepository = $tuteurRepository;
@@ -44,6 +57,10 @@ final class CheckupController extends AbstractController
         $this->presenceRepository = $presenceRepository;
         $this->ordreService = $ordreService;
         $this->jourRepository = $jourRepository;
+        $this->factureRepository = $factureRepository;
+        $this->factureCalculator = $factureCalculator;
+        $this->facturePresenceRepository = $facturePresenceRepository;
+        $this->presenceCalculator = $presenceCalculator;
     }
 
     /**
@@ -175,6 +192,46 @@ final class CheckupController extends AbstractController
             '@AcMarcheMercrediAdmin/checkup/presences.html.twig',
             [
                 'presences' => $presences,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/factures", name="mercredi_admin_checkup_presence")
+     */
+    public function factures(): Response
+    {
+        $factures = $this->factureRepository->findFacturesByMonth('10-2021');
+        $total = 0;
+        $data = [];
+        $i = 0;
+        foreach ($factures as $facture) {
+            $tuteur = $facture->getTuteur();
+            $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
+                $facture,
+                FactureInterface::OBJECT_PRESENCE
+            );
+            foreach ($facturePresences as $presenceFactured) {
+                $presence = $this->presenceRepository->find($presenceFactured->getPresenceId());
+                $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
+                $prix = $this->presenceCalculator->getPrixByOrdre($presence, $ordre);
+                $prixFactured = $presenceFactured->getCoutBrut();
+                if ($prix != $prixFactured) {
+                    $data[$i]['tuteur'] = $tuteur;
+                    $data[$i]['presences'][] = ['object' => $presence, 'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €'];
+                }
+            }
+            $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
+            $total += $facture->factureDetailDto->total;
+            $i++;
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/checkup/factures.html.twig',
+            [
+                'factures' => $factures,
+                'total' => $total,
+                'data' => $data,
             ]
         );
     }
