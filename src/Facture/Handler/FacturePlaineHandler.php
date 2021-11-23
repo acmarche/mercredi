@@ -4,7 +4,6 @@
 namespace AcMarche\Mercredi\Facture\Handler;
 
 
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -41,21 +40,24 @@ class FacturePlaineHandler
         $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
-    public function newInstance(Tuteur $tuteur): Facture
+    public function newInstance(Plaine $plaine, Tuteur $tuteur): FactureInterface
     {
-        return $this->factureFactory->newInstance($tuteur);
+        $facture = $this->factureFactory->newInstance($tuteur);
+        $jours = $plaine->getJours();
+        $facture->setMois($jours[0]);
+        $facture->setPlaine($plaine->getNom());
+
+        return $facture;
     }
 
     /**
-     * @param Facture $facture
+     * @param FactureInterface $facture
      * @param Plaine $plaine
-     * @return Facture
+     * @return FactureInterface
      */
-    public function handleManually(Facture $facture, Plaine $plaine): Facture
+    public function handleManually(FactureInterface $facture, Plaine $plaine): FactureInterface
     {
-        $facture->setMois(date('m-Y'));
-        $facture->setPlaine($plaine->getNom());
-        $facture->setCommunication($this->communicationFactory->generateForPlaine($plaine));
+        $facture->setCommunication($this->communicationFactory->generateForPlaine($plaine, $facture));
         $tuteur = $facture->getTuteur();
         $presences = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
 
@@ -71,10 +73,17 @@ class FacturePlaineHandler
         return $facture;
     }
 
-    private function attachPresences(Facture $facture, Plaine $plaine, array $presences): void
+    private function attachPresences(FactureInterface $facture, Plaine $plaine, array $presences): void
     {
         foreach ($presences as $presence) {
-            $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
+            if (!$facturePresence = $this->facturePresenceRepository->findByIdAndType(
+                $presence->getId(),
+                FactureInterface::OBJECT_PLAINE
+            )) {
+                $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
+                $this->facturePresenceRepository->persist($facturePresence);
+            }
+
             $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
             $enfant = $presence->getEnfant();
             if ($ecole = $enfant->getEcole()) {
@@ -85,11 +94,8 @@ class FacturePlaineHandler
             $ordre = $this->plaineCalculator->getOrdreOnePresence($presence);
             $facturePresence->setCoutBrut($this->plaineCalculator->getPrixByOrdre($plaine, $ordre));
             $facturePresence->setCoutCalculated($this->plaineCalculator->calculateOnePresence($plaine, $presence));
-            $this->facturePresenceRepository->persist($facturePresence);
-            $facture->addFacturePresence($facturePresence);
         }
     }
-
 
     private function flush(): void
     {

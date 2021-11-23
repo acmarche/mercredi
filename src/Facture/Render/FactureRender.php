@@ -4,7 +4,6 @@
 namespace AcMarche\Mercredi\Facture\Render;
 
 
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
@@ -31,7 +30,7 @@ class FactureRender
         $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
-    public function generateOneHtml(Facture $facture): string
+    public function generateOneHtml(FactureInterface $facture): string
     {
         $content = $this->prepareContent($facture);
 
@@ -66,7 +65,7 @@ class FactureRender
         );
     }
 
-    private function prepareContent(Facture $facture): string
+    private function prepareContent(FactureInterface $facture): string
     {
         $organisation = $this->organisationRepository->getOrganisation();
         $data = [

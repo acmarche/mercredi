@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\PedagogiqueTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\ReductionTrait;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -34,7 +35,7 @@ class FacturePresence
     /**
      * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="facturePresences")
      */
-    private Facture $facture;
+    private FactureInterface $facture;
 
     /**
      * @ORM\Column(type="integer", nullable=false)
@@ -71,7 +72,7 @@ class FacturePresence
      */
     private ?float $cout_calculated = null;
 
-    public function __construct(Facture $facture, int $presenceId, string $objectType)
+    public function __construct(FactureInterface $facture, int $presenceId, string $objectType)
     {
         $this->facture = $facture;
         $this->presenceId = $presenceId;

@@ -9,5 +9,5 @@ interface CommunicationFactoryInterface
 {
     public function generateForPresence(FactureInterface $facture): string;
 
-    public function generateForPlaine(Plaine $plaine): string;
+    public function generateForPlaine(Plaine $plaine, FactureInterface $facture): string;
 }

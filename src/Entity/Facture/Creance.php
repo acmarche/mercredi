@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\FactureInterface;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -21,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\CreanceRepository")
  *
  */
-class Creance implements TimestampableInterface, UuidableInterface, FactureInterface
+class Creance implements TimestampableInterface, UuidableInterface
 {
     use IdTrait;
     use NomTrait;

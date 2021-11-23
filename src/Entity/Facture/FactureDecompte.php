@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -27,7 +28,7 @@ class FactureDecompte implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="factureDecomptes")
      */
-    private Facture $facture;
+    private FactureInterface $facture;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)

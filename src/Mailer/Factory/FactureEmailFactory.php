@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Render\FactureRender;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Mailer\NotificationEmailJf;
@@ -13,6 +14,7 @@ use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Notifier\Notification\Notification;
 
 class FactureEmailFactory
@@ -45,7 +47,6 @@ class FactureEmailFactory
 
         return $data;
     }
-
 
 
     /**
@@ -108,11 +109,9 @@ class FactureEmailFactory
     }
 
     /**
-     * acces refuse wget https://assetx
-     * @param $facture
-     * @param $message
+     * acces refuse wget https://assetx en console
      */
-    public function attachFactureOnTheFly($facture, $message)
+    public function attachFactureOnTheFly(FactureInterface $facture, Email $message)
     {
         $htmlInvoice = $this->factureRender->generateOneHtml($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);

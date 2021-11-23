@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Validator as AcMarcheValidator;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +30,7 @@ class FactureComplement implements TimestampableInterface, UuidableInterface
     /**
      * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="factureComplements")
      */
-    private Facture $facture;
+    private FactureInterface $facture;
     /**
      * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      * @Assert\Range(

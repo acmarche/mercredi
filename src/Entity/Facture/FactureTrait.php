@@ -2,16 +2,18 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use AcMarche\Mercredi\Facture\FactureInterface;
+
 trait FactureTrait
 {
-    private Facture $facture;
+    private FactureInterface $facture;
 
-    public function getFacture(): Facture
+    public function getFacture(): FactureInterface
     {
         return $this->facture;
     }
 
-    public function setFacture(Facture $facture): void
+    public function setFacture(FactureInterface $facture): void
     {
         $this->facture = $facture;
     }
