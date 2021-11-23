@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table("facture_presence", uniqueConstraints={
  *     @ORM\UniqueConstraint(columns={"presence_id", "object_type"})
  * })
- * @UniqueEntity(fields={"presence", "objectType"}, message="Présence déjà payée")
+ * @UniqueEntity(fields={"presence", "objectType"}, message="Présence existante")
  */
 class FacturePresence
 {

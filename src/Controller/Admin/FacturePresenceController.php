@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
@@ -86,10 +87,11 @@ final class FacturePresenceController extends AbstractController
     {
         $facture = $facturePresence->getFacture();
         $presence = $accueil = null;
-        if ($facturePresence->getObjectType() == 'presence') {
+        $type = $facturePresence->getObjectType();
+        if ($type == FactureInterface::OBJECT_PRESENCE or $type == FactureInterface::OBJECT_PLAINE) {
             $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
         }
-        if ($facturePresence->getObjectType() == 'accueil') {
+        if ($type == FactureInterface::OBJECT_ACCUEIL) {
             $accueil = $this->accueilRepository->find($facturePresence->getPresenceId());
         }
 
@@ -99,7 +101,7 @@ final class FacturePresenceController extends AbstractController
                 'facture' => $facture,
                 'facturePresence' => $facturePresence,
                 'presence' => $presence,
-                'acceuil' => $accueil,
+                'accueil' => $accueil,
             ]
         );
     }

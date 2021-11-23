@@ -65,17 +65,17 @@
                         <th>Présence liée</th>
                         <td>
                             <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
-                                {{ presence.jour | format_date('full') }}
+                                {{ presence.jour.dateJour | format_date('full') }}
                             </a>
                         </td>
                     </tr>
                 {% endif %}
-                {% if acceuil %}
+                {% if accueil %}
                     <tr>
-                        <th>Acceuil liée</th>
+                        <th>Accueil lié</th>
                         <td>
-                            <a href="{{ path('mercredi_admin_accueil_show', {'id': acceuil.id}) }}">
-                                {{ acceuil.dateJour | format_date('full') }}
+                            <a href="{{ path('mercredi_admin_accueil_show', {'id': accueil.id}) }}">
+                                {{ accueil.dateJour | format_date('full') }}
                             </a>
                         </td>
                     </tr>
@@ -84,7 +84,7 @@
                     <th>Type</th>
                     <td>
                         {{ facturePresence.objectType }}<br>
-                        <span class="text-muted">présence ou plaine ou accueil</span>
+                        <span class="text-muted">présence, plaine ou accueil</span>
                     </td>
                 </tr>
             </table>

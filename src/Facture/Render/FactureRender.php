@@ -109,7 +109,7 @@ class FactureRender
         }
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/_content.html.twig',
+            '@AcMarcheMercrediAdmin/facture/hotton/_content_pdf.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,

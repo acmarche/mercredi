@@ -3,12 +3,11 @@
 namespace AcMarche\Mercredi\Facture\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
-use AcMarche\Mercredi\Entity\Presence\Accueil;
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -73,7 +72,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findByPresence(Presence $presence): ?FacturePresence
+    public function findByPresence(PresenceInterface $presence): ?FacturePresence
     {
         return $this->findByIdAndType($presence->getId(), FactureInterface::OBJECT_PRESENCE);
     }

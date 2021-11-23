@@ -32,7 +32,7 @@ final class FactureSearchType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom du tuteur'],
+                    'attr' => ['placeholder' => 'Nom du parent'],
                 ]
             )
             ->add(

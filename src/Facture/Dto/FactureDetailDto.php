@@ -6,6 +6,7 @@ class FactureDetailDto
 {
     public float $totalPresences = 0;
     public float $totalAccueils = 0;
+    public float $totalPlaines = 0;
     public float $totalReductionForfaits = 0;
     public float $totalReductionPourcentage = 0;
     public float $totalComplementForfaits = 0;

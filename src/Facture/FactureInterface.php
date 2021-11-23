@@ -40,8 +40,6 @@ interface FactureInterface
 
     public function setCommunication(string $communication): self;
 
-    public function __construct(Tuteur $tuteur);
-
     public function __toString();
 
     public function getEnfants(): array;

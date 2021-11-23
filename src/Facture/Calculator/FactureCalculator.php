@@ -44,13 +44,14 @@ class FactureCalculator implements FactureCalculatorInterface
         $factureDetail = new FactureDetailDto();
         $factureDetail->totalPresences = $this->totalPresences($facture);
         $factureDetail->totalAccueils = $this->totalAccueils($facture);
+        $factureDetail->totalPlaines = $this->totalPlaine($facture);
         $factureDetail->totalReductionForfaits = $this->totalReductionForfaits($facture);
         $factureDetail->totalReductionPourcentage = $this->totalReductionPourcentage($facture);
         $factureDetail->totalComplementForfaits = $this->totalComplementForfaits($facture);
         $factureDetail->totalComplementPourcentage = $this->totalComplementPourcentage($facture);
         $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
 
-        $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalComplementForfaits;
+        $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementForfaits;
         $factureDetail->total = $factureDetail->total - $factureDetail->totalReductionForfaits;
         $factureDetail->totalHorsPourcentage = $factureDetail->total;
 
@@ -157,5 +158,20 @@ class FactureCalculator implements FactureCalculatorInterface
         }
 
         return $complementPourcentage;
+    }
+
+    public function totalPlaine(FactureInterface $facture): float
+    {
+        $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_PLAINE
+        );
+
+        $cout = 0;
+        foreach ($facturePresences as $facturePresence) {
+            $cout += $facturePresence->getCoutCalculated();
+        }
+
+        return $cout;
     }
 }

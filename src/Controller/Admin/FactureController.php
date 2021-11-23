@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
-use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
@@ -16,11 +15,8 @@ use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
-use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
-use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
+use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
-use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,30 +35,21 @@ final class FactureController extends AbstractController
     private FactureRepository $factureRepository;
     private FactureHandler $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private FactureReductionRepository $factureReductionRepository;
-    private FactureComplementRepository $factureComplementRepository;
     private FactureCalculatorInterface $factureCalculator;
-    private FactureDecompteRepository $factureDecompteRepository;
+    private FactureRenderInterface $factureRenderInterface;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
-        FacturePresenceRepository $facturePresenceRepository,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
-        FactureReductionRepository $factureReductionRepository,
-        FactureComplementRepository $factureComplementRepository,
         FactureCalculatorInterface $factureCalculator,
-        FactureDecompteRepository $factureDecompteRepository
+        FactureRenderInterface $factureRenderInterface
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->factureReductionRepository = $factureReductionRepository;
-        $this->factureComplementRepository = $factureComplementRepository;
         $this->factureCalculator = $factureCalculator;
-        $this->factureDecompteRepository = $factureDecompteRepository;
+        $this->factureRenderInterface = $factureRenderInterface;
     }
 
     /**
@@ -246,37 +233,14 @@ final class FactureController extends AbstractController
     public function show(Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_PRESENCE
-        );
-        $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_ACCUEIL
-        );
-        $facturePlaines = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_PLAINE
-        );
-        $factureReductions = $this->factureReductionRepository->findByFacture($facture);
-        $factureComplements = $this->factureComplementRepository->findByFacture($facture);
-
-        $factureDecomptes = $this->factureDecompteRepository->findByFacture($facture);
-
-        $dto = $this->factureCalculator->createDetail($facture);
+        $html = $this->factureRenderInterface->render($facture);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
-                'facturePresences' => $facturePresences,
-                'factureAccueils' => $factureAccueils,
-                'facturePlaines' => $facturePlaines,
-                'factureReductions' => $factureReductions,
-                'factureComplements' => $factureComplements,
-                'factureDecomptes' => $factureDecomptes,
-                'dto' => $dto,
+                'content' => $html,
             ]
         );
     }
