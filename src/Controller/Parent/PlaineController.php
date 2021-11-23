@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
+use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Form\PlaineConfirmationType;
@@ -39,6 +40,7 @@ final class PlaineController extends AbstractController
     private FacturePlaineHandler $facturePlaineHandler;
     private FactureEmailFactory $factureEmailFactory;
     private NotificationMailer $notificationMailer;
+    private AdminEmailFactory $adminEmailFactory;
 
     public function __construct(
         PlaineRepository $plaineRepository,
@@ -49,7 +51,8 @@ final class PlaineController extends AbstractController
         PlainePresenceRepository $plainePresenceRepository,
         FacturePlaineHandler $facturePlaineHandler,
         FactureEmailFactory $factureEmailFactory,
-        NotificationMailer $notificationMailer
+        NotificationMailer $notificationMailer,
+        AdminEmailFactory $adminEmailFactory
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->relationUtils = $relationUtils;
@@ -60,6 +63,7 @@ final class PlaineController extends AbstractController
         $this->facturePlaineHandler = $facturePlaineHandler;
         $this->factureEmailFactory = $factureEmailFactory;
         $this->notificationMailer = $notificationMailer;
+        $this->adminEmailFactory = $adminEmailFactory;
     }
 
     /**
@@ -180,42 +184,43 @@ final class PlaineController extends AbstractController
                 $inscription->setConfirmed(true);
             }
             $this->plainePresenceRepository->flush();
-            //generate facture
-            //send mail
-            //redirect
 
-            $facture = $this->facturePlaineHandler->newInstance($this->tuteur);
+            $facture = $this->facturePlaineHandler->newInstance($plaine, $this->tuteur);
+            $this->plainePresenceRepository->persist($facture);
+            $this->plainePresenceRepository->flush();
+
             $this->facturePlaineHandler->handleManually($facture, $plaine);
-            $this->factureEmailFactory->initFromAndToForForm($facture);
-            $message = $this->factureEmailFactory->messageFacture($data['from'], $data['sujet'], $data['texte']);
-            $this->factureEmailFactory->setTos($message, [$data['to']]);
-            $this->factureEmailFactory->attachFactureOnTheFly($message, $facture);
-            $emails = TuteurUtils::getEmailsOfOneTuteur($this->tuteur);
 
+            $emails = TuteurUtils::getEmailsOfOneTuteur($this->tuteur);
             if (count($emails) < 1) {
-                $error = 'Pas de mail pour la facture: '.$facture->getId();
+                $error = 'Pas de mail pour la facture plaine: '.$facture->getId();
                 $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
             }
+
+            $from = $this->factureEmailFactory->getEmailAddressOrganisation();
+            $message = $this->factureEmailFactory->messageFacture($from, 'Inscription à la plaine', 'Coucou');
+            $this->factureEmailFactory->setTos($message, $emails);
+            $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
 
             $this->factureEmailFactory->setTos($message, $emails);
 
             try {
                 $this->notificationMailer->sendMail($message);
             } catch (TransportExceptionInterface $e) {
-                $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
-                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $error = 'Facture plaine num '.$facture->getId().' '.$e->getMessage();
+                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture plaine", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
             }
 
             $this->notificationMailer->sendAsEmailNotification($message);
-            $facture->setEnvoyeA($data['to']);
+            $facture->setEnvoyeA(join(',',$emails));
             $facture->setEnvoyeLe(new \DateTime());
             $this->addFlash('success', 'La facture a bien été envoyée');
-            $this->factureRepository->flush();
+            $this->plainePresenceRepository->flush();
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute('mercredi_parent_plaine_show', ['id' => $plaine->getId()]);
         }
 
         return $this->render(

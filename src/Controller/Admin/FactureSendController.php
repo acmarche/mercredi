@@ -99,7 +99,7 @@ final class FactureSendController extends AbstractController
 
             $message = $this->factureEmailFactory->messageFacture($data['from'], $data['sujet'], $data['texte']);
             $this->factureEmailFactory->setTos($message, [$data['to']]);
-            $this->factureEmailFactory->attachFactureOnTheFly($message, $facture);
+            $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
 
             $this->notificationMailer->sendAsEmailNotification($message);
             $facture->setEnvoyeA($data['to']);

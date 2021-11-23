@@ -72,7 +72,7 @@ class FacturePlaineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $facture = $this->facturePlaineHandler->newInstance($tuteur);
+            $facture = $this->facturePlaineHandler->newInstance($plaine,$tuteur);
             $this->facturePlaineHandler->handleManually($facture, $plaine);
 
             $this->addFlash('success', 'Facture générée');
