@@ -17,7 +17,7 @@ class UserEmailFactory
 
     public function messageNewAccountToTuteur(User $user, Tuteur $tuteur, ?string $password = null): NotificationEmail
     {
-        $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $from = $this->getEmailAddressOrganisation();
 
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
@@ -44,7 +44,7 @@ class UserEmailFactory
         Animateur $animateur,
         ?string $password = null
     ): NotificationEmail {
-        $from = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $from = $this->getEmailAddressOrganisation();
 
         $message = NotificationEmailJf::asPublicEmailJf();
         $message

@@ -35,7 +35,7 @@ class FactureEmailFactory
     public function initFromAndToForForm(?Facture $facture = null): array
     {
         $data = [];
-        $data['from'] = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $data['from'] = $this->getEmailAddressOrganisation();
         if ($facture) {
             $tuteur = $facture->getTuteur();
             if ($emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
@@ -45,6 +45,8 @@ class FactureEmailFactory
 
         return $data;
     }
+
+
 
     /**
      * @param Facture $facture

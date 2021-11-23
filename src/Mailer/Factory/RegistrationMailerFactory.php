@@ -38,7 +38,7 @@ final class RegistrationMailerFactory
 
     public function generateMessageToAdminAccountCreated(User $user): NotificationEmail
     {
-        $email = null !== $this->organisation ? $this->organisation->getEmail() : 'nomail@domain.be';
+        $email = $this->getEmailAddressOrganisation();
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->to($email)

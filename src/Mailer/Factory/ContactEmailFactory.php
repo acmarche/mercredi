@@ -20,8 +20,7 @@ class ContactEmailFactory
      */
     public function sendContactForm(string $from, string $nom, string $body): NotificationEmail
     {
-        $to = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
-        ) : 'nomail@domain.be';
+        $to = $this->getEmailAddressOrganisation();
         $message = NotificationEmailJf::asPublicEmailJf();
 
         $message

@@ -45,8 +45,7 @@ class AdminEmailFactory
     public function messagEnfantsOrphelins(array $enfants): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
-        ) : 'nomail@domain.be';
+        $email = $this->getEmailAddressOrganisation();
         $message
             ->from($email)
             ->to($email)
@@ -69,8 +68,7 @@ class AdminEmailFactory
     public function messageTuteurArchived(array $tuteurs): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
-        ) : 'nomail@domain.be';
+        $email = $this->getEmailAddressOrganisation();
         $message
             ->from($email)
             ->to($email)
@@ -93,8 +91,7 @@ class AdminEmailFactory
     public function messageAlert(string $subject, string $texte): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->organisationRepository->getOrganisation() !== null ? $this->organisation->getEmail(
-        ) : 'nomail@domain.be';
+        $email = $this->getEmailAddressOrganisation();
         $message
             ->from($email)
             ->to($email)
