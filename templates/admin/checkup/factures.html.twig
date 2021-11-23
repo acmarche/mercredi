@@ -15,11 +15,12 @@
                         <table class="table">
                             <tr>
                                 <th>Date</th>
-                                <th>Prix</th>
                                 <th>Ordre</th>
+                                <th>Prix</th>
                             </tr>
                         </table>
                     </th>
+                    <th>Montant</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,11 +34,16 @@
                                 {% for presence in row.presences %}
                                     <tr>
                                         <td>{{ presence.object.jour }}</td>
-                                        <td>{{ presence.prix }}</td>
                                         <td>{{ presence.ordre }}</td>
+                                        <td>{{ presence.prix }}</td>
                                     </tr>
                                 {% endfor %}
                             </table>
+                        </td>
+                        <td>
+                            {% if row.montant is defined %}
+                                {{ row.montant }} €
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

@@ -222,10 +222,18 @@ final class CheckupController extends AbstractController
                     $data[$i]['presences'][] = [
                         'object' => $presence,
                         'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €',
-                        'ordre'=> 'Passe de '.$ordreFactured.' à '.$ordre
+                        'ordre' => 'Passe de '.$ordreFactured.' à '.$ordre,
                     ];
+                    $newcout = $this->presenceCalculator->calculate(
+                        $presence
+                    );
+                    if (!isset($data[$i]['montant'])) {
+                        $data[$i]['montant'] = 0;
+                    }
+                    $data[$i]['montant'] += ($newcout - $presenceFactured->getCoutCalculated());
                 }
             }
+
             $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
             $total += $facture->factureDetailDto->total;
             $i++;
