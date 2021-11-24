@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\DependencyInjection;
 
-use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceConstraintInterface;
 use Symfony\Component\Config\Builder\ConfigBuilderGenerator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

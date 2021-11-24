@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
@@ -36,20 +36,20 @@ final class FactureController extends AbstractController
     private FactureHandler $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
     private FactureCalculatorInterface $factureCalculator;
-    private FactureRenderInterface $factureRenderInterface;
+    private FactureRenderInterface $factureRender;
 
     public function __construct(
         FactureRepository $factureRepository,
         FactureHandler $factureHandler,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         FactureCalculatorInterface $factureCalculator,
-        FactureRenderInterface $factureRenderInterface
+        FactureRenderInterface $factureRender
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
         $this->factureCalculator = $factureCalculator;
-        $this->factureRenderInterface = $factureRenderInterface;
+        $this->factureRender = $factureRender;
     }
 
     /**
@@ -233,7 +233,7 @@ final class FactureController extends AbstractController
     public function show(Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $html = $this->factureRenderInterface->render($facture);
+        $html = $this->factureRender->render($facture);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',

@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

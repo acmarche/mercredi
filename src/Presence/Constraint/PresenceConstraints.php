@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Presence\Constraint;
 
+use AcMarche\Mercredi\Contrat\Presence\PresenceConstraintInterface;
+
 final class PresenceConstraints
 {
     /**

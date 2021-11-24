@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
+use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\CommunicationTrait;
@@ -30,6 +32,7 @@ class Plaine implements SluggableInterface
     use ArchiveTrait;
     use JoursTrait;
     use CommunicationTrait;
+    use FacturesTrait;
 
     /**
      * @var Jour[]
@@ -47,6 +50,12 @@ class Plaine implements SluggableInterface
      * @ORM\Column(type="string", length=100, nullable=true, unique=false)
      */
     private ?string $communication = null;
+
+    /**
+     * @var Facture[]
+     * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="plaine", cascade={"remove"})
+     */
+    private iterable $factures;
 
     public array $enfants = [];
 

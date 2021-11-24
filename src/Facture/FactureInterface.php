@@ -64,9 +64,9 @@ interface FactureInterface
 
     public function setMois(string $mois): self;
 
-    public function getPlaine(): ?string;
+    public function getPlaineNom(): ?string;
 
-    public function setPlaine(?string $plaine): self;
+    public function setPlaineNom(?string $plaine): self;
 
     public function getEcoles(): ?string;
 

@@ -3,12 +3,12 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;

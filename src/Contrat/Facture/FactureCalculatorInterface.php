@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Facture\Calculator;
+namespace AcMarche\Mercredi\Contrat\Facture;
 
 use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;

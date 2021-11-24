@@ -2,25 +2,24 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Form\PlaineConfirmationType;
 use AcMarche\Mercredi\Plaine\Form\SelectEnfantType;
-use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -33,7 +32,7 @@ final class PlaineController extends AbstractController
 
     private PlaineRepository $plaineRepository;
     private RelationUtils $relationUtils;
-    private PlainePresenceHandler $plainePresenceHandler;
+    private PlaineHandlerInterface $plaineHandler;
     private SanteHandler $santeHandler;
     private SanteChecker $santeChecker;
     private PlainePresenceRepository $plainePresenceRepository;
@@ -41,22 +40,24 @@ final class PlaineController extends AbstractController
     private FactureEmailFactory $factureEmailFactory;
     private NotificationMailer $notificationMailer;
     private AdminEmailFactory $adminEmailFactory;
+    private FactureRepository $factureRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         RelationUtils $relationUtils,
-        PlainePresenceHandler $plainePresenceHandler,
         SanteHandler $santeHandler,
         SanteChecker $santeChecker,
         PlainePresenceRepository $plainePresenceRepository,
         FacturePlaineHandler $facturePlaineHandler,
         FactureEmailFactory $factureEmailFactory,
         NotificationMailer $notificationMailer,
-        AdminEmailFactory $adminEmailFactory
+        AdminEmailFactory $adminEmailFactory,
+        PlaineHandlerInterface $plaineHandler,
+        FactureRepository $factureRepository
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->relationUtils = $relationUtils;
-        $this->plainePresenceHandler = $plainePresenceHandler;
+        $this->plaineHandler = $plaineHandler;
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;
         $this->plainePresenceRepository = $plainePresenceRepository;
@@ -64,6 +65,7 @@ final class PlaineController extends AbstractController
         $this->factureEmailFactory = $factureEmailFactory;
         $this->notificationMailer = $notificationMailer;
         $this->adminEmailFactory = $adminEmailFactory;
+        $this->factureRepository = $factureRepository;
     }
 
     /**
@@ -92,11 +94,17 @@ final class PlaineController extends AbstractController
             return $hasTuteur;
         }
 
-        $inscriptions = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $this->tuteur);
+        $tuteur = $this->tuteur;
+        $inscriptions = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
         $enfantsInscrits = PresenceUtils::extractEnfants($inscriptions);
-        $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
+        $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
 
         $resteEnfant = count($enfantsInscrits) !== count($enfants);
+
+        $facture = null;
+        if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
+            $facture = $this->factureRepository->findByTuteurAndPlaine($tuteur, $plaine);
+        }
 
         return $this->render(
             '@AcMarcheMercrediParent/plaine/show.html.twig',
@@ -105,6 +113,7 @@ final class PlaineController extends AbstractController
                 'enfants' => $enfantsInscrits,
                 'inscriptions' => $inscriptions,
                 'resteEnfants' => $resteEnfant,
+                'facture' => $facture,
             ]
         );
     }
@@ -139,7 +148,7 @@ final class PlaineController extends AbstractController
                 }
 
                 if (null !== $plaine) {
-                    $this->plainePresenceHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
+                    $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
                     $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
                 }
             }
@@ -170,55 +179,28 @@ final class PlaineController extends AbstractController
             return $hasTuteur;
         }
 
+        $tuteur = $this->tuteur;
         $plaine = $this->plaineRepository->findPlaineOpen();
 
-        $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $this->tuteur);
+        if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
+            return $this->redirectToRoute('mercredi_parent_plaine_show', ['id' => $plaine->getId()]);
+        }
+
+        $enfantsInscrits = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $tuteur);
+        $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
 
         $form = $this->createForm(PlaineConfirmationType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $inscriptions = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $this->tuteur);
-            foreach ($inscriptions as $inscription) {
-                $inscription->setConfirmed(true);
-            }
-            $this->plainePresenceRepository->flush();
-
-            $facture = $this->facturePlaineHandler->newInstance($plaine, $this->tuteur);
-            $this->plainePresenceRepository->persist($facture);
-            $this->plainePresenceRepository->flush();
-
-            $this->facturePlaineHandler->handleManually($facture, $plaine);
-
-            $emails = TuteurUtils::getEmailsOfOneTuteur($this->tuteur);
-            if (count($emails) < 1) {
-                $error = 'Pas de mail pour la facture plaine: '.$facture->getId();
-                $this->addFlash('danger', $error);
-                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
-                $this->notificationMailer->sendAsEmailNotification($message);
-            }
-
-            $from = $this->factureEmailFactory->getEmailAddressOrganisation();
-            $message = $this->factureEmailFactory->messageFacture($from, 'Inscription à la plaine', 'Coucou');
-            $this->factureEmailFactory->setTos($message, $emails);
-            $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
-
-            $this->factureEmailFactory->setTos($message, $emails);
 
             try {
-                $this->notificationMailer->sendMail($message);
-            } catch (TransportExceptionInterface $e) {
-                $error = 'Facture plaine num '.$facture->getId().' '.$e->getMessage();
-                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture plaine", $error);
-                $this->notificationMailer->sendAsEmailNotification($message);
+                $this->plaineHandler->confirm($plaine, $tuteur);
+                $this->addFlash('success', 'La facture a bien été générée et envoyée sur votre mail');
+            } catch (\Exception $e) {
+                $this->addFlash('danger', 'Erreur survenue: '.$e->getMessage());
             }
-
-            $this->notificationMailer->sendAsEmailNotification($message);
-            $facture->setEnvoyeA(join(',',$emails));
-            $facture->setEnvoyeLe(new \DateTime());
-            $this->addFlash('success', 'La facture a bien été envoyée');
-            $this->plainePresenceRepository->flush();
 
             return $this->redirectToRoute('mercredi_parent_plaine_show', ['id' => $plaine->getId()]);
         }
@@ -227,6 +209,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediParent/plaine/confirmation.twig',
             [
                 'plaine' => $plaine,
+                'enfantsInscrits' => $enfantsInscrits,
                 'enfants' => $enfants,
                 'form' => $form->createView(),
             ]

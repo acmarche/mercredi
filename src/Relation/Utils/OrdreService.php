@@ -5,10 +5,9 @@ namespace AcMarche\Mercredi\Relation\Utils;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Utils\DateUtils;
 use AcMarche\Mercredi\Utils\SortUtils;
 use function count;
 

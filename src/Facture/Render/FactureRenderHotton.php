@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Render;
 
-use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
@@ -38,7 +38,7 @@ class FactureRenderHotton implements FactureRenderInterface
 
     public function render(FactureInterface $facture): string
     {
-        if ($facture->getPlaine()) {
+        if ($facture->getPlaineNom()) {
             return $this->renderForPlaine($facture);
         }
 

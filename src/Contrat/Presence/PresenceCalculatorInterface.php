@@ -1,9 +1,9 @@
 <?php
 
-namespace AcMarche\Mercredi\Presence\Calculator;
+namespace AcMarche\Mercredi\Contrat\Presence;
 
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
-use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 
 interface PresenceCalculatorInterface
 {

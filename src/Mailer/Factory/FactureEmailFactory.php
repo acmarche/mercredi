@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Render\FactureRender;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
@@ -24,13 +25,16 @@ class FactureEmailFactory
     use PdfDownloaderTrait;
 
     private FactureRender $factureRender;
+    private FactureFactory $factureFactory;
     private ParameterBagInterface $parameterBag;
 
     public function __construct(
         FactureRender $factureRender,
+        FactureFactory $factureFactory,
         ParameterBagInterface $parameterBag
     ) {
         $this->factureRender = $factureRender;
+        $this->factureFactory = $factureFactory;
         $this->parameterBag = $parameterBag;
     }
 
@@ -98,7 +102,7 @@ class FactureEmailFactory
      */
     public function attachFactureFromPath(NotificationEmail $message, Facture $facture): void
     {
-        $path = $this->parameterBag->get('kernel.project_dir').'/var/factures/';
+        $path = $this->factureFactory->getBasePathFacture($facture->getMois());
         $factureFile = $path.'facture-'.$facture->getId().'.pdf';
 
         $date = $facture->getFactureLe();
@@ -119,4 +123,14 @@ class FactureEmailFactory
         $date = $facture->getFactureLe();
         $message->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
     }
+
+    public function attachFacturePlaineOnTheFly(FactureInterface $facture, Email $message)
+    {
+        $htmlInvoice = $this->factureRender->generateOneHtml($facture);
+        $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
+
+        $date = $facture->getFactureLe();
+        $message->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
+    }
+
 }

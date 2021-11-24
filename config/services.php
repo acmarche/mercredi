@@ -1,13 +1,13 @@
 <?php
 
-use AcMarche\Mercredi\Jour\Tarification\Form\TarificationFormGeneratorInterface;
+use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
 use AcMarche\Mercredi\Jour\Tarification\Form\TarificationHottonFormGenerator;
 use AcMarche\Mercredi\Namer\DirectoryNamer;
 use AcMarche\Mercredi\Parameter\Option;
-use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Calculator\PlaineHottonCalculator;
 use AcMarche\Mercredi\Presence\Calculator\PrenceHottonCalculator;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;

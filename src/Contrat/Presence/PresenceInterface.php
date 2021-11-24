@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Mercredi\Presence\Entity;
+namespace AcMarche\Mercredi\Contrat\Presence;
 
 use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Enfant;

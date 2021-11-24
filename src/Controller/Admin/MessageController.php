@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -13,7 +14,6 @@ use AcMarche\Mercredi\Message\Form\SearchMessageType;
 use AcMarche\Mercredi\Message\Handler\MessageHandler;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -24,7 +24,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use function count;
 
@@ -42,9 +41,8 @@ final class MessageController extends AbstractController
     private TuteurUtils $tuteurUtils;
     private MessageFactory $messageFactory;
     private MessageHandler $messageHandler;
-    private PresenceHandler $presenceHandler;
+    private PresenceHandlerInterface $presenceHandler;
     private MessageRepository $messageRepository;
-    private NotifierInterface $notifier;
     private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
@@ -56,8 +54,7 @@ final class MessageController extends AbstractController
         TuteurUtils $tuteurUtils,
         MessageFactory $messageFactory,
         MessageHandler $messageHandler,
-        PresenceHandler $presenceHandler,
-        NotifierInterface $notifier
+        PresenceHandlerInterface $presenceHandler
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->relationRepository = $relationRepository;
@@ -67,7 +64,6 @@ final class MessageController extends AbstractController
         $this->messageHandler = $messageHandler;
         $this->presenceHandler = $presenceHandler;
         $this->messageRepository = $messageRepository;
-        $this->notifier = $notifier;
         $this->plainePresenceRepository = $plainePresenceRepository;
     }
 

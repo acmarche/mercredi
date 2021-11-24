@@ -2,16 +2,16 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
-use AcMarche\Mercredi\Plaine\Handler\PlainePresenceHandler;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -32,20 +32,20 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PlainePresenceController extends AbstractController
 {
     private EnfantRepository $enfantRepository;
-    private PlainePresenceHandler $plainePresenceHandler;
+    private PlaineHandlerInterface $plaineHandler;
     private RelationRepository $relationRepository;
     private PlaineCalculatorInterface $plaineCalculator;
     private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
-        PlainePresenceHandler $plainePresenceHandler,
+        PlaineHandlerInterface $plaineHandler,
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
         PlainePresenceRepository $plainePresenceRepository,
         PlaineCalculatorInterface $plaineCalculator
     ) {
         $this->enfantRepository = $enfantRepository;
-        $this->plainePresenceHandler = $plainePresenceHandler;
+        $this->plaineHandler = $plaineHandler;
         $this->relationRepository = $relationRepository;
         $this->plaineCalculator = $plaineCalculator;
         $this->plainePresenceRepository = $plainePresenceRepository;
@@ -123,7 +123,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): Response
     {
-        $this->plainePresenceHandler->handleAddEnfant($plaine, $tuteur, $enfant);
+        $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant);
 
         $this->addFlash('success', "L'enfant a bien été inscrit");
 
@@ -216,7 +216,7 @@ final class PlainePresenceController extends AbstractController
                 $tuteur = $presences[0]->getTuteur();
             }
 
-            $this->plainePresenceHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
+            $this->plaineHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
             $this->addFlash('success', 'Les présences ont bien été modifiées');
 
             return $this->redirectToRoute(
@@ -275,7 +275,7 @@ final class PlainePresenceController extends AbstractController
     public function remove(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
         if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
-            $this->plainePresenceHandler->removeEnfant($plaine, $enfant);
+            $this->plaineHandler->removeEnfant($plaine, $enfant);
             $this->addFlash('success', 'L\'enfant a été retiré de la plaine');
         }
 

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Jour\Tarification\Form;
 
+use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
 use AcMarche\Mercredi\Entity\Jour;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;

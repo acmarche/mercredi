@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Plaine\Calculator;
 
-use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Presence\Entity\PresenceInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 
 final class PlaineMarcheCalculator implements PlaineCalculatorInterface
 {

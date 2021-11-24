@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Constraint;
 
+use AcMarche\Mercredi\Contrat\Presence\PresenceConstraintInterface;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;

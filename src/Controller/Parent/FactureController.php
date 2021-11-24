@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Calculator\FactureCalculatorInterface;
-use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,15 +25,18 @@ final class FactureController extends AbstractController
     private FactureRepository $factureRepository;
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureCalculatorInterface $factureCalculator;
+    private factureRenderInterface $factureRender;
 
     public function __construct(
         FactureRepository $factureRepository,
         FacturePresenceRepository $facturePresenceRepository,
-        FactureCalculatorInterface $factureCalculator
+        FactureCalculatorInterface $factureCalculator,
+        factureRenderInterface $factureRender
     ) {
         $this->factureRepository = $factureRepository;
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureCalculator = $factureCalculator;
+        $this->factureRender = $factureRender;
     }
 
     /**
@@ -63,32 +66,15 @@ final class FactureController extends AbstractController
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-        $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_PRESENCE
-        );
-        $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_ACCUEIL
-        );
-        $facturePlaines = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_PLAINE
-        );
 
-        $tuteur = $this->tuteur;
+        $html = $this->factureRender->render($facture);
 
-        $dto = $this->factureCalculator->createDetail($facture);
 
         return $this->render(
             '@AcMarcheMercrediParent/facture/show.html.twig',
             [
                 'facture' => $facture,
-                'tuteur' => $tuteur,
-                'facturePresences' => $facturePresences,
-                'factureAccueils' => $factureAccueils,
-                'facturePlaines' => $facturePlaines,
-                'dto' => $dto,
+                'content' => $html,
             ]
         );
     }

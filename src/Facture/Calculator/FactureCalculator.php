@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Calculator;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;

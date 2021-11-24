@@ -4,6 +4,7 @@
 namespace AcMarche\Mercredi\Facture\Handler;
 
 
+use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -12,7 +13,6 @@ use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Plaine\Calculator\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 
 class FacturePlaineHandler
@@ -45,7 +45,8 @@ class FacturePlaineHandler
         $facture = $this->factureFactory->newInstance($tuteur);
         $jours = $plaine->getJours();
         $facture->setMois($jours[0]);
-        $facture->setPlaine($plaine->getNom());
+        $facture->setPlaineNom($plaine->getNom());
+        $facture->setPlaine($plaine);
 
         return $facture;
     }

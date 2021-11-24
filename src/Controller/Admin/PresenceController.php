@@ -9,14 +9,14 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
 use AcMarche\Mercredi\Presence\Form\PresenceType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceByMonthType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
-use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
+use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
@@ -39,7 +39,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PresenceController extends AbstractController
 {
     private PresenceRepository $presenceRepository;
-    private PresenceHandler $presenceHandler;
+    private PresenceHandlerInterface $presenceHandler;
     private SearchHelper $searchHelper;
     private ListingPresenceByMonth $listingPresenceByMonth;
     private FacturePresenceRepository $facturePresenceRepository;
@@ -49,7 +49,7 @@ final class PresenceController extends AbstractController
 
     public function __construct(
         PresenceRepository $presenceRepository,
-        PresenceHandler $presenceHandler,
+        PresenceHandlerInterface $presenceHandler,
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
         FacturePresenceRepository $facturePresenceRepository,

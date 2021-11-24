@@ -153,4 +153,14 @@ final class FactureRepository extends ServiceEntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function findByTuteurAndPlaine(Tuteur $tuteur, Plaine $plaine): ?Facture
+    {
+        return $this->getQBl()
+            ->andWhere('facture.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture.plaine = :plaine')
+            ->setParameter('plaine', $plaine)
+            ->getQuery()->getOneOrNullResult();
+    }
 }

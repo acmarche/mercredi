@@ -14,34 +14,42 @@
 
             {% endif %}
 
-            <h4 class="text-success">Vos enfants inscrits</h4>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Nom</th>
-                    <th>Inscrits aux dates</th>
-                </tr>
-                {% for enfant in enfants %}
-                    <tr>
-                        <td>{{ enfant }}</td>
-                        <td>
-                            {% for inscription in inscriptions %}
-                                {% if inscription.enfant.id == enfant.id %}
-                                    {{ inscription.jour.dateJour| date('d/m') }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="2">Aucun</td>
-                    </tr>
-                {% endfor %}
-            </table>
-
             {% if enfants|length > 0 %}
-                <a href="{{ path('mercredi_parent_plaine_presence_confirmation') }}" class="btn btn-primary my-3">
-                    <i class="fas fa-save"></i> Confirmer les inscriptions à la plaine
-                </a>
+                <h4 class="text-success">Vos enfants inscrits</h4>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Inscrits aux dates</th>
+                    </tr>
+                    {% for enfant in enfants %}
+                        <tr>
+                            <td>{{ enfant }}</td>
+                            <td>
+                                {% for inscription in inscriptions %}
+                                    {% if inscription.enfant.id == enfant.id %}
+                                        {{ inscription.jour.dateJour| date('d/m') }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2">Aucun</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+                {% if facture %}
+                    <a href="{{ path('mercredi_parent_facture_show', {'uuid': facture.uuid}) }}"
+                       class="btn btn-primary my-3">
+                        <i class="fas fa-arrow-up"></i> Consulter la facture
+                    </a>
+                {% else %}
+                    <a href="{{ path('mercredi_parent_plaine_presence_confirmation') }}" class="btn btn-primary my-3">
+                        <i class="fas fa-arrow-right"></i> Obtenir la facture
+                    </a>
+                {% endif %}
+
             {% endif %}
 
             <hr>

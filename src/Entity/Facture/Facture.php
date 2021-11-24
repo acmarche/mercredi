@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineTrait;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
@@ -41,11 +43,16 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     use FactureDecomptesTrait;
     use UserAddTrait;
     use CommunicationTrait;
+    use PlaineTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="factures")
      */
     private ?Tuteur $tuteur = null;
+    /**
+     * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="factures")
+     */
+    private ?Plaine $plaine = null;
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
@@ -69,7 +76,7 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $plaine = null;
+    private ?string $plaine_nom = null;
     /**
      * @ORM\Column(type="string", nullable=true)
      */
@@ -175,14 +182,14 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
         return $this;
     }
 
-    public function getPlaine(): ?string
+    public function getPlaineNom(): ?string
     {
-        return $this->plaine;
+        return $this->plaine_nom;
     }
 
-    public function setPlaine(?string $plaine): self
+    public function setPlaineNom(?string $plaine_nom): self
     {
-        $this->plaine = $plaine;
+        $this->plaine_nom = $plaine_nom;
 
         return $this;
     }

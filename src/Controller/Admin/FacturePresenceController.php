@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

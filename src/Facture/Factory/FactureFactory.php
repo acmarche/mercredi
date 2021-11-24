@@ -44,9 +44,9 @@ final class FactureFactory
     /**
      * @param array|Facture[] $factures
      */
-    public function createAllPdf(array $factures, string $month, int $max = 30 ): bool
+    public function createAllPdf(array $factures, string $month, int $max = 30): bool
     {
-        $path = $this->parameterBag->get('kernel.project_dir').'/var/factures/'.$month.'/';
+        $path = $this->getBasePathFacture($month);
         $i = 0;
         foreach ($factures as $facture) {
             $fileName = $path.'facture-'.$facture->getId().'.pdf';
@@ -62,6 +62,11 @@ final class FactureFactory
         }
 
         return true;
+    }
+
+    public function getBasePathFacture(string $month): string
+    {
+        return $this->parameterBag->get('kernel.project_dir').'/var/factures/'.$month.'/';
     }
 
 }

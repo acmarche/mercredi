@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Presence\Handler;
 
+use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -13,7 +14,7 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use Doctrine\ORM\NonUniqueResultException;
 
-final class PresenceHandler
+final class PresenceHandler implements PresenceHandlerInterface
 {
     private PresenceRepository $presenceRepository;
     private PresenceUtils $presenceUtils;

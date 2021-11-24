@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\DependencyInjection;
 
-use AcMarche\Mercredi\Presence\Constraint\PresenceConstraintInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceConstraintInterface;
 use AcMarche\Mercredi\Presence\Constraint\PresenceConstraints;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

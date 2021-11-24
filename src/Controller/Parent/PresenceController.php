@@ -5,11 +5,11 @@ namespace AcMarche\Mercredi\Controller\Parent;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
-use AcMarche\Mercredi\Presence\Handler\PresenceHandler;
+use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface;
@@ -32,7 +32,7 @@ final class PresenceController extends AbstractController
     use GetTuteurTrait;
 
     private PresenceRepository $presenceRepository;
-    private PresenceHandler $presenceHandler;
+    private PresenceHandlerInterface $presenceHandler;
     private RelationUtils $relationUtils;
     private SanteChecker $santeChecker;
     private SanteHandler $santeHandler;
@@ -46,7 +46,7 @@ final class PresenceController extends AbstractController
     public function __construct(
         RelationUtils $relationUtils,
         PresenceRepository $presenceRepository,
-        PresenceHandler $presenceHandler,
+        PresenceHandlerInterface $presenceHandler,
         SanteChecker $santeChecker,
         SanteHandler $santeHandler,
         PresenceCalculatorInterface $presenceCalculator,

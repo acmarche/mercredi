@@ -94,16 +94,22 @@ final class PlainePresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur): array
+    public function findByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur, bool $confirmed = null): array
     {
         $jours = $plaine->getJours();
 
-        return $this->createQBl()
+        $qb = $this->createQBl()
             ->andWhere('presence.jour IN (:jours)')
             ->setParameter('jours', $jours)
             ->andWhere('presence.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
-            ->getQuery()->getResult();
+            ->setParameter('tuteur', $tuteur);
+
+        if ($confirmed !== null) {
+            $qb->andWhere('presence.confirmed = :confirmed')
+                ->setParameter('confirmed', $confirmed);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

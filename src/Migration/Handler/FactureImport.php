@@ -12,7 +12,7 @@ use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
-use AcMarche\Mercredi\Presence\Calculator\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
