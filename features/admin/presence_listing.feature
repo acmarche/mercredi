@@ -31,7 +31,7 @@ Feature: Gestion des présences
   Scenario: Rechercher présences
     Given I am on "/admin/presence/"
     Then I should see "Liste des présences"
-    Then I select "19-09-2024" from "search_presence[jour]"
+    Then I select "Jeudi 19 septembre 2024" from "search_presence[jour]"
     Then I select "Aye" from "search_presence[ecole]"
     And I press "Rechercher"
     Then I should see "PERET Merlin"
@@ -43,7 +43,7 @@ Feature: Gestion des présences
   Scenario: Export xls
     Given I am on "/admin/presence/"
     Then I should see "Liste des présences"
-    Then I select "19-09-2024" from "search_presence[jour]"
+    Then I select "Jeudi 19 septembre 2024" from "search_presence[jour]"
     And I press "Rechercher"
     Then I follow "export_xls_presence"
     Then the response status code should be 200

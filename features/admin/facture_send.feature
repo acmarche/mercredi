@@ -24,7 +24,7 @@ Feature: Gestion des factures
     Then I should see "La facture a bien été envoyée"
 
   Scenario: J'envoie des factures par mail
-    Given I am on "/admin/factur/send/select/month"
+    Given I am on "/admin/facture/send/select/month"
     Then I should see "Envoie de factures"
     And I fill in "facture_select_send[mois]" with "06-2020"
     And I select "Mail" from "facture_select_send_mode"
@@ -36,7 +36,7 @@ Feature: Gestion des factures
     Then I should see "Les factures ont bien été envoyées"
 
   Scenario: J'envoie des factures par papier
-    Given I am on "/admin/factur/send/select/month"
+    Given I am on "/admin/facture/send/select/month"
     Then I should see "Envoie de factures"
     And I fill in "facture_select_send[mois]" with "06-2020"
     And I select "Papier" from "facture_select_send_mode"
