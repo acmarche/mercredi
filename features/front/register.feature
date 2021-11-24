@@ -13,7 +13,7 @@ Feature: M'enregistrer
     And I fill in "registration_form[email]" with "burn@hotmail.com"
     And I fill in "registration_form[telephone]" with "0476 22 55 88"
     And I fill in "registration_form[plainPassword]" with "Montgomery"
-    And I check "Conditions d'utilisation"
+    And I check "Lire les conditions d'utilisation"
     And I press "M'enregistrer"
     And the response status code should be 200
     #Then print last response
