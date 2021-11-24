@@ -27,7 +27,7 @@
                 {% for row in data %}
                     <tr>
                         <td>
-                            {{ row.tuteur }}
+                            <a href="{{ path('mercredi_admin_facture_show', {'id': row.facture.id}) }}">{{ row.tuteur }}</a>
                         </td>
                         <td>
                             <table class="table">

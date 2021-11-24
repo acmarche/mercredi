@@ -222,6 +222,7 @@ final class CheckupController extends AbstractController
                 if ($prix != $prixFactured) {
                     $newcout = 0;
                     $data[$i]['tuteur'] = $tuteur;
+                    $data[$i]['facture'] = $facture;
                     $data[$i]['presences'][] = [
                         'object' => $presence,
                         'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €',
