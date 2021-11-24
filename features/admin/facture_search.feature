@@ -25,5 +25,5 @@ Feature: Gestion des factures
     And I fill in "facture_search[mois]" with "06-2020"
     And I select "Non payée" from "facture_search[paye]"
     And I press "Rechercher"
-    Then I should see "Mardi 6 Octobre 2020"
+    Then I should see "06-2020"
     Then I should see "SIMPSON Homer"

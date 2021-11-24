@@ -7,7 +7,7 @@ Feature: Gestion des messages
     Given I am logged in as an admin
     Given I am on "/admin/presence/"
     Then I should see "Liste des présences"
-    Then I select "19-09-2024" from "search_presence[jour]"
+    Then I select "Jeudi 19 septembre 2024" from "search_presence[jour]"
     And I press "Rechercher"
 
   Scenario: Message par jour

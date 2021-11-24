@@ -13,8 +13,8 @@ AcMarche\Mercredi\Entity\Jour:
     prix1: '0'
     prix2: '0'
     prix3: '0'
-  jour_2026_12_18:
-    date_jour: '<carbonDateTime(2026,12,18,9,0)>'
+  jour_2024_12_18:
+    date_jour: '<carbonDateTime(2024,12,18,9,0)>'
     plaine: '@plaine_noel'
     color: '<hexcolor()>'
     prix1: '0'
@@ -34,7 +34,7 @@ AcMarche\Mercredi\Entity\Jour:
     prix1: '0'
     prix2: '0'
     prix3: '0'
-  jour_2024_12_18:
+  jour_2026_12_18:
     date_jour: '<carbonDateTime(2026,12,18,9,0)>'
     plaine: '@plaine_jesus'
     color: '<hexcolor()>'
