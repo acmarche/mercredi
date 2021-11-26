@@ -33,7 +33,10 @@ final class RelationRepository extends ServiceEntityRepository
             ->leftJoin('relation.enfant', 'enfant', 'WITH')
             ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
             ->leftJoin('tuteur.users', 'users', 'WITH')
-            ->addSelect('tuteur', 'enfant', 'sante_fiche', 'users');
+            ->addSelect('tuteur', 'enfant', 'sante_fiche', 'users')
+            ->orderBy('enfant.nom', 'ASC')
+            ->orderBy('enfant.prenom', 'ASC')
+            ->orderBy('enfant.birthday', 'ASC');
     }
 
     /**
@@ -57,7 +60,6 @@ final class RelationRepository extends ServiceEntityRepository
         return $this->getQlB()
             ->andWhere('relation.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
-            ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -70,7 +72,6 @@ final class RelationRepository extends ServiceEntityRepository
         return $this->getQlB()
             ->andWhere('enfant.ecole = :ecole')
             ->setParameter('ecole', $ecole)
-            ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -110,7 +111,6 @@ final class RelationRepository extends ServiceEntityRepository
             ->setParameter('tuteurs', $tuteurs)
             ->andWhere('relation.enfant != :enfant')
             ->setParameter('enfant', $enfant)
-            ->orderBy('enfant.prenom', 'ASC')
             ->getQuery()
             ->getResult();
 
