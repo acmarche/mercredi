@@ -14,15 +14,15 @@ final class ListingPresenceByMonth
     /**
      * @var Presence[]
      */
-    private $presences;
+    private array $presences;
     /**
      * @var Enfant[]
      */
-    private $enfants;
+    private array $enfants;
     /**
      * @var JourListing[]
      */
-    private $joursListing;
+    private array $joursListing;
     private PresenceRepository $presenceRepository;
     private JourRepository $jourRepository;
 
