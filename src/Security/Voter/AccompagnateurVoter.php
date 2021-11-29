@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Common\Collections\Collection;
@@ -28,17 +29,14 @@ final class AccompagnateurVoter extends Voter
      * @var string
      */
     private const ECOLE = 'ROLE_MERCREDI_ECOLE';
-    /**
-     * @var User
-     */
-    private $user;
+    private ?UserInterface $user = null;
 
     private AccessDecisionManagerInterface $decisionManager;
 
     private FlashBagInterface $flashBag;
 
     /**
-     * @var \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|Collection
+     * @var Ecole[]|Collection
      */
     private $ecoles;
     /**

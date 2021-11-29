@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 trait GroupeScolaireNextTrait
 {
     /**
-     * @var \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
+     * @var GroupeScolaire
      */
     private GroupeScolaire $groupe_scolaire_nex;
 }

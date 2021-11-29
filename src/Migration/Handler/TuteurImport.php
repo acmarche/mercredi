@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
@@ -23,7 +24,7 @@ class TuteurImport
         $this->migrationRepository = $migrationRepository;
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $pdo = new MercrediPdo();
@@ -52,15 +53,15 @@ class TuteurImport
             $user = $this->migrationRepository->getUser($data->user_add_id);
             $tuteur->setUserAdd($user->getUserIdentifier());
             $this->addUser($tuteur, $data->user_id);
-            $tuteur->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-            $tuteur->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $tuteur->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $tuteur->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $tuteur->setSlug($data->slugname);
             $this->tuteurRepository->persist($tuteur);
         }
         $this->tuteurRepository->flush();
     }
 
-    private function addUser(Tuteur $tuteur, ?int $userId)
+    private function addUser(Tuteur $tuteur, ?int $userId): void
     {
         if ($userId) {
             $user = $this->migrationRepository->getUser($userId);

@@ -46,7 +46,7 @@ class SanteReponse
         $this->reponse = false;
     }
 
-    public function getQuestion(): ?SanteQuestion
+    public function getQuestion(): SanteQuestion
     {
         return $this->question;
     }
@@ -58,7 +58,7 @@ class SanteReponse
         return $this;
     }
 
-    public function getSanteFiche(): ?SanteFiche
+    public function getSanteFiche(): SanteFiche
     {
         return $this->sante_fiche;
     }
@@ -94,7 +94,7 @@ class SanteReponse
         return $this;
     }
 
-    public function getReponse(): ?bool
+    public function getReponse(): bool
     {
         return $this->reponse;
     }

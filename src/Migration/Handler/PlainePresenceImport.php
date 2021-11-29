@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
@@ -24,7 +25,7 @@ class PlainePresenceImport
         $this->pdo = new MercrediPdo();
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $plaine_enfants = $this->pdo->getAll('plaine_enfant');
@@ -37,7 +38,7 @@ class PlainePresenceImport
                 if (!$plaineEnfant->tuteur_id) {
                     $io->error($plaine->getNom() . ' => ' . $enfant);
                     $relations = $this->pdo->getAllWhere('enfant_tuteur', 'enfant_id = ' . $data->enfant_id, false);
-                    $count = count($relations);
+                    $count = is_countable($relations) ? count($relations) : 0;
                     if ($count > 0) {
                         $tuteur = $this->migrationRepository->getTuteur($relations[0]->tuteur_id);
                     }
@@ -52,8 +53,8 @@ class PlainePresenceImport
                 $user = $this->migrationRepository->getUser($plaineEnfant->user_add_id);
                 $presence->setUserAdd($user->getUserIdentifier());
                 $presence->generateUuid();
-                $presence->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->updated));
-                $presence->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->created));
+                $presence->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->updated));
+                $presence->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $plaineEnfant->created));
                 $this->tuteurRepository->persist($presence);
             }
         }

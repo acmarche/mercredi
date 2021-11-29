@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Utils;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 
@@ -22,12 +23,7 @@ final class SortUtils
 
                 $dateB = $jourB->getDateJour();
                 $dateB->format('Y-m-d');
-
-                if ($dateA === $dateB) {
-                    return 0;
-                }
-
-                return $dateA > $dateB ? -1 : 1;
+                return $dateA <=> $dateB;
             }
         );
 
@@ -60,7 +56,7 @@ final class SortUtils
         return $presences;
     }
 
-    public static function sortGroupesScolairesByOrder(array $groups)
+    public static function sortGroupesScolairesByOrder(array $groups): array
     {
         uasort(
             $groups,
@@ -80,9 +76,9 @@ final class SortUtils
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Enfant[] $data
+     * @param Enfant[] $data
      *
-     * @return \AcMarche\Mercredi\Entity\Enfant[]
+     * @return Enfant[]
      */
     public static function sortByBirthday(array $data): array
     {
@@ -95,7 +91,7 @@ final class SortUtils
                 $dateB = $enfantB->getBirthday();
                 $dateB->format('Y-m-d');
 
-                if ($dateA == $dateB) {
+                if ($dateA === $dateB) {
                     if ($enfantA->getPrenom() > $enfantB->getPrenom()) {
                         return +1;
                     } else {

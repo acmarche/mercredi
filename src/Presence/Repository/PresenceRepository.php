@@ -130,7 +130,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->andWhere('presence.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur);
 
-        if ($date) {
+        if ($date !== null) {
             $qb->andWhere('jour.date_jour LIKE :date')
                 ->setParameter('date', $date->format('Y-m') . '%');
         }

@@ -33,10 +33,7 @@ final class PresenceVoter extends Voter
     private RelationRepository $relationRepository;
     private TuteurUtils $tuteurUtils;
     private Security $security;
-    /**
-     * @var null|string|Stringable|UserInterface
-     */
-    private $user;
+    private ?UserInterface $user = null;
     private $enfant;
 
     public function __construct(
@@ -136,7 +133,7 @@ final class PresenceVoter extends Voter
 
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if (null === $this->tuteurOfUser) {
+        if (!$this->tuteurOfUser instanceof Tuteur) {
             return false;
         }
 

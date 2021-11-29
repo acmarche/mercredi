@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -26,10 +27,7 @@ final class JourVoter extends Voter
     public const EDIT = 'jour_edit';
     public const DELETE = 'jour_delete';
 
-    /**
-     * @var User
-     */
-    private $user;
+    private ?UserInterface $user = null;
     /**
      * @var Jour
      */
@@ -124,7 +122,7 @@ final class JourVoter extends Voter
     {
         $this->animateur = $this->user->getAnimateur();
 
-        if ($this->animateur === null) {
+        if (!$this->animateur instanceof Animateur) {
             return false;
         }
 

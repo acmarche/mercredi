@@ -29,7 +29,7 @@ final class EcoleRepository extends ServiceEntityRepository
 
     /**
      * @param User $user
-     * @return \AcMarche\Mercredi\Entity\Scolaire\Ecole[]
+     * @return Ecole[]
      */
     public function getEcolesByUser(User $user): array
     {
@@ -42,7 +42,7 @@ final class EcoleRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|\AcMarche\Mercredi\Entity\Scolaire\Ecole[]
+     * @return array|Ecole[]
      */
     public function findAllOrderByNom(): array
     {

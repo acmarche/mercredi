@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\Mailer\Messenger\SendEmailMessage;
 use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $framework) {
@@ -17,5 +18,5 @@ return static function (FrameworkConfig $framework) {
                 'multiplier' => 2,
             ],
         ]);
-    $messenger->routing('Symfony\Component\Mailer\Messenger\SendEmailMessage')->senders(['async']);
+    $messenger->routing(SendEmailMessage::class)->senders(['async']);
 };

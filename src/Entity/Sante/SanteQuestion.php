@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Sante;
 
+
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -105,7 +106,7 @@ class SanteQuestion
         return $this;
     }
 
-    public function getComplement(): ?bool
+    public function getComplement(): bool
     {
         return $this->complement;
     }
@@ -123,7 +124,7 @@ class SanteQuestion
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponse(): Collection
+    public function getReponse(): iterable
     {
         return $this->reponse;
     }
@@ -140,11 +141,9 @@ class SanteQuestion
 
     public function removeReponse(SanteReponse $reponse): self
     {
-        if ($this->reponse->removeElement($reponse)) {
-            // set the owning side to null (unless already changed)
-            if ($reponse->getQuestion() === $this) {
-                $reponse->setQuestion(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->reponse->removeElement($reponse) && $reponse->getQuestion() === $this) {
+            $reponse->setQuestion(null);
         }
 
         return $this;

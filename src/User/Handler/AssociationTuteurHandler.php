@@ -48,7 +48,7 @@ final class AssociationTuteurHandler
         $tuteur = $associateUserTuteurDto->getTuteur();
         $user = $associateUserTuteurDto->getUser();
 
-        if (count($this->tuteurRepository->getTuteursByUser($user)) > 0) {
+        if ($this->tuteurRepository->getTuteursByUser($user) !== []) {
             //remove old tuteur
             $user->getTuteurs()->clear();
         }

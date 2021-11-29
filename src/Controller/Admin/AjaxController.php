@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
@@ -94,16 +95,16 @@ final class AjaxController extends AbstractController
     /**
      * @Route("/q/sort/", name="mercredi_admin_ajax_question_sort", methods={"POST"})
      */
-    public function trierQuestion(Request $request): Response
+    public function trierQuestion(Request $request): JsonResponse
     {
         //    $isAjax = $request->isXmlHttpRequest();
         //    if ($isAjax) {
         //
-        $data = json_decode($request->getContent());
+        $data = json_decode($request->getContent(), null, 512, JSON_THROW_ON_ERROR);
         $questions = $data->questions;
         foreach ($questions as $position => $questionId) {
             $question = $this->santeQuestionRepository->find($questionId);
-            if ($question) {
+            if ($question !== null) {
                 $question->setDisplayOrder($position);
             }
         }

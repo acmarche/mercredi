@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\EventSubscriber;
 
+use DateTimeImmutable;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,13 +25,13 @@ final class UserLoginSubscriber implements EventSubscriberInterface
         return [LoginSuccessEvent::class => 'onLoginSuccess'];
     }
 
-    public function onLoginSuccess(LoginSuccessEvent $event)
+    public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         /**
          * @var User $user
          */
         $user = $event->getUser();
-        $user->setLastLogin(new \DateTimeImmutable());
+        $user->setLastLogin(new DateTimeImmutable());
         $this->entityManager->flush();
     }
 }

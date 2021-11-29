@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
+use Exception;
 use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -38,12 +39,12 @@ final class FactureFactory
     public function setEcoles(Facture $facture): void
     {
         $ecoles = array_unique($facture->ecolesListing);
-        $facture->setEcoles(join(' ', $ecoles));
+        $facture->setEcoles(implode(' ', $ecoles));
     }
 
     /**
      * @param array|Facture[] $factures
-     * @throws \Exception
+     * @throws Exception
      */
     public function createAllPdf(array $factures, string $month, int $max = 30): bool
     {
@@ -57,8 +58,8 @@ final class FactureFactory
             $htmlInvoice = $this->factureRender->render($facture);
             try {
                 $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
-            } catch (\Exception $exception) {
-                throw new \Exception($exception->getMessage());
+            } catch (Exception $exception) {
+                throw new Exception($exception->getMessage(), $exception->getCode(), $exception);
             }
             if ($i > $max) {
                 return false;

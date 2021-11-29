@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Note;
@@ -27,7 +28,7 @@ class EnfantImport
         $this->pdo = new MercrediPdo();
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $enfants = $this->pdo->getAll('enfant');
@@ -36,7 +37,7 @@ class EnfantImport
             $enfant = new Enfant();
             $enfant->setNom($data->nom);
             $enfant->setPrenom($data->prenom);
-            if ($birthday = \DateTime::createFromFormat('Y-m-d', $data->birthday)) {
+            if ($birthday = DateTime::createFromFormat('Y-m-d', $data->birthday)) {
                 $enfant->setBirthday($birthday);
             }
             $anneeScolaire = $this->migrationRepository->getAnneeScolaire($data->annee_scolaire);
@@ -57,8 +58,8 @@ class EnfantImport
             $enfant->setSexe($data->sexe);
             $user = $this->migrationRepository->getUser($data->user_add_id);
             $enfant->setUserAdd($user->getUserIdentifier());
-            $enfant->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-            $enfant->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $enfant->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $enfant->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $enfant->generateUuid();
             $enfant->setSlug($data->slugname);
             $this->enfantRepository->persist($enfant);
@@ -66,7 +67,7 @@ class EnfantImport
         $this->enfantRepository->flush();
     }
 
-    public function importRelation(SymfonyStyle $io)
+    public function importRelation(SymfonyStyle $io): void
     {
         $relations = $this->pdo->getAll('enfant_tuteur');
         foreach ($relations as $data) {
@@ -81,7 +82,7 @@ class EnfantImport
         $this->enfantRepository->flush();
     }
 
-    public function importNote(SymfonyStyle $io)
+    public function importNote(SymfonyStyle $io): void
     {
         $enfants = $this->pdo->getAll('note');
         foreach ($enfants as $data) {
@@ -92,8 +93,8 @@ class EnfantImport
             $note->setArchived($data->cloture);
             $user = $this->migrationRepository->getUser($data->user_add_id);
             $note->setUserAdd($user->getUserIdentifier());
-            $note->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-            $note->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $note->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $note->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $this->enfantRepository->persist($note);
         }
         $this->enfantRepository->flush();

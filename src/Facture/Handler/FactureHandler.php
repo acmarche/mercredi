@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
@@ -87,11 +88,11 @@ final class FactureHandler implements FactureHandlerInterface
 
     public function generateByMonthForTuteur(Tuteur $tuteur, string $month): ?FactureInterface
     {
-        list($month, $year) = explode('-', $month);
+        [$month, $year] = explode('-', $month);
         $date = Carbon::createFromDate($year, $month, 01);
 
         $facture = $this->handleByTuteur($tuteur, $date);
-        if ($facture) {
+        if ($facture !== null) {
             $this->flush();
             $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
             $this->flush();
@@ -102,13 +103,13 @@ final class FactureHandler implements FactureHandlerInterface
 
     public function generateByMonthForEveryone(string $monthSelected): array
     {
-        list($month, $year) = explode('-', $monthSelected);
+        [$month, $year] = explode('-', $monthSelected);
         $date = Carbon::createFromDate($year, $month, 01);
         $factures = [];
 
         $tuteurs = $this->tuteurRepository->findAllOrderByNom();
         foreach ($tuteurs as $tuteur) {
-            if ($facture = $this->handleByTuteur($tuteur, $date)) {
+            if (($facture = $this->handleByTuteur($tuteur, $date)) !== null) {
                 $factures[] = $facture;
             }
         }
@@ -130,7 +131,7 @@ final class FactureHandler implements FactureHandlerInterface
         $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur, $date->toDateTime());
         $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur, $date->toDateTime());
 
-        if (count($presences) === 0 && count($accueils) === 0) {
+        if ($presences === [] && $accueils === []) {
             return null;
         }
 
@@ -141,16 +142,12 @@ final class FactureHandler implements FactureHandlerInterface
 
     public function isBilled(int $presenceId, string $type): bool
     {
-        if ($this->facturePresenceRepository->findByIdAndType($presenceId, $type)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->facturePresenceRepository->findByIdAndType($presenceId, $type);
     }
 
     public function isSended(int $presenceId, string $type): bool
     {
-        if ($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) {
+        if (($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) !== null) {
             return $facturePresence->getFacture()->getEnvoyeLe() != null;
         }
 
@@ -204,7 +201,7 @@ final class FactureHandler implements FactureHandlerInterface
             $facturePresence->setHeure($accueil->getHeure());
             $facturePresence->setDuree($accueil->getDuree());
             $enfant = $accueil->getEnfant();
-            if ($ecole = $enfant->getEcole()) {
+            if (($ecole = $enfant->getEcole()) !== null) {
                 $facture->ecolesListing[$ecole->getId()] = $ecole;
             }
             $facturePresence->setNom($enfant->getNom());
@@ -224,7 +221,7 @@ final class FactureHandler implements FactureHandlerInterface
         $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
         $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
         $enfant = $presence->getEnfant();
-        if ($ecole = $enfant->getEcole()) {
+        if (($ecole = $enfant->getEcole()) !== null) {
             $facture->ecolesListing[$ecole->getId()] = $ecole;
         }
         $facturePresence->setNom($enfant->getNom());
@@ -244,21 +241,21 @@ final class FactureHandler implements FactureHandlerInterface
     /**
      * @param array|Accueil[] $accueils
      */
-    private function attachRetard(Facture $facture, array $accueils)
+    private function attachRetard(Facture $facture, array $accueils): void
     {
         $retards = [];
         $total = 0;
         foreach ($accueils as $accueil) {
-            if ($accueil->getHeureRetard()) {
+            if ($accueil->getHeureRetard() !== null) {
                 $total += $this->accueilCalculator->calculateRetard($accueil);
                 $retards[] = $accueil->getDateJour()->format('d-m');
             }
         }
         if ($total > 0) {
             $complement = new FactureComplement($facture);
-            $complement->setDateLe(new \DateTime());
+            $complement->setDateLe(new DateTime());
             $complement->setForfait($total);
-            $complement->setNom('Retard pour les accueils: ' . join(', ', $retards));
+            $complement->setNom('Retard pour les accueils: ' . implode(', ', $retards));
             $facture->addFactureComplement($complement);
             $this->factureRepository->persist($complement);
         }

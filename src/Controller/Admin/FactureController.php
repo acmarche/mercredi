@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Exception;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
@@ -164,7 +166,7 @@ final class FactureController extends AbstractController
     /**
      * @Route("/{id}/month/", name="mercredi_admin_facture_new_month", methods={"GET","POST"})
      */
-    public function newByMonth(Request $request, Tuteur $tuteur): Response
+    public function newByMonth(Request $request, Tuteur $tuteur): RedirectResponse
     {
         $form = $this->createForm(FactureSelectMonthType::class);
         $form->handleRequest($request);
@@ -172,7 +174,7 @@ final class FactureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $month = $form->get('mois')->getData();
 
-            if (!$facture = $this->factureHandler->generateByMonthForTuteur($tuteur, $month)) {
+            if (($facture = $this->factureHandler->generateByMonthForTuteur($tuteur, $month)) === null) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_index_by_tuteur', ['id' => $tuteur->getId()]);
@@ -202,13 +204,13 @@ final class FactureController extends AbstractController
 
             try {
                 $factures = $this->factureHandler->generateByMonthForEveryone($month);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->addFlash('danger', 'Erreur survenue: ' . $exception->getMessage());
 
                 return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
             }
 
-            if (count($factures) === 0) {
+            if ($factures === []) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
@@ -298,8 +300,9 @@ final class FactureController extends AbstractController
     /**
      * @Route("/{id}/delete", name="mercredi_admin_facture_delete", methods={"POST"})
      */
-    public function delete(Request $request, Facture $facture): Response
+    public function delete(Request $request, Facture $facture): RedirectResponse
     {
+        $tuteur = null;
         if ($this->isCsrfTokenValid('delete' . $facture->getId(), $request->request->get('_token'))) {
             $factureId = $facture->getId();
             $tuteur = $facture->getTuteur();

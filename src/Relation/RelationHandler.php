@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Relation;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -29,7 +30,7 @@ final class RelationHandler
         }
 
         $enfant = $this->enfantRepository->find($enfantId);
-        if (null === $enfant) {
+        if (!$enfant instanceof Enfant) {
             throw new Exception('Enfant non trouvé');
         }
 

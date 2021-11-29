@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormEvents;
 
 class TuteurSubsciberFieldType implements EventSubscriberInterface
 {
+    public $enfantTuteurRepository;
     public static function getSubscribedEvents(): array
     {
         return [
@@ -19,7 +20,7 @@ class TuteurSubsciberFieldType implements EventSubscriberInterface
      * Verifie si nouveau objet
      * Si id enfant avec ou pas.
      */
-    public function OnPreSetData(FormEvent $event)
+    public function OnPreSetData(FormEvent $event): void
     {
         /**
          * @var Presence
@@ -39,14 +40,12 @@ class TuteurSubsciberFieldType implements EventSubscriberInterface
                     [
                         'class' => Jour::class,
                         'multiple' => true,
-                        'query_builder' => function (JourRepository $cr) use ($enfant) {
-                            return $cr->getForList($enfant);
-                        },
+                        'query_builder' => fn(JourRepository $cr) => $cr->getForList($enfant),
                         'label' => 'Choisissez une ou plusieurs dates',
                     ]
                 );
 
-                if (count($tuteurs) > 1) {
+                if ((is_countable($tuteurs) ? count($tuteurs) : 0) > 1) {
                     $form->add(
                         'tuteur',
                         EntityType::class,

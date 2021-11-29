@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteReponse;
@@ -26,7 +27,7 @@ class FicheSanteImport
         $this->pdo = new MercrediPdo();
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $fiches = $this->pdo->getAll('sante_fiche');
@@ -38,14 +39,14 @@ class FicheSanteImport
             $ficheSante->setMedecinNom($data->medecin_nom);
             $ficheSante->setMedecinTelephone($data->medecin_telephone);
             $ficheSante->setPersonneUrgence($data->personne_urgence);
-            $ficheSante->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated_at));
-            $ficheSante->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created_at));
+            $ficheSante->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->updated_at));
+            $ficheSante->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->created_at));
             $this->enfantRepository->persist($ficheSante);
         }
         $this->enfantRepository->flush();
     }
 
-    public function importReponse(SymfonyStyle $io)
+    public function importReponse(SymfonyStyle $io): void
     {
         $this->io = $io;
         $fiches = $this->pdo->getAll('sante_reponse');

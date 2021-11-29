@@ -32,7 +32,7 @@ class HealthCommand extends Command
         $this->adminEmailFactory = $adminEmailFactory;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Vérifie l\'intégrité des données');
@@ -41,7 +41,7 @@ class HealthCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $enfants = $this->enfantRepository->findOrphelins();
-        if (count($enfants) > 0) {
+        if ($enfants !== []) {
             $message = $this->adminEmailFactory->messagEnfantsOrphelins($enfants);
             $this->notifcationMailer->sendAsEmailNotification($message);
         }
@@ -64,7 +64,7 @@ class HealthCommand extends Command
             }
         }
         //  $this->tuteurRepository->flush();
-        if (count($enfants) > 0) {
+        if ($enfants !== []) {
             $message = $this->adminEmailFactory->messageTuteurArchived($tuteurs);
             $this->notifcationMailer->sendAsEmailNotification($message);
         }

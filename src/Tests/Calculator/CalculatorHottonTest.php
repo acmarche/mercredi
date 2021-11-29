@@ -21,7 +21,7 @@ class CalculatorHottonTest extends KernelTestCase
         $calculator->calculate($presence);
     }
 
-    public function testAbsent()
+    public function testAbsent(): void
     {
         $container = static::getContainer();
         $calculator = $container->get(PrenceHottonCalculator::class);

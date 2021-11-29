@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Jour\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -51,7 +52,7 @@ final class JourRepository extends ServiceEntityRepository
 
         $queryBuilder = $this->getQlNotPlaine();
 
-        if (count($joursRegistered) > 0) {
+        if ($joursRegistered !== []) {
             $queryBuilder
                 ->andWhere('jour.id NOT IN (:jours)')
                 ->setParameter('jours', $joursRegistered);
@@ -150,11 +151,11 @@ final class JourRepository extends ServiceEntityRepository
 
     /**
      * use in Handler plaine
-     * @param \DateTimeInterface $dateTime
-     * @return \AcMarche\Mercredi\Entity\Jour|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @param DateTimeInterface $dateTime
+     * @return Jour|null
+     * @throws NonUniqueResultException
      */
-    public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?\AcMarche\Mercredi\Entity\Jour
+    public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?Jour
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')

@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Migration;
 
+use DateTime;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -73,29 +74,29 @@ class MigrationRepository
         $this->pdo = new MercrediPdo();
     }
 
-    public function getUser(int $userId): User
+    public function getUser(int $userId): ?User
     {
         $user = $this->pdo->getAllWhere('users', 'id = ' . $userId, true);
 
         return $this->userRepository->findOneBy(['email' => $user->email]);
     }
 
-    public function getAnneeScolaire(string $name): AnneeScolaire
+    public function getAnneeScolaire(string $name): ?AnneeScolaire
     {
         return $this->anneeScolaireRepository->findOneBy(['nom' => $name]);
     }
 
-    public function getGroupeScolaire(string $name): GroupeScolaire
+    public function getGroupeScolaire(string $name): ?GroupeScolaire
     {
         return $this->groupeScolaireRepository->findOneBy(['nom' => $name]);
     }
 
-    public function getTuteur(int $tuteurId): Tuteur
+    public function getTuteur(int $tuteurId): ?Tuteur
     {
         $tuteurOld = $this->pdo->getAllWhere('tuteur', 'id = ' . $tuteurId, true);
         $slug = preg_replace("#_#", '-', $tuteurOld->slugname);
 
-        if (!$tuteur = $this->tuteurRepository->findOneBy(['slug' => $slug])) {
+        if (($tuteur = $this->tuteurRepository->findOneBy(['slug' => $slug])) === null) {
             $tuteur = $this->tuteurRepository->findOneBy(
                 ['nom' => $tuteurOld->nom, 'prenom' => $tuteurOld->prenom, 'code_postal' => $tuteurOld->code_postal]
             );
@@ -104,17 +105,17 @@ class MigrationRepository
         return $tuteur;
     }
 
-    public function getEnfant(int $enfantId): Enfant
+    public function getEnfant(int $enfantId): ?Enfant
     {
         $enfantOld = $this->pdo->getAllWhere('enfant', 'id = ' . $enfantId, true);
         $slug = preg_replace("#_#", '-', $enfantOld->slugname);
 
-        if (!$enfant = $this->enfantRepository->findOneBy(['slug' => $slug])) {
+        if (($enfant = $this->enfantRepository->findOneBy(['slug' => $slug])) === null) {
             $enfant = $this->enfantRepository->findOneBy(
                 [
                     'nom' => $enfantOld->nom,
                     'prenom' => $enfantOld->prenom,
-                    'birthday' => \DateTime::createFromFormat('Y-m-d', $enfantOld->birthday),
+                    'birthday' => DateTime::createFromFormat('Y-m-d', $enfantOld->birthday),
                 ]
             );
         }
@@ -122,14 +123,14 @@ class MigrationRepository
         return $enfant;
     }
 
-    public function getEcole(int $ecoleId): Ecole
+    public function getEcole(int $ecoleId): ?Ecole
     {
         $ecole = $this->pdo->getAllWhere('ecole', 'id = ' . $ecoleId, true);
 
         return $this->ecoleRepository->findOneBy(['nom' => $ecole->nom]);
     }
 
-    public function getSanteFiche(int $santeFicheId): SanteFiche
+    public function getSanteFiche(int $santeFicheId): ?SanteFiche
     {
         $santeFiche = $this->pdo->getAllWhere('sante_fiche', 'id = ' . $santeFicheId, true);
         $enfant = $this->getEnfant($santeFiche->enfant_id);
@@ -137,39 +138,39 @@ class MigrationRepository
         return $this->santeFicheRepository->findOneBy(['enfant' => $enfant]);
     }
 
-    public function getSanteQuestion($questionId): SanteQuestion
+    public function getSanteQuestion($questionId): ?SanteQuestion
     {
         $question = $this->pdo->getAllWhere('sante_question', 'id = ' . $questionId, true);
 
         return $this->santeQuestionRepository->findOneBy(['nom' => $question->intitule]);
     }
 
-    public function getJour(int $jourId): Jour
+    public function getJour(int $jourId): ?Jour
     {
         $jour = $this->pdo->getAllWhere('jour', 'id = ' . $jourId, true);
 
         return $this->jourRepository->findOneBy(
-            ['date_jour' => \DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
+            ['date_jour' => DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
         );
     }
 
-    public function getJourPlaine(int $jourId): Jour
+    public function getJourPlaine(int $jourId): ?Jour
     {
         $jour = $this->pdo->getAllWhere('plaine_jours', 'id = ' . $jourId, true);
 
         return $this->jourRepository->findOneBy(
-            ['date_jour' => \DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
+            ['date_jour' => DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
         );
     }
 
-    public function getReduction(int $reductionId): Reduction
+    public function getReduction(int $reductionId): ?Reduction
     {
         $reduction = $this->pdo->getAllWhere('reduction', 'id = ' . $reductionId, true);
 
         return $this->reductionRepository->findOneBy(['nom' => $reduction->nom]);
     }
 
-    public function getPlaine(int $plaineId): Plaine
+    public function getPlaine(int $plaineId): ?Plaine
     {
         $plaine = $this->pdo->getAllWhere('plaine', 'id = ' . $plaineId, true);
 
@@ -181,7 +182,7 @@ class MigrationRepository
         $tuteur = $this->getTuteur($tuteurId);
 
         $presence = $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
-        if (!$presence) {
+        if ($presence === null) {
             dd(
                 $enfant->getId() . ' ' . $enfant->getNom() . ' ' . $enfant->getPrenom() . ' ' . $tuteur->getId(
                 ) . ' ' . ' ' . $tuteur->getNom() . ' ' . $tuteur->getPrenom() . ' ' . $jour->getDateJour()->format(

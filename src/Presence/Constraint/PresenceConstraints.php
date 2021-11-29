@@ -18,7 +18,7 @@ final class PresenceConstraints
 
     //todo try it
     //https://woutercarabain.com/webdevelopment/how-to-inject-multiple-instances-of-an-interface-in-a-service-using-symfony-5/
-    public function construct(PresenceConstraintInterface ...$providers)
+    public function construct(PresenceConstraintInterface ...$providers): void
     {
         $this->constraints2 = $providers;
     }

@@ -69,7 +69,7 @@ final class OrdreService
          * Pas de fratries
          * Force 1
          */
-        if (0 === count($fratries)) {
+        if ([] === $fratries) {
             return 1;
         }
 
@@ -89,7 +89,7 @@ final class OrdreService
          * si pas de date naissance on force 1;
          */
         foreach ($presents as $present) {
-            if (!$present->getBirthday()) {
+            if ($present->getBirthday() === null) {
                 return 1;
             }
         }
@@ -107,7 +107,7 @@ final class OrdreService
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Presence\Presence $presence
+     * @param Presence $presence
      * @return array|Enfant[]
      */
     public function getFratriesPresents(Presence $presence): array
@@ -121,7 +121,7 @@ final class OrdreService
             [$tuteur]
         );
 
-        if (0 === count($fratries)) {
+        if ([] === $fratries) {
             return [];
         }
 

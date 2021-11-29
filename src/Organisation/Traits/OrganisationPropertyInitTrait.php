@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 trait OrganisationPropertyInitTrait
 {
     private OrganisationRepository $organisationRepository;
-    private ?Organisation $organisation;
+    private ?Organisation $organisation = null;
 
     /**
      * @required

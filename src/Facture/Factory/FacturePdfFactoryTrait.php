@@ -45,9 +45,9 @@ final class FacturePdfFactoryTrait
     /**
      * @param array|Facture[] $factures
      * @param string $month
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function generates(array $factures, string $month): \Symfony\Component\HttpFoundation\Response
+    public function generates(array $factures, string $month): Response
     {
         $html = $this->facturePdfPresence->renderMultiple($factures);
 

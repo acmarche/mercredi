@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -27,10 +29,7 @@ final class EnfantVoter extends Voter
     public const EDIT = 'enfant_edit';
     public const DELETE = 'enfant_delete';
 
-    /**
-     * @var User
-     */
-    private $user;
+    private ?UserInterface $user = null;
     /**
      * @var Enfant
      */
@@ -125,7 +124,7 @@ final class EnfantVoter extends Voter
     private function checkAnimateur(): bool
     {
         $animateur = $this->user->getAnimateur();
-        if ($animateur === null) {
+        if (!$animateur instanceof Animateur) {
             return false;
         }
 
@@ -143,7 +142,7 @@ final class EnfantVoter extends Voter
         }
 
         $this->tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
-        if ($this->tuteur === null) {
+        if (!$this->tuteur instanceof Tuteur) {
             return false;
         }
 

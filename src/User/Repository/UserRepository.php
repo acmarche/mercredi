@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\User\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -29,7 +30,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      * @see UserProviderListener::checkPassport
      * @param string $username
      * @return int|mixed|string|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function loadUserByIdentifier(string $username)
     {

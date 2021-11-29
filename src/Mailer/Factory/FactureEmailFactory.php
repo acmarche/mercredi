@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Mailer\Factory;
 
+use Exception;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
@@ -46,7 +47,7 @@ class FactureEmailFactory
     {
         $data = [];
         $data['from'] = $this->getEmailAddressOrganisation();
-        if ($facture) {
+        if ($facture !== null) {
             $tuteur = $facture->getTuteur();
             if ($emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
                 $data['to'] = $emails[0];
@@ -62,9 +63,8 @@ class FactureEmailFactory
      * @param string $from
      * @param string $sujet
      * @param string $body
-     * @return \Symfony\Bridge\Twig\Mime\NotificationEmail
      */
-    public function messageFacture(string $from, string $sujet, string $body): \Symfony\Bridge\Twig\Mime\NotificationEmail
+    public function messageFacture(string $from, string $sujet, string $body): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
@@ -102,7 +102,7 @@ class FactureEmailFactory
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function attachFactureFromPath(NotificationEmail $message, Facture $facture): void
     {
@@ -111,7 +111,7 @@ class FactureEmailFactory
 
         $date = $facture->getFactureLe();
         if (!is_readable($factureFile)) {
-            throw new \Exception('Pdf non trouvé ' . $factureFile);
+            throw new Exception('Pdf non trouvé ' . $factureFile);
         }
         $message->attachFromPath($factureFile, 'facture_' . $date->format('d-m-Y') . '.pdf', 'application/pdf');
     }
@@ -119,7 +119,7 @@ class FactureEmailFactory
     /**
      * acces refuse wget https://assetx en console
      */
-    public function attachFactureOnTheFly(FactureInterface $facture, Email $message)
+    public function attachFactureOnTheFly(FactureInterface $facture, Email $message): void
     {
         $htmlInvoice = $this->facturePdfPresence->render($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
@@ -128,7 +128,7 @@ class FactureEmailFactory
         $message->attach($invoicepdf, 'facture_' . $date->format('d-m-Y') . '.pdf', 'application/pdf');
     }
 
-    public function attachFacturePlaineOnTheFly(FactureInterface $facture, Email $message)
+    public function attachFacturePlaineOnTheFly(FactureInterface $facture, Email $message): void
     {
         $htmlInvoice = $this->facturePdfPlaine->render($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);

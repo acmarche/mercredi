@@ -10,7 +10,7 @@ use Symfony\Component\Mime\Email;
 
 class SetToListener implements EventSubscriberInterface
 {
-    public function onMessage(MessageEvent $event)
+    public function onMessage(MessageEvent $event): void
     {
         $email = $event->getMessage();
         if (!$email instanceof Email) {

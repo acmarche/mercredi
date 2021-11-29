@@ -18,7 +18,7 @@ class UserImport
         $this->userRepository = $userRepository;
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->pdo = new MercrediPdo();
         $enfants = $this->pdo->getAll('users');

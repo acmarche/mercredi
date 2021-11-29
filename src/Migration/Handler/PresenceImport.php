@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Migration\MercrediPdo;
@@ -24,7 +25,7 @@ class PresenceImport
         $this->pdo = new MercrediPdo();
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $presences = $this->pdo->getAll('presence');
@@ -45,8 +46,8 @@ class PresenceImport
             $user = $this->migrationRepository->getUser($data->user_add_id);
             $presence->setUserAdd($user->getUserIdentifier());
             $presence->generateUuid();
-            $presence->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-            $presence->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $presence->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $presence->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $this->enfantRepository->persist($presence);
         }
         $this->enfantRepository->flush();

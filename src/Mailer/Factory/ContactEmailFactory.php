@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Mailer\Factory;
 
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
@@ -15,9 +16,9 @@ class ContactEmailFactory
      * @param string $from
      * @param string $nom
      * @param string $body
-     * @return \Symfony\Bridge\Twig\Mime\NotificationEmail
+     * @return NotificationEmail
      */
-    public function sendContactForm(string $from, string $nom, string $body): \Symfony\Bridge\Twig\Mime\NotificationEmail
+    public function sendContactForm(string $from, string $nom, string $body): NotificationEmailJf
     {
         $to = $this->getEmailAddressOrganisation();
         $message = NotificationEmailJf::asPublicEmailJf();

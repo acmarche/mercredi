@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -39,7 +40,7 @@ final class PresenceController extends AbstractController
     private FacturePresenceRepository $facturePresenceRepository;
     private PresenceCalculatorInterface $presenceCalculator;
     /**
-     * @var \AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface
+     * @var PresenceDaysProviderInterface
      */
     private PresenceDaysProviderInterface $presenceDaysProvider;
 
@@ -151,7 +152,7 @@ final class PresenceController extends AbstractController
      * @Route("/{id}/delete", name="mercredi_parent_presence_delete", methods={"POST"})
      * @IsGranted("presence_edit", subject="presence")
      */
-    public function delete(Request $request, Presence $presence): Response
+    public function delete(Request $request, Presence $presence): RedirectResponse
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete' . $presence->getId(), $request->request->get('_token'))) {

@@ -27,13 +27,13 @@ class AjaxController extends AbstractController
      */
     public function updateDuree(Request $request): Response
     {
-        $data = json_decode($request->getContent());
+        $data = json_decode($request->getContent(), null, 512, JSON_THROW_ON_ERROR);
         $enfantId = $data->enfantId;
         $date = $data->date;
         $heure = $data->heure;
         $duree = $data->duree;
 
-        if (!$enfant = $this->enfantRepository->find($enfantId)) {
+        if (($enfant = $this->enfantRepository->find($enfantId)) === null) {
             return $this->json(['error' => 'Enfant non trouvé']);
         }
 

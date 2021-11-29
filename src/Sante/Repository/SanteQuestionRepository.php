@@ -38,7 +38,7 @@ final class SanteQuestionRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('santeQuestion');
 
-        if (\count($questionsRepondues) > 0) {
+        if ($questionsRepondues !== []) {
             $queryBuilder->andWhere('santeQuestion.id NOT IN (:questions) ')
                 ->setParameter('questions', $questionsRepondues);
         }

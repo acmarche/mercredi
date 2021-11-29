@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
+use DateTimeInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -27,23 +28,19 @@ class FacturePresenceNonPayeRepository
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Tuteur $tuteur
+     * @param Tuteur $tuteur
      * @return array|Presence[]
      */
-    public function findPresencesNonPayes(Tuteur $tuteur, ?\DateTimeInterface $date = null): array
+    public function findPresencesNonPayes(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $presences = $this->presenceRepository->findByTuteurAndMonth($tuteur, $date);
         $ids = array_map(
-            function ($presence) {
-                return $presence->getId();
-            },
+            fn($presence) => $presence->getId(),
             $presences
         );
         $presencesPayes = $this->facturePresenceRepository->findByIdsAndType($ids, FactureInterface::OBJECT_PRESENCE);
         $idPayes = array_map(
-            function ($presence) {
-                return $presence->getPresenceId();
-            },
+            fn($presence) => $presence->getPresenceId(),
             $presencesPayes
         );
         $idsNonPayes = array_diff($ids, $idPayes);
@@ -52,23 +49,19 @@ class FacturePresenceNonPayeRepository
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Tuteur $tuteur
+     * @param Tuteur $tuteur
      * @return array|Accueil[]
      */
-    public function findAccueilsNonPayes(Tuteur $tuteur, ?\DateTimeInterface $date = null): array
+    public function findAccueilsNonPayes(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $accueils = $this->accueilRepository->findByTuteurAndMonth($tuteur, $date);
         $ids = array_map(
-            function ($accueil) {
-                return $accueil->getId();
-            },
+            fn($accueil) => $accueil->getId(),
             $accueils
         );
         $presencesPayes = $this->facturePresenceRepository->findByIdsAndType($ids, FactureInterface::OBJECT_ACCUEIL);
         $idPayes = array_map(
-            function ($presence) {
-                return $presence->getPresenceId();
-            },
+            fn($presence) => $presence->getPresenceId(),
             $presencesPayes
         );
         $idsNonPayes = array_diff($ids, $idPayes);

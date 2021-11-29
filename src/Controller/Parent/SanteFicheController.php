@@ -107,7 +107,7 @@ final class SanteFicheController extends AbstractController
     public function editEtape2(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant, false);
-        if (count($santeFiche->getAccompagnateurs()) === 0) {
+        if ($santeFiche->getAccompagnateurs() === []) {
             $santeFiche->addAccompagnateur(' ');
         }
 

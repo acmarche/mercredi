@@ -53,7 +53,7 @@ class FactureCalculator implements FactureCalculatorInterface
         $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
 
         $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementForfaits;
-        $factureDetail->total = $factureDetail->total - $factureDetail->totalReductionForfaits;
+        $factureDetail->total -= $factureDetail->totalReductionForfaits;
         $factureDetail->totalHorsPourcentage = $factureDetail->total;
 
         $factureDetail->pourcentageEnPlus = $this->reductionCalculator->calculatePourcentage(

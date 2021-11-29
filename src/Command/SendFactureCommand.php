@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Command;
 
+use Exception;
+use DateTime;
 use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
@@ -77,7 +79,7 @@ class SendFactureCommand extends Command
             );
 
             foreach ($factures as $facture) {
-                if ($facture->getEnvoyeLe() != null && $force === false) {
+                if ($facture->getEnvoyeLe() != null && !$force) {
                     continue;
                 }
 
@@ -96,7 +98,7 @@ class SendFactureCommand extends Command
                 $this->factureEmailFactory->setTos($messageFacture, $emails);
                 try {
                     $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $error = 'Pas de pièce jointe pour la facture: ' . $facture->getId();
                     $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
@@ -112,8 +114,8 @@ class SendFactureCommand extends Command
                     continue;
                 }
 
-                $facture->setEnvoyeA(join(', ', $emails));
-                $facture->setEnvoyeLe(new \DateTime());
+                $facture->setEnvoyeA(implode(', ', $emails));
+                $facture->setEnvoyeLe(new DateTime());
                 $i++;
                 $io->writeln($i . '/' . $count);
                 $this->factureRepository->flush();

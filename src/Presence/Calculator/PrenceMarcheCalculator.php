@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 {
+    public array $ecoles;
     private OrdreService $ordreService;
     private ReductionCalculator $reductionCalculator;
 
@@ -81,7 +82,7 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
         $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
         $enfant = $presence->getEnfant();
-        if ($enfant->getEcole()) {
+        if ($enfant->getEcole() !== null) {
             $this->ecoles[] = $enfant->getEcole()->getNom();
         }
         $facturePresence->setNom($enfant->getNom());

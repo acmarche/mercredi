@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use DateTime;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
@@ -129,23 +130,17 @@ final class CheckupController extends AbstractController
                 $bad[] = ['error' => 'Aucun rôle', 'user' => $user];
                 continue;
             }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_PARENT)) {
-                if (count($user->getTuteurs()) === 0) {
-                    $bad[] = ['error' => 'Rôle parent, mais aucun parent associé', 'user' => $user];
-                    continue;
-                }
+            if ($user->hasRole(MercrediSecurityRole::ROLE_PARENT) && count($user->getTuteurs()) === 0) {
+                $bad[] = ['error' => 'Rôle parent, mais aucun parent associé', 'user' => $user];
+                continue;
             }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_ANIMATEUR)) {
-                if (count($user->getAnimateurs()) === 0) {
-                    $bad[] = ['error' => 'Rôle animateur, mais aucun animateur associé', 'user' => $user];
-                    continue;
-                }
+            if ($user->hasRole(MercrediSecurityRole::ROLE_ANIMATEUR) && count($user->getAnimateurs()) === 0) {
+                $bad[] = ['error' => 'Rôle animateur, mais aucun animateur associé', 'user' => $user];
+                continue;
             }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_ECOLE)) {
-                if (count($user->getEcoles()) === 0) {
-                    $bad[] = ['error' => 'Rôle école, mais aucune école associée', 'user' => $user];
-                    continue;
-                }
+            if ($user->hasRole(MercrediSecurityRole::ROLE_ECOLE) && count($user->getEcoles()) === 0) {
+                $bad[] = ['error' => 'Rôle école, mais aucune école associée', 'user' => $user];
+                continue;
             }
         }
 
@@ -179,7 +174,7 @@ final class CheckupController extends AbstractController
      */
     public function presences(): Response
     {
-        $dateTime = new \DateTime('01-10-2021');
+        $dateTime = new DateTime('01-10-2021');
         $jours = $this->jourRepository->findDaysByMonth($dateTime);
         $presences = $this->presenceRepository->findByDays($jours);
         foreach ($presences as $presence) {
@@ -213,7 +208,7 @@ final class CheckupController extends AbstractController
             );
             foreach ($facturePresences as $presenceFactured) {
                 $presence = $this->presenceRepository->find($presenceFactured->getPresenceId());
-                if ($presence) {
+                if ($presence !== null) {
                     $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
                     $prix = $this->presenceCalculator->getPrixByOrdre($presence, $ordre);
                 }
@@ -228,7 +223,7 @@ final class CheckupController extends AbstractController
                         'prix' => 'Passe de ' . $prixFactured . ' € à ' . $prix . ' €',
                         'ordre' => 'Passe de ' . $ordreFactured . ' à ' . $ordre,
                     ];
-                    if ($presence) {
+                    if ($presence !== null) {
                         $newcout = $this->presenceCalculator->calculate(
                             $presence
                         );

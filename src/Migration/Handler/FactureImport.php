@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
@@ -40,7 +41,7 @@ class FactureImport
         $this->presenceCalculator = $presenceCalculator;
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $this->pdo = new MercrediPdo();
@@ -56,7 +57,7 @@ class FactureImport
             $this->treatment($facture, $paiement, $type);
             if ($paiement->enfant_id) {
                 $enfant = $this->migrationRepository->getEnfant($paiement->enfant_id);
-                if ($enfant->getEcole()) {
+                if ($enfant->getEcole() !== null) {
                     $facture->setEcoles($enfant->getEcole()->getNom());
                 }
             }
@@ -70,14 +71,14 @@ class FactureImport
     {
         $facture = $this->factureHandler->newFacture($tuteur);
         if ($paiement->date_paiement) {
-            $facture->setPayeLe(\DateTime::createFromFormat('Y-m-d', $paiement->date_paiement));
+            $facture->setPayeLe(DateTime::createFromFormat('Y-m-d', $paiement->date_paiement));
         }
-        $facture->setFactureLe(\DateTime::createFromFormat('Y-m-d H:i:s', $paiement->created));
-        $facture->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $paiement->created));
-        $facture->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $paiement->updated));
+        $facture->setFactureLe(DateTime::createFromFormat('Y-m-d H:i:s', $paiement->created));
+        $facture->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $paiement->created));
+        $facture->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $paiement->updated));
         $facture->setMontantObsolete($paiement->montant);
         $facture->setClotureObsolete($paiement->cloture);
-        $facture->setMois(\DateTime::createFromFormat('Y-m-d', $paiement->date_paiement)->format('m-Y'));
+        $facture->setMois(DateTime::createFromFormat('Y-m-d', $paiement->date_paiement)->format('m-Y'));
         $facture->setRemarque(
             'type et mode de paiement: ' . $paiement->type_paiement . ' ' . $paiement->mode_paiement . ' ordre: ' . $paiement->ordre
         );
@@ -91,7 +92,7 @@ class FactureImport
         return $facture;
     }
 
-    private function attachPresence(Facture $facture, Presence $presence, string $type)
+    private function attachPresence(Facture $facture, Presence $presence, string $type): void
     {
         $jour = $presence->getJour();
         $facturePresence = new FacturePresence($facture, $presence->getId(), $type);
@@ -109,7 +110,7 @@ class FactureImport
      * Parcourir les présences dans presences
      * et parcourir les presences dans plaines_presences
      */
-    private function treatment(Facture $facture, object $paiement, string $type)
+    private function treatment(Facture $facture, object $paiement, string $type): void
     {
         foreach ($this->pdo->getAllWhere('presence', 'paiement_id = ' . $paiement->id, false) as $row) {
             $enfant = $this->migrationRepository->getEnfant($row->enfant_id);

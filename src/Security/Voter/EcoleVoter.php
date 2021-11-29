@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -19,22 +20,23 @@ use Symfony\Component\Security\Core\Security;
  */
 final class EcoleVoter extends Voter
 {
+    /**
+     * @var mixed|\Symfony\Component\Security\Core\User\UserInterface|null
+     */
+    public $user;
     public const INDEX = 'ecole_index';
     public const SHOW = 'ecole_show';
     public const ADD = 'ecole_add';
     public const EDIT = 'ecole_edit';
     public const DELETE = 'ecole_delete';
 
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
     /**
      * @var Ecole|null
      */
     private $ecole;
     /**
-     * @var Ecole[]|\Doctrine\Common\Collections\Collection
+     * @var Ecole[]|Collection
      */
     private $ecoles;
 
@@ -103,7 +105,7 @@ final class EcoleVoter extends Voter
         if (!$this->checkEcoles()) {
             return false;
         }
-        if (!$this->ecole) {
+        if ($this->ecole === null) {
             return false;
         }
 
@@ -112,10 +114,6 @@ final class EcoleVoter extends Voter
 
     private function checkEcoles(): bool
     {
-        if (\count($this->ecoles) == 0) {
-            return false;
-        }
-
-        return true;
+        return \count($this->ecoles) != 0;
     }
 }

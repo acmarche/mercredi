@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Plaine\Handler;
 
+use Exception;
+use DateTime;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -84,13 +86,13 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
 
     public function isRegistrationFinalized(Plaine $plaine, Tuteur $tuteur): bool
     {
-        return count($this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur, true)) > 0;
+        return $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur, true) !== [];
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Plaine\Plaine $plaine
-     * @param \AcMarche\Mercredi\Entity\Tuteur $tuteur
-     * @throws \Exception
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @throws Exception
      */
     public function confirm(Plaine $plaine, Tuteur $tuteur): void
     {
@@ -111,7 +113,7 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
             $error = 'Pas de mail pour la facture plaine: ' . $facture->getId();
             $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
             $this->notificationMailer->sendAsEmailNotification($message);
-            throw new \Exception($error);
+            throw new Exception($error);
         }
 
         $from = $this->factureEmailFactory->getEmailAddressOrganisation();
@@ -128,8 +130,8 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
         }
 
         $this->notificationMailer->sendAsEmailNotification($message);
-        $facture->setEnvoyeA(join(',', $emails));
-        $facture->setEnvoyeLe(new \DateTime());
+        $facture->setEnvoyeA(implode(',', $emails));
+        $facture->setEnvoyeLe(new DateTime());
         $this->plainePresenceRepository->flush();
     }
 }

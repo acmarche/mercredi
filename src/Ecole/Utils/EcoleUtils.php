@@ -19,7 +19,7 @@ class EcoleUtils
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|ArrayCollection $ecoles
+     * @param Ecole[]|ArrayCollection $ecoles
      * @return string
      */
     public static function getNamesEcole(iterable $ecoles): string

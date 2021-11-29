@@ -157,7 +157,7 @@ final class MigrationCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function organisation()
+    private function organisation(): void
     {
         $oranisation = new Organisation();
         $oranisation->setNom('Espace parents enfants');

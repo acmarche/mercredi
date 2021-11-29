@@ -61,7 +61,7 @@ final class PlaineRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('plaine')
             ->andWhere('plaine.inscriptionOpen = 1');
 
-        if ($plaine) {
+        if ($plaine !== null) {
             $qb->andWhere('plaine != :plaine')
                 ->setParameter('plaine', $plaine);
         }

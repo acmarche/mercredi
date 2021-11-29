@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineTrait;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -113,7 +114,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Presence[]
      */
-    public function getPresences(): Collection
+    public function getPresences(): iterable
     {
         return $this->presences;
     }
@@ -130,11 +131,9 @@ class Jour implements TimestampableInterface
 
     public function removePresence(Presence $presence): self
     {
-        if ($this->presences->removeElement($presence)) {
-            // set the owning side to null (unless already changed)
-            if ($presence->getJour() === $this) {
-                $presence->setJour(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->presences->removeElement($presence) && $presence->getJour() === $this) {
+            $presence->setJour(null);
         }
 
         return $this;
@@ -143,7 +142,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Ecole[]
      */
-    public function getEcoles(): Collection
+    public function getEcoles(): iterable
     {
         return $this->ecoles;
     }

@@ -102,7 +102,7 @@ final class RelationRepository extends ServiceEntityRepository
     public function findFrateries(Enfant $enfant, array $tuteurs = []): array
     {
         $enfants = [];
-        if (0 === \count($tuteurs)) {
+        if ([] === $tuteurs) {
             $tuteurs = $this->findTuteursByEnfant($enfant);
         }
 

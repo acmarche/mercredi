@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -22,35 +24,27 @@ use Symfony\Component\Security\Core\Security;
  */
 final class AccueilVoter extends Voter
 {
+    /**
+     * @var \AcMarche\Mercredi\Entity\Tuteur|mixed|null
+     */
+    public $tuteurOfUser;
     public const ADD = 'accueil_new';
     public const SHOW = 'accueil_show';
     public const EDIT = 'accueil_edit';
     public const DELETE = 'accueil_delete';
 
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
     /**
      * @var Accueil|null
      */
     private $accueil;
-    /**
-     * @var User
-     */
-    private $user;
+    private ?UserInterface $user = null;
     /**
      * @var Enfant
      */
     private $enfant;
-    /**
-     * @var RelationRepository
-     */
-    private $relationRepository;
-    /**
-     * @var TuteurUtils
-     */
-    private $tuteurUtils;
+    private RelationRepository $relationRepository;
+    private TuteurUtils $tuteurUtils;
 
     public function __construct(
         Security $security,
@@ -115,16 +109,14 @@ final class AccueilVoter extends Voter
     {
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if (null === $this->tuteurOfUser) {
+        if (!$this->tuteurOfUser instanceof Tuteur) {
             return false;
         }
 
         $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
         $enfants = array_map(
-            function ($relation) {
-                return $relation->getEnfant()->getId();
-            },
+            fn($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

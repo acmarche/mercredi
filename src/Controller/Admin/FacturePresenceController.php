@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
@@ -27,6 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FacturePresenceController extends AbstractController
 {
+    public PresenceCalculatorInterface $presenceCalculator;
     private FacturePresenceRepository $facturePresenceRepository;
     private FactureHandlerInterface $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
@@ -88,7 +90,7 @@ final class FacturePresenceController extends AbstractController
         $facture = $facturePresence->getFacture();
         $presence = $accueil = null;
         $type = $facturePresence->getObjectType();
-        if ($type == FactureInterface::OBJECT_PRESENCE or $type == FactureInterface::OBJECT_PLAINE) {
+        if ($type == FactureInterface::OBJECT_PRESENCE || $type == FactureInterface::OBJECT_PLAINE) {
             $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
         }
         if ($type == FactureInterface::OBJECT_ACCUEIL) {
@@ -131,7 +133,7 @@ final class FacturePresenceController extends AbstractController
     /**
      * @Route("/{id}/delete", name="mercredi_admin_facture_presence_delete", methods={"POST"})
      */
-    public function delete(Request $request, FacturePresence $facturePresence): Response
+    public function delete(Request $request, FacturePresence $facturePresence): RedirectResponse
     {
         $facture = $facturePresence->getFacture();
         if ($this->isCsrfTokenValid('delete' . $facturePresence->getId(), $request->request->get('_token'))) {

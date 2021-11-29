@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait EcolesTrait
 {
     /**
-     * @var \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|ArrayCollection
+     * @var Ecole[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity=Ecole::class, inversedBy="users")
      */
     private iterable $ecoles;

@@ -279,7 +279,7 @@ final class MessageController extends AbstractController
     /**
      * @Route("archive", name="mercredi_message_archive")
      */
-    public function archive()
+    public function archive(): Response
     {
         $messages = $this->messageRepository->findall();
 
@@ -294,7 +294,7 @@ final class MessageController extends AbstractController
     /**
      * @Route("/show/{id}", name="mercredi_message_show", methods={"GET"})
      */
-    public function show(Message $message)
+    public function show(Message $message): Response
     {
         return $this->render(
             '@AcMarcheMercredi/admin/message/show.html.twig',

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Sante;
 
+
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
@@ -122,7 +123,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponses(): Collection
+    public function getReponses(): iterable
     {
         return $this->reponses;
     }
@@ -163,11 +164,9 @@ class SanteFiche implements TimestampableInterface
 
     public function removeReponse(SanteReponse $reponse): self
     {
-        if ($this->reponses->removeElement($reponse)) {
-            // set the owning side to null (unless already changed)
-            if ($reponse->getSanteFiche() === $this) {
-                $reponse->setSanteFiche(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->reponses->removeElement($reponse) && $reponse->getSanteFiche() === $this) {
+            $reponse->setSanteFiche(null);
         }
 
         return $this;

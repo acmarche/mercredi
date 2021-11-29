@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureReduction;
 use AcMarche\Mercredi\Facture\Form\FactureReductionType;
@@ -33,7 +34,7 @@ final class FactureReductionController extends AbstractController
      */
     public function new(Request $request, Facture $facture): Response
     {
-        if ($facture->getEnvoyeLe()) {
+        if ($facture->getEnvoyeLe() !== null) {
             $this->addFlash('danger', 'La facture a déjà été envoyée');
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
@@ -84,7 +85,7 @@ final class FactureReductionController extends AbstractController
      */
     public function edit(Request $request, FactureReduction $factureReduction): Response
     {
-        if ($factureReduction->getFacture()->getEnvoyeLe()) {
+        if ($factureReduction->getFacture()->getEnvoyeLe() !== null) {
             $this->addFlash('danger', 'La facture a déjà été envoyée');
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $factureReduction->getFacture()->getId()]);
@@ -116,7 +117,7 @@ final class FactureReductionController extends AbstractController
     /**
      * @Route("/{id}/delete", name="mercredi_admin_facture_reduction_delete", methods={"POST"})
      */
-    public function delete(Request $request, FactureReduction $factureReduction): Response
+    public function delete(Request $request, FactureReduction $factureReduction): RedirectResponse
     {
         $facture = $factureReduction->getFacture();
         if ($this->isCsrfTokenValid('delete' . $factureReduction->getId(), $request->request->get('_token'))) {

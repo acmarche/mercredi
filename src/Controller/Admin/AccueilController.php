@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
@@ -180,8 +181,9 @@ final class AccueilController extends AbstractController
     /**
      * @Route("/delete/{id}", name="mercredi_admin_accueil_delete", methods={"POST"})
      */
-    public function delete(Request $request, Accueil $accueil): Response
+    public function delete(Request $request, Accueil $accueil): RedirectResponse
     {
+        $enfant = null;
         if ($this->isCsrfTokenValid('delete' . $accueil->getId(), $request->request->get('_token'))) {
             if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
                 $this->addFlash('danger', 'Un accueil déjà facturé ne peut être supprimé');

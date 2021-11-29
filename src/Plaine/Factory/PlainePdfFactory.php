@@ -64,7 +64,7 @@ class PlainePdfFactory
             $enfantId = $enfant->getId();
             $age = $enfant->getAge($firstDay, true);
             $groupeScolaire = $this->grouping->findGroupeScolaireByAge($age);
-            if (!$groupeScolaire) {
+            if ($groupeScolaire === null) {
                 $groupeScolaire = $groupeForce;
             }
             $stats[$groupeScolaire->getId()][$jour->getId()]['total'] += 1;
@@ -102,7 +102,7 @@ class PlainePdfFactory
         return $this->downloadPdf($html, $name . '.pdf');
     }
 
-    private function getImagesBase64()
+    private function getImagesBase64(): array
     {
         $root = $this->parameterBag->get('kernel.project_dir') . '/public/bundles/acmarchemercredi/images/';
         $ok = $root . 'check_ok.jpg';

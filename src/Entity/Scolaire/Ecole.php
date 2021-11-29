@@ -77,11 +77,9 @@ class Ecole
 
     public function removeEnfant(Enfant $enfant): self
     {
-        if ($this->enfants->removeElement($enfant)) {
-            // set the owning side to null (unless already changed)
-            if ($enfant->getEcole() === $this) {
-                $enfant->setEcole(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->enfants->removeElement($enfant) && $enfant->getEcole() === $this) {
+            $enfant->setEcole(null);
         }
 
         return $this;

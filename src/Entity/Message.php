@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -107,7 +108,7 @@ class Message implements TimestampableInterface
         $this->file = $file;
     }
 
-    public function getDestinataires(): ?array
+    public function getDestinataires(): iterable
     {
         return $this->destinataires;
     }

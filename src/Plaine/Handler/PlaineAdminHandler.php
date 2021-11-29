@@ -38,7 +38,7 @@ final class PlaineAdminHandler
     public function initJours(Plaine $plaine): void
     {
         $currentJours = $this->jourRepository->findByPlaine($plaine);
-        if (0 === count($currentJours)) {
+        if ([] === $currentJours) {
             $plaine->addJour(new Jour(new DateTime('today')));
             for ($i = 1; $i < 5; $i++) {
                 $plaine->addJour(new Jour(new DateTime('+' . $i . ' day')));

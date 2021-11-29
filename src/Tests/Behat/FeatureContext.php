@@ -193,7 +193,7 @@ class FeatureContext extends RawMinkContext
     /**
      * @Then /^I should see "([^"]*)" exactly "([^"]*)" times$/
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function iShouldSeeTextSoManyTimes($sText, $iExpected): void
     {

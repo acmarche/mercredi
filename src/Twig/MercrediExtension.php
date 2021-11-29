@@ -48,14 +48,12 @@ final class MercrediExtension extends AbstractExtension
 
     public function monthFr(int $number)
     {
-        return isset(self::MONTHS[$number]) ? self::MONTHS[$number] : $number;
+        return self::MONTHS[$number] ?? $number;
     }
 
     private function inIds(int $number, array $objects): bool
     {
-        $ids = array_map(function ($object) {
-            return $object->getId();
-        }, $objects);
+        $ids = array_map(fn($object) => $object->getId(), $objects);
 
         return in_array($number, $ids);
     }

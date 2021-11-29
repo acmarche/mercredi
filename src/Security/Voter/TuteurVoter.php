@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -23,10 +24,7 @@ final class TuteurVoter extends Voter
     public const EDIT = 'tuteur_edit';
     public const DELETE = 'tuteur_delete';
 
-    /**
-     * @var User
-     */
-    private $user;
+    private ?UserInterface $user = null;
 
     private ?Tuteur $tuteurOfUser = null;
 

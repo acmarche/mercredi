@@ -9,7 +9,7 @@ final class PasswordGenerator
         $password = '';
 
         for ($i = 0; $i < 6; ++$i) {
-            $password .= rand(1, 9);
+            $password .= random_int(1, 9);
         }
 
         return $password;

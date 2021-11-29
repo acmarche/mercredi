@@ -17,7 +17,10 @@ trait BirthdayTrait
      */
     private ?DateTimeInterface $birthday = null;
 
-    public function getBirthday(): ?DateTime
+    /**
+     * @return DateTime|DateTimeImmutable|null
+     */
+    public function getBirthday(): ?\DateTimeInterface
     {
         return $this->birthday;
     }
@@ -31,7 +34,7 @@ trait BirthdayTrait
     }
 
     /**
-     * @param \DateTimeInterface|null $dateReference
+     * @param DateTimeInterface|null $dateReference
      * @param bool $rounded arrondi à 0.5
      * @return float|null
      */

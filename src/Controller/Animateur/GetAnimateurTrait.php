@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait GetAnimateurTrait
 {
-    private ?Animateur $animateur;
+    private ?Animateur $animateur = null;
     private EcoleUtils $ecoleUtils;
 
     /**

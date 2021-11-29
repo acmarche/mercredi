@@ -91,7 +91,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
     /**
      * J'exclus les enfants sans tuteur !
-     * @param \AcMarche\Mercredi\Entity\Scolaire\Ecole $ecole
+     * @param Ecole $ecole
      * @return Enfant[]
      */
     public function findByEcolesForInscription(Ecole $ecole): array
@@ -200,11 +200,7 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
-        if ($jour !== null) {
-            $jours = [$jour];
-        } else {
-            $jours = $this->jourRepository->findByAnimateur($animateur);
-        }
+        $jours = $jour !== null ? [$jour] : $this->jourRepository->findByAnimateur($animateur);
         if (count($jours) == 0) {
             return [];
         }

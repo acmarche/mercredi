@@ -91,7 +91,7 @@ class Accueil implements TimestampableInterface, UuidableInterface
         return $this;
     }
 
-    public function getDuree(): ?int
+    public function getDuree(): int
     {
         return $this->duree;
     }

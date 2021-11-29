@@ -47,7 +47,7 @@ final class AssociationAnimateurHandler
         $animateur = $associateUserAnimateurDto->getAnimateur();
         $user = $associateUserAnimateurDto->getUser();
 
-        if (count($this->animateurRepository->getAnimateursByUser($user)) > 0) {
+        if ((is_countable($this->animateurRepository->getAnimateursByUser($user)) ? count($this->animateurRepository->getAnimateursByUser($user)) : 0) > 0) {
             //remove old animateur
             $user->getAnimateurs()->clear();
         }

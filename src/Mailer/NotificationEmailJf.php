@@ -23,9 +23,9 @@ class NotificationEmailJf extends NotificationEmail
 
     /**
      * Pour retirer l'importance dans le sujet
-     * @return \Symfony\Component\Mime\Header\Headers
+     * @return Headers
      */
-    public function getPreparedHeaders(): \Symfony\Component\Mime\Header\Headers
+    public function getPreparedHeaders(): Headers
     {
         $headers = parent::getPreparedHeaders();
 

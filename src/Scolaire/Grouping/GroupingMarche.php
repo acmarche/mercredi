@@ -26,9 +26,7 @@ class GroupingMarche implements GroupingInterface
             $groups[$groupe->getId()]['enfants'][] = $enfant;
         }
 
-        $groups = SortUtils::sortGroupesScolairesByOrder($groups);
-
-        return $groups;
+        return SortUtils::sortGroupesScolairesByOrder($groups);
     }
 
     /**
@@ -50,7 +48,7 @@ class GroupingMarche implements GroupingInterface
         }
         foreach ($enfants as $enfant) {
             $groupe = $this->findGroupeScolaireByAge($enfant->getAge($date, true));
-            if (!$groupe) {
+            if ($groupe === null) {
                 $groupe = $groupeForce;
             }
             $groups[$groupe->getId()]['groupe'] = $groupe;

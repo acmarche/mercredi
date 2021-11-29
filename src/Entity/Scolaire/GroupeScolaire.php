@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Scolaire;
 
+
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -105,7 +106,7 @@ class GroupeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): Collection
+    public function getEnfants(): iterable
     {
         return $this->enfants;
     }
@@ -122,11 +123,9 @@ class GroupeScolaire
 
     public function removeEnfant(Enfant $enfant): self
     {
-        if ($this->enfants->removeElement($enfant)) {
-            // set the owning side to null (unless already changed)
-            if ($enfant->getGroupeScolaire() === $this) {
-                $enfant->setGroupeScolaire(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->enfants->removeElement($enfant) && $enfant->getGroupeScolaire() === $this) {
+            $enfant->setGroupeScolaire(null);
         }
 
         return $this;
@@ -135,7 +134,7 @@ class GroupeScolaire
     /**
      * @return Collection|AnneeScolaire[]
      */
-    public function getAnneesScolaires(): Collection
+    public function getAnneesScolaires(): iterable
     {
         return $this->annees_scolaires;
     }
@@ -152,11 +151,9 @@ class GroupeScolaire
 
     public function removeAnneesScolaire(AnneeScolaire $anneesScolaire): self
     {
-        if ($this->annees_scolaires->removeElement($anneesScolaire)) {
-            // set the owning side to null (unless already changed)
-            if ($anneesScolaire->getGroupeScolaire() === $this) {
-                $anneesScolaire->setGroupeScolaire(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->annees_scolaires->removeElement($anneesScolaire) && $anneesScolaire->getGroupeScolaire() === $this) {
+            $anneesScolaire->setGroupeScolaire(null);
         }
 
         return $this;
@@ -165,7 +162,7 @@ class GroupeScolaire
     /**
      * @return Collection|PlaineGroupe[]
      */
-    public function getPlaineGroupes(): Collection
+    public function getPlaineGroupes(): iterable
     {
         return $this->plaine_groupes;
     }
@@ -182,11 +179,9 @@ class GroupeScolaire
 
     public function removePlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if ($this->plaine_groupes->removeElement($plaineGroupe)) {
-            // set the owning side to null (unless already changed)
-            if ($plaineGroupe->getGroupeScolaire() === $this) {
-                $plaineGroupe->setGroupeScolaire(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->plaine_groupes->removeElement($plaineGroupe) && $plaineGroupe->getGroupeScolaire() === $this) {
+            $plaineGroupe->setGroupeScolaire(null);
         }
 
         return $this;

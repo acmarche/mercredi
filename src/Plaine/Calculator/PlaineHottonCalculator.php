@@ -23,7 +23,7 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
     }
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Plaine\Plaine $plaine
+     * @param Plaine $plaine
      * @param array|PresenceInterface[] $presences
      * @return float
      */
@@ -45,9 +45,8 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
         }
         $ordre = $this->getOrdreOnePresence($presence);
         $prix = $this->getPrixByOrdre($plaine, $ordre);
-        $cout = $this->applicateReduction($presence, $prix);
 
-        return $cout;
+        return $this->applicateReduction($presence, $prix);
     }
 
     public function getOrdreOnePresence(PresenceInterface $presence): int

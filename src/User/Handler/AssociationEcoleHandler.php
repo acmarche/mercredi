@@ -32,7 +32,7 @@ final class AssociationEcoleHandler
         $ecoles = $associateUserEcoleDto->getEcoles();
         $user = $associateUserEcoleDto->getUser();
 
-        if (count($this->ecoleRepository->getEcolesByUser($user)) > 0) {
+        if ($this->ecoleRepository->getEcolesByUser($user) !== []) {
             //remove old ecoles
             $user->getEcoles()->clear();
         }

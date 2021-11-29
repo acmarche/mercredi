@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -19,22 +20,23 @@ use Symfony\Component\Security\Core\Security;
  */
 final class AnimateurVoter extends Voter
 {
+    /**
+     * @var mixed|\Symfony\Component\Security\Core\User\UserInterface|null
+     */
+    public $user;
     public const INDEX = 'animateur_index';
     public const SHOW = 'animateur_show';
     public const ADD = 'animateur_add';
     public const EDIT = 'animateur_edit';
     public const DELETE = 'animateur_delete';
 
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
     /**
      * @var Animateur|null
      */
     private $animateur;
     /**
-     * @var Animateur[]|\Doctrine\Common\Collections\Collection
+     * @var Animateur[]|Collection
      */
     private $animateurs;
 
@@ -103,7 +105,7 @@ final class AnimateurVoter extends Voter
         if (!$this->checkAnimateurs()) {
             return false;
         }
-        if (!$this->animateur) {
+        if ($this->animateur === null) {
             return false;
         }
 
@@ -112,10 +114,6 @@ final class AnimateurVoter extends Voter
 
     private function checkAnimateurs(): bool
     {
-        if (\count($this->animateurs) == 0) {
-            return false;
-        }
-
-        return true;
+        return \count($this->animateurs) != 0;
     }
 }

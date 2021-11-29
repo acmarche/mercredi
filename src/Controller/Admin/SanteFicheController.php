@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -79,7 +80,7 @@ final class SanteFicheController extends AbstractController
     public function edit(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-        if (count($santeFiche->getAccompagnateurs()) === 0) {
+        if ($santeFiche->getAccompagnateurs() === []) {
             $santeFiche->addAccompagnateur(' ');
         }
 
@@ -107,8 +108,9 @@ final class SanteFicheController extends AbstractController
     /**
      * @Route("/{id}/delete", name="mercredi_admin_sante_fiche_delete", methods={"POST"})
      */
-    public function delete(Request $request, SanteFiche $santeFiche): Response
+    public function delete(Request $request, SanteFiche $santeFiche): RedirectResponse
     {
+        $enfant = null;
         if ($this->isCsrfTokenValid('delete' . $santeFiche->getId(), $request->request->get('_token'))) {
             $id = $santeFiche->getId();
             $enfant = $santeFiche->getEnfant();

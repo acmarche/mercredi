@@ -158,7 +158,7 @@ final class PresenceUtils
                     return null;
                 }
                 $plaine = $jour->getPlaine();
-                if (!$plaine) {
+                if ($plaine === null) {
                     return null;
                 }
                 if (!$plaines->contains($plaine)) {

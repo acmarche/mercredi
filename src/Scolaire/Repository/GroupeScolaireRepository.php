@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Scolaire\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -65,7 +66,7 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    public function getQbForListingPlaine()
+    public function getQbForListingPlaine(): QueryBuilder
     {
         return $this->createQueryBuilder('groupe_scolaire')
             ->andWhere('groupe_scolaire.is_plaine = 1')

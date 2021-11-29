@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\Ldap\Ldap;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
@@ -67,7 +68,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     if (interface_exists(LdapInterface::class)) {
         $services
-            ->set(Symfony\Component\Ldap\Ldap::class)
+            ->set(Ldap::class)
             ->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])
             ->tag('ldap');
         $services->set(Adapter::class)->args(
@@ -85,7 +86,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         );
 
         $services->set(LdapMercredi::class)
-            ->arg('$adapter', service('Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'))
+            ->arg('$adapter', service(Adapter::class))
             ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
     }
 

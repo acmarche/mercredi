@@ -17,7 +17,7 @@ class MailTestCommand extends Command
 
     protected static $defaultName = 'mercredi:test-mail';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Test envoie mail')

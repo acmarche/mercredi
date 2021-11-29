@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait GetTuteurTrait
 {
     private TuteurUtils $tuteurUtils;
-    private ?Tuteur $tuteur;
+    private ?Tuteur $tuteur = null;
 
     /**
      * @required

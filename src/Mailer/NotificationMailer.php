@@ -11,7 +11,7 @@ final class NotificationMailer
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    public function sendAsEmailNotification(NotificationEmail $templatedEmail, ?string $email = null)
+    public function sendAsEmailNotification(NotificationEmail $templatedEmail, ?string $email = null): void
     {
         if (!$email) {
             $email = $this->organisation->getEmail();

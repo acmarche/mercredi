@@ -74,10 +74,8 @@ final class TuteurUtils
     {
         $emails = [[]];
         foreach ($tuteurs as $tuteur) {
-            if ($this->tuteurIsActif($tuteur)) {
-                if ($tmp = self::getEmailsOfOneTuteur($tuteur)) {
-                    $emails[] = $tmp;
-                }
+            if ($this->tuteurIsActif($tuteur) && ($tmp = self::getEmailsOfOneTuteur($tuteur))) {
+                $emails[] = $tmp;
             }
         }
 
@@ -88,7 +86,7 @@ final class TuteurUtils
 
     public function tuteurIsActif(Tuteur $tuteur): bool
     {
-        return count($this->relationRepository->findEnfantsActifs($tuteur)) > 0;
+        return $this->relationRepository->findEnfantsActifs($tuteur) !== [];
     }
 
     /**
@@ -98,7 +96,7 @@ final class TuteurUtils
     {
         $tuteurs = $user->getTuteurs();
 
-        if (0 === count($tuteurs)) {
+        if (0 === (is_countable($tuteurs) ? count($tuteurs) : 0)) {
             return null;
         }
 
@@ -129,9 +127,6 @@ final class TuteurUtils
         }
 
         $emails = array_unique($emails);
-        if (count($emails) === 0) {
-            return [];
-        }
 
         return $emails;
     }

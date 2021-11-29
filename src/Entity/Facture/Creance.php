@@ -64,7 +64,7 @@ class Creance implements TimestampableInterface, UuidableInterface
         return $this->nom;
     }
 
-    public function getMontant(): ?string
+    public function getMontant(): ?float
     {
         return $this->montant;
     }

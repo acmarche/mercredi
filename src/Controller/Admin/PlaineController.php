@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
@@ -167,7 +168,7 @@ final class PlaineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$plaineOpen = $this->plaineAdminHandler->handleOpeningRegistrations($plaine)) {
+            if (($plaineOpen = $this->plaineAdminHandler->handleOpeningRegistrations($plaine)) === null) {
                 $this->plaineRepository->flush();
                 $this->dispatchMessage(new PlaineUpdated($plaine->getId()));
             } else {
@@ -193,7 +194,7 @@ final class PlaineController extends AbstractController
     /**
      * @Route("/{id}/delete", name="mercredi_admin_plaine_delete", methods={"POST"})
      */
-    public function delete(Request $request, Plaine $plaine): Response
+    public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete' . $plaine->getId(), $request->request->get('_token'))) {
             $plaineId = $plaine->getId();

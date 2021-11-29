@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Contrat\Plaine;
 
+use Exception;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -25,7 +26,7 @@ interface PlaineHandlerInterface
     /**
      * @param Plaine $plaine
      * @param Tuteur $tuteur
-     * @throws \Exception
+     * @throws Exception
      */
     public function confirm(Plaine $plaine, Tuteur $tuteur): void;
 }

@@ -15,7 +15,7 @@ use Symfony\Component\Ldap\LdapInterface;
  */
 class LdapMercredi implements LdapInterface
 {
-    private $adapter;
+    private AdapterInterface $adapter;
 
     public function __construct(AdapterInterface $adapter)
     {
@@ -25,7 +25,7 @@ class LdapMercredi implements LdapInterface
     /**
      * {@inheritdoc}
      */
-    public function bind(string $dn = null, string $password = null)
+    public function bind(string $dn = null, string $password = null): void
     {
         $this->adapter->getConnection()->bind($dn, $password);
     }

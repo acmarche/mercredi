@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Scolaire;
 
+
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -55,7 +56,7 @@ class AnneeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): Collection
+    public function getEnfants(): iterable
     {
         return $this->enfants;
     }
@@ -72,11 +73,9 @@ class AnneeScolaire
 
     public function removeEnfant(Enfant $enfant): self
     {
-        if ($this->enfants->removeElement($enfant)) {
-            // set the owning side to null (unless already changed)
-            if ($enfant->getAnneeScolaire() === $this) {
-                $enfant->setAnneeScolaire(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->enfants->removeElement($enfant) && $enfant->getAnneeScolaire() === $this) {
+            $enfant->setAnneeScolaire(null);
         }
 
         return $this;

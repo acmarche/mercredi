@@ -100,11 +100,7 @@ final class SanteChecker
             if ($santeQuestion->getRemarque() === null) {
                 return false;
             }
-            if (trim($santeQuestion->getRemarque()) != '') {
-                return true;
-            }
-
-            return false;
+            return trim($santeQuestion->getRemarque()) != '';
         }
 
         return true;

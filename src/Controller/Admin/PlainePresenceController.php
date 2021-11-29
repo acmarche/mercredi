@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
@@ -121,7 +122,7 @@ final class PlainePresenceController extends AbstractController
      * @Entity("plaine", expr="repository.find(plaine)")
      * @Entity("enfant", expr="repository.find(enfant)")
      */
-    public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): Response
+    public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): RedirectResponse
     {
         $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant);
 
@@ -208,7 +209,7 @@ final class PlainePresenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $new = $plainePresencesDto->getJours();
-            if (0 === count($presences)) {
+            if ([] === $presences) {
                 $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
                 $tuteur = $tuteurs[0];
             } else {
@@ -241,8 +242,9 @@ final class PlainePresenceController extends AbstractController
     /**
      * @Route("/{id}/delete", name="mercredi_admin_plaine_presence_delete", methods={"POST"})
      */
-    public function delete(Request $request, Plaine $plaine): Response
+    public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
+        $enfant = null;
         if ($this->isCsrfTokenValid('deletePresence' . $plaine->getId(), $request->request->get('_token'))) {
             $presenceId = (int)$request->request->get('presence');
             if (0 === $presenceId) {
@@ -272,7 +274,7 @@ final class PlainePresenceController extends AbstractController
     /**
      * @Route("/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_remove_enfant", methods={"POST"})
      */
-    public function remove(Request $request, Plaine $plaine, Enfant $enfant): Response
+    public function remove(Request $request, Plaine $plaine, Enfant $enfant): RedirectResponse
     {
         if ($this->isCsrfTokenValid('remove' . $plaine->getId(), $request->request->get('_token'))) {
             $this->plaineHandler->removeEnfant($plaine, $enfant);

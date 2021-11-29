@@ -19,10 +19,10 @@ final class ScolaireUtils
      * Retourne le groupe scolaire de l'enfant
      * Si a pas retourne le groupe scolaire de son année
      * Si a pas retourne un groupe au hasard
-     * @param \AcMarche\Mercredi\Entity\Enfant $enfant
-     * @return \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
+     * @param Enfant $enfant
+     * @return GroupeScolaire
      */
-    public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
+    public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): GroupeScolaire
     {
         if (null !== ($groupeScolaire = $enfant->getGroupeScolaire())) {
             return $groupeScolaire;
@@ -41,9 +41,8 @@ final class ScolaireUtils
 
     /**
      * @param Enfant $enfant
-     * @return GroupeScolaire
      */
-    public function findGroupeScolaireEnfantByAge(?float $age): GroupeScolaire
+    public function findGroupeScolaireEnfantByAge(?float $age): ?GroupeScolaire
     {
         if (!$age) {
             return null;

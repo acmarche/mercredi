@@ -3,6 +3,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
@@ -28,12 +29,12 @@ class ParametreImport
         $this->migrationRepository = $migrationRepository;
     }
 
-    public function setIo(SymfonyStyle $io)
+    public function setIo(SymfonyStyle $io): void
     {
         $this->io = $io;
     }
 
-    public function importAll()
+    public function importAll(): void
     {
         $this->importEcole();
         $this->importJour();
@@ -45,7 +46,7 @@ class ParametreImport
         $this->enfantRepository->flush();
     }
 
-    public function importEcole()
+    public function importEcole(): void
     {
         $pdo = new MercrediPdo();
         $enfants = $pdo->getAll('ecole');
@@ -64,7 +65,7 @@ class ParametreImport
         }
     }
 
-    public function importReduction()
+    public function importReduction(): void
     {
         $pdo = new MercrediPdo();
         $enfants = $pdo->getAll('reduction');
@@ -78,27 +79,27 @@ class ParametreImport
         }
     }
 
-    public function importJour()
+    public function importJour(): void
     {
         $pdo = new MercrediPdo();
         $enfants = $pdo->getAll('jour');
         foreach ($enfants as $data) {
             $this->io->writeln($data->date_jour);
             $jour = new Jour();
-            $jour->setDateJour(\DateTime::createFromFormat('Y-m-d', $data->date_jour));
+            $jour->setDateJour(DateTime::createFromFormat('Y-m-d', $data->date_jour));
             $jour->setRemarque($data->remarques);
             $jour->setColor($data->color);
             $jour->setArchived($data->archive);
             $jour->setPrix1($data->prix1);
             $jour->setPrix2($data->prix2);
             $jour->setPrix3($data->prix3);
-            $jour->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
-            $jour->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
+            $jour->setUpdatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->updated));
+            $jour->setCreatedAt(DateTime::createFromFormat('Y-m-d H:i:s', $data->created));
             $this->enfantRepository->persist($jour);
         }
     }
 
-    public function importQuestions()
+    public function importQuestions(): void
     {
         $pdo = new MercrediPdo();
         $enfants = $pdo->getAll('sante_question');
@@ -114,7 +115,7 @@ class ParametreImport
         }
     }
 
-    private function importAnneeScolaire()
+    private function importAnneeScolaire(): void
     {
         $annees = ['PM', '1M', '2M', '3M', '1P', '2P', '3P', '4P', '5P', '6P'];
         $i = 0;
@@ -143,7 +144,7 @@ class ParametreImport
         return $this->migrationRepository->getGroupeScolaire($groupeName);
     }
 
-    private function importGroupes()
+    private function importGroupes(): void
     {
         $groupes = ['premats', 'petits', 'moyens', 'grands'];
         foreach ($groupes as $data) {

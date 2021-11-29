@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\Ldap\Ldap;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Authenticator\MercrediAuthenticator;
 use AcMarche\Mercredi\Security\Authenticator\MercrediLdapAuthenticator;
@@ -39,7 +40,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     if (interface_exists(LdapInterface::class)) {
         $authenticators[] = MercrediLdapAuthenticator::class;
         $main['form_login_ldap'] = [
-            'service' => 'Symfony\Component\Ldap\Ldap',
+            'service' => Ldap::class,
             'check_path' => 'app_login',
         ];
     }

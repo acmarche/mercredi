@@ -21,7 +21,7 @@ final class AnneeScolaireRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return \AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire[]
+     * @return AnneeScolaire[]
      */
     public function findAllOrderByOrdre(): array
     {

@@ -94,7 +94,7 @@ class FactureCron implements TimestampableInterface
         return $this;
     }
 
-    public function getDone(): ?bool
+    public function getDone(): bool
     {
         return $this->done;
     }

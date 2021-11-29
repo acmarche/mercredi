@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
  */
 class ProcessUtils
 {
-    public static function lunchSend()
+    public static function lunchSend(): void
     {
         $process = new Process(['bin/console', 'mercredi:send-facture', '10-2021']);
         $process->setWorkingDirectory(getcwd() . "/../");

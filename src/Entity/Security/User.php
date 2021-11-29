@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Security;
 
+use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 use AcMarche\Mercredi\Entity\Security\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
@@ -64,10 +65,8 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string
      */
-    protected $salt;
+    protected ?string $salt = null;
 
     /**
      * @ORM\Column(type="boolean")
@@ -77,7 +76,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
     /**
      * @ORM\OneToMany(targetEntity=ResetPasswordRequest::class, mappedBy="user", cascade={"remove"})
      */
-    private $request_password;
+    private Collection $request_password;
 
     public function __construct()
     {
@@ -106,12 +105,12 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
         return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
     }
 
-    public function setSalt(string $salt)
+    public function setSalt(string $salt): void
     {
         $this->salt = $salt;
     }
 
-    public function getUserIdentifier(): string
+    public function getUserIdentifier(): ?string
     {
         return $this->email;
     }
@@ -162,7 +161,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIsVerified(): ?bool
+    public function getIsVerified(): bool
     {
         return $this->isVerified;
     }

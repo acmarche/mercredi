@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Form\RelationType;
@@ -35,7 +36,7 @@ final class RelationController extends AbstractController
     /**
      * @Route("/attach/enfant/{id}", name="mercredi_admin_relation_attach_enfant", methods={"POST"})
      */
-    public function attachEnfant(Request $request, Tuteur $tuteur): Response
+    public function attachEnfant(Request $request, Tuteur $tuteur): RedirectResponse
     {
         if ($this->isCsrfTokenValid('attachEnfant' . $tuteur->getId(), $request->request->get('_token'))) {
             $enfantId = (int) $request->request->get('enfantId');
@@ -83,7 +84,7 @@ final class RelationController extends AbstractController
     /**
      * @Route("/delete", name="mercredi_admin_relation_delete", methods={"POST"})
      */
-    public function delete(Request $request): Response
+    public function delete(Request $request): RedirectResponse
     {
         $relationId = $request->request->get('relationid');
 
@@ -93,7 +94,7 @@ final class RelationController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
-        if (null === $relation) {
+        if (!$relation instanceof Relation) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');

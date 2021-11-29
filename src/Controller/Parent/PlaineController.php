@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use Exception;
 use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -196,7 +197,7 @@ final class PlaineController extends AbstractController
             try {
                 $this->plaineHandler->confirm($plaine, $tuteur);
                 $this->addFlash('success', 'La facture a bien été générée et envoyée sur votre mail');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->addFlash('danger', 'Erreur survenue: ' . $e->getMessage());
             }
 

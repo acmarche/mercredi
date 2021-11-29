@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Utils;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -31,8 +32,9 @@ final class DateUtils
      * @param string $mois 05/2020
      *
      * @throws Exception
+     * @return DateTime|DateTimeImmutable
      */
-    public static function createDateTimeFromDayMonth(string $mois): DateTime
+    public static function createDateTimeFromDayMonth(string $mois): \DateTime
     {
         if ($date = DateTime::createFromFormat('d/m/Y', '01/' . $mois)) {
             return $date;
@@ -102,10 +104,7 @@ final class DateUtils
         );
     }
 
-    /**
-     * @return CarbonPeriod
-     */
-    public function getWeeksOfMonth(CarbonInterface $date): CarbonPeriod
+    public function getWeeksOfMonth(CarbonInterface $date): array
     {
         $weeks = [];
         $firstDay = $date->firstOfMonth();
@@ -162,7 +161,7 @@ final class DateUtils
 
 
     /**
-     * @param \AcMarche\Mercredi\Entity\Enfant[] $enfants
+     * @param Enfant[] $enfants
      *
      * @return boolean
      */
@@ -170,7 +169,7 @@ final class DateUtils
     {
         $birthdays = [];
         foreach ($enfants as $enfant) {
-            if ($birthday = $enfant->getBirthday()) {
+            if (($birthday = $enfant->getBirthday()) !== null) {
                 $birthdays[] = $birthday->format('Y-m-d');
             }
         }

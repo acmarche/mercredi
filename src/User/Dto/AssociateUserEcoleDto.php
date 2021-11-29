@@ -41,7 +41,7 @@ final class AssociateUserEcoleDto
     }
 
     /**
-     * @return Collection|\AcMarche\Mercredi\Entity\Scolaire\Ecole[]
+     * @return Collection|Ecole[]
      */
     public function getEcoles(): Collection
     {

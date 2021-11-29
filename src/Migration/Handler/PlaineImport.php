@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
+use DateTime;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
@@ -24,7 +25,7 @@ class PlaineImport
         $this->migrationRepository = $migrationRepository;
     }
 
-    public function import(SymfonyStyle $io)
+    public function import(SymfonyStyle $io): void
     {
         $this->io = $io;
         $pdo = new MercrediPdo();
@@ -45,7 +46,7 @@ class PlaineImport
         $this->tuteurRepository->flush();
     }
 
-    public function importGroupe(SymfonyStyle $io)
+    public function importGroupe(SymfonyStyle $io): void
     {
         $this->io = $io;
         $pdo = new MercrediPdo();
@@ -60,14 +61,14 @@ class PlaineImport
         $this->tuteurRepository->flush();
     }
 
-    public function importJours(SymfonyStyle $io)
+    public function importJours(SymfonyStyle $io): void
     {
         $this->io = $io;
         $pdo = new MercrediPdo();
         $jours = $pdo->getAll('plaine_jours');
         foreach ($jours as $data) {
             $plaine = $this->migrationRepository->getPlaine($data->plaine_id);
-            $jourDate = \DateTime::createFromFormat('Y-m-d', $data->date_jour);
+            $jourDate = DateTime::createFromFormat('Y-m-d', $data->date_jour);
             $jour = new Jour();
             $jour->setDateJour($jourDate);
             $jour->setPlaineNom($plaine);

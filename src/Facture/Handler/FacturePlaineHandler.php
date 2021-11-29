@@ -77,10 +77,10 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
     private function attachPresences(FactureInterface $facture, Plaine $plaine, array $presences): void
     {
         foreach ($presences as $presence) {
-            if (!$facturePresence = $this->facturePresenceRepository->findByIdAndType(
+            if (($facturePresence = $this->facturePresenceRepository->findByIdAndType(
                 $presence->getId(),
                 FactureInterface::OBJECT_PLAINE
-            )) {
+            )) === null) {
                 $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
                 $this->facturePresenceRepository->persist($facturePresence);
             }

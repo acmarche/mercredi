@@ -25,7 +25,7 @@ trait SpreadsheetDownloaderTrait
         $binaryFileResponse = new BinaryFileResponse($temp_file);
         $binaryFileResponse->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_INLINE,
-            null === $fileName ? $binaryFileResponse->getFile()->getFilename() : $fileName
+            $fileName ?? $binaryFileResponse->getFile()->getFilename()
         );
 
         return $binaryFileResponse;

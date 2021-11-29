@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Ecole;
 
+use DateTime;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilRetardTpe;
@@ -257,7 +258,7 @@ final class AccueilController extends AbstractController
      */
     public function retard(Request $request, Enfant $enfant): Response
     {
-        $args = ['date_retard' => new \DateTime(), 'heure_retard' => new \DateTime()];
+        $args = ['date_retard' => new DateTime(), 'heure_retard' => new DateTime()];
         $form = $this->createForm(AccueilRetardTpe::class, $args);
         $form->handleRequest($request);
 
@@ -265,11 +266,11 @@ final class AccueilController extends AbstractController
             $data = $form->getData();
             $dateRetard = $data['date_retard'];
             $heureRetard = $data['heure_retard'];
-            if (!$accueil = $this->accueilRepository->findOneByEnfantAndDayAndHour(
+            if (($accueil = $this->accueilRepository->findOneByEnfantAndDayAndHour(
                 $enfant,
                 $dateRetard,
                 AccueilInterface::SOIR
-            )) {
+            )) === null) {
                 $this->addFlash('danger', 'Aucun accueil encodé pour ce jour là. Veuillez d\'abord ajouté un accueil');
             } else {
                 $dateRetard->setTime($heureRetard->format('H'), $heureRetard->format('i'));

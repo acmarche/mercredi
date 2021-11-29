@@ -85,7 +85,7 @@ final class AccueilHandler
         }
     }
 
-    public function handleOne()
+    public function handleOne(): void
     {
     }
 

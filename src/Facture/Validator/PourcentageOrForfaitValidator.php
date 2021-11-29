@@ -8,7 +8,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class PourcentageOrForfaitValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         /* @var $constraint FactureReduction */
 
