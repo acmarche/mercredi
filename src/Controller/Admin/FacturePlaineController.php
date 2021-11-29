@@ -7,7 +7,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
-use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Form\ValidateForm;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -29,18 +28,15 @@ class FacturePlaineController extends AbstractController
     private FacturePlaineHandler $facturePlaineHandler;
     private RelationRepository $relationRepository;
     private PlainePresenceRepository $plainePresenceRepository;
-    private FactureRenderInterface $factureRender;
 
     public function __construct(
         FacturePlaineHandler $facturePlaineHandler,
         RelationRepository $relationRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        FactureRenderInterface $factureRender
+        PlainePresenceRepository $plainePresenceRepository
     ) {
         $this->facturePlaineHandler = $facturePlaineHandler;
         $this->relationRepository = $relationRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->factureRender = $factureRender;
     }
 
     /**
@@ -76,7 +72,7 @@ class FacturePlaineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $facture = $this->facturePlaineHandler->newInstance($plaine,$tuteur);
+            $facture = $this->facturePlaineHandler->newInstance($plaine, $tuteur);
             $this->facturePlaineHandler->handleManually($facture, $plaine);
 
             $this->addFlash('success', 'Facture générée');
