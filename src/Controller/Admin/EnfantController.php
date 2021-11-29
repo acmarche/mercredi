@@ -122,6 +122,7 @@ final class EnfantController extends AbstractController
         $presencesGrouped = $this->presenceUtils->groupByYear($data);
         $fratries = $this->relationRepository->findFrateries($enfant);
         $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
+        $year = date('Y');
 
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/show.html.twig',
@@ -131,6 +132,7 @@ final class EnfantController extends AbstractController
                 'relations' => $relations,
                 'prensencesGrouped' => $presencesGrouped,
                 'plaines' => $plaines,
+                'yearNow' => $year,
             ]
         );
     }
