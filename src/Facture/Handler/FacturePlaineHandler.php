@@ -4,6 +4,7 @@
 namespace AcMarche\Mercredi\Facture\Handler;
 
 
+use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -15,7 +16,7 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 
-class FacturePlaineHandler
+class FacturePlaineHandler implements FacturePlaineHandlerInterface
 {
     private FactureFactory $factureFactory;
     private CommunicationFactoryInterface $communicationFactory;

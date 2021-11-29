@@ -27,7 +27,6 @@ class FactureRenderHotton implements FactureRenderInterface
         FactureDecompteRepository $factureDecompteRepository,
         Environment $environment
     ) {
-
         $this->facturePresenceRepository = $facturePresenceRepository;
         $this->factureReductionRepository = $factureReductionRepository;
         $this->factureComplementRepository = $factureComplementRepository;
@@ -36,7 +35,16 @@ class FactureRenderHotton implements FactureRenderInterface
         $this->environment = $environment;
     }
 
-    public function render(FactureInterface $facture): string
+    public function renderForDetails(FactureInterface $facture): string
+    {
+        if ($facture->getPlaineNom()) {
+            return $this->renderForPlaine($facture);
+        }
+
+        return $this->renderForPresence($facture);
+    }
+
+    public function renderForPdf(FactureInterface $facture): string
     {
         if ($facture->getPlaineNom()) {
             return $this->renderForPlaine($facture);

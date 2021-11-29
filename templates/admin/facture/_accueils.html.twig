@@ -12,9 +12,13 @@
             <tr>
                 <td>{{ accueil.nom }} {{ accueil.prenom }}</td>
                 <td>
+                    {% if is_granted('ROLE_MERCREDI_ADMIN') %}
                     <a href="{{ path('mercredi_admin_facture_presence_show', {'id': accueil.id}) }}">
                         {{ accueil.presenceDate | format_date('full') }}
                     </a>
+                    {% else %}
+                        {{ accueil.presenceDate | format_date('full') }}
+                    {% endif %}
                 </td>
                 <td>{{ accueil.coutCalculated|format_currency('eur') }}</td>
             </tr>

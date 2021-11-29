@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Contrat\Facture;
 
-interface FacturePlainePdfInterface
+interface FacturePdfPlaineInterface
 {
     public function generate();
 }

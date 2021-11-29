@@ -6,5 +6,6 @@ use AcMarche\Mercredi\Facture\FactureInterface;
 
 interface FactureRenderInterface
 {
-    public function render(FactureInterface $facture):string;
+    public function renderForDetails(FactureInterface $facture):string;
+    public function renderForPdf(FactureInterface $facture):string;
 }

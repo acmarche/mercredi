@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
@@ -36,7 +36,7 @@ final class PlaineController extends AbstractController
     private SanteHandler $santeHandler;
     private SanteChecker $santeChecker;
     private PlainePresenceRepository $plainePresenceRepository;
-    private FacturePlaineHandler $facturePlaineHandler;
+    private FacturePlaineHandlerInterface $facturePlaineHandler;
     private FactureEmailFactory $factureEmailFactory;
     private NotificationMailer $notificationMailer;
     private AdminEmailFactory $adminEmailFactory;
@@ -48,7 +48,7 @@ final class PlaineController extends AbstractController
         SanteHandler $santeHandler,
         SanteChecker $santeChecker,
         PlainePresenceRepository $plainePresenceRepository,
-        FacturePlaineHandler $facturePlaineHandler,
+        FacturePlaineHandlerInterface $facturePlaineHandler,
         FactureEmailFactory $factureEmailFactory,
         NotificationMailer $notificationMailer,
         AdminEmailFactory $adminEmailFactory,

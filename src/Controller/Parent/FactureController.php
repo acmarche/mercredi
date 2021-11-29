@@ -2,8 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
@@ -67,8 +67,7 @@ final class FactureController extends AbstractController
             return $hasTuteur;
         }
 
-        $html = $this->factureRender->render($facture);
-
+        $html = $this->factureRender->renderForDetails($facture);
 
         return $this->render(
             '@AcMarcheMercrediParent/facture/show.html.twig',

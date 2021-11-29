@@ -25,7 +25,7 @@ final class FacturePdfFactoryTrait
 
         //   return new Response($html);
 
-        return $this->downloadPdf($html, 'facture_'.$date->format('d-m-Y').'.pdf');
+        return $this->downloadPdf($html, 'facture_'.$facture->getId().'.pdf');
     }
 
     /**

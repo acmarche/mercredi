@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Render\FactureRender;
+use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use DateTime;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -13,10 +13,10 @@ final class FactureFactory
 {
     use PdfDownloaderTrait;
 
-    private FactureRender $factureRender;
+    private FactureRenderInterface $factureRender;
     private ParameterBagInterface $parameterBag;
 
-    public function __construct(FactureRender $factureRender, ParameterBagInterface $parameterBag)
+    public function __construct(FactureRenderInterface $factureRender, ParameterBagInterface $parameterBag)
     {
         $this->factureRender = $factureRender;
         $this->parameterBag = $parameterBag;
@@ -53,7 +53,7 @@ final class FactureFactory
             if (is_readable($fileName)) {
                 continue;
             }
-            $htmlInvoice = $this->factureRender->generateOneHtml($facture);
+            $htmlInvoice = $this->factureRender->renderForPdf($facture);
             $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
             if ($i > $max) {
                 return false;
