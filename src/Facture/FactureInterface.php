@@ -41,7 +41,7 @@ interface FactureInterface
 
     public function setCommunication(string $communication): self;
 
-    public function __toString();
+    public function __toString(): string;
 
     public function getEnfants(): array;
 

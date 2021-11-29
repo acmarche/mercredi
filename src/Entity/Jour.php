@@ -93,7 +93,7 @@ class Jour implements TimestampableInterface
         $this->date_jour = $date_jour;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->date_jour->format('d-m-Y');
     }

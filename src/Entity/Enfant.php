@@ -127,7 +127,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         $this->photo_autorisation = false;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
     }

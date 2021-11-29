@@ -105,7 +105,7 @@ final class DateUtils
     /**
      * @return CarbonPeriod
      */
-    public function getWeeksOfMonth(CarbonInterface $date): array
+    public function getWeeksOfMonth(CarbonInterface $date): CarbonPeriod
     {
         $weeks = [];
         $firstDay = $date->firstOfMonth();

@@ -59,7 +59,7 @@ class Creance implements TimestampableInterface, UuidableInterface
         $this->tuteur = $tuteur;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->nom;
     }

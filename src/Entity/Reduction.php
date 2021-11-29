@@ -38,7 +38,7 @@ class Reduction
      */
     private ?float $forfait = null;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getNom() . ' (' . $this->pourcentage . '%)';
     }

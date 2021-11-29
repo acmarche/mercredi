@@ -68,7 +68,7 @@ final class RegistrationFormType extends AbstractType
             );
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return UserType::class;
     }

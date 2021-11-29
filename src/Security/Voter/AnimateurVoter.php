@@ -44,7 +44,7 @@ final class AnimateurVoter extends Voter
         $this->security = $security;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         //a cause de index pas d'animateur defini
         if ($subject && !$subject instanceof Animateur) {
@@ -54,7 +54,7 @@ final class AnimateurVoter extends Voter
         return \in_array($attribute, [self::INDEX, self::SHOW, self::ADD, self::EDIT, self::DELETE], true);
     }
 
-    protected function voteOnAttribute($attribute, $animateur, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $animateur, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
 

@@ -78,7 +78,7 @@ class SanteFiche implements TimestampableInterface
         $this->questions = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'Fiche ' . $this->id;
     }

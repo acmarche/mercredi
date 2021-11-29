@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormEvents;
 
 class AddFieldTuteurSubscriber implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [FormEvents::PRE_SET_DATA => 'preSetData'];
     }

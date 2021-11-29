@@ -18,7 +18,7 @@ class ContactEmailFactory
      * @param string $body
      * @return \Symfony\Bridge\Twig\Mime\NotificationEmail
      */
-    public function sendContactForm(string $from, string $nom, string $body): NotificationEmail
+    public function sendContactForm(string $from, string $nom, string $body): \Symfony\Bridge\Twig\Mime\NotificationEmail
     {
         $to = $this->getEmailAddressOrganisation();
         $message = NotificationEmailJf::asPublicEmailJf();

@@ -13,7 +13,7 @@ final class PlaineGroupeEditWithoutFileType extends AbstractType
             ->remove('groupeScolaire');
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return PlaineGroupeType::class;
     }

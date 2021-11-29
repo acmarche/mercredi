@@ -61,7 +61,7 @@ class PlaineGroupe implements TimestampableInterface
         $this->groupe_scolaire = $groupe_scolaire;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getGroupeScolaire()->getNom();
     }

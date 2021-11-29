@@ -10,7 +10,7 @@ use DateTimeInterface;
 
 interface PresenceInterface
 {
-    public function __toString();
+    public function __toString(): string;
 
     public function getAbsent(): int;
 

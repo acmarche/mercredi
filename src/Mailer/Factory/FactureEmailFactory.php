@@ -64,7 +64,7 @@ class FactureEmailFactory
      * @param string $body
      * @return \Symfony\Bridge\Twig\Mime\NotificationEmail
      */
-    public function messageFacture(string $from, string $sujet, string $body): NotificationEmail
+    public function messageFacture(string $from, string $sujet, string $body): \Symfony\Bridge\Twig\Mime\NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message

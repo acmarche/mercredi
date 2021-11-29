@@ -62,7 +62,7 @@ final class AccueilVoter extends Voter
         $this->tuteurUtils = $tuteurUtils;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Accueil && \in_array(
             $attribute,
@@ -71,7 +71,7 @@ final class AccueilVoter extends Voter
         );
     }
 
-    protected function voteOnAttribute($attribute, $accueil, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $accueil, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
         $this->accueil = $accueil;
@@ -111,7 +111,7 @@ final class AccueilVoter extends Voter
     /**
      * @return bool
      */
-    private function checkTuteur()
+    private function checkTuteur(): bool
     {
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 

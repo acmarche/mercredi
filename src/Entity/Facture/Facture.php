@@ -106,7 +106,7 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
         $this->factureDecomptes = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'Facture ' . $this->id;
     }

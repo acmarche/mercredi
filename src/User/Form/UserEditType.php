@@ -16,7 +16,7 @@ final class UserEditType extends AbstractType
             ->remove('roles');
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return UserType::class;
     }

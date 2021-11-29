@@ -13,7 +13,7 @@ final class FactureSendAllType extends AbstractType
             ->remove('to');
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FactureSendType::class;
     }

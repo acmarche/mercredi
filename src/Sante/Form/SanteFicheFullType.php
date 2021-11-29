@@ -31,12 +31,12 @@ final class SanteFicheFullType extends AbstractType
         );
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return SanteFicheEtape2Type::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'sante_fiche';
     }

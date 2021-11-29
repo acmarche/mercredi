@@ -106,7 +106,7 @@ final class EnfantRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function findOrphelins()
+    public function findOrphelins(): array
     {
         return $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.relations IS EMPTY')

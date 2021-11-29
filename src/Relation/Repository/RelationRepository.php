@@ -42,7 +42,7 @@ final class RelationRepository extends ServiceEntityRepository
     /**
      * @return Relation[] Returns an array of Relation objects
      */
-    public function findByEnfant(Enfant $enfant)
+    public function findByEnfant(Enfant $enfant): array
     {
         return $this->getQlB()
             ->andWhere('relation.enfant = :enfant')
@@ -55,7 +55,7 @@ final class RelationRepository extends ServiceEntityRepository
     /**
      * @return Relation[] Returns an array of Relation objects
      */
-    public function findByTuteur(Tuteur $tuteur)
+    public function findByTuteur(Tuteur $tuteur): array
     {
         return $this->getQlB()
             ->andWhere('relation.tuteur = :tuteur')
@@ -67,7 +67,7 @@ final class RelationRepository extends ServiceEntityRepository
     /**
      * @return Relation[] Returns an array of Relation objects
      */
-    public function findByEcole(Ecole $ecole)
+    public function findByEcole(Ecole $ecole): array
     {
         return $this->getQlB()
             ->andWhere('enfant.ecole = :ecole')

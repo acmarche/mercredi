@@ -30,7 +30,7 @@ final class PageRepository extends ServiceEntityRepository
     /**
      * @return Page[]
      */
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['position' => 'ASC']);
     }

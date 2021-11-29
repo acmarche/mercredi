@@ -20,7 +20,7 @@ final class UserAddSubscriber implements EventSubscriber
         $this->propertyUtil = $propertyUtil;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::prePersist,

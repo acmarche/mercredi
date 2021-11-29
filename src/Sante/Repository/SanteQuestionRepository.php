@@ -34,7 +34,7 @@ final class SanteQuestionRepository extends ServiceEntityRepository
      *
      * @return SanteQuestion[]
      */
-    public function getQuestionsNonRepondues($questionsRepondues)
+    public function getQuestionsNonRepondues($questionsRepondues): array
     {
         $queryBuilder = $this->createQueryBuilder('santeQuestion');
 

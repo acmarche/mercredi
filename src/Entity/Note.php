@@ -33,7 +33,7 @@ class Note implements TimestampableInterface
         $this->enfant = $enfant;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getRemarque();
     }

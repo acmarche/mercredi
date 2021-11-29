@@ -38,7 +38,7 @@ class Document implements TimestampableInterface, UuidableInterface
      */
     private ?File $file = null;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->nom;
     }

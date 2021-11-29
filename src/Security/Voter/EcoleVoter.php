@@ -44,7 +44,7 @@ final class EcoleVoter extends Voter
         $this->security = $security;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         //a cause de index pas d'ecole defini
         if ($subject && !$subject instanceof Ecole) {
@@ -54,7 +54,7 @@ final class EcoleVoter extends Voter
         return \in_array($attribute, [self::INDEX, self::SHOW, self::ADD, self::EDIT, self::DELETE], true);
     }
 
-    protected function voteOnAttribute($attribute, $ecole, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $ecole, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
 

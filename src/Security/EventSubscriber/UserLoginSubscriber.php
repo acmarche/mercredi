@@ -19,7 +19,7 @@ final class UserLoginSubscriber implements EventSubscriberInterface
         $this->entityManager = $entityManager;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [LoginSuccessEvent::class => 'onLoginSuccess'];
     }

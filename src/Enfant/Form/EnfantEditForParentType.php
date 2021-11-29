@@ -15,7 +15,7 @@ final class EnfantEditForParentType extends AbstractType
             ->remove('groupe_scolaire');
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return EnfantType::class;
     }

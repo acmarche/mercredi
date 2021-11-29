@@ -27,7 +27,7 @@ final class AssociateUserTuteurDto
     /**
      * @return Tuteur
      */
-    public function getTuteur(): ?Tuteur
+    public function getTuteur(): Tuteur
     {
         return $this->tuteur;
     }

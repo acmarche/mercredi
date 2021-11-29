@@ -112,7 +112,7 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findByDay(Jour $jour)
+    public function findByDay(Jour $jour): array
     {
         return $this->createQBl()
             ->andWhere('presence.jour = :jour')
@@ -144,7 +144,7 @@ final class PresenceRepository extends ServiceEntityRepository
      *
      * @throws NonUniqueResultException
      */
-    public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
+    public function isRegistered(Enfant $enfant, Jour $jour): Presence
     {
         return $this->createQBlPlaine()
             ->andWhere('presence.enfant = :enfant')

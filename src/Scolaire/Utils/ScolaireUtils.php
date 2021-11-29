@@ -22,7 +22,7 @@ final class ScolaireUtils
      * @param \AcMarche\Mercredi\Entity\Enfant $enfant
      * @return \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
      */
-    public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): GroupeScolaire
+    public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): \AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire
     {
         if (null !== ($groupeScolaire = $enfant->getGroupeScolaire())) {
             return $groupeScolaire;
@@ -43,7 +43,7 @@ final class ScolaireUtils
      * @param Enfant $enfant
      * @return GroupeScolaire
      */
-    public function findGroupeScolaireEnfantByAge(?float $age): ?GroupeScolaire
+    public function findGroupeScolaireEnfantByAge(?float $age): GroupeScolaire
     {
         if (!$age) {
             return null;

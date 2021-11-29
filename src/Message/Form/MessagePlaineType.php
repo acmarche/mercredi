@@ -22,7 +22,7 @@ final class MessagePlaineType extends AbstractType
             );
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return MessageType::class;
     }

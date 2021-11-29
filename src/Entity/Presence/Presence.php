@@ -76,7 +76,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
         $this->half = 0;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'presence to string';
     }

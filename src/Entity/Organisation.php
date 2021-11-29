@@ -53,7 +53,7 @@ class Organisation
      */
     private ?File $photo = null;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->nom;
     }

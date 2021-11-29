@@ -46,12 +46,12 @@ final class SanteHandler
      *
      * @return void|null
      */
-    public function handle(SanteFiche $santeFiche, array $questions)
+    public function handle(SanteFiche $santeFiche, array $questions): void
     {
         $this->santeFicheRepository->flush();
         foreach ($questions as $question) {
             if (null === $question->getReponseTxt()) {
-                return null;
+                return;
             }
             if (null === ($reponse = $this->santeReponseRepository->getResponse($santeFiche, $question))) {
                 $reponse = $this->santeFactory->createSanteReponse($santeFiche, $question);

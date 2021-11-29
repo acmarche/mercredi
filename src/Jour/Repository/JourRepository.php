@@ -154,7 +154,7 @@ final class JourRepository extends ServiceEntityRepository
      * @return \AcMarche\Mercredi\Entity\Jour|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?Jour
+    public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?\AcMarche\Mercredi\Entity\Jour
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')

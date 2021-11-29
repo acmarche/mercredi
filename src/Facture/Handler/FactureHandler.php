@@ -72,7 +72,7 @@ final class FactureHandler implements FactureHandlerInterface
      * @param array|int[] $accueilsId
      * @return Facture
      */
-    public function handleManually(FactureInterface $facture, array $presencesId, array $accueilsId): FactureInterface
+    public function handleManually(FactureInterface $facture, array $presencesId, array $accueilsId): Facture
     {
         $presences = $this->presenceRepository->findBy(['id' => $presencesId]);
         $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);

@@ -69,7 +69,7 @@ class Plaine implements SluggableInterface
         $this->prix3 = 0;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->nom;
     }
