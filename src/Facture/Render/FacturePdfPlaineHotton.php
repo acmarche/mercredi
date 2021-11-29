@@ -62,7 +62,5 @@ class FacturePdfPlaineHotton implements FacturePdfPlaineInterface
                 'plaine' => $plaine,
             ]
         );
-
     }
-
 }
