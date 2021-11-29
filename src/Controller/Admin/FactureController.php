@@ -132,7 +132,7 @@ final class FactureController extends AbstractController
      */
     public function newManual(Request $request, Tuteur $tuteur): Response
     {
-        $facture = $this->factureHandler->newInstance($tuteur);
+        $facture = $this->factureHandler->newFacture($tuteur);
 
         $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur);
         $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur);
@@ -172,7 +172,7 @@ final class FactureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $month = $form->get('mois')->getData();
 
-            if (!$facture = $this->factureHandler->generateByMonth($tuteur, $month)) {
+            if (!$facture = $this->factureHandler->generateByMonthForTuteur($tuteur, $month)) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_index_by_tuteur', ['id' => $tuteur->getId()]);
@@ -201,7 +201,7 @@ final class FactureController extends AbstractController
             $month = $form->get('mois')->getData();
 
             try {
-                $factures = $this->factureHandler->generateByMonthForAll($month);
+                $factures = $this->factureHandler->generateByMonthForEveryone($month);
             } catch (\Exception $exception) {
                 $this->addFlash('danger', 'Erreur survenue: '.$exception->getMessage());
 

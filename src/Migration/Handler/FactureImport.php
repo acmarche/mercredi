@@ -68,7 +68,7 @@ class FactureImport
 
     private function createFacture($paiement, Tuteur $tuteur): Facture
     {
-        $facture = $this->factureHandler->newInstance($tuteur);
+        $facture = $this->factureHandler->newFacture($tuteur);
         if ($paiement->date_paiement) {
             $facture->setPayeLe(\DateTime::createFromFormat('Y-m-d', $paiement->date_paiement));
         }

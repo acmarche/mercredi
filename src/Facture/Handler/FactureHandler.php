@@ -61,7 +61,7 @@ final class FactureHandler implements FactureHandlerInterface
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
     }
 
-    public function newInstance(Tuteur $tuteur): FactureInterface
+    public function newFacture(Tuteur $tuteur): FactureInterface
     {
         return $this->factureFactory->newInstance($tuteur);
     }
@@ -85,7 +85,7 @@ final class FactureHandler implements FactureHandlerInterface
         return $facture;
     }
 
-    public function generateByMonth(Tuteur $tuteur, string $month): ?FactureInterface
+    public function generateByMonthForTuteur(Tuteur $tuteur, string $month): ?FactureInterface
     {
         list($month, $year) = explode('-', $month);
         $date = Carbon::createFromDate($year, $month, 01);
@@ -100,7 +100,7 @@ final class FactureHandler implements FactureHandlerInterface
         return $facture;
     }
 
-    public function generateByMonthForAll(string $monthSelected): array
+    public function generateByMonthForEveryone(string $monthSelected): array
     {
         list($month, $year) = explode('-', $monthSelected);
         $date = Carbon::createFromDate($year, $month, 01);
@@ -124,7 +124,7 @@ final class FactureHandler implements FactureHandlerInterface
 
     private function handleByTuteur(Tuteur $tuteur, CarbonInterface $date): ?Facture
     {
-        $facture = $this->newInstance($tuteur);
+        $facture = $this->newFacture($tuteur);
         $facture->setMois($date->format('m-Y'));
 
         $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur, $date->toDateTime());
@@ -185,7 +185,7 @@ final class FactureHandler implements FactureHandlerInterface
     {
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
-            $this->setMetaDatas($facture, $presence, $facturePresence);
+            $this->registerDataOnFacturePresence($facture, $presence, $facturePresence);
             $facturePresence->setCoutCalculated($this->presenceCalculator->calculate($presence));
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
@@ -216,7 +216,7 @@ final class FactureHandler implements FactureHandlerInterface
         }
     }
 
-    public function setMetaDatas(
+    public function registerDataOnFacturePresence(
         FactureInterface $facture,
         PresenceInterface $presence,
         FacturePresence $facturePresence
