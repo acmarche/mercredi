@@ -144,7 +144,7 @@ final class PresenceRepository extends ServiceEntityRepository
      *
      * @throws NonUniqueResultException
      */
-    public function isRegisteredForPlaine(Enfant $enfant, Jour $jour): ?Presence
+    public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
     {
         return $this->createQBlPlaine()
             ->andWhere('presence.enfant = :enfant')
