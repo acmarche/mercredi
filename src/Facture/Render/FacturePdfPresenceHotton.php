@@ -107,6 +107,8 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
                 'tuteur' => $tuteur,
                 'organisation' => $organisation,
                 'data' => $data,
+                'countAccueils'=>count($factureAccueils),
+                'countPresences'=>count($facturePresences)
             ]
         );
     }

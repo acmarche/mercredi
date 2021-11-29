@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use DateTime;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

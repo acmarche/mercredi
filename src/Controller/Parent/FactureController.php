@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -67,7 +67,7 @@ final class FactureController extends AbstractController
             return $hasTuteur;
         }
 
-        $html = $this->factureRender->renderForDetails($facture);
+        $html = $this->factureRender->render($facture);
 
         return $this->render(
             '@AcMarcheMercrediParent/facture/show.html.twig',

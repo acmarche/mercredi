@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
@@ -15,7 +16,6 @@ use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
-use AcMarche\Mercredi\Facture\Render\FactureRenderInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -233,7 +233,7 @@ final class FactureController extends AbstractController
     public function show(Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $html = $this->factureRender->renderForDetails($facture);
+        $html = $this->factureRender->render($facture);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',

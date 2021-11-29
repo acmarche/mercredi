@@ -27,13 +27,11 @@
         <div class="text-center">
             <div>
                 {{ organisation.nom }}
-                <strong>Mois {{ facture.mois }}</strong>
+                <strong>{{ plaine }}</strong>
             </div>
-            <br/>
-            <div>Implantation scolaire {{ facture.ecoles }}</div>
         </div>
         <p class="mt-5">
-            Nous vous invitons à verser le montant mentionné ci-dessous dans les 30 jours.
+            Nous vous invitons à verser le montant mentionné ci-dessous.
             <br/><br/>
             Le détail est consultable, en ligne, via votre compte ATL (www.atl-hotton.be).
             <br/><br/>
@@ -42,10 +40,6 @@
             Communal (rue des Ecoles 50 à 6990 HOTTON ou cartourba@hotton.be) <br/>dans les 15 jours calendrier qui
             suivent la date d’expiration de la facture.
             <br/><br/>
-            En cas de non-paiement, les frais de rappel s’élèveront à 1,00€ par facture mensuelle de retard et
-            10,00€
-            en cas de rappel par voie recommandée.
-            <br/><br/>
             <span class="text-muted">
                     Texte de référence : « Règlement redevance sur les accueils extrascolaire » adopté par le conseil en sa
                 séance du 27.08.2021
@@ -53,66 +47,30 @@
             <br>
         </p>
         <table class="table table-bordered">
-            <thead>
             <tr>
-                <th>Enfant(s)</th>
-                {% for row in data.enfants %}
-                    <th>{{ row.enfant }}</th>
-                {% endfor %}
+                <th>Nom</th>
+                <th>Inscrits aux dates</th>
             </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    Accueils matin<br/>
-                    ≤ 7h29=0,50 € &7h30 -
-                    8h = 0,50€
-                </td>
-                {% for row in data.enfants %}
-                    <td>{{ row.accueils.Matin.nb }} demi-heure(s)</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                <td>
-                    Accueils soir <br/>
-                    ≤ 17h = 0,50 € & Après
-                    17h = 0,50 €/demi-heure
-                </td>
-                {% for row in data.enfants %}
-                    <td>{{ row.accueils.Soir.nb }} demi-heure(s)</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                <td>
-                    Journée pédagogique<br/>
-                    1 journée = 5,00 € & 1/2 journée = 2,50 €
-                </td>
-                {% for row in data.enfants %}
-                    <td>{{ row.peda }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                <td>
-                    Mercredis récréatifs<br/>
-                    5 €, 3 €, 1 € (selon le nbre d'enfants)
-                </td>
-                {% for row in data.enfants %}
-                    <td>{{ row.mercredi }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                <th>
-                    Total période
-                </th>
-                {% for row in data.enfants %}
-                    <td>{{ row.cout | format_currency('eur') }}</td>
-                {% endfor %}
-            </tr>
-            </tbody>
+            {% for enfant in enfants %}
+                <tr>
+                    <td>{{ enfant }}</td>
+                    <td>
+                        {% for inscription in inscriptions %}
+                            {% if inscription.enfant.id == enfant.id %}
+                                {{ inscription.jour.dateJour| date('d/m') }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucun</td>
+                </tr>
+            {% endfor %}
             <tfoot>
             <tr>
                 <th>Total à payer</th>
-                <td class="text-right" colspan="{{ data.enfants|length }}">
+                <td class="text-end">
                     <strong>{{ data.cout | format_currency('eur') }}</strong>
                 </td>
             </tr>

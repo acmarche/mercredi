@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Contrat\Facture;
 
 use AcMarche\Mercredi\Facture\FactureInterface;
 
-interface FacturePdfPlaineInterface
+interface FacturePdfRenderInterface
 {
-    public function render(FactureInterface $facture):string;
+    public function render(FactureInterface $facture): string;
 }
