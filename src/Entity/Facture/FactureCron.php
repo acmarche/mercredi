@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
-
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -106,5 +105,4 @@ class FactureCron implements TimestampableInterface
 
         return $this;
     }
-
 }

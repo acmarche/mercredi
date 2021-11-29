@@ -182,8 +182,7 @@ final class AccueilController extends AbstractController
      */
     public function delete(Request $request, Accueil $accueil): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('delete' . $accueil->getId(), $request->request->get('_token'))) {
             if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
                 $this->addFlash('danger', 'Un accueil déjà facturé ne peut être supprimé');
 

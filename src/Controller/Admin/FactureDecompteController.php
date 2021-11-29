@@ -39,7 +39,6 @@ final class FactureDecompteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->factureDecompteRepository->persist($factureDecompte);
             $this->factureDecompteRepository->flush();
 
@@ -105,8 +104,7 @@ final class FactureDecompteController extends AbstractController
     public function delete(Request $request, FactureDecompte $factureDecompte): Response
     {
         $facture = $factureDecompte->getFacture();
-        if ($this->isCsrfTokenValid('delete'.$factureDecompte->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('delete' . $factureDecompte->getId(), $request->request->get('_token'))) {
             $this->factureDecompteRepository->remove($factureDecompte);
             $this->factureDecompteRepository->flush();
 

@@ -62,7 +62,7 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
         $badges =
             [
                 new CsrfTokenBadge('authenticate', $token),
-                new PasswordUpgradeBadge($password, $this->userRepository),//SelfValidatingPassport?
+                new PasswordUpgradeBadge($password, $this->userRepository), //SelfValidatingPassport?
             ];
 
         $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
@@ -76,7 +76,8 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($password), $badges
+            new PasswordCredentials($password),
+            $badges
         );
     }
 

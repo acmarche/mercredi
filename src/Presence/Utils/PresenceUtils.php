@@ -65,7 +65,7 @@ final class PresenceUtils
     public static function extractTuteurs(array $presences): array
     {
         $tuteurs = array_map(
-            fn($presence) => $presence->getTuteur(),
+            fn ($presence) => $presence->getTuteur(),
             $presences
         );
         $data = [];
@@ -90,7 +90,7 @@ final class PresenceUtils
                     if ($registerRemarques) {
                         $remarques = $enfant->getRemarque();
                         if ($presence->getRemarque()) {
-                            $remarques .= ' (Parent=>) '.$presence->getRemarque();
+                            $remarques .= ' (Parent=>) ' . $presence->getRemarque();
                         }
                         $enfant->setRemarque($remarques);
                     }
@@ -117,7 +117,7 @@ final class PresenceUtils
     {
         $jours =
             array_map(
-                fn($presence) => $presence->getJour(),
+                fn ($presence) => $presence->getJour(),
                 $presences
             );
         $data = [];
@@ -137,7 +137,7 @@ final class PresenceUtils
             $telephones = '';
             foreach ($this->relationRepository->findByEnfant($enfant) as $relation) {
                 $tuteur = $relation->getTuteur();
-                $telephones .= ' '.TuteurUtils::getTelephones($tuteur);
+                $telephones .= ' ' . TuteurUtils::getTelephones($tuteur);
             }
             $enfant->setTelephones($telephones);
         }

@@ -41,7 +41,7 @@ final class PlaineAdminHandler
         if (0 === count($currentJours)) {
             $plaine->addJour(new Jour(new DateTime('today')));
             for ($i = 1; $i < 5; $i++) {
-                $plaine->addJour(new Jour(new DateTime('+'.$i.' day')));
+                $plaine->addJour(new Jour(new DateTime('+' . $i . ' day')));
             }
         }
     }
@@ -94,5 +94,4 @@ final class PlaineAdminHandler
     {
         return $this->plaineRepository->findPlaineOpen($plaine);
     }
-
 }

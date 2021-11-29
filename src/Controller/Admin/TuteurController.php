@@ -137,7 +137,7 @@ final class TuteurController extends AbstractController
      */
     public function delete(Request $request, Tuteur $tuteur): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $tuteur->getId(), $request->request->get('_token'))) {
 
             /*      if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
                       $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');

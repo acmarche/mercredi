@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Security\User;
-use Doctrine\ORM\Mapping as ORM;
 use AcMarche\Mercredi\ResetPassword\Repository\ResetPasswordRequestRepository;
+use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 

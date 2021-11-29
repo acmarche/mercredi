@@ -2,17 +2,17 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use AcMarche\Mercredi\Entity\Tuteur;
-use Stringable;
-use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use Stringable;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -63,7 +63,7 @@ final class PresenceVoter extends Voter
         $this->user = $token->getUser();
         $this->enfant = $presence->getEnfant();
 
-        if (! $this->user instanceof User) {
+        if (!$this->user instanceof User) {
             return false;
         }
 
@@ -130,7 +130,7 @@ final class PresenceVoter extends Voter
 
     private function checkTuteur(): bool
     {
-        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
+        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return false;
         }
 
@@ -143,7 +143,7 @@ final class PresenceVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
         $enfants = array_map(
-            fn($relation) => $relation->getEnfant()->getId(),
+            fn ($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

@@ -24,7 +24,7 @@ trait JoursTrait
      */
     public function getJours(): Collection
     {
-        if (! $this->jours) {
+        if (!$this->jours) {
             $this->jours = new ArrayCollection();
         }
 
@@ -33,7 +33,7 @@ trait JoursTrait
 
     public function addJour(Jour $jour): self
     {
-        if (! $this->jours->contains($jour)) {
+        if (!$this->jours->contains($jour)) {
             $this->jours[] = $jour;
         }
 

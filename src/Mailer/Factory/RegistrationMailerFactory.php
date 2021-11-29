@@ -20,7 +20,6 @@ final class RegistrationMailerFactory
         User $user,
         VerifyEmailSignatureComponents $verifyEmailSignatureComponents
     ): NotificationEmail {
-
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
@@ -45,7 +44,8 @@ final class RegistrationMailerFactory
             ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
             ->subject('Un nouveau compte a été crée sur Accueil Temps Libre')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_new_account_created.html.twig')
-            ->context([
+            ->context(
+                [
                     'user' => $user,
                     'footer_text' => 'orga',
                     'organisation' => $this->organisation,

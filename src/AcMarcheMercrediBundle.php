@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi;
 
 use AcMarche\Mercredi\DependencyInjection\PresenceConstraintPass;
-use function dirname;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use function dirname;
 
 final class AcMarcheMercrediBundle extends Bundle
 {

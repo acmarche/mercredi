@@ -91,12 +91,12 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
 
         if ($name) {
             $queryBuilder->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
-                ->setParameter('nom', '%'.$name.'%');
+                ->setParameter('nom', '%' . $name . '%');
         }
 
         if ($role) {
             $queryBuilder->andWhere('user.roles LIKE :role')
-                ->setParameter('role', '%'.$role.'%');
+                ->setParameter('role', '%' . $role . '%');
         }
 
         return $queryBuilder

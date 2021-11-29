@@ -30,14 +30,14 @@ final class MercrediExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('mercredi_month_fr', fn(int $number) => $this->monthFr($number)),
-            new TwigFilter('mercredi_absence_text', fn($number): string => $this->absenceFilter($number)),
+            new TwigFilter('mercredi_month_fr', fn (int $number) => $this->monthFr($number)),
+            new TwigFilter('mercredi_absence_text', fn ($number): string => $this->absenceFilter($number)),
         ];
     }
 
     public function getFunctions()
     {
-        return [new TwigFunction('inIds', fn(int $number, array $objects) => $this->inIds($number, $objects))];
+        return [new TwigFunction('inIds', fn (int $number, array $objects) => $this->inIds($number, $objects))];
     }
 
 

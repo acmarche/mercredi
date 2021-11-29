@@ -203,7 +203,7 @@ final class FactureController extends AbstractController
             try {
                 $factures = $this->factureHandler->generateByMonthForEveryone($month);
             } catch (\Exception $exception) {
-                $this->addFlash('danger', 'Erreur survenue: '.$exception->getMessage());
+                $this->addFlash('danger', 'Erreur survenue: ' . $exception->getMessage());
 
                 return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
             }
@@ -300,7 +300,7 @@ final class FactureController extends AbstractController
      */
     public function delete(Request $request, Facture $facture): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$facture->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $facture->getId(), $request->request->get('_token'))) {
             $factureId = $facture->getId();
             $tuteur = $facture->getTuteur();
             $this->factureRepository->remove($facture);

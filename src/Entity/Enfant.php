@@ -129,7 +129,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
 
     public function __toString()
     {
-        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+        return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
     }
 
     public function getSluggableFields(): array
@@ -145,7 +145,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     public function getTuteurs(): array
     {
         return array_map(
-            fn($relation) => $relation->getTuteur(),
+            fn ($relation) => $relation->getTuteur(),
             $this->getRelations()->toArray()
         );
     }

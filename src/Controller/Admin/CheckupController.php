@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -225,8 +225,8 @@ final class CheckupController extends AbstractController
                     $data[$i]['facture'] = $facture;
                     $data[$i]['presences'][] = [
                         'object' => $presence,
-                        'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €',
-                        'ordre' => 'Passe de '.$ordreFactured.' à '.$ordre,
+                        'prix' => 'Passe de ' . $prixFactured . ' € à ' . $prix . ' €',
+                        'ordre' => 'Passe de ' . $ordreFactured . ' à ' . $ordre,
                     ];
                     if ($presence) {
                         $newcout = $this->presenceCalculator->calculate(

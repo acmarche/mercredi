@@ -35,7 +35,6 @@ final class PlaineGroupeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->plaineGroupeRepository->flush();
             $this->addFlash('success', 'le groupe été enregistré');
 
@@ -51,5 +50,4 @@ final class PlaineGroupeController extends AbstractController
             ]
         );
     }
-
 }

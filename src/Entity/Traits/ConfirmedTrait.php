@@ -20,5 +20,4 @@ trait ConfirmedTrait
     {
         $this->confirmed = $confirmed;
     }
-
 }

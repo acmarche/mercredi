@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -151,7 +150,7 @@ final class EnfantVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($this->tuteur);
 
         $enfants = array_map(
-            fn($relation) => $relation->getEnfant()->getId(),
+            fn ($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

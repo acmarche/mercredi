@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Note;
@@ -71,7 +70,6 @@ class EnfantImport
     {
         $relations = $this->pdo->getAll('enfant_tuteur');
         foreach ($relations as $data) {
-
             $tuteur = $this->migrationRepository->getTuteur($data->tuteur_id);
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
 
@@ -87,7 +85,6 @@ class EnfantImport
     {
         $enfants = $this->pdo->getAll('note');
         foreach ($enfants as $data) {
-
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
 
             $note = new Note($enfant);
@@ -101,5 +98,4 @@ class EnfantImport
         }
         $this->enfantRepository->flush();
     }
-
 }

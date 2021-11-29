@@ -243,7 +243,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function delete(Request $request, Plaine $plaine): Response
     {
-        if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('deletePresence' . $plaine->getId(), $request->request->get('_token'))) {
             $presenceId = (int)$request->request->get('presence');
             if (0 === $presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
@@ -274,7 +274,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function remove(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
-        if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('remove' . $plaine->getId(), $request->request->get('_token'))) {
             $this->plaineHandler->removeEnfant($plaine, $enfant);
             $this->addFlash('success', 'L\'enfant a été retiré de la plaine');
         }

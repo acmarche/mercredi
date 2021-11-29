@@ -13,7 +13,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]);
 
-    $containerConfigurator->extension('security', [
+    $containerConfigurator->extension(
+        'security',
+        [
             'providers' => [
                 'mercredi_user_provider' => [
                     'entity' => [

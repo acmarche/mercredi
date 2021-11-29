@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Form\SearchEnfantType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
@@ -13,6 +11,7 @@ use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
@@ -20,6 +19,7 @@ use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -167,7 +167,7 @@ final class EnfantController extends AbstractController
      */
     public function delete(Request $request, Enfant $enfant): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $enfant->getId(), $request->request->get('_token'))) {
             $enfantId = $enfant->getId();
             $this->enfantRepository->remove($enfant);
             $this->enfantRepository->flush();

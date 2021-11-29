@@ -24,7 +24,7 @@ trait FactureReductionsTrait
 
     public function addFactureReduction(FactureReduction $factureReduction): self
     {
-        if (! $this->factureReductions->contains($factureReduction)) {
+        if (!$this->factureReductions->contains($factureReduction)) {
             $this->factureReductions[] = $factureReduction;
             $factureReduction->setFacture($this);
         }

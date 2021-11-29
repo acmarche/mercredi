@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Jour\Form;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Form\Type\ArchivedType;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -47,7 +47,7 @@ final class JourType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Ecole::class,
-                    'query_builder' => fn(EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
+                    'query_builder' => fn (EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
                     'help' => 'Donnée utilisée pour les journées pédagogiques',
                     'required' => false,
                     'multiple' => true,

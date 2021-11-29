@@ -3,14 +3,13 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
-use AcMarche\Mercredi\Entity\Scolaire\Ecole;
-use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Sante\SanteQuestion;
+use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -165,5 +164,4 @@ class ParametreImport
 
         $this->enfantRepository->flush();
     }
-
 }

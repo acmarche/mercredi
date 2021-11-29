@@ -49,6 +49,6 @@ final class ScolaireUtils
             return null;
         }
 
-       return $this->groupeScolaireRepository->findGroupePlaineByAge($age);
+        return $this->groupeScolaireRepository->findGroupePlaineByAge($age);
     }
 }

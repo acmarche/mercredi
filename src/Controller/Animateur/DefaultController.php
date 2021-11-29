@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Controller\Animateur;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

@@ -161,5 +161,4 @@ final class PlainePresenceRepository extends ServiceEntityRepository
             ->addOrderBy('enfant.nom')
             ->getQuery()->getResult();
     }
-
 }

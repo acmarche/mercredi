@@ -4,9 +4,6 @@
 namespace AcMarche\Mercredi\Enfant\Form;
 
 use AcMarche\Mercredi\Entity\Animateur;
-use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;

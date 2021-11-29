@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait EnfantNotesTrait
 {
-
     /**
      * @var Collection|Note[]
      * @ORM\OneToMany(targetEntity=Note::class, mappedBy="enfant", cascade={"remove"})

@@ -90,7 +90,7 @@ final class AccueilRepository extends ServiceEntityRepository
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour LIKE :date')
-            ->setParameter('date', $date->format('Y-m-d').'%')
+            ->setParameter('date', $date->format('Y-m-d') . '%')
             ->andWhere('accueil.heure = :heure')
             ->setParameter('heure', $heure)
             ->getQuery()->getOneOrNullResult();
@@ -180,7 +180,7 @@ final class AccueilRepository extends ServiceEntityRepository
 
         if ($date) {
             $qb->andWhere('accueil.date_jour LIKE :date')
-                ->setParameter('date', $date->format('Y-m').'%');
+                ->setParameter('date', $date->format('Y-m') . '%');
         }
 
         return $qb->getQuery()->getResult();
@@ -196,5 +196,4 @@ final class AccueilRepository extends ServiceEntityRepository
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
     }
-
 }

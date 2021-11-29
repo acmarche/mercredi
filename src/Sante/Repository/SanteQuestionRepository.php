@@ -24,7 +24,7 @@ final class SanteQuestionRepository extends ServiceEntityRepository
     /**
      * @return SanteQuestion[]
      */
-    public function findAllOrberByPosition():array
+    public function findAllOrberByPosition(): array
     {
         return $this->findBy([], ['display_order' => 'ASC']);
     }

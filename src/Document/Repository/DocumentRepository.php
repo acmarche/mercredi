@@ -4,8 +4,8 @@ namespace AcMarche\Mercredi\Document\Repository;
 
 use AcMarche\Mercredi\Entity\Document;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Document|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,7 +29,7 @@ final class DocumentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('document')
             ->andWhere('document.nom LIKE :keyword OR document.prenom LIKE :keyword')
-            ->setParameter('keyword', '%'.$keyword.'%')
+            ->setParameter('keyword', '%' . $keyword . '%')
             ->addOrderBy('document.nom', 'ASC')
             ->getQuery()->getResult();
     }

@@ -3,10 +3,10 @@
 namespace AcMarche\Mercredi\Presence\Calculator;
 
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
@@ -108,6 +108,5 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
             default:
                 return $jour->getPrix1();
         }
-
     }
 }

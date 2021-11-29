@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Facture\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -34,6 +33,4 @@ class FactureComplementRepository extends ServiceEntityRepository
             ->setParameter('fact', $facture)
             ->getQuery()->getResult();
     }
-
-
 }

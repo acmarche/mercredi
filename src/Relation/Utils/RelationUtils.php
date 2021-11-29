@@ -35,7 +35,7 @@ final class RelationUtils
     {
         return array_unique(
             array_map(
-                fn($relation) => $relation->getTuteur(),
+                fn ($relation) => $relation->getTuteur(),
                 $relations
             )
         );
@@ -50,7 +50,7 @@ final class RelationUtils
     {
         return array_unique(
             array_map(
-                fn($relation) => $relation->getEnfant(),
+                fn ($relation) => $relation->getEnfant(),
                 $relations
             )
         );

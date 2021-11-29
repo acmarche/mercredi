@@ -40,7 +40,7 @@ class Reduction
 
     public function __toString()
     {
-        return $this->getNom().' ('.$this->pourcentage.'%)';
+        return $this->getNom() . ' (' . $this->pourcentage . '%)';
     }
 
     public function getPourcentage(): ?float

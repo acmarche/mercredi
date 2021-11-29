@@ -4,10 +4,10 @@ namespace AcMarche\Mercredi\Security\Ldap;
 
 use Symfony\Component\Ldap\Adapter\AdapterInterface;
 use Symfony\Component\Ldap\Adapter\EntryManagerInterface;
+use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 use Symfony\Component\Ldap\Adapter\QueryInterface;
 use Symfony\Component\Ldap\Exception\DriverNotFoundException;
 use Symfony\Component\Ldap\LdapInterface;
-use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 
 /**
  * Copy/Paste

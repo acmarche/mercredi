@@ -74,7 +74,8 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($password), $badges
+            new PasswordCredentials($password),
+            $badges
         );
     }
 

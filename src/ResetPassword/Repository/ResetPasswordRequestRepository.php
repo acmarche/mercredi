@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\ResetPassword\Repository;
 
-use DateTimeInterface;
 use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,4 +29,3 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
         return new ResetPasswordRequest($user, $expiresAt, $selector, $hashedToken);
     }
 }
-

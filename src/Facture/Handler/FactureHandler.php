@@ -5,6 +5,8 @@ namespace AcMarche\Mercredi\Facture\Handler;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
@@ -17,8 +19,6 @@ use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
-use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Carbon\Carbon;
@@ -258,7 +258,7 @@ final class FactureHandler implements FactureHandlerInterface
             $complement = new FactureComplement($facture);
             $complement->setDateLe(new \DateTime());
             $complement->setForfait($total);
-            $complement->setNom('Retard pour les accueils: '.join(', ', $retards));
+            $complement->setNom('Retard pour les accueils: ' . join(', ', $retards));
             $facture->addFactureComplement($complement);
             $this->factureRepository->persist($complement);
         }

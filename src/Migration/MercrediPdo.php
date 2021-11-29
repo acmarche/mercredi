@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Migration;
 
-
 use PDO;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -26,7 +25,7 @@ class MercrediPdo
 
     public function getAll(string $table)
     {
-        $sql = 'SELECT * FROM '.$table;
+        $sql = 'SELECT * FROM ' . $table;
         $query = $this->execQuery($sql);
 
         return $query->fetchAll(PDO::FETCH_OBJ);
@@ -34,7 +33,7 @@ class MercrediPdo
 
     public function getAllWhere(string $table, string $where, bool $one)
     {
-        $sql = 'SELECT * FROM '.$table.' WHERE '.$where;
+        $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $where;
         $query = $this->execQuery($sql);
         if ($one) {
             return $query->fetch(PDO::FETCH_OBJ);

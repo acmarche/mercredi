@@ -2,12 +2,12 @@
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
-use Behat\Mink\Element\DocumentElement;
-use Doctrine\ORM\EntityManager;
-use Behat\Mink\Element\NodeElement;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\DocumentElement;
+use Behat\Mink\Element\NodeElement;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 
@@ -46,7 +46,7 @@ class XxContext
     public function loadFixtures(): void
     {
         $loader = new ContainerAwareLoader($this->getContainer());
-        $loader->loadFromDirectory(__DIR__.'/../../src/AppBundle/DataFixtures');
+        $loader->loadFromDirectory(__DIR__ . '/../../src/AppBundle/DataFixtures');
         $executor = new ORMExecutor($this->getEntityManager());
         $executor->execute($loader->getFixtures(), true);
     }
@@ -210,7 +210,7 @@ class XxContext
     public function iSaveAScreenshotIn($filename): void
     {
         sleep(1);
-        $this->saveScreenshot($filename, __DIR__.'/../sallessf');
+        $this->saveScreenshot($filename, __DIR__ . '/../sallessf');
     }
 
     private function getPage(): DocumentElement
@@ -227,7 +227,7 @@ class XxContext
     {
         for ($i = 0; $i < $count; ++$i) {
             $product = new Product();
-            $product->setName('Product '.$i);
+            $product->setName('Product ' . $i);
             $product->setPrice(rand(10, 1000));
             $product->setDescription('lorem');
 

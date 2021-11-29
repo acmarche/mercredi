@@ -54,7 +54,7 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-            ->setParameter('keyword', '%'.$keyword.'%');
+            ->setParameter('keyword', '%' . $keyword . '%');
 
         if ($actif) {
             $queryBuilder->andWhere('enfant.archived = 0');
@@ -122,7 +122,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-                ->setParameter('keyword', '%'.$nom.'%');
+                ->setParameter('keyword', '%' . $nom . '%');
         }
 
         if (null !== $ecole) {
@@ -156,7 +156,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-                ->setParameter('keyword', '%'.$nom.'%');
+                ->setParameter('keyword', '%' . $nom . '%');
         }
 
         $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
@@ -213,7 +213,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-                ->setParameter('keyword', '%'.$nom.'%');
+                ->setParameter('keyword', '%' . $nom . '%');
         }
 
         return $queryBuilder
@@ -239,7 +239,7 @@ final class EnfantRepository extends ServiceEntityRepository
             ->andWhere('enfant.archived = 0');
     }
 
-    public function findDoublon():array
+    public function findDoublon(): array
     {
         return $this->createQueryBuilder('enfant')
             ->select('count(enfant.nom) as lignes, enfant.nom, enfant.prenom')

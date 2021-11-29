@@ -24,7 +24,7 @@ class ContactEmailFactory
         $message = NotificationEmailJf::asPublicEmailJf();
 
         $message
-            ->subject('[Mercredi] '.$nom.' vous contact via le site')
+            ->subject('[Mercredi] ' . $nom . ' vous contact via le site')
             ->from($from)
             ->to($to)
             ->htmlTemplate('@AcMarcheMercrediEmail/front/contact.html.twig')

@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
-
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -58,7 +57,7 @@ class FacturePresenceNonPayeRepository
      */
     public function findAccueilsNonPayes(Tuteur $tuteur, ?\DateTimeInterface $date = null): array
     {
-        $accueils = $this->accueilRepository->findByTuteurAndMonth($tuteur,$date);
+        $accueils = $this->accueilRepository->findByTuteurAndMonth($tuteur, $date);
         $ids = array_map(
             function ($accueil) {
                 return $accueil->getId();

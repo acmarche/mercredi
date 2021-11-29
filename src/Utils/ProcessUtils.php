@@ -13,7 +13,7 @@ class ProcessUtils
     public static function lunchSend()
     {
         $process = new Process(['bin/console', 'mercredi:send-facture', '10-2021']);
-        $process->setWorkingDirectory(getcwd()."/../");
+        $process->setWorkingDirectory(getcwd() . "/../");
         $process->run();
 
         // executes after the command finishes

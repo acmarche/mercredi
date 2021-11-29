@@ -84,7 +84,7 @@ final class ExportController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_presence_by_month');
         }
 
-        $fileName = 'listing-'.$date->format('m-Y').'.xls';
+        $fileName = 'listing-' . $date->format('m-Y') . '.xls';
 
         $listingPresences = $this->listingPresenceByMonth->create($date);
 
@@ -104,5 +104,4 @@ final class ExportController extends AbstractController
     {
         return $this->plainePdfFactory->generate($plaine);
     }
-
 }

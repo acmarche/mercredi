@@ -71,5 +71,4 @@ class FactureDecompte implements TimestampableInterface, UuidableInterface
 
         return $this;
     }
-
 }

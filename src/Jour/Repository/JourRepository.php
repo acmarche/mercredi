@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -70,7 +69,7 @@ final class JourRepository extends ServiceEntityRepository
             ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->addSelect('plaine')
             ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m').'%')
+            ->setParameter('date', $dateTime->format('Y-m') . '%')
             ->addOrderBy('jour.date_jour', 'ASC')
             ->andWhere('plaine IS NULL')
             ->getQuery()->getResult();
@@ -121,7 +120,7 @@ final class JourRepository extends ServiceEntityRepository
     ): array {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
+            ->setParameter('date', $dateTime->format('Y-m-d') . '%')
             ->andWhere('jour.pedagogique = 1')
             ->getQuery()->getResult();
     }
@@ -135,7 +134,7 @@ final class JourRepository extends ServiceEntityRepository
     ): array {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
+            ->setParameter('date', $dateTime->format('Y-m-d') . '%')
             ->andWhere('jour.pedagogique = 0')
             ->getQuery()->getResult();
     }
@@ -146,7 +145,7 @@ final class JourRepository extends ServiceEntityRepository
     ): QueryBuilder {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%');
+            ->setParameter('date', $dateTime->format('Y-m-d') . '%');
     }
 
     /**
@@ -159,7 +158,7 @@ final class JourRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
+            ->setParameter('date', $dateTime->format('Y-m-d') . '%')
             ->andWhere('jour.plaine = :plaine')
             ->setParameter('plaine', $plaine)
             ->getQuery()->getOneOrNullResult();
@@ -191,5 +190,4 @@ final class JourRepository extends ServiceEntityRepository
             ->addOrderBy('jour.date_jour', 'ASC')
             ->getQuery()->getResult();
     }
-
 }

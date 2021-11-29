@@ -116,17 +116,17 @@ final class FactureRepository extends ServiceEntityRepository
 
         if ($tuteur) {
             $queryBuilder->andWhere('tuteur.nom LIKE :tuteur OR tuteur.prenom LIKE :tuteur')
-                ->setParameter('tuteur', '%'.$tuteur.'%');
+                ->setParameter('tuteur', '%' . $tuteur . '%');
         }
 
         if ($enfant) {
             $queryBuilder->andWhere('facturePresences.nom LIKE :enfant OR facturePresences.prenom LIKE :enfant')
-                ->setParameter('enfant', '%'.$enfant.'%');
+                ->setParameter('enfant', '%' . $enfant . '%');
         }
 
         if ($ecole !== null) {
             $queryBuilder->andWhere('facture.ecoles LIKE :ecole')
-                ->setParameter('ecole', '%'.$ecole.'%');
+                ->setParameter('ecole', '%' . $ecole . '%');
         }
 
         if ($plaine !== null) {
@@ -141,7 +141,7 @@ final class FactureRepository extends ServiceEntityRepository
 
         if ($communication !== null) {
             $queryBuilder->andWhere('facture.communication LIKE :commu')
-                ->setParameter('commu', '%'.$communication.'%');
+                ->setParameter('commu', '%' . $communication . '%');
         }
 
         if ($paye === false) {

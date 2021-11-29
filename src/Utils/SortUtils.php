@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Utils;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
-use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 
 final class SortUtils
 {
@@ -66,7 +65,6 @@ final class SortUtils
         uasort(
             $groups,
             function ($dataA, $dataB) {
-
                 $groupeA = $dataA['groupe'];
                 $groupeB = $dataB['groupe'];
 
@@ -98,10 +96,9 @@ final class SortUtils
                 $dateB->format('Y-m-d');
 
                 if ($dateA == $dateB) {
-                    if($enfantA->getPrenom() > $enfantB->getPrenom()) {
+                    if ($enfantA->getPrenom() > $enfantB->getPrenom()) {
                         return +1;
-                    }
-                    else {
+                    } else {
                         return -1;
                     }
                 }

@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

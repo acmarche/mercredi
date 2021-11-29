@@ -2,12 +2,12 @@
 
 namespace AcMarche\Mercredi\Facture\Repository;
 
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

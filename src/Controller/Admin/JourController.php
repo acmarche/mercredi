@@ -3,18 +3,18 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
-use AcMarche\Mercredi\Jour\Form\SearchJourType;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Jour\Form\JourType;
+use AcMarche\Mercredi\Jour\Form\SearchJourType;
 use AcMarche\Mercredi\Jour\Message\JourCreated;
 use AcMarche\Mercredi\Jour\Message\JourDeleted;
 use AcMarche\Mercredi\Jour\Message\JourUpdated;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -167,7 +167,7 @@ final class JourController extends AbstractController
      */
     public function delete(Request $request, Jour $jour): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$jour->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $jour->getId(), $request->request->get('_token'))) {
             $jourId = $jour->getId();
             $this->jourRepository->remove($jour);
             $this->jourRepository->flush();

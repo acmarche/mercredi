@@ -35,11 +35,11 @@ final class FacturePdfFactoryTrait
         } else {
             $html = $this->facturePdfPresence->render($facture);
         }
-        $slug = $this->slugger->slug($facture->getNom().' '.$facture->getPrenom());
+        $slug = $this->slugger->slug($facture->getNom() . ' ' . $facture->getPrenom());
 
         //   return new Response($html);
 
-        return $this->downloadPdf($html, 'facture_'.$facture->getId().'_'.$slug.'.pdf');
+        return $this->downloadPdf($html, 'facture_' . $facture->getId() . '_' . $slug . '.pdf');
     }
 
     /**
@@ -53,6 +53,6 @@ final class FacturePdfFactoryTrait
 
         //  return new Response($html);
 
-        return $this->downloadPdf($html, 'factures_'.$month.'.pdf');
+        return $this->downloadPdf($html, 'factures_' . $month . '.pdf');
     }
 }

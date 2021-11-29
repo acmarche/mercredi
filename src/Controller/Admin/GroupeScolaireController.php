@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\GroupeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireCreated;
@@ -12,6 +11,7 @@ use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -110,7 +110,7 @@ final class GroupeScolaireController extends AbstractController
      */
     public function delete(Request $request, GroupeScolaire $groupeScolaire): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$groupeScolaire->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $groupeScolaire->getId(), $request->request->get('_token'))) {
             $ecoleId = $groupeScolaire->getId();
             $this->groupeScolaireRepository->remove($groupeScolaire);
             $this->groupeScolaireRepository->flush();

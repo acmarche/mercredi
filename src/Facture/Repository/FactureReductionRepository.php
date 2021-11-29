@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Facture\Repository;
 
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
-use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureReduction;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

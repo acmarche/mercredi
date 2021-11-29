@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
-use RuntimeException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 

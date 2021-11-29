@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Traits\ContentTrait;
 use AcMarche\Mercredi\Entity\Traits\DocumentsTraits;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;

@@ -3,8 +3,8 @@
 namespace AcMarche\Mercredi\Plaine\Calculator;
 
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 
 final class PlaineMarcheCalculator implements PlaineCalculatorInterface
 {

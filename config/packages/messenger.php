@@ -9,7 +9,7 @@ return static function (FrameworkConfig $framework) {
             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
             'options' => [
                 'auto_setup' => true,
-                'use_notify' => true,//PostgreSQL’s
+                'use_notify' => true, //PostgreSQL’s
                 'check_delayed_interval' => 60000,
             ],
             'retry_strategy' => [

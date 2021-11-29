@@ -36,7 +36,9 @@ final class UserType extends AbstractType
                     'attr' => ['autocomplete' => 'off'],
                 ]
             )
-            ->add('email', EmailType::class,
+            ->add(
+                'email',
+                EmailType::class,
                 [
                     'required' => true,
                     'attr' => ['autocomplete' => 'off'],

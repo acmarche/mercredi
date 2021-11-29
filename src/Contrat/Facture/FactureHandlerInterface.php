@@ -28,6 +28,4 @@ interface FactureHandlerInterface
         PresenceInterface $presence,
         FacturePresence $facturePresence
     ): void;
-
-
 }

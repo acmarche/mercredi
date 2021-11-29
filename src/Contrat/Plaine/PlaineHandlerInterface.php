@@ -28,5 +28,4 @@ interface PlaineHandlerInterface
      * @throws \Exception
      */
     public function confirm(Plaine $plaine, Tuteur $tuteur): void;
-
 }

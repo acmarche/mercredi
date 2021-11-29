@@ -30,11 +30,11 @@ final class TuteurUtils
         $telephoneConjoint = $tuteur->getTelephoneConjoint();
 
         if ($gsm || $gsmConjoint) {
-            $telephones .= $gsm.' | '.$gsmConjoint;
+            $telephones .= $gsm . ' | ' . $gsmConjoint;
         } elseif ($telephoneBureau || $telephoneBureauConjoint) {
-            $telephones .= $telephoneBureau.' | '.$telephoneBureauConjoint;
+            $telephones .= $telephoneBureau . ' | ' . $telephoneBureauConjoint;
         } else {
-            $telephones .= $telephone.' | '.$telephoneConjoint;
+            $telephones .= $telephone . ' | ' . $telephoneConjoint;
         }
 
         return $telephones;

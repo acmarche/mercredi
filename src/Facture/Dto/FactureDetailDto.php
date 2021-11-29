@@ -14,6 +14,6 @@ class FactureDetailDto
     public float $pourcentageEnPlus = 0;
     public float $pourcentageEnMoins = 0;
     public float $totalDecomptes = 0;
-    public float $total= 0;
-    public float $totalHorsPourcentage= 0;
+    public float $total = 0;
+    public float $totalHorsPourcentage = 0;
 }

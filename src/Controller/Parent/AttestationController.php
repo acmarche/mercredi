@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -49,6 +49,6 @@ final class AttestationController extends AbstractController
             ]
         );
 
-        return $this->downloadPdf($html, $enfant->getSlug().'-attestation-'.$year.'.pdf');
+        return $this->downloadPdf($html, $enfant->getSlug() . '-attestation-' . $year . '.pdf');
     }
 }

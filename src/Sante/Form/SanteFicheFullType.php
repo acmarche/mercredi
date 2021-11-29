@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Sante\Form;
 
-use AcMarche\Mercredi\Enfant\Form\EnfantEditForParentType;
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Sante\Form\Etape\SanteFicheEtape2Type;
 use Symfony\Component\Form\AbstractType;
@@ -42,6 +40,4 @@ final class SanteFicheFullType extends AbstractType
     {
         return 'sante_fiche';
     }
-
-
 }

@@ -100,5 +100,3 @@ class Creance implements TimestampableInterface, UuidableInterface
         return $this;
     }
 }
-
-

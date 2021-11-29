@@ -93,7 +93,6 @@ final class PlaineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->plaineRepository->persist($plaine);
             $this->plaineRepository->flush();
 
@@ -174,8 +173,8 @@ final class PlaineController extends AbstractController
             } else {
                 $this->addFlash(
                     'danger',
-                    'Les inscriptions n\'ont pas pu être ouvrir car la plaine '.$plaineOpen->getNom(
-                    ).' est toujours ouverte'
+                    'Les inscriptions n\'ont pas pu être ouvrir car la plaine ' . $plaineOpen->getNom(
+                    ) . ' est toujours ouverte'
                 );
             }
 
@@ -196,7 +195,7 @@ final class PlaineController extends AbstractController
      */
     public function delete(Request $request, Plaine $plaine): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $plaine->getId(), $request->request->get('_token'))) {
             $plaineId = $plaine->getId();
             $this->plaineRepository->remove($plaine);
             $this->plaineRepository->flush();

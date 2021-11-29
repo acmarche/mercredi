@@ -92,7 +92,7 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
      * @param \AcMarche\Mercredi\Entity\Tuteur $tuteur
      * @throws \Exception
      */
-    public function confirm(Plaine $plaine, Tuteur $tuteur):void
+    public function confirm(Plaine $plaine, Tuteur $tuteur): void
     {
         $inscriptions = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
         foreach ($inscriptions as $inscription) {
@@ -108,7 +108,7 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
 
         $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
         if (count($emails) < 1) {
-            $error = 'Pas de mail pour la facture plaine: '.$facture->getId();
+            $error = 'Pas de mail pour la facture plaine: ' . $facture->getId();
             $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
             $this->notificationMailer->sendAsEmailNotification($message);
             throw new \Exception($error);
@@ -122,7 +122,7 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
         try {
             $this->notificationMailer->sendMail($message);
         } catch (TransportExceptionInterface $e) {
-            $error = 'Facture plaine num '.$facture->getId().' '.$e->getMessage();
+            $error = 'Facture plaine num ' . $facture->getId() . ' ' . $e->getMessage();
             $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture plaine", $error);
             $this->notificationMailer->sendAsEmailNotification($message);
         }

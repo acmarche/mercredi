@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Scolaire\Form\AnneeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireCreated;
@@ -12,6 +11,7 @@ use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -110,7 +110,7 @@ final class AnneeScolaireController extends AbstractController
      */
     public function delete(Request $request, AnneeScolaire $anneeScolaire): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$anneeScolaire->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $anneeScolaire->getId(), $request->request->get('_token'))) {
             if (\count($anneeScolaire->getEnfants()) > 0) {
                 $this->addFlash('danger', 'Une année scolaire contenant des enfants ne peux pas être supprimée');
 

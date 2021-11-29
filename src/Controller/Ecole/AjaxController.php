@@ -33,8 +33,8 @@ class AjaxController extends AbstractController
         $heure = $data->heure;
         $duree = $data->duree;
 
-        if(!$enfant = $this->enfantRepository->find($enfantId)) {
-            return $this->json(['error'=>'Enfant non trouvé']);
+        if (!$enfant = $this->enfantRepository->find($enfantId)) {
+            return $this->json(['error' => 'Enfant non trouvé']);
         }
 
         $accueil = $this->accueilRepository->findByEnfantDateAndHeure($enfant, $date, $heure);

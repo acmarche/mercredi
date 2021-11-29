@@ -16,7 +16,7 @@ final class SanteFicheEtape2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $countConstraint = new Count(0,1);
+        $countConstraint = new Count(0, 1);
         $countConstraint->minMessage = 'Il faut au moins un accompagnateur';
 
         $formBuilder

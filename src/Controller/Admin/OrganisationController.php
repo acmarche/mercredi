@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Organisation\Form\OrganisationType;
 use AcMarche\Mercredi\Organisation\Message\OrganisationCreated;
@@ -12,6 +11,7 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -120,7 +120,7 @@ final class OrganisationController extends AbstractController
      */
     public function delete(Request $request, Organisation $organisation): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$organisation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $organisation->getId(), $request->request->get('_token'))) {
             $id = $organisation->getId();
             $this->organisationRepository->remove($organisation);
             $this->organisationRepository->flush();

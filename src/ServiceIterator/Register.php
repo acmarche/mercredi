@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\ServiceIterator;
 
-
 final class Register
 {
     private iterable $secondaryFlows;

@@ -148,7 +148,9 @@ final class FactureSendController extends AbstractController
             }
             $this->factureCronRepository->flush();
 
-            return $this->redirectToRoute('mercredi_admin_facture_create_pdf_all', ['month' => $month, 'pause' => 0]
+            return $this->redirectToRoute(
+                'mercredi_admin_facture_create_pdf_all',
+                ['month' => $month, 'pause' => 0]
             );
         }
 
@@ -191,7 +193,9 @@ final class FactureSendController extends AbstractController
                 'La demande d\'envoie des factures a bien été programmée. Vous pouvez quitter cette page'
             );
         } else {
-            return $this->redirectToRoute('mercredi_admin_facture_create_pdf_all', ['month' => $month, 'pause' => 1]
+            return $this->redirectToRoute(
+                'mercredi_admin_facture_create_pdf_all',
+                ['month' => $month, 'pause' => 1]
             );
         }
 
@@ -224,14 +228,13 @@ final class FactureSendController extends AbstractController
         );
 
         foreach ($factures as $facture) {
-
             $messageFacture = clone $messageBase;//sinon attachs multiple
 
             $tuteur = $facture->getTuteur();
             $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
 
             if (count($emails) < 1) {
-                $error = 'Pas de mail pour la facture: '.$facture->getId();
+                $error = 'Pas de mail pour la facture: ' . $facture->getId();
                 $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
@@ -242,7 +245,7 @@ final class FactureSendController extends AbstractController
             try {
                 $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
             } catch (\Exception $e) {
-                $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
+                $error = 'Pas de pièce jointe pour la facture: ' . $facture->getId();
                 $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
@@ -252,7 +255,7 @@ final class FactureSendController extends AbstractController
             try {
                 $this->notificationMailer->sendMail($messageFacture);
             } catch (TransportExceptionInterface $e) {
-                $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
+                $error = 'Facture num ' . $facture->getId() . ' ' . $e->getMessage();
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;

@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
@@ -11,6 +10,7 @@ use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,7 +37,7 @@ final class AssocierParentController extends AbstractController
      */
     public function associate(Request $request, User $user): Response
     {
-        if (! $user->isParent()) {
+        if (!$user->isParent()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de parent');
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
@@ -69,7 +69,7 @@ final class AssocierParentController extends AbstractController
      */
     public function dissociate(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('dissociate' . $user->getId(), $request->request->get('_token'))) {
             $tuteurId = (int) $request->request->get('tuteur');
             if (0 === $tuteurId) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');

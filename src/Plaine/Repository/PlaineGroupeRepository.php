@@ -5,8 +5,8 @@ namespace AcMarche\Mercredi\Plaine\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method PlaineGroupe|null find($id, $lockMode = null, $lockVersion = null)

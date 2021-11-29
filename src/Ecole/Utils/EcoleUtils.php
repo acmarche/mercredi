@@ -22,10 +22,10 @@ class EcoleUtils
      * @param \AcMarche\Mercredi\Entity\Scolaire\Ecole[]|ArrayCollection $ecoles
      * @return string
      */
-    public static function getNamesEcole(iterable $ecoles):string
+    public static function getNamesEcole(iterable $ecoles): string
     {
         $noms = array_map(
-            fn($ecole) => $ecole->getNom(),
+            fn ($ecole) => $ecole->getNom(),
             $ecoles->toArray()
         );
         return implode(",", $noms);

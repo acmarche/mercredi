@@ -27,6 +27,4 @@ trait CreancesTrait
     {
         $this->creances = $creances;
     }
-
-
 }

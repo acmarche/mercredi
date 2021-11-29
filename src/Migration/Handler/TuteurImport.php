@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
@@ -68,5 +67,4 @@ class TuteurImport
             $user->addTuteur($tuteur);
         }
     }
-
 }

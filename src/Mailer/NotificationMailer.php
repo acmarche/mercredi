@@ -20,5 +20,4 @@ final class NotificationMailer
         $notification = new EmailNotification($templatedEmail);
         $this->sendNotifier($notification, $recipient);
     }
-
 }

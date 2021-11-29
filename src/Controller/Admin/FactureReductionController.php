@@ -45,7 +45,6 @@ final class FactureReductionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->factureReductionRepository->persist($factureReduction);
             $this->factureReductionRepository->flush();
 
@@ -95,7 +94,6 @@ final class FactureReductionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->factureReductionRepository->flush();
             $this->addFlash('success', 'La réduction a bien été modifiée');
 
@@ -121,8 +119,7 @@ final class FactureReductionController extends AbstractController
     public function delete(Request $request, FactureReduction $factureReduction): Response
     {
         $facture = $factureReduction->getFacture();
-        if ($this->isCsrfTokenValid('delete'.$factureReduction->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('delete' . $factureReduction->getId(), $request->request->get('_token'))) {
             $this->factureReductionRepository->remove($factureReduction);
             $this->factureReductionRepository->flush();
 

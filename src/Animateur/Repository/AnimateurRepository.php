@@ -5,8 +5,8 @@ namespace AcMarche\Mercredi\Animateur\Repository;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Animateur|null find($id, $lockMode = null, $lockVersion = null)
@@ -39,7 +39,7 @@ final class AnimateurRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('animateur')
             ->andWhere('animateur.nom LIKE :keyword OR animateur.prenom LIKE :keyword')
-            ->setParameter('keyword', '%'.$keyword.'%')
+            ->setParameter('keyword', '%' . $keyword . '%')
             ->addOrderBy('animateur.nom', 'ASC')
             ->getQuery()->getResult();
     }

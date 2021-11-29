@@ -54,7 +54,6 @@ final class CreanceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->creanceRepository->persist($creance);
             $this->creanceRepository->flush();
 
@@ -99,7 +98,6 @@ final class CreanceController extends AbstractController
         $tuteur = $creance->getTuteur();
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->creanceRepository->flush();
             $this->addFlash('success', 'La créance a bien été modifiée');
 
@@ -123,8 +121,7 @@ final class CreanceController extends AbstractController
     {
         $tuteur = $creance->getTuteur();
 
-        if ($this->isCsrfTokenValid('delete'.$creance->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('delete' . $creance->getId(), $request->request->get('_token'))) {
             $this->creanceRepository->remove($creance);
             $this->creanceRepository->flush();
 

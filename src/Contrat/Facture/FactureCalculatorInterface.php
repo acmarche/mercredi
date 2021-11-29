@@ -57,5 +57,4 @@ interface FactureCalculatorInterface
      * @return float
      */
     public function totalComplementPourcentage(FactureInterface $facture): float;
-
 }

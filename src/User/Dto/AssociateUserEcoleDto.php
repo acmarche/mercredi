@@ -50,7 +50,7 @@ final class AssociateUserEcoleDto
 
     public function addEcole(Ecole $ecole): self
     {
-        if (! $this->ecoles->contains($ecole)) {
+        if (!$this->ecoles->contains($ecole)) {
             $this->ecoles[] = $ecole;
         }
 

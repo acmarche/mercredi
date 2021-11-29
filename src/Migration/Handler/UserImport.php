@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -45,10 +44,10 @@ class UserImport
     private function getRoles(int $userId): array
     {
         $roles = [];
-        $rows = $this->pdo->getAllWhere('fos_user_group', 'user_id = '.$userId, false);
+        $rows = $this->pdo->getAllWhere('fos_user_group', 'user_id = ' . $userId, false);
         foreach ($rows as $row) {
-            $groupe = $this->pdo->getAllWhere('fos_group', 'id = '.$row->group_id, true);
-            $roles[] = 'ROLE_'.$groupe->name;
+            $groupe = $this->pdo->getAllWhere('fos_group', 'id = ' . $row->group_id, true);
+            $roles[] = 'ROLE_' . $groupe->name;
         }
 
         return $roles;

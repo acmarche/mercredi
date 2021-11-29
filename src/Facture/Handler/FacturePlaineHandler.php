@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Facture\Handler;
 
-
 use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;

@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Contrat\Presence;
 
-use DateTimeInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Tuteur;
+use DateTimeInterface;
 
 interface PresenceInterface
 {

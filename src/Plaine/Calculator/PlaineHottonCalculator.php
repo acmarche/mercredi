@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi\Plaine\Calculator;
 
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
-use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 

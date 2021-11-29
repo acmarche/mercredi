@@ -2,17 +2,16 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Page\Form\PageType;
 use AcMarche\Mercredi\Page\Message\PageCreated;
 use AcMarche\Mercredi\Page\Message\PageDeleted;
 use AcMarche\Mercredi\Page\Message\PageUpdated;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
-use function is_array;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -111,7 +110,7 @@ final class PageController extends AbstractController
      */
     public function delete(Request $request, Page $page): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $page->getId(), $request->request->get('_token'))) {
             $pageId = $page->getId();
             $this->pageRepository->remove($page);
             $this->pageRepository->flush();

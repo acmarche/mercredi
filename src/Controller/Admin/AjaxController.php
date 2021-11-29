@@ -125,7 +125,7 @@ final class AjaxController extends AbstractController
                 $this->pageRepository->flush();
             }
 
-            return new Response('<div class="alert alert-success">Tri enregistré '.$position.'</div>');
+            return new Response('<div class="alert alert-success">Tri enregistré ' . $position . '</div>');
         }
 
         return new Response('<div class="alert alert-danger">Faill</div>');

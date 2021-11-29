@@ -34,5 +34,4 @@ final class CreanceRepository extends ServiceEntityRepository
             ->addOrderBy('creance.createdAt', 'DESC')
             ->getQuery()->getResult();
     }
-
 }

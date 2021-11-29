@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Accueil\Handler;
 
-use DateTime;
-use Exception;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AccueilHandler
@@ -53,7 +53,7 @@ final class AccueilHandler
                 $duree = (int)$duree;
 
                 if (($enfant = $this->enfantRepository->find((int)$enfantId)) === null) {
-                    $this->flashBag->add('danger', 'Référence pour l\enfant '.$enfantId.' non trouvé');
+                    $this->flashBag->add('danger', 'Référence pour l\enfant ' . $enfantId . ' non trouvé');
 
                     continue;
                 }
@@ -61,7 +61,7 @@ final class AccueilHandler
 
                 if (($tuteur = $this->tuteurRepository->find($tuteurId)) === null) {
                     if ($duree > 0) {
-                        $this->flashBag->add('danger', 'Spécifié sous quelle garde pour '.$enfant);
+                        $this->flashBag->add('danger', 'Spécifié sous quelle garde pour ' . $enfant);
                     }
                     continue;
                 }
@@ -76,7 +76,7 @@ final class AccueilHandler
                 } catch (Exception $exception) {
                     $this->flashBag->add(
                         'danger',
-                        'Impossible de convertir la date '.$dateString.' pour '.$enfant.': '.$exception->getMessage()
+                        'Impossible de convertir la date ' . $dateString . ' pour ' . $enfant . ': ' . $exception->getMessage()
                     );
 
                     continue;
@@ -85,8 +85,8 @@ final class AccueilHandler
         }
     }
 
-    public function handleOne() {
-
+    public function handleOne()
+    {
     }
 
     private function updateAccueil(Accueil $accueilExistant, Accueil $accueilSubmited): void

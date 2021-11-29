@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
@@ -55,7 +55,7 @@ final class AccompagnateurVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         //a cause de index pas d'ecole defini
-        if ($subject && ! $subject instanceof Accompagnateur) {
+        if ($subject && !$subject instanceof Accompagnateur) {
             return false;
         }
 
@@ -66,7 +66,7 @@ final class AccompagnateurVoter extends Voter
     {
         $this->user = $token->getUser();
 
-        if (! $this->user instanceof User) {
+        if (!$this->user instanceof User) {
             return false;
         }
 
@@ -112,7 +112,7 @@ final class AccompagnateurVoter extends Voter
             return true;
         }
 
-        if (! $this->decisionManager->decide($token, [self::ECOLE])) {
+        if (!$this->decisionManager->decide($token, [self::ECOLE])) {
             return false;
         }
 
@@ -121,7 +121,7 @@ final class AccompagnateurVoter extends Voter
 
     private function canEdit(TokenInterface $token): bool
     {
-        if (! $this->decisionManager->decide($token, [self::ECOLE])) {
+        if (!$this->decisionManager->decide($token, [self::ECOLE])) {
             return false;
         }
 

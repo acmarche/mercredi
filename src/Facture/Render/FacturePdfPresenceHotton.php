@@ -107,15 +107,15 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
                 'tuteur' => $tuteur,
                 'organisation' => $organisation,
                 'data' => $data,
-                'countAccueils'=>count($factureAccueils),
-                'countPresences'=>count($facturePresences)
+                'countAccueils' => count($factureAccueils),
+                'countPresences' => count($facturePresences)
             ]
         );
     }
 
     private function groupAccueils(FacturePresence $facturePresence, array $data): array
     {
-        $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
+        $enfant = $facturePresence->getNom() . ' ' . $facturePresence->getPrenom();
         $slug = $this->factureUtils->slugger->slug($enfant);
         $heure = $facturePresence->getHeure();
         $duree = $facturePresence->getDuree();
@@ -127,7 +127,7 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
 
     private function groupPresences(FacturePresence $facturePresence, array $data): array
     {
-        $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
+        $enfant = $facturePresence->getNom() . ' ' . $facturePresence->getPrenom();
         $slug = $this->factureUtils->slugger->slug($enfant);
         if ($facturePresence->isPedagogique()) {
             $data['enfants'][$slug->toString()]['peda'] += 1;

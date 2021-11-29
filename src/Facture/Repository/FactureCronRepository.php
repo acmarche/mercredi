@@ -39,5 +39,4 @@ final class FactureCronRepository extends ServiceEntityRepository
             ->setParameter('month', $month)
             ->getQuery()->getOneOrNullResult();
     }
-
 }

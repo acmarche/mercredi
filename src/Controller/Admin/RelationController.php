@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Form\RelationType;
@@ -15,6 +14,7 @@ use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,7 +37,7 @@ final class RelationController extends AbstractController
      */
     public function attachEnfant(Request $request, Tuteur $tuteur): Response
     {
-        if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('attachEnfant' . $tuteur->getId(), $request->request->get('_token'))) {
             $enfantId = (int) $request->request->get('enfantId');
 
             try {
@@ -87,7 +87,7 @@ final class RelationController extends AbstractController
     {
         $relationId = $request->request->get('relationid');
 
-        if (! $relationId) {
+        if (!$relationId) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
@@ -101,7 +101,7 @@ final class RelationController extends AbstractController
 
         $tuteur = $relation->getTuteur();
 
-        if ($this->isCsrfTokenValid('delete'.$relation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $relation->getId(), $request->request->get('_token'))) {
             $this->relationRepository->remove($relation);
             $this->relationRepository->flush();
             $this->dispatchMessage(new RelationDeleted($relationId));

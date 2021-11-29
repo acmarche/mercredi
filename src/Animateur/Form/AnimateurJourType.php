@@ -23,16 +23,16 @@ final class AnimateurJourType extends AbstractType
                 [
                     'class' => Jour::class,
                     'placeholder' => 'Jours d\'accueil',
-                    'query_builder' => fn(JourRepository $jourRepository) => $jourRepository->getQlNotPlaine(),
-                    'group_by' => fn($jour, $key, $id) => $jour->getDateJour()->format('Y'),
+                    'query_builder' => fn (JourRepository $jourRepository) => $jourRepository->getQlNotPlaine(),
+                    'group_by' => fn ($jour, $key, $id) => $jour->getDateJour()->format('Y'),
                     'required' => false,
                     'choice_label' => function (Jour $jour) {
                         $peda = '';
                         if ($jour->isPedagogique()) {
                             $ecoles = EcoleUtils::getNamesEcole($jour->getEcoles());
-                            $peda = '(Pédagogique '.$ecoles.')';
+                            $peda = '(Pédagogique ' . $ecoles . ')';
                         }
-                        return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
+                        return ucfirst(DateUtils::formatFr($jour->getDatejour()) . ' ' . $peda);
                     },
                     'multiple' => true,
                     'expanded' => true,

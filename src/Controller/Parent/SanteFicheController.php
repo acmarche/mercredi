@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Sante\Form\Etape\SanteFicheEtape1Type;
 use AcMarche\Mercredi\Sante\Form\Etape\SanteFicheEtape2Type;
 use AcMarche\Mercredi\Sante\Form\Etape\SanteFicheEtape3Type;
-use AcMarche\Mercredi\Sante\Form\SanteFicheType;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
@@ -86,7 +85,6 @@ final class SanteFicheController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->santeFicheRepository->flush();
             $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
 
@@ -118,7 +116,6 @@ final class SanteFicheController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->santeFicheRepository->flush();
             $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
 

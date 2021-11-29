@@ -23,5 +23,4 @@ trait RetardTrait
     {
         $this->heure_retard = $heure_retard;
     }
-
 }

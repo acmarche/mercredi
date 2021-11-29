@@ -13,7 +13,10 @@ class SelectEnfantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $formBuilder->add('enfants', EntityType::class, [
+        $formBuilder->add(
+            'enfants',
+            EntityType::class,
+            [
                 'class' => Enfant::class,
                 'choices' => $options['enfants'],
                 'multiple' => true,

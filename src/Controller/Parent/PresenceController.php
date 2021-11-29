@@ -2,14 +2,14 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Constraint\DeleteConstraint;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewForParentType;
-use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Repository\PresenceDaysProviderInterface;
@@ -154,7 +154,7 @@ final class PresenceController extends AbstractController
     public function delete(Request $request, Presence $presence): Response
     {
         $enfant = $presence->getEnfant();
-        if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $presence->getId(), $request->request->get('_token'))) {
             if (!DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 

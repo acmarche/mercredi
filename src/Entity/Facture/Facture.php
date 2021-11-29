@@ -108,14 +108,14 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
 
     public function __toString()
     {
-        return 'Facture '.$this->id;
+        return 'Facture ' . $this->id;
     }
 
     public function getEnfants(): array
     {
         $enfants = [];
         foreach ($this->facturePresences as $presence) {
-            $nom = $presence->getNom().' '.$presence->getPrenom();
+            $nom = $presence->getNom() . ' ' . $presence->getPrenom();
             $enfants[$nom] = $nom;
         }
 

@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
@@ -59,7 +58,6 @@ class FacturePlaineController extends AbstractController
                 'plaines' => $plaines,
             ]
         );
-
     }
 
     /**

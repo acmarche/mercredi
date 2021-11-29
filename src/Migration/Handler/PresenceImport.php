@@ -29,7 +29,6 @@ class PresenceImport
         $this->io = $io;
         $presences = $this->pdo->getAll('presence');
         foreach ($presences as $data) {
-
             $tuteur = $this->migrationRepository->getTuteur($data->tuteur_id);
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
             $jour = $this->migrationRepository->getJour($data->jour_id);
@@ -52,5 +51,4 @@ class PresenceImport
         }
         $this->enfantRepository->flush();
     }
-
 }

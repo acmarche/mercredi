@@ -44,8 +44,7 @@ class GroupingMarche implements GroupingInterface
         if ($plaine->getPlaineGroupes()->count() > 0) {
             $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
             $groupeForce->setNom('Non classé');
-        }
-        else {
+        } else {
             $groupeForce = new GroupeScolaire();
             $groupeForce->setNom('Inexistant');
         }

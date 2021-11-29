@@ -14,5 +14,4 @@ interface PlaineCalculatorInterface
     public function getOrdreOnePresence(PresenceInterface $presence): int;
 
     public function getPrixByOrdre(Plaine $plaine, $ordre): float;
-
 }

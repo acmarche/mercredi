@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Enfant\Form;
 
-use DateTime;
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
-use AcMarche\Mercredi\Entity\Enfant;
+use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Security;
 
+use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 use AcMarche\Mercredi\Entity\Security\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\LastLoginTrait;
@@ -23,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -103,7 +103,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+        return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
     }
 
     public function setSalt(string $salt)
@@ -178,5 +178,4 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }

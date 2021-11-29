@@ -154,7 +154,7 @@ final class NoteController extends AbstractController
      */
     public function delete(Request $request, Note $note): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $note->getId(), $request->request->get('_token'))) {
             $enfant = $note->getEnfant();
             $noteId = $note->getId();
             $this->noteRepository->remove($note);

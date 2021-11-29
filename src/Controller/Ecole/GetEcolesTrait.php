@@ -13,7 +13,7 @@ trait GetEcolesTrait
     /**
      * @var Ecole[]
      */
-    private  iterable  $ecoles;
+    private iterable  $ecoles;
 
     /**
      * @required

@@ -3,7 +3,6 @@
 
 namespace AcMarche\Mercredi\Facture\Utils;
 
-
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -24,7 +23,7 @@ class FactureUtils
     {
         $enfants = [];
         foreach ($facture->getFacturePresences() as $facturePresence) {
-            $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
+            $enfant = $facturePresence->getNom() . ' ' . $facturePresence->getPrenom();
             $slug = $this->slugger->slug($enfant);
             $enfants[$slug->toString()] = $enfant;
         }

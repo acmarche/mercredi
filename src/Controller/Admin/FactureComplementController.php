@@ -39,7 +39,6 @@ final class FactureComplementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->factureComplementRepository->persist($factureComplement);
             $this->factureComplementRepository->flush();
 
@@ -83,7 +82,6 @@ final class FactureComplementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->factureComplementRepository->flush();
             $this->addFlash('success', 'Le complément a bien été modifié');
 
@@ -109,8 +107,7 @@ final class FactureComplementController extends AbstractController
     public function delete(Request $request, FactureComplement $factureComplement): Response
     {
         $facture = $factureComplement->getFacture();
-        if ($this->isCsrfTokenValid('delete'.$factureComplement->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('delete' . $factureComplement->getId(), $request->request->get('_token'))) {
             $this->factureComplementRepository->remove($factureComplement);
             $this->factureComplementRepository->flush();
 

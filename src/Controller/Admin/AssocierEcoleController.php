@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
@@ -11,6 +10,7 @@ use AcMarche\Mercredi\User\Handler\AssociationEcoleHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -68,7 +68,7 @@ final class AssocierEcoleController extends AbstractController
      */
     public function dissociate(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('dissociate' . $user->getId(), $request->request->get('_token'))) {
             $ecoleId = (int)$request->request->get('tuteur');
             if (0 === $ecoleId) {
                 $this->addFlash('danger', 'L\'école n\'a pas été trouvée');

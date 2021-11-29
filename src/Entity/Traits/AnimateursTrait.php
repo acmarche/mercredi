@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 
 trait AnimateursTrait
 {
-
     /**
      * @var Animateur[]|ArrayCollection
      */

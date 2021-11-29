@@ -26,8 +26,8 @@ class AccueilRetardTpe extends AbstractType
                 TimeType::class,
                 [
                     'label' => 'Heure de départ',
-                    'with_seconds'=>false,
-                    'hours'=>[18,19]
+                    'with_seconds' => false,
+                    'hours' => [18, 19]
                 ]
             );
     }

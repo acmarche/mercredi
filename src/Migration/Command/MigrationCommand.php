@@ -123,6 +123,7 @@ final class MigrationCommand extends Command
             case 'sante':
                 $this->ficheSanteImport->import($symfonyStyle);
                 $this->ficheSanteImport->importReponse($symfonyStyle);
+                // no break
             case 'presence':
                 $this->presenceImport->import($symfonyStyle);
 
@@ -177,5 +178,4 @@ final class MigrationCommand extends Command
      * La table animateur
      * Lier ecole et user
      */
-
 }

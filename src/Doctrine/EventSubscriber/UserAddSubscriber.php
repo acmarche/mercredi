@@ -4,8 +4,8 @@ namespace AcMarche\Mercredi\Doctrine\EventSubscriber;
 
 use AcMarche\Mercredi\Utils\PropertyUtil;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
 use Symfony\Component\Security\Core\Security;
 
@@ -31,7 +31,7 @@ final class UserAddSubscriber implements EventSubscriber
     public function prePersist(LifecycleEventArgs $lifecycleEventArgs): void
     {
         $object = $lifecycleEventArgs->getObject();
-        if (! $this->propertyUtil->getPropertyAccessor()->isWritable($object, 'userAdd')) {
+        if (!$this->propertyUtil->getPropertyAccessor()->isWritable($object, 'userAdd')) {
             return;
         }
 

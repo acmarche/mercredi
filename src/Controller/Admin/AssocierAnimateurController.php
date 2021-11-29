@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
@@ -11,6 +10,7 @@ use AcMarche\Mercredi\User\Handler\AssociationAnimateurHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -68,7 +68,7 @@ final class AssocierAnimateurController extends AbstractController
      */
     public function dissociate(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('dissociate' . $user->getId(), $request->request->get('_token'))) {
             $animateurId = (int)$request->request->get('animateur');
             if (0 === $animateurId) {
                 $this->addFlash('danger', 'L\'animateur n\'a pas été trouvé');

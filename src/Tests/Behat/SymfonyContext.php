@@ -58,7 +58,7 @@ final class SymfonyContext implements Context
             throw new RuntimeException('No response received');
         }
 
-        if (! $this->response->isRedirection()) {
+        if (!$this->response->isRedirection()) {
             throw new RuntimeException('Response is not redirect');
         }
     }

@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Mercredi\Ecole\Form\EcoleType;
 use AcMarche\Mercredi\Ecole\Message\EcoleCreated;
 use AcMarche\Mercredi\Ecole\Message\EcoleDeleted;
@@ -10,11 +9,12 @@ use AcMarche\Mercredi\Ecole\Message\EcoleUpdated;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
-use function count;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function count;
 
 /**
  * @Route("/ecole")
@@ -117,7 +117,7 @@ final class EcoleController extends AbstractController
      */
     public function delete(Request $request, Ecole $ecole): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $ecole->getId(), $request->request->get('_token'))) {
             if (count($this->enfantRepository->findByEcoles([$ecole])) > 0) {
                 $this->addFlash('danger', 'L\'école contient des enfants et ne peut être supprimée');
 
