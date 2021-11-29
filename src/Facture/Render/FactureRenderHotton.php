@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Render;
 
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
@@ -35,16 +36,7 @@ class FactureRenderHotton implements FactureRenderInterface
         $this->environment = $environment;
     }
 
-    public function renderForDetails(FactureInterface $facture): string
-    {
-        if ($facture->getPlaineNom()) {
-            return $this->renderForPlaine($facture);
-        }
-
-        return $this->renderForPresence($facture);
-    }
-
-    public function renderForPdf(FactureInterface $facture): string
+    public function render(FactureInterface $facture): string
     {
         if ($facture->getPlaineNom()) {
             return $this->renderForPlaine($facture);
@@ -94,7 +86,8 @@ class FactureRenderHotton implements FactureRenderInterface
             FactureInterface::OBJECT_PLAINE
         );
         $dto = $this->factureCalculator->createDetail($facture);
-         return $this->environment->render(
+
+        return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/hotton/_show_plaine.html.twig',
             [
                 'facture' => $facture,
