@@ -132,7 +132,7 @@ final class EnfantController extends AbstractController
                 'relations' => $relations,
                 'prensencesGrouped' => $presencesGrouped,
                 'plaines' => $plaines,
-                'yearNow' => $year,
+                'currentYear' => $year,
             ]
         );
     }
