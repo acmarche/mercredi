@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use AcMarche\Mercredi\Entity\Facture\FactureDecompte;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Entity\Facture\FactureReduction;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use DateTimeInterface;
@@ -151,4 +152,8 @@ interface FactureInterface
     public function getUuid(): ?UuidInterface;
 
     public function generateUuid(): void;
+
+    public function getPlaine(): ?Plaine;
+
+    public function setPlaine(?Plaine $plaine): void;
 }
