@@ -53,7 +53,7 @@ final class FactureFactory
             if (is_readable($fileName)) {
                 continue;
             }
-            $htmlInvoice = $this->factureRender->renderForPdf($facture);
+            $htmlInvoice = $this->factureRender->render($facture);
             $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
             if ($i > $max) {
                 return false;

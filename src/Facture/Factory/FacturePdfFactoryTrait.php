@@ -49,7 +49,7 @@ final class FacturePdfFactoryTrait
      */
     public function generates(array $factures, string $month): Response
     {
-        $html = $this->facturePdfPresence->renderMultiplesForPdf($factures);
+        $html = $this->facturePdfPresence->renderMultiple($factures);
 
         //  return new Response($html);
 

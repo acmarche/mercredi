@@ -55,7 +55,7 @@ final class PlaineAdminHandler
             if ($jour->getId()) {
                 continue;
             }
-            $jour->setPlaineNom($plaine);
+            $jour->setPlaine($plaine);
             $this->jourRepository->persist($jour);
         }
         $this->removeJours($plaine, $newJours);
