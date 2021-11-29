@@ -101,7 +101,7 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
         }
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/_content_pdf.html.twig',
+            '@AcMarcheMercrediAdmin/facture/hotton/_presence_content_pdf.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
