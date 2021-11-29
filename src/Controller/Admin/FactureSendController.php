@@ -189,7 +189,7 @@ final class FactureSendController extends AbstractController
         try {
             $finish = $this->factureFactory->createAllPdf($factures, $month);
         } catch (\Exception $e) {
-            $this->addFlash('danger', 'Erreur survenue: '.$e->getMessage());
+            $this->addFlash('danger', 'Erreur survenue: ' . $e->getMessage());
 
             return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $month]);
         }
@@ -240,7 +240,7 @@ final class FactureSendController extends AbstractController
             $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
 
             if (count($emails) < 1) {
-                $error = 'Pas de mail pour la facture: '.$facture->getId();
+                $error = 'Pas de mail pour la facture: ' . $facture->getId();
                 $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
@@ -251,7 +251,7 @@ final class FactureSendController extends AbstractController
             try {
                 $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
             } catch (\Exception $e) {
-                $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
+                $error = 'Pas de pièce jointe pour la facture: ' . $facture->getId();
                 $this->addFlash('danger', $error);
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
@@ -261,7 +261,7 @@ final class FactureSendController extends AbstractController
             try {
                 $this->notificationMailer->sendMail($messageFacture);
             } catch (TransportExceptionInterface $e) {
-                $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
+                $error = 'Facture num ' . $facture->getId() . ' ' . $e->getMessage();
                 $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;
