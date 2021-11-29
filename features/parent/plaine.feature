@@ -36,8 +36,9 @@ Feature: Test pour les présences des plaines
     Given I am on "/parent"
     Then I follow "Plaine de noel est ouverte aux inscriptions"
     Then I follow "Inscrire mes enfants"
-    Then I follow "SIMPSON Lisa"
-    Then I should see "La fiche santé de votre enfant doit être complétée"
+    And I check "SIMPSON Lisa"
+    And I press "Inscrire"
+    Then I should see "La fiche santé de SIMPSON Lisa doit être complétée"
 
   Scenario: J' inscris pour un enfant qui a une fiche santé
     Given I am logged in as an admin
@@ -52,9 +53,12 @@ Feature: Test pour les présences des plaines
     Given I am on "/parent"
     Then I follow "Plaine de noel est ouverte aux inscriptions"
     Then I follow "Inscrire mes enfants"
-    Then I follow "SIMPSON Bart"
-    Then I should see "Votre enfant a bien été inscrits à la plaine"
-    Then I should see "SIMPSON Bart"
+    And I check "SIMPSON Bart"
+    And I press "Inscrire"
+    Then I should see "SIMPSON Bart a bien été inscrits à la plaine"
+    Then I should see "Vous avez inscrit SIMPSON Bart"
+    Then I press "Obtenir ma facture"
+    Then I should see "La facture a bien été générée et envoyée sur votre mail"
     Given I am on "/parent/enfant/"
     Then I should see "Liste de mes enfants"
     Then I follow "SIMPSON Bart"
