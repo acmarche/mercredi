@@ -2,7 +2,8 @@
 
 namespace AcMarche\Mercredi\Mailer\Factory;
 
-use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\FactureInterface;
@@ -24,18 +25,22 @@ class FactureEmailFactory
     use OrganisationPropertyInitTrait;
     use PdfDownloaderTrait;
 
-    private FactureRenderInterface $factureRender;
     private FactureFactory $factureFactory;
     private ParameterBagInterface $parameterBag;
+    private FacturePdfPresenceInterface $facturePdfPresence;
+    private FacturePdfPlaineInterface $facturePdfPlaine;
 
     public function __construct(
-        FactureRenderInterface $factureRender,
+        FacturePdfPresenceInterface $facturePdfPresence,
+        FacturePdfPlaineInterface $facturePdfPlaine,
         FactureFactory $factureFactory,
         ParameterBagInterface $parameterBag
     ) {
-        $this->factureRender = $factureRender;
+
         $this->factureFactory = $factureFactory;
         $this->parameterBag = $parameterBag;
+        $this->facturePdfPresence = $facturePdfPresence;
+        $this->facturePdfPlaine = $facturePdfPlaine;
     }
 
     public function initFromAndToForForm(?Facture $facture = null): array
@@ -117,7 +122,7 @@ class FactureEmailFactory
      */
     public function attachFactureOnTheFly(FactureInterface $facture, Email $message)
     {
-        $htmlInvoice = $this->factureRender->renderForPdf($facture);
+        $htmlInvoice = $this->facturePdfPresence->render($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
 
         $date = $facture->getFactureLe();
@@ -126,7 +131,7 @@ class FactureEmailFactory
 
     public function attachFacturePlaineOnTheFly(FactureInterface $facture, Email $message)
     {
-        $htmlInvoice = $this->factureRender->renderForPdf($facture);
+        $htmlInvoice = $this->facturePdfPlaine->render($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
 
         $date = $facture->getFactureLe();

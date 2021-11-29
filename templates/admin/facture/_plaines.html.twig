@@ -12,9 +12,13 @@
         <tr>
             <td>{{ facturePlaine.nom }} {{ facturePlaine.prenom }}</td>
             <td>
-                <a href="{{ path('mercredi_admin_facture_presence_show', {'id': facturePlaine.id}) }}">
+                {% if is_granted('ROLE_MERCREDI_ADMIN') %}
+                    <a href="{{ path('mercredi_admin_facture_presence_show', {'id': facturePlaine.id}) }}">
+                        {{ facturePlaine.presenceDate | format_date('full') }}
+                    </a>
+                {% else %}
                     {{ facturePlaine.presenceDate | format_date('full') }}
-                </a>
+                {% endif %}
             </td>
             <td>{{ facturePlaine.ordre }}</td>
             <td>{{ facturePlaine.coutCalculated|format_currency('eur') }}</td>
