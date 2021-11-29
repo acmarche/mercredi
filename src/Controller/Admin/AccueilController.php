@@ -10,11 +10,11 @@ use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -34,7 +34,7 @@ final class AccueilController extends AbstractController
     private AccueilHandler $accueilHandler;
     private RelationRepository $relationRepository;
     private AccueilCalculatorInterface $accueilCalculator;
-    private FactureHandler $factureHandler;
+    private FactureHandlerInterface $factureHandler;
     private FacturePresenceRepository $facturePresenceRepository;
 
     public function __construct(
@@ -42,7 +42,7 @@ final class AccueilController extends AbstractController
         AccueilHandler $accueilHandler,
         RelationRepository $relationRepository,
         AccueilCalculatorInterface $accueilCalculator,
-        FactureHandler $factureHandler,
+        FactureHandlerInterface $factureHandler,
         FacturePresenceRepository $facturePresenceRepository
     ) {
         $this->accueilRepository = $accueilRepository;

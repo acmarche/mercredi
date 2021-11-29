@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Facture\Handler;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
@@ -23,7 +24,7 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 
-final class FactureHandler
+final class FactureHandler implements FactureHandlerInterface
 {
     private FactureRepository $factureRepository;
     private FactureFactory $factureFactory;
@@ -60,7 +61,7 @@ final class FactureHandler
         $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
     }
 
-    public function newInstance(Tuteur $tuteur): Facture
+    public function newInstance(Tuteur $tuteur): FactureInterface
     {
         return $this->factureFactory->newInstance($tuteur);
     }
@@ -71,7 +72,7 @@ final class FactureHandler
      * @param array|int[] $accueilsId
      * @return Facture
      */
-    public function handleManually(Facture $facture, array $presencesId, array $accueilsId): Facture
+    public function handleManually(FactureInterface $facture, array $presencesId, array $accueilsId): FactureInterface
     {
         $presences = $this->presenceRepository->findBy(['id' => $presencesId]);
         $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
@@ -84,7 +85,7 @@ final class FactureHandler
         return $facture;
     }
 
-    public function generateByMonth(Tuteur $tuteur, string $month): ?Facture
+    public function generateByMonth(Tuteur $tuteur, string $month): ?FactureInterface
     {
         list($month, $year) = explode('-', $month);
         $date = Carbon::createFromDate($year, $month, 01);
@@ -99,9 +100,6 @@ final class FactureHandler
         return $facture;
     }
 
-    /**
-     * @return array|null
-     */
     public function generateByMonthForAll(string $monthSelected): array
     {
         list($month, $year) = explode('-', $monthSelected);
@@ -145,6 +143,15 @@ final class FactureHandler
     {
         if ($this->facturePresenceRepository->findByIdAndType($presenceId, $type)) {
             return true;
+        }
+
+        return false;
+    }
+
+    public function isSended(int $presenceId, string $type): bool
+    {
+        if ($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) {
+            return $facturePresence->getFacture()->getEnvoyeLe() != null;
         }
 
         return false;
