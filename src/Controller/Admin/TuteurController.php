@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Tuteur\Form\SearchTuteurType;
@@ -27,18 +26,15 @@ final class TuteurController extends AbstractController
     private TuteurRepository $tuteurRepository;
     private RelationRepository $relationRepository;
     private SearchHelper $searchHelper;
-    private PresenceRepository $presenceRepository;
 
     public function __construct(
         TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
-        PresenceRepository $presenceRepository,
         SearchHelper $searchHelper
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
         $this->searchHelper = $searchHelper;
-        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -143,11 +139,11 @@ final class TuteurController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
 
-      /*      if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
-                $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');
+            /*      if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
+                      $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');
 
-                return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
-            }*/
+                      return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+                  }*/
 
             $id = $tuteur->getId();
             $this->tuteurRepository->remove($tuteur);
