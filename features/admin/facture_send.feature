@@ -33,7 +33,10 @@ Feature: Gestion des factures
     And I fill in "facture_send_all[sujet]" with "Voici votre facture"
     And I fill in "facture_send_all[texte]" with "Payer sur le compte x"
     And I press "Envoyer les factures"
-    Then I should see "Les factures ont bien été envoyées"
+    Then I should see "Création des pdfs pour 06-2020"
+    Then I should see "Tous les pdf ont été créés."
+    Then I follow "Cliquez ici pour envoyer les mails"
+    Then I should see "Envoie des mails pour 06-2020"
 
   Scenario: J'envoie des factures par papier
     Given I am on "/admin/facture/send/select/month"
