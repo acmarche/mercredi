@@ -2,30 +2,44 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Render\FactureRender;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class FacturePdfFactoryTrait
 {
     use PdfDownloaderTrait;
 
-    private FactureRender $factureRender;
+    private FacturePdfPresenceInterface $facturePdfPresence;
+    private FacturePdfPlaineInterface $facturePdfPlaine;
+    private SluggerInterface $slugger;
 
-    public function __construct(FactureRender $factureRender)
-    {
-        $this->factureRender = $factureRender;
+    public function __construct(
+        FacturePdfPresenceInterface $facturePdfPresence,
+        FacturePdfPlaineInterface $facturePdfPlaine,
+        SluggerInterface $slugger
+    ) {
+        $this->facturePdfPresence = $facturePdfPresence;
+        $this->facturePdfPlaine = $facturePdfPlaine;
+        $this->slugger = $slugger;
     }
 
-    public function generate(Facture $facture): Response
+    public function generate(FactureInterface $facture): Response
     {
-        $date = $facture->getFactureLe();
-        $html = $this->factureRender->generateOneHtml($facture);
+        if ($facture->getPlaineNom()) {
+            $html = $this->facturePdfPlaine->render($facture);
+        } else {
+            $html = $this->facturePdfPresence->render($facture);
+        }
+        $slug = $this->slugger->slug($facture->getNom().' '.$facture->getPrenom());
 
         //   return new Response($html);
 
-        return $this->downloadPdf($html, 'facture_'.$facture->getId().'.pdf');
+        return $this->downloadPdf($html, 'facture_'.$facture->getId().'_'.$slug.'.pdf');
     }
 
     /**
@@ -35,7 +49,7 @@ final class FacturePdfFactoryTrait
      */
     public function generates(array $factures, string $month): Response
     {
-        $html = $this->factureRender->generateMultipleHtml($factures);
+        $html = $this->facturePdfPresence->renderMultiplesForPdf($factures);
 
         //  return new Response($html);
 
