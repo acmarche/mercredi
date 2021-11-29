@@ -2,9 +2,9 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,11 +20,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FactureAccueilController extends AbstractController
 {
-    private FactureHandler $factureHandler;
+    private FactureHandlerInterface $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
 
     public function __construct(
-        FactureHandler $factureHandler,
+        FactureHandlerInterface $factureHandler,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
         $this->factureHandler = $factureHandler;

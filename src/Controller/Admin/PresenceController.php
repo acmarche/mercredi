@@ -2,21 +2,21 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Dto\PresenceSelectDays;
 use AcMarche\Mercredi\Presence\Form\PresenceNewType;
 use AcMarche\Mercredi\Presence\Form\PresenceType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceByMonthType;
 use AcMarche\Mercredi\Presence\Form\SearchPresenceType;
-use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
@@ -43,7 +43,7 @@ final class PresenceController extends AbstractController
     private SearchHelper $searchHelper;
     private ListingPresenceByMonth $listingPresenceByMonth;
     private FacturePresenceRepository $facturePresenceRepository;
-    private FactureHandler $factureHandler;
+    private FactureHandlerInterface $factureHandler;
     private PresenceCalculatorInterface $presenceCalculator;
     private OrdreService $ordreService;
 
@@ -53,7 +53,7 @@ final class PresenceController extends AbstractController
         SearchHelper $searchHelper,
         ListingPresenceByMonth $listingPresenceByMonth,
         FacturePresenceRepository $facturePresenceRepository,
-        FactureHandler $factureHandler,
+        FactureHandlerInterface $factureHandler,
         PresenceCalculatorInterface $presenceCalculator,
         OrdreService $ordreService
     ) {

@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Plaine\Handler;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\FactureInterface;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
@@ -17,14 +17,14 @@ final class PlaineAdminHandler
 {
     private PlaineRepository $plaineRepository;
     private JourRepository $jourRepository;
-    private FactureHandler $factureHandler;
+    private FactureHandlerInterface $factureHandler;
     private PlainePresenceRepository $plainePresenceRepository;
 
     public function __construct(
         PlaineRepository $plaineRepository,
         JourRepository $jourRepository,
         PlainePresenceRepository $plainePresenceRepository,
-        FactureHandler $factureHandler
+        FactureHandlerInterface $factureHandler
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->jourRepository = $jourRepository;

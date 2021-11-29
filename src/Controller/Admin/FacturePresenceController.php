@@ -3,15 +3,15 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Form\FactureAttachType;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,14 +28,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FacturePresenceController extends AbstractController
 {
     private FacturePresenceRepository $facturePresenceRepository;
-    private FactureHandler $factureHandler;
+    private FactureHandlerInterface $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
     private PresenceRepository $presenceRepository;
     private AccueilRepository $accueilRepository;
 
     public function __construct(
         FacturePresenceRepository $facturePresenceRepository,
-        FactureHandler $factureHandler,
+        FactureHandlerInterface $factureHandler,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         PresenceCalculatorInterface $presenceCalculator,
         PresenceRepository $presenceRepository,

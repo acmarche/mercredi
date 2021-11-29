@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
@@ -10,7 +11,6 @@ use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
 use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
@@ -33,14 +33,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FactureController extends AbstractController
 {
     private FactureRepository $factureRepository;
-    private FactureHandler $factureHandler;
+    private FactureHandlerInterface $factureHandler;
     private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
     private FactureCalculatorInterface $factureCalculator;
     private FactureRenderInterface $factureRender;
 
     public function __construct(
         FactureRepository $factureRepository,
-        FactureHandler $factureHandler,
+        FactureHandlerInterface $factureHandler,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         FactureCalculatorInterface $factureCalculator,
         FactureRenderInterface $factureRender
