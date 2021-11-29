@@ -1,9 +1,8 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Render;
 
-
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
@@ -11,7 +10,7 @@ use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Twig\Environment;
 
-class FactureRender
+class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
 {
     private Environment $environment;
     private OrganisationRepository $organisationRepository;
@@ -30,7 +29,7 @@ class FactureRender
         $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
-    public function generateOneHtml(FactureInterface $facture): string
+    public function render(FactureInterface $facture): string
     {
         $content = $this->prepareContent($facture);
 
@@ -42,14 +41,7 @@ class FactureRender
         );
     }
 
-    /**
-     * @param array $factures
-     * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     */
-    public function generateMultipleHtml(array $factures): string
+    public function renderMultiple(array $factures): string
     {
         $content = '';
         foreach ($factures as $facture) {
