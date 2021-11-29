@@ -43,7 +43,7 @@ final class FactureAccueilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $accueilsF = $request->request->get('accueils', []);
+            $accueilsF = (array)$request->request->get('accueils', []);
             $this->factureHandler->handleManually($facture, [], $accueilsF);
 
             $this->addFlash('success', 'Les accueils ont bien été attachés');

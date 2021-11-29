@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureDecompte;
 use AcMarche\Mercredi\Facture\Form\FactureDecompteType;
@@ -21,14 +20,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class FactureDecompteController extends AbstractController
 {
-    private FactureHandlerInterface $factureHandler;
     private FactureDecompteRepository $factureDecompteRepository;
 
     public function __construct(
-        FactureDecompteRepository $factureDecompteRepository,
-        FactureHandlerInterface $factureHandler
+        FactureDecompteRepository $factureDecompteRepository
     ) {
-        $this->factureHandler = $factureHandler;
         $this->factureDecompteRepository = $factureDecompteRepository;
     }
 
