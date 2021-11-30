@@ -71,7 +71,7 @@ class PlaineImport
             $jourDate = DateTime::createFromFormat('Y-m-d', $data->date_jour);
             $jour = new Jour();
             $jour->setDateJour($jourDate);
-            $jour->setPlaineNom($plaine);
+            $jour->setPlaine($plaine);
             $this->tuteurRepository->persist($jour);
         }
         $this->tuteurRepository->flush();
