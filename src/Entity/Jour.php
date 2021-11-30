@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Entity\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\ColorTrait;
 use AcMarche\Mercredi\Entity\Traits\ForfaitTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\PedagogiqueTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -45,6 +46,7 @@ class Jour implements TimestampableInterface
     use ForfaitTrait;
     use AnimateursTrait;
     use PlaineTrait;
+    use IdOldTrait;
 
     /**
      * @var DateTime|null

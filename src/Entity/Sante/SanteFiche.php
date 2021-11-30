@@ -6,6 +6,7 @@ namespace AcMarche\Mercredi\Entity\Sante;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Sante\Validator as AcMarcheSanteAssert;
@@ -31,6 +32,7 @@ class SanteFiche implements TimestampableInterface
     use EnfantTrait;
     use AccompagnateursTrait;
     use RemarqueTrait;
+    use IdOldTrait;
 
     /**
      * @ORM\Column(type="text", nullable=false)

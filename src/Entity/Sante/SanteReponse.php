@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Sante;
 
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -15,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class SanteReponse
 {
-    use IdTrait;
+    use IdTrait, IdOldTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=SanteQuestion::class, inversedBy="reponse")

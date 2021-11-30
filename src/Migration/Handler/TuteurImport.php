@@ -32,6 +32,7 @@ class TuteurImport
         foreach ($enfants as $data) {
             $this->io->writeln($data->nom);
             $tuteur = new Tuteur();
+            $tuteur->setIdOld($data->id);
             $tuteur->setNom($data->nom);
             $tuteur->setPrenom($data->prenom);
             $tuteur->setArchived($data->archive);

@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\CommunicationTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
@@ -33,6 +34,7 @@ class Plaine implements SluggableInterface
     use JoursTrait;
     use CommunicationTrait;
     use FacturesTrait;
+    use IdOldTrait;
 
     /**
      * @var Jour[]

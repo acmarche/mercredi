@@ -32,6 +32,7 @@ class PlaineImport
         $plaines = $pdo->getAll('plaine');
         foreach ($plaines as $data) {
             $plaine = new Plaine();
+            $plaine->setIdOld($data->id);
             $plaine->setNom($data->intitule);
             $plaine->setSlug($data->slugname);
             $plaine->setRemarque($data->remarques);
@@ -70,6 +71,7 @@ class PlaineImport
             $plaine = $this->migrationRepository->getPlaine($data->plaine_id);
             $jourDate = DateTime::createFromFormat('Y-m-d', $data->date_jour);
             $jour = new Jour();
+            $jour->setIdOld($data->id);
             $jour->setDateJour($jourDate);
             $jour->setPlaine($plaine);
             $this->tuteurRepository->persist($jour);

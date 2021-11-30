@@ -35,6 +35,7 @@ class FicheSanteImport
             $enfant = $this->migrationRepository->getEnfant($data->enfant_id);
             $io->writeln($enfant->getPrenom());
             $ficheSante = new SanteFiche($enfant);
+            $ficheSante->setIdOld($data->id);
             $ficheSante->setRemarque($data->remarques);
             $ficheSante->setMedecinNom($data->medecin_nom);
             $ficheSante->setMedecinTelephone($data->medecin_telephone);
@@ -55,6 +56,7 @@ class FicheSanteImport
             $santeQuestion = $this->migrationRepository->getSanteQuestion($data->question_id);
 
             $santeReponse = new SanteReponse($santeFiche, $santeQuestion);
+            $santeReponse->setIdOld($data->id);
             $santeReponse->setReponse((bool)$data->reponse);
             $santeReponse->setRemarque($data->remarque);
             $this->enfantRepository->persist($santeReponse);

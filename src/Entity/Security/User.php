@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Security;
 
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 use AcMarche\Mercredi\Entity\Security\Traits\AnimateursTrait;
@@ -46,6 +47,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
     use EcolesTrait;
     use AnimateursTrait;
     use LastLoginTrait;
+    use IdOldTrait;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)

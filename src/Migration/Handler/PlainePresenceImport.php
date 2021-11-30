@@ -46,6 +46,7 @@ class PlainePresenceImport
                     $tuteur = $this->migrationRepository->getTuteur($plaineEnfant->tuteur_id);
                 }
                 $presence = new Presence($tuteur, $enfant, $jour);
+                $presence->setIdOld($plaineEnfant->id);
                 $ordre = $plaineEnfant->ordre ?? 0;
                 $presence->setRemarque($plaineEnfant->remarques);
                 $presence->setAbsent($plaineEnfant->absent);

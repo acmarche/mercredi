@@ -35,6 +35,7 @@ class PresenceImport
             $jour = $this->migrationRepository->getJour($data->jour_id);
 
             $presence = new Presence($tuteur, $enfant, $jour);
+            $presence->setIdOld($data->id);
             if ($data->reduction_id > 0) {
                 $reduction = $this->migrationRepository->getReduction($data->reduction_id);
                 $presence->setReduction($reduction);

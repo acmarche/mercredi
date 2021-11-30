@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Entity\Traits\AbsentTrait;
 use AcMarche\Mercredi\Entity\Traits\ConfirmedTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\HalfTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\JourTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
@@ -46,6 +47,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     use TimestampableTrait;
     use HalfTrait;
     use ConfirmedTrait;
+    use IdOldTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Jour::class, inversedBy="presences")

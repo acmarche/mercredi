@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Entity\Traits\BirthdayTrait;
 use AcMarche\Mercredi\Entity\Traits\EcoleTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantNotesTrait;
 use AcMarche\Mercredi\Entity\Traits\GroupeScolaireTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\IsAccueilEcoleTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -73,7 +74,8 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
         EnfantNotesTrait,
         IsAccueilEcoleTrait,
         RegistreNationalTrait,
-        PoidsTrait;
+        PoidsTrait,
+        IdOldTrait;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)

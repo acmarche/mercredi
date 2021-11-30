@@ -35,6 +35,7 @@ class EnfantImport
         foreach ($enfants as $data) {
             $this->io->writeln($data->nom);
             $enfant = new Enfant();
+            $enfant->setIdOld($data->id);
             $enfant->setNom($data->nom);
             $enfant->setPrenom($data->prenom);
             if ($birthday = DateTime::createFromFormat('Y-m-d', $data->birthday)) {

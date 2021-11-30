@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\FactureImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
+use AcMarche\Mercredi\Migration\Handler\PaiementImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\PlaineImport;
 use AcMarche\Mercredi\Migration\Handler\PlainePresenceImport;
@@ -37,6 +38,7 @@ final class MigrationCommand extends Command
     private PlaineImport $plaineImport;
     private PlainePresenceImport $plainePresenceImport;
     private FactureImport $factureImport;
+    private PaiementImport $paiementImport;
 
     public function __construct(
         ParametreImport $parametreImport,
@@ -50,6 +52,7 @@ final class MigrationCommand extends Command
         PlainePresenceImport $plainePresenceImport,
         FactureImport $factureImport,
         UserPasswordHasherInterface $passwordHasher,
+        PaiementImport $paiementImport,
         ?string $name = null
     ) {
         parent::__construct($name);
@@ -65,6 +68,7 @@ final class MigrationCommand extends Command
         $this->plaineImport = $plaineImport;
         $this->plainePresenceImport = $plainePresenceImport;
         $this->factureImport = $factureImport;
+        $this->paiementImport = $paiementImport;
     }
 
     protected function configure(): void
@@ -93,6 +97,7 @@ final class MigrationCommand extends Command
             $this->plaineImport->importGroupe($symfonyStyle);
             $this->plaineImport->importJours($symfonyStyle);
             $this->plainePresenceImport->import($symfonyStyle);
+            $this->paiementImport->import($symfonyStyle);
             $this->organisation();
 
             return Command::SUCCESS;
@@ -144,6 +149,10 @@ final class MigrationCommand extends Command
                 return Command::SUCCESS;
             case 'facture':
                 $this->factureImport->import($symfonyStyle);
+
+                return Command::SUCCESS;
+            case 'paiement':
+                $this->paiementImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'password':

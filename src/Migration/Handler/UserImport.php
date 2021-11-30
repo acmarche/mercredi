@@ -25,6 +25,7 @@ class UserImport
         foreach ($enfants as $data) {
             $io->writeln($data->nom);
             $user = new User();
+            $user->setIdOld($data->id);
             $user->setNom($data->nom);
             $user->setPrenom($data->prenom);
             $user->setEmail($data->email);
