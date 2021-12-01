@@ -136,8 +136,8 @@ final class FactureRepository extends ServiceEntityRepository
         }
 
         if ($monthYear !== null) {
-            $queryBuilder->andWhere('facture.mois = :date')
-                ->setParameter('date', $monthYear);
+            $queryBuilder->andWhere('facture.mois = :monthYear')
+                ->setParameter('monthYear', $monthYear);
         }
 
         if ($communication !== null) {
@@ -146,8 +146,8 @@ final class FactureRepository extends ServiceEntityRepository
         }
 
         if ($datePaiement !== null) {
-            $queryBuilder->andWhere('facture.payeLe LIKE :date')
-                ->setParameter('date', $datePaiement->format('Y-m-d').'%');
+            $queryBuilder->andWhere('facture.payeLe LIKE :datePaiement')
+                ->setParameter('datePaiement', $datePaiement->format('Y-m-d').'%');
         }
 
         if ($paye === false) {
