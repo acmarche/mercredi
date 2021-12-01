@@ -47,14 +47,14 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
             return $presence->isHalf() ? $jour->getPrix2() : $jour->getPrix1();
         }
 
-        switch ($ordre) {
-            case 2:
-                return $jour->getPrix2();
-            case 3:
-                return $jour->getPrix3();
-            default:
-                return $jour->getPrix1();
+        if ($ordre >= 3) {
+            return $jour->getPrix3();
         }
+        if ($ordre == 2) {
+            return $jour->getPrix2();
+        }
+
+        return $jour->getPrix1();
     }
 
     public function getOrdreOnPresence(PresenceInterface $presence): int

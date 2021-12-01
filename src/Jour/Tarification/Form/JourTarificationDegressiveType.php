@@ -10,19 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class JourTarificationDegressiveType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-    /**
-     * @var string
-     */
-    private const HELP = 'help';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -32,7 +19,7 @@ final class JourTarificationDegressiveType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Prix 1er enfant',
-                    self::HELP => 'Uniquement les chiffres',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
             ->add(
@@ -41,7 +28,7 @@ final class JourTarificationDegressiveType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Prix 2iem enfant',
-                    self::HELP => 'Uniquement les chiffres',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
             ->add(
@@ -50,7 +37,7 @@ final class JourTarificationDegressiveType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Prix des suivants',
-                    self::HELP => 'Uniquement les chiffres',
+                    'help' => 'Uniquement les chiffres',
                 ]
             );
     }

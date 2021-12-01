@@ -101,13 +101,13 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
     public function getPrixByOrdre(PresenceInterface $presence, int $ordre): float
     {
         $jour = $presence->getJour();
-        switch ($ordre) {
-            case 2:
-                return $jour->getPrix2();
-            case 3:
-                return $jour->getPrix3();
-            default:
-                return $jour->getPrix1();
+        if ($ordre >= 3) {
+            return $jour->getPrix3();
         }
+        if ($ordre == 2) {
+            return $jour->getPrix2();
+        }
+
+        return $jour->getPrix1();
     }
 }
