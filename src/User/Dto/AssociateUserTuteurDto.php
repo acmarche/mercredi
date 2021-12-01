@@ -2,13 +2,12 @@
 
 namespace AcMarche\Mercredi\User\Dto;
 
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserTuteurDto
 {
-    private User $user;
+    private UserInterface $user;
 
     private ?Tuteur $tuteur = null;
 
@@ -19,20 +18,17 @@ final class AssociateUserTuteurDto
         $this->user = $user;
     }
 
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }
 
-    /**
-     * @return Tuteur
-     */
-    public function getTuteur(): Tuteur
+    public function getTuteur(): ?Tuteur
     {
         return $this->tuteur;
     }
 
-    public function setTuteur(Tuteur $tuteur): void
+    public function setTuteur(?Tuteur $tuteur): void
     {
         $this->tuteur = $tuteur;
     }
