@@ -11,8 +11,6 @@ use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
-use function count;
-
 final class AssociationTuteurHandler
 {
     private TuteurRepository $tuteurRepository;
@@ -53,6 +51,11 @@ final class AssociationTuteurHandler
             $user->getTuteurs()->clear();
         }
 
+        if (!$tuteur) {
+            $this->flashBag->add('danger', 'Aucun tuteur sélectionné.');
+
+            return;
+        }
         $user->addTuteur($tuteur);
         $this->tuteurRepository->flush();
 
