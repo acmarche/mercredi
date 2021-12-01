@@ -228,66 +228,7 @@ class Paiement
         return $this;
     }
 
-    /**
-     * @return Collection|Presence[]
-     */
-    public function getPresences(): Collection
-    {
-        return $this->presences;
-    }
 
-    public function addPresence(Presence $presence): self
-    {
-        if (!$this->presences->contains($presence)) {
-            $this->presences[] = $presence;
-            $presence->setPaiement($this);
-        }
 
-        return $this;
-    }
-
-    public function removePresence(Presence $presence): self
-    {
-        if ($this->presences->contains($presence)) {
-            $this->presences->removeElement($presence);
-            // set the owning side to null (unless already changed)
-            if ($presence->getPaiement() === $this) {
-                $presence->setPaiement(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|PlainePresence[]
-     */
-    public function getPlainePresences(): Collection
-    {
-        return $this->plaine_presences;
-    }
-
-    public function addPlainePresence(PlainePresence $plainePresence): self
-    {
-        if (!$this->plaine_presences->contains($plainePresence)) {
-            $this->plaine_presences[] = $plainePresence;
-            $plainePresence->setPaiement($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlainePresence(PlainePresence $plainePresence): self
-    {
-        if ($this->plaine_presences->contains($plainePresence)) {
-            $this->plaine_presences->removeElement($plainePresence);
-            // set the owning side to null (unless already changed)
-            if ($plainePresence->getPaiement() === $this) {
-                $plainePresence->setPaiement(null);
-            }
-        }
-
-        return $this;
-    }
 
 }
