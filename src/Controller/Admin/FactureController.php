@@ -100,6 +100,7 @@ final class FactureController extends AbstractController
                 $dataForm['plaine'],
                 $dataForm['paye'],
                 $dataForm['mois'],
+                $dataForm['datePaiement'],
                 $dataForm['communication'],
             );
         }

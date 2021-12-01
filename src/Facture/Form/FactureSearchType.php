@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Facture\Form;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
+use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use AcMarche\Mercredi\Form\Type\MonthWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -86,6 +87,14 @@ final class FactureSearchType extends AbstractType
                     'placeholder' => 'Payé ou non',
                     'choices' => ['Payée' => 1, 'Non payée' => 0],
                     'required' => false,
+                ]
+            )
+            ->add(
+                'datePaiement',
+                DateWidgetType::class,
+                [
+                    'required' => false,
+                    'help' => 'Date de paiement',
                 ]
             );
     }
