@@ -53,9 +53,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public();
 
     $services->alias(TarificationFormGeneratorInterface::class, TarificationHottonFormGenerator::class);
-
     $services->alias(PresenceCalculatorInterface::class, PrenceHottonCalculator::class);
-
     $services->alias(PlaineCalculatorInterface::class, PlaineHottonCalculator::class);
 
     $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.loader.doctrine');

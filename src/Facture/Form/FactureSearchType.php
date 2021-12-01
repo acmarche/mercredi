@@ -49,6 +49,9 @@ final class FactureSearchType extends AbstractType
                 [
                     'help' => null,
                     'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Mois facture, format: 06-2021',
+                    ],
                 ]
             )
             ->add(

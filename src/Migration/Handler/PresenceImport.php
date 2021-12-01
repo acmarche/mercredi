@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
+use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class PresenceImport
@@ -39,6 +39,10 @@ class PresenceImport
             if ($data->reduction_id > 0) {
                 $reduction = $this->migrationRepository->getReduction($data->reduction_id);
                 $presence->setReduction($reduction);
+            }
+            if ($data->paiement_id) {
+                $paiement = $this->migrationRepository->getPaiement($data->paiement_id);
+                $presence->setPaiement($paiement);
             }
             $ordre = $data->ordre ?? 0;
             $presence->setRemarque($data->remarques);

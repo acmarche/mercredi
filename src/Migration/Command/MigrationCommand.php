@@ -92,12 +92,12 @@ final class MigrationCommand extends Command
             $this->enfantImport->importNote($symfonyStyle);
             $this->ficheSanteImport->import($symfonyStyle);
             $this->ficheSanteImport->importReponse($symfonyStyle);
+            $this->paiementImport->import($symfonyStyle);
             $this->presenceImport->import($symfonyStyle);
             $this->plaineImport->import($symfonyStyle);
             $this->plaineImport->importGroupe($symfonyStyle);
             $this->plaineImport->importJours($symfonyStyle);
             $this->plainePresenceImport->import($symfonyStyle);
-            $this->paiementImport->import($symfonyStyle);
             $this->organisation();
 
             return Command::SUCCESS;
