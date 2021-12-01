@@ -2,14 +2,10 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
-use AcMarche\Mercredi\Entity\Security\User;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,15 +41,11 @@ class Paiement
 
     /**
      * @ORM\Column(type="string", nullable=true, length=150)
-     *
-     * @var string?
      */
     protected ?string $type_paiement = null;
 
     /**
      * @ORM\Column(type="string", nullable=true, length=150)
-     *
-     * @var string?
      */
     protected ?string $mode_paiement = null;
 
@@ -63,11 +55,9 @@ class Paiement
     protected ?int $ordre = 0;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(type="boolean", options={"default" = "0"})
      */
-    protected $cloture = false;
+    protected bool $cloture = false;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -75,31 +65,20 @@ class Paiement
     protected ?string $remarques = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tuteur", inversedBy="paiements")
+     * @ORM\ManyToOne(targetEntity="Tuteur")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     protected ?Tuteur $tuteur = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Enfant", inversedBy="paiements")
+     * @ORM\ManyToOne(targetEntity="Enfant")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     protected ?Enfant $enfant = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Presence\Presence", mappedBy="paiement")
-     */
-    protected Collection $presences;
-
-    /**
-     * ORM\OneToMany(targetEntity="AcMarche\Mercredi\Plaine\Entity\PlainePresence", mappedBy="paiement")
-     */
-    protected Collection $plaine_presences;
-
     public function __construct()
     {
-        $this->presences = new ArrayCollection();
-        $this->plaine_presences = new ArrayCollection();
+
     }
 
     public function __toString()
@@ -109,7 +88,7 @@ class Paiement
             $string .= $this->getDatePaiement()->format('d-m-Y');
         }
 
-        return $string . (' ('.$this->getMontant().' €)');
+        return $string.(' ('.$this->getMontant().' €)');
     }
 
     public function getId(): int
@@ -227,8 +206,4 @@ class Paiement
 
         return $this;
     }
-
-
-
-
 }
