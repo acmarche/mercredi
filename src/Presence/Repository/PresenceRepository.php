@@ -140,11 +140,11 @@ final class PresenceRepository extends ServiceEntityRepository
 
     /**
      * Quand on ajoute une présence
-     * @return Presence
+     * @return ?Presence
      *
      * @throws NonUniqueResultException
      */
-    public function isRegistered(Enfant $enfant, Jour $jour): Presence
+    public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
     {
         return $this->createQBlPlaine()
             ->andWhere('presence.enfant = :enfant')
