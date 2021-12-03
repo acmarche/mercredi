@@ -2,13 +2,14 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -20,10 +21,7 @@ use Symfony\Component\Security\Core\Security;
  */
 final class EcoleVoter extends Voter
 {
-    /**
-     * @var mixed|\Symfony\Component\Security\Core\User\UserInterface|null
-     */
-    public $user;
+    public UserInterface $user;
     public const INDEX = 'ecole_index';
     public const SHOW = 'ecole_show';
     public const ADD = 'ecole_add';
@@ -31,18 +29,14 @@ final class EcoleVoter extends Voter
     public const DELETE = 'ecole_delete';
 
     private Security $security;
-    /**
-     * @var Ecole|null
-     */
-    private $ecole;
+    private ?Ecole $ecole = null;
     /**
      * @var Ecole[]|Collection
      */
-    private $ecoles;
+    private iterable $ecoles;
 
-    public function __construct(
-        Security $security
-    ) {
+    public function __construct(Security $security)
+    {
         $this->security = $security;
     }
 
@@ -58,11 +52,11 @@ final class EcoleVoter extends Voter
 
     protected function voteOnAttribute($attribute, $ecole, TokenInterface $token): bool
     {
-        $this->user = $token->getUser();
-
-        if (!$this->user instanceof User) {
+        if (!$token->getUser() instanceof User) {
             return false;
         }
+
+        $this->user = $token->getUser();
 
         if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;

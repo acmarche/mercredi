@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -10,6 +9,7 @@ use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -24,15 +24,9 @@ final class TuteurVoter extends Voter
     public const EDIT = 'tuteur_edit';
     public const DELETE = 'tuteur_delete';
 
-    private ?UserInterface $user = null;
-
+    private UserInterface $user;
     private ?Tuteur $tuteurOfUser = null;
-
-    /**
-     * @var Tuteur
-     */
-    private $tuteurToCheck;
-
+    private ?Tuteur $tuteurToCheck = null;
     private Security $security;
     private TuteurUtils $tuteurUtils;
 
@@ -57,11 +51,11 @@ final class TuteurVoter extends Voter
 
     protected function voteOnAttribute($attribute, $tuteur, TokenInterface $token): bool
     {
-        $this->user = $token->getUser();
-
-        if (!$this->user instanceof User) {
+        if (!$token->getUser() instanceof User) {
             return false;
         }
+
+        $this->user = $token->getUser();
 
         $this->tuteurToCheck = $tuteur;
 

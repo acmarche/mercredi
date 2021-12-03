@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use Stringable;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -34,7 +34,7 @@ final class PresenceVoter extends Voter
     private TuteurUtils $tuteurUtils;
     private Security $security;
     private ?UserInterface $user = null;
-    private $enfant;
+    private ?Enfant $enfant = null;
 
     public function __construct(
         RelationRepository $relationRepository,
@@ -49,20 +49,20 @@ final class PresenceVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Presence && \in_array(
-            $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
-            true
-        );
+                $attribute,
+                [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+                true
+            );
     }
 
     protected function voteOnAttribute($attribute, $presence, TokenInterface $token): bool
     {
-        $this->user = $token->getUser();
-        $this->enfant = $presence->getEnfant();
-
-        if (!$this->user instanceof User) {
+        if (!$token->getUser() instanceof User) {
             return false;
         }
+
+        $this->user = $token->getUser();
+        $this->enfant = $presence->getEnfant();
 
         if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
@@ -140,7 +140,7 @@ final class PresenceVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
         $enfants = array_map(
-            fn ($relation) => $relation->getEnfant()->getId(),
+            fn($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

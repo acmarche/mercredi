@@ -2,9 +2,8 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -15,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -29,12 +29,8 @@ final class EnfantVoter extends Voter
     public const EDIT = 'enfant_edit';
     public const DELETE = 'enfant_delete';
 
-    private ?UserInterface $user = null;
-    /**
-     * @var Enfant
-     */
-    private $enfant;
-    private ?Tuteur $tuteur = null;
+    private UserInterface $user;
+    private Enfant $enfant;
     private TuteurUtils $tuteurUtils;
     private Security $security;
     private RelationRepository $relationRepository;
@@ -67,12 +63,12 @@ final class EnfantVoter extends Voter
 
     protected function voteOnAttribute($attribute, $enfant, TokenInterface $token): bool
     {
-        $this->user = $token->getUser();
-        $this->enfant = $enfant;
-
-        if (!$this->user instanceof User) {
+        if (!$token->getUser() instanceof User) {
             return false;
         }
+
+        $this->user = $token->getUser();
+        $this->enfant = $enfant;
 
         if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
@@ -100,6 +96,7 @@ final class EnfantVoter extends Voter
         if ($this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR) && $this->checkAnimateur()) {
             return true;
         }
+
         return $this->canEdit();
     }
 
@@ -108,6 +105,7 @@ final class EnfantVoter extends Voter
         if ($this->security->isGranted(MercrediSecurityRole::ROLE_ECOLE) && $this->checkEcoles()) {
             return true;
         }
+
         return $this->security->isGranted(MercrediSecurityRole::ROLE_PARENT) && $this->checkTuteur();
     }
 
@@ -129,6 +127,7 @@ final class EnfantVoter extends Voter
         }
 
         $enfants = new ArrayCollection($this->enfantRepository->findAllForAnimateur($animateur));
+
         return $enfants->contains($this->enfant);
     }
 
@@ -141,15 +140,16 @@ final class EnfantVoter extends Voter
             return false;
         }
 
-        $this->tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
-        if (!$this->tuteur instanceof Tuteur) {
+        $tuteur = null;
+        $tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
+        if (!$tuteur instanceof Tuteur) {
             return false;
         }
 
-        $relations = $this->relationRepository->findByTuteur($this->tuteur);
+        $relations = $this->relationRepository->findByTuteur($tuteur);
 
         $enfants = array_map(
-            fn ($relation) => $relation->getEnfant()->getId(),
+            fn($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

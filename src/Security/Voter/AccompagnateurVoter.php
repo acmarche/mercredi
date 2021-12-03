@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +9,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -25,11 +25,8 @@ final class AccompagnateurVoter extends Voter
     public const SHOW = 'show';
     public const EDIT = 'edit';
     public const DELETE = 'delete';
-    /**
-     * @var string
-     */
     private const ECOLE = 'ROLE_MERCREDI_ECOLE';
-    private ?UserInterface $user = null;
+    private UserInterface $user;
 
     private AccessDecisionManagerInterface $decisionManager;
 
@@ -38,11 +35,7 @@ final class AccompagnateurVoter extends Voter
     /**
      * @var Ecole[]|Collection
      */
-    private $ecoles;
-    /**
-     * @var Accompagnateur
-     */
-    private $accompagnateur;
+    private iterable $ecoles;
 
     public function __construct(AccessDecisionManagerInterface $accessDecisionManager, FlashBagInterface $flashBag)
     {
@@ -62,11 +55,11 @@ final class AccompagnateurVoter extends Voter
 
     protected function voteOnAttribute($attribute, $accompagnateur, TokenInterface $token): bool
     {
-        $this->user = $token->getUser();
-
-        if (!$this->user instanceof User) {
+        if (!$token->getUser() instanceof User) {
             return false;
         }
+
+        $this->user = $token->getUser();
 
         if ($this->decisionManager->decide($token, ['ROLE_MERCREDI_ADMIN'])) {
             return true;
@@ -128,7 +121,7 @@ final class AccompagnateurVoter extends Voter
 
     private function canDelete(TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($token);
+        return (bool)$this->canEdit($token);
     }
 
     private function checkEcoles($token): bool

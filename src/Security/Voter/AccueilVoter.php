@@ -2,17 +2,17 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -24,25 +24,15 @@ use Symfony\Component\Security\Core\Security;
  */
 final class AccueilVoter extends Voter
 {
-    /**
-     * @var \AcMarche\Mercredi\Entity\Tuteur|mixed|null
-     */
-    public $tuteurOfUser;
+    public ?Tuteur $tuteurOfUser = null;
     public const ADD = 'accueil_new';
     public const SHOW = 'accueil_show';
     public const EDIT = 'accueil_edit';
     public const DELETE = 'accueil_delete';
 
     private Security $security;
-    /**
-     * @var Accueil|null
-     */
-    private $accueil;
     private ?UserInterface $user = null;
-    /**
-     * @var Enfant
-     */
-    private $enfant;
+    private Enfant $enfant;
     private RelationRepository $relationRepository;
     private TuteurUtils $tuteurUtils;
 
@@ -59,20 +49,19 @@ final class AccueilVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Accueil && \in_array(
-            $attribute,
-            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
-            true
-        );
+                $attribute,
+                [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+                true
+            );
     }
 
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token): bool
     {
-        $this->user = $token->getUser();
-        $this->accueil = $accueil;
-
-        if (!$this->user instanceof User) {
+        if (!$token->getUser() instanceof User) {
             return false;
         }
+
+        $this->user = $token->getUser();
 
         if ($this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN)) {
             return true;
