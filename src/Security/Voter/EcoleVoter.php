@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -52,7 +51,7 @@ final class EcoleVoter extends Voter
 
     protected function voteOnAttribute($attribute, $ecole, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof User) {
+        if (!$token->getUser() instanceof UserInterface) {
             return false;
         }
 

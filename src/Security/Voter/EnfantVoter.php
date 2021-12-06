@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Security\Voter;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -63,7 +62,7 @@ final class EnfantVoter extends Voter
 
     protected function voteOnAttribute($attribute, $enfant, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof User) {
+        if (!$token->getUser() instanceof UserInterface) {
             return false;
         }
 

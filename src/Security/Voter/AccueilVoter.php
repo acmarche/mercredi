@@ -57,7 +57,7 @@ final class AccueilVoter extends Voter
 
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof User) {
+        if (!$token->getUser() instanceof UserInterface) {
             return false;
         }
 

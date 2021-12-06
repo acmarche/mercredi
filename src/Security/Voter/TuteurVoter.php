@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Security\Voter;
 
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
@@ -51,7 +50,7 @@ final class TuteurVoter extends Voter
 
     protected function voteOnAttribute($attribute, $tuteur, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof User) {
+        if (!$token->getUser() instanceof UserInterface) {
             return false;
         }
 

@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -59,7 +58,7 @@ final class JourVoter extends Voter
 
     protected function voteOnAttribute($attribute, $jour, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof User) {
+        if (!$token->getUser() instanceof UserInterface) {
             return false;
         }
 
