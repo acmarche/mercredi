@@ -42,7 +42,8 @@
                 <thead>
                 <tr>
                     <th>Numéro</th>
-                    <th>Facturé le</th>
+                    <th>Mois</th>
+                    <th>Envoyé le</th>
                     <th>Payé le</th>
                     <th>Communication</th>
                 </tr>
@@ -51,19 +52,22 @@
                 {% for facture in factures %}
                     <tr>
                         <td>
-                            N° {{ facture.id }}
-                        </td>
-                        <td>
                             <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
-                                {{ facture.factureLe | format_date('full') | title }}
+                                N° {{ facture.id }}
                             </a>
+                        </td>
+                        <td>{{ facture.mois }}</td>
+                        <td>
+                            {% if facture.envoyeLe %}
+                                {{ facture.envoyeLe | format_date('full') | title }}
+                            {% endif %}
                         </td>
                         <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') }}</td>
                         <td>{{ facture.communication }}</td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="4">Aucune</td>
+                        <td colspan="5">Aucune</td>
                     </tr>
                 {% endfor %}
                 </tbody>
