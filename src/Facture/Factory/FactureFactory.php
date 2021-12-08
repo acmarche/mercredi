@@ -2,8 +2,9 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use Exception;
-use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
@@ -14,13 +15,13 @@ final class FactureFactory
 {
     use PdfDownloaderTrait;
 
-    private FactureRenderInterface $factureRender;
     private ParameterBagInterface $parameterBag;
+    private FacturePdfPresenceInterface $facturePdfPresence;
 
-    public function __construct(FactureRenderInterface $factureRender, ParameterBagInterface $parameterBag)
+    public function __construct(FacturePdfPresenceInterface $facturePdfPresence, ParameterBagInterface $parameterBag)
     {
-        $this->factureRender = $factureRender;
         $this->parameterBag = $parameterBag;
+        $this->facturePdfPresence = $facturePdfPresence;
     }
 
     public function newInstance(Tuteur $tuteur): Facture
@@ -51,11 +52,11 @@ final class FactureFactory
         $path = $this->getBasePathFacture($month);
         $i = 0;
         foreach ($factures as $facture) {
-            $fileName = $path . 'facture-' . $facture->getId() . '.pdf';
+            $fileName = $path.'facture-'.$facture->getId().'.pdf';
             if (is_readable($fileName)) {
                 continue;
             }
-            $htmlInvoice = $this->factureRender->render($facture);
+            $htmlInvoice = $this->createHtml($facture);
             try {
                 $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
             } catch (Exception $exception) {
@@ -70,8 +71,13 @@ final class FactureFactory
         return true;
     }
 
+    public function createHtml(FactureInterface $facture): string
+    {
+        return $this->facturePdfPresence->render($facture);
+    }
+
     public function getBasePathFacture(string $month): string
     {
-        return $this->parameterBag->get('kernel.project_dir') . '/var/factures/' . $month . '/';
+        return $this->parameterBag->get('kernel.project_dir').'/var/factures/'.$month.'/';
     }
 }

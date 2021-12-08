@@ -121,7 +121,7 @@ class FactureEmailFactory
      */
     public function attachFactureOnTheFly(FactureInterface $facture, Email $message): void
     {
-        $htmlInvoice = $this->facturePdfPresence->render($facture);
+        $htmlInvoice = $this->factureFactory->createHtml($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
 
         $date = $facture->getFactureLe();
