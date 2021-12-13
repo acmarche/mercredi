@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserAnimateurDto
 {
-    private User $user;
+    private UserInterface $user;
 
     private ?Animateur $animateur = null;
 
@@ -19,7 +19,7 @@ final class AssociateUserAnimateurDto
         $this->user = $user;
     }
 
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }
