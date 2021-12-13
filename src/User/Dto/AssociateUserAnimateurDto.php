@@ -24,10 +24,7 @@ final class AssociateUserAnimateurDto
         return $this->user;
     }
 
-    /**
-     * @return Animateur
-     */
-    public function getAnimateur(): Animateur
+    public function getAnimateur(): ?Animateur
     {
         return $this->animateur;
     }
