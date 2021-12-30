@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AssociationTuteurHandler
@@ -20,12 +21,13 @@ final class AssociationTuteurHandler
     private UserEmailFactory $userEmailFactory;
 
     public function __construct(
-        TuteurRepository $tuteurRepository,
-        UserFactory $userFactory,
+        TuteurRepository   $tuteurRepository,
+        UserFactory        $userFactory,
         NotificationMailer $notificationMailer,
-        UserEmailFactory $userEmailFactory,
-        FlashBagInterface $flashBag
-    ) {
+        UserEmailFactory   $userEmailFactory,
+        FlashBagInterface  $flashBag
+    )
+    {
         $this->tuteurRepository = $tuteurRepository;
         $this->flashBag = $flashBag;
         $this->userFactory = $userFactory;
@@ -35,9 +37,13 @@ final class AssociationTuteurHandler
 
     public function suggestTuteur(User $user, AssociateUserTuteurDto $associateUserTuteurDto): void
     {
-        $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
-        if (null !== $tuteur) {
-            $associateUserTuteurDto->setTuteur($tuteur);
+        try {
+            $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
+            if (null !== $tuteur) {
+                $associateUserTuteurDto->setTuteur($tuteur);
+            }
+        } catch (NonUniqueResultException $e) {
+
         }
     }
 

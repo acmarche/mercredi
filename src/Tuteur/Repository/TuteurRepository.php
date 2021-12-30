@@ -58,6 +58,9 @@ final class TuteurRepository extends ServiceEntityRepository
             ->orderBy('tuteur.nom');
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneByEmail(string $email): ?Tuteur
     {
         return $this->createQueryBuilder('tuteur')
