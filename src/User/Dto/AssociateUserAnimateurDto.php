@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\User\Dto;
 
 use AcMarche\Mercredi\Entity\Animateur;
-use AcMarche\Mercredi\Entity\Security\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserAnimateurDto

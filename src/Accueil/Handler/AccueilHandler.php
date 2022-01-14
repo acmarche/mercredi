@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use DateTime;
 use Exception;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AccueilHandler
@@ -22,12 +23,12 @@ final class AccueilHandler
         AccueilRepository $accueilRepository,
         EnfantRepository $enfantRepository,
         TuteurRepository $tuteurRepository,
-        FlashBagInterface $flashBag
+        RequestStack $requestStack
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->enfantRepository = $enfantRepository;
         $this->tuteurRepository = $tuteurRepository;
-        $this->flashBag = $flashBag;
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
     }
 
     public function handleNew(Enfant $enfant, Accueil $accueilSubmited): Accueil
@@ -50,18 +51,18 @@ final class AccueilHandler
     {
         foreach ($accueils as $enfantId => $days) {
             foreach ($days as $dateString => $duree) {
-                $duree = (int)$duree;
+                $duree = (int) $duree;
 
-                if (($enfant = $this->enfantRepository->find((int)$enfantId)) === null) {
-                    $this->flashBag->add('danger', 'Référence pour l\enfant ' . $enfantId . ' non trouvé');
+                if (($enfant = $this->enfantRepository->find((int) $enfantId)) === null) {
+                    $this->flashBag->add('danger', 'Référence pour l\enfant '.$enfantId.' non trouvé');
 
                     continue;
                 }
-                $tuteurId = (int)$tuteurs[$enfantId][0];
+                $tuteurId = (int) $tuteurs[$enfantId][0];
 
                 if (($tuteur = $this->tuteurRepository->find($tuteurId)) === null) {
                     if ($duree > 0) {
-                        $this->flashBag->add('danger', 'Spécifié sous quelle garde pour ' . $enfant);
+                        $this->flashBag->add('danger', 'Spécifié sous quelle garde pour '.$enfant);
                     }
                     continue;
                 }
@@ -76,7 +77,7 @@ final class AccueilHandler
                 } catch (Exception $exception) {
                     $this->flashBag->add(
                         'danger',
-                        'Impossible de convertir la date ' . $dateString . ' pour ' . $enfant . ': ' . $exception->getMessage()
+                        'Impossible de convertir la date '.$dateString.' pour '.$enfant.': '.$exception->getMessage()
                     );
 
                     continue;
@@ -91,7 +92,7 @@ final class AccueilHandler
 
     private function updateAccueil(Accueil $accueilExistant, Accueil $accueilSubmited): void
     {
-        if ($accueilSubmited->getDuree() == 0) {
+        if (0 == $accueilSubmited->getDuree()) {
             $this->accueilRepository->remove($accueilExistant);
         } else {
             $accueilExistant->setHeure($accueilSubmited->getHeure());

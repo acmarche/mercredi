@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Ecole\Utils;
 
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
@@ -10,7 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class EcoleUtils
 {
     /**
-     * @param User $user
      * @return Ecole[]|ArrayCollection
      */
     public function getEcolesByUser(User $user): iterable
@@ -20,7 +18,6 @@ class EcoleUtils
 
     /**
      * @param Ecole[]|ArrayCollection $ecoles
-     * @return string
      */
     public static function getNamesEcole(iterable $ecoles): string
     {
@@ -28,6 +25,7 @@ class EcoleUtils
             fn ($ecole) => $ecole->getNom(),
             $ecoles->toArray()
         );
-        return implode(",", $noms);
+
+        return implode(',', $noms);
     }
 }

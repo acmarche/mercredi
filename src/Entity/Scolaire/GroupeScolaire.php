@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Scolaire;
 
-
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -16,55 +15,47 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"age_minimum", "is_plaine"}),
- *     @ORM\UniqueConstraint(columns={"age_maximum", "is_plaine"})
- * })
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository")
  * @UniqueEntity(fields={"age_minimum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge minimum")
  * @UniqueEntity(fields={"age_maximum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge maximum")
  */
+#[ORM\Table]
+#[ORM\UniqueConstraint(columns: ['age_minimum', 'is_plaine'])]
+#[ORM\UniqueConstraint(columns: ['age_maximum', 'is_plaine'])]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository')]
 class GroupeScolaire
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
     use OrdreTrait;
-
     /**
-     * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
      * @Assert\LessThan(propertyPath="age_maximum")
      */
+    #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
     private ?float $age_minimum = null;
     /**
-     * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true)
      * @Assert\GreaterThan(propertyPath="age_minimum")
      */
+    #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
     private ?float $age_maximum = null;
-
-    /**
-     * @ORM\Column(type="boolean", length=10, nullable=false)
-     */
+    #[ORM\Column(type: 'boolean', length: 10, nullable: false)]
     private ?bool $is_plaine = false;
-
     /**
      * @var Enfant[]
-     * @ORM\OneToMany(targetEntity=Enfant::class, mappedBy="groupe_scolaire")
      */
+    #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'groupe_scolaire')]
     private iterable $enfants;
-
     /**
      * @var AnneeScolaire[]
-     * @ORM\OneToMany(targetEntity=AnneeScolaire::class, mappedBy="groupe_scolaire")
      */
+    #[ORM\OneToMany(targetEntity: AnneeScolaire::class, mappedBy: 'groupe_scolaire')]
     private iterable $annees_scolaires;
-
     /**
      * Pour la cascade.
      *
      * @var PlaineGroupe[]
-     * @ORM\OneToMany(targetEntity=PlaineGroupe::class, mappedBy="groupe_scolaire", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: PlaineGroupe::class, mappedBy: 'groupe_scolaire', cascade: ['remove'])]
     private iterable $plaine_groupes;
 
     public function __construct()

@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Exception;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
@@ -20,8 +18,10 @@ use AcMarche\Mercredi\Facture\Message\FacturesCreated;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,7 +55,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/index", name="mercredi_admin_facture_index_by_tuteur", methods={"GET","POST"})
+     * @Route("/{id}/index", name="mercredi_admin_facture_index_by_tuteur", methods={"GET", "POST"})
      */
     public function indexByTuteur(Tuteur $tuteur): Response
     {
@@ -79,7 +79,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/search", name="mercredi_admin_facture_index", methods={"GET","POST"})
+     * @Route("/search", name="mercredi_admin_facture_index", methods={"GET", "POST"})
      */
     public function search(Request $request): Response
     {
@@ -131,7 +131,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/manual", name="mercredi_admin_facture_new_manual", methods={"GET","POST"})
+     * @Route("/{id}/manual", name="mercredi_admin_facture_new_manual", methods={"GET", "POST"})
      */
     public function newManual(Request $request, Tuteur $tuteur): Response
     {
@@ -144,8 +144,8 @@ final class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = (array)$request->request->get('presences', []);
-            $accueilsF = (array)$request->request->get('accueils', []);
+            $presencesF = (array) $request->request->get('presences', []);
+            $accueilsF = (array) $request->request->get('accueils', []);
             $this->factureHandler->handleManually($facture, $presencesF, $accueilsF);
 
             $this->dispatchMessage(new FactureCreated($facture->getId()));
@@ -165,7 +165,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/month/", name="mercredi_admin_facture_new_month", methods={"GET","POST"})
+     * @Route("/{id}/month/", name="mercredi_admin_facture_new_month", methods={"GET", "POST"})
      */
     public function newByMonth(Request $request, Tuteur $tuteur): RedirectResponse
     {
@@ -192,7 +192,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/for/all/", name="mercredi_admin_facture_new_month_all", methods={"GET","POST"})
+     * @Route("/for/all/", name="mercredi_admin_facture_new_month_all", methods={"GET", "POST"})
      */
     public function newByMonthForAll(Request $request): Response
     {
@@ -206,12 +206,12 @@ final class FactureController extends AbstractController
             try {
                 $factures = $this->factureHandler->generateByMonthForEveryone($month);
             } catch (Exception $exception) {
-                $this->addFlash('danger', 'Erreur survenue: ' . $exception->getMessage());
+                $this->addFlash('danger', 'Erreur survenue: '.$exception->getMessage());
 
                 return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
             }
 
-            if ($factures === []) {
+            if ([] === $factures) {
                 $this->addFlash('warning', 'Aucune présences ou accueils non facturés pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
@@ -249,7 +249,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_facture_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_facture_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Facture $facture): Response
     {
@@ -274,7 +274,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/payer", name="mercredi_admin_facture_payer", methods={"GET","POST"})
+     * @Route("/{uuid}/payer", name="mercredi_admin_facture_payer", methods={"GET", "POST"})
      */
     public function payer(Request $request, Facture $facture): Response
     {
@@ -304,7 +304,7 @@ final class FactureController extends AbstractController
     public function delete(Request $request, Facture $facture): RedirectResponse
     {
         $tuteur = null;
-        if ($this->isCsrfTokenValid('delete' . $facture->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$facture->getId(), $request->request->get('_token'))) {
             $factureId = $facture->getId();
             $tuteur = $facture->getTuteur();
             $this->factureRepository->remove($facture);

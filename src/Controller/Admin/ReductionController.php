@@ -41,7 +41,7 @@ final class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_reduction_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_reduction_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -81,7 +81,7 @@ final class ReductionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_reduction_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_reduction_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Reduction $reduction): Response
     {
@@ -110,7 +110,7 @@ final class ReductionController extends AbstractController
      */
     public function delete(Request $request, Reduction $reduction): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $reduction->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$reduction->getId(), $request->request->get('_token'))) {
             $id = $reduction->getId();
             $this->reductionRepository->remove($reduction);
             $this->reductionRepository->flush();

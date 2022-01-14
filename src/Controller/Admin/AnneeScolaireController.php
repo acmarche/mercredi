@@ -41,7 +41,7 @@ final class AnneeScolaireController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_annee_scolaire_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_annee_scolaire_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -81,7 +81,7 @@ final class AnneeScolaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_annee_scolaire_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_annee_scolaire_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, AnneeScolaire $anneeScolaire): Response
     {
@@ -110,7 +110,7 @@ final class AnneeScolaireController extends AbstractController
      */
     public function delete(Request $request, AnneeScolaire $anneeScolaire): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $anneeScolaire->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$anneeScolaire->getId(), $request->request->get('_token'))) {
             if (\count($anneeScolaire->getEnfants()) > 0) {
                 $this->addFlash('danger', 'Une année scolaire contenant des enfants ne peux pas être supprimée');
 

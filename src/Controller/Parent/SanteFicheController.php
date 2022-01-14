@@ -76,7 +76,7 @@ final class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/edit/etape1", name="mercredi_parent_sante_fiche_edit", methods={"GET","POST"})
+     * @Route("/{uuid}/edit/etape1", name="mercredi_parent_sante_fiche_edit", methods={"GET", "POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function edit(Request $request, Enfant $enfant): Response
@@ -101,13 +101,13 @@ final class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/edit/etape2", name="mercredi_parent_sante_fiche_edit_etape2", methods={"GET","POST"})
+     * @Route("/{uuid}/edit/etape2", name="mercredi_parent_sante_fiche_edit_etape2", methods={"GET", "POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function editEtape2(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant, false);
-        if ($santeFiche->getAccompagnateurs() === []) {
+        if ([] === $santeFiche->getAccompagnateurs()) {
             $santeFiche->addAccompagnateur(' ');
         }
 
@@ -133,7 +133,7 @@ final class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/edit/etape3", name="mercredi_parent_sante_fiche_edit_etape3", methods={"GET","POST"})
+     * @Route("/{uuid}/edit/etape3", name="mercredi_parent_sante_fiche_edit_etape3", methods={"GET", "POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function editEtape3(Request $request, Enfant $enfant): Response

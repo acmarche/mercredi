@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- *
  * @Route("/export/pdf")
  */
 final class ExportPdfController extends AbstractController

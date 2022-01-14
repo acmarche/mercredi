@@ -49,6 +49,6 @@ final class AttestationController extends AbstractController
             ]
         );
 
-        return $this->downloadPdf($html, $enfant->getSlug() . '-attestation-' . $year . '.pdf');
+        return $this->downloadPdf($html, $enfant->getSlug().'-attestation-'.$year.'.pdf');
     }
 }

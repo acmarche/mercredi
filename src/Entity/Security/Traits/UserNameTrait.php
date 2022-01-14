@@ -6,10 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait UserNameTrait
 {
-    /**
-     * @ORM\Column(type="string", length=50, unique=true)
-     */
-    private ?string$username = null;
+    #[ORM\Column(type: 'string', length: 50, unique: true)]
+    private ?string $username = null;
 
     /**
      * A visual identifier that represents this user.

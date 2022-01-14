@@ -75,7 +75,7 @@ final class EcoleVoter extends Voter
                 return $this->canView();
             case self::DELETE:
             case self::ADD:
-                return false;//only admin
+                return false; //only admin
             case self::EDIT:
                 return $this->canEdit();
         }
@@ -98,7 +98,7 @@ final class EcoleVoter extends Voter
         if (!$this->checkEcoles()) {
             return false;
         }
-        if ($this->ecole === null) {
+        if (null === $this->ecole) {
             return false;
         }
 
@@ -107,6 +107,6 @@ final class EcoleVoter extends Voter
 
     private function checkEcoles(): bool
     {
-        return \count($this->ecoles) != 0;
+        return 0 != \count($this->ecoles);
     }
 }

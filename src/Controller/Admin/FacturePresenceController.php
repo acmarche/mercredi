@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
@@ -16,6 +15,7 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,7 +63,7 @@ final class FacturePresenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = (array)$request->request->get('presences', []);
+            $presencesF = (array) $request->request->get('presences', []);
             $this->factureHandler->handleManually($facture, $presencesF, []);
 
             $this->addFlash('success', 'Les présences ont bien été attachées');
@@ -90,10 +90,10 @@ final class FacturePresenceController extends AbstractController
         $facture = $facturePresence->getFacture();
         $presence = $accueil = null;
         $type = $facturePresence->getObjectType();
-        if ($type == FactureInterface::OBJECT_PRESENCE || $type == FactureInterface::OBJECT_PLAINE) {
+        if (FactureInterface::OBJECT_PRESENCE == $type || FactureInterface::OBJECT_PLAINE == $type) {
             $presence = $this->presenceRepository->find($facturePresence->getPresenceId());
         }
-        if ($type == FactureInterface::OBJECT_ACCUEIL) {
+        if (FactureInterface::OBJECT_ACCUEIL == $type) {
             $accueil = $this->accueilRepository->find($facturePresence->getPresenceId());
         }
 
@@ -136,7 +136,7 @@ final class FacturePresenceController extends AbstractController
     public function delete(Request $request, FacturePresence $facturePresence): RedirectResponse
     {
         $facture = $facturePresence->getFacture();
-        if ($this->isCsrfTokenValid('delete' . $facturePresence->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$facturePresence->getId(), $request->request->get('_token'))) {
             $this->facturePresenceRepository->remove($facturePresence);
             $this->facturePresenceRepository->flush();
 

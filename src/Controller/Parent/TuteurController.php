@@ -50,7 +50,7 @@ final class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/edit", name="mercredi_parent_tuteur_edit", methods={"GET","POST"})
+     * @Route("/edit", name="mercredi_parent_tuteur_edit", methods={"GET", "POST"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
     public function edit(Request $request): Response

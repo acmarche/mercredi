@@ -33,7 +33,7 @@ final class AssocierParentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_associate_tuteur", methods={"GET","POST"})
+     * @Route("/{id}", name="mercredi_user_associate_tuteur", methods={"GET", "POST"})
      */
     public function associate(Request $request, User $user): Response
     {
@@ -69,7 +69,7 @@ final class AssocierParentController extends AbstractController
      */
     public function dissociate(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('dissociate' . $user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
             $tuteurId = (int) $request->request->get('tuteur');
             if (0 === $tuteurId) {
                 $this->addFlash('danger', 'Le parent n\'a pas été trouvé');

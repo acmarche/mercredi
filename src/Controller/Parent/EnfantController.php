@@ -88,7 +88,7 @@ final class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_parent_enfant_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_parent_enfant_new", methods={"GET", "POST"})
      * @IsGranted("ROLE_MERCREDI_PARENT")
      */
     public function new(Request $request): Response
@@ -101,7 +101,7 @@ final class EnfantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantHandler->newHandle($enfant, $this->tuteur);
             $this->dispatchMessage(new EnfantCreated($enfant->getId()));
-            $enfant->setPhoto(null);//bug serialize
+            $enfant->setPhoto(null); //bug serialize
             $message = $this->adminEmailFactory->messageEnfantCreated($this->getUser(), $enfant);
             $this->notifcationMailer->sendAsEmailNotification($message);
 

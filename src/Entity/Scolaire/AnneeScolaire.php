@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Scolaire;
 
-
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -11,36 +10,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository')]
 class AnneeScolaire
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
-
-    /**
-     * @ORM\OneToOne(targetEntity=AnneeScolaire::class)
-     * @ORM\JoinColumn(onDelete="SET NULL", unique=true)
-     */
+    #[ORM\OneToOne(targetEntity: self::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', unique: true)]
     private ?AnneeScolaire $annee_suivante = null;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $ordre = null;
-
     /**
      * @var Enfant[]
-     * @ORM\OneToMany(targetEntity=Enfant::class, mappedBy="annee_scolaire")
      */
+    #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'annee_scolaire')]
     private iterable $enfants;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=GroupeScolaire::class, inversedBy="annees_scolaires")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'annees_scolaires')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?GroupeScolaire $groupe_scolaire = null;
 
     public function __construct()

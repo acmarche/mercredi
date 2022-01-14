@@ -23,6 +23,7 @@ final class SortUtils
 
                 $dateB = $jourB->getDateJour();
                 $dateB->format('Y-m-d');
+
                 return $dateA <=> $dateB;
             }
         );
@@ -32,6 +33,7 @@ final class SortUtils
 
     /**
      * @param array|Presence[] $presences
+     *
      * @return Presence[]
      */
     public static function sortPresences(array $presences): array

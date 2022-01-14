@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Presence\Calculator\PrenceHottonCalculator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CalculatorHottonTest extends KernelTestCase

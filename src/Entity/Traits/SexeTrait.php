@@ -8,9 +8,8 @@ trait SexeTrait
 {
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=150, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $sexe = null;
 
     public function getSexe(): ?string

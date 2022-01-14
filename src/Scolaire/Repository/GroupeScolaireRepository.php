@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Scolaire\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

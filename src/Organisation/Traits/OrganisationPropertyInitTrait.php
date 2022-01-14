@@ -21,7 +21,7 @@ trait OrganisationPropertyInitTrait
 
     public function setOrganisation(): void
     {
-        if ($this->organisationRepository !== null) {
+        if (null !== $this->organisationRepository) {
             $this->organisation = $this->organisationRepository->getOrganisation();
         }
     }

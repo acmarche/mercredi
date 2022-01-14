@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Accueil\Form;
 
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
@@ -27,7 +26,7 @@ class AccueilRetardTpe extends AbstractType
                 [
                     'label' => 'Heure de départ',
                     'with_seconds' => false,
-                    'hours' => [18, 19]
+                    'hours' => [18, 19],
                 ]
             );
     }

@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @deprecated  for migration
+ *
  * @method Paiement|null   find($id, $lockMode = null, $lockVersion = null)
  * @method Paiement|null   findOneBy(array $criteria, array $orderBy = null)
  * @method Paiement[]|null findAll()

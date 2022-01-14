@@ -26,7 +26,7 @@ final class AnimateurPresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_animateur_presence_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_animateur_presence_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Animateur $animateur): Response
     {

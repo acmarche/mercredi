@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use DateTime;
-use Exception;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureCron;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
@@ -17,6 +15,8 @@ use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use DateTime;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,7 +59,7 @@ final class FactureSendController extends AbstractController
     }
 
     /**
-     * @Route("/select/month", name="mercredi_admin_facture_send_select_month", methods={"GET","POST"})
+     * @Route("/select/month", name="mercredi_admin_facture_send_select_month", methods={"GET", "POST"})
      */
     public function selectMonth(Request $request): Response
     {
@@ -70,10 +70,10 @@ final class FactureSendController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $mois = $form->get('mois')->getData();
             $mode = $form->get('mode')->getData();
-            if ($mode === 'mail') {
+            if ('mail' === $mode) {
                 return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $mois]);
             }
-            if ($mode === 'papier') {
+            if ('papier' === $mode) {
                 return $this->redirectToRoute('mercredi_admin_facture_send_all_by_paper', ['month' => $mois]);
             }
         }
@@ -87,7 +87,7 @@ final class FactureSendController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/one", name="mercredi_admin_facture_send_one", methods={"GET","POST"})
+     * @Route("/{id}/one", name="mercredi_admin_facture_send_one", methods={"GET", "POST"})
      */
     public function sendOneFacture(Request $request, Facture $facture): Response
     {
@@ -123,7 +123,7 @@ final class FactureSendController extends AbstractController
     }
 
     /**
-     * @Route("/all/mail/{month}", name="mercredi_admin_facture_send_all_by_mail", methods={"GET","POST"})
+     * @Route("/all/mail/{month}", name="mercredi_admin_facture_send_all_by_mail", methods={"GET", "POST"})
      */
     public function sendAllFacture(Request $request, string $month): Response
     {
@@ -134,7 +134,7 @@ final class FactureSendController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            if ($factures === []) {
+            if ([] === $factures) {
                 $this->addFlash('warning', 'Aucune facture trouvée pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
@@ -173,12 +173,12 @@ final class FactureSendController extends AbstractController
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
 
-        if ($this->factureCronRepository->findOneByMonth($month) === null) {
+        if (null === $this->factureCronRepository->findOneByMonth($month)) {
             $this->addFlash('danger', 'Erreur aucun cron trouvé');
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }
-        if ($pause == 1) {
+        if (1 == $pause) {
             return $this->render(
                 '@AcMarcheMercrediAdmin/facture/create_pdf.html.twig',
                 [
@@ -191,7 +191,7 @@ final class FactureSendController extends AbstractController
         try {
             $finish = $this->factureFactory->createAllPdf($factures, $month);
         } catch (Exception $e) {
-            $this->addFlash('danger', 'Erreur survenue: ' . $e->getMessage());
+            $this->addFlash('danger', 'Erreur survenue: '.$e->getMessage());
 
             return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $month]);
         }
@@ -226,8 +226,8 @@ final class FactureSendController extends AbstractController
 
         $cron = $this->factureCronRepository->findOneByMonth($month);
         $factures = $this->factureRepository->findFacturesByMonthNotSend($month);
-        $count = count($factures);
-        $finish = $count === 0;
+        $count = \count($factures);
+        $finish = 0 === $count;
 
         $messageBase = $this->factureEmailFactory->messageFacture(
             $cron->getFromAdresse(),
@@ -236,15 +236,15 @@ final class FactureSendController extends AbstractController
         );
 
         foreach ($factures as $facture) {
-            $messageFacture = clone $messageBase;//sinon attachs multiple
+            $messageFacture = clone $messageBase; //sinon attachs multiple
 
             $tuteur = $facture->getTuteur();
             $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
 
-            if (count($emails) < 1) {
-                $error = 'Pas de mail pour la facture: ' . $facture->getId();
+            if (\count($emails) < 1) {
+                $error = 'Pas de mail pour la facture: '.$facture->getId();
                 $this->addFlash('danger', $error);
-                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;
             }
@@ -253,9 +253,9 @@ final class FactureSendController extends AbstractController
             try {
                 $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
             } catch (Exception $e) {
-                $error = 'Pas de pièce jointe pour la facture: ' . $facture->getId();
+                $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
                 $this->addFlash('danger', $error);
-                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;
             }
@@ -263,15 +263,15 @@ final class FactureSendController extends AbstractController
             try {
                 $this->notificationMailer->sendMail($messageFacture);
             } catch (TransportExceptionInterface $e) {
-                $error = 'Facture num ' . $facture->getId() . ' ' . $e->getMessage();
-                $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
+                $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 continue;
             }
 
             $facture->setEnvoyeA(implode(', ', $emails));
             $facture->setEnvoyeLe(new DateTime());
-            $i++;
+            ++$i;
             $this->factureRepository->flush();
             $pause = 1;
             if ($i > 30) {
@@ -296,7 +296,7 @@ final class FactureSendController extends AbstractController
     public function facturesPapier(string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);
-        if ($factures === []) {
+        if ([] === $factures) {
             $this->addFlash('warning', 'Aucune facture trouvée pour ce mois au format papier');
 
             return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
@@ -317,7 +317,7 @@ final class FactureSendController extends AbstractController
     public function downloadFacturePapier(string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);
-        if ($factures === []) {
+        if ([] === $factures) {
             $this->addFlash('warning', 'Aucune facture trouvée pour ce mois au format papier');
 
             return $this->redirectToRoute('mercredi_admin_facture_send_select_month');

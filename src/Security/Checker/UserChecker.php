@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Security\Checker;
 
 use AcMarche\Mercredi\Entity\Security\User;
@@ -16,7 +15,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if ($user->getAnimateur() === null) {
+        if (null === $user->getAnimateur()) {
             throw new LockedException();
         }
     }
@@ -25,7 +24,7 @@ class UserChecker implements UserCheckerInterface
     {
     }
 }
-/**
+/*
  * # config/packages/security.yaml
 security:
     firewalls:

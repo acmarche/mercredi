@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Message\Factory\EmailFactory;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class MessageHandler
@@ -23,12 +24,12 @@ final class MessageHandler
         MessageRepository $messageRepository,
         EmailFactory $emailFactory,
         NotificationMailer $notificationMailer,
-        FlashBagInterface $flashBag
+        RequestStack $requestStack
     ) {
         $this->messageRepository = $messageRepository;
         $this->emailFactory = $emailFactory;
-        $this->flashBag = $flashBag;
         $this->notificationMailer = $notificationMailer;
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
     }
 
     public function handle(Message $message): void

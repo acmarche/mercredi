@@ -99,22 +99,19 @@ final class JourVoter extends Voter
 
     private function canEdit(): bool
     {
-        return false;//not use
+        return false; //not use
     }
 
     private function canAdd(): bool
     {
-        return false;//not use
+        return false; //not use
     }
 
     private function canDelete(): bool
     {
-        return false;//only admin
+        return false; //only admin
     }
 
-    /**
-     * @return bool
-     */
     private function checkJoursAnimateur(): bool
     {
         $this->animateur = $this->user->getAnimateur();
@@ -125,6 +122,6 @@ final class JourVoter extends Voter
 
         $this->jours = $this->animateur->getJours();
 
-        return count($this->jours) !== 0;
+        return 0 !== \count($this->jours);
     }
 }

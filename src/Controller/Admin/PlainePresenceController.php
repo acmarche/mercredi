@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
@@ -22,6 +21,7 @@ use AcMarche\Mercredi\Utils\SortUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,11 +53,11 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/new/{id}", name="mercredi_admin_plaine_presence_new", methods={"GET","POST"})
+     * @Route("/new/{id}", name="mercredi_admin_plaine_presence_new", methods={"GET", "POST"})
      */
     public function new(Request $request, Plaine $plaine): Response
     {
-        if (0 === count($plaine->getJours())) {
+        if (0 === \count($plaine->getJours())) {
             $this->addFlash('danger', 'La plaine n\'a aucune date');
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
@@ -84,7 +84,7 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/select/tuteur/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_select_tuteur", methods={"GET","POST"})
+     * @Route("/select/tuteur/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_select_tuteur", methods={"GET", "POST"})
      *
      * @Entity("plaine", expr="repository.find(plaine)")
      * @Entity("enfant", expr="repository.find(enfant)")
@@ -92,7 +92,7 @@ final class PlainePresenceController extends AbstractController
     public function selectTuteur(Plaine $plaine, Enfant $enfant): Response
     {
         $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
-        if (1 === count($tuteurs)) {
+        if (1 === \count($tuteurs)) {
             $tuteur = $tuteurs[0];
 
             return $this->redirectToRoute(
@@ -116,7 +116,7 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/confirmation/{plaine}/{tuteur}/{enfant}", name="mercredi_admin_plaine_presence_confirmation", methods={"GET","POST"})
+     * @Route("/confirmation/{plaine}/{tuteur}/{enfant}", name="mercredi_admin_plaine_presence_confirmation", methods={"GET", "POST"})
      *
      * @Entity("tuteur", expr="repository.find(tuteur)")
      * @Entity("plaine", expr="repository.find(plaine)")
@@ -158,7 +158,7 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{plaine}/{presence}/edit", name="mercredi_admin_plaine_presence_edit", methods={"GET","POST"})
+     * @Route("/{plaine}/{presence}/edit", name="mercredi_admin_plaine_presence_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Plaine $plaine, Presence $presence): Response
     {
@@ -192,7 +192,7 @@ final class PlainePresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{plaine}/{enfant}/jours", name="mercredi_admin_plaine_presence_jours", methods={"GET","POST"})
+     * @Route("/{plaine}/{enfant}/jours", name="mercredi_admin_plaine_presence_jours", methods={"GET", "POST"})
      */
     public function jours(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
@@ -245,8 +245,8 @@ final class PlainePresenceController extends AbstractController
     public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
         $enfant = null;
-        if ($this->isCsrfTokenValid('deletePresence' . $plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int)$request->request->get('presence');
+        if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
+            $presenceId = (int) $request->request->get('presence');
             if (0 === $presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
 
@@ -276,7 +276,7 @@ final class PlainePresenceController extends AbstractController
      */
     public function remove(Request $request, Plaine $plaine, Enfant $enfant): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('remove' . $plaine->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
             $this->plaineHandler->removeEnfant($plaine, $enfant);
             $this->addFlash('success', 'L\'enfant a été retiré de la plaine');
         }

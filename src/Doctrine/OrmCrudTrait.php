@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Doctrine;
 
 use Doctrine\ORM\EntityManager;

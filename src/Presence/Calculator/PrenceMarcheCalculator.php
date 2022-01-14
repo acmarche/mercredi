@@ -26,7 +26,7 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 
     public function calculate(PresenceInterface $presence): float
     {
-        /**
+        /*
          * Absence.avec certificat
          */
         if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
@@ -82,7 +82,7 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
         $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
         $enfant = $presence->getEnfant();
-        if ($enfant->getEcole() !== null) {
+        if (null !== $enfant->getEcole()) {
             $this->ecoles[] = $enfant->getEcole()->getNom();
         }
         $facturePresence->setNom($enfant->getNom());
@@ -104,7 +104,7 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         if ($ordre >= 3) {
             return $jour->getPrix3();
         }
-        if ($ordre == 2) {
+        if (2 == $ordre) {
             return $jour->getPrix2();
         }
 

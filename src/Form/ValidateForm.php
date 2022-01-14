@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Form;
 
 use Symfony\Component\Form\AbstractType;

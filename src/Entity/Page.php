@@ -11,9 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Page\Repository\PageRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Page\Repository\PageRepository')]
 class Page implements SluggableInterface
 {
     public bool $system;
@@ -22,21 +20,14 @@ class Page implements SluggableInterface
     use ContentTrait;
     use SluggableTrait;
     use DocumentsTraits;
-
-    /**
-     * @ORM\Column(type="text", length=100, nullable=true)
-     */
+    #[ORM\Column(type: 'text', length: 100, nullable: true)]
     private ?string $slug_system = null;
-
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
+    #[ORM\Column(type: 'smallint', nullable: true)]
     private ?int $position = null;
-
     /**
      * @var Document[]
-     * @ORM\ManyToMany(targetEntity=Document::class)
      */
+    #[ORM\ManyToMany(targetEntity: Document::class)]
     private iterable $documents;
 
     public function __construct()

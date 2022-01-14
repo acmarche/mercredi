@@ -33,7 +33,7 @@ final class EmailFactory
                 ]
             );
 
-        /**
+        /*
          * Pieces jointes.
          */
         if (null !== ($uploadedFile = $message->getFile())) {
@@ -60,7 +60,7 @@ final class EmailFactory
                 ]
             );
 
-        /**
+        /*
          * Pieces jointes.
          */
         if ($attachCourriers) {

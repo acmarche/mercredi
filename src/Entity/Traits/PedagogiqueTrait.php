@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PedagogiqueTrait
 {
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $pedagogique = false;
 
     public function isPedagogique(): bool

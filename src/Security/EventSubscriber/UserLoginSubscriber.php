@@ -2,14 +2,14 @@
 
 namespace AcMarche\Mercredi\Security\EventSubscriber;
 
-use DateTimeImmutable;
 use AcMarche\Mercredi\Entity\Security\User;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 /**
- * bin/console debug:event-dispatcher
+ * bin/console debug:event-dispatcher.
  */
 final class UserLoginSubscriber implements EventSubscriberInterface
 {

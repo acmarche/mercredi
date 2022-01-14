@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Accueil\Contrat;
 
 interface AccueilInterface

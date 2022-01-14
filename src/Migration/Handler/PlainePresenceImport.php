@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Migration\Handler;
 
-use DateTime;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class PlainePresenceImport
@@ -38,7 +38,7 @@ class PlainePresenceImport
                 if (!$plaineEnfant->tuteur_id) {
                     $io->error($plaine->getNom().' => '.$enfant);
                     $relations = $this->pdo->getAllWhere('enfant_tuteur', 'enfant_id = '.$data->enfant_id, false);
-                    $count = is_countable($relations) ? count($relations) : 0;
+                    $count = is_countable($relations) ? \count($relations) : 0;
                     if ($count > 0) {
                         $tuteur = $this->migrationRepository->getTuteur($relations[0]->tuteur_id);
                     }

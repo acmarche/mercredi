@@ -70,7 +70,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByEnfantAndDaysAndHeure(Enfant $enfant, CarbonPeriod $weekPeriod, string $heure): array
     {
-        $days = array_map(fn($date) => $date->toDateString(), $weekPeriod->toArray());
+        $days = array_map(fn ($date) => $date->toDateString(), $weekPeriod->toArray());
 
         return $this->createQbl()
             ->andWhere('accueil.enfant = :enfant')
@@ -88,7 +88,7 @@ final class AccueilRepository extends ServiceEntityRepository
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->andWhere('accueil.date_jour LIKE :date')
-            ->setParameter('date', $date->format('Y-m-d') . '%')
+            ->setParameter('date', $date->format('Y-m-d').'%')
             ->andWhere('accueil.heure = :heure')
             ->setParameter('heure', $heure)
             ->getQuery()->getOneOrNullResult();
@@ -106,9 +106,8 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param DateTimeInterface $date
-     * @param string|null $heure
      * @param array $ecoles
+     *
      * @return Accueil[]
      */
     public function findByDateAndHeureAndEcoles(DateTimeInterface $date, ?string $heure, iterable $ecoles): array
@@ -123,7 +122,7 @@ final class AccueilRepository extends ServiceEntityRepository
                 ->getQuery()->getResult();
         }
 
-        if ((is_countable($ecoles) ? count($ecoles) : 0) > 0) {
+        if ((is_countable($ecoles) ? \count($ecoles) : 0) > 0) {
             $qb->andWhere('ecole IN (:ecoles)')
                 ->setParameter('ecoles', $ecoles)
                 ->getQuery()->getResult();
@@ -144,10 +143,7 @@ final class AccueilRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-
     /**
-     * @param DateTimeInterface $date
-     * @param string|null $heure
      * @return Accueil[]
      */
     public function findByDateAndHeure(DateTimeInterface $date, ?string $heure): array
@@ -166,8 +162,6 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Tuteur $tuteur
-     * @param DateTimeInterface|null $date
      * @return array|Accueil[]
      */
     public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
@@ -176,9 +170,9 @@ final class AccueilRepository extends ServiceEntityRepository
             ->andWhere('accueil.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur);
 
-        if ($date !== null) {
+        if (null !== $date) {
             $qb->andWhere('accueil.date_jour LIKE :date')
-                ->setParameter('date', $date->format('Y-m') . '%');
+                ->setParameter('date', $date->format('Y-m').'%');
         }
 
         return $qb->getQuery()->getResult();

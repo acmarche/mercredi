@@ -41,7 +41,7 @@ class HealthCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $enfants = $this->enfantRepository->findOrphelins();
-        if ($enfants !== []) {
+        if ([] !== $enfants) {
             $message = $this->adminEmailFactory->messagEnfantsOrphelins($enfants);
             $this->notifcationMailer->sendAsEmailNotification($message);
         }
@@ -49,22 +49,22 @@ class HealthCommand extends Command
         $tuteurs = [];
         foreach ($this->tuteurRepository->findAllActif() as $tuteur) {
             $relations = $tuteur->getRelations();
-            if (count($relations) === 0) {
+            if (0 === \count($relations)) {
                 continue;
             }
             $count = 0;
             foreach ($tuteur->getRelations() as $relation) {
                 if ($relation->getEnfant()->isArchived()) {
-                    $count++;
+                    ++$count;
                 }
             }
-            if ($count === count($relations)) {
+            if ($count === \count($relations)) {
                 $tuteurs[] = $tuteur;
                 $tuteur->setArchived(true);
             }
         }
         //  $this->tuteurRepository->flush();
-        if ($enfants !== []) {
+        if ([] !== $enfants) {
             $message = $this->adminEmailFactory->messageTuteurArchived($tuteurs);
             $this->notifcationMailer->sendAsEmailNotification($message);
         }

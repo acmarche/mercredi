@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,13 +27,13 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
 
     public function __construct(
         UserRepository $userRepository,
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         RegistrationMailerFactory $registrationMailerFactory,
         VerifyEmailHelperInterface $verifyEmailHelper,
         NotificationMailer $notificationMailer,
         ParameterBagInterface $parameterBag
     ) {
-        $this->flashBag = $flashBag;
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
         $this->userRepository = $userRepository;
         $this->registrationMailerFactory = $registrationMailerFactory;
         $this->verifyEmailHelper = $verifyEmailHelper;
@@ -42,9 +43,9 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
 
     public function isOpen(): bool
     {
-        $register = (bool)$this->parameterBag->get(Option::REGISTER);
+        $register = (bool) $this->parameterBag->get(Option::REGISTER);
 
-        return $register == true;
+        return true == $register;
     }
 
     public function __invoke(RegisterCreated $registerCreated): void
@@ -76,7 +77,6 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
 
         $this->flashBag->add('success', 'Votre compte a bien été créé, consultez votre boite mail');
     }
-
 
     /**
      * @throws VerifyEmailExceptionInterface

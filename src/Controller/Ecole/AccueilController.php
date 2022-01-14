@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Ecole;
 
-use DateTime;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilRetardTpe;
@@ -21,6 +20,7 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,7 +63,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/index", name="mercredi_ecole_accueils_index", methods={"GET","POST"})
+     * @Route("/index", name="mercredi_ecole_accueils_index", methods={"GET", "POST"})
      * @IsGranted("ROLE_MERCREDI_ECOLE")
      */
     public function index(Request $request): Response
@@ -94,7 +94,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_ecole_accueil_new", methods={"GET","POST"})
+     * @Route("/new/{tuteur}/{enfant}", name="mercredi_ecole_accueil_new", methods={"GET", "POST"})
      * @Entity("tuteur", expr="repository.find(tuteur)")
      * @Entity("enfant", expr="repository.find(enfant)")
      * @IsGranted("enfant_edit", subject="enfant")
@@ -143,7 +143,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/edit", name="mercredi_ecole_accueil_edit", methods={"GET","POST"})
+     * @Route("/{uuid}/edit", name="mercredi_ecole_accueil_edit", methods={"GET", "POST"})
      * @IsGranted("accueil_edit", subject="accueil")
      */
     public function edit(Request $request, Accueil $accueil): Response
@@ -169,14 +169,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}", name="mercredi_ecole_accueil_inscriptions", methods={"GET","POST"})
-     * @param Request $request
-     * @param Ecole $ecole
-     * @param int $year
-     * @param int $month
-     * @param string $heure
-     * @param int $week
-     * @return Response
+     * @Route("/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}", name="mercredi_ecole_accueil_inscriptions", methods={"GET", "POST"})
      */
     public function inscriptions(
         Request $request,
@@ -186,7 +179,7 @@ final class AccueilController extends AbstractController
         string $heure,
         int $week = 0
     ): Response {
-        if ($week !== 0) {
+        if (0 !== $week) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
             $weekSelected = $week;
         } else {
@@ -224,7 +217,7 @@ final class AccueilController extends AbstractController
             $tuteurs = $request->request->get('tuteurs');
 
             $this->accueilHandler->handleCollections($accueils, $tuteurs, $heure);
-            $this->addFlash('success', "Les acceuils ont bien été sauvegardés");
+            $this->addFlash('success', 'Les acceuils ont bien été sauvegardés');
 
             return $this->redirectToRoute('mercredi_ecole_accueil_inscriptions', [
                 'id' => $ecole->getId(),
@@ -253,7 +246,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/retard", name="mercredi_ecole_accueil_retard", methods={"GET","POST"})
+     * @Route("/{uuid}/retard", name="mercredi_ecole_accueil_retard", methods={"GET", "POST"})
      * @IsGranted("enfant_show", subject="enfant")
      */
     public function retard(Request $request, Enfant $enfant): Response

@@ -11,7 +11,6 @@ use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use function count;
 
 final class PlaineAdminHandler
 {
@@ -40,8 +39,8 @@ final class PlaineAdminHandler
         $currentJours = $this->jourRepository->findByPlaine($plaine);
         if ([] === $currentJours) {
             $plaine->addJour(new Jour(new DateTime('today')));
-            for ($i = 1; $i < 5; $i++) {
-                $plaine->addJour(new Jour(new DateTime('+' . $i . ' day')));
+            for ($i = 1; $i < 5; ++$i) {
+                $plaine->addJour(new Jour(new DateTime('+'.$i.' day')));
             }
         }
     }
@@ -61,7 +60,6 @@ final class PlaineAdminHandler
         $this->removeJours($plaine, $newJours);
         $this->jourRepository->flush();
     }
-
 
     /**
      * @param Jour[] $newJours

@@ -11,17 +11,14 @@ trait AnimateursTrait
 {
     /**
      * @var Animateur[]|ArrayCollection
-     * @ORM\ManyToMany(targetEntity=Animateur::class, inversedBy="users")
      */
+    #[ORM\ManyToMany(targetEntity: Animateur::class, inversedBy: 'users')]
     private iterable $animateurs;
 
-    /**
-     * @return Animateur|null
-     */
     public function getAnimateur(): ?Animateur
     {
         $animateurs = $this->animateurs;
-        if (count($animateurs) > 0) {
+        if (\count($animateurs) > 0) {
             return $animateurs[0];
         }
 

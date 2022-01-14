@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Search;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class SearchHelper
@@ -14,9 +15,9 @@ final class SearchHelper
 
     private SessionInterface $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     public function saveSearch(string $name, array $args): void

@@ -29,13 +29,13 @@ final class ResponseIsCompleteValidator extends ConstraintValidator
             foreach ($questions as $question) {
                 if (!$this->santeChecker->checkQuestionOk($question)) {
                     $order = $question->getDisplayOrder() ?: 0;
-                    if ($question->getComplement() === true) {
-                        $txt = $question->getNom() . ' : Indiquez => ' . $question->getComplementLabel();
+                    if (true === $question->getComplement()) {
+                        $txt = $question->getNom().' : Indiquez => '.$question->getComplementLabel();
                     } else {
-                        $txt = $question->getNom() . ' répondez par oui ou non';
+                        $txt = $question->getNom().' répondez par oui ou non';
                     }
                     $this->context->buildViolation($constraint->message_question)
-                        ->atPath('sante_fiche_etape3[questions][' . $order . '][remarque]')
+                        ->atPath('sante_fiche_etape3[questions]['.$order.'][remarque]')
                         ->setParameter('{{ string }}', $txt)
                         ->addViolation();
                 }

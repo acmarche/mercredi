@@ -1,9 +1,7 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Migration\Handler;
 
-use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Reduction;
@@ -13,6 +11,7 @@ use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
+use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ParametreImport
@@ -108,7 +107,7 @@ class ParametreImport
             $reduction = new SanteQuestion();
             $reduction->setNom($data->intitule);
             $reduction->setCategorie($data->categorie);
-            $reduction->setComplement((bool)$data->complement);
+            $reduction->setComplement((bool) $data->complement);
             $reduction->setComplementLabel($data->complement_label);
             $reduction->setDisplayOrder($data->display_order);
             $this->enfantRepository->persist($reduction);
@@ -126,18 +125,18 @@ class ParametreImport
             $groupeScolaire = $this->getGroupeScolaire($anneeScolaire);
             $anneeScolaire->setGroupeScolaire($groupeScolaire);
             $this->enfantRepository->persist($anneeScolaire);
-            $i++;
+            ++$i;
         }
     }
 
     private function getGroupeScolaire(AnneeScolaire $anneeScolaire): GroupeScolaire
     {
         $groupeName = 'grands';
-        if (in_array($anneeScolaire->getNom(), ['PM', '1M', '2M'])) {
+        if (\in_array($anneeScolaire->getNom(), ['PM', '1M', '2M'])) {
             $groupeName = 'petits';
         }
 
-        if (in_array($anneeScolaire->getNom(), ['3M', '1P', '2P'])) {
+        if (\in_array($anneeScolaire->getNom(), ['3M', '1P', '2P'])) {
             $groupeName = 'moyens';
         }
 

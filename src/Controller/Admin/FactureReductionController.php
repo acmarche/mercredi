@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FactureReduction;
 use AcMarche\Mercredi\Facture\Form\FactureReductionType;
 use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +34,7 @@ final class FactureReductionController extends AbstractController
      */
     public function new(Request $request, Facture $facture): Response
     {
-        if ($facture->getEnvoyeLe() !== null) {
+        if (null !== $facture->getEnvoyeLe()) {
             $this->addFlash('danger', 'La facture a déjà été envoyée');
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
@@ -81,11 +81,11 @@ final class FactureReductionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_facture_reduction_edit", methods={"GET","POST"}).
+     * @Route("/{id}/edit", name="mercredi_admin_facture_reduction_edit", methods={"GET", "POST"}).
      */
     public function edit(Request $request, FactureReduction $factureReduction): Response
     {
-        if ($factureReduction->getFacture()->getEnvoyeLe() !== null) {
+        if (null !== $factureReduction->getFacture()->getEnvoyeLe()) {
             $this->addFlash('danger', 'La facture a déjà été envoyée');
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $factureReduction->getFacture()->getId()]);
@@ -120,7 +120,7 @@ final class FactureReductionController extends AbstractController
     public function delete(Request $request, FactureReduction $factureReduction): RedirectResponse
     {
         $facture = $factureReduction->getFacture();
-        if ($this->isCsrfTokenValid('delete' . $factureReduction->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$factureReduction->getId(), $request->request->get('_token'))) {
             $this->factureReductionRepository->remove($factureReduction);
             $this->factureReductionRepository->flush();
 

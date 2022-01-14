@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Jour\Repository;
 
-use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -11,9 +10,9 @@ use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use function count;
 
 /**
  * @method Jour|null find($id, $lockMode = null, $lockVersion = null)
@@ -52,7 +51,7 @@ final class JourRepository extends ServiceEntityRepository
 
         $queryBuilder = $this->getQlNotPlaine();
 
-        if ($joursRegistered !== []) {
+        if ([] !== $joursRegistered) {
             $queryBuilder
                 ->andWhere('jour.id NOT IN (:jours)')
                 ->setParameter('jours', $joursRegistered);
@@ -70,7 +69,7 @@ final class JourRepository extends ServiceEntityRepository
             ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->addSelect('plaine')
             ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m') . '%')
+            ->setParameter('date', $dateTime->format('Y-m').'%')
             ->addOrderBy('jour.date_jour', 'ASC')
             ->andWhere('plaine IS NULL')
             ->getQuery()->getResult();
@@ -121,7 +120,7 @@ final class JourRepository extends ServiceEntityRepository
     ): array {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d') . '%')
+            ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->andWhere('jour.pedagogique = 1')
             ->getQuery()->getResult();
     }
@@ -135,7 +134,7 @@ final class JourRepository extends ServiceEntityRepository
     ): array {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d') . '%')
+            ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->andWhere('jour.pedagogique = 0')
             ->getQuery()->getResult();
     }
@@ -146,27 +145,25 @@ final class JourRepository extends ServiceEntityRepository
     ): QueryBuilder {
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
-            ->setParameter('date', $dateTime->format('Y-m-d') . '%');
+            ->setParameter('date', $dateTime->format('Y-m-d').'%');
     }
 
     /**
-     * use in Handler plaine
-     * @param DateTimeInterface $dateTime
-     * @return Jour|null
+     * use in Handler plaine.
+     *
      * @throws NonUniqueResultException
      */
     public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?Jour
     {
         return $this->createQueryBuilder('jour')
             ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m-d') . '%')
+            ->setParameter('date', $dateTime->format('Y-m-d').'%')
             ->andWhere('jour.plaine = :plaine')
             ->setParameter('plaine', $plaine)
             ->getQuery()->getOneOrNullResult();
     }
 
     /**
-     * @param Animateur $animateur
      * @return array|Jour[]
      */
     public function findByAnimateur(Animateur $animateur): array
@@ -178,7 +175,6 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Plaine $plaine
      * @return array|Jour[]
      */
     public function findByPlaine(Plaine $plaine): array

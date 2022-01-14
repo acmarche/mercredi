@@ -8,24 +8,21 @@ trait TelephonieTrait
 {
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=150, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $telephone = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=150, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $telephone_bureau = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=150, nullable=true)
      */
-    private ?string  $gsm = null;
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    private ?string $gsm = null;
 
     public function getTelephone(): ?string
     {

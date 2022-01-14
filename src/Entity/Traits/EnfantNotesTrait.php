@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Note;
@@ -11,8 +10,8 @@ trait EnfantNotesTrait
 {
     /**
      * @var Collection|Note[]
-     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="enfant", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'enfant', cascade: ['remove'])]
     private iterable $notes;
 
     /**

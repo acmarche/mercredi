@@ -50,7 +50,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
         if ($ordre >= 3) {
             return $jour->getPrix3();
         }
-        if ($ordre == 2) {
+        if (2 == $ordre) {
             return $jour->getPrix2();
         }
 

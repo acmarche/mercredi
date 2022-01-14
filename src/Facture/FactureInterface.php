@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture;
 
 use AcMarche\Mercredi\Entity\Facture\FactureComplement;
@@ -129,9 +128,9 @@ interface FactureInterface
 
     public function setRemarque(?string $remarque): void;
 
-    public function getCreatedAt(): DateTimeInterface;
+    public function getCreatedAt(): ?DateTimeInterface;
 
-    public function getUpdatedAt(): DateTimeInterface;
+    public function getUpdatedAt(): ?DateTimeInterface;
 
     public function setCreatedAt(DateTimeInterface $createdAt): void;
 

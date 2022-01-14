@@ -4,13 +4,13 @@ namespace AcMarche\Mercredi\Fixture;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use Fidry\AliceDataFixtures\ProcessorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserProcessor implements ProcessorInterface
 {
-    private UserPasswordEncoderInterface $userPasswordEncoder;
+    private UserPasswordHasherInterface $userPasswordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
+    public function __construct(UserPasswordHasherInterface $userPasswordEncoder)
     {
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
@@ -21,7 +21,7 @@ final class UserProcessor implements ProcessorInterface
             return;
         }
 
-        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
+        $user->setPassword($this->userPasswordEncoder->hashPassword($user, $user->getPassword()));
     }
 
     public function postProcess(string $fixtureId, $user): void

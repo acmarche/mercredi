@@ -49,7 +49,7 @@ final class AnimateurController extends AbstractController
     }
 
     /**
-     * @Route("/edit", name="mercredi_animateur_animateur_edit", methods={"GET","POST"})
+     * @Route("/edit", name="mercredi_animateur_animateur_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request): Response
     {

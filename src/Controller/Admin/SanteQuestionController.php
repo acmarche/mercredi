@@ -41,7 +41,7 @@ final class SanteQuestionController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_sante_question_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_sante_question_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -81,7 +81,7 @@ final class SanteQuestionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_sante_question_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_sante_question_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, SanteQuestion $santeQuestion): Response
     {
@@ -110,7 +110,7 @@ final class SanteQuestionController extends AbstractController
      */
     public function delete(Request $request, SanteQuestion $santeQuestion): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $santeQuestion->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$santeQuestion->getId(), $request->request->get('_token'))) {
             $id = $santeQuestion->getId();
             $this->santeQuestionRepository->remove($santeQuestion);
             $this->santeQuestionRepository->flush();

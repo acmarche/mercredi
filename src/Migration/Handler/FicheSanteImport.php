@@ -1,14 +1,13 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Migration\Handler;
 
-use DateTime;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Entity\Sante\SanteReponse;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
+use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class FicheSanteImport
@@ -57,7 +56,7 @@ class FicheSanteImport
 
             $santeReponse = new SanteReponse($santeFiche, $santeQuestion);
             $santeReponse->setIdOld($data->id);
-            $santeReponse->setReponse((bool)$data->reponse);
+            $santeReponse->setReponse((bool) $data->reponse);
             $santeReponse->setRemarque($data->remarque);
             $this->enfantRepository->persist($santeReponse);
         }

@@ -21,9 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Animateur\Repository\AnimateurRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Animateur\Repository\AnimateurRepository')]
 class Animateur implements TimestampableInterface
 {
     use IdTrait;
@@ -39,19 +37,15 @@ class Animateur implements TimestampableInterface
     use UserAddTrait;
     use UsersTrait;
     use JoursTrait;
-
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="animateurs" )
-     *
      * @var User[]|Collection
      */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'animateurs')]
     private iterable $users;
-
     /**
-     * @ORM\ManyToMany(targetEntity=Jour::class, inversedBy="animateurs" )
-     *
      * @var Jour[]|Collection
      */
+    #[ORM\ManyToMany(targetEntity: Jour::class, inversedBy: 'animateurs')]
     private iterable $jours;
 
     public function __construct()
@@ -62,6 +56,6 @@ class Animateur implements TimestampableInterface
 
     public function __toString(): string
     {
-        return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 }

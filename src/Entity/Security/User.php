@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Security;
 
-use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
-use Doctrine\Common\Collections\Collection;
 use AcMarche\Mercredi\Entity\ResetPasswordRequest;
 use AcMarche\Mercredi\Entity\Security\Traits\AnimateursTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\IsRoleTrait;
@@ -14,6 +12,7 @@ use AcMarche\Mercredi\Entity\Security\Traits\UserNameTrait;
 use AcMarche\Mercredi\Entity\Traits\EcolesTrait;
 use AcMarche\Mercredi\Entity\Traits\EmailTrait;
 use AcMarche\Mercredi\Entity\Traits\EnabledTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
@@ -22,16 +21,17 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity("email")
  * @UniqueEntity("username")
  */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use IdTrait;
@@ -48,36 +48,20 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
     use AnimateursTrait;
     use LastLoginTrait;
     use IdOldTrait;
-
-    /**
-     * @ORM\Column(type="string", length=150, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $telephone = null;
-
-    /**
-     * @ORM\Column(type="string", length=50, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 50, unique: true)]
     private ?string $email = null;
-
     /**
-     * The hashed password
-     * @ORM\Column(type="string")
+     * The hashed password.
      */
+    #[ORM\Column(type: 'string')]
     private ?string $password = null;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected ?string $salt = null;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
-
-    /**
-     * @ORM\OneToMany(targetEntity=ResetPasswordRequest::class, mappedBy="user", cascade={"remove"})
-     */
+    #[ORM\OneToMany(targetEntity: ResetPasswordRequest::class, mappedBy: 'user', cascade: ['remove'])]
     private Collection $request_password;
 
     public function __construct()
@@ -89,6 +73,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 
     /**
      * @param object|Tuteur| $object
+     *
      * @return static
      */
     public static function newFromObject(object $object): self
@@ -104,7 +89,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
     public function setSalt(string $salt): void
@@ -112,7 +97,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
         $this->salt = $salt;
     }
 
-    public function getUserIdentifier(): ?string
+    public function getUserIdentifier(): string
     {
         return $this->email;
     }

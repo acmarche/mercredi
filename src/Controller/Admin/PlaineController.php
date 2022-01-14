@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
@@ -18,6 +17,7 @@ use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +49,7 @@ final class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_plaine_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_plaine_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -80,7 +80,7 @@ final class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_plaine_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_plaine_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -115,7 +115,7 @@ final class PlaineController extends AbstractController
      */
     public function show(Plaine $plaine): Response
     {
-        if (count($plaine->getJours()) < 1) {
+        if (\count($plaine->getJours()) < 1) {
             $this->addFlash('danger', 'La plaine doit contenir des dates');
 
             return $this->redirectToRoute('mercredi_admin_plaine_jour_edit', ['id' => $plaine->getId()]);
@@ -135,7 +135,7 @@ final class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_plaine_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_plaine_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Plaine $plaine): Response
     {
@@ -160,7 +160,7 @@ final class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/open", name="mercredi_admin_plaine_open", methods={"GET","POST"})
+     * @Route("/{id}/open", name="mercredi_admin_plaine_open", methods={"GET", "POST"})
      */
     public function open(Request $request, Plaine $plaine): Response
     {
@@ -174,8 +174,8 @@ final class PlaineController extends AbstractController
             } else {
                 $this->addFlash(
                     'danger',
-                    'Les inscriptions n\'ont pas pu être ouvrir car la plaine ' . $plaineOpen->getNom(
-                    ) . ' est toujours ouverte'
+                    'Les inscriptions n\'ont pas pu être ouvrir car la plaine '.$plaineOpen->getNom(
+                    ).' est toujours ouverte'
                 );
             }
 
@@ -196,7 +196,7 @@ final class PlaineController extends AbstractController
      */
     public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('delete' . $plaine->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$plaine->getId(), $request->request->get('_token'))) {
             $plaineId = $plaine->getId();
             $this->plaineRepository->remove($plaine);
             $this->plaineRepository->flush();

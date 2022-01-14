@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PapierTrait
 {
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $facture_papier = false;
 
     public function getFacturePapier(): ?bool

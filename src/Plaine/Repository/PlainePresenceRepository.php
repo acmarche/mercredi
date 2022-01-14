@@ -104,7 +104,7 @@ final class PlainePresenceRepository extends ServiceEntityRepository
             ->andWhere('presence.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur);
 
-        if ($confirmed !== null) {
+        if (null !== $confirmed) {
             $qb->andWhere('presence.confirmed = :confirmed')
                 ->setParameter('confirmed', $confirmed);
         }

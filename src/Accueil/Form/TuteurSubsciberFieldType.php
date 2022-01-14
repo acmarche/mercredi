@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Accueil\Form;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -10,12 +9,14 @@ use Symfony\Component\Form\FormEvents;
 class TuteurSubsciberFieldType implements EventSubscriberInterface
 {
     public $enfantTuteurRepository;
+
     public static function getSubscribedEvents(): array
     {
         return [
             FormEvents::PRE_SET_DATA => 'OnPreSetData',
         ];
     }
+
     /**
      * Verifie si nouveau objet
      * Si id enfant avec ou pas.
@@ -40,12 +41,12 @@ class TuteurSubsciberFieldType implements EventSubscriberInterface
                     [
                         'class' => Jour::class,
                         'multiple' => true,
-                        'query_builder' => fn(JourRepository $cr) => $cr->getForList($enfant),
+                        'query_builder' => fn (JourRepository $cr) => $cr->getForList($enfant),
                         'label' => 'Choisissez une ou plusieurs dates',
                     ]
                 );
 
-                if ((is_countable($tuteurs) ? count($tuteurs) : 0) > 1) {
+                if ((is_countable($tuteurs) ? \count($tuteurs) : 0) > 1) {
                     $form->add(
                         'tuteur',
                         EntityType::class,

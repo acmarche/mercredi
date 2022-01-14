@@ -9,7 +9,6 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Utils\SortUtils;
-use function count;
 
 final class OrdreService
 {
@@ -28,7 +27,7 @@ final class OrdreService
     public function getOrdreOnRelation(Enfant $enfant, Tuteur $tuteur): ?int
     {
         $relation = $this->relationRepository->findOneByTuteurAndEnfant($tuteur, $enfant);
-        if (null !== $relation && $relation->getOrdre() !== 0) {
+        if (null !== $relation && 0 !== $relation->getOrdre()) {
             return $relation->getOrdre();
         }
 
@@ -37,7 +36,7 @@ final class OrdreService
 
     public function getOrdreOnPresence(PresenceInterface $presence): float
     {
-        /**
+        /*
          * Ordre force sur la presence
          */
         if (0 !== ($presence->getOrdre())) {
@@ -50,7 +49,7 @@ final class OrdreService
         if ($ordreRelation = $this->getOrdreOnRelation($enfant, $tuteur)) {
             $ordreBase = $ordreRelation;
         }
-        /**
+        /*
          * quand enfant premier, fratrie pas d'importance
          */
         if (1 === $ordreBase) {
@@ -65,7 +64,7 @@ final class OrdreService
             [$tuteur]
         );
 
-        /**
+        /*
          * Pas de fratries
          * Force 1
          */
@@ -77,19 +76,19 @@ final class OrdreService
 
         /**
          * Pas de fratries ce jour là
-         * Force premier
+         * Force premier.
          */
-        $countPresents = count($presents);
+        $countPresents = \count($presents);
         if (0 === $countPresents) {
             return 1;
         }
 
         $presents[] = $enfant;
-        /**
+        /*
          * si pas de date naissance on force 1;
          */
         foreach ($presents as $present) {
-            if ($present->getBirthday() === null) {
+            if (null === $present->getBirthday()) {
                 return 1;
             }
         }
@@ -107,7 +106,6 @@ final class OrdreService
     }
 
     /**
-     * @param Presence $presence
      * @return array|Enfant[]
      */
     public function getFratriesPresents(Presence $presence): array

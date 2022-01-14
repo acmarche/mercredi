@@ -7,9 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait SanteFicheTrait
 {
-    /**
-     * @ORM\OneToOne(targetEntity=SanteFiche::class, mappedBy="enfant", cascade={"remove"})
-     */
+    #[ORM\OneToOne(targetEntity: SanteFiche::class, mappedBy: 'enfant', cascade: ['remove'])]
     private ?SanteFiche $sante_fiche = null;
 
     public function getSanteFiche(): ?SanteFiche

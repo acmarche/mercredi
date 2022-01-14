@@ -42,7 +42,7 @@ final class NoteController extends AbstractController
     }
 
     /**
-     * Route("/new/", name="mercredi_admin_note_new", methods={"GET","POST"})
+     * Route("/new/", name="mercredi_admin_note_new", methods={"GET","POST"}).
      */
     public function new(Request $request): Response
     {
@@ -69,7 +69,7 @@ final class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/new/enfant/{id}", name="mercredi_admin_note_new_enfant", methods={"GET","POST"})
+     * @Route("/new/enfant/{id}", name="mercredi_admin_note_new_enfant", methods={"GET", "POST"})
      */
     public function newForEnfant(Request $request, Enfant $enfant): Response
     {
@@ -125,7 +125,7 @@ final class NoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_note_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_note_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Note $note): Response
     {
@@ -154,7 +154,7 @@ final class NoteController extends AbstractController
      */
     public function delete(Request $request, Note $note): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $note->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
             $enfant = $note->getEnfant();
             $noteId = $note->getId();
             $this->noteRepository->remove($note);

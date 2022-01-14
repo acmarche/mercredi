@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class DefaultController.
+ *
  * @IsGranted("ROLE_MERCREDI_ANIMATEUR")
  */
 final class DefaultController extends AbstractController
@@ -19,7 +20,6 @@ final class DefaultController extends AbstractController
 
     /**
      * @Route("/", name="mercredi_animateur_home")
-     *
      */
     public function default(): Response
     {

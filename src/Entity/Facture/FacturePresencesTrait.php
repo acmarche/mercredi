@@ -10,8 +10,8 @@ trait FacturePresencesTrait
 {
     /**
      * @var FacturePresence[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity=FacturePresence::class, mappedBy="facture", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: FacturePresence::class, mappedBy: 'facture', cascade: ['remove'])]
     private iterable $facturePresences;
 
     /**

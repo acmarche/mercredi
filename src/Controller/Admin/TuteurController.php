@@ -38,7 +38,7 @@ final class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_tuteur_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_tuteur_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -65,7 +65,7 @@ final class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_tuteur_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_tuteur_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -108,7 +108,7 @@ final class TuteurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_tuteur_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_tuteur_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Tuteur $tuteur): Response
     {
@@ -137,8 +137,7 @@ final class TuteurController extends AbstractController
      */
     public function delete(Request $request, Tuteur $tuteur): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $tuteur->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
             /*      if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
                       $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');
 

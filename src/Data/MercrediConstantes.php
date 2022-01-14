@@ -23,6 +23,7 @@ final class MercrediConstantes
     public static function getAbsenceTxt($number = false): string
     {
         $absences = self::getListAbsences();
+
         return $absences[$number] ?? $number;
     }
 

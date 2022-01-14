@@ -4,9 +4,6 @@ namespace AcMarche\Mercredi\Entity\Traits;
 
 trait PhotoAutorisationTrait
 {
-    /**
-     * @var bool
-     */
     private bool $photo_autorisation;
 
     public function isPhotoAutorisation(): bool

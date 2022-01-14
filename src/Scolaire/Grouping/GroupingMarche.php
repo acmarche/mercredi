@@ -30,8 +30,8 @@ class GroupingMarche implements GroupingInterface
     }
 
     /**
-     * @param Plaine $plaine
      * @param array|Enfant[] $enfants
+     *
      * @return array|Enfant[]
      */
     public function groupEnfantsForPlaine(Plaine $plaine, array $enfants): array
@@ -48,7 +48,7 @@ class GroupingMarche implements GroupingInterface
         }
         foreach ($enfants as $enfant) {
             $groupe = $this->findGroupeScolaireByAge($enfant->getAge($date, true));
-            if ($groupe === null) {
+            if (null === $groupe) {
                 $groupe = $groupeForce;
             }
             $groups[$groupe->getId()]['groupe'] = $groupe;

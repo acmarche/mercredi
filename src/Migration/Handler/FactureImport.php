@@ -1,9 +1,7 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Migration\Handler;
 
-use DateTime;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
@@ -15,6 +13,7 @@ use AcMarche\Mercredi\Facture\Handler\FactureHandler;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class FactureImport
@@ -48,16 +47,16 @@ class FactureImport
         $paiements = $this->pdo->getAll('paiement');
         foreach ($paiements as $paiement) {
             $this->io->writeln($paiement->date_paiement);
-            $tuteur = $this->migrationRepository->getTuteur((int)$paiement->tuteur_id);
+            $tuteur = $this->migrationRepository->getTuteur((int) $paiement->tuteur_id);
             $facture = $this->createFacture($paiement, $tuteur);
             $type = FactureInterface::OBJECT_PRESENCE;
-            if ($paiement->type_paiement == 'Plaine') {
+            if ('Plaine' == $paiement->type_paiement) {
                 $type = FactureInterface::OBJECT_PLAINE;
             }
             $this->treatment($facture, $paiement, $type);
             if ($paiement->enfant_id) {
                 $enfant = $this->migrationRepository->getEnfant($paiement->enfant_id);
-                if ($enfant->getEcole() !== null) {
+                if (null !== $enfant->getEcole()) {
                     $facture->setEcoles($enfant->getEcole()->getNom());
                 }
             }
@@ -80,7 +79,7 @@ class FactureImport
         $facture->setClotureObsolete($paiement->cloture);
         $facture->setMois(DateTime::createFromFormat('Y-m-d', $paiement->date_paiement)->format('m-Y'));
         $facture->setRemarque(
-            'type et mode de paiement: ' . $paiement->type_paiement . ' ' . $paiement->mode_paiement . ' ordre: ' . $paiement->ordre
+            'type et mode de paiement: '.$paiement->type_paiement.' '.$paiement->mode_paiement.' ordre: '.$paiement->ordre
         );
         $user = $this->migrationRepository->getUser($paiement->user_add_id);
         $facture->setUserAdd($user);
@@ -108,21 +107,21 @@ class FactureImport
 
     /**
      * Parcourir les présences dans presences
-     * et parcourir les presences dans plaines_presences
+     * et parcourir les presences dans plaines_presences.
      */
     private function treatment(Facture $facture, object $paiement, string $type): void
     {
-        foreach ($this->pdo->getAllWhere('presence', 'paiement_id = ' . $paiement->id, false) as $row) {
+        foreach ($this->pdo->getAllWhere('presence', 'paiement_id = '.$paiement->id, false) as $row) {
             $enfant = $this->migrationRepository->getEnfant($row->enfant_id);
             $jour = $this->migrationRepository->getJour($row->jour_id);
             $presence = $this->migrationRepository->getPresence($row->tuteur_id, $enfant, $jour);
             $this->attachPresence($facture, $presence, $type);
         }
 
-        foreach ($this->pdo->getAllWhere('plaine_presences', 'paiement_id = ' . $paiement->id, false) as $row) {
+        foreach ($this->pdo->getAllWhere('plaine_presences', 'paiement_id = '.$paiement->id, false) as $row) {
             $plaineEnfant = $this->pdo->getAllWhere(
                 'plaine_enfant',
-                'id = ' . $row->plaine_enfant_id,
+                'id = '.$row->plaine_enfant_id,
                 true
             );
             $jour = $this->migrationRepository->getJourPlaine($row->jour_id);

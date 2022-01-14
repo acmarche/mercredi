@@ -68,7 +68,7 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_presence_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_presence_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -105,7 +105,7 @@ final class PresenceController extends AbstractController
     /**
      * Liste toutes les presences par mois.
      *
-     * @Route("/by/month", name="mercredi_admin_presence_by_month", methods={"GET","POST"})
+     * @Route("/by/month", name="mercredi_admin_presence_by_month", methods={"GET", "POST"})
      */
     public function indexByMonth(Request $request): Response
     {
@@ -147,7 +147,7 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_presence_new", methods={"GET","POST"})
+     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_presence_new", methods={"GET", "POST"})
      * @Entity("tuteur", expr="repository.find(tuteur)")
      * @Entity("enfant", expr="repository.find(enfant)")
      */
@@ -199,7 +199,7 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_presence_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_presence_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Presence $presence): Response
     {
@@ -235,7 +235,7 @@ final class PresenceController extends AbstractController
     public function delete(Request $request, Presence $presence): Response
     {
         $enfant = $presence->getEnfant();
-        if ($this->isCsrfTokenValid('delete' . $presence->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
             if ($this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PRESENCE)) {
                 $this->addFlash('danger', 'Une présence déjà facturée ne peut être supprimée');
 

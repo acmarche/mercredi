@@ -9,8 +9,8 @@ use AcMarche\Mercredi\Mailer\Factory\UserEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use function count;
 
 final class AssociationAnimateurHandler
 {
@@ -25,13 +25,13 @@ final class AssociationAnimateurHandler
         UserFactory $userFactory,
         NotificationMailer $notificationMailer,
         UserEmailFactory $userEmailFactory,
-        FlashBagInterface $flashBag
+        RequestStack $requestStack
     ) {
         $this->animateurRepository = $animateurRepository;
-        $this->flashBag = $flashBag;
         $this->userFactory = $userFactory;
         $this->notificationMailer = $notificationMailer;
         $this->userEmailFactory = $userEmailFactory;
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
     }
 
     public function suggestAnimateur(User $user, AssociateUserAnimateurDto $associateUserAnimateurDto): void
@@ -47,7 +47,7 @@ final class AssociationAnimateurHandler
         $animateur = $associateUserAnimateurDto->getAnimateur();
         $user = $associateUserAnimateurDto->getUser();
 
-        if ((is_countable($this->animateurRepository->getAnimateursByUser($user)) ? count($this->animateurRepository->getAnimateursByUser($user)) : 0) > 0) {
+        if ((is_countable($this->animateurRepository->getAnimateursByUser($user)) ? \count($this->animateurRepository->getAnimateursByUser($user)) : 0) > 0) {
             //remove old animateur
             $user->getAnimateurs()->clear();
         }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Mailer;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

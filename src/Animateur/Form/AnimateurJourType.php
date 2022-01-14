@@ -30,9 +30,10 @@ final class AnimateurJourType extends AbstractType
                         $peda = '';
                         if ($jour->isPedagogique()) {
                             $ecoles = EcoleUtils::getNamesEcole($jour->getEcoles());
-                            $peda = '(Pédagogique ' . $ecoles . ')';
+                            $peda = '(Pédagogique '.$ecoles.')';
                         }
-                        return ucfirst(DateUtils::formatFr($jour->getDatejour()) . ' ' . $peda);
+
+                        return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
                     },
                     'multiple' => true,
                     'expanded' => true,

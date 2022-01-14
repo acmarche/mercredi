@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait RegistreNationalTrait
 {
-    /**
-     * @ORM\Column(type="string", length=150, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $registre_national = null;
 
     public function getRegistreNational(): ?string

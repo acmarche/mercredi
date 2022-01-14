@@ -6,9 +6,6 @@ use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 
 trait EcoleTrait
 {
-    /**
-     * @var Ecole|null
-     */
     private ?Ecole $ecole = null;
 
     public function getEcole(): ?Ecole

@@ -8,8 +8,8 @@ trait ContentTrait
 {
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content = null;
 
     public function getContent(): ?string

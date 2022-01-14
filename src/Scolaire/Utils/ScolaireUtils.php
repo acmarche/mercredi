@@ -18,9 +18,7 @@ final class ScolaireUtils
     /**
      * Retourne le groupe scolaire de l'enfant
      * Si a pas retourne le groupe scolaire de son année
-     * Si a pas retourne un groupe au hasard
-     * @param Enfant $enfant
-     * @return GroupeScolaire
+     * Si a pas retourne un groupe au hasard.
      */
     public function findGroupeScolaireEnfantByAnneeScolaire(Enfant $enfant): GroupeScolaire
     {

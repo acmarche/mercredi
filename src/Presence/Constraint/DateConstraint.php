@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Presence\Constraint;
 use AcMarche\Mercredi\Contrat\Presence\PresenceConstraintInterface;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Twig\Environment;
 
@@ -19,11 +20,11 @@ final class DateConstraint implements PresenceConstraintInterface
     private PresenceUtils $presenceUtils;
 
     public function __construct(
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         Environment $environment,
         PresenceUtils $presenceUtils
     ) {
-        $this->flashBag = $flashBag;
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
         $this->environment = $environment;
         $this->presenceUtils = $presenceUtils;
     }
@@ -36,7 +37,6 @@ final class DateConstraint implements PresenceConstraintInterface
      */
     public function check(Jour $jour): bool
     {
-        return true;//todo reactivate
         $datePresence = $jour->getDateJour();
 
         $deadLinePedagogique = $this->presenceUtils->getDeadLineDatePedagogique();

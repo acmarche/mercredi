@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PrenomTrait
 {
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $prenom = null;
 
     public function getPrenom(): ?string

@@ -7,9 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PaiementTrait
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\Mercredi\Entity\Paiement")
-     */
+    #[ORM\ManyToOne(targetEntity: 'AcMarche\Mercredi\Entity\Paiement')]
     private ?Paiement $paiement = null;
 
     public function getPaiement(): ?Paiement
@@ -21,5 +19,4 @@ trait PaiementTrait
     {
         $this->paiement = $paiement;
     }
-
 }

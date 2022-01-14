@@ -7,9 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait LastLoginTrait
 {
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?DateTimeImmutable $last_login = null;
 
     public function getLastLogin(): ?DateTimeImmutable

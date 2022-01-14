@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait ConfirmedTrait
 {
-    /**
-     * @ORM\Column(type="boolean", nullable=false)
-     */
+    #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $confirmed = false;
 
     public function isConfirmed(): bool

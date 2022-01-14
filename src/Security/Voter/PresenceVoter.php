@@ -48,10 +48,10 @@ final class PresenceVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Presence && \in_array(
-                $attribute,
-                [self::ADD, self::SHOW, self::EDIT, self::DELETE],
-                true
-            );
+            $attribute,
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+            true
+        );
     }
 
     protected function voteOnAttribute($attribute, $presence, TokenInterface $token): bool
@@ -139,7 +139,7 @@ final class PresenceVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
         $enfants = array_map(
-            fn($relation) => $relation->getEnfant()->getId(),
+            fn ($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

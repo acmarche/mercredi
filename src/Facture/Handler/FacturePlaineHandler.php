@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Handler;
 
 use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
@@ -51,11 +50,6 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
         return $facture;
     }
 
-    /**
-     * @param FactureInterface $facture
-     * @param Plaine $plaine
-     * @return FactureInterface
-     */
     public function handleManually(FactureInterface $facture, Plaine $plaine): FactureInterface
     {
         $facture->setCommunication($this->communicationFactory->generateForPlaine($plaine, $facture));

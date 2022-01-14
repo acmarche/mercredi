@@ -25,7 +25,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function count;
 
 /**
  * Class DefaultController.
@@ -165,7 +164,7 @@ final class MessageController extends AbstractController
     public function fromGroupeScolaire(Request $request, GroupeScolaire $groupeScolaire): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
-        if (count($args) < 1) {
+        if (\count($args) < 1) {
             $this->addFlash('danger', 'Aucun critère de recherche encodé');
 
             return $this->redirectToRoute('mercredi_admin_presence_index');
@@ -224,7 +223,7 @@ final class MessageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $attachCourrier = (bool)$form->get('attachCourriers')->getData();
+            $attachCourrier = (bool) $form->get('attachCourriers')->getData();
             $this->messageHandler->handleFromPlaine($plaine, $message, $attachCourrier);
 
             $this->addFlash('success', 'Le message a bien été envoyé');

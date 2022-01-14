@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -10,48 +9,36 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table("message")
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Message\Repository\MessageRepository")
- */
+#[ORM\Table(name: 'message')]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Message\Repository\MessageRepository')]
 class Message implements TimestampableInterface
 {
     use IdTrait;
     use TimestampableTrait;
-
     /**
      * @Assert\NotBlank()
      */
     private ?string $from = null;
-
     /**
-     * Assert\NotBlank()
+     * Assert\NotBlank().
      */
     private ?string $to = null;
-
     /**
-     *
-     * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'text', nullable: false)]
     private ?string $sujet = null;
-
     /**
-     *
-     * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'text', nullable: false)]
     private ?string $texte = null;
-
     private ?UploadedFile $file = null;
-
     /**
      * @var array|null
-     *
-     * @ORM\Column(type="array", nullable=false)
      */
+    #[ORM\Column(type: 'array', nullable: false)]
     private iterable $destinataires;
-
     public bool $attachCourriers;
 
     public function getFrom(): ?string

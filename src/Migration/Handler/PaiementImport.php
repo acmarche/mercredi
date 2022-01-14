@@ -1,12 +1,11 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Migration\Handler;
 
 use AcMarche\Mercredi\Entity\Paiement;
-use AcMarche\Mercredi\Migration\PaiementRepository;
 use AcMarche\Mercredi\Migration\MercrediPdo;
 use AcMarche\Mercredi\Migration\MigrationRepository;
+use AcMarche\Mercredi\Migration\PaiementRepository;
 use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -59,6 +58,4 @@ class PaiementImport
         }
         $this->paiementRepository->flush();
     }
-
-
 }

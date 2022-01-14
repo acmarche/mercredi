@@ -27,12 +27,11 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table("presence", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"jour_id", "enfant_id"})
- * })
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Presence\Repository\PresenceRepository")
  * @UniqueEntity(fields={"jour", "enfant"}, message="L'enfant est déjà inscrit à cette date")
  */
+#[ORM\Table(name: 'presence')]
+#[ORM\UniqueConstraint(columns: ['jour_id', 'enfant_id'])]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Presence\Repository\PresenceRepository')]
 class Presence implements TimestampableInterface, PresenceInterface, UuidableInterface
 {
     use IdTrait;
@@ -50,20 +49,11 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
     use ConfirmedTrait;
     use IdOldTrait;
     use PaiementTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Jour::class, inversedBy="presences")
-     */
+    #[ORM\ManyToOne(targetEntity: Jour::class, inversedBy: 'presences')]
     private ?Jour $jour = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Enfant::class, inversedBy="presences")
-     */
+    #[ORM\ManyToOne(targetEntity: Enfant::class, inversedBy: 'presences')]
     private ?Enfant $enfant = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="presences")
-     */
+    #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'presences')]
     private ?Tuteur $tuteur = null;
     /**
      * @var array|Enfant[]

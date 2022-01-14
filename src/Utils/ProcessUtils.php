@@ -6,14 +6,14 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
- * not use
+ * not use.
  */
 class ProcessUtils
 {
     public static function lunchSend(): void
     {
         $process = new Process(['bin/console', 'mercredi:send-facture', '10-2021']);
-        $process->setWorkingDirectory(getcwd() . "/../");
+        $process->setWorkingDirectory(getcwd().'/../');
         $process->run();
 
         // executes after the command finishes

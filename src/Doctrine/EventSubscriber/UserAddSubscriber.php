@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Doctrine\EventSubscriber;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Mercredi\Utils\PropertyUtil;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserAddSubscriber implements EventSubscriber
 {

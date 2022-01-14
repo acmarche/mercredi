@@ -11,8 +11,8 @@ trait EcolesTrait
 {
     /**
      * @var Ecole[]|ArrayCollection
-     * @ORM\ManyToMany(targetEntity=Ecole::class, inversedBy="users")
      */
+    #[ORM\ManyToMany(targetEntity: Ecole::class, inversedBy: 'users')]
     private iterable $ecoles;
 
     /**

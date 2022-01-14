@@ -40,7 +40,6 @@ final class MercrediExtension extends AbstractExtension
         return [new TwigFunction('inIds', fn (int $number, array $objects) => $this->inIds($number, $objects))];
     }
 
-
     public function absenceFilter($number): string
     {
         return MercrediConstantes::getAbsenceTxt($number);
@@ -53,8 +52,8 @@ final class MercrediExtension extends AbstractExtension
 
     private function inIds(int $number, array $objects): bool
     {
-        $ids = array_map(fn($object) => $object->getId(), $objects);
+        $ids = array_map(fn ($object) => $object->getId(), $objects);
 
-        return in_array($number, $ids);
+        return \in_array($number, $ids);
     }
 }

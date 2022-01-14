@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use function strlen;
 
 final class CreateUserCommand extends Command
 {
@@ -56,7 +55,7 @@ final class CreateUserCommand extends Command
             return Command::FAILURE;
         }
 
-        if (strlen($name) < 1) {
+        if (\strlen($name) < 1) {
             $symfonyStyle->error('Name minium 1');
 
             return Command::FAILURE;

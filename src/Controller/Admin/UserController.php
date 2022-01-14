@@ -40,7 +40,7 @@ final class UserController extends AbstractController
     /**
      * Lists all User entities.
      *
-     * @Route("/", name="mercredi_admin_user_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_user_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -69,7 +69,7 @@ final class UserController extends AbstractController
     /**
      * Displays a form to create a new User utilisateur.
      *
-     * @Route("/new", name="mercredi_admin_user_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_user_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -102,7 +102,7 @@ final class UserController extends AbstractController
     /**
      * Displays a form to create a new User utilisateur.
      *
-     * @Route("/new/tuteur/{id}", name="mercredi_admin_user_new_from_tuteur", methods={"GET","POST"})
+     * @Route("/new/tuteur/{id}", name="mercredi_admin_user_new_from_tuteur", methods={"GET", "POST"})
      */
     public function newFromTuteur(Request $request, Tuteur $tuteur): Response
     {
@@ -152,7 +152,7 @@ final class UserController extends AbstractController
     /**
      * Displays a form to edit an existing User utilisateur.
      *
-     * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, User $user): Response
     {
@@ -179,7 +179,7 @@ final class UserController extends AbstractController
     /**
      * Displays a form to edit an existing User utilisateur.
      *
-     * @Route("/{id}/roles", name="mercredi_admin_user_roles", methods={"GET","POST"})
+     * @Route("/{id}/roles", name="mercredi_admin_user_roles", methods={"GET", "POST"})
      */
     public function roles(Request $request, User $user): Response
     {
@@ -210,7 +210,7 @@ final class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $id = $user->getId();
             $this->userRepository->remove($user);
             $this->userRepository->flush();

@@ -3,14 +3,10 @@
 namespace AcMarche\Mercredi\Entity\Plaine;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 trait InscriptionOpenTrait
 {
-    /**
-     * @ORM\Column(type="boolean")
-     * Assert\Type() //todo my constraint only one
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $inscriptionOpen = false;
 
     public function isInscriptionOpen(): bool

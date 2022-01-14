@@ -74,7 +74,7 @@ final class FactureComplementController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_facture_complement_edit", methods={"GET","POST"}).
+     * @Route("/{id}/edit", name="mercredi_admin_facture_complement_edit", methods={"GET", "POST"}).
      */
     public function edit(Request $request, FactureComplement $factureComplement): Response
     {
@@ -107,7 +107,7 @@ final class FactureComplementController extends AbstractController
     public function delete(Request $request, FactureComplement $factureComplement): Response
     {
         $facture = $factureComplement->getFacture();
-        if ($this->isCsrfTokenValid('delete' . $factureComplement->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$factureComplement->getId(), $request->request->get('_token'))) {
             $this->factureComplementRepository->remove($factureComplement);
             $this->factureComplementRepository->flush();
 

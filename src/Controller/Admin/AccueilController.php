@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
@@ -21,6 +20,7 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,8 +55,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/index", name="mercredi_admin_accueil_index", methods={"GET","POST"})
-     *
+     * @Route("/index", name="mercredi_admin_accueil_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -81,7 +80,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/list/{id}", name="mercredi_admin_accueil_show_enfant", methods={"GET","POST"})
+     * @Route("/list/{id}", name="mercredi_admin_accueil_show_enfant", methods={"GET", "POST"})
      */
     public function enfant(Enfant $enfant): Response
     {
@@ -99,7 +98,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_accueil_new", methods={"GET","POST"})
+     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_accueil_new", methods={"GET", "POST"})
      * @Entity("tuteur", expr="repository.find(tuteur)")
      * @Entity("enfant", expr="repository.find(enfant)")
      */
@@ -148,7 +147,7 @@ final class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_accueil_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_accueil_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Accueil $accueil): Response
     {
@@ -184,7 +183,7 @@ final class AccueilController extends AbstractController
     public function delete(Request $request, Accueil $accueil): RedirectResponse
     {
         $enfant = null;
-        if ($this->isCsrfTokenValid('delete' . $accueil->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$accueil->getId(), $request->request->get('_token'))) {
             if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
                 $this->addFlash('danger', 'Un accueil déjà facturé ne peut être supprimé');
 

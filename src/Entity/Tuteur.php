@@ -33,9 +33,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Tuteur\Repository\TuteurRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Tuteur\Repository\TuteurRepository')]
 class Tuteur implements SluggableInterface, TimestampableInterface
 {
     use IdTrait;
@@ -60,32 +58,27 @@ class Tuteur implements SluggableInterface, TimestampableInterface
     use IbanTrait;
     use CreancesTrait;
     use IdOldTrait;
-
     /**
      * @var Relation[]
-     * @ORM\OneToMany(targetEntity=Relation::class, mappedBy="tuteur", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Relation::class, mappedBy: 'tuteur', cascade: ['remove'])]
     private iterable $relations;
-
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Accueil[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity=Accueil::class, mappedBy="tuteur", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Accueil::class, mappedBy: 'tuteur', cascade: ['remove'])]
     private iterable $accueils;
-
     /**
      * @var Facture[]
-     * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="tuteur", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'tuteur', cascade: ['remove'])]
     private iterable $factures;
-
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="tuteurs" )
-     *
      * @var User[]|Collection
      */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'tuteurs')]
     private iterable $users;
 
     public function __construct()
@@ -98,7 +91,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface
 
     public function __toString(): string
     {
-        return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
     public function getSluggableFields(): array

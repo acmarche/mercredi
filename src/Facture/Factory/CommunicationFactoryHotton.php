@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -17,7 +16,7 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
     }
 
     /**
-     * Pour la communication à faire apparaitre :
+     * Pour la communication à faire apparaitre :.
      *
      * Raccourci de l’école + n° facture + année (année, non pas d’émission de la facture, mais du mois de garderie)
      *
@@ -51,14 +50,14 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
         $ecoles = '';
         foreach ($facture->ecolesListing as $ecole) {
             if ($ecole->getAbreviation()) {
-                $ecoles .= $ecole->getAbreviation() . ' ';
+                $ecoles .= $ecole->getAbreviation().' ';
             } else {
                 $ecoles .= $ecole->getLocalite();
             }
         }
 
         //list($month, $year) = explode('-', $facture->getMois());
-        $communication = $ecoles . ' ' . $facture->getId() . ' ' . $facture->getMois();
+        $communication = $ecoles.' '.$facture->getId().' '.$facture->getMois();
 
         return $communication;
     }
@@ -67,9 +66,9 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
     {
         $communication = $plaine->getCommunication();
         if (!$communication) {
-            return $plaine->getSlug() . ' ' . $facture->getId();
+            return $plaine->getSlug().' '.$facture->getId();
         }
 
-        return $communication . ' ' . $facture->getId();
+        return $communication.' '.$facture->getId();
     }
 }

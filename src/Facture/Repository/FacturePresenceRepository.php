@@ -27,8 +27,6 @@ final class FacturePresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array $presenceIds
-     * @param string $type
      * @return array|FacturePresence[]
      */
     public function findByIdsAndType(array $presenceIds, string $type): array
@@ -56,7 +54,6 @@ final class FacturePresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $type
      * @return array|FacturePresence[]
      */
     public function findByFactureAndType(FactureInterface $facture, string $type): array

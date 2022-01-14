@@ -37,13 +37,13 @@ final class PresenceNewType extends AbstractType
                         $peda = '';
                         if ($jour->isPedagogique()) {
                             $ecoles = EcoleUtils::getNamesEcole($jour->getEcoles());
-                            $peda = '(Pédagogique ' . $ecoles . ')';
+                            $peda = '(Pédagogique '.$ecoles.')';
                         }
 
-                        return ucfirst(DateUtils::formatFr($jour->getDatejour()) . ' ' . $peda);
+                        return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
                     },
                     'attr' => ['style' => 'height:150px;'],
-                    'group_by' => fn ($date) => $date->getDateJour()->format('m') . '-' . $date->getDateJour()->format('Y'),
+                    'group_by' => fn ($date) => $date->getDateJour()->format('m').'-'.$date->getDateJour()->format('Y'),
                 ]
             );
     }

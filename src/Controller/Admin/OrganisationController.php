@@ -45,7 +45,7 @@ final class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_organisation_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_organisation_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -91,7 +91,7 @@ final class OrganisationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_organisation_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_organisation_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Organisation $organisation): Response
     {
@@ -120,7 +120,7 @@ final class OrganisationController extends AbstractController
      */
     public function delete(Request $request, Organisation $organisation): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $organisation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$organisation->getId(), $request->request->get('_token'))) {
             $id = $organisation->getId();
             $this->organisationRepository->remove($organisation);
             $this->organisationRepository->flush();

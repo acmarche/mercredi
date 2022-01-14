@@ -2,14 +2,14 @@
 
 namespace AcMarche\Mercredi\Command;
 
-use Exception;
-use DateTime;
 use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use DateTime;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,7 +54,7 @@ class SendFactureCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $force = (bool)$input->getOption('force');
+        $force = (bool) $input->getOption('force');
         /* $month = $input->getArgument('month');
 
          if (preg_match("#^\d{2}-\d{4}$#", $month) == false) {
@@ -69,8 +69,8 @@ class SendFactureCommand extends Command
         foreach ($crons as $cron) {
             $i = 0;
             $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
-            $count = count($factures);
-            $io->writeln($count . ' factures trouvées');
+            $count = \count($factures);
+            $io->writeln($count.' factures trouvées');
 
             $messageBase = $this->factureEmailFactory->messageFacture(
                 $cron->getFromAdresse(),
@@ -79,18 +79,18 @@ class SendFactureCommand extends Command
             );
 
             foreach ($factures as $facture) {
-                if ($facture->getEnvoyeLe() != null && !$force) {
+                if (null != $facture->getEnvoyeLe() && !$force) {
                     continue;
                 }
 
-                $messageFacture = clone $messageBase;//sinon attachs multiple
+                $messageFacture = clone $messageBase; //sinon attachs multiple
 
                 $tuteur = $facture->getTuteur();
                 $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
 
-                if (count($emails) < 1) {
-                    $error = 'Pas de mail pour la facture: ' . $facture->getId();
-                    $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                if (\count($emails) < 1) {
+                    $error = 'Pas de mail pour la facture: '.$facture->getId();
+                    $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
@@ -99,8 +99,8 @@ class SendFactureCommand extends Command
                 try {
                     $this->factureEmailFactory->attachFactureFromPath($messageFacture, $facture);
                 } catch (Exception $e) {
-                    $error = 'Pas de pièce jointe pour la facture: ' . $facture->getId();
-                    $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                    $error = 'Pas de pièce jointe pour la facture: '.$facture->getId();
+                    $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
@@ -108,16 +108,16 @@ class SendFactureCommand extends Command
                 try {
                     $this->notificationMailer->sendMail($messageFacture);
                 } catch (TransportExceptionInterface $e) {
-                    $error = 'Facture num ' . $facture->getId() . ' ' . $e->getMessage();
-                    $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+                    $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
+                    $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
                     continue;
                 }
 
                 $facture->setEnvoyeA(implode(', ', $emails));
                 $facture->setEnvoyeLe(new DateTime());
-                $i++;
-                $io->writeln($i . '/' . $count);
+                ++$i;
+                $io->writeln($i.'/'.$count);
                 $this->factureRepository->flush();
             }
             $cron->setDone(true);

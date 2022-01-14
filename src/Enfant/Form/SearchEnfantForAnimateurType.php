@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Enfant\Form;
 
 use AcMarche\Mercredi\Entity\Animateur;
@@ -28,9 +27,9 @@ class SearchEnfantForAnimateurType extends AbstractType
     public function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setDefaults(
-            array(
+            [
                 'animateur' => null,
-            )
+            ]
         )
             ->setAllowedTypes('animateur', Animateur::class)
             ->setRequired('animateur');

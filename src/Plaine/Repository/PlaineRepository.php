@@ -37,7 +37,7 @@ final class PlaineRepository extends ServiceEntityRepository
 
         if ($nom) {
             $qb->andWhere('plaine.nom LIKE :nom')
-                ->setParameter('nom', '%' . $nom . '%');
+                ->setParameter('nom', '%'.$nom.'%');
         }
 
         return $qb->getQuery()->getResult();
@@ -61,7 +61,7 @@ final class PlaineRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('plaine')
             ->andWhere('plaine.inscriptionOpen = 1');
 
-        if ($plaine !== null) {
+        if (null !== $plaine) {
             $qb->andWhere('plaine != :plaine')
                 ->setParameter('plaine', $plaine);
         }

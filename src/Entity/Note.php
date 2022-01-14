@@ -11,9 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Note\Repository\NoteRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Note\Repository\NoteRepository')]
 class Note implements TimestampableInterface
 {
     use IdTrait;
@@ -22,10 +20,7 @@ class Note implements TimestampableInterface
     use ArchiveTrait;
     use UserAddTrait;
     use EnfantTrait;
-
-    /**
-     * @ORM\ManyToOne (targetEntity=Enfant::class, inversedBy="notes")
-     */
+    #[ORM\ManyToOne(targetEntity: Enfant::class, inversedBy: 'notes')]
     private ?Enfant $enfant = null;
 
     public function __construct(Enfant $enfant)

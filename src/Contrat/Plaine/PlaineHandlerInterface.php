@@ -2,11 +2,11 @@
 
 namespace AcMarche\Mercredi\Contrat\Plaine;
 
-use Exception;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Common\Collections\Collection;
+use Exception;
 
 interface PlaineHandlerInterface
 {
@@ -24,8 +24,6 @@ interface PlaineHandlerInterface
     public function isRegistrationFinalized(Plaine $plaine, Tuteur $tuteur): bool;
 
     /**
-     * @param Plaine $plaine
-     * @param Tuteur $tuteur
      * @throws Exception
      */
     public function confirm(Plaine $plaine, Tuteur $tuteur): void;

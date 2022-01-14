@@ -83,7 +83,7 @@ final class MigrationCommand extends Command
         $symfonyStyle = new SymfonyStyle($input, $output);
         $this->parametreImport->setIo($symfonyStyle);
 
-        if ($input->getArgument('name') == 'all') {
+        if ('all' == $input->getArgument('name')) {
             $this->parametreImport->importAll();
             $this->userImport->import($symfonyStyle);
             $this->tuteurImport->import($symfonyStyle);
@@ -183,7 +183,7 @@ final class MigrationCommand extends Command
      * A REGARDER !!!!!!!!!!!!!!!
      */
 
-    /**
+    /*
      * La table animateur
      * Lier ecole et user
      */

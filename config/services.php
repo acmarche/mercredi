@@ -1,6 +1,5 @@
 <?php
 
-use Symfony\Component\Ldap\Ldap;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
@@ -14,17 +13,18 @@ use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
-use Symfony\Component\Ldap\LdapInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
+use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
+use Symfony\Component\Ldap\Ldap;
+use Symfony\Component\Ldap\LdapInterface;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_EMAILS_FACTURE)%');
     $parameters->set(Option::EMAILS_FACTURE, '%env(MERCREDI_EMAILS_FACTURE)%');
-    $parameters->set(Option::REGISTER, (bool)'%env(MERCREDI_REGISTER)%');
+    $parameters->set(Option::REGISTER, (bool) '%env(MERCREDI_REGISTER)%');
     $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
     $parameters->set(Option::PRESENCE_PRIX1, '%env(MERCREDI_PRESENCE_PRIX1)%');
     $parameters->set(Option::PRESENCE_PRIX2, '%env(MERCREDI_PRESENCE_PRIX2)%');
@@ -46,8 +46,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure()
         ->private();
 
-    $services->load('AcMarche\Mercredi\\', __DIR__ . '/../src/*')
-        ->exclude([__DIR__ . '/../src/{Entity,Tests2}']);
+    $services->load('AcMarche\Mercredi\\', __DIR__.'/../src/*')
+        ->exclude([__DIR__.'/../src/{Entity,Tests2}']);
 
     $services->set(DirectoryNamer::class)
         ->public();

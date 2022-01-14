@@ -10,36 +10,24 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table("relation", uniqueConstraints={
- * @ORM\UniqueConstraint(columns={"tuteur_id", "enfant_id"})
- * })
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Relation\Repository\RelationRepository")
  * @UniqueEntity(fields={"tuteur", "enfant"}, message="Cet enfant est déjà lié à ce parent")
  */
+#[ORM\Table(name: 'relation')]
+#[ORM\UniqueConstraint(columns: ['tuteur_id', 'enfant_id'])]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Relation\Repository\RelationRepository')]
 class Relation
 {
     use IdTrait;
     use TuteurTrait;
     use EnfantTrait;
     use OrdreTrait;
-
-    /**
-     * @ORM\Column(type="string", length=200, nullable=true, options={"comment" = "pere,mere,beau pere.."})
-     */
+    #[ORM\Column(type: 'string', length: 200, nullable: true, options: ['comment' => 'pere,mere,beau pere..'])]
     private ?string $type = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Enfant::class, inversedBy="relations", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     *
-     * */
+    #[ORM\ManyToOne(targetEntity: Enfant::class, inversedBy: 'relations', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Enfant $enfant = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="relations", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     *
-     * */
+    #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'relations', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Tuteur $tuteur = null;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant)

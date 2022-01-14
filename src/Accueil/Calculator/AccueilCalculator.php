@@ -30,12 +30,12 @@ final class AccueilCalculator implements AccueilCalculatorInterface
 
     /**
      * 18h15 => 0.25, 18h30 => 0.25
-     * 18h31 => 0.5 et  18h46 => 0.5
+     * 18h31 => 0.5 et  18h46 => 0.5.
      */
     public function calculateRetard(Accueil $accueil): float
     {
         $heureRetard = $accueil->getHeureRetard();
-        if ($heureRetard !== null) {
+        if (null !== $heureRetard) {
             $h18 = Carbon::instance($heureRetard);
             $h18->hour(18);
             $h18->minute(15);
@@ -49,6 +49,7 @@ final class AccueilCalculator implements AccueilCalculatorInterface
             if ($minutes > 15) {
                 return 0.5;
             }
+
             return 0.25;
         }
 

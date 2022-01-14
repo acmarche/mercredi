@@ -8,34 +8,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureCronRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Facture\Repository\FactureCronRepository')]
 class FactureCron implements TimestampableInterface
 {
-    use IdTrait,
-        UserAddTrait,
-        TimestampableTrait;
-
-    /**
-     * @ORM\Column(type="string", length=50, unique=true, nullable=false)
-     */
+    use IdTrait;
+    use UserAddTrait;
+    use TimestampableTrait;
+    #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)]
     private string $month;
-    /**
-     * @ORM\Column(type="string", length=150, nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 150, nullable: false)]
     private string $subject;
-    /**
-     * @ORM\Column(type="text", nullable=false)
-     */
+    #[ORM\Column(type: 'text', nullable: false)]
     private string $body;
-    /**
-     * @ORM\Column(type="string", length=50, nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private string $fromAdresse;
-    /**
-     * @ORM\Column(type="boolean", nullable=false)
-     */
+    #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $done = false;
 
     public function __construct(string $from, string $subject, string $body, string $month)

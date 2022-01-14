@@ -2,8 +2,6 @@
 
 namespace AcMarche\Mercredi\Plaine\Handler;
 
-use Exception;
-use DateTime;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -16,7 +14,9 @@ use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Exception;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class PlaineHandlerHotton implements PlaineHandlerInterface
@@ -43,7 +43,6 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
         $this->adminEmailFactory = $adminEmailFactory;
         $this->presenceHandler = $presenceHandler;
     }
-
 
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): void
     {
@@ -86,12 +85,10 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
 
     public function isRegistrationFinalized(Plaine $plaine, Tuteur $tuteur): bool
     {
-        return $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur, true) !== [];
+        return [] !== $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur, true);
     }
 
     /**
-     * @param Plaine $plaine
-     * @param Tuteur $tuteur
      * @throws Exception
      */
     public function confirm(Plaine $plaine, Tuteur $tuteur): void
@@ -109,9 +106,9 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
         $this->facturePlaineHandler->handleManually($facture, $plaine);
 
         $emails = TuteurUtils::getEmailsOfOneTuteur($tuteur);
-        if (count($emails) < 1) {
-            $error = 'Pas de mail pour la facture plaine: ' . $facture->getId();
-            $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture", $error);
+        if (\count($emails) < 1) {
+            $error = 'Pas de mail pour la facture plaine: '.$facture->getId();
+            $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
             $this->notificationMailer->sendAsEmailNotification($message);
             throw new Exception($error);
         }
@@ -124,8 +121,8 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
         try {
             $this->notificationMailer->sendMail($message);
         } catch (TransportExceptionInterface $e) {
-            $error = 'Facture plaine num ' . $facture->getId() . ' ' . $e->getMessage();
-            $message = $this->adminEmailFactory->messageAlert("Erreur envoie facture plaine", $error);
+            $error = 'Facture plaine num '.$facture->getId().' '.$e->getMessage();
+            $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture plaine', $error);
             $this->notificationMailer->sendAsEmailNotification($message);
         }
 

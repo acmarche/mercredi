@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait NomTrait
 {
     /**
-     * @ORM\Column(type="string", length=150)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'string', length: 150)]
     private ?string $nom = null;
 
     public function getNom(): ?string

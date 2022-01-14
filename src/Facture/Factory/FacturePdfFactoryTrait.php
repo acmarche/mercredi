@@ -35,17 +35,15 @@ final class FacturePdfFactoryTrait
         } else {
             $html = $this->facturePdfPresence->render($facture);
         }
-        $slug = $this->slugger->slug($facture->getNom() . ' ' . $facture->getPrenom());
+        $slug = $this->slugger->slug($facture->getNom().' '.$facture->getPrenom());
 
         //   return new Response($html);
 
-        return $this->downloadPdf($html, 'facture_' . $facture->getId() . '_' . $slug . '.pdf');
+        return $this->downloadPdf($html, 'facture_'.$facture->getId().'_'.$slug.'.pdf');
     }
 
     /**
      * @param array|Facture[] $factures
-     * @param string $month
-     * @return Response
      */
     public function generates(array $factures, string $month): Response
     {
@@ -53,6 +51,6 @@ final class FacturePdfFactoryTrait
 
         //  return new Response($html);
 
-        return $this->downloadPdf($html, 'factures_' . $month . '.pdf');
+        return $this->downloadPdf($html, 'factures_'.$month.'.pdf');
     }
 }

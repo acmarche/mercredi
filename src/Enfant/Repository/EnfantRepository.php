@@ -54,7 +54,7 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-            ->setParameter('keyword', '%' . $keyword . '%');
+            ->setParameter('keyword', '%'.$keyword.'%');
 
         if ($actif) {
             $queryBuilder->andWhere('enfant.archived = 0');
@@ -67,6 +67,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
     /**
      * @param array $ecoles
+     *
      * @return Enfant[]
      */
     public function findByEcoles(iterable $ecoles): array
@@ -79,6 +80,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
     /**
      * @param array $ecoles
+     *
      * @return Enfant[]
      */
     public function findByEcolesForEcole(iterable $ecoles): array
@@ -91,7 +93,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
     /**
      * J'exclus les enfants sans tuteur !
-     * @param Ecole $ecole
+     *
      * @return Enfant[]
      */
     public function findByEcolesForInscription(Ecole $ecole): array
@@ -122,7 +124,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-                ->setParameter('keyword', '%' . $nom . '%');
+                ->setParameter('keyword', '%'.$nom.'%');
         }
 
         if (null !== $ecole) {
@@ -130,7 +132,7 @@ final class EnfantRepository extends ServiceEntityRepository
                 ->setParameter('ecole', $ecole);
         }
 
-        if ($anneeScolaire !== null) {
+        if (null !== $anneeScolaire) {
             $queryBuilder->andWhere('enfant.annee_scolaire = :annee')
                 ->setParameter('annee', $anneeScolaire);
         }
@@ -149,14 +151,13 @@ final class EnfantRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-
     public function searchForEcole(iterable $ecoles, ?string $nom, bool $strict = true)
     {
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-                ->setParameter('keyword', '%' . $nom . '%');
+                ->setParameter('keyword', '%'.$nom.'%');
         }
 
         $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
@@ -170,7 +171,6 @@ final class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Animateur $animateur
      * @return array|Enfant[]
      */
     public function findAllForAnimateur(Animateur $animateur): array
@@ -179,7 +179,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         $jours = $this->jourRepository->findByAnimateur($animateur);
 
-        if (count($jours) == 0) {
+        if (0 == \count($jours)) {
             return [];
         }
 
@@ -191,17 +191,14 @@ final class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Animateur $animateur
-     * @param string|null $nom
-     * @param Jour|null $jour
      * @return array|Enfant[]
      */
     public function searchForAnimateur(Animateur $animateur, ?string $nom = null, ?Jour $jour = null): array
     {
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
-        $jours = $jour !== null ? [$jour] : $this->jourRepository->findByAnimateur($animateur);
-        if (count($jours) == 0) {
+        $jours = null !== $jour ? [$jour] : $this->jourRepository->findByAnimateur($animateur);
+        if (0 == \count($jours)) {
             return [];
         }
 
@@ -209,7 +206,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         if ($nom) {
             $queryBuilder->andWhere('enfant.nom LIKE :keyword OR enfant.prenom LIKE :keyword')
-                ->setParameter('keyword', '%' . $nom . '%');
+                ->setParameter('keyword', '%'.$nom.'%');
         }
 
         return $queryBuilder

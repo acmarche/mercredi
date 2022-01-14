@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -39,7 +38,7 @@ class FacturePlaineController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/manual", name="mercredi_admin_facture_select_plaine", methods={"GET","POST"})
+     * @Route("/{id}/manual", name="mercredi_admin_facture_select_plaine", methods={"GET", "POST"})
      */
     public function selectPlaine(Request $request, Tuteur $tuteur): Response
     {
@@ -61,7 +60,7 @@ class FacturePlaineController extends AbstractController
     }
 
     /**
-     * @Route("/{tuteur}/{plaine}/manual", name="mercredi_admin_facture_new_plaine", methods={"GET","POST"})
+     * @Route("/{tuteur}/{plaine}/manual", name="mercredi_admin_facture_new_plaine", methods={"GET", "POST"})
      */
     public function newManual(Request $request, Tuteur $tuteur, Plaine $plaine): Response
     {

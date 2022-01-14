@@ -110,7 +110,7 @@ final class FactureRepository extends ServiceEntityRepository
     ): array {
         $queryBuilder = $this->getQBl();
 
-        if ($numero !== null) {
+        if (null !== $numero) {
             $queryBuilder->andWhere('facture.id = :numero')
                 ->setParameter('numero', $numero);
         }
@@ -125,35 +125,35 @@ final class FactureRepository extends ServiceEntityRepository
                 ->setParameter('enfant', '%'.$enfant.'%');
         }
 
-        if ($ecole !== null) {
+        if (null !== $ecole) {
             $queryBuilder->andWhere('facture.ecoles LIKE :ecole')
                 ->setParameter('ecole', '%'.$ecole.'%');
         }
 
-        if ($plaine !== null) {
+        if (null !== $plaine) {
             $queryBuilder->andWhere('facture.plaine = :plaine')
                 ->setParameter('plaine', $plaine->getNom());
         }
 
-        if ($monthYear !== null) {
+        if (null !== $monthYear) {
             $queryBuilder->andWhere('facture.mois = :monthYear')
                 ->setParameter('monthYear', $monthYear);
         }
 
-        if ($communication !== null) {
+        if (null !== $communication) {
             $queryBuilder->andWhere('facture.communication LIKE :commu')
                 ->setParameter('commu', '%'.$communication.'%');
         }
 
-        if ($datePaiement !== null) {
+        if (null !== $datePaiement) {
             $queryBuilder->andWhere('facture.payeLe LIKE :datePaiement')
                 ->setParameter('datePaiement', $datePaiement->format('Y-m-d').'%');
         }
 
-        if ($paye === false) {
+        if (false === $paye) {
             $queryBuilder->andWhere('facture.payeLe IS NULL');
         }
-        if ($paye === true) {
+        if (true === $paye) {
             $queryBuilder->andWhere('facture.payeLe IS NOT NULL');
         }
 

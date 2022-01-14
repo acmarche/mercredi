@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Security\Authenticator;
 
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -20,13 +19,13 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgrade
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * Essayer de voir les events
- * Si reponse null en cas de failure le manager va essayer un autre authenticator
+ * Si reponse null en cas de failure le manager va essayer un autre authenticator.
+ *
  * @see \Symfony\Component\Security\Http\Authentication\AuthenticatorManager
  * @see UserCheckerListener::postCheckCredentials
  * @see UserProviderListener::checkPassport
@@ -58,7 +57,7 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
         return $request->isMethod('POST') && $this->getLoginUrl($request) === $request->getPathInfo();
     }
 
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('username', '');
         $password = $request->request->get('password', '');

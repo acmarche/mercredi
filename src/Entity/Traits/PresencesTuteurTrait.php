@@ -13,8 +13,8 @@ trait PresencesTuteurTrait
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity=Presence::class, mappedBy="tuteur", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'tuteur', cascade: ['remove'])]
     private iterable $presences;
 
     /**

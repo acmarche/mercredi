@@ -33,13 +33,12 @@ final class ProfileController extends AbstractController
 
     /**
      * @Route("/show", name="mercredi_front_user_show")
-     *
      */
     public function show(): Response
     {
         /** @var User */
         $user = $this->getUser();
-        if ($user == null) {
+        if (null == $user) {
             $this->addFlash('warning', 'Votre compte n\'est pas encore actif');
 
             return $this->redirectToRoute('mercredi_front_home');
@@ -61,7 +60,7 @@ final class ProfileController extends AbstractController
         /** @var User */
         $user = $this->getUser();
 
-        if ($user != null) {
+        if (null != $user) {
             $roles = $user->getRoles();
             $del_val = 'ROLE_USER';
 

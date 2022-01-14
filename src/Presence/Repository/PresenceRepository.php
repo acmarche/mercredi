@@ -70,7 +70,7 @@ final class PresenceRepository extends ServiceEntityRepository
 
     /**
      * Pour le calcul du cout de la presence
-     * On check s'il y a des frères et soeurs présents
+     * On check s'il y a des frères et soeurs présents.
      */
     public function findByTuteurEnfantAndJour(Tuteur $tuteur, Enfant $enfant, Jour $jour): ?Presence
     {
@@ -96,7 +96,6 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array $days
      * @return Presence[]
      */
     public function findByDays(array $days): array
@@ -130,16 +129,17 @@ final class PresenceRepository extends ServiceEntityRepository
             ->andWhere('presence.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur);
 
-        if ($date !== null) {
+        if (null !== $date) {
             $qb->andWhere('jour.date_jour LIKE :date')
-                ->setParameter('date', $date->format('Y-m') . '%');
+                ->setParameter('date', $date->format('Y-m').'%');
         }
 
         return $qb->getQuery()->getResult();
     }
 
     /**
-     * Quand on ajoute une présence
+     * Quand on ajoute une présence.
+     *
      * @return ?Presence
      *
      * @throws NonUniqueResultException
@@ -176,6 +176,7 @@ final class PresenceRepository extends ServiceEntityRepository
 
     /**
      * @param array|Jour[] $jours
+     *
      * @return Presence[]
      */
     public function findPresencesByJours(array $jours): array

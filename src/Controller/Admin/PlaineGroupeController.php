@@ -26,7 +26,7 @@ final class PlaineGroupeController extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", name="mercredi_admin_plaine_groupe_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="mercredi_admin_plaine_groupe_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, PlaineGroupe $plaineGroupe): Response
     {

@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function count;
 
 final class TuteurUtils
 {
@@ -30,11 +29,11 @@ final class TuteurUtils
         $telephoneConjoint = $tuteur->getTelephoneConjoint();
 
         if ($gsm || $gsmConjoint) {
-            $telephones .= $gsm . ' | ' . $gsmConjoint;
+            $telephones .= $gsm.' | '.$gsmConjoint;
         } elseif ($telephoneBureau || $telephoneBureauConjoint) {
-            $telephones .= $telephoneBureau . ' | ' . $telephoneBureauConjoint;
+            $telephones .= $telephoneBureau.' | '.$telephoneBureauConjoint;
         } else {
-            $telephones .= $telephone . ' | ' . $telephoneConjoint;
+            $telephones .= $telephone.' | '.$telephoneConjoint;
         }
 
         return $telephones;
@@ -62,7 +61,7 @@ final class TuteurUtils
             return false;
         }
 
-        return (bool)$tuteur->getLocalite();
+        return (bool) $tuteur->getLocalite();
     }
 
     /**
@@ -86,7 +85,7 @@ final class TuteurUtils
 
     public function tuteurIsActif(Tuteur $tuteur): bool
     {
-        return $this->relationRepository->findEnfantsActifs($tuteur) !== [];
+        return [] !== $this->relationRepository->findEnfantsActifs($tuteur);
     }
 
     /**
@@ -96,7 +95,7 @@ final class TuteurUtils
     {
         $tuteurs = $user->getTuteurs();
 
-        if (0 === (is_countable($tuteurs) ? count($tuteurs) : 0)) {
+        if (0 === (is_countable($tuteurs) ? \count($tuteurs) : 0)) {
             return null;
         }
 
@@ -114,7 +113,7 @@ final class TuteurUtils
             $emails[] = $tuteur->getEmail();
         }
 
-        if (count($tuteur->getUsers()) > 0) {
+        if (\count($tuteur->getUsers()) > 0) {
             $users = $tuteur->getUsers();
             $user = $users[0];
             if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
@@ -146,7 +145,7 @@ final class TuteurUtils
                 continue;
             }
             $t = self::getEmailsOfOneTuteur($tuteur);
-            if ($t !== null) {
+            if (null !== $t) {
                 continue;
             }
             $data[] = $tuteur;
@@ -157,6 +156,7 @@ final class TuteurUtils
 
     /**
      * @param Enfant[] $enfants
+     *
      * @return Tuteur[]
      */
     public function getTuteursByEnfants(array $enfants): array

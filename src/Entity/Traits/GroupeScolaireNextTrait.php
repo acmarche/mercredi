@@ -10,8 +10,5 @@ use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
  */
 trait GroupeScolaireNextTrait
 {
-    /**
-     * @var GroupeScolaire
-     */
     private GroupeScolaire $groupe_scolaire_nex;
 }

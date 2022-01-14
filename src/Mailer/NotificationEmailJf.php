@@ -10,7 +10,7 @@ use Symfony\Component\Notifier\Notification\Notification;
 class NotificationEmailJf extends NotificationEmail
 {
     /**
-     * Pour mettre important, car plus jolie
+     * Pour mettre important, car plus jolie.
      */
     public static function asPublicEmailJf(Headers $headers = null, AbstractPart $body = null): self
     {
@@ -22,14 +22,13 @@ class NotificationEmailJf extends NotificationEmail
     }
 
     /**
-     * Pour retirer l'importance dans le sujet
-     * @return Headers
+     * Pour retirer l'importance dans le sujet.
      */
     public function getPreparedHeaders(): Headers
     {
         $headers = parent::getPreparedHeaders();
 
-        $headers->setHeaderBody("Text", "Subject", $this->getSubject());
+        $headers->setHeaderBody('Text', 'Subject', $this->getSubject());
 
         return $headers;
     }

@@ -1,15 +1,15 @@
 <?php
 
-use Symfony\Component\Ldap\Ldap;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Authenticator\MercrediAuthenticator;
 use AcMarche\Mercredi\Security\Authenticator\MercrediLdapAuthenticator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\LdapInterface;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('security', [
-        'encoders' => [
+        'password_hashers' => [
             User::class => ['algorithm' => 'auto'],
         ],
     ]);

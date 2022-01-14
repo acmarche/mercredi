@@ -38,7 +38,6 @@ final class SearchAccueilByDate extends AbstractType
     {
         $optionsResolver->setDefaults(
             [
-
             ]
         );
     }

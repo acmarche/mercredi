@@ -10,7 +10,8 @@ use Symfony\Component\Ldap\Exception\DriverNotFoundException;
 use Symfony\Component\Ldap\LdapInterface;
 
 /**
- * Copy/Paste
+ * Copy/Paste.
+ *
  * @see Ldap
  */
 class LdapMercredi implements LdapInterface
@@ -58,16 +59,14 @@ class LdapMercredi implements LdapInterface
      * Creates a new Ldap instance.
      *
      * @param string $adapter The adapter name
-     * @param array $config The adapter's configuration
+     * @param array  $config  The adapter's configuration
      *
      * @return static
      */
     public static function create(string $adapter, array $config = []): self
     {
         if ('ext_ldap' !== $adapter) {
-            throw new DriverNotFoundException(
-                sprintf('Adapter "%s" not found. Only "ext_ldap" is supported at the moment.', $adapter)
-            );
+            throw new DriverNotFoundException(sprintf('Adapter "%s" not found. Only "ext_ldap" is supported at the moment.', $adapter));
         }
 
         return new self(new Adapter($config));

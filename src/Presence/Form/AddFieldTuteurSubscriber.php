@@ -28,7 +28,7 @@ class AddFieldTuteurSubscriber implements EventSubscriberInterface
         $enfant = $presence->getEnfant();
         $relations = $enfant->getRelations();
 
-        if (count($relations) > 1) {
+        if (\count($relations) > 1) {
             $tuteurs = array_map(
                 fn ($relation) => $relation->getTuteur(),
                 $relations->toArray(),

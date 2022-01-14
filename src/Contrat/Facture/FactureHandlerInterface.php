@@ -21,6 +21,7 @@ interface FactureHandlerInterface
     public function generateByMonthForEveryone(string $monthSelected): array;
 
     public function isBilled(int $presenceId, string $type): bool;
+
     public function isSended(int $presenceId, string $type): bool;
 
     public function registerDataOnFacturePresence(

@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Facture\Handler;
 
-use DateTime;
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
@@ -24,6 +23,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use DateTime;
 
 final class FactureHandler implements FactureHandlerInterface
 {
@@ -68,10 +68,9 @@ final class FactureHandler implements FactureHandlerInterface
     }
 
     /**
-     * @param Facture $facture
+     * @param Facture     $facture
      * @param array|int[] $presencesId
      * @param array|int[] $accueilsId
-     * @return Facture
      */
     public function handleManually(FactureInterface $facture, array $presencesId, array $accueilsId): Facture
     {
@@ -92,7 +91,7 @@ final class FactureHandler implements FactureHandlerInterface
         $date = Carbon::createFromDate($year, $month, 01);
 
         $facture = $this->handleByTuteur($tuteur, $date);
-        if ($facture !== null) {
+        if (null !== $facture) {
             $this->flush();
             $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
             $this->flush();
@@ -131,7 +130,7 @@ final class FactureHandler implements FactureHandlerInterface
         $presences = $this->facturePresenceNonPayeRepository->findPresencesNonPayes($tuteur, $date->toDateTime());
         $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur, $date->toDateTime());
 
-        if ($presences === [] && $accueils === []) {
+        if ([] === $presences && [] === $accueils) {
             return null;
         }
 
@@ -148,17 +147,15 @@ final class FactureHandler implements FactureHandlerInterface
     public function isSended(int $presenceId, string $type): bool
     {
         if (($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) !== null) {
-            return $facturePresence->getFacture()->getEnvoyeLe() != null;
+            return null != $facturePresence->getFacture()->getEnvoyeLe();
         }
 
         return false;
     }
 
     /**
-     * @param Facture $facture
      * @param array|Presence[] $presences
-     * @param array|Accueil[] $accueils
-     * @return Facture
+     * @param array|Accueil[]  $accueils
      */
     private function finish(Facture $facture, array $presences, array $accueils): Facture
     {
@@ -176,7 +173,6 @@ final class FactureHandler implements FactureHandlerInterface
 
     /**
      * @param array|Presence[] $presences
-     * @param Facture $facture
      */
     private function attachPresences(Facture $facture, array $presences): void
     {
@@ -191,7 +187,6 @@ final class FactureHandler implements FactureHandlerInterface
 
     /**
      * @param array|Accueil[] $accueils
-     * @param Facture $facture
      */
     private function attachAccueils(Facture $facture, array $accueils): void
     {
@@ -246,7 +241,7 @@ final class FactureHandler implements FactureHandlerInterface
         $retards = [];
         $total = 0;
         foreach ($accueils as $accueil) {
-            if ($accueil->getHeureRetard() !== null) {
+            if (null !== $accueil->getHeureRetard()) {
                 $total += $this->accueilCalculator->calculateRetard($accueil);
                 $retards[] = $accueil->getDateJour()->format('d-m');
             }
@@ -255,7 +250,7 @@ final class FactureHandler implements FactureHandlerInterface
             $complement = new FactureComplement($facture);
             $complement->setDateLe(new DateTime());
             $complement->setForfait($total);
-            $complement->setNom('Retard pour les accueils: ' . implode(', ', $retards));
+            $complement->setNom('Retard pour les accueils: '.implode(', ', $retards));
             $facture->addFactureComplement($complement);
             $this->factureRepository->persist($complement);
         }

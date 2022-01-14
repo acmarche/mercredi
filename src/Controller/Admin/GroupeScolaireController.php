@@ -41,7 +41,7 @@ final class GroupeScolaireController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_groupe_scolaire_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_groupe_scolaire_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -81,7 +81,7 @@ final class GroupeScolaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_groupe_scolaire_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_groupe_scolaire_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, GroupeScolaire $groupeScolaire): Response
     {
@@ -110,7 +110,7 @@ final class GroupeScolaireController extends AbstractController
      */
     public function delete(Request $request, GroupeScolaire $groupeScolaire): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $groupeScolaire->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$groupeScolaire->getId(), $request->request->get('_token'))) {
             $ecoleId = $groupeScolaire->getId();
             $this->groupeScolaireRepository->remove($groupeScolaire);
             $this->groupeScolaireRepository->flush();

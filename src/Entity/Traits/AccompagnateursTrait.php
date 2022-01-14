@@ -8,9 +8,8 @@ trait AccompagnateursTrait
 {
     /**
      * @var string[]
-     *
-     * @ORM\Column(type="simple_array", nullable=true)
      */
+    #[ORM\Column(type: 'simple_array', nullable: true)]
     private array $accompagnateurs = [];
 
     /**

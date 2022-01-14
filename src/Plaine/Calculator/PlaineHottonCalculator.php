@@ -23,9 +23,7 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
     }
 
     /**
-     * @param Plaine $plaine
      * @param array|PresenceInterface[] $presences
-     * @return float
      */
     public function calculate(Plaine $plaine, array $presences): float
     {

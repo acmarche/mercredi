@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Security\Voter;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
-use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -49,10 +48,10 @@ final class AccueilVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Accueil && \in_array(
-                $attribute,
-                [self::ADD, self::SHOW, self::EDIT, self::DELETE],
-                true
-            );
+            $attribute,
+            [self::ADD, self::SHOW, self::EDIT, self::DELETE],
+            true
+        );
     }
 
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token): bool
@@ -84,16 +83,13 @@ final class AccueilVoter extends Voter
     {
         $ecoles = $this->user->getEcoles();
 
-        if (\count($ecoles) == 0) {
+        if (0 == \count($ecoles)) {
             return false;
         }
 
         return $ecoles->contains($this->enfant->getEcole());
     }
 
-    /**
-     * @return bool
-     */
     private function checkTuteur(): bool
     {
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
@@ -105,7 +101,7 @@ final class AccueilVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($this->tuteurOfUser);
 
         $enfants = array_map(
-            fn($relation) => $relation->getEnfant()->getId(),
+            fn ($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 

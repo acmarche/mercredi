@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Exception;
 use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -18,6 +17,7 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,7 +100,7 @@ final class PlaineController extends AbstractController
         $enfantsInscrits = PresenceUtils::extractEnfants($inscriptions);
         $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
 
-        $resteEnfant = count($enfantsInscrits) !== count($enfants);
+        $resteEnfant = \count($enfantsInscrits) !== \count($enfants);
 
         $facture = null;
         if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
@@ -122,7 +122,7 @@ final class PlaineController extends AbstractController
     /**
      * Etape 1 select enfant.
      *
-     * @Route("/select/enfant", name="mercredi_parent_plaine_select_enfant", methods={"GET","POST"})
+     * @Route("/select/enfant", name="mercredi_parent_plaine_select_enfant", methods={"GET", "POST"})
      */
     public function selectEnfant(Request $request): Response
     {
@@ -142,21 +142,20 @@ final class PlaineController extends AbstractController
                 $santeFiche = $this->santeHandler->init($enfant);
 
                 if (!$this->santeChecker->isComplete($santeFiche)) {
-                    $this->addFlash('danger', 'La fiche santé de ' . $enfant . ' doit être complétée');
+                    $this->addFlash('danger', 'La fiche santé de '.$enfant.' doit être complétée');
 
                     continue;
                 }
 
                 if (null !== $plaine) {
                     $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
-                    $this->addFlash('success', $enfant . ' a bien été inscrits à la plaine');
+                    $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
                 }
             }
 
             return $this->redirectToRoute(
                 'mercredi_parent_plaine_presence_confirmation',
                 [
-
                 ]
             );
         }
@@ -171,7 +170,7 @@ final class PlaineController extends AbstractController
     }
 
     /**
-     * @Route("/confirmation", name="mercredi_parent_plaine_presence_confirmation", methods={"GET","POST"})
+     * @Route("/confirmation", name="mercredi_parent_plaine_presence_confirmation", methods={"GET", "POST"})
      */
     public function confirmation(Request $request): Response
     {
@@ -198,7 +197,7 @@ final class PlaineController extends AbstractController
                 $this->plaineHandler->confirm($plaine, $tuteur);
                 $this->addFlash('success', 'La facture a bien été générée et envoyée sur votre mail');
             } catch (Exception $e) {
-                $this->addFlash('danger', 'Erreur survenue: ' . $e->getMessage());
+                $this->addFlash('danger', 'Erreur survenue: '.$e->getMessage());
             }
 
             return $this->redirectToRoute('mercredi_parent_plaine_show', ['id' => $plaine->getId()]);

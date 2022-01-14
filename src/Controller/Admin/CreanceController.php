@@ -38,7 +38,6 @@ final class CreanceController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'creances' => $creances,
-
             ]
         );
     }
@@ -83,13 +82,12 @@ final class CreanceController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'creance' => $creance,
-
             ]
         );
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_creance_edit", methods={"GET","POST"}).
+     * @Route("/{id}/edit", name="mercredi_admin_creance_edit", methods={"GET", "POST"}).
      */
     public function edit(Request $request, Creance $creance): Response
     {
@@ -121,7 +119,7 @@ final class CreanceController extends AbstractController
     {
         $tuteur = $creance->getTuteur();
 
-        if ($this->isCsrfTokenValid('delete' . $creance->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$creance->getId(), $request->request->get('_token'))) {
             $this->creanceRepository->remove($creance);
             $this->creanceRepository->flush();
 

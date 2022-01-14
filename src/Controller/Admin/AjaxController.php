@@ -2,13 +2,13 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +39,8 @@ final class AjaxController extends AbstractController
     }
 
     /**
-     * not use
+     * not use.
+     *
      * @Route("/tuteurs", name="mercredi_admin_ajax_tuteurs")
      */
     public function tuteurs(Request $request): Response
@@ -82,7 +83,8 @@ final class AjaxController extends AbstractController
     }
 
     /**
-     * not use
+     * not use.
+     *
      * @Route("/plaine/date", name="mercredi_admin_ajax_plaine_new_date")
      */
     public function plaineDate(Request $request): Response
@@ -104,7 +106,7 @@ final class AjaxController extends AbstractController
         $questions = $data->questions;
         foreach ($questions as $position => $questionId) {
             $question = $this->santeQuestionRepository->find($questionId);
-            if ($question !== null) {
+            if (null !== $question) {
                 $question->setDisplayOrder($position);
             }
         }
@@ -126,7 +128,7 @@ final class AjaxController extends AbstractController
                 $this->pageRepository->flush();
             }
 
-            return new Response('<div class="alert alert-success">Tri enregistré ' . $position . '</div>');
+            return new Response('<div class="alert alert-success">Tri enregistré '.$position.'</div>');
         }
 
         return new Response('<div class="alert alert-danger">Faill</div>');

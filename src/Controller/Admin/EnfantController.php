@@ -55,7 +55,7 @@ final class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_enfant_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_enfant_index", methods={"GET", "POST"})
      * @Route("/all/{all}", name="mercredi_admin_enfant_all", methods={"GET"})
      */
     public function index(Request $request): Response
@@ -88,7 +88,7 @@ final class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/new/{id}", name="mercredi_admin_enfant_new", methods={"GET","POST"})
+     * @Route("/new/{id}", name="mercredi_admin_enfant_new", methods={"GET", "POST"})
      */
     public function new(Request $request, Tuteur $tuteur): Response
     {
@@ -138,7 +138,7 @@ final class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_enfant_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_enfant_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Enfant $enfant): Response
     {
@@ -167,7 +167,7 @@ final class EnfantController extends AbstractController
      */
     public function delete(Request $request, Enfant $enfant): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $enfant->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
             $enfantId = $enfant->getId();
             $this->enfantRepository->remove($enfant);
             $this->enfantRepository->flush();

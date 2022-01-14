@@ -8,8 +8,8 @@ trait CreancesTrait
 {
     /**
      * @var iterable|Creance[]
-     * @ORM\OneToMany(targetEntity="AcMarche\Mercredi\Entity\Facture\Creance", mappedBy="tuteur", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'AcMarche\Mercredi\Entity\Facture\Creance', mappedBy: 'tuteur', cascade: ['remove'])]
     private iterable $creances = [];
 
     /**

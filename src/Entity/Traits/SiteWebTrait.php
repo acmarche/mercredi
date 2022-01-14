@@ -9,9 +9,9 @@ trait SiteWebTrait
 {
     /**
      * @var string|null
-     * @ORM\Column(type="string", length=150, nullable=true)
      * @Assert\Url()
      */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $site_web = null;
 
     public function getSiteWeb(): ?string

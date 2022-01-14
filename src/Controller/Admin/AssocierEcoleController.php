@@ -33,7 +33,7 @@ final class AssocierEcoleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_associate_ecole", methods={"GET","POST"})
+     * @Route("/{id}", name="mercredi_user_associate_ecole", methods={"GET", "POST"})
      */
     public function associate(Request $request, User $user): Response
     {
@@ -68,8 +68,8 @@ final class AssocierEcoleController extends AbstractController
      */
     public function dissociate(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('dissociate' . $user->getId(), $request->request->get('_token'))) {
-            $ecoleId = (int)$request->request->get('tuteur');
+        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
+            $ecoleId = (int) $request->request->get('tuteur');
             if (0 === $ecoleId) {
                 $this->addFlash('danger', 'L\'école n\'a pas été trouvée');
 

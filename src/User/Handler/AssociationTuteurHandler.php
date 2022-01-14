@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AssociationTuteurHandler
@@ -21,15 +22,15 @@ final class AssociationTuteurHandler
     private UserEmailFactory $userEmailFactory;
 
     public function __construct(
-        TuteurRepository   $tuteurRepository,
-        UserFactory        $userFactory,
+        TuteurRepository $tuteurRepository,
+        UserFactory $userFactory,
         NotificationMailer $notificationMailer,
-        UserEmailFactory   $userEmailFactory,
-        FlashBagInterface  $flashBag
-    )
-    {
+        UserEmailFactory $userEmailFactory,
+        RequestStack $requestStack
+    ) {
         $this->tuteurRepository = $tuteurRepository;
-        $this->flashBag = $flashBag;
+
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
         $this->userFactory = $userFactory;
         $this->notificationMailer = $notificationMailer;
         $this->userEmailFactory = $userEmailFactory;
@@ -43,7 +44,6 @@ final class AssociationTuteurHandler
                 $associateUserTuteurDto->setTuteur($tuteur);
             }
         } catch (NonUniqueResultException $e) {
-
         }
     }
 
@@ -52,7 +52,7 @@ final class AssociationTuteurHandler
         $tuteur = $associateUserTuteurDto->getTuteur();
         $user = $associateUserTuteurDto->getUser();
 
-        if ($this->tuteurRepository->getTuteursByUser($user) !== []) {
+        if ([] !== $this->tuteurRepository->getTuteursByUser($user)) {
             //remove old tuteur
             $user->getTuteurs()->clear();
         }

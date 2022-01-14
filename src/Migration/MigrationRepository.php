@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Migration;
 
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
@@ -98,7 +97,7 @@ class MigrationRepository
     public function getTuteur(int $tuteurId): ?Tuteur
     {
         $tuteurOld = $this->pdo->getAllWhere('tuteur', 'id = '.$tuteurId, true);
-        $slug = preg_replace("#_#", '-', $tuteurOld->slugname);
+        $slug = preg_replace('#_#', '-', $tuteurOld->slugname);
 
         if (($tuteur = $this->tuteurRepository->findOneBy(['slug' => $slug])) === null) {
             $tuteur = $this->tuteurRepository->findOneBy(
@@ -112,7 +111,7 @@ class MigrationRepository
     public function getEnfant(int $enfantId): ?Enfant
     {
         $enfantOld = $this->pdo->getAllWhere('enfant', 'id = '.$enfantId, true);
-        $slug = preg_replace("#_#", '-', $enfantOld->slugname);
+        $slug = preg_replace('#_#', '-', $enfantOld->slugname);
 
         if (($enfant = $this->enfantRepository->findOneBy(['slug' => $slug])) === null) {
             $enfant = $this->enfantRepository->findOneBy(
@@ -195,7 +194,7 @@ class MigrationRepository
         $tuteur = $this->getTuteur($tuteurId);
 
         $presence = $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
-        if ($presence === null) {
+        if (null === $presence) {
             dd(
                 $enfant->getId().' '.$enfant->getNom().' '.$enfant->getPrenom().' '.$tuteur->getId(
                 ).' '.' '.$tuteur->getNom().' '.$tuteur->getPrenom().' '.$jour->getDateJour()->format(

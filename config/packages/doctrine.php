@@ -10,7 +10,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mappings' => [
                     'AcMarche\Mercredi' => [
                         'is_bundle' => false,
-                        'type' => 'annotation',
                         'dir' => '%kernel.project_dir%/src/AcMarche/Mercredi/src/Entity',
                         'prefix' => 'AcMarche\Mercredi',
                         'alias' => 'AcMarche\Mercredi',

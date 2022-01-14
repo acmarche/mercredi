@@ -40,7 +40,7 @@ final class FactureController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_parent_facture_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_parent_facture_index", methods={"GET", "POST"})
      */
     public function index(): Response
     {

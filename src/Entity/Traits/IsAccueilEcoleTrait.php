@@ -8,8 +8,8 @@ trait IsAccueilEcoleTrait
 {
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private bool $accueil_ecole = false;
 
     public function isAccueilEcole(): bool

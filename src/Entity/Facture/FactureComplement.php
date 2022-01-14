@@ -15,10 +15,10 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureComplementRepository")
- * @ORM\Table("facture_complement")
  * @AcMarcheValidator\PourcentageOrForfait()
  */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Facture\Repository\FactureComplementRepository')]
+#[ORM\Table(name: 'facture_complement')]
 class FactureComplement implements TimestampableInterface, UuidableInterface
 {
     use IdTrait;
@@ -26,30 +26,24 @@ class FactureComplement implements TimestampableInterface, UuidableInterface
     use FactureTrait;
     use UuidableTrait;
     use TimestampableTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="factureComplements")
-     */
+    #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'factureComplements')]
     private FactureInterface $facture;
     /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      * @Assert\Range(
      *      min = 0
      * )
      */
+    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: true)]
     private ?float $forfait = null;
     /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      * @Assert\Range(
      *      min = 0,
      *      max = 100
      *)
      */
+    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: true)]
     private ?float $pourcentage = null;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=false)
-     */
+    #[ORM\Column(type: 'datetime', nullable: false)]
     private ?DateTimeInterface $dateLe = null;
 
     public function __construct(Facture $facture)

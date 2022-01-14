@@ -35,7 +35,7 @@ final class TuteurRepository extends ServiceEntityRepository
             ->leftJoin('tuteur.relations', 'relations', 'WITH')
             ->addSelect('relations')
             ->andWhere('tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword OR tuteur.email_conjoint LIKE :keyword OR tuteur.email LIKE :keyword')
-            ->setParameter('keyword', '%' . $keyword . '%')
+            ->setParameter('keyword', '%'.$keyword.'%')
             ->andwhere('tuteur.archived = :archive')
             ->setParameter('archive', $archived)
             ->addOrderBy('tuteur.nom', 'ASC')

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Parameter;
 
 class Option

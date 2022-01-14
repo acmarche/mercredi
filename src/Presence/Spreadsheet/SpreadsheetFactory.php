@@ -13,7 +13,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use IntlDateFormatter;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use function count;
 
 final class SpreadsheetFactory
 {
@@ -55,15 +54,15 @@ final class SpreadsheetFactory
          */
         $ligne = 1;
         $worksheet
-            ->setCellValue('A' . $ligne, self::NOM)
-            ->setCellValue('B' . $ligne, 'Prénom')
-            ->setCellValue('C' . $ligne, 'Né le')
-            ->setCellValue('D' . $ligne, 'Groupe');
+            ->setCellValue('A'.$ligne, self::NOM)
+            ->setCellValue('B'.$ligne, 'Prénom')
+            ->setCellValue('C'.$ligne, 'Né le')
+            ->setCellValue('D'.$ligne, 'Groupe');
 
         $colonne = 'E';
 
         foreach ($datePeriod as $dateTime) {
-            $worksheet->setCellValue($colonne . $ligne, DateUtils::formatFr($dateTime, IntlDateFormatter::SHORT));
+            $worksheet->setCellValue($colonne.$ligne, DateUtils::formatFr($dateTime, IntlDateFormatter::SHORT));
             ++$colonne;
         }
 
@@ -75,14 +74,14 @@ final class SpreadsheetFactory
             $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
 
             $worksheet
-                ->setCellValue($colonne . $ligne, $enfant->getNom())
-                ->setCellValue(++$colonne . $ligne, $enfant->getPrenom())
-                ->setCellValue(++$colonne . $ligne, $neLe)
-                ->setCellValue(++$colonne . $ligne, $groupe->getNom());
+                ->setCellValue($colonne.$ligne, $enfant->getNom())
+                ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
+                ->setCellValue(++$colonne.$ligne, $neLe)
+                ->setCellValue(++$colonne.$ligne, $groupe->getNom());
 
             foreach ($datePeriod as $dateTime) {
                 ++$colonne;
-                $worksheet->setCellValue($colonne . $ligne, 1);
+                $worksheet->setCellValue($colonne.$ligne, 1);
             }
             ++$ligne;
         }
@@ -101,14 +100,14 @@ final class SpreadsheetFactory
         $ligne = 1;
         $colonne = 'A';
         $worksheet
-            ->setCellValue($colonne . $ligne, self::NOM)
-            ->setCellValue(++$colonne . $ligne, 'Prénom')
-            ->setCellValue(++$colonne . $ligne, 'Né le');
+            ->setCellValue($colonne.$ligne, self::NOM)
+            ->setCellValue(++$colonne.$ligne, 'Prénom')
+            ->setCellValue(++$colonne.$ligne, 'Né le');
 
         foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
-            $worksheet->setCellValue(++$colonne . $ligne, $jourListing->getJour()->getDateJour()->format(self::FORMAT));
+            $worksheet->setCellValue(++$colonne.$ligne, $jourListing->getJour()->getDateJour()->format(self::FORMAT));
         }
-        $worksheet->setCellValue(++$colonne . $ligne, 'Total');
+        $worksheet->setCellValue(++$colonne.$ligne, 'Total');
 
         /**
          * Pour chaque enfant on affiche present ou pas et son total.
@@ -119,9 +118,9 @@ final class SpreadsheetFactory
 
             $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
             $worksheet
-                ->setCellValue($colonne . $ligne, $enfant->getNom())
-                ->setCellValue(++$colonne . $ligne, $enfant->getPrenom())
-                ->setCellValue(++$colonne . $ligne, $neLe);
+                ->setCellValue($colonne.$ligne, $enfant->getNom())
+                ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
+                ->setCellValue(++$colonne.$ligne, $neLe);
 
             $countPresences = 0;
             foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
@@ -130,9 +129,9 @@ final class SpreadsheetFactory
                     $present = 1;
                     ++$countPresences;
                 }
-                $worksheet->setCellValue(++$colonne . $ligne, $present);
+                $worksheet->setCellValue(++$colonne.$ligne, $present);
             }
-            $worksheet->setCellValue(++$colonne . $ligne, $countPresences);
+            $worksheet->setCellValue(++$colonne.$ligne, $countPresences);
             ++$ligne;
         }
 
@@ -140,15 +139,15 @@ final class SpreadsheetFactory
          * Total enfants et total enfants par jour.
          */
         $colonne = 'A';
-        $worksheet->setCellValue($colonne . $ligne, count($listingPresenceByMonth->getEnfants()) . ' enfants');
+        $worksheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getEnfants()).' enfants');
         $colonne = 'D';
 
         foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
-            $worksheet->setCellValue($colonne . $ligne, count($jourListing->getEnfants()));
+            $worksheet->setCellValue($colonne.$ligne, \count($jourListing->getEnfants()));
             ++$colonne;
         }
 
-        $worksheet->setCellValue($colonne . $ligne, count($listingPresenceByMonth->getPresences()));
+        $worksheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getPresences()));
 
         return $spreadsheet;
     }
@@ -161,9 +160,9 @@ final class SpreadsheetFactory
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
         $worksheet
-            ->setCellValue('A' . self::COLONNE, self::NOM)
-            ->setCellValue('B' . self::COLONNE, 'Prénom')
-            ->setCellValue('C' . self::COLONNE, 'Né le');
+            ->setCellValue('A'.self::COLONNE, self::NOM)
+            ->setCellValue('B'.self::COLONNE, 'Prénom')
+            ->setCellValue('C'.self::COLONNE, 'Né le');
 
         $ligne = 3;
 
@@ -173,9 +172,9 @@ final class SpreadsheetFactory
             $colonne = 'A';
             $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
             $worksheet
-                ->setCellValue($colonne . $ligne, $enfant->getNom())
-                ->setCellValue(++$colonne . $ligne, $enfant->getPrenom())
-                ->setCellValue(++$colonne . $ligne, $neLe);
+                ->setCellValue($colonne.$ligne, $enfant->getNom())
+                ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
+                ->setCellValue(++$colonne.$ligne, $neLe);
             ++$ligne;
         }
 

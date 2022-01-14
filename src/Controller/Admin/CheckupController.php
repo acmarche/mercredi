@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use DateTime;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
@@ -15,6 +14,7 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,7 +72,6 @@ final class CheckupController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/checkup/index.html.twig',
             [
-
             ]
         );
     }
@@ -113,7 +112,6 @@ final class CheckupController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/default/index.html.twig',
             [
-
             ]
         );
     }
@@ -130,15 +128,15 @@ final class CheckupController extends AbstractController
                 $bad[] = ['error' => 'Aucun rôle', 'user' => $user];
                 continue;
             }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_PARENT) && count($user->getTuteurs()) === 0) {
+            if ($user->hasRole(MercrediSecurityRole::ROLE_PARENT) && 0 === \count($user->getTuteurs())) {
                 $bad[] = ['error' => 'Rôle parent, mais aucun parent associé', 'user' => $user];
                 continue;
             }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_ANIMATEUR) && count($user->getAnimateurs()) === 0) {
+            if ($user->hasRole(MercrediSecurityRole::ROLE_ANIMATEUR) && 0 === \count($user->getAnimateurs())) {
                 $bad[] = ['error' => 'Rôle animateur, mais aucun animateur associé', 'user' => $user];
                 continue;
             }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_ECOLE) && count($user->getEcoles()) === 0) {
+            if ($user->hasRole(MercrediSecurityRole::ROLE_ECOLE) && 0 === \count($user->getEcoles())) {
                 $bad[] = ['error' => 'Rôle école, mais aucune école associée', 'user' => $user];
                 continue;
             }
@@ -208,7 +206,7 @@ final class CheckupController extends AbstractController
             );
             foreach ($facturePresences as $presenceFactured) {
                 $presence = $this->presenceRepository->find($presenceFactured->getPresenceId());
-                if ($presence !== null) {
+                if (null !== $presence) {
                     $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
                     $prix = $this->presenceCalculator->getPrixByOrdre($presence, $ordre);
                 }
@@ -220,10 +218,10 @@ final class CheckupController extends AbstractController
                     $data[$i]['facture'] = $facture;
                     $data[$i]['presences'][] = [
                         'object' => $presence,
-                        'prix' => 'Passe de ' . $prixFactured . ' € à ' . $prix . ' €',
-                        'ordre' => 'Passe de ' . $ordreFactured . ' à ' . $ordre,
+                        'prix' => 'Passe de '.$prixFactured.' € à '.$prix.' €',
+                        'ordre' => 'Passe de '.$ordreFactured.' à '.$ordre,
                     ];
-                    if ($presence !== null) {
+                    if (null !== $presence) {
                         $newcout = $this->presenceCalculator->calculate(
                             $presence
                         );
@@ -237,7 +235,7 @@ final class CheckupController extends AbstractController
 
             $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
             $total += $facture->factureDetailDto->total;
-            $i++;
+            ++$i;
         }
 
         return $this->render(

@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait IdOldTrait
 {
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     *
      * @var int|null
      */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $idOld = null;
 
     public function getIdOld(): ?int
@@ -22,5 +21,4 @@ trait IdOldTrait
     {
         $this->idOld = $idOld;
     }
-
 }

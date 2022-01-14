@@ -41,7 +41,7 @@ final class PageController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_page_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_page_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -81,7 +81,7 @@ final class PageController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_page_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_page_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Page $page): Response
     {
@@ -110,7 +110,7 @@ final class PageController extends AbstractController
      */
     public function delete(Request $request, Page $page): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $page->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $pageId = $page->getId();
             $this->pageRepository->remove($page);
             $this->pageRepository->flush();

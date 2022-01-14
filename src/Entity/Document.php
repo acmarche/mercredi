@@ -15,9 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Document\Repository\DocumentRepository")
  * @Vich\Uploadable
  */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Document\Repository\DocumentRepository')]
 class Document implements TimestampableInterface, UuidableInterface
 {
     use IdTrait;
@@ -25,15 +25,14 @@ class Document implements TimestampableInterface, UuidableInterface
     use TimestampableTrait;
     use NomTrait;
     use FileTrait;
-
     /**
      * @Vich\UploadableField(mapping="mercredi_document", fileNameProperty="fileName", mimeType="mimeType", size="fileSize")
      *
      * note This is not a mapped field of entity metadata, just a simple property.
      * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = {"application/pdf", "application/x-pdf", "image/*"},
-     *     mimeTypesMessage = "Uniquement des images ou Pdf"
+     *     maxSize="10M",
+     *     mimeTypes={"application/pdf", "application/x-pdf", "image/*"},
+     *     mimeTypesMessage="Uniquement des images ou Pdf"
      * )
      */
     private ?File $file = null;

@@ -24,7 +24,6 @@ final class InscriptionsType extends AbstractType
     {
         $optionsResolver->setDefaults(
             [
-
             ]
         );
     }

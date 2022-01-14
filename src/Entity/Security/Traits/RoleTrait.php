@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait RoleTrait
 {
-    /**
-     * @ORM\Column(type="array")
-     */
+    #[ORM\Column(type: 'array')]
     private array $roles = [];
 
     public function addRole(string $role): void

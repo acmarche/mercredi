@@ -16,9 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Organisation\Repository\OrganisationRepository")
  * @Vich\Uploadable
  */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Organisation\Repository\OrganisationRepository')]
 class Organisation
 {
     use IdTrait;
@@ -29,20 +29,15 @@ class Organisation
     use TelephonieTrait;
     use RemarqueTrait;
     use PhotoTrait;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $initiale = null;
-
     /**
      * overload pour nullable false.
      *
      * @Assert\Email()
-     * @ORM\Column(name="email", type="string", length=50, nullable=false)
      */
+    #[ORM\Column(name: 'email', type: 'string', length: 50, nullable: false)]
     private ?string $email = null;
-
     /**
      * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
      *

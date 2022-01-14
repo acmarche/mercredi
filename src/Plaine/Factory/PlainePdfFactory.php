@@ -44,7 +44,7 @@ class PlainePdfFactory
         $presences = $this->plainePresenceRepository->findByPlaine($plaine);
         /**
          * par enfant je dois avoir quel tuteur en garde
-         * jours presents
+         * jours presents.
          */
         $data = [];
         $dataEnfants = [];
@@ -64,12 +64,12 @@ class PlainePdfFactory
             $enfantId = $enfant->getId();
             $age = $enfant->getAge($firstDay, true);
             $groupeScolaire = $this->grouping->findGroupeScolaireByAge($age);
-            if ($groupeScolaire === null) {
+            if (null === $groupeScolaire) {
                 $groupeScolaire = $groupeForce;
             }
-            $stats[$groupeScolaire->getId()][$jour->getId()]['total'] += 1;
+            ++$stats[$groupeScolaire->getId()][$jour->getId()]['total'];
             if ($age < 6) {
-                $stats[$groupeScolaire->getId()][$jour->getId()]['moins6'] += 1;
+                ++$stats[$groupeScolaire->getId()][$jour->getId()]['moins6'];
             }
             $dataEnfants[$enfantId]['enfant'] = $enfant;
             $dataEnfants[$enfantId]['tuteur'] = $tuteur;
@@ -95,18 +95,18 @@ class PlainePdfFactory
         $name = $plaine->getSlug();
 
         $this->pdf->setOption('footer-right', '[page]/[toPage]');
-        if (count($dates) > 6) {
+        if (\count($dates) > 6) {
             $this->pdf->setOption('orientation', 'landscape');
         }
 
-        return $this->downloadPdf($html, $name . '.pdf');
+        return $this->downloadPdf($html, $name.'.pdf');
     }
 
     private function getImagesBase64(): array
     {
-        $root = $this->parameterBag->get('kernel.project_dir') . '/public/bundles/acmarchemercredi/images/';
-        $ok = $root . 'check_ok.jpg';
-        $ko = $root . 'check_ko.jpg';
+        $root = $this->parameterBag->get('kernel.project_dir').'/public/bundles/acmarchemercredi/images/';
+        $ok = $root.'check_ok.jpg';
+        $ko = $root.'check_ko.jpg';
         $data = [];
         $data['ok'] = base64_encode(file_get_contents($ok));
         $data['ko'] = base64_encode(file_get_contents($ko));

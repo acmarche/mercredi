@@ -32,15 +32,16 @@ final class DateUtils
      * @param string $mois 05/2020
      *
      * @throws Exception
+     *
      * @return DateTime|DateTimeImmutable
      */
     public static function createDateTimeFromDayMonth(string $mois): \DateTime
     {
-        if ($date = DateTime::createFromFormat('d/m/Y', '01/' . $mois)) {
+        if ($date = DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
             return $date;
         }
 
-        throw new Exception('Mauvais format de date: ' . $mois);
+        throw new Exception('Mauvais format de date: '.$mois);
     }
 
     public static function formatFr(DateTimeInterface $dateTime, ?int $format = IntlDateFormatter::FULL): string
@@ -159,11 +160,8 @@ final class DateUtils
         return Carbon::parse($firstDayOfWeek)->monthsUntil($lastDayOffWeek);
     }
 
-
     /**
      * @param Enfant[] $enfants
-     *
-     * @return boolean
      */
     public static function hasTwins(array $enfants): bool
     {
@@ -174,6 +172,6 @@ final class DateUtils
             }
         }
 
-        return count($birthdays) !== count(array_unique($birthdays));
+        return \count($birthdays) !== \count(array_unique($birthdays));
     }
 }

@@ -2,29 +2,24 @@
 
 namespace AcMarche\Mercredi\Entity\Sante;
 
-
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\AccompagnateursTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
 use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Validator as AcMarcheSanteAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table("sante_fiche", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"enfant_id"})
- * }))
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteFicheRepository")
- * @UniqueEntity(fields={"enfant"}, message="L'enfant a déjà une fiche santé")
- */
+#[ORM\Entity(repositoryClass: SanteFicheRepository::class)]
+#[ORM\Table(name: 'sante_fiche')]
+#[ORM\UniqueConstraint(columns: ['enfant_id'])]
 class SanteFiche implements TimestampableInterface
 {
     use TimestampableTrait;
@@ -33,41 +28,31 @@ class SanteFiche implements TimestampableInterface
     use AccompagnateursTrait;
     use RemarqueTrait;
     use IdOldTrait;
-
     /**
-     * @ORM\Column(type="text", nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'text', nullable: false)]
     private ?string $personne_urgence = null;
-
     /**
-     *
-     * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'string', length: 200, nullable: false)]
     private ?string $medecin_nom = null;
-
     /**
-     *
-     * @ORM\Column(type="string", length=200, nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'string', length: 200, nullable: false)]
     private ?string $medecin_telephone = null;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Enfant::class, inversedBy="sante_fiche")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\OneToOne(targetEntity: Enfant::class, inversedBy: 'sante_fiche')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Enfant $enfant = null;
-
     /**
      * Pour le cascade.
      *
      * @var SanteReponse[]
-     * @ORM\OneToMany(targetEntity=SanteReponse::class, mappedBy="sante_fiche", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: SanteReponse::class, mappedBy: 'sante_fiche', cascade: ['remove'])]
     private iterable $reponses;
-
     /**
      * @var SanteQuestion[]|ArrayCollection
      * @AcMarcheSanteAssert\ResponseIsComplete()
@@ -83,7 +68,7 @@ class SanteFiche implements TimestampableInterface
 
     public function __toString(): string
     {
-        return 'Fiche ' . $this->id;
+        return 'Fiche '.$this->id;
     }
 
     public function getPersonneUrgence(): ?string

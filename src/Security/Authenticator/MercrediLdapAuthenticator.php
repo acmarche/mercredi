@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AcMarche\Mercredi\Security\Authenticator;
 
 use AcMarche\Mercredi\Parameter\Option;
@@ -20,11 +19,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgrade
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
- * Essayer de voir les events
+ * Essayer de voir les events.
+ *
  * @see UserCheckerListener::postCheckCredentials
  * @see UserProviderListener::checkPassport
  * @see CheckCredentialsListener
@@ -51,7 +50,7 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
         $this->parameterBag = $parameterBag;
     }
 
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('username', '');
         $password = $request->request->get('password', '');

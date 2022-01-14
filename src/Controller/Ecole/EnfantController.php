@@ -115,7 +115,7 @@ final class EnfantController extends AbstractController
     }
 
     /**
-     * @Route("/{uuid}/edit", name="mercredi_ecole_enfant_edit", methods={"GET","POST"})
+     * @Route("/{uuid}/edit", name="mercredi_ecole_enfant_edit", methods={"GET", "POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function edit(Request $request, Enfant $enfant): Response

@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Facture\FactureInterface;
 interface FacturePlaineHandlerInterface
 {
     /**
-     * set mois, nom plaine, plaine
+     * set mois, nom plaine, plaine.
      */
     public function newInstance(Plaine $plaine, Tuteur $tuteur): FactureInterface;
 

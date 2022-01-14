@@ -33,7 +33,7 @@ final class AssocierAnimateurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_user_associate_animateur", methods={"GET","POST"})
+     * @Route("/{id}", name="mercredi_user_associate_animateur", methods={"GET", "POST"})
      */
     public function associate(Request $request, User $user): Response
     {
@@ -68,8 +68,8 @@ final class AssocierAnimateurController extends AbstractController
      */
     public function dissociate(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('dissociate' . $user->getId(), $request->request->get('_token'))) {
-            $animateurId = (int)$request->request->get('animateur');
+        if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
+            $animateurId = (int) $request->request->get('animateur');
             if (0 === $animateurId) {
                 $this->addFlash('danger', 'L\'animateur n\'a pas été trouvé');
 

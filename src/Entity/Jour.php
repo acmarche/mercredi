@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity;
 
-
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineTrait;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -28,12 +27,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"date_jour", "pedagogique", "plaine_id"}),
- * })
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Jour\Repository\JourRepository")
  * @UniqueEntity("date_jour", "pedagogique", "plaine")
  */
+#[ORM\Table]
+#[ORM\UniqueConstraint(columns: ['date_jour', 'pedagogique', 'plaine_id'])]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Jour\Repository\JourRepository')]
 class Jour implements TimestampableInterface
 {
     use IdTrait;
@@ -47,37 +45,28 @@ class Jour implements TimestampableInterface
     use AnimateursTrait;
     use PlaineTrait;
     use IdOldTrait;
-
     /**
      * @var DateTime|null
      *
-     * @ORM\Column(name="date_jour", type="date")
      * @Assert\Type("datetime")
      */
+    #[ORM\Column(name: 'date_jour', type: 'date')]
     private ?DateTimeInterface $date_jour;
-
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
-     * @ORM\OneToMany(targetEntity=Presence::class, mappedBy="jour", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'jour', cascade: ['remove'])]
     private iterable $presences;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="jours")
-     */
+    #[ORM\ManyToOne(targetEntity: Plaine::class, inversedBy: 'jours')]
     private ?Plaine $plaine = null;
-
     /**
      * @var Animateur[]
-     * @ORM\ManyToMany(targetEntity=Animateur::class, mappedBy="jours")
      */
+    #[ORM\ManyToMany(targetEntity: Animateur::class, mappedBy: 'jours')]
     private iterable $animateurs;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Ecole::class)
-     */
+    #[ORM\ManyToMany(targetEntity: Ecole::class)]
     private iterable $ecoles;
 
     /**

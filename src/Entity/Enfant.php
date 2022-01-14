@@ -43,80 +43,65 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity()
  * @Vich\Uploadable
  */
+#[ORM\Entity]
 class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface
 {
-    use IdTrait,
-        NomTrait,
-        PrenomTrait,
-        BirthdayTrait,
-        SexeTrait,
-        PhotoAutorisationTrait,
-        RemarqueTrait,
-        OrdreTrait,
-        PhotoTrait,
-        UserAddTrait,
-        SluggableTrait,
-        EcoleTrait,
-        RelationsTrait,
-        ArchiveTrait,
-        TimestampableTrait,
-        TelephonesTrait,
-        SanteFicheTrait,
-        FicheSanteIsCompleteTrait,
-        UuidableTrait,
-        GroupeScolaireTrait,
-        AnneeScolaireTrait,
-        PresencesTrait,
-        AccueilsTrait,
-        EnfantNotesTrait,
-        IsAccueilEcoleTrait,
-        RegistreNationalTrait,
-        PoidsTrait,
-        IdOldTrait;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=false)
-     */
+    use IdTrait;
+    use NomTrait;
+    use PrenomTrait;
+    use BirthdayTrait;
+    use SexeTrait;
+    use PhotoAutorisationTrait;
+    use RemarqueTrait;
+    use OrdreTrait;
+    use PhotoTrait;
+    use UserAddTrait;
+    use SluggableTrait;
+    use EcoleTrait;
+    use RelationsTrait;
+    use ArchiveTrait;
+    use TimestampableTrait;
+    use TelephonesTrait;
+    use SanteFicheTrait;
+    use FicheSanteIsCompleteTrait;
+    use UuidableTrait;
+    use GroupeScolaireTrait;
+    use AnneeScolaireTrait;
+    use PresencesTrait;
+    use AccueilsTrait;
+    use EnfantNotesTrait;
+    use IsAccueilEcoleTrait;
+    use RegistreNationalTrait;
+    use PoidsTrait;
+    use IdOldTrait;
+    #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $photo_autorisation;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=AnneeScolaire::class, inversedBy="enfants")
-     */
+    #[ORM\ManyToOne(targetEntity: AnneeScolaire::class, inversedBy: 'enfants')]
     private ?AnneeScolaire $annee_scolaire = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=GroupeScolaire::class, inversedBy="enfants")
-     */
+    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'enfants')]
     private ?GroupeScolaire $groupe_scolaire = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Ecole::class, inversedBy="enfants")
-     */
+    #[ORM\ManyToOne(targetEntity: Ecole::class, inversedBy: 'enfants')]
     private ?Ecole $ecole = null;
-
     /**
      * @var Relation[]
-     * @ORM\OneToMany(targetEntity=Relation::class, mappedBy="enfant", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Relation::class, mappedBy: 'enfant', cascade: ['remove'])]
     private iterable $relations;
-
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
-     * @ORM\OneToMany(targetEntity=Presence::class, mappedBy="enfant", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'enfant', cascade: ['remove'])]
     private iterable $presences;
-
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Accueil[]
-     * @ORM\OneToMany(targetEntity=Accueil::class, mappedBy="enfant", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: Accueil::class, mappedBy: 'enfant', cascade: ['remove'])]
     private iterable $accueils;
 
     public function __construct()
@@ -131,7 +116,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
 
     public function __toString(): string
     {
-        return mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
     public function getSluggableFields(): array

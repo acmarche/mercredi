@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\Fixture\Faker;
 
-use DateTimeImmutable;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DateTime;
+use DateTimeImmutable;
 use Faker\Provider\Base as BaseProvider;
 
 /**

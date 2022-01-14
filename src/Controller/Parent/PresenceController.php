@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -20,6 +19,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,9 +39,7 @@ final class PresenceController extends AbstractController
     private SanteHandler $santeHandler;
     private FacturePresenceRepository $facturePresenceRepository;
     private PresenceCalculatorInterface $presenceCalculator;
-    /**
-     * @var PresenceDaysProviderInterface
-     */
+
     private PresenceDaysProviderInterface $presenceDaysProvider;
 
     public function __construct(
@@ -88,7 +86,7 @@ final class PresenceController extends AbstractController
     /**
      * Etape 2.
      *
-     * @Route("/select/jour/{uuid}", name="mercredi_parent_presence_select_jours", methods={"GET","POST"})
+     * @Route("/select/jour/{uuid}", name="mercredi_parent_presence_select_jours", methods={"GET", "POST"})
      * @IsGranted("enfant_edit", subject="enfant")
      */
     public function selectJours(Request $request, Enfant $enfant): Response
@@ -155,7 +153,7 @@ final class PresenceController extends AbstractController
     public function delete(Request $request, Presence $presence): RedirectResponse
     {
         $enfant = $presence->getEnfant();
-        if ($this->isCsrfTokenValid('delete' . $presence->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
             if (!DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 

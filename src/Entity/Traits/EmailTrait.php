@@ -10,8 +10,8 @@ trait EmailTrait
     /**
      * @var string|null
      * @Assert\Email()
-     * @ORM\Column(name="email", type="string", length=50, nullable=true)
      */
+    #[ORM\Column(name: 'email', type: 'string', length: 50, nullable: true)]
     private ?string $email = null;
 
     public function getEmail(): ?string

@@ -20,6 +20,6 @@ final class ReductionCalculator
 
     public function calculatePourcentage(float $montant, float $pourcentage): float
     {
-        return ($montant / 100 * $pourcentage);
+        return $montant / 100 * $pourcentage;
     }
 }

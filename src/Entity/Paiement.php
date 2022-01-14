@@ -12,79 +12,49 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @deprecated  for migration
- * @ORM\Table("paiement")
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Migration\PaiementRepository")
  */
+#[ORM\Table(name: 'paiement')]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Migration\PaiementRepository')]
 class Paiement
 {
     use TimestampableTrait;
     use UserAddTrait;
-
-    /**
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
-
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
     protected $montant;
-
-    /**
-     * @ORM\Column(type="date", nullable=false)
-     */
+    #[ORM\Column(type: 'date', nullable: false)]
     protected ?DateTimeInterface $date_paiement = null;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, length=150)
-     */
+    #[ORM\Column(type: 'string', nullable: true, length: 150)]
     protected ?string $type_paiement = null;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, length=150)
-     */
+    #[ORM\Column(type: 'string', nullable: true, length: 150)]
     protected ?string $mode_paiement = null;
-
-    /**
-     * @ORM\Column(type="smallint", length=2, nullable=true, options={"comment" = "1,2, suviant", "default" = "0"})
-     */
+    #[ORM\Column(type: 'smallint', length: 2, nullable: true, options: ['comment' => '1,2, suviant', 'default' => '0'])]
     protected ?int $ordre = 0;
-
-    /**
-     * @ORM\Column(type="boolean", options={"default" = "0"})
-     */
+    #[ORM\Column(type: 'boolean', options: ['default' => '0'])]
     protected bool $cloture = false;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $remarques = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Tuteur")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Tuteur')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     protected ?Tuteur $tuteur = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Enfant")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Enfant')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     protected ?Enfant $enfant = null;
 
     public function __construct()
     {
-
     }
 
     public function __toString()
     {
         $string = $this->getTypePaiement().' du ';
-        if ($this->getDatePaiement() !== null) {
+        if (null !== $this->getDatePaiement()) {
             $string .= $this->getDatePaiement()->format('d-m-Y');
         }
 

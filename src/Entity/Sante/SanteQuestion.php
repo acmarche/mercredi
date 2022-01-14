@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Entity\Sante;
 
-
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
@@ -11,53 +10,37 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("sante_question")
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository")
- */
+#[ORM\Table(name: 'sante_question')]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository')]
 class SanteQuestion
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
-
-    /**
-     * @ORM\Column(type="string", length=200)
-     */
+    #[ORM\Column(type: 'string', length: 200)]
     private ?string $nom = null;
-
     /**
      * Information complementaire necessaire.
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private bool $complement = false;
-
     /**
      * Texte d'aide pour le complement.
-     * @ORM\Column(type="string", length=180, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     private ?string $complement_label = null;
-
-    /**
-     * @ORM\Column(type="integer",nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $display_order = null;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $categorie = null;
-
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
-     * @ORM\OneToMany(targetEntity=SanteReponse::class, mappedBy="question", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: SanteReponse::class, mappedBy: 'question', cascade: ['remove'])]
     private iterable $reponse;
-
     private ?bool $reponseTxt = null;
-
     private ?string $remarque = null;
 
     public function __construct()

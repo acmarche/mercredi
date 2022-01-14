@@ -42,7 +42,7 @@ final class LoadfixturesCommand extends Command
         $helper = $this->getHelper('question');
         $purge = $input->getOption('purge');
 
-        if ($purge === null) {
+        if (null === $purge) {
             $confirmationQuestion = new ConfirmationQuestion("Voulez vous vider la base de données ? [y,N] \n", false);
             $purge = $helper->ask($input, $output, $confirmationQuestion);
         }

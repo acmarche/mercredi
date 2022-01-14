@@ -34,7 +34,7 @@ final class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_document_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_document_index", methods={"GET", "POST"})
      */
     public function index(): Response
     {
@@ -49,7 +49,7 @@ final class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/new/frompage/{id}", name="mercredi_admin_document_new_from_page", methods={"GET","POST"})
+     * @Route("/new/frompage/{id}", name="mercredi_admin_document_new_from_page", methods={"GET", "POST"})
      */
     public function new(Request $request, Page $page): Response
     {
@@ -90,7 +90,7 @@ final class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_document_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_document_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Document $document): Response
     {
@@ -119,7 +119,7 @@ final class DocumentController extends AbstractController
      */
     public function delete(Request $request, Document $document): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $document->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$document->getId(), $request->request->get('_token'))) {
             $id = $document->getId();
             $this->documentRepository->remove($document);
             $this->documentRepository->flush();

@@ -10,37 +10,33 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Reduction\Repository\ReductionRepository")
  * @AcMarcheReductionAssert\PourcentageOrForfait()
  */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Reduction\Repository\ReductionRepository')]
 class Reduction
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
-
     /**
-     *
-     * @ORM\Column(type="float", nullable=true)
      * @Assert\Range(
      *      min = 0,
      *      max = 100
      *     )
      */
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $pourcentage = null;
-
     /**
-     *
-     * @ORM\Column(type="float", nullable=true)
      * @Assert\Range(
      *      min = 0
      *     )
      */
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $forfait = null;
 
     public function __toString(): string
     {
-        return $this->getNom() . ' (' . $this->pourcentage . '%)';
+        return $this->getNom().' ('.$this->pourcentage.'%)';
     }
 
     public function getPourcentage(): ?float

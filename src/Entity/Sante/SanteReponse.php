@@ -4,40 +4,25 @@ namespace AcMarche\Mercredi\Entity\Sante;
 
 use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Table("sante_reponse", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"sante_fiche_id", "question_id"})
- * }))
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Sante\Repository\SanteReponseRepository")
- * @UniqueEntity(fields={"sante_fiche", "question"}, message="Une réponse existe déjà")
- */
+#[ORM\Entity(repositoryClass: SanteReponseRepository::class)]
+#[ORM\Table(name: 'sante_reponse')]
+#[ORM\UniqueConstraint(columns: ['sante_fiche_id', 'question_id'])]
 class SanteReponse
 {
-    use IdTrait, IdOldTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=SanteQuestion::class, inversedBy="reponse")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    use IdTrait;
+    use IdOldTrait;
+    #[ORM\ManyToOne(targetEntity: SanteQuestion::class, inversedBy: 'reponse')]
+    #[ORM\JoinColumn(nullable: false)]
     private SanteQuestion $question;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=SanteFiche::class, inversedBy="reponses", cascade={"remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: SanteFiche::class, inversedBy: 'reponses', cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private SanteFiche $sante_fiche;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $reponse;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $remarque = null;
 
     public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)

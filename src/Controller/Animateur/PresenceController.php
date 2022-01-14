@@ -34,7 +34,7 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_animateur_presence_index", methods={"GET","POST"}).
+     * @Route("/", name="mercredi_animateur_presence_index", methods={"GET", "POST"}).
      */
     public function index(): Response
     {
@@ -53,7 +53,7 @@ final class PresenceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mercredi_animateur_presence_show", methods={"GET","POST"}).
+     * @Route("/{id}", name="mercredi_animateur_presence_show", methods={"GET", "POST"}).
      */
     public function show(Jour $jour): Response
     {

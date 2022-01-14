@@ -2,10 +2,10 @@
 
 namespace AcMarche\Mercredi\User\Repository;
 
-use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -28,8 +28,9 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
 
     /**
      * @see UserProviderListener::checkPassport
-     * @param string $username
+     *
      * @return int|mixed|string|null
+     *
      * @throws NonUniqueResultException
      */
     public function loadUserByIdentifier(string $username)
@@ -92,12 +93,12 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
 
         if ($name) {
             $queryBuilder->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
-                ->setParameter('nom', '%' . $name . '%');
+                ->setParameter('nom', '%'.$name.'%');
         }
 
         if ($role) {
             $queryBuilder->andWhere('user.roles LIKE :role')
-                ->setParameter('role', '%' . $role . '%');
+                ->setParameter('role', '%'.$role.'%');
         }
 
         return $queryBuilder

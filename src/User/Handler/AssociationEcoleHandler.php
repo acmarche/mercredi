@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AssociationEcoleHandler
@@ -15,9 +16,9 @@ final class AssociationEcoleHandler
 
     public function __construct(
         EcoleRepository $ecoleRepository,
-        FlashBagInterface $flashBag
+        RequestStack $requestStack
     ) {
-        $this->flashBag = $flashBag;
+        $this->flashBag = $requestStack->getSession()?->getFlashBag();
         $this->ecoleRepository = $ecoleRepository;
     }
 
@@ -26,7 +27,7 @@ final class AssociationEcoleHandler
         $ecoles = $associateUserEcoleDto->getEcoles();
         $user = $associateUserEcoleDto->getUser();
 
-        if ($this->ecoleRepository->getEcolesByUser($user) !== []) {
+        if ([] !== $this->ecoleRepository->getEcolesByUser($user)) {
             //remove old ecoles
             $user->getEcoles()->clear();
         }

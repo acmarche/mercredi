@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait CommunicationTrait
 {
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: true, unique: true)]
     private ?string $communication = null;
 
     public function getCommunication(): ?string

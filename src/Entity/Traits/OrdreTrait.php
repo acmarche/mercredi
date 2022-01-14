@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait OrdreTrait
 {
     /**
-     * @ORM\Column(type="smallint", length=2, nullable=false)
      * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'smallint', length: 2, nullable: false)]
     private int $ordre = 0;
 
     public function getOrdre(): int

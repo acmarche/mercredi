@@ -7,7 +7,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
 use Carbon\Carbon;
 use Exception;
 
-class FeatureContext extends RawMinkContext
+class FeatureContext //extends RawMinkContext
 {
     /**
      * @Given I am logged in as an admin
@@ -172,7 +172,7 @@ class FeatureContext extends RawMinkContext
      */
     public function clickLinkWeek(): void
     {
-        $link = 's' . Carbon::today()->week;
+        $link = 's'.Carbon::today()->week;
         $link = $this->fixStepArgument($link);
         $this->getSession()->getPage()->clickLink($link);
     }
@@ -200,7 +200,7 @@ class FeatureContext extends RawMinkContext
         $sContent = $this->getSession()->getPage()->getText();
         $iFound = substr_count($sContent, $sText);
         if ($iExpected !== $iFound) {
-            throw new Exception('Found ' . $iFound . ' occurences of "' . $sText . '" when expecting ' . $iExpected);
+            throw new Exception('Found '.$iFound.' occurences of "'.$sText.'" when expecting '.$iExpected);
         }
     }
 

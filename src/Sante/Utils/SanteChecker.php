@@ -9,8 +9,6 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
-use function count;
-
 final class SanteChecker
 {
     private SanteQuestionRepository $santeQuestionRepository;
@@ -41,7 +39,7 @@ final class SanteChecker
             return false;
         }
 
-        return (bool)$enfant->getAnneeScolaire();
+        return (bool) $enfant->getAnneeScolaire();
     }
 
     public function isComplete(SanteFiche $santeFiche): bool
@@ -53,7 +51,7 @@ final class SanteChecker
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
         $questions = $this->santeQuestionRepository->findAllOrberByPosition();
 
-        if (count($reponses) < count($questions)) {
+        if (\count($reponses) < \count($questions)) {
             return false;
         }
 
@@ -64,11 +62,10 @@ final class SanteChecker
             }
         }
 
-        return count($santeFiche->getAccompagnateurs()) >= 1;
+        return \count($santeFiche->getAccompagnateurs()) >= 1;
     }
 
     /**
-     * @param SanteFiche $santeFiche
      * @return SanteQuestion[]
      */
     public function getQuestionsNotOk(SanteFiche $santeFiche): array
@@ -78,7 +75,7 @@ final class SanteChecker
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
             if (!$this->checkQuestionOk($question)) {
-                $questionsnotOk [] = $question;
+                $questionsnotOk[] = $question;
             }
         }
 
@@ -88,19 +85,20 @@ final class SanteChecker
     public function checkQuestionOk(SanteQuestion $santeQuestion): bool
     {
         //pas repondu par oui ou non
-        if ($santeQuestion->getReponseTxt() === null) {
+        if (null === $santeQuestion->getReponseTxt()) {
             return false;
         }
         //si complement on verifie si mis
-        if ($santeQuestion->getComplement() === true) {
+        if (true === $santeQuestion->getComplement()) {
             //on repond non
-            if ((int)$santeQuestion->getReponseTxt() === 0) {
+            if (0 === (int) $santeQuestion->getReponseTxt()) {
                 return true;
             }
-            if ($santeQuestion->getRemarque() === null) {
+            if (null === $santeQuestion->getRemarque()) {
                 return false;
             }
-            return trim($santeQuestion->getRemarque()) != '';
+
+            return '' != trim($santeQuestion->getRemarque());
         }
 
         return true;

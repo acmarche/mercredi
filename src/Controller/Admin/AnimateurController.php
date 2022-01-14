@@ -34,7 +34,7 @@ final class AnimateurController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_animateur_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_animateur_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -61,7 +61,7 @@ final class AnimateurController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_animateur_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_animateur_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -101,7 +101,7 @@ final class AnimateurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_animateur_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_animateur_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Animateur $animateur): Response
     {
@@ -132,7 +132,7 @@ final class AnimateurController extends AbstractController
      */
     public function delete(Request $request, Animateur $animateur): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $animateur->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$animateur->getId(), $request->request->get('_token'))) {
             $id = $animateur->getId();
             $this->animateurRepository->remove($animateur);
             $this->animateurRepository->flush();

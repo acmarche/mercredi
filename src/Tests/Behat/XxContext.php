@@ -46,7 +46,7 @@ class XxContext
     public function loadFixtures(): void
     {
         $loader = new ContainerAwareLoader($this->getContainer());
-        $loader->loadFromDirectory(__DIR__ . '/../../src/AppBundle/DataFixtures');
+        $loader->loadFromDirectory(__DIR__.'/../../src/AppBundle/DataFixtures');
         $executor = new ORMExecutor($this->getEntityManager());
         $executor->execute($loader->getFixtures(), true);
     }
@@ -190,7 +190,7 @@ class XxContext
     /**
      * Pauses the scenario until the user presses a key. Useful when debugging a scenario.
      *
-     * @Then (I )break
+     * @Then(I)break
      */
     public function iPutABreakpoint(): void
     {
@@ -210,7 +210,7 @@ class XxContext
     public function iSaveAScreenshotIn($filename): void
     {
         sleep(1);
-        $this->saveScreenshot($filename, __DIR__ . '/../sallessf');
+        $this->saveScreenshot($filename, __DIR__.'/../sallessf');
     }
 
     private function getPage(): DocumentElement
@@ -227,11 +227,11 @@ class XxContext
     {
         for ($i = 0; $i < $count; ++$i) {
             $product = new Product();
-            $product->setName('Product ' . $i);
+            $product->setName('Product '.$i);
             $product->setPrice(random_int(10, 1000));
             $product->setDescription('lorem');
 
-            if ($author !== null) {
+            if (null !== $author) {
                 $product->setAuthor($author);
             }
 

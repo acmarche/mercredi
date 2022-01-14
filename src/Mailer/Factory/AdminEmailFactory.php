@@ -16,8 +16,6 @@ class AdminEmailFactory
 
     /**
      * @param UserInterface|User $user
-     * @param Enfant $enfant
-     * @return NotificationEmail
      */
     public function messageEnfantCreated(UserInterface $user, Enfant $enfant): NotificationEmail
     {
@@ -25,7 +23,7 @@ class AdminEmailFactory
         $message
             ->from($user->getEmail())
             ->to($this->organisation->getEmail())
-            ->subject('Un enfant a été ajouté par ' . $user->getNom() . ' ' . $user->getPrenom())
+            ->subject('Un enfant a été ajouté par '.$user->getNom().' '.$user->getPrenom())
             ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_add_enfant.html.twig')
             ->context(
                 [

@@ -75,7 +75,7 @@ final class AnimateurVoter extends Voter
                 return $this->canView();
             case self::DELETE:
             case self::ADD:
-                return false;//only admin
+                return false; //only admin
             case self::EDIT:
                 return $this->canEdit();
         }
@@ -98,7 +98,7 @@ final class AnimateurVoter extends Voter
         if (!$this->checkAnimateurs()) {
             return false;
         }
-        if ($this->animateur === null) {
+        if (null === $this->animateur) {
             return false;
         }
 
@@ -107,6 +107,6 @@ final class AnimateurVoter extends Voter
 
     private function checkAnimateurs(): bool
     {
-        return \count($this->animateurs) != 0;
+        return 0 != \count($this->animateurs);
     }
 }

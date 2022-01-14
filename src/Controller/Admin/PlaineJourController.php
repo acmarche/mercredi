@@ -35,7 +35,7 @@ final class PlaineJourController extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", name="mercredi_admin_plaine_jour_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="mercredi_admin_plaine_jour_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Plaine $plaine): Response
     {

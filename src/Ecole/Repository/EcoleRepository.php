@@ -28,7 +28,6 @@ final class EcoleRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param User $user
      * @return Ecole[]
      */
     public function getEcolesByUser(User $user): array

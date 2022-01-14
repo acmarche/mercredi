@@ -15,9 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Ecole\Repository\EcoleRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Ecole\Repository\EcoleRepository')]
 class Ecole
 {
     use IdTrait;
@@ -27,23 +25,17 @@ class Ecole
     use EmailTrait;
     use RemarqueTrait;
     use UsersTrait;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $abreviation = null;
-
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="ecoles" )
-     *
      * @var User[]|Collection
      */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'ecoles')]
     private iterable $users;
     /**
-     * @ORM\OneToMany(targetEntity=Enfant::class, mappedBy="ecole" )
-     *
      * @var Enfant[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'ecole')]
     private iterable $enfants;
 
     public function __construct()

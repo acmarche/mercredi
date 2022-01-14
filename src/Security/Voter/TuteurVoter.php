@@ -94,12 +94,12 @@ final class TuteurVoter extends Voter
 
     private function canAdd(): bool
     {
-        return (bool)$this->canEdit();
+        return (bool) $this->canEdit();
     }
 
     private function canDelete(): bool
     {
-        return (bool)$this->canEdit();
+        return (bool) $this->canEdit();
     }
 
     private function checkOwnTuteur(): bool

@@ -24,9 +24,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FactureRepository")
- */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Facture\Repository\FactureRepository')]
 class Facture implements TimestampableInterface, UuidableInterface, FactureInterface
 {
     use IdTrait;
@@ -44,57 +42,34 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     use UserAddTrait;
     use CommunicationTrait;
     use PlaineTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="factures")
-     */
+    #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'factures')]
     private ?Tuteur $tuteur = null;
-    /**
-     * @ORM\ManyToOne(targetEntity=Plaine::class, inversedBy="factures")
-     */
+    #[ORM\ManyToOne(targetEntity: Plaine::class, inversedBy: 'factures')]
     private ?Plaine $plaine = null;
-    /**
-     * @ORM\Column(type="datetime", nullable=false)
-     */
+    #[ORM\Column(type: 'datetime', nullable: false)]
     private ?DateTimeInterface $factureLe = null;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $payeLe = null;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $envoyeLe = null;
-    /**
-     * @ORM\Column(type="string", length=100,nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $envoyeA = null;
-    /**
-     * @ORM\Column(type="string", length=100,nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: false)]
     private ?string $mois = null;
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $plaine_nom = null;
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $ecoles = null;
-    /**
-     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
-     */
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
     private float $montant_obsolete;
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private float $cloture_obsolete;
     /**
-     * Use for commu factory
+     * Use for commu factory.
+     *
      * @var array|Ecole[]
      */
     public array $ecolesListing = [];
-
     public ?FactureDetailDto $factureDetailDto = null;
 
     public function __construct(Tuteur $tuteur)
@@ -108,14 +83,14 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
 
     public function __toString(): string
     {
-        return 'Facture ' . $this->id;
+        return 'Facture '.$this->id;
     }
 
     public function getEnfants(): array
     {
         $enfants = [];
         foreach ($this->facturePresences as $presence) {
-            $nom = $presence->getNom() . ' ' . $presence->getPrenom();
+            $nom = $presence->getNom().' '.$presence->getPrenom();
             $enfants[$nom] = $nom;
         }
 

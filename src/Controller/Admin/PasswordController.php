@@ -32,7 +32,7 @@ final class PasswordController extends AbstractController
     /**
      * Displays a form to edit an existing Utilisateur utilisateur.
      *
-     * @Route("/{id}/password", name="mercredi_admin_user_password", methods={"GET","POST"})
+     * @Route("/{id}/password", name="mercredi_admin_user_password", methods={"GET", "POST"})
      */
     public function passord(Request $request, User $user): Response
     {

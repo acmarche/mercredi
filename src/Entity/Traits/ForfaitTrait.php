@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait ForfaitTrait
 {
-    /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
-     */
+    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: false)]
     private float $forfait;
 
     public function getForfait(): float

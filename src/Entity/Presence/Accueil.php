@@ -22,12 +22,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class Accueil.
  *
- * @ORM\Table("accueil", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"date_jour", "enfant_id", "heure"})
- * })
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Accueil\Repository\AccueilRepository")
  * @UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
  */
+#[ORM\Table(name: 'accueil')]
+#[ORM\UniqueConstraint(columns: ['date_jour', 'enfant_id', 'heure'])]
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Accueil\Repository\AccueilRepository')]
 class Accueil implements TimestampableInterface, UuidableInterface
 {
     use TimestampableTrait;
@@ -38,33 +37,20 @@ class Accueil implements TimestampableInterface, UuidableInterface
     use RemarqueTrait;
     use UserAddTrait;
     use RetardTrait;
-
     /**
-     * @ORM\Column(type="date")
      * @Assert\Type("datetime")
      */
+    #[ORM\Column(type: 'date')]
     private ?DateTimeInterface $date_jour = null;
-
-    /**
-     * @ORM\Column(type="smallint")
-     */
+    #[ORM\Column(type: 'smallint')]
     private int $duree;
-
-    /**
-     * @ORM\Column(type="string", nullable=false, length=50)
-     */
+    #[ORM\Column(type: 'string', nullable: false, length: 50)]
     private ?string $heure = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Enfant::class, inversedBy="accueils")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Enfant::class, inversedBy: 'accueils')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Enfant $enfant = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Tuteur::class, inversedBy="accueils")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'accueils')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Tuteur $tuteur = null;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant)

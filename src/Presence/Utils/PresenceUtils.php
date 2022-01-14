@@ -90,7 +90,7 @@ final class PresenceUtils
                     if ($registerRemarques) {
                         $remarques = $enfant->getRemarque();
                         if ($presence->getRemarque()) {
-                            $remarques .= ' (Parent=>) ' . $presence->getRemarque();
+                            $remarques .= ' (Parent=>) '.$presence->getRemarque();
                         }
                         $enfant->setRemarque($remarques);
                     }
@@ -137,7 +137,7 @@ final class PresenceUtils
             $telephones = '';
             foreach ($this->relationRepository->findByEnfant($enfant) as $relation) {
                 $tuteur = $relation->getTuteur();
-                $telephones .= ' ' . TuteurUtils::getTelephones($tuteur);
+                $telephones .= ' '.TuteurUtils::getTelephones($tuteur);
             }
             $enfant->setTelephones($telephones);
         }
@@ -158,7 +158,7 @@ final class PresenceUtils
                     return null;
                 }
                 $plaine = $jour->getPlaine();
-                if ($plaine === null) {
+                if (null === $plaine) {
                     return null;
                 }
                 if (!$plaines->contains($plaine)) {

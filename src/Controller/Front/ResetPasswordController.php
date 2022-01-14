@@ -160,7 +160,7 @@ class ResetPasswordController extends AbstractController
         );
 
         // Do not reveal whether a user account was found or not.
-        if ($user === null) {
+        if (null === $user) {
             //$this->addFlash('danger', 'Utilisateur non trouvé');
 
             return $this->redirectToRoute('mercredi_front_forgot_password_request');

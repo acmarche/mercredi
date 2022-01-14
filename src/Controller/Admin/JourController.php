@@ -38,7 +38,7 @@ final class JourController extends AbstractController
     }
 
     /**
-     * @Route("/", name="mercredi_admin_jour_index", methods={"GET","POST"})
+     * @Route("/", name="mercredi_admin_jour_index", methods={"GET", "POST"})
      */
     public function index(Request $request): Response
     {
@@ -65,7 +65,7 @@ final class JourController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="mercredi_admin_jour_new", methods={"GET","POST"})
+     * @Route("/new", name="mercredi_admin_jour_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -92,7 +92,7 @@ final class JourController extends AbstractController
     }
 
     /**
-     * @Route("/tarif/{id}", name="mercredi_admin_jour_tarif", methods={"GET","POST"})
+     * @Route("/tarif/{id}", name="mercredi_admin_jour_tarif", methods={"GET", "POST"})
      */
     public function tarif(Request $request, Jour $jour): Response
     {
@@ -137,7 +137,7 @@ final class JourController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_jour_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_jour_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Jour $jour): Response
     {
@@ -167,7 +167,7 @@ final class JourController extends AbstractController
      */
     public function delete(Request $request, Jour $jour): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $jour->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$jour->getId(), $request->request->get('_token'))) {
             $jourId = $jour->getId();
             $this->jourRepository->remove($jour);
             $this->jourRepository->flush();

@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PoidsTrait
 {
-    /**
-     * @ORM\Column(type="string", length=150, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $poids = null;
 
     public function getPoids(): ?string

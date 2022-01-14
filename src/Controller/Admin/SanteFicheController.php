@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Sante\SanteFiche;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -15,6 +14,7 @@ use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,12 +75,12 @@ final class SanteFicheController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="mercredi_admin_sante_fiche_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="mercredi_admin_sante_fiche_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-        if ($santeFiche->getAccompagnateurs() === []) {
+        if ([] === $santeFiche->getAccompagnateurs()) {
             $santeFiche->addAccompagnateur(' ');
         }
 
@@ -111,7 +111,7 @@ final class SanteFicheController extends AbstractController
     public function delete(Request $request, SanteFiche $santeFiche): RedirectResponse
     {
         $enfant = null;
-        if ($this->isCsrfTokenValid('delete' . $santeFiche->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$santeFiche->getId(), $request->request->get('_token'))) {
             $id = $santeFiche->getId();
             $enfant = $santeFiche->getEnfant();
             $this->santeFicheRepository->remove($santeFiche);

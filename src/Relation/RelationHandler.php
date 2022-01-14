@@ -2,8 +2,8 @@
 
 namespace AcMarche\Mercredi\Relation;
 
-use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;

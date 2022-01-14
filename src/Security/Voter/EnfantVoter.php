@@ -110,12 +110,12 @@ final class EnfantVoter extends Voter
 
     private function canAdd(): bool
     {
-        return false;//not use
+        return false; //not use
     }
 
     private function canDelete(): bool
     {
-        return false;//only admin
+        return false; //only admin
     }
 
     private function checkAnimateur(): bool
@@ -130,9 +130,6 @@ final class EnfantVoter extends Voter
         return $enfants->contains($this->enfant);
     }
 
-    /**
-     * @return bool
-     */
     private function checkTuteur(): bool
     {
         if (!$this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
@@ -148,7 +145,7 @@ final class EnfantVoter extends Voter
         $relations = $this->relationRepository->findByTuteur($tuteur);
 
         $enfants = array_map(
-            fn($relation) => $relation->getEnfant()->getId(),
+            fn ($relation) => $relation->getEnfant()->getId(),
             $relations
         );
 
@@ -158,7 +155,7 @@ final class EnfantVoter extends Voter
     private function checkEcoles(): bool
     {
         $ecoles = $this->user->getEcoles();
-        if (\count($ecoles) == 0) {
+        if (0 == \count($ecoles)) {
             return false;
         }
 

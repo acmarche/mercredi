@@ -2,7 +2,6 @@
 
 namespace AcMarche\Mercredi\Mailer\Factory;
 
-use Exception;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
@@ -14,6 +13,7 @@ use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use Exception;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
@@ -47,7 +47,7 @@ class FactureEmailFactory
     {
         $data = [];
         $data['from'] = $this->getEmailAddressOrganisation();
-        if ($facture !== null) {
+        if (null !== $facture) {
             $tuteur = $facture->getTuteur();
             if ($emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
                 $data['to'] = $emails[0];
@@ -57,12 +57,8 @@ class FactureEmailFactory
         return $data;
     }
 
-
     /**
      * @param Facture $facture
-     * @param string $from
-     * @param string $sujet
-     * @param string $body
      */
     public function messageFacture(string $from, string $sujet, string $body): NotificationEmailJf
     {
@@ -74,7 +70,7 @@ class FactureEmailFactory
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(
                 [
-                    "importance" => Notification::IMPORTANCE_HIGH,
+                    'importance' => Notification::IMPORTANCE_HIGH,
                     'texte' => $body,
                     'organisation' => $this->organisation,
                     'footer_text' => 'orga',
@@ -90,8 +86,8 @@ class FactureEmailFactory
             $message->addTo(new Address($email));
         }
         if ($this->parameterBag->has(Option::EMAILS_FACTURE)) {
-            $copies = explode(",", $this->parameterBag->get(Option::EMAILS_FACTURE));
-            if (is_array($copies)) {
+            $copies = explode(',', $this->parameterBag->get(Option::EMAILS_FACTURE));
+            if (\is_array($copies)) {
                 foreach ($copies as $copy) {
                     if (filter_var($copy, FILTER_VALIDATE_EMAIL)) {
                         $message->addBcc(new Address($copy));
@@ -107,17 +103,17 @@ class FactureEmailFactory
     public function attachFactureFromPath(NotificationEmail $message, Facture $facture): void
     {
         $path = $this->factureFactory->getBasePathFacture($facture->getMois());
-        $factureFile = $path . 'facture-' . $facture->getId() . '.pdf';
+        $factureFile = $path.'facture-'.$facture->getId().'.pdf';
 
         $date = $facture->getFactureLe();
         if (!is_readable($factureFile)) {
-            throw new Exception('Pdf non trouvé ' . $factureFile);
+            throw new Exception('Pdf non trouvé '.$factureFile);
         }
-        $message->attachFromPath($factureFile, 'facture_' . $date->format('d-m-Y') . '.pdf', 'application/pdf');
+        $message->attachFromPath($factureFile, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
     }
 
     /**
-     * acces refuse wget https://assetx en console
+     * acces refuse wget https://assetx en console.
      */
     public function attachFactureOnTheFly(FactureInterface $facture, Email $message): void
     {
@@ -125,7 +121,7 @@ class FactureEmailFactory
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
 
         $date = $facture->getFactureLe();
-        $message->attach($invoicepdf, 'facture_' . $date->format('d-m-Y') . '.pdf', 'application/pdf');
+        $message->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
     }
 
     public function attachFacturePlaineOnTheFly(FactureInterface $facture, Email $message): void
@@ -134,6 +130,6 @@ class FactureEmailFactory
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
 
         $date = $facture->getFactureLe();
-        $message->attach($invoicepdf, 'facture_' . $date->format('d-m-Y') . '.pdf', 'application/pdf');
+        $message->attach($invoicepdf, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
     }
 }

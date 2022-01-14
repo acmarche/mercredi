@@ -15,12 +15,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository")
- * @ORM\Table("facture_presence", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"presence_id", "object_type"})
- * })
  * @UniqueEntity(fields={"presence", "objectType"}, message="Présence existante")
  */
+#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository')]
+#[ORM\Table(name: 'facture_presence')]
+#[ORM\UniqueConstraint(columns: ['presence_id', 'object_type'])]
 class FacturePresence
 {
     use IdTrait;
@@ -31,45 +30,21 @@ class FacturePresence
     use OrdreTrait;
     use AbsentTrait;
     use ReductionTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="facturePresences")
-     */
+    #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'facturePresences')]
     private FactureInterface $facture;
-
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
+    #[ORM\Column(type: 'integer', nullable: false)]
     private ?int $presenceId = null;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: false)]
     private ?string $objectType = null;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $heure = null;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $duree = null;
-
-    /**
-     * @ORM\Column(type="date", nullable=false)
-     */
+    #[ORM\Column(type: 'date', nullable: false)]
     private ?DateTimeInterface $presenceDate = null;
-
-    /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
-     */
+    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: false)]
     private ?float $cout_brut = null;
-
-    /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
-     */
+    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: false)]
     private ?float $cout_calculated = null;
 
     public function __construct(FactureInterface $facture, int $presenceId, string $objectType)
@@ -102,6 +77,7 @@ class FacturePresence
 
         return $this;
     }
+
     public function getCoutBrut(): ?float
     {
         return $this->cout_brut;

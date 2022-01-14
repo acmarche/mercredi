@@ -10,8 +10,8 @@ trait FactureComplementsTrait
 {
     /**
      * @var FactureComplement[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity=FactureComplement::class, mappedBy="facture", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: FactureComplement::class, mappedBy: 'facture', cascade: ['remove'])]
     private iterable $factureComplements;
 
     /**

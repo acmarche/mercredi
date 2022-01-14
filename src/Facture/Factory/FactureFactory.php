@@ -3,12 +3,12 @@
 namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
-use AcMarche\Mercredi\Facture\FactureInterface;
-use Exception;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use DateTime;
+use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class FactureFactory
@@ -45,6 +45,7 @@ final class FactureFactory
 
     /**
      * @param array|Facture[] $factures
+     *
      * @throws Exception
      */
     public function createAllPdf(array $factures, string $month, int $max = 30): bool
@@ -65,7 +66,7 @@ final class FactureFactory
             if ($i > $max) {
                 return false;
             }
-            $i++;
+            ++$i;
         }
 
         return true;

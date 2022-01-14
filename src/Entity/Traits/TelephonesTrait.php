@@ -4,9 +4,6 @@ namespace AcMarche\Mercredi\Entity\Traits;
 
 trait TelephonesTrait
 {
-    /**
-     * @var string|null
-     */
     private ?string $telephones = null;
 
     public function getTelephones(): ?string

@@ -41,7 +41,7 @@ class MailTestCommand extends Command
             $this->sendMail($message);
             $io->success('Le mail a bien été envoyé.');
         } catch (TransportExceptionInterface $e) {
-            $io->error('Erreur lors de l envoie: ' . $e->getMessage());
+            $io->error('Erreur lors de l envoie: '.$e->getMessage());
         }
 
         return Command::SUCCESS;
