@@ -7,7 +7,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
 use Carbon\Carbon;
 use Exception;
 
-class FeatureContext //extends RawMinkContext
+class FeatureContext extends RawMinkContext
 {
     /**
      * @Given I am logged in as an admin
