@@ -3,18 +3,24 @@
 namespace AcMarche\Mercredi\Tests\Behat;
 
 use AcMarche\Mercredi\Utils\DateUtils;
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
+use Behat\Mink\Session;
 use Carbon\Carbon;
 use Exception;
+use Symfony\Component\Routing\RouterInterface;
 
-class FeatureContext extends RawMinkContext
+class FeatureContext implements Context
 {
+    public function __construct(private Session $session, private RouterInterface $router)
+    {
+    }
+
     /**
      * @Given I am logged in as an admin
      */
     public function iAmLoggedInAsAnAdmin(): void
     {
-        $this->visitPath('/login');
+        $this->session->visit('/login');
         //var_dump($this->getSession()->getPage()->getContent());
         $this->fillField('username', 'jf@marche.be');
         $this->fillField('password', 'homer');
@@ -28,7 +34,7 @@ class FeatureContext extends RawMinkContext
      */
     public function iAmLoggedInAsUser(string $username): void
     {
-        $this->visitPath('/login');
+        $this->session->visit('/login');
         $this->fillField('username', $username);
         $this->fillField('password', 'homer');
         $this->pressButton('Me connecter');
@@ -39,7 +45,7 @@ class FeatureContext extends RawMinkContext
      */
     public function iAmLoginWithUserAndPassword(string $email, string $password): void
     {
-        $this->visitPath('/login');
+        $this->session->visit('/login');
         $this->fillField('username', $email);
         $this->fillField('password', $password);
         $this->pressButton('Me connecter');
@@ -55,7 +61,7 @@ class FeatureContext extends RawMinkContext
         $today = ucfirst(DateUtils::formatFr($today));
         $select = $this->fixStepArgument($select);
         $option = $this->fixStepArgument($today);
-        $this->getSession()->getPage()->selectFieldOption($select, $option);
+        $this->session->getPage()->selectFieldOption($select, $option);
     }
 
     /**
@@ -68,7 +74,7 @@ class FeatureContext extends RawMinkContext
         $today = ucfirst(DateUtils::formatFr($today));
         $select = $this->fixStepArgument($select);
         $option = $this->fixStepArgument($today);
-        $this->getSession()->getPage()->selectFieldOption($select, $option, true);
+        $this->session->getPage()->selectFieldOption($select, $option, true);
     }
 
     /**
@@ -172,22 +178,9 @@ class FeatureContext extends RawMinkContext
      */
     public function clickLinkWeek(): void
     {
-        $link = 's'.Carbon::today()->week;
+        $link = 's' . Carbon::today()->week;
         $link = $this->fixStepArgument($link);
-        $this->getSession()->getPage()->clickLink($link);
-    }
-
-    /**
-     * Clicks link day
-     * Example: When I follow this day.
-     *
-     * @Then /^I follow this day$/
-     */
-    public function clickLinkDay(): void
-    {
-        $link = Carbon::today()->day;
-        $link = $this->fixStepArgument($link);
-        $this->getSession()->getPage()->clickLink($link);
+        $this->session->getPage()->clickLink($link);
     }
 
     /**
@@ -197,10 +190,10 @@ class FeatureContext extends RawMinkContext
      */
     public function iShouldSeeTextSoManyTimes($sText, $iExpected): void
     {
-        $sContent = $this->getSession()->getPage()->getText();
+        $sContent = $this->session->getPage()->getText();
         $iFound = substr_count($sContent, $sText);
         if ($iExpected !== $iFound) {
-            throw new Exception('Found '.$iFound.' occurences of "'.$sText.'" when expecting '.$iExpected);
+            throw new Exception('Found ' . $iFound . ' occurences of "' . $sText . '" when expecting ' . $iExpected);
         }
     }
 
@@ -214,12 +207,12 @@ class FeatureContext extends RawMinkContext
 
     private function fillField(string $field, string $value): void
     {
-        $this->getSession()->getPage()->fillField($field, $value);
+        $this->session->getPage()->fillField($field, $value);
     }
 
     private function pressButton($button): void
     {
         $button = $this->fixStepArgument($button);
-        $this->getSession()->getPage()->pressButton($button);
+        $this->session->getPage()->pressButton($button);
     }
 }

@@ -20,7 +20,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class SymfonyContext implements Context
 {
     private KernelInterface $kernel;
-
     private ?Response $response = null;
     private EnfantRepository $enfantRepository;
 
