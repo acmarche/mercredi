@@ -9,10 +9,9 @@ use Doctrine\Common\Collections\Collection;
 trait JoursTrait
 {
     /**
-     * @var Jour[]|ArrayCollection
-     *
+     * @var Jour[]|Collection
      * */
-    private iterable $jours;
+    private Collection $jours;
 
     public function initJours(): void
     {

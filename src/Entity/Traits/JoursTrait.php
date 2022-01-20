@@ -10,7 +10,7 @@ trait JoursTrait
     /**
      * @var Jour[]|Collection
      */
-    private iterable $jours;
+    private Collection $jours;
 
     /**
      * @return Collection|Jour[]

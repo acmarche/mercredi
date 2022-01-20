@@ -62,28 +62,28 @@ class Tuteur implements SluggableInterface, TimestampableInterface
      * @var Relation[]
      */
     #[ORM\OneToMany(targetEntity: Relation::class, mappedBy: 'tuteur', cascade: ['remove'])]
-    private iterable $relations;
+    private Collection $relations;
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
-     * @var Accueil[]|ArrayCollection
+     * @var Accueil[]|Collection
      */
     #[ORM\OneToMany(targetEntity: Accueil::class, mappedBy: 'tuteur', cascade: ['remove'])]
-    private iterable $accueils;
+    private Collection $accueils;
     /**
      * @var Facture[]
      */
     #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'tuteur', cascade: ['remove'])]
-    private iterable $factures;
+    private Collection $factures;
     /**
      * @var User[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'tuteurs')]
-    private iterable $users;
+    private Collection $users;
 
     public function __construct()
     {
-        $this->relations = [];
+        $this->relations = new ArrayCollection();
         $this->presences = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->accueils = new ArrayCollection();

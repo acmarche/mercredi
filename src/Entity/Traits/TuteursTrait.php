@@ -3,17 +3,16 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Tuteur;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 trait TuteursTrait
 {
     /**
-     * @var Tuteur[]|ArrayCollection
+     * @var Tuteur[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: Tuteur::class, inversedBy: 'users')]
-    private iterable $tuteurs;
+    private Collection $tuteurs;
 
     /**
      * @return Collection|Tuteur[]

@@ -10,7 +10,7 @@ trait UsersTrait
     /**
      * @var User[]|Collection
      */
-    private iterable $users;
+    private Collection $users;
 
     /**
      * @return Collection|User[]

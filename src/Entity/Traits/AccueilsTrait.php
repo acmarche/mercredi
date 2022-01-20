@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Presence\Accueil;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 trait AccueilsTrait
@@ -11,9 +10,9 @@ trait AccueilsTrait
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
-     * @var Accueil[]|ArrayCollection
+     * @var Accueil[]|Collection
      */
-    private iterable $accueils;
+    private Collection $accueils;
 
     /**
      * @return Collection|Accueil[]

@@ -33,6 +33,7 @@ use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonesTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -88,29 +89,29 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
      * @var Relation[]
      */
     #[ORM\OneToMany(targetEntity: Relation::class, mappedBy: 'enfant', cascade: ['remove'])]
-    private iterable $relations;
+    private Collection $relations;
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Presence[]
      */
     #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'enfant', cascade: ['remove'])]
-    private iterable $presences;
+    private Collection $presences;
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
      * @var Accueil[]
      */
     #[ORM\OneToMany(targetEntity: Accueil::class, mappedBy: 'enfant', cascade: ['remove'])]
-    private iterable $accueils;
+    private Collection $accueils;
 
     public function __construct()
     {
         $this->relations = new ArrayCollection();
         $this->accueils = new ArrayCollection();
         $this->presences = new ArrayCollection();
-        $this->ficheSanteIsComplete = false;
         $this->notes = new ArrayCollection();
+        $this->ficheSanteIsComplete = false;
         $this->photo_autorisation = false;
     }
 

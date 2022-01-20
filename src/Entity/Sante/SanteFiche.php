@@ -52,12 +52,12 @@ class SanteFiche implements TimestampableInterface
      * @var SanteReponse[]
      */
     #[ORM\OneToMany(targetEntity: SanteReponse::class, mappedBy: 'sante_fiche', cascade: ['remove'])]
-    private iterable $reponses;
+    private Collection $reponses;
     /**
-     * @var SanteQuestion[]|ArrayCollection
+     * @var SanteQuestion[]|Collection
      * @AcMarcheSanteAssert\ResponseIsComplete()
      */
-    private iterable $questions;
+    private Collection $questions;
 
     public function __construct(Enfant $enfant)
     {
@@ -110,7 +110,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponses(): iterable
+    public function getReponses(): Collection
     {
         return $this->reponses;
     }
@@ -120,23 +120,23 @@ class SanteFiche implements TimestampableInterface
      */
     public function setReponses(array $reponses): void
     {
-        $this->reponses = $reponses;
+        $this->reponses = new ArrayCollection($reponses);
     }
 
     /**
-     * @return SanteQuestion[]|ArrayCollection
+     * @return SanteQuestion[]|Collection
      */
-    public function getQuestions()
+    public function getQuestions():Collection
     {
         return $this->questions;
     }
 
     /**
-     * @param SanteQuestion[]|ArrayCollection $questions
+     * @param SanteQuestion[]|Collection $questions
      */
-    public function setQuestions($questions): void
+    public function setQuestions(array  $questions): void
     {
-        $this->questions = $questions;
+        $this->questions = new ArrayCollection($questions);
     }
 
     public function addReponse(SanteReponse $reponse): self

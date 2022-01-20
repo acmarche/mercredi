@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Presence\Presence;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,10 +11,10 @@ trait PresencesTuteurTrait
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
-     * @var Presence[]|ArrayCollection
+     * @var Presence[]|Collection
      */
     #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'tuteur', cascade: ['remove'])]
-    private iterable $presences;
+    private Collection $presences;
 
     /**
      * @return Collection|Presence[]

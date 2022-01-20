@@ -3,15 +3,14 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Animateur;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 trait AnimateursTrait
 {
     /**
-     * @var Animateur[]|ArrayCollection
+     * @var Animateur[]|Collection
      */
-    private iterable $animateurs;
+    private Collection $animateurs;
 
     /**
      * @return Collection|Animateur[]

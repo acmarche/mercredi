@@ -2,17 +2,16 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 trait FactureDecomptesTrait
 {
     /**
-     * @var FactureDecompte[]|ArrayCollection
+     * @var FactureDecompte[]|Collection
      */
     #[ORM\OneToMany(targetEntity: FactureDecompte::class, mappedBy: 'facture', cascade: ['remove'])]
-    private iterable $factureDecomptes;
+    private Collection $factureDecomptes;
 
     /**
      * @return Collection|FactureDecompte[]

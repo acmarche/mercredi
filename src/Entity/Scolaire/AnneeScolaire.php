@@ -25,7 +25,7 @@ class AnneeScolaire
      * @var Enfant[]
      */
     #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'annee_scolaire')]
-    private iterable $enfants;
+    private Collection $enfants;
     #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'annees_scolaires')]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?GroupeScolaire $groupe_scolaire = null;
@@ -43,7 +43,7 @@ class AnneeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): iterable
+    public function getEnfants(): Collection
     {
         return $this->enfants;
     }

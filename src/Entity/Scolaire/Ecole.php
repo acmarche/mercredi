@@ -31,12 +31,12 @@ class Ecole
      * @var User[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'ecoles')]
-    private iterable $users;
+    private Collection $users;
     /**
      * @var Enfant[]|Collection
      */
     #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'ecole')]
-    private iterable $enfants;
+    private Collection $enfants;
 
     public function __construct()
     {

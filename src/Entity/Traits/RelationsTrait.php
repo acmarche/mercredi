@@ -10,12 +10,12 @@ trait RelationsTrait
     /**
      * @var Relation[]
      */
-    private iterable $relations;
+    private Collection $relations;
 
     /**
      * @return Relation[]|Collection
      */
-    public function getRelations(): iterable
+    public function getRelations(): Collection
     {
         return $this->relations;
     }
@@ -23,7 +23,7 @@ trait RelationsTrait
     /**
      * @param Relation[] $relations
      */
-    public function setRelations(array $relations): void
+    public function setRelations(Collection $relations): void
     {
         $this->relations = $relations;
     }

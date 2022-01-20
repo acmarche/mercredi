@@ -10,7 +10,7 @@ trait PresencesTrait
     /**
      * @var Collection
      */
-    private iterable $presences;
+    private Collection $presences;
 
     /**
      * @return Collection|Presence[]

@@ -3,17 +3,16 @@
 namespace AcMarche\Mercredi\Entity\Security\Traits;
 
 use AcMarche\Mercredi\Entity\Animateur;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 trait AnimateursTrait
 {
     /**
-     * @var Animateur[]|ArrayCollection
+     * @var Animateur[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: Animateur::class, inversedBy: 'users')]
-    private iterable $animateurs;
+    private Collection $animateurs;
 
     public function getAnimateur(): ?Animateur
     {

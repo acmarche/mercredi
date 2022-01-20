@@ -2,15 +2,14 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 trait PlaineGroupesTrait
 {
     /**
-     * @var PlaineGroupe[]|ArrayCollection|null
+     * @var PlaineGroupe[]|Collection
      */
-    private iterable $plaine_groupes;
+    private Collection $plaine_groupes;
 
     /**
      * @return Collection|PlaineGroupe[]

@@ -2,17 +2,16 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 trait FactureComplementsTrait
 {
     /**
-     * @var FactureComplement[]|ArrayCollection
+     * @var FactureComplement[]|Collection
      */
     #[ORM\OneToMany(targetEntity: FactureComplement::class, mappedBy: 'facture', cascade: ['remove'])]
-    private iterable $factureComplements;
+    private Collection $factureComplements;
 
     /**
      * @return Collection|FactureComplement[]

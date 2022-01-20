@@ -39,7 +39,7 @@ class SanteQuestion
      * @var Presence[]
      */
     #[ORM\OneToMany(targetEntity: SanteReponse::class, mappedBy: 'question', cascade: ['remove'])]
-    private iterable $reponse;
+    private Collection $reponse;
     private ?bool $reponseTxt = null;
     private ?string $remarque = null;
 
@@ -107,7 +107,7 @@ class SanteQuestion
     /**
      * @return Collection|SanteReponse[]
      */
-    public function getReponse(): iterable
+    public function getReponse(): Collection
     {
         return $this->reponse;
     }

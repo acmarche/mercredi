@@ -41,12 +41,12 @@ class Animateur implements TimestampableInterface
      * @var User[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'animateurs')]
-    private iterable $users;
+    private Collection $users;
     /**
      * @var Jour[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: Jour::class, inversedBy: 'animateurs')]
-    private iterable $jours;
+    private Collection $jours;
 
     public function __construct()
     {

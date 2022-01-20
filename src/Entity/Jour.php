@@ -58,30 +58,30 @@ class Jour implements TimestampableInterface
      * @var Presence[]
      */
     #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'jour', cascade: ['remove'])]
-    private iterable $presences;
+    private Collection $presences;
     #[ORM\ManyToOne(targetEntity: Plaine::class, inversedBy: 'jours')]
     private ?Plaine $plaine = null;
     /**
      * @var Animateur[]
      */
     #[ORM\ManyToMany(targetEntity: Animateur::class, mappedBy: 'jours')]
-    private iterable $animateurs;
+    private Collection $animateurs;
     #[ORM\ManyToMany(targetEntity: Ecole::class)]
-    private iterable $ecoles;
+    private Collection $ecoles;
 
     /**
      * @param DateTime|DateTimeImmutable|null $date_jour
      */
     public function __construct(?DateTimeInterface $date_jour = null)
     {
+        $this->presences = new ArrayCollection();
+        $this->animateurs = new ArrayCollection();
+        $this->ecoles = new ArrayCollection();
         $this->prix1 = 0;
         $this->prix2 = 0;
         $this->prix3 = 0;
         $this->forfait = 0;
         $this->pedagogique = false;
-        $this->presences = new ArrayCollection();
-        $this->animateurs = new ArrayCollection();
-        $this->ecoles = new ArrayCollection();
         $this->date_jour = $date_jour;
     }
 
@@ -105,7 +105,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Presence[]
      */
-    public function getPresences(): iterable
+    public function getPresences(): Collection
     {
         return $this->presences;
     }
@@ -133,7 +133,7 @@ class Jour implements TimestampableInterface
     /**
      * @return Collection|Ecole[]
      */
-    public function getEcoles(): iterable
+    public function getEcoles(): Collection
     {
         return $this->ecoles;
     }

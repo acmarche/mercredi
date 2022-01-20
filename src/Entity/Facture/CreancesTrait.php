@@ -2,28 +2,29 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 trait CreancesTrait
 {
     /**
-     * @var iterable|Creance[]
+     * @var Collection|Creance[]
      */
     #[ORM\OneToMany(targetEntity: 'AcMarche\Mercredi\Entity\Facture\Creance', mappedBy: 'tuteur', cascade: ['remove'])]
-    private iterable $creances = [];
+    private Collection $creances;
 
     /**
-     * @return Creance[]|iterable
+     * @return Creance[]|Collection
      */
-    public function getCreances(): iterable
+    public function getCreances(): Collection
     {
         return $this->creances;
     }
 
     /**
-     * @param Creance[]|iterable $creances
+     * @param Creance[]|Collection $creances
      */
-    public function setCreances(iterable $creances): void
+    public function setCreances(Collection $creances): void
     {
         $this->creances = $creances;
     }

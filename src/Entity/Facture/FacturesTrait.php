@@ -2,12 +2,14 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
+use Doctrine\Common\Collections\Collection;
+
 trait FacturesTrait
 {
     /**
      * @var Facture[]
      */
-    private iterable $factures;
+    private Collection $factures;
 
     /**
      * @return Facture[]
@@ -20,7 +22,7 @@ trait FacturesTrait
     /**
      * @param Facture[] $factures
      */
-    public function setFactures(array $factures): void
+    public function setFactures(Collection $factures): void
     {
         $this->factures = $factures;
     }

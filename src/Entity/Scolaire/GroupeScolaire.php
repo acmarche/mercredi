@@ -44,19 +44,19 @@ class GroupeScolaire
      * @var Enfant[]
      */
     #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'groupe_scolaire')]
-    private iterable $enfants;
+    private Collection $enfants;
     /**
      * @var AnneeScolaire[]
      */
     #[ORM\OneToMany(targetEntity: AnneeScolaire::class, mappedBy: 'groupe_scolaire')]
-    private iterable $annees_scolaires;
+    private Collection $annees_scolaires;
     /**
      * Pour la cascade.
      *
      * @var PlaineGroupe[]
      */
     #[ORM\OneToMany(targetEntity: PlaineGroupe::class, mappedBy: 'groupe_scolaire', cascade: ['remove'])]
-    private iterable $plaine_groupes;
+    private Collection $plaine_groupes;
 
     public function __construct()
     {
@@ -97,7 +97,7 @@ class GroupeScolaire
     /**
      * @return Collection|Enfant[]
      */
-    public function getEnfants(): iterable
+    public function getEnfants(): Collection
     {
         return $this->enfants;
     }
@@ -125,7 +125,7 @@ class GroupeScolaire
     /**
      * @return Collection|AnneeScolaire[]
      */
-    public function getAnneesScolaires(): iterable
+    public function getAnneesScolaires(): Collection
     {
         return $this->annees_scolaires;
     }
@@ -153,7 +153,7 @@ class GroupeScolaire
     /**
      * @return Collection|PlaineGroupe[]
      */
-    public function getPlaineGroupes(): iterable
+    public function getPlaineGroupes(): Collection
     {
         return $this->plaine_groupes;
     }

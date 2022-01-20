@@ -2,17 +2,16 @@
 
 namespace AcMarche\Mercredi\Entity\Facture;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 trait FactureReductionsTrait
 {
     /**
-     * @var FactureReduction[]|ArrayCollection
+     * @var FactureReduction[]|Collection
      */
     #[ORM\OneToMany(targetEntity: FactureReduction::class, mappedBy: 'facture', cascade: ['remove'])]
-    private iterable $factureReductions;
+    private Collection $factureReductions;
 
     /**
      * @return Collection|FactureReduction[]

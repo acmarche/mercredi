@@ -3,15 +3,14 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Document;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 trait DocumentsTraits
 {
     /**
-     * @var Document[]|ArrayCollection
+     * @var Document[]|Collection
      */
-    private iterable $documents;
+    private Collection $documents;
 
     /**
      * @return Collection|Document[]

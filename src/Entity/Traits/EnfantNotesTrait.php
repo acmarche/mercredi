@@ -12,12 +12,12 @@ trait EnfantNotesTrait
      * @var Collection|Note[]
      */
     #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'enfant', cascade: ['remove'])]
-    private iterable $notes;
+    private Collection $notes;
 
     /**
      * @return Collection|Note[]
      */
-    public function getNotes(): iterable
+    public function getNotes(): Collection
     {
         return $this->notes;
     }

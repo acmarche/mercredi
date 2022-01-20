@@ -3,15 +3,14 @@
 namespace AcMarche\Mercredi\Entity\Traits;
 
 use AcMarche\Mercredi\Entity\Presence\Accueil;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 trait AccueilsTraits
 {
     /**
-     * @var Accueil[]|ArrayCollection
+     * @var Accueil[]|Collection
      */
-    private iterable $accueils;
+    private Collection $accueils;
 
     /**
      * @return Collection|Accueil[]
