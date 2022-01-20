@@ -15,6 +15,7 @@ use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,7 +32,8 @@ final class UserController extends AbstractController
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordEncoder
+        UserPasswordHasherInterface $userPasswordEncoder,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
@@ -86,7 +88,7 @@ final class UserController extends AbstractController
             $user->setUsername($user->getEmail());
             $this->userRepository->persist($user);
             $this->userRepository->flush();
-            $this->dispatchMessage(new UserCreated($user->getId()));
+            $this->dispatcher->dispatch(new UserCreated($user->getId()));
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
@@ -121,7 +123,7 @@ final class UserController extends AbstractController
             $user->setUsername($user->getEmail());
             $this->userRepository->persist($user);
             $this->userRepository->flush();
-            $this->dispatchMessage(new UserCreated($user->getId()));
+            $this->dispatcher->dispatch(new UserCreated($user->getId()));
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
@@ -162,7 +164,7 @@ final class UserController extends AbstractController
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->userRepository->flush();
-            $this->dispatchMessage(new UserUpdated($user->getId()));
+            $this->dispatcher->dispatch(new UserUpdated($user->getId()));
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
@@ -189,7 +191,7 @@ final class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->flush();
-            $this->dispatchMessage(new UserUpdated($user->getId()));
+            $this->dispatcher->dispatch(new UserUpdated($user->getId()));
 
             return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
         }
@@ -214,7 +216,7 @@ final class UserController extends AbstractController
             $id = $user->getId();
             $this->userRepository->remove($user);
             $this->userRepository->flush();
-            $this->dispatchMessage(new UserDeleted($id));
+            $this->dispatcher->dispatch(new UserDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_user_index');

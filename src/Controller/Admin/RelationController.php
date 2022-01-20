@@ -13,6 +13,7 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,8 @@ final class RelationController extends AbstractController
     private RelationRepository $relationRepository;
     private RelationHandler $relationHandler;
 
-    public function __construct(RelationRepository $relationRepository, RelationHandler $relationHandler)
+    public function __construct(RelationRepository $relationRepository, RelationHandler $relationHandler,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->relationRepository = $relationRepository;
         $this->relationHandler = $relationHandler;
@@ -43,7 +45,7 @@ final class RelationController extends AbstractController
 
             try {
                 $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
-                $this->dispatchMessage(new RelationCreated($relation->getId()));
+                $this->dispatcher->dispatch(new RelationCreated($relation->getId()));
             } catch (Exception $e) {
                 $this->addFlash('danger', $e->getMessage());
 
@@ -67,7 +69,7 @@ final class RelationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->relationRepository->flush();
 
-            $this->dispatchMessage(new RelationUpdated($relation->getId()));
+            $this->dispatcher->dispatch(new RelationUpdated($relation->getId()));
 
             return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $relation->getEnfant()->getId()]);
         }
@@ -105,7 +107,7 @@ final class RelationController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$relation->getId(), $request->request->get('_token'))) {
             $this->relationRepository->remove($relation);
             $this->relationRepository->flush();
-            $this->dispatchMessage(new RelationDeleted($relationId));
+            $this->dispatcher->dispatch(new RelationDeleted($relationId));
         }
 
         return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);

@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +24,8 @@ final class AnimateurController extends AbstractController
     private AnimateurRepository $animateurRepository;
     private EnfantRepository $enfantRepository;
 
-    public function __construct(AnimateurRepository $animateurRepository, EnfantRepository $enfantRepository)
+    public function __construct(AnimateurRepository $animateurRepository, EnfantRepository $enfantRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->animateurRepository = $animateurRepository;
         $this->enfantRepository = $enfantRepository;
@@ -65,7 +67,7 @@ final class AnimateurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->animateurRepository->flush();
 
-            $this->dispatchMessage(new AnimateurUpdated($this->animateur->getId()));
+            $this->dispatcher->dispatch(new AnimateurUpdated($this->animateur->getId()));
 
             return $this->redirectToRoute('mercredi_animateur_animateur_show');
         }

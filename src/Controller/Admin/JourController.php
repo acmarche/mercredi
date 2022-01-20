@@ -13,6 +13,7 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,8 @@ final class JourController extends AbstractController
     public function __construct(
         JourRepository $jourRepository,
         TarificationFormGeneratorInterface $tarificationFormGenerator,
-        PresenceRepository $presenceRepository
+        PresenceRepository $presenceRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->jourRepository = $jourRepository;
         $this->tarificationFormGenerator = $tarificationFormGenerator;
@@ -77,7 +79,7 @@ final class JourController extends AbstractController
             $this->jourRepository->persist($jour);
             $this->jourRepository->flush();
 
-            $this->dispatchMessage(new JourCreated($jour->getId()));
+            $this->dispatcher->dispatch(new JourCreated($jour->getId()));
 
             return $this->redirectToRoute('mercredi_admin_jour_tarif', ['id' => $jour->getId()]);
         }
@@ -104,7 +106,7 @@ final class JourController extends AbstractController
             $this->jourRepository->persist($jour);
             $this->jourRepository->flush();
 
-            $this->dispatchMessage(new JourCreated($jour->getId()));
+            $this->dispatcher->dispatch(new JourCreated($jour->getId()));
 
             return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
         }
@@ -148,7 +150,7 @@ final class JourController extends AbstractController
             $this->jourRepository->flush();
             //todo switch pedagogique
 
-            $this->dispatchMessage(new JourUpdated($jour->getId()));
+            $this->dispatcher->dispatch(new JourUpdated($jour->getId()));
 
             return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
         }
@@ -171,7 +173,7 @@ final class JourController extends AbstractController
             $jourId = $jour->getId();
             $this->jourRepository->remove($jour);
             $this->jourRepository->flush();
-            $this->dispatchMessage(new JourDeleted($jourId));
+            $this->dispatcher->dispatch(new JourDeleted($jourId));
         }
 
         return $this->redirectToRoute('mercredi_admin_jour_index');

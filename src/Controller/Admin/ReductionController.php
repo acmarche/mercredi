@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Reduction\Message\ReductionUpdated;
 use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,8 @@ final class ReductionController extends AbstractController
 {
     private ReductionRepository $reductionRepository;
 
-    public function __construct(ReductionRepository $reductionRepository)
+    public function __construct(ReductionRepository $reductionRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->reductionRepository = $reductionRepository;
     }
@@ -53,7 +55,7 @@ final class ReductionController extends AbstractController
             $this->reductionRepository->persist($reduction);
             $this->reductionRepository->flush();
 
-            $this->dispatchMessage(new ReductionCreated($reduction->getId()));
+            $this->dispatcher->dispatch(new ReductionCreated($reduction->getId()));
 
             return $this->redirectToRoute('mercredi_admin_reduction_show', ['id' => $reduction->getId()]);
         }
@@ -91,7 +93,7 @@ final class ReductionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->reductionRepository->flush();
 
-            $this->dispatchMessage(new ReductionUpdated($reduction->getId()));
+            $this->dispatcher->dispatch(new ReductionUpdated($reduction->getId()));
 
             return $this->redirectToRoute('mercredi_admin_reduction_show', ['id' => $reduction->getId()]);
         }
@@ -114,7 +116,7 @@ final class ReductionController extends AbstractController
             $id = $reduction->getId();
             $this->reductionRepository->remove($reduction);
             $this->reductionRepository->flush();
-            $this->dispatchMessage(new ReductionDeleted($id));
+            $this->dispatcher->dispatch(new ReductionDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_reduction_index');

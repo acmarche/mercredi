@@ -21,6 +21,7 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,8 @@ final class FactureController extends AbstractController
         FactureHandlerInterface $factureHandler,
         FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         FactureCalculatorInterface $factureCalculator,
-        FactureRenderInterface $factureRender
+        FactureRenderInterface $factureRender,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->factureRepository = $factureRepository;
         $this->factureHandler = $factureHandler;
@@ -148,7 +150,7 @@ final class FactureController extends AbstractController
             $accueilsF = (array) $request->request->get('accueils', []);
             $this->factureHandler->handleManually($facture, $presencesF, $accueilsF);
 
-            $this->dispatchMessage(new FactureCreated($facture->getId()));
+            $this->dispatcher->dispatch(new FactureCreated($facture->getId()));
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
@@ -181,7 +183,7 @@ final class FactureController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_facture_index_by_tuteur', ['id' => $tuteur->getId()]);
             }
 
-            $this->dispatchMessage(new FactureCreated($facture->getId()));
+            $this->dispatcher->dispatch(new FactureCreated($facture->getId()));
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
@@ -217,7 +219,7 @@ final class FactureController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_facture_new_month_all');
             }
 
-            $this->dispatchMessage(new FacturesCreated($factures));
+            $this->dispatcher->dispatch(new FacturesCreated($factures));
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }
@@ -259,7 +261,7 @@ final class FactureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->factureRepository->flush();
 
-            $this->dispatchMessage(new FactureUpdated($facture->getId()));
+            $this->dispatcher->dispatch(new FactureUpdated($facture->getId()));
 
             return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
         }
@@ -309,7 +311,7 @@ final class FactureController extends AbstractController
             $tuteur = $facture->getTuteur();
             $this->factureRepository->remove($facture);
             $this->factureRepository->flush();
-            $this->dispatchMessage(new FactureDeleted($factureId));
+            $this->dispatcher->dispatch(new FactureDeleted($factureId));
         }
 
         return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);

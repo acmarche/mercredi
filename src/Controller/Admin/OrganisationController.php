@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Organisation\Message\OrganisationUpdated;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,8 @@ final class OrganisationController extends AbstractController
 {
     private OrganisationRepository $organisationRepository;
 
-    public function __construct(OrganisationRepository $organisationRepository)
+    public function __construct(OrganisationRepository $organisationRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->organisationRepository = $organisationRepository;
     }
@@ -63,7 +65,7 @@ final class OrganisationController extends AbstractController
             $this->organisationRepository->persist($organisation);
             $this->organisationRepository->flush();
 
-            $this->dispatchMessage(new OrganisationCreated($organisation->getId()));
+            $this->dispatcher->dispatch(new OrganisationCreated($organisation->getId()));
 
             return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
@@ -101,7 +103,7 @@ final class OrganisationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->organisationRepository->flush();
 
-            $this->dispatchMessage(new OrganisationUpdated($organisation->getId()));
+            $this->dispatcher->dispatch(new OrganisationUpdated($organisation->getId()));
 
             return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
         }
@@ -124,7 +126,7 @@ final class OrganisationController extends AbstractController
             $id = $organisation->getId();
             $this->organisationRepository->remove($organisation);
             $this->organisationRepository->flush();
-            $this->dispatchMessage(new OrganisationDeleted($id));
+            $this->dispatcher->dispatch(new OrganisationDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_organisation_index');

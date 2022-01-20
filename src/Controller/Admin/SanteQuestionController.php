@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Sante\Message\SanteQuestionUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,8 @@ final class SanteQuestionController extends AbstractController
 {
     private SanteQuestionRepository $santeQuestionRepository;
 
-    public function __construct(SanteQuestionRepository $santeQuestionRepository)
+    public function __construct(SanteQuestionRepository $santeQuestionRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->santeQuestionRepository = $santeQuestionRepository;
     }
@@ -53,7 +55,7 @@ final class SanteQuestionController extends AbstractController
             $this->santeQuestionRepository->persist($santeQuestion);
             $this->santeQuestionRepository->flush();
 
-            $this->dispatchMessage(new SanteQuestionCreated($santeQuestion->getId()));
+            $this->dispatcher->dispatch(new SanteQuestionCreated($santeQuestion->getId()));
 
             return $this->redirectToRoute('mercredi_admin_sante_question_show', ['id' => $santeQuestion->getId()]);
         }
@@ -91,7 +93,7 @@ final class SanteQuestionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->santeQuestionRepository->flush();
 
-            $this->dispatchMessage(new SanteQuestionUpdated($santeQuestion->getId()));
+            $this->dispatcher->dispatch(new SanteQuestionUpdated($santeQuestion->getId()));
 
             return $this->redirectToRoute('mercredi_admin_sante_question_show', ['id' => $santeQuestion->getId()]);
         }
@@ -114,7 +116,7 @@ final class SanteQuestionController extends AbstractController
             $id = $santeQuestion->getId();
             $this->santeQuestionRepository->remove($santeQuestion);
             $this->santeQuestionRepository->flush();
-            $this->dispatchMessage(new SanteQuestionDeleted($id));
+            $this->dispatcher->dispatch(new SanteQuestionDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_sante_question_index');

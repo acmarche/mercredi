@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\Registration\MessageHandler\RegisterCreatedHandler;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -23,7 +24,8 @@ final class RegistrationController extends AbstractController
     public function __construct(
         RegisterCreatedHandler $registerCreatedHandler,
         UserPasswordHasherInterface $userPasswordEncoder,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->userRepository = $userRepository;
@@ -57,7 +59,7 @@ final class RegistrationController extends AbstractController
             $this->userRepository->persist($user);
             $this->userRepository->flush();
 
-            $this->dispatchMessage(new RegisterCreated($user->getId()));
+            $this->dispatcher->dispatch(new RegisterCreated($user->getId()));
 
             return $this->redirectToRoute('mercredi_front_home');
         }

@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Page\Message\PageUpdated;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,8 @@ final class PageController extends AbstractController
 {
     private PageRepository $pageRepository;
 
-    public function __construct(PageRepository $pageRepository)
+    public function __construct(PageRepository $pageRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->pageRepository = $pageRepository;
     }
@@ -53,7 +55,7 @@ final class PageController extends AbstractController
             $this->pageRepository->persist($page);
             $this->pageRepository->flush();
 
-            $this->dispatchMessage(new PageCreated($page->getId()));
+            $this->dispatcher->dispatch(new PageCreated($page->getId()));
 
             return $this->redirectToRoute('mercredi_admin_page_show', ['id' => $page->getId()]);
         }
@@ -91,7 +93,7 @@ final class PageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pageRepository->flush();
 
-            $this->dispatchMessage(new PageUpdated($page->getId()));
+            $this->dispatcher->dispatch(new PageUpdated($page->getId()));
 
             return $this->redirectToRoute('mercredi_admin_page_show', ['id' => $page->getId()]);
         }
@@ -114,7 +116,7 @@ final class PageController extends AbstractController
             $pageId = $page->getId();
             $this->pageRepository->remove($page);
             $this->pageRepository->flush();
-            $this->dispatchMessage(new PageDeleted($pageId));
+            $this->dispatcher->dispatch(new PageDeleted($pageId));
         }
 
         return $this->redirectToRoute('mercredi_admin_page_index');

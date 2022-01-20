@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +28,8 @@ final class DocumentController extends AbstractController
 
     public function __construct(
         DocumentRepository $documentRepository,
-        PageRepository $pageRepository
+        PageRepository $pageRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->documentRepository = $documentRepository;
         $this->pageRepository = $pageRepository;
@@ -63,7 +65,7 @@ final class DocumentController extends AbstractController
             $this->documentRepository->flush();
             $this->pageRepository->flush();
 
-            $this->dispatchMessage(new DocumentCreated($document->getId()));
+            $this->dispatcher->dispatch(new DocumentCreated($document->getId()));
 
             return $this->redirectToRoute('mercredi_admin_page_show', ['id' => $page->getId()]);
         }
@@ -100,7 +102,7 @@ final class DocumentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->documentRepository->flush();
 
-            $this->dispatchMessage(new DocumentUpdated($document->getId()));
+            $this->dispatcher->dispatch(new DocumentUpdated($document->getId()));
 
             return $this->redirectToRoute('mercredi_admin_document_show', ['id' => $document->getId()]);
         }
@@ -123,7 +125,7 @@ final class DocumentController extends AbstractController
             $id = $document->getId();
             $this->documentRepository->remove($document);
             $this->documentRepository->flush();
-            $this->dispatchMessage(new DocumentDeleted($id));
+            $this->dispatcher->dispatch(new DocumentDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_document_index');

@@ -18,6 +18,7 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,30 +29,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class EnfantController extends AbstractController
 {
-    private EnfantRepository $enfantRepository;
-    private EnfantHandler $enfantHandler;
-    private RelationRepository $relationRepository;
-    private PresenceRepository $presenceRepository;
-    private PresenceUtils $presenceUtils;
-    private SearchHelper $searchHelper;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        EnfantRepository $enfantRepository,
-        EnfantHandler $enfantHandler,
-        RelationRepository $relationRepository,
-        PresenceRepository $presenceRepository,
-        PresenceUtils $presenceUtils,
-        SearchHelper $searchHelper,
-        PlainePresenceRepository $plainePresenceRepository
+        private EnfantRepository $enfantRepository,
+        private EnfantHandler $enfantHandler,
+        private RelationRepository $relationRepository,
+        private PresenceRepository $presenceRepository,
+        private PresenceUtils $presenceUtils,
+        private SearchHelper $searchHelper,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->enfantHandler = $enfantHandler;
-        $this->relationRepository = $relationRepository;
-        $this->presenceRepository = $presenceRepository;
-        $this->presenceUtils = $presenceUtils;
-        $this->searchHelper = $searchHelper;
-        $this->plainePresenceRepository = $plainePresenceRepository;
+
     }
 
     /**
@@ -98,7 +86,7 @@ final class EnfantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantHandler->newHandle($enfant, $tuteur);
-            $this->dispatchMessage(new EnfantCreated($enfant->getId()));
+            $this->dispatcher->dispatch(new EnfantCreated($enfant->getId()));
 
             return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
         }
@@ -148,7 +136,7 @@ final class EnfantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantRepository->flush();
 
-            $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
+            $this->dispatcher->dispatch(new EnfantUpdated($enfant->getId()));
 
             return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
         }
@@ -171,7 +159,7 @@ final class EnfantController extends AbstractController
             $enfantId = $enfant->getId();
             $this->enfantRepository->remove($enfant);
             $this->enfantRepository->flush();
-            $this->dispatchMessage(new EnfantDeleted($enfantId));
+            $this->dispatcher->dispatch(new EnfantDeleted($enfantId));
         }
 
         return $this->redirectToRoute('mercredi_admin_enfant_index');

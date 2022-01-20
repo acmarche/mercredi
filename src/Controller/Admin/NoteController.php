@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Note\Message\NoteUpdated;
 use AcMarche\Mercredi\Note\Repository\NoteRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +24,8 @@ final class NoteController extends AbstractController
 {
     private NoteRepository $noteRepository;
 
-    public function __construct(NoteRepository $noteRepository)
+    public function __construct(NoteRepository $noteRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->noteRepository = $noteRepository;
     }
@@ -54,7 +56,7 @@ final class NoteController extends AbstractController
             $this->noteRepository->persist($note);
             $this->noteRepository->flush();
 
-            $this->dispatchMessage(new NoteCreated($note->getId()));
+            $this->dispatcher->dispatch(new NoteCreated($note->getId()));
 
             return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
         }
@@ -81,7 +83,7 @@ final class NoteController extends AbstractController
             $this->noteRepository->persist($note);
             $this->noteRepository->flush();
 
-            $this->dispatchMessage(new NoteCreated($note->getId()));
+            $this->dispatcher->dispatch(new NoteCreated($note->getId()));
 
             return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
         }
@@ -135,7 +137,7 @@ final class NoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->noteRepository->flush();
 
-            $this->dispatchMessage(new NoteUpdated($note->getId()));
+            $this->dispatcher->dispatch(new NoteUpdated($note->getId()));
 
             return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
         }
@@ -159,7 +161,7 @@ final class NoteController extends AbstractController
             $noteId = $note->getId();
             $this->noteRepository->remove($note);
             $this->noteRepository->flush();
-            $this->dispatchMessage(new NoteDeleted($noteId));
+            $this->dispatcher->dispatch(new NoteDeleted($noteId));
 
             return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
         }

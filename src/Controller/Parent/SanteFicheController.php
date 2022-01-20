@@ -15,6 +15,7 @@ use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +37,8 @@ final class SanteFicheController extends AbstractController
         OrganisationRepository $organisationRepository,
         SanteHandler $santeHandler,
         SanteChecker $santeChecker,
-        SanteFicheRepository $santeFicheRepository
+        SanteFicheRepository $santeFicheRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;
@@ -86,7 +88,7 @@ final class SanteFicheController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->santeFicheRepository->flush();
-            $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
+            $this->dispatcher->dispatch(new EnfantUpdated($enfant->getId()));
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_edit_etape2', ['uuid' => $enfant->getUuid()]);
         }
@@ -117,7 +119,7 @@ final class SanteFicheController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->santeFicheRepository->flush();
-            $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
+            $this->dispatcher->dispatch(new SanteFicheUpdated($santeFiche->getId()));
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_edit_etape3', ['uuid' => $enfant->getUuid()]);
         }
@@ -147,7 +149,7 @@ final class SanteFicheController extends AbstractController
             $questions = $form->getData()->getQuestions();
             $this->santeHandler->handle($santeFiche, $questions);
 
-            $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
+            $this->dispatcher->dispatch(new SanteFicheUpdated($santeFiche->getId()));
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
         }

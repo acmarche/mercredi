@@ -28,6 +28,7 @@ use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,7 +56,8 @@ final class PresenceController extends AbstractController
         FacturePresenceRepository $facturePresenceRepository,
         FactureHandlerInterface $factureHandler,
         PresenceCalculatorInterface $presenceCalculator,
-        OrdreService $ordreService
+        OrdreService $ordreService,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -162,7 +164,7 @@ final class PresenceController extends AbstractController
 
             $this->presenceHandler->handleNew($tuteur, $enfant, $days);
 
-            $this->dispatchMessage(new PresenceCreated($days));
+            $this->dispatcher->dispatch(new PresenceCreated($days));
 
             return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
         }
@@ -215,7 +217,7 @@ final class PresenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->presenceRepository->flush();
 
-            $this->dispatchMessage(new PresenceUpdated($presence->getId()));
+            $this->dispatcher->dispatch(new PresenceUpdated($presence->getId()));
 
             return $this->redirectToRoute('mercredi_admin_presence_show', ['id' => $presence->getId()]);
         }
@@ -245,7 +247,7 @@ final class PresenceController extends AbstractController
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
             $this->presenceRepository->flush();
-            $this->dispatchMessage(new PresenceDeleted($presenceId));
+            $this->dispatcher->dispatch(new PresenceDeleted($presenceId));
         }
 
         return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);

@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireUpdated;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,8 @@ final class GroupeScolaireController extends AbstractController
 {
     private GroupeScolaireRepository $groupeScolaireRepository;
 
-    public function __construct(GroupeScolaireRepository $groupeScolaireRepository)
+    public function __construct(GroupeScolaireRepository $groupeScolaireRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->groupeScolaireRepository = $groupeScolaireRepository;
     }
@@ -53,7 +55,7 @@ final class GroupeScolaireController extends AbstractController
             $this->groupeScolaireRepository->persist($groupeScolaire);
             $this->groupeScolaireRepository->flush();
 
-            $this->dispatchMessage(new GroupeScolaireCreated($groupeScolaire->getId()));
+            $this->dispatcher->dispatch(new GroupeScolaireCreated($groupeScolaire->getId()));
 
             return $this->redirectToRoute('mercredi_admin_groupe_scolaire_show', ['id' => $groupeScolaire->getId()]);
         }
@@ -91,7 +93,7 @@ final class GroupeScolaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->groupeScolaireRepository->flush();
 
-            $this->dispatchMessage(new GroupeScolaireUpdated($groupeScolaire->getId()));
+            $this->dispatcher->dispatch(new GroupeScolaireUpdated($groupeScolaire->getId()));
 
             return $this->redirectToRoute('mercredi_admin_groupe_scolaire_show', ['id' => $groupeScolaire->getId()]);
         }
@@ -114,7 +116,7 @@ final class GroupeScolaireController extends AbstractController
             $ecoleId = $groupeScolaire->getId();
             $this->groupeScolaireRepository->remove($groupeScolaire);
             $this->groupeScolaireRepository->flush();
-            $this->dispatchMessage(new GroupeScolaireDeleted($ecoleId));
+            $this->dispatcher->dispatch(new GroupeScolaireDeleted($ecoleId));
         }
 
         return $this->redirectToRoute('mercredi_admin_groupe_scolaire_index');

@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +24,8 @@ final class TuteurController extends AbstractController
 
     private TuteurRepository $tuteurRepository;
 
-    public function __construct(TuteurRepository $tuteurRepository)
+    public function __construct(TuteurRepository $tuteurRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->tuteurRepository = $tuteurRepository;
     }
@@ -65,7 +67,7 @@ final class TuteurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tuteurRepository->flush();
 
-            $this->dispatchMessage(new TuteurUpdated($this->tuteur->getId()));
+            $this->dispatcher->dispatch(new TuteurUpdated($this->tuteur->getId()));
 
             return $this->redirectToRoute('mercredi_parent_tuteur_show');
         }

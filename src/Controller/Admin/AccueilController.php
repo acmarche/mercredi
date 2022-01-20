@@ -20,6 +20,7 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +45,8 @@ final class AccueilController extends AbstractController
         RelationRepository $relationRepository,
         AccueilCalculatorInterface $accueilCalculator,
         FactureHandlerInterface $factureHandler,
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
@@ -110,7 +112,7 @@ final class AccueilController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
-            $this->dispatchMessage(new AccueilCreated($result->getId()));
+            $this->dispatcher->dispatch(new AccueilCreated($result->getId()));
 
             return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $result->getId()]);
         }
@@ -163,7 +165,7 @@ final class AccueilController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->accueilRepository->flush();
 
-            $this->dispatchMessage(new AccueilUpdated($accueil->getId()));
+            $this->dispatcher->dispatch(new AccueilUpdated($accueil->getId()));
 
             return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
         }
@@ -194,7 +196,7 @@ final class AccueilController extends AbstractController
             $enfant = $accueil->getEnfant();
             $this->accueilRepository->remove($accueil);
             $this->accueilRepository->flush();
-            $this->dispatchMessage(new AccueilDeleted($id));
+            $this->dispatcher->dispatch(new AccueilDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);

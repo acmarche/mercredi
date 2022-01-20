@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,8 @@ final class EcoleController extends AbstractController
     private EcoleRepository $ecoleRepository;
     private EnfantRepository $enfantRepository;
 
-    public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository)
+    public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->ecoleRepository = $ecoleRepository;
         $this->enfantRepository = $enfantRepository;
@@ -57,7 +59,7 @@ final class EcoleController extends AbstractController
             $this->ecoleRepository->persist($ecole);
             $this->ecoleRepository->flush();
 
-            $this->dispatchMessage(new EcoleCreated($ecole->getId()));
+            $this->dispatcher->dispatch(new EcoleCreated($ecole->getId()));
 
             return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
         }
@@ -98,7 +100,7 @@ final class EcoleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->ecoleRepository->flush();
 
-            $this->dispatchMessage(new EcoleUpdated($ecole->getId()));
+            $this->dispatcher->dispatch(new EcoleUpdated($ecole->getId()));
 
             return $this->redirectToRoute('mercredi_admin_ecole_show', ['id' => $ecole->getId()]);
         }
@@ -126,7 +128,7 @@ final class EcoleController extends AbstractController
             $ecoleId = $ecole->getId();
             $this->ecoleRepository->remove($ecole);
             $this->ecoleRepository->flush();
-            $this->dispatchMessage(new EcoleDeleted($ecoleId));
+            $this->dispatcher->dispatch(new EcoleDeleted($ecoleId));
         }
 
         return $this->redirectToRoute('mercredi_admin_ecole_index');

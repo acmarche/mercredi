@@ -16,6 +16,7 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Search\Form\SearchEnfantEcoleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -46,7 +47,8 @@ final class EnfantController extends AbstractController
         AccueilRepository $accueilRepository,
         RelationRepository $relationRepository,
         SanteQuestionRepository $santeQuestionRepository,
-        OrganisationRepository $organisationRepository
+        OrganisationRepository $organisationRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->santeHandler = $santeHandler;
@@ -126,7 +128,7 @@ final class EnfantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantRepository->flush();
 
-            $this->dispatchMessage(new EnfantUpdated($enfant->getId()));
+            $this->dispatcher->dispatch(new EnfantUpdated($enfant->getId()));
 
             return $this->redirectToRoute('mercredi_ecole_enfant_index', ['uuid' => $enfant->getUuid()]);
         }

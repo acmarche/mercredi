@@ -19,6 +19,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +51,8 @@ final class PresenceController extends AbstractController
         SanteHandler $santeHandler,
         PresenceCalculatorInterface $presenceCalculator,
         PresenceDaysProviderInterface $presenceDaysProvider,
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->presenceRepository = $presenceRepository;
         $this->presenceHandler = $presenceHandler;
@@ -113,7 +115,7 @@ final class PresenceController extends AbstractController
 
             $this->presenceHandler->handleNew($this->tuteur, $enfant, $days);
 
-            $this->dispatchMessage(new PresenceCreated($days));
+            $this->dispatcher->dispatch(new PresenceCreated($days));
 
             return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
         }
@@ -162,7 +164,7 @@ final class PresenceController extends AbstractController
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
             $this->presenceRepository->flush();
-            $this->dispatchMessage(new PresenceDeleted($presenceId));
+            $this->dispatcher->dispatch(new PresenceDeleted($presenceId));
         }
 
         return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);

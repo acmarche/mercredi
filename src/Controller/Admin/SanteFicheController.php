@@ -14,6 +14,7 @@ use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +37,8 @@ final class SanteFicheController extends AbstractController
         SanteQuestionRepository $santeQuestionRepository,
         OrganisationRepository $organisationRepository,
         SanteHandler $santeHandler,
-        SanteChecker $santeChecker
+        SanteChecker $santeChecker,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->santeFicheRepository = $santeFicheRepository;
         $this->santeHandler = $santeHandler;
@@ -91,7 +93,7 @@ final class SanteFicheController extends AbstractController
             $questions = $form->getData()->getQuestions();
             $this->santeHandler->handle($santeFiche, $questions);
 
-            $this->dispatchMessage(new SanteFicheUpdated($santeFiche->getId()));
+            $this->dispatcher->dispatch(new SanteFicheUpdated($santeFiche->getId()));
 
             return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $enfant->getId()]);
         }
@@ -116,7 +118,7 @@ final class SanteFicheController extends AbstractController
             $enfant = $santeFiche->getEnfant();
             $this->santeFicheRepository->remove($santeFiche);
             $this->santeFicheRepository->flush();
-            $this->dispatchMessage(new SanteFicheDeleted($id));
+            $this->dispatcher->dispatch(new SanteFicheDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);

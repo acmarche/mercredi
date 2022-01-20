@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,8 @@ final class PlaineController extends AbstractController
         PlainePresenceRepository $plainePresenceRepository,
         GroupeScolaireRepository $groupeScolaireRepository,
         PlaineAdminHandler $plaineHandler,
-        GroupingInterface $grouping
+        GroupingInterface $grouping,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;
@@ -97,7 +99,7 @@ final class PlaineController extends AbstractController
             $this->plaineRepository->persist($plaine);
             $this->plaineRepository->flush();
 
-            $this->dispatchMessage(new PlaineCreated($plaine->getId()));
+            $this->dispatcher->dispatch(new PlaineCreated($plaine->getId()));
 
             return $this->redirectToRoute('mercredi_admin_plaine_jour_edit', ['id' => $plaine->getId()]);
         }
@@ -145,7 +147,7 @@ final class PlaineController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->plaineRepository->flush();
 
-            $this->dispatchMessage(new PlaineUpdated($plaine->getId()));
+            $this->dispatcher->dispatch(new PlaineUpdated($plaine->getId()));
 
             return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
         }
@@ -170,7 +172,7 @@ final class PlaineController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if (($plaineOpen = $this->plaineAdminHandler->handleOpeningRegistrations($plaine)) === null) {
                 $this->plaineRepository->flush();
-                $this->dispatchMessage(new PlaineUpdated($plaine->getId()));
+                $this->dispatcher->dispatch(new PlaineUpdated($plaine->getId()));
             } else {
                 $this->addFlash(
                     'danger',
@@ -200,7 +202,7 @@ final class PlaineController extends AbstractController
             $plaineId = $plaine->getId();
             $this->plaineRepository->remove($plaine);
             $this->plaineRepository->flush();
-            $this->dispatchMessage(new PlaineDeleted($plaineId));
+            $this->dispatcher->dispatch(new PlaineDeleted($plaineId));
         }
 
         return $this->redirectToRoute('mercredi_admin_plaine_index');

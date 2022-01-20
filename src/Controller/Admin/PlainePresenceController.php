@@ -21,6 +21,7 @@ use AcMarche\Mercredi\Utils\SortUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,8 @@ final class PlainePresenceController extends AbstractController
         EnfantRepository $enfantRepository,
         RelationRepository $relationRepository,
         PlainePresenceRepository $plainePresenceRepository,
-        PlaineCalculatorInterface $plaineCalculator
+        PlaineCalculatorInterface $plaineCalculator,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->plaineHandler = $plaineHandler;
@@ -169,7 +171,7 @@ final class PlainePresenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->plainePresenceRepository->flush();
 
-            $this->dispatchMessage(new PresenceUpdated($presence->getId()));
+            $this->dispatcher->dispatch(new PresenceUpdated($presence->getId()));
 
             return $this->redirectToRoute(
                 'mercredi_admin_plaine_presence_show',

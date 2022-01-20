@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,7 +52,8 @@ final class EnfantController extends AbstractController
         AccueilRepository $accueilRepository,
         EnfantHandler $enfantHandler,
         AdminEmailFactory $adminEmailFactory,
-        NotificationMailer $notifcationMailer
+        NotificationMailer $notifcationMailer,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->relationUtils = $relationUtils;
@@ -100,7 +102,7 @@ final class EnfantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantHandler->newHandle($enfant, $this->tuteur);
-            $this->dispatchMessage(new EnfantCreated($enfant->getId()));
+            $this->dispatcher->dispatch(new EnfantCreated($enfant->getId()));
             $enfant->setPhoto(null); //bug serialize
             $message = $this->adminEmailFactory->messageEnfantCreated($this->getUser(), $enfant);
             $this->notifcationMailer->sendAsEmailNotification($message);

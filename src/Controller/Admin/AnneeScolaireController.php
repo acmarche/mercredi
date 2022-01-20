@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireUpdated;
 use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,8 @@ final class AnneeScolaireController extends AbstractController
 {
     private AnneeScolaireRepository $anneeScolaireRepository;
 
-    public function __construct(AnneeScolaireRepository $anneeScolaireRepository)
+    public function __construct(AnneeScolaireRepository $anneeScolaireRepository,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->anneeScolaireRepository = $anneeScolaireRepository;
     }
@@ -53,7 +55,7 @@ final class AnneeScolaireController extends AbstractController
             $this->anneeScolaireRepository->persist($anneeScolaire);
             $this->anneeScolaireRepository->flush();
 
-            $this->dispatchMessage(new AnneeScolaireCreated($anneeScolaire->getId()));
+            $this->dispatcher->dispatch(new AnneeScolaireCreated($anneeScolaire->getId()));
 
             return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
         }
@@ -91,7 +93,7 @@ final class AnneeScolaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->anneeScolaireRepository->flush();
 
-            $this->dispatchMessage(new AnneeScolaireUpdated($anneeScolaire->getId()));
+            $this->dispatcher->dispatch(new AnneeScolaireUpdated($anneeScolaire->getId()));
 
             return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
         }
@@ -120,7 +122,7 @@ final class AnneeScolaireController extends AbstractController
             $ecoleId = $anneeScolaire->getId();
             $this->anneeScolaireRepository->remove($anneeScolaire);
             $this->anneeScolaireRepository->flush();
-            $this->dispatchMessage(new AnneeScolaireDeleted($ecoleId));
+            $this->dispatcher->dispatch(new AnneeScolaireDeleted($ecoleId));
         }
 
         return $this->redirectToRoute('mercredi_admin_annee_scolaire_index');

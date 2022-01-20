@@ -24,6 +24,7 @@ use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,7 +52,8 @@ final class AccueilController extends AbstractController
         AccueilCalculatorInterface $accueilCalculator,
         EnfantRepository $enfantRepository,
         DateUtils $dateUtils,
-        FacturePresenceRepository $facturePresenceRepository
+        FacturePresenceRepository $facturePresenceRepository,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->accueilRepository = $accueilRepository;
         $this->accueilHandler = $accueilHandler;
@@ -107,7 +109,7 @@ final class AccueilController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
-            $this->dispatchMessage(new AccueilCreated($result->getId()));
+            $this->dispatcher->dispatch(new AccueilCreated($result->getId()));
 
             return $this->redirectToRoute('mercredi_ecole_accueil_show', ['uuid' => $result->getUuid()]);
         }
@@ -154,7 +156,7 @@ final class AccueilController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->accueilRepository->flush();
 
-            $this->dispatchMessage(new AccueilUpdated($accueil->getId()));
+            $this->dispatcher->dispatch(new AccueilUpdated($accueil->getId()));
 
             return $this->redirectToRoute('mercredi_ecole_accueil_show', ['uuid' => $accueil->getUuid()]);
         }

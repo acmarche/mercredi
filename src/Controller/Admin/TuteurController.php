@@ -13,6 +13,7 @@ use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,8 @@ final class TuteurController extends AbstractController
     public function __construct(
         TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
-        SearchHelper $searchHelper
+        SearchHelper $searchHelper,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;
@@ -77,7 +79,7 @@ final class TuteurController extends AbstractController
             $this->tuteurRepository->persist($tuteur);
             $this->tuteurRepository->flush();
 
-            $this->dispatchMessage(new TuteurCreated($tuteur->getId()));
+            $this->dispatcher->dispatch(new TuteurCreated($tuteur->getId()));
 
             return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
@@ -118,7 +120,7 @@ final class TuteurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tuteurRepository->flush();
 
-            $this->dispatchMessage(new TuteurUpdated($tuteur->getId()));
+            $this->dispatcher->dispatch(new TuteurUpdated($tuteur->getId()));
 
             return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
@@ -147,7 +149,7 @@ final class TuteurController extends AbstractController
             $id = $tuteur->getId();
             $this->tuteurRepository->remove($tuteur);
             $this->tuteurRepository->flush();
-            $this->dispatchMessage(new TuteurDeleted($id));
+            $this->dispatcher->dispatch(new TuteurDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_tuteur_index');

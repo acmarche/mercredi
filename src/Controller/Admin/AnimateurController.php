@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +28,8 @@ final class AnimateurController extends AbstractController
 
     public function __construct(
         AnimateurRepository $animateurRepository,
-        SearchHelper $searchHelper
+        SearchHelper $searchHelper,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->animateurRepository = $animateurRepository;
         $this->searchHelper = $searchHelper;
@@ -73,7 +75,7 @@ final class AnimateurController extends AbstractController
             $this->animateurRepository->persist($animateur);
             $this->animateurRepository->flush();
 
-            $this->dispatchMessage(new AnimateurCreated($animateur->getId()));
+            $this->dispatcher->dispatch(new AnimateurCreated($animateur->getId()));
 
             return $this->redirectToRoute('mercredi_admin_animateur_show', ['id' => $animateur->getId()]);
         }
@@ -111,7 +113,7 @@ final class AnimateurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->animateurRepository->flush();
 
-            $this->dispatchMessage(new AnimateurUpdated($animateur->getId()));
+            $this->dispatcher->dispatch(new AnimateurUpdated($animateur->getId()));
 
             return $this->redirectToRoute('mercredi_admin_animateur_show', ['id' => $animateur->getId()]);
         }
@@ -136,7 +138,7 @@ final class AnimateurController extends AbstractController
             $id = $animateur->getId();
             $this->animateurRepository->remove($animateur);
             $this->animateurRepository->flush();
-            $this->dispatchMessage(new AnimateurDeleted($id));
+            $this->dispatcher->dispatch(new AnimateurDeleted($id));
         }
 
         return $this->redirectToRoute('mercredi_admin_animateur_index');

@@ -9,6 +9,7 @@ use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,7 +26,8 @@ final class ProfileController extends AbstractController
     private UserRepository $userRepository;
     private UserPasswordHasherInterface $userPasswordEncoder;
 
-    public function __construct(UserRepository $userRepository, UserPasswordHasherInterface $userPasswordEncoder)
+    public function __construct(UserRepository $userRepository, UserPasswordHasherInterface $userPasswordEncoder,
+        private EventDispatcherInterface $dispatcher)
     {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoder = $userPasswordEncoder;
@@ -121,7 +123,7 @@ final class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->flush();
 
-            $this->dispatchMessage(new UserUpdated($user->getId()));
+            $this->dispatcher->dispatch(new UserUpdated($user->getId()));
 
             return $this->redirectToRoute('mercredi_front_user_show');
         }
