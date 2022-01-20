@@ -10,7 +10,7 @@ use AcMarche\Mercredi\Organisation\Message\OrganisationUpdated;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +24,7 @@ final class OrganisationController extends AbstractController
     private OrganisationRepository $organisationRepository;
 
     public function __construct(OrganisationRepository $organisationRepository,
-        private EventDispatcherInterface $dispatcher)
+        private MessageBusInterface $dispatcher)
     {
         $this->organisationRepository = $organisationRepository;
     }

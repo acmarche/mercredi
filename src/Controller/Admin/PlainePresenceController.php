@@ -21,7 +21,7 @@ use AcMarche\Mercredi\Utils\SortUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +45,7 @@ final class PlainePresenceController extends AbstractController
         RelationRepository $relationRepository,
         PlainePresenceRepository $plainePresenceRepository,
         PlaineCalculatorInterface $plaineCalculator,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->enfantRepository = $enfantRepository;
         $this->plaineHandler = $plaineHandler;

@@ -12,7 +12,7 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +29,7 @@ final class AnimateurController extends AbstractController
     public function __construct(
         AnimateurRepository $animateurRepository,
         SearchHelper $searchHelper,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->animateurRepository = $animateurRepository;
         $this->searchHelper = $searchHelper;

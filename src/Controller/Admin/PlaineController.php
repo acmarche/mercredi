@@ -17,7 +17,7 @@ use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +41,7 @@ final class PlaineController extends AbstractController
         GroupeScolaireRepository $groupeScolaireRepository,
         PlaineAdminHandler $plaineHandler,
         GroupingInterface $grouping,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->plaineRepository = $plaineRepository;
         $this->plainePresenceRepository = $plainePresenceRepository;

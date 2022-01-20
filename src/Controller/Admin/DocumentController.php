@@ -12,7 +12,7 @@ use AcMarche\Mercredi\Entity\Page;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +29,7 @@ final class DocumentController extends AbstractController
     public function __construct(
         DocumentRepository $documentRepository,
         PageRepository $pageRepository,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->documentRepository = $documentRepository;
         $this->pageRepository = $pageRepository;

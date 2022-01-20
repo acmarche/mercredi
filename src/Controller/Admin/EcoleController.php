@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ final class EcoleController extends AbstractController
     private EnfantRepository $enfantRepository;
 
     public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository,
-        private EventDispatcherInterface $dispatcher)
+        private MessageBusInterface $dispatcher)
     {
         $this->ecoleRepository = $ecoleRepository;
         $this->enfantRepository = $enfantRepository;

@@ -15,7 +15,7 @@ use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +38,7 @@ final class SanteFicheController extends AbstractController
         SanteHandler $santeHandler,
         SanteChecker $santeChecker,
         SanteFicheRepository $santeFicheRepository,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->santeHandler = $santeHandler;
         $this->santeChecker = $santeChecker;

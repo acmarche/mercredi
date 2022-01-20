@@ -13,7 +13,7 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +32,7 @@ final class JourController extends AbstractController
         JourRepository $jourRepository,
         TarificationFormGeneratorInterface $tarificationFormGenerator,
         PresenceRepository $presenceRepository,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->jourRepository = $jourRepository;
         $this->tarificationFormGenerator = $tarificationFormGenerator;

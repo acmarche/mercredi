@@ -13,7 +13,7 @@ use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +32,7 @@ final class TuteurController extends AbstractController
         TuteurRepository $tuteurRepository,
         RelationRepository $relationRepository,
         SearchHelper $searchHelper,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->tuteurRepository = $tuteurRepository;
         $this->relationRepository = $relationRepository;

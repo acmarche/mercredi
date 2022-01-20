@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\Registration\MessageHandler\RegisterCreatedHandler;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,7 +25,7 @@ final class RegistrationController extends AbstractController
         RegisterCreatedHandler $registerCreatedHandler,
         UserPasswordHasherInterface $userPasswordEncoder,
         UserRepository $userRepository,
-        private EventDispatcherInterface $dispatcher
+        private MessageBusInterface $dispatcher
     ) {
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->userRepository = $userRepository;
