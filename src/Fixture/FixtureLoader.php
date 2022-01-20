@@ -6,33 +6,25 @@ use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class FixtureLoader
 {
-    private LoaderInterface $loader;
-    private ParameterBagInterface $parameterBag;
-    private TuteurRepository $tuteurRepository;
-    private PresenceRepository $presenceRepository;
-    private EnfantRepository $enfantRepository;
-    private AccueilRepository $accueilRepository;
-
     public function __construct(
-        LoaderInterface $loader,
-        ParameterBagInterface $parameterBag,
-        TuteurRepository $tuteurRepository,
-        PresenceRepository $presenceRepository,
-        EnfantRepository $enfantRepository,
-        AccueilRepository $accueilRepository
+        private LoaderInterface $loader,
+        private EntityManagerInterface $entityManager,
+        private ParameterBagInterface $parameterBag,
+        private TuteurRepository $tuteurRepository,
+        private PresenceRepository $presenceRepository,
+        private EnfantRepository $enfantRepository,
+        private AccueilRepository $accueilRepository
     ) {
-        $this->loader = $loader;
-        $this->parameterBag = $parameterBag;
-        $this->tuteurRepository = $tuteurRepository;
-        $this->presenceRepository = $presenceRepository;
-        $this->enfantRepository = $enfantRepository;
-        $this->accueilRepository = $accueilRepository;
+
     }
 
     public function getPath(): string
@@ -70,7 +62,11 @@ final class FixtureLoader
             $path.'note.yaml',
         ];
 
-        $this->loader->load($files);
+        $ormPurger = new ORMPurger($this->entityManager);
+        $ormPurger->setPurgeMode(1);
+        $ormPurger->purge();
+
+        $this->loader->load($files, [], [], PurgeMode::createDeleteMode());
         $tuteurSimposn = $this->tuteurRepository->findOneBy(['prenom' => 'Homer']);
         $enfant = $this->enfantRepository->findOneBy(['prenom' => 'Bart']);
         $presence = $this->presenceRepository->findOneBy(['tuteur' => $tuteurSimposn, 'enfant' => $enfant]);

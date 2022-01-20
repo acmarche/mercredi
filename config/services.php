@@ -56,7 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(PresenceCalculatorInterface::class, PrenceHottonCalculator::class);
     $services->alias(PlaineCalculatorInterface::class, PlaineHottonCalculator::class);
 
-    $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.loader.doctrine');
+    $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
 
     $services->instanceof(AfterUserRegistration::class)
         ->tag('app.user.after_registration');

@@ -5,17 +5,16 @@ namespace AcMarche\Mercredi\Fixture\Command;
 use AcMarche\Mercredi\Fixture\FixtureLoader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
+use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class LoadfixturesCommand extends Command
 {
-    /**
-     * @var string
-     */
     protected static $defaultName = 'mercredi:load-fixtures';
     private EntityManagerInterface $entityManager;
     private FixtureLoader $fixtureLoader;
@@ -49,7 +48,10 @@ final class LoadfixturesCommand extends Command
 
         if ($purge) {
             $ormPurger = new ORMPurger($this->entityManager);
+            $ormPurger->setPurgeMode(1);
             $ormPurger->purge();
+            $io = new SymfonyStyle($input, $output);
+            $io->info('Bd purgée');
         }
 
         $this->fixtureLoader->load();
