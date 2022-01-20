@@ -2,25 +2,17 @@
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
-use AcMarche\Mercredi\Utils\DateUtils;
-use Behat\Behat\Context\Context;
-use Behat\Mink\Session;
-use Carbon\Carbon;
+use Behat\MinkExtension\Context\MinkContext;
 use Exception;
-use Symfony\Component\Routing\RouterInterface;
 
-class FeatureContext implements Context
+class FeatureContext extends MinkContext
 {
-    public function __construct(private Session $session, private RouterInterface $router)
-    {
-    }
-
     /**
      * @Given I am logged in as an admin
      */
     public function iAmLoggedInAsAnAdmin(): void
     {
-        $this->session->visit('/login');
+        $this->visitPath('/login');
         //var_dump($this->getSession()->getPage()->getContent());
         $this->fillField('username', 'jf@marche.be');
         $this->fillField('password', 'homer');
@@ -34,7 +26,7 @@ class FeatureContext implements Context
      */
     public function iAmLoggedInAsUser(string $username): void
     {
-        $this->session->visit('/login');
+        $this->getSession()->visit('/login');
         $this->fillField('username', $username);
         $this->fillField('password', 'homer');
         $this->pressButton('Me connecter');
@@ -45,142 +37,10 @@ class FeatureContext implements Context
      */
     public function iAmLoginWithUserAndPassword(string $email, string $password): void
     {
-        $this->session->visit('/login');
+        $this->getSession()->visit('/login');
         $this->fillField('username', $email);
         $this->fillField('password', $password);
         $this->pressButton('Me connecter');
-    }
-
-    /**
-     * @When /^I select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
-     */
-    public function iSelectDayPlusFrom($nbDays, $select): void
-    {
-        $today = Carbon::today();
-        $today->addDays($nbDays);
-        $today = ucfirst(DateUtils::formatFr($today));
-        $select = $this->fixStepArgument($select);
-        $option = $this->fixStepArgument($today);
-        $this->session->getPage()->selectFieldOption($select, $option);
-    }
-
-    /**
-     * @When /^I additionally select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
-     */
-    public function iAdditionallySelectDayPlusFrom($nbDays, $select): void
-    {
-        $today = Carbon::today();
-        $today->addDays($nbDays);
-        $today = ucfirst(DateUtils::formatFr($today));
-        $select = $this->fixStepArgument($select);
-        $option = $this->fixStepArgument($today);
-        $this->session->getPage()->selectFieldOption($select, $option, true);
-    }
-
-    /**
-     * Selects additional option in select field with specified id|name|label|value
-     * Example: When I additionally select "Deceased" from "parents_alive_status"
-     * Example: And I additionally select "Deceased" from "parents_alive_status".
-     *
-     * @When /^(?:|I )ad222ditionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
-     */
-    public function additionallySelectOption($select, $option): void
-    {
-    }
-
-    /**
-     * Selects option in select field with specified id|name|label|value
-     * Example: When I select "Bats" from "user_fears"
-     * Example: And I select "Bats" from "user_fears".
-     *
-     * @When /^(?:|I )sel222ect date "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
-     */
-    public function selectOption($select, $nbDays): void
-    {
-    }
-
-    /**
-     * @Given I fill the periodicity endTime with the date :day/:month/:year
-     */
-    public function iFillEndTimePeridocity(int $day, int $month, int $year): void
-    {
-        $this->fillField('entry_with_periodicity[periodicity][endTime][day]', $day);
-        $this->fillField('entry_with_periodicity[periodicity][endTime][month]', $month);
-        $this->fillField('entry_with_periodicity[periodicity][endTime][year]', $year);
-    }
-
-    /**
-     * @Given /^I fill the periodicity endTime with this month and day (\d+) and year (\d+)$/
-     */
-    public function iFillEndTimePeridocityThisMonth(int $day, int $year): void
-    {
-        $today = Carbon::today();
-
-        $this->fillField('entry_with_periodicity[periodicity][endTime][day]', $day);
-        $this->fillField('entry_with_periodicity[periodicity][endTime][month]', $today->month);
-        $this->fillField('entry_with_periodicity[periodicity][endTime][year]', $year);
-    }
-
-    /**
-     * @Given I fill the periodicity endTime with later date
-     */
-    public function iFillEndTimePeridocityLater(): void
-    {
-        $today = Carbon::today();
-        $today->addDays(3);
-
-        $this->fillField('entry_with_periodicity[periodicity][endTime][day]', $today->day);
-        $this->fillField('entry_with_periodicity[periodicity][endTime][month]', $today->month);
-        $this->fillField('entry_with_periodicity[periodicity][endTime][year]', $today->year);
-    }
-
-    /**
-     * @Given I fill the entry startTime with the date :day/:month/:year
-     */
-    public function iFillDateBeginEntry(int $day, int $month, int $year): void
-    {
-        $this->fillField('entry_with_periodicity_startTime_date_day', $day);
-        $this->fillField('entry_with_periodicity_startTime_date_month', $month);
-        $this->fillField('entry_with_periodicity_startTime_date_year', $year);
-    }
-
-    /**
-     * @Given I fill the entry startTime with today :hour::minute
-     */
-    public function iFillDateBeginEntryWithToday(int $hour, int $minute): void
-    {
-        $today = Carbon::today();
-        $this->fillField('entry_with_periodicity_startTime_date_day', $today->day);
-        $this->fillField('entry_with_periodicity_startTime_date_month', $today->month);
-        $this->fillField('entry_with_periodicity_startTime_date_year', $today->year);
-        $this->fillField('entry_with_periodicity_startTime_time_hour', $hour);
-        $this->fillField('entry_with_periodicity_startTime_time_minute', $minute);
-    }
-
-    /**
-     * @Given /^I fill the entry startTime with this month and day (\d+) and year (\d+) at time (\d+):(\d+)$/
-     */
-    public function iFillDateBeginEntryWithThisMonth(int $day, int $year, int $hour, int $minute): void
-    {
-        $today = Carbon::today();
-        $this->fillField('entry_with_periodicity_startTime_date_day', $day);
-        $this->fillField('entry_with_periodicity_startTime_date_month', $today->month);
-        $this->fillField('entry_with_periodicity_startTime_date_year', $year);
-        $this->fillField('entry_with_periodicity_startTime_time_hour', $hour);
-        $this->fillField('entry_with_periodicity_startTime_time_minute', $minute);
-    }
-
-    /**
-     * Clicks link semaine
-     * Example: When I follow this week.
-     *
-     * @Then /^I follow this week$/
-     */
-    public function clickLinkWeek(): void
-    {
-        $link = 's' . Carbon::today()->week;
-        $link = $this->fixStepArgument($link);
-        $this->session->getPage()->clickLink($link);
     }
 
     /**
@@ -190,29 +50,10 @@ class FeatureContext implements Context
      */
     public function iShouldSeeTextSoManyTimes($sText, $iExpected): void
     {
-        $sContent = $this->session->getPage()->getText();
+        $sContent = $this->getSession()->getPage()->getText();
         $iFound = substr_count($sContent, $sText);
         if ($iExpected !== $iFound) {
-            throw new Exception('Found ' . $iFound . ' occurences of "' . $sText . '" when expecting ' . $iExpected);
+            throw new Exception('Found '.$iFound.' occurences of "'.$sText.'" when expecting '.$iExpected);
         }
-    }
-
-    /**
-     * @return mixed[]|string
-     */
-    protected function fixStepArgument($argument)
-    {
-        return str_replace('\\"', '"', $argument);
-    }
-
-    private function fillField(string $field, string $value): void
-    {
-        $this->session->getPage()->fillField($field, $value);
-    }
-
-    private function pressButton($button): void
-    {
-        $button = $this->fixStepArgument($button);
-        $this->session->getPage()->pressButton($button);
     }
 }
