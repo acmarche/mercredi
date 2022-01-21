@@ -63,7 +63,7 @@ final class FixtureLoader
         ];
 
         $ormPurger = new ORMPurger($this->entityManager);
-        $ormPurger->setPurgeMode(1);
+        //$ormPurger->setPurgeMode(1);
         $ormPurger->purge();
 
         $this->loader->load($files, [], [], PurgeMode::createDeleteMode());
