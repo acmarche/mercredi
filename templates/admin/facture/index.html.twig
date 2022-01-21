@@ -56,7 +56,11 @@
                                 N° {{ facture.id }}
                             </a>
                         </td>
-                        <td>{{ facture.mois }}</td>
+                        <td>
+                            <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
+                                {{ facture.mois }}
+                            </a>
+                        </td>
                         <td>
                             {% if facture.envoyeLe %}
                                 {{ facture.envoyeLe | format_date('full') | title }}
