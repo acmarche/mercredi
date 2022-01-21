@@ -2,7 +2,9 @@
 
 namespace AcMarche\Mercredi\Tests\Behat;
 
+use AcMarche\Mercredi\Utils\DateUtils;
 use Behat\MinkExtension\Context\MinkContext;
+use Carbon\Carbon;
 use Exception;
 
 class FeatureContext extends MinkContext
@@ -41,6 +43,32 @@ class FeatureContext extends MinkContext
         $this->fillField('username', $email);
         $this->fillField('password', $password);
         $this->pressButton('Me connecter');
+    }
+
+    /**
+     * @When /^I select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
+     */
+    public function iSelectDayPlusFrom($nbDays, $select): void
+    {
+        $today = Carbon::today();
+        $today->addDays($nbDays);
+        $today = ucfirst(DateUtils::formatFr($today));
+        $select = $this->fixStepArgument($select);
+        $option = $this->fixStepArgument($today);
+        $this->getSession()->getPage()->selectFieldOption($select, $option);
+    }
+
+    /**
+     * @When /^I additionally select day plus "(\d+)" from "(?P<select>(?:[^"]|\\")*)"$/
+     */
+    public function iAdditionallySelectDayPlusFrom($nbDays, $select): void
+    {
+        $today = Carbon::today();
+        $today->addDays($nbDays);
+        $today = ucfirst(DateUtils::formatFr($today));
+        $select = $this->fixStepArgument($select);
+        $option = $this->fixStepArgument($today);
+        $this->getSession()->getPage()->selectFieldOption($select, $option, true);
     }
 
     /**
