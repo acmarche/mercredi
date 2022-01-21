@@ -10,7 +10,9 @@ use Symfony\Component\Ldap\LdapInterface;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('security', [
         'password_hashers' => [
-            User::class => ['algorithm' => 'auto'],
+            User::class => [
+                'algorithm' => 'auto',
+            ],
         ],
     ]);
 
@@ -32,7 +34,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $main = [
         'provider' => 'mercredi_user_provider',
-        'logout' => ['path' => 'app_logout'],
+        'logout' => [
+            'path' => 'app_logout',
+        ],
         'form_login' => [],
         'entry_point' => MercrediAuthenticator::class,
     ];

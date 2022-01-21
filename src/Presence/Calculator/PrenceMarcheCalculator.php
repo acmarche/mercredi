@@ -13,15 +13,11 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 {
     public array $ecoles;
-    private OrdreService $ordreService;
-    private ReductionCalculator $reductionCalculator;
 
     public function __construct(
-        OrdreService $ordreService,
-        ReductionCalculator $reductionCalculator
+        private OrdreService $ordreService,
+        private ReductionCalculator $reductionCalculator
     ) {
-        $this->ordreService = $ordreService;
-        $this->reductionCalculator = $reductionCalculator;
     }
 
     public function calculate(PresenceInterface $presence): float
@@ -38,43 +34,6 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         }
 
         return $this->calculatePresence($presence);
-    }
-
-    private function calculatePresence(PresenceInterface $presence): float
-    {
-        $ordre = $this->ordreService->getOrdreOnPresence($presence);
-        $prix = $this->getPrixByOrdre($presence, $ordre);
-
-        return $this->reductionApplicate($presence, $prix);
-    }
-
-    private function calculatePlaine(PresenceInterface $presence, Jour $jour): float
-    {
-        $plaine = $jour->getPlaine();
-        $ordre = $this->getOrdreOnPresence($presence);
-
-        switch ($ordre) {
-            case 2:
-                $prix = $plaine->getPrix2();
-                break;
-            case 3:
-                $prix = $plaine->getPrix3();
-                break;
-            default:
-                $prix = $plaine->getPrix1();
-                break;
-        }
-
-        return $this->reductionApplicate($presence, $prix);
-    }
-
-    private function reductionApplicate(PresenceInterface $presence, float $cout): float
-    {
-        if (null !== ($reduction = $presence->getReduction())) {
-            return $this->reductionCalculator->applicate($reduction, $cout);
-        }
-
-        return $cout;
     }
 
     public function setMetaDatas(PresenceInterface $presence, FacturePresence $facturePresence): void
@@ -104,10 +63,41 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         if ($ordre >= 3) {
             return $jour->getPrix3();
         }
-        if (2 == $ordre) {
+        if (2 === $ordre) {
             return $jour->getPrix2();
         }
 
         return $jour->getPrix1();
+    }
+
+    private function calculatePresence(PresenceInterface $presence): float
+    {
+        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $prix = $this->getPrixByOrdre($presence, $ordre);
+
+        return $this->reductionApplicate($presence, $prix);
+    }
+
+    private function calculatePlaine(PresenceInterface $presence, Jour $jour): float
+    {
+        $plaine = $jour->getPlaine();
+        $ordre = $this->getOrdreOnPresence($presence);
+
+        $prix = match ($ordre) {
+            2 => $plaine->getPrix2(),
+            3 => $plaine->getPrix3(),
+            default => $plaine->getPrix1(),
+        };
+
+        return $this->reductionApplicate($presence, $prix);
+    }
+
+    private function reductionApplicate(PresenceInterface $presence, float $cout): float
+    {
+        if (null !== ($reduction = $presence->getReduction())) {
+            return $this->reductionCalculator->applicate($reduction, $cout);
+        }
+
+        return $cout;
     }
 }

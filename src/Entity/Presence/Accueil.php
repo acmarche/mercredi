@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Presence;
 
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\EnfantTrait;
@@ -16,18 +17,16 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class Accueil.
- *
- * @UniqueEntity(fields={"date_jour", "enfant", "heure"}, message="L'enfant est déjà inscrit à cette date")
- */
+
 #[ORM\Table(name: 'accueil')]
 #[ORM\UniqueConstraint(columns: ['date_jour', 'enfant_id', 'heure'])]
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Accueil\Repository\AccueilRepository')]
-class Accueil implements TimestampableInterface, UuidableInterface
+#[ORM\Entity(repositoryClass: AccueilRepository::class)]
+#[UniqueEntity(fields: ['date_jour', 'enfant', 'heure'], message: "L'enfant est déjà inscrit à cette date")]
+class Accueil implements TimestampableInterface, UuidableInterface, Stringable
 {
     use TimestampableTrait;
     use IdTrait;
@@ -37,26 +36,29 @@ class Accueil implements TimestampableInterface, UuidableInterface
     use RemarqueTrait;
     use UserAddTrait;
     use RetardTrait;
-    /**
-     * @Assert\Type("datetime")
-     */
+
+    #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'accueils')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Tuteur $tuteur = null;
+
+    #[ORM\ManyToOne(targetEntity: Enfant::class, inversedBy: 'accueils')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Enfant $enfant = null;
+
     #[ORM\Column(type: 'date')]
+    #[Assert\Type(type: 'datetime')]
     private ?DateTimeInterface $date_jour = null;
     #[ORM\Column(type: 'smallint')]
     private int $duree;
     #[ORM\Column(type: 'string', nullable: false, length: 50)]
     private ?string $heure = null;
-    #[ORM\ManyToOne(targetEntity: Enfant::class, inversedBy: 'accueils')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Enfant $enfant = null;
-    #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'accueils')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Tuteur $tuteur = null;
 
-    public function __construct(Tuteur $tuteur, Enfant $enfant)
-    {
-        $this->enfant = $enfant;
+    public function __construct(
+        Tuteur $tuteur,
+        Enfant $enfant
+    ) {
         $this->tuteur = $tuteur;
+        $this->enfant = $enfant;
         $this->duree = 0;
     }
 

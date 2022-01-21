@@ -22,7 +22,10 @@ class SelectEnfantType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'constraints' => [
-                    new Count(['min' => 1, 'minMessage' => 'Sélectionnez au moins un enfant']),
+                    new Count([
+                        'min' => 1,
+                        'minMessage' => 'Sélectionnez au moins un enfant',
+                    ]),
                 ],
             ]
         );

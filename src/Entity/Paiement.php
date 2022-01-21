@@ -3,19 +3,21 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
+use AcMarche\Mercredi\Migration\PaiementRepository;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @deprecated  for migration
  */
 #[ORM\Table(name: 'paiement')]
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Migration\PaiementRepository')]
-class Paiement
+#[ORM\Entity(repositoryClass: PaiementRepository::class)]
+class Paiement implements Stringable
 {
     use TimestampableTrait;
     use UserAddTrait;
@@ -23,10 +25,8 @@ class Paiement
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
+    #[Assert\NotBlank]
     protected $montant;
     #[ORM\Column(type: 'date', nullable: false)]
     protected ?DateTimeInterface $date_paiement = null;
@@ -34,9 +34,14 @@ class Paiement
     protected ?string $type_paiement = null;
     #[ORM\Column(type: 'string', nullable: true, length: 150)]
     protected ?string $mode_paiement = null;
-    #[ORM\Column(type: 'smallint', length: 2, nullable: true, options: ['comment' => '1,2, suviant', 'default' => '0'])]
+    #[ORM\Column(type: 'smallint', length: 2, nullable: true, options: [
+        'comment' => '1,2, suviant',
+        'default' => '0',
+    ])]
     protected ?int $ordre = 0;
-    #[ORM\Column(type: 'boolean', options: ['default' => '0'])]
+    #[ORM\Column(type: 'boolean', options: [
+        'default' => '0',
+    ])]
     protected bool $cloture = false;
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $remarques = null;
@@ -51,7 +56,7 @@ class Paiement
     {
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $string = $this->getTypePaiement().' du ';
         if (null !== $this->getDatePaiement()) {
@@ -61,7 +66,7 @@ class Paiement
         return $string.(' ('.$this->getMontant().' €)');
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -81,7 +86,7 @@ class Paiement
     /**
      * @return DateTime|DateTimeImmutable
      */
-    public function getDatePaiement(): \DateTime
+    public function getDatePaiement(): ?\DateTimeInterface
     {
         return $this->date_paiement;
     }
@@ -93,7 +98,7 @@ class Paiement
         return $this;
     }
 
-    public function getTypePaiement(): string
+    public function getTypePaiement(): ?string
     {
         return $this->type_paiement;
     }
@@ -105,7 +110,7 @@ class Paiement
         return $this;
     }
 
-    public function getModePaiement(): string
+    public function getModePaiement(): ?string
     {
         return $this->mode_paiement;
     }
@@ -117,7 +122,7 @@ class Paiement
         return $this;
     }
 
-    public function getOrdre(): int
+    public function getOrdre(): ?int
     {
         return $this->ordre;
     }
@@ -141,7 +146,7 @@ class Paiement
         return $this;
     }
 
-    public function getRemarques(): string
+    public function getRemarques(): ?string
     {
         return $this->remarques;
     }

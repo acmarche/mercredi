@@ -16,7 +16,11 @@ final class SearchNameType extends AbstractType
                 SearchType::class,
                 [
                     'required' => true,
-                    'attr' => ['placeholder' => 'Nom', 'autocomplete' => 'off', 'data-autocomplete-target' => 'input'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                        'autocomplete' => 'off',
+                        'data-autocomplete-target' => 'input',
+                    ],
                 ]
             );
     }

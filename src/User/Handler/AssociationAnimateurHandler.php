@@ -14,23 +14,15 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AssociationAnimateurHandler
 {
-    private AnimateurRepository $animateurRepository;
     private FlashBagInterface $flashBag;
-    private UserFactory $userFactory;
-    private NotificationMailer $notificationMailer;
-    private UserEmailFactory $userEmailFactory;
 
     public function __construct(
-        AnimateurRepository $animateurRepository,
-        UserFactory $userFactory,
-        NotificationMailer $notificationMailer,
-        UserEmailFactory $userEmailFactory,
+        private AnimateurRepository $animateurRepository,
+        private UserFactory $userFactory,
+        private NotificationMailer $notificationMailer,
+        private UserEmailFactory $userEmailFactory,
         RequestStack $requestStack
     ) {
-        $this->animateurRepository = $animateurRepository;
-        $this->userFactory = $userFactory;
-        $this->notificationMailer = $notificationMailer;
-        $this->userEmailFactory = $userEmailFactory;
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
     }
 

@@ -12,19 +12,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AjaxController extends AbstractController
 {
-    private AccueilRepository $accueilRepository;
-    private EnfantRepository $enfantRepository;
-
-    public function __construct(AccueilRepository $accueilRepository, EnfantRepository $enfantRepository)
-    {
-        $this->accueilRepository = $accueilRepository;
-        $this->enfantRepository = $enfantRepository;
+    public function __construct(
+        private AccueilRepository $accueilRepository,
+        private EnfantRepository $enfantRepository
+    ) {
     }
 
-    /**
-     * @Route("/accueil/ajax/duree", name="mercredi_ecole_ajax_duree", methods={"POST"})
-     * @IsGranted("ROLE_MERCREDI_ECOLE")
-     */
+    #[Route(path: '/accueil/ajax/duree', name: 'mercredi_ecole_ajax_duree', methods: ['POST'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
     public function updateDuree(Request $request): Response
     {
         $data = json_decode($request->getContent(), null, 512, JSON_THROW_ON_ERROR);
@@ -32,11 +27,11 @@ class AjaxController extends AbstractController
         $date = $data->date;
         $heure = $data->heure;
         $duree = $data->duree;
-
         if (($enfant = $this->enfantRepository->find($enfantId)) === null) {
-            return $this->json(['error' => 'Enfant non trouvé']);
+            return $this->json([
+                'error' => 'Enfant non trouvé',
+            ]);
         }
-
         $accueil = $this->accueilRepository->findByEnfantDateAndHeure($enfant, $date, $heure);
 
         return $this->json($data);

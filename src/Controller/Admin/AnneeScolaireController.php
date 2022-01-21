@@ -10,28 +10,23 @@ use AcMarche\Mercredi\Scolaire\Message\AnneeScolaireUpdated;
 use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/annee_scolaire")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/annee_scolaire')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class AnneeScolaireController extends AbstractController
 {
-    private AnneeScolaireRepository $anneeScolaireRepository;
-
-    public function __construct(AnneeScolaireRepository $anneeScolaireRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->anneeScolaireRepository = $anneeScolaireRepository;
+    public function __construct(
+        private AnneeScolaireRepository $anneeScolaireRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_annee_scolaire_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_annee_scolaire_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render(
@@ -42,22 +37,21 @@ final class AnneeScolaireController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_admin_annee_scolaire_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new', name: 'mercredi_admin_annee_scolaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $anneeScolaire = new AnneeScolaire();
         $form = $this->createForm(AnneeScolaireType::class, $anneeScolaire);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->anneeScolaireRepository->persist($anneeScolaire);
             $this->anneeScolaireRepository->flush();
 
             $this->dispatcher->dispatch(new AnneeScolaireCreated($anneeScolaire->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', [
+                'id' => $anneeScolaire->getId(),
+            ]);
         }
 
         return $this->render(
@@ -69,9 +63,7 @@ final class AnneeScolaireController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_annee_scolaire_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_annee_scolaire_show', methods: ['GET'])]
     public function show(AnneeScolaire $anneeScolaire): Response
     {
         return $this->render(
@@ -82,20 +74,19 @@ final class AnneeScolaireController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_annee_scolaire_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_annee_scolaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, AnneeScolaire $anneeScolaire): Response
     {
         $form = $this->createForm(AnneeScolaireType::class, $anneeScolaire);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->anneeScolaireRepository->flush();
 
             $this->dispatcher->dispatch(new AnneeScolaireUpdated($anneeScolaire->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+            return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', [
+                'id' => $anneeScolaire->getId(),
+            ]);
         }
 
         return $this->render(
@@ -107,16 +98,16 @@ final class AnneeScolaireController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_annee_scolaire_delete", methods={"POST"})
-     */
-    public function delete(Request $request, AnneeScolaire $anneeScolaire): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_annee_scolaire_delete', methods: ['POST'])]
+    public function delete(Request $request, AnneeScolaire $anneeScolaire): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$anneeScolaire->getId(), $request->request->get('_token'))) {
             if (\count($anneeScolaire->getEnfants()) > 0) {
                 $this->addFlash('danger', 'Une année scolaire contenant des enfants ne peux pas être supprimée');
 
-                return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', ['id' => $anneeScolaire->getId()]);
+                return $this->redirectToRoute('mercredi_admin_annee_scolaire_show', [
+                    'id' => $anneeScolaire->getId(),
+                ]);
             }
 
             $ecoleId = $anneeScolaire->getId();

@@ -10,7 +10,7 @@ class PourcentageOrForfaitValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint): void
     {
-        /* @var $constraint FactureReduction */
+        /** @var FactureReduction $constraint */
 
         if ($value->getPourcentage() && $value->getForfait()) {
             $this->context->buildViolation($constraint->message_only_one)
@@ -18,7 +18,7 @@ class PourcentageOrForfaitValidator extends ConstraintValidator
                 ->addViolation();
         }
 
-        if (!$value->getPourcentage() && !$value->getForfait()) {
+        if (! $value->getPourcentage() && ! $value->getForfait()) {
             $this->context->buildViolation($constraint->message_only_one)
                 ->atPath('facture_reduction[pourcentage]')
                 ->addViolation();

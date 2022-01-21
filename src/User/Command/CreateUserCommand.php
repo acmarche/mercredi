@@ -18,18 +18,13 @@ final class CreateUserCommand extends Command
      * @var string
      */
     protected static $defaultName = 'mercredi:create-user';
-    private UserRepository $userRepository;
-    private UserPasswordHasherInterface $userPasswordHasher;
 
     public function __construct(
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordHasher,
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $userPasswordHasher,
         ?string $name = null
     ) {
         parent::__construct($name);
-
-        $this->userRepository = $userRepository;
-        $this->userPasswordHasher = $userPasswordHasher;
     }
 
     protected function configure(): void
@@ -49,7 +44,7 @@ final class CreateUserCommand extends Command
         $name = $input->getArgument('name');
         $password = $input->getArgument('password');
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $symfonyStyle->error('Adresse email non valide');
 
             return Command::FAILURE;
@@ -60,7 +55,9 @@ final class CreateUserCommand extends Command
 
             return Command::FAILURE;
         }
-        if (null !== $this->userRepository->findOneBy(['email' => $email])) {
+        if (null !== $this->userRepository->findOneBy([
+            'email' => $email,
+        ])) {
             $symfonyStyle->error('Un utilisateur existe déjà avec cette adresse email');
 
             return Command::FAILURE;

@@ -10,28 +10,23 @@ use AcMarche\Mercredi\Sante\Message\SanteQuestionUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/sante/question")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/sante/question')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class SanteQuestionController extends AbstractController
 {
-    private SanteQuestionRepository $santeQuestionRepository;
-
-    public function __construct(SanteQuestionRepository $santeQuestionRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->santeQuestionRepository = $santeQuestionRepository;
+    public function __construct(
+        private SanteQuestionRepository $santeQuestionRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_sante_question_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_sante_question_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render(
@@ -42,22 +37,21 @@ final class SanteQuestionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_admin_sante_question_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new', name: 'mercredi_admin_sante_question_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $santeQuestion = new SanteQuestion();
         $form = $this->createForm(SanteQuestionType::class, $santeQuestion);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->santeQuestionRepository->persist($santeQuestion);
             $this->santeQuestionRepository->flush();
 
             $this->dispatcher->dispatch(new SanteQuestionCreated($santeQuestion->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_sante_question_show', ['id' => $santeQuestion->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_question_show', [
+                'id' => $santeQuestion->getId(),
+            ]);
         }
 
         return $this->render(
@@ -69,9 +63,7 @@ final class SanteQuestionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_sante_question_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_sante_question_show', methods: ['GET'])]
     public function show(SanteQuestion $santeQuestion): Response
     {
         return $this->render(
@@ -82,20 +74,19 @@ final class SanteQuestionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_sante_question_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_sante_question_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SanteQuestion $santeQuestion): Response
     {
         $form = $this->createForm(SanteQuestionType::class, $santeQuestion);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->santeQuestionRepository->flush();
 
             $this->dispatcher->dispatch(new SanteQuestionUpdated($santeQuestion->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_sante_question_show', ['id' => $santeQuestion->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_question_show', [
+                'id' => $santeQuestion->getId(),
+            ]);
         }
 
         return $this->render(
@@ -107,10 +98,8 @@ final class SanteQuestionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_sante_question_delete", methods={"POST"})
-     */
-    public function delete(Request $request, SanteQuestion $santeQuestion): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_sante_question_delete', methods: ['POST'])]
+    public function delete(Request $request, SanteQuestion $santeQuestion): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$santeQuestion->getId(), $request->request->get('_token'))) {
             $id = $santeQuestion->getId();
@@ -122,9 +111,7 @@ final class SanteQuestionController extends AbstractController
         return $this->redirectToRoute('mercredi_admin_sante_question_index');
     }
 
-    /**
-     * @Route("/q/sort", name="mercredi_admin_sante_question_sort", methods={"GET"})
-     */
+    #[Route(path: '/q/sort', name: 'mercredi_admin_sante_question_sort', methods: ['GET'])]
     public function trier(): Response
     {
         $questions = $this->santeQuestionRepository->findAllOrberByPosition();

@@ -9,12 +9,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class UserImport
 {
-    private UserRepository $userRepository;
     private MercrediPdo $pdo;
 
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private UserRepository $userRepository
+    ) {
     }
 
     public function import(SymfonyStyle $io): void

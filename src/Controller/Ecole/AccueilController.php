@@ -24,60 +24,39 @@ use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/accueil")
- * @IsGranted("ROLE_MERCREDI_ECOLE")
- */
+#[Route(path: '/accueil')]
+#[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
 final class AccueilController extends AbstractController
 {
     use GetEcolesTrait;
 
-    private AccueilRepository $accueilRepository;
-    private AccueilHandler $accueilHandler;
-    private RelationRepository $relationRepository;
-    private AccueilCalculatorInterface $accueilCalculator;
-    private EnfantRepository $enfantRepository;
-    private DateUtils $dateUtils;
-    private FacturePresenceRepository $facturePresenceRepository;
-
     public function __construct(
-        AccueilRepository $accueilRepository,
-        AccueilHandler $accueilHandler,
-        RelationRepository $relationRepository,
-        AccueilCalculatorInterface $accueilCalculator,
-        EnfantRepository $enfantRepository,
-        DateUtils $dateUtils,
-        FacturePresenceRepository $facturePresenceRepository,
+        private AccueilRepository $accueilRepository,
+        private AccueilHandler $accueilHandler,
+        private RelationRepository $relationRepository,
+        private AccueilCalculatorInterface $accueilCalculator,
+        private EnfantRepository $enfantRepository,
+        private DateUtils $dateUtils,
+        private FacturePresenceRepository $facturePresenceRepository,
         private MessageBusInterface $dispatcher
     ) {
-        $this->accueilRepository = $accueilRepository;
-        $this->accueilHandler = $accueilHandler;
-        $this->relationRepository = $relationRepository;
-        $this->accueilCalculator = $accueilCalculator;
-        $this->enfantRepository = $enfantRepository;
-        $this->dateUtils = $dateUtils;
-        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
-    /**
-     * @Route("/index", name="mercredi_ecole_accueils_index", methods={"GET", "POST"})
-     * @IsGranted("ROLE_MERCREDI_ECOLE")
-     */
+    #[Route(path: '/index', name: 'mercredi_ecole_accueils_index', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
     public function index(Request $request): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
-
         $accueils = [];
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $date = $data['date_jour'];
@@ -95,23 +74,22 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_ecole_accueil_new", methods={"GET", "POST"})
-     * @Entity("tuteur", expr="repository.find(tuteur)")
-     * @Entity("enfant", expr="repository.find(enfant)")
-     * @IsGranted("enfant_edit", subject="enfant")
-     */
+    #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_ecole_accueil_new', methods: ['GET', 'POST'])]
+    #[Entity(data: 'tuteur', expr: 'repository.find(tuteur)')]
+    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
+    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
         $accueil = new Accueil($tuteur, $enfant);
         $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatcher->dispatch(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_ecole_accueil_show', ['uuid' => $result->getUuid()]);
+            return $this->redirectToRoute('mercredi_ecole_accueil_show', [
+                'uuid' => $result->getUuid(),
+            ]);
         }
 
         return $this->render(
@@ -123,10 +101,8 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}/show", name="mercredi_ecole_accueil_show", methods={"GET"})
-     * @IsGranted("accueil_show", subject="accueil")
-     */
+    #[Route(path: '/{uuid}/show', name: 'mercredi_ecole_accueil_show', methods: ['GET'])]
+    #[IsGranted(data: 'accueil_show', subject: 'accueil')]
     public function show(Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
@@ -144,21 +120,20 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}/edit", name="mercredi_ecole_accueil_edit", methods={"GET", "POST"})
-     * @IsGranted("accueil_edit", subject="accueil")
-     */
+    #[Route(path: '/{uuid}/edit', name: 'mercredi_ecole_accueil_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'accueil_edit', subject: 'accueil')]
     public function edit(Request $request, Accueil $accueil): Response
     {
         $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->accueilRepository->flush();
 
             $this->dispatcher->dispatch(new AccueilUpdated($accueil->getId()));
 
-            return $this->redirectToRoute('mercredi_ecole_accueil_show', ['uuid' => $accueil->getUuid()]);
+            return $this->redirectToRoute('mercredi_ecole_accueil_show', [
+                'uuid' => $accueil->getUuid(),
+            ]);
         }
 
         return $this->render(
@@ -170,17 +145,9 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}", name="mercredi_ecole_accueil_inscriptions", methods={"GET", "POST"})
-     */
-    public function inscriptions(
-        Request $request,
-        Ecole $ecole,
-        int $year,
-        int $month,
-        string $heure,
-        int $week = 0
-    ): Response {
+    #[Route(path: '/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}', name: 'mercredi_ecole_accueil_inscriptions', methods: ['GET', 'POST'])]
+    public function inscriptions(Request $request, Ecole $ecole, int $year, int $month, string $heure, int $week = 0): Response
+    {
         if (0 !== $week) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
             $weekSelected = $week;
@@ -188,32 +155,31 @@ final class AccueilController extends AbstractController
             $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);
             $weekSelected = $date->format('W');
         }
-
         $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);
         $data = [];
         $enfants = $this->enfantRepository->findByEcolesForInscription($ecole);
-
         foreach ($enfants as $enfant) {
             $tuteurSelected = 0;
             $accueils = $this->accueilRepository->findByEnfantAndDaysAndHeure($enfant, $weekPeriod, $heure);
-            $rows = ['accueils' => [], 'tuteurs' => []];
+            $rows = [
+                'accueils' => [],
+                'tuteurs' => [],
+            ];
             foreach ($accueils as $accueil) {
                 $rows['accueils'][$accueil->getDateJour()->format('Y-m-d')] = [
                     'duree' => $accueil->getDuree(),
                     'tuteur' => $accueil->getTuteur()->getId(),
                 ];
                 $weekAccueil = $accueil->getDateJour()->format('W');
-                if ($weekSelected == $weekAccueil) {
+                if ($weekSelected === $weekAccueil) {
                     $tuteurSelected = $accueil->getTuteur()->getId();
                 }
             }
             $rows['tuteurSelected'] = $tuteurSelected;
             $data[$enfant->getId()] = $rows;
         }
-
         $form = $this->createForm(InscriptionsType::class, $data);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $accueils = $request->request->all('accueils');
             $tuteurs = $request->request->all('tuteurs');
@@ -229,7 +195,6 @@ final class AccueilController extends AbstractController
                 'week' => $week,
             ]);
         }
-
         $calendar = $this->dateUtils->renderMonth($ecole, $heure, $week, $date);
 
         return $this->render(
@@ -247,16 +212,16 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}/retard", name="mercredi_ecole_accueil_retard", methods={"GET", "POST"})
-     * @IsGranted("enfant_show", subject="enfant")
-     */
+    #[Route(path: '/{uuid}/retard', name: 'mercredi_ecole_accueil_retard', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
     public function retard(Request $request, Enfant $enfant): Response
     {
-        $args = ['date_retard' => new DateTime(), 'heure_retard' => new DateTime()];
+        $args = [
+            'date_retard' => new DateTime(),
+            'heure_retard' => new DateTime(),
+        ];
         $form = $this->createForm(AccueilRetardTpe::class, $args);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $dateRetard = $data['date_retard'];
@@ -274,7 +239,9 @@ final class AccueilController extends AbstractController
                 $this->addFlash('success', 'Le retard a bien été ajouté');
             }
 
-            return $this->redirectToRoute('mercredi_ecole_enfant_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_ecole_enfant_show', [
+                'uuid' => $enfant->getUuid(),
+            ]);
         }
 
         return $this->render(

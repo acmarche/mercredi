@@ -22,7 +22,7 @@ trait AnimateursTrait
 
     public function addAnimateur(Animateur $animateur): self
     {
-        if (!$this->animateurs->contains($animateur)) {
+        if (! $this->animateurs->contains($animateur)) {
             $this->animateurs[] = $animateur;
             $animateur->addJour($this);
         }

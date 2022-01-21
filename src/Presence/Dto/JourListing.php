@@ -13,12 +13,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 final class JourListing
 {
     private ArrayCollection $enfants;
-    private Jour $jour;
 
-    public function __construct(Jour $jour, array $enfants)
-    {
+    public function __construct(
+        private Jour $jour,
+        array $enfants
+    ) {
         $this->enfants = new ArrayCollection($enfants);
-        $this->jour = $jour;
     }
 
     public function hasEnfant(Enfant $enfant): bool

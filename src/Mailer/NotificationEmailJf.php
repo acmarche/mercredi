@@ -12,7 +12,7 @@ class NotificationEmailJf extends NotificationEmail
     /**
      * Pour mettre important, car plus jolie.
      */
-    public static function asPublicEmailJf(Headers $headers = null, AbstractPart $body = null): self
+    public static function asPublicEmailJf(Headers $headers = null, AbstractPart $body = null): static
     {
         $email = new static($headers, $body);
         $email->markAsPublic();

@@ -20,7 +20,10 @@ final class SearchEnfantType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom', 'autocomplete' => 'off'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -30,7 +33,9 @@ final class SearchEnfantType extends AbstractType
                     'class' => Ecole::class,
                     'required' => false,
                     'placeholder' => 'Choisissez une école',
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'attr' => [
+                        'class' => 'custom-select my-1 mr-sm-2',
+                    ],
                 ]
             )
             ->add(
@@ -40,7 +45,9 @@ final class SearchEnfantType extends AbstractType
                     'class' => AnneeScolaire::class,
                     'label' => 'Année scolaire',
                     'placeholder' => 'Choisissez son année scolaire',
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'attr' => [
+                        'class' => 'custom-select my-1 mr-sm-2',
+                    ],
                     'required' => false,
                 ]
             )
@@ -50,7 +57,9 @@ final class SearchEnfantType extends AbstractType
                 [
                     'label' => 'Afficher les enfants archivés',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             );
     }

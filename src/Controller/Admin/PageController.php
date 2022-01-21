@@ -10,28 +10,23 @@ use AcMarche\Mercredi\Page\Message\PageUpdated;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/page")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/page')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class PageController extends AbstractController
 {
-    private PageRepository $pageRepository;
-
-    public function __construct(PageRepository $pageRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->pageRepository = $pageRepository;
+    public function __construct(
+        private PageRepository $pageRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_page_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_page_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render(
@@ -42,22 +37,21 @@ final class PageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_admin_page_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new', name: 'mercredi_admin_page_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $page = new Page();
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pageRepository->persist($page);
             $this->pageRepository->flush();
 
             $this->dispatcher->dispatch(new PageCreated($page->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_page_show', ['id' => $page->getId()]);
+            return $this->redirectToRoute('mercredi_admin_page_show', [
+                'id' => $page->getId(),
+            ]);
         }
 
         return $this->render(
@@ -69,9 +63,7 @@ final class PageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_page_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_page_show', methods: ['GET'])]
     public function show(Page $page): Response
     {
         return $this->render(
@@ -82,20 +74,19 @@ final class PageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_page_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_page_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Page $page): Response
     {
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pageRepository->flush();
 
             $this->dispatcher->dispatch(new PageUpdated($page->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_page_show', ['id' => $page->getId()]);
+            return $this->redirectToRoute('mercredi_admin_page_show', [
+                'id' => $page->getId(),
+            ]);
         }
 
         return $this->render(
@@ -107,10 +98,8 @@ final class PageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_page_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Page $page): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_page_delete', methods: ['POST'])]
+    public function delete(Request $request, Page $page): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $pageId = $page->getId();
@@ -122,9 +111,7 @@ final class PageController extends AbstractController
         return $this->redirectToRoute('mercredi_admin_page_index');
     }
 
-    /**
-     * @Route("/s/sort", name="mercredi_admin_page_sort", methods={"GET"})
-     */
+    #[Route(path: '/s/sort', name: 'mercredi_admin_page_sort', methods: ['GET'])]
     public function trier(): Response
     {
         $pages = $this->pageRepository->findAll();

@@ -26,45 +26,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/accueil")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/accueil')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class AccueilController extends AbstractController
 {
-    private AccueilRepository $accueilRepository;
-    private AccueilHandler $accueilHandler;
-    private RelationRepository $relationRepository;
-    private AccueilCalculatorInterface $accueilCalculator;
-    private FactureHandlerInterface $factureHandler;
-    private FacturePresenceRepository $facturePresenceRepository;
-
     public function __construct(
-        AccueilRepository $accueilRepository,
-        AccueilHandler $accueilHandler,
-        RelationRepository $relationRepository,
-        AccueilCalculatorInterface $accueilCalculator,
-        FactureHandlerInterface $factureHandler,
-        FacturePresenceRepository $facturePresenceRepository,
+        private AccueilRepository $accueilRepository,
+        private AccueilHandler $accueilHandler,
+        private RelationRepository $relationRepository,
+        private AccueilCalculatorInterface $accueilCalculator,
+        private FactureHandlerInterface $factureHandler,
+        private FacturePresenceRepository $facturePresenceRepository,
         private MessageBusInterface $dispatcher
     ) {
-        $this->accueilRepository = $accueilRepository;
-        $this->accueilHandler = $accueilHandler;
-        $this->relationRepository = $relationRepository;
-        $this->accueilCalculator = $accueilCalculator;
-        $this->factureHandler = $factureHandler;
-        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
-    /**
-     * @Route("/index", name="mercredi_admin_accueil_index", methods={"GET", "POST"})
-     */
+    #[Route(path: '/index', name: 'mercredi_admin_accueil_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $accueils = [];
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $date = $data['date_jour'];
@@ -81,9 +63,7 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/list/{id}", name="mercredi_admin_accueil_show_enfant", methods={"GET", "POST"})
-     */
+    #[Route(path: '/list/{id}', name: 'mercredi_admin_accueil_show_enfant', methods: ['GET', 'POST'])]
     public function enfant(Enfant $enfant): Response
     {
         $accueils = $this->accueilRepository->findByEnfant($enfant);
@@ -99,22 +79,21 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new/{tuteur}/{enfant}", name="mercredi_admin_accueil_new", methods={"GET", "POST"})
-     * @Entity("tuteur", expr="repository.find(tuteur)")
-     * @Entity("enfant", expr="repository.find(enfant)")
-     */
+    #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_admin_accueil_new', methods: ['GET', 'POST'])]
+    #[Entity(data: 'tuteur', expr: 'repository.find(tuteur)')]
+    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
         $accueil = new Accueil($tuteur, $enfant);
         $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $this->accueilHandler->handleNew($enfant, $accueil);
             $this->dispatcher->dispatch(new AccueilCreated($result->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $result->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [
+                'id' => $result->getId(),
+            ]);
         }
 
         return $this->render(
@@ -126,9 +105,7 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/show/{id}", name="mercredi_admin_accueil_show", methods={"GET"})
-     */
+    #[Route(path: '/show/{id}', name: 'mercredi_admin_accueil_show', methods: ['GET'])]
     public function show(Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
@@ -148,26 +125,26 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_accueil_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_accueil_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Accueil $accueil): Response
     {
         if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
             $this->addFlash('danger', 'Un accueil déjà facturé ne peut être modifié');
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [
+                'id' => $accueil->getId(),
+            ]);
         }
-
         $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->accueilRepository->flush();
 
             $this->dispatcher->dispatch(new AccueilUpdated($accueil->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [
+                'id' => $accueil->getId(),
+            ]);
         }
 
         return $this->render(
@@ -179,9 +156,7 @@ final class AccueilController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/delete/{id}", name="mercredi_admin_accueil_delete", methods={"POST"})
-     */
+    #[Route(path: '/delete/{id}', name: 'mercredi_admin_accueil_delete', methods: ['POST'])]
     public function delete(Request $request, Accueil $accueil): RedirectResponse
     {
         $enfant = null;
@@ -189,7 +164,9 @@ final class AccueilController extends AbstractController
             if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
                 $this->addFlash('danger', 'Un accueil déjà facturé ne peut être supprimé');
 
-                return $this->redirectToRoute('mercredi_admin_accueil_show', ['id' => $accueil->getId()]);
+                return $this->redirectToRoute('mercredi_admin_accueil_show', [
+                    'id' => $accueil->getId(),
+                ]);
             }
 
             $id = $accueil->getId();
@@ -199,6 +176,8 @@ final class AccueilController extends AbstractController
             $this->dispatcher->dispatch(new AccueilDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', [
+            'id' => $enfant->getId(),
+        ]);
     }
 }

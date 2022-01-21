@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Mailer\Factory\RegistrationMailerFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
 use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,37 +18,27 @@ use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-/**
- * @Route("/reset-password")
- */
+#[Route(path: '/reset-password')]
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private ResetPasswordHelperInterface $resetPasswordHelper;
-    private RegistrationMailerFactory $registrationMailerFactory;
-    private NotificationMailer $notificationMailer;
-
     public function __construct(
-        ResetPasswordHelperInterface $resetPasswordHelper,
-        RegistrationMailerFactory $registrationMailerFactory,
-        NotificationMailer $notificationMailer
+        private ResetPasswordHelperInterface $resetPasswordHelper,
+        private RegistrationMailerFactory $registrationMailerFactory,
+        private NotificationMailer $notificationMailer,
+        private ManagerRegistry $managerRegistry
     ) {
-        $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->registrationMailerFactory = $registrationMailerFactory;
-        $this->notificationMailer = $notificationMailer;
     }
 
     /**
      * Display & process form to request a password reset.
-     *
-     * @Route("/", name="mercredi_front_forgot_password_request")
      */
+    #[Route(path: '/', name: 'mercredi_front_forgot_password_request')]
     public function request(Request $request): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData()
@@ -64,9 +55,8 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Confirmation page after a user has requested a password reset.
-     *
-     * @Route("/check-email", name="mercredi_front_check_email")
      */
+    #[Route(path: '/check-email', name: 'mercredi_front_check_email')]
     public function checkEmail(): Response
     {
         // Generate a fake token if the user does not exist or someone hit this page directly.
@@ -85,14 +75,10 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Validates and process the reset URL that the user clicked in their email.
-     *
-     * @Route("/reset/{token}", name="mercredi_front_reset_password")
      */
-    public function reset(
-        Request $request,
-        UserPasswordHasherInterface $passwordEncoder,
-        string $token = null
-    ): Response {
+    #[Route(path: '/reset/{token}', name: 'mercredi_front_reset_password')]
+    public function reset(Request $request, UserPasswordHasherInterface $passwordEncoder, string $token = null): Response
+    {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
@@ -100,12 +86,10 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('mercredi_front_reset_password');
         }
-
         $token = $this->getTokenFromSession();
         if (null === $token) {
             throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
         }
-
         try {
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
@@ -119,11 +103,9 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
-
         // The token is valid; allow the user to change their password.
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             // A password reset token should be used only once, remove it.
             $this->resetPasswordHelper->removeResetRequest($token);
@@ -135,7 +117,7 @@ class ResetPasswordController extends AbstractController
             );
 
             $user->setPassword($encodedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->managerRegistry->getManager()->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -153,7 +135,7 @@ class ResetPasswordController extends AbstractController
 
     private function processSendingPasswordResetEmail(string $emailFormData): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(
+        $user = $this->managerRegistry->getRepository(User::class)->findOneBy(
             [
                 'email' => $emailFormData,
             ]

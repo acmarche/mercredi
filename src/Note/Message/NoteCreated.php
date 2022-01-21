@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Note\Message;
 
 final class NoteCreated
 {
-    private int $noteId;
-
-    public function __construct(int $noteId)
-    {
-        $this->noteId = $noteId;
+    public function __construct(
+        private int $noteId
+    ) {
     }
 
     public function getNoteId(): int

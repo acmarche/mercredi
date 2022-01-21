@@ -10,13 +10,10 @@ use AcMarche\Mercredi\Utils\SortUtils;
 
 final class PresenceDaysProvider implements PresenceDaysProviderInterface
 {
-    private JourRepository $jourRepository;
-    private PresenceUtils $presenceUtils;
-
-    public function __construct(JourRepository $jourRepository, PresenceUtils $presenceUtils)
-    {
-        $this->jourRepository = $jourRepository;
-        $this->presenceUtils = $presenceUtils;
+    public function __construct(
+        private JourRepository $jourRepository,
+        private PresenceUtils $presenceUtils
+    ) {
     }
 
     /**

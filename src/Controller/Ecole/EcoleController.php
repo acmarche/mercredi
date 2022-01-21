@@ -12,26 +12,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/ecole")
- * @IsGranted("ROLE_MERCREDI_ECOLE")
- */
+#[Route(path: '/ecole')]
+#[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
 final class EcoleController extends AbstractController
 {
     use GetEcolesTrait;
 
-    private EcoleRepository $ecoleRepository;
-    private EnfantRepository $enfantRepository;
-
-    public function __construct(EcoleRepository $ecoleRepository, EnfantRepository $enfantRepository)
-    {
-        $this->ecoleRepository = $ecoleRepository;
-        $this->enfantRepository = $enfantRepository;
+    public function __construct(
+        private EcoleRepository $ecoleRepository,
+        private EnfantRepository $enfantRepository
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_ecole_ecole_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_ecole_ecole_index', methods: ['GET'])]
     public function index(): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
@@ -49,10 +42,8 @@ final class EcoleController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_ecole_ecole_show", methods={"GET"})
-     * @IsGranted("ecole_show", subject="ecole")
-     */
+    #[Route(path: '/{id}', name: 'mercredi_ecole_ecole_show', methods: ['GET'])]
+    #[IsGranted(data: 'ecole_show', subject: 'ecole')]
     public function show(Ecole $ecole): Response
     {
         $enfants = $this->enfantRepository->findByEcolesForEcole([$ecole]);

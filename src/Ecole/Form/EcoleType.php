@@ -57,7 +57,9 @@ final class EcoleType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false,
-                    'attr' => ['rows' => 8],
+                    'attr' => [
+                        'rows' => 8,
+                    ],
                 ]
             );
     }

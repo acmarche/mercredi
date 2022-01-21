@@ -17,7 +17,9 @@ final class SearchJourType extends AbstractType
                 [
                     'label' => 'Afficher les jours archivés',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             )
             ->add(
@@ -26,7 +28,9 @@ final class SearchJourType extends AbstractType
                 [
                     'label' => 'Journée pédagoque',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             );
     }

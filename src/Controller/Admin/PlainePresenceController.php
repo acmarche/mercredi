@@ -21,58 +21,42 @@ use AcMarche\Mercredi\Utils\SortUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/plaine/presence")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/plaine/presence')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class PlainePresenceController extends AbstractController
 {
-    private EnfantRepository $enfantRepository;
-    private PlaineHandlerInterface $plaineHandler;
-    private RelationRepository $relationRepository;
-    private PlaineCalculatorInterface $plaineCalculator;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        PlaineHandlerInterface $plaineHandler,
-        EnfantRepository $enfantRepository,
-        RelationRepository $relationRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        PlaineCalculatorInterface $plaineCalculator,
+        private PlaineHandlerInterface $plaineHandler,
+        private EnfantRepository $enfantRepository,
+        private RelationRepository $relationRepository,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private PlaineCalculatorInterface $plaineCalculator,
         private MessageBusInterface $dispatcher
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->plaineHandler = $plaineHandler;
-        $this->relationRepository = $relationRepository;
-        $this->plaineCalculator = $plaineCalculator;
-        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
-    /**
-     * @Route("/new/{id}", name="mercredi_admin_plaine_presence_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new/{id}', name: 'mercredi_admin_plaine_presence_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Plaine $plaine): Response
     {
         if (0 === \count($plaine->getJours())) {
             $this->addFlash('danger', 'La plaine n\'a aucune date');
 
-            return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
+            return $this->redirectToRoute('mercredi_admin_plaine_show', [
+                'id' => $plaine->getId(),
+            ]);
         }
-
         $nom = null;
         $form = $this->createForm(SearchNameType::class, null);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $nom = $form->get('nom')->getData();
         }
-
         $enfants = $nom ? $this->enfantRepository->findByName($nom) : $this->enfantRepository->findAllActif();
 
         return $this->render(
@@ -85,12 +69,9 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/select/tuteur/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_select_tuteur", methods={"GET", "POST"})
-     *
-     * @Entity("plaine", expr="repository.find(plaine)")
-     * @Entity("enfant", expr="repository.find(enfant)")
-     */
+    #[Route(path: '/select/tuteur/{plaine}/{enfant}', name: 'mercredi_admin_plaine_presence_select_tuteur', methods: ['GET', 'POST'])]
+    #[Entity(data: 'plaine', expr: 'repository.find(plaine)')]
+    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
     public function selectTuteur(Plaine $plaine, Enfant $enfant): Response
     {
         $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
@@ -117,17 +98,13 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/confirmation/{plaine}/{tuteur}/{enfant}", name="mercredi_admin_plaine_presence_confirmation", methods={"GET", "POST"})
-     *
-     * @Entity("tuteur", expr="repository.find(tuteur)")
-     * @Entity("plaine", expr="repository.find(plaine)")
-     * @Entity("enfant", expr="repository.find(enfant)")
-     */
+    #[Route(path: '/confirmation/{plaine}/{tuteur}/{enfant}', name: 'mercredi_admin_plaine_presence_confirmation', methods: ['GET', 'POST'])]
+    #[Entity(data: 'tuteur', expr: 'repository.find(tuteur)')]
+    #[Entity(data: 'plaine', expr: 'repository.find(plaine)')]
+    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
     public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): RedirectResponse
     {
         $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant);
-
         $this->addFlash('success', "L'enfant a bien été inscrit");
 
         return $this->redirectToRoute(
@@ -139,9 +116,7 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_show", methods={"GET"})
-     */
+    #[Route(path: '/{plaine}/{enfant}', name: 'mercredi_admin_plaine_presence_show', methods: ['GET'])]
     public function show(Plaine $plaine, Enfant $enfant): Response
     {
         $presences = $this->plainePresenceRepository->findByPlaineAndEnfant($plaine, $enfant);
@@ -159,15 +134,12 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{plaine}/{presence}/edit", name="mercredi_admin_plaine_presence_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{plaine}/{presence}/edit', name: 'mercredi_admin_plaine_presence_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Plaine $plaine, Presence $presence): Response
     {
         $enfant = $presence->getEnfant();
         $form = $this->createForm(PlainePresenceEditType::class, $presence);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->plainePresenceRepository->flush();
 
@@ -193,22 +165,16 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{plaine}/{enfant}/jours", name="mercredi_admin_plaine_presence_jours", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{plaine}/{enfant}/jours', name: 'mercredi_admin_plaine_presence_jours', methods: ['GET', 'POST'])]
     public function jours(Request $request, Plaine $plaine, Enfant $enfant): Response
     {
         $jours = $plaine->getJours();
         $plainePresencesDto = new PlainePresencesDto($plaine, $enfant, $jours);
-
         $presences = $this->plainePresenceRepository->findByPlaineAndEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
         $plainePresencesDto->setJours($currentJours);
-
         $form = $this->createForm(PlainePresencesEditType::class, $plainePresencesDto);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $new = $plainePresencesDto->getJours();
             if ([] === $presences) {
@@ -241,9 +207,7 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_plaine_presence_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_plaine_presence_delete', methods: ['POST'])]
     public function delete(Request $request, Plaine $plaine): RedirectResponse
     {
         $enfant = null;
@@ -269,13 +233,14 @@ final class PlainePresenceController extends AbstractController
 
         return $this->redirectToRoute(
             'mercredi_admin_plaine_presence_show',
-            ['plaine' => $plaine->getId(), 'enfant' => $enfant->getId()]
+            [
+                'plaine' => $plaine->getId(),
+                'enfant' => $enfant->getId(),
+            ]
         );
     }
 
-    /**
-     * @Route("/{plaine}/{enfant}", name="mercredi_admin_plaine_presence_remove_enfant", methods={"POST"})
-     */
+    #[Route(path: '/{plaine}/{enfant}', name: 'mercredi_admin_plaine_presence_remove_enfant', methods: ['POST'])]
     public function remove(Request $request, Plaine $plaine, Enfant $enfant): RedirectResponse
     {
         if ($this->isCsrfTokenValid('remove'.$plaine->getId(), $request->request->get('_token'))) {
@@ -283,6 +248,8 @@ final class PlainePresenceController extends AbstractController
             $this->addFlash('success', 'L\'enfant a été retiré de la plaine');
         }
 
-        return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
+        return $this->redirectToRoute('mercredi_admin_plaine_show', [
+            'id' => $plaine->getId(),
+        ]);
     }
 }

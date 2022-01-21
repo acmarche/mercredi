@@ -20,29 +20,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class AnimateurVoter extends Voter
 {
-    public UserInterface $user;
     public const INDEX = 'animateur_index';
     public const SHOW = 'animateur_show';
     public const ADD = 'animateur_add';
     public const EDIT = 'animateur_edit';
     public const DELETE = 'animateur_delete';
-
-    private Security $security;
+    public UserInterface $user;
     private ?Animateur $animateur = null;
     /**
      * @var Animateur[]|Collection
      */
-    private $animateurs;
+    private array|Collection $animateurs;
 
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
+    public function __construct(
+        private Security $security
+    ) {
     }
 
     protected function supports($attribute, $subject): bool
     {
         //a cause de index pas d'animateur defini
-        if ($subject && !$subject instanceof Animateur) {
+        if ($subject && ! $subject instanceof Animateur) {
             return false;
         }
 
@@ -51,7 +49,7 @@ final class AnimateurVoter extends Voter
 
     protected function voteOnAttribute($attribute, $animateur, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof UserInterface) {
+        if (! $token->getUser() instanceof UserInterface) {
             return false;
         }
 
@@ -61,26 +59,20 @@ final class AnimateurVoter extends Voter
             return true;
         }
 
-        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR)) {
+        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR)) {
             return false;
         }
 
         $this->animateur = $animateur;
         $this->animateurs = $this->user->getAnimateurs();
 
-        switch ($attribute) {
-            case self::INDEX:
-                return $this->canIndex();
-            case self::SHOW:
-                return $this->canView();
-            case self::DELETE:
-            case self::ADD:
-                return false; //only admin
-            case self::EDIT:
-                return $this->canEdit();
-        }
-
-        return false;
+        return match ($attribute) {
+            self::INDEX => $this->canIndex(),
+            self::SHOW => $this->canView(),
+            self::DELETE, self::ADD => false,
+            self::EDIT => $this->canEdit(),
+            default => false,
+        };
     }
 
     private function canIndex(): bool
@@ -95,7 +87,7 @@ final class AnimateurVoter extends Voter
 
     private function canEdit(): bool
     {
-        if (!$this->checkAnimateurs()) {
+        if (! $this->checkAnimateurs()) {
             return false;
         }
         if (null === $this->animateur) {
@@ -107,6 +99,6 @@ final class AnimateurVoter extends Voter
 
     private function checkAnimateurs(): bool
     {
-        return 0 != \count($this->animateurs);
+        return 0 !== \count($this->animateurs);
     }
 }

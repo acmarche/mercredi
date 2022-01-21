@@ -4,8 +4,16 @@ namespace AcMarche\Mercredi\Data;
 
 final class MercrediConstantes
 {
-    public const SEXES = ['Masculin' => 'Masculin', 'Féminin' => 'Féminin'];
-    public const ORDRES = ['0' => 0, 1 => 1, 2 => 2, 'Suivant' => 3];
+    public const SEXES = [
+        'Masculin' => 'Masculin',
+        'Féminin' => 'Féminin',
+    ];
+    public const ORDRES = [
+        '0' => 0,
+        1 => 1,
+        2 => 2,
+        'Suivant' => 3,
+    ];
 
     public const ABSENCE_NON = 0;
     public const ABSENCE_AVEC_CERTIF = 1;
@@ -29,13 +37,10 @@ final class MercrediConstantes
 
     public static function getCiviliteBySexe(?string $sexe): string
     {
-        switch ($sexe) {
-            case 'Masculin':
-                return 'Monsieur';
-            case 'Féminin':
-                return 'Madame';
-            default:
-                return '';
-        }
+        return match ($sexe) {
+            'Masculin' => 'Monsieur',
+            'Féminin' => 'Madame',
+            default => '',
+        };
     }
 }

@@ -21,27 +21,14 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class PlaineHandlerHotton implements PlaineHandlerInterface
 {
-    private PlainePresenceRepository $plainePresenceRepository;
-    private FacturePlaineHandler $facturePlaineHandler;
-    private FactureEmailFactory $factureEmailFactory;
-    private NotificationMailer $notificationMailer;
-    private AdminEmailFactory $adminEmailFactory;
-    private PresenceHandlerInterface $presenceHandler;
-
     public function __construct(
-        PlainePresenceRepository $plainePresenceRepository,
-        FacturePlaineHandler $facturePlaineHandler,
-        FactureEmailFactory $factureEmailFactory,
-        NotificationMailer $notificationMailer,
-        AdminEmailFactory $adminEmailFactory,
-        PresenceHandlerInterface $presenceHandler
+        private PlainePresenceRepository $plainePresenceRepository,
+        private FacturePlaineHandler $facturePlaineHandler,
+        private FactureEmailFactory $factureEmailFactory,
+        private NotificationMailer $notificationMailer,
+        private AdminEmailFactory $adminEmailFactory,
+        private PresenceHandlerInterface $presenceHandler
     ) {
-        $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->facturePlaineHandler = $facturePlaineHandler;
-        $this->factureEmailFactory = $factureEmailFactory;
-        $this->notificationMailer = $notificationMailer;
-        $this->adminEmailFactory = $adminEmailFactory;
-        $this->presenceHandler = $presenceHandler;
     }
 
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): void

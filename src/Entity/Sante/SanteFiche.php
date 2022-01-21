@@ -15,12 +15,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SanteFicheRepository::class)]
 #[ORM\Table(name: 'sante_fiche')]
 #[ORM\UniqueConstraint(columns: ['enfant_id'])]
-class SanteFiche implements TimestampableInterface
+class SanteFiche implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
     use IdTrait;
@@ -28,24 +29,20 @@ class SanteFiche implements TimestampableInterface
     use AccompagnateursTrait;
     use RemarqueTrait;
     use IdOldTrait;
-    /**
-     * @Assert\NotBlank()
-     */
-    #[ORM\Column(type: 'text', nullable: false)]
-    private ?string $personne_urgence = null;
-    /**
-     * @Assert\NotBlank()
-     */
-    #[ORM\Column(type: 'string', length: 200, nullable: false)]
-    private ?string $medecin_nom = null;
-    /**
-     * @Assert\NotBlank()
-     */
-    #[ORM\Column(type: 'string', length: 200, nullable: false)]
-    private ?string $medecin_telephone = null;
+
     #[ORM\OneToOne(targetEntity: Enfant::class, inversedBy: 'sante_fiche')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Enfant $enfant = null;
+
+    #[ORM\Column(type: 'text', nullable: false)]
+    #[Assert\NotBlank]
+    private ?string $personne_urgence = null;
+    #[ORM\Column(type: 'string', length: 200, nullable: false)]
+    #[Assert\NotBlank]
+    private ?string $medecin_nom = null;
+    #[ORM\Column(type: 'string', length: 200, nullable: false)]
+    #[Assert\NotBlank]
+    private ?string $medecin_telephone = null;
     /**
      * Pour le cascade.
      *
@@ -59,11 +56,12 @@ class SanteFiche implements TimestampableInterface
      */
     private Collection $questions;
 
-    public function __construct(Enfant $enfant)
-    {
-        $this->enfant = $enfant;
+    public function __construct(
+        Enfant $enfant
+    ) {
         $this->reponses = new ArrayCollection();
         $this->questions = new ArrayCollection();
+        $this->enfant = $enfant;
     }
 
     public function __toString(): string
@@ -126,7 +124,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @return SanteQuestion[]|Collection
      */
-    public function getQuestions():Collection
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
@@ -134,7 +132,7 @@ class SanteFiche implements TimestampableInterface
     /**
      * @param SanteQuestion[]|Collection $questions
      */
-    public function setQuestions(array  $questions): void
+    public function setQuestions(array|Collection $questions): void
     {
         $this->questions = new ArrayCollection($questions);
     }

@@ -9,38 +9,31 @@ use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/profile")
- * @IsGranted("IS_AUTHENTICATED_FULLY")
- */
+
+#[Route(path: '/profile')]
+#[IsGranted(data: 'IS_AUTHENTICATED_FULLY')]
 final class ProfileController extends AbstractController
 {
-    private UserRepository $userRepository;
-    private UserPasswordHasherInterface $userPasswordEncoder;
-
-    public function __construct(UserRepository $userRepository, UserPasswordHasherInterface $userPasswordEncoder,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->userRepository = $userRepository;
-        $this->userPasswordEncoder = $userPasswordEncoder;
+    public function __construct(
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $userPasswordEncoder,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/show", name="mercredi_front_user_show")
-     */
+    #[Route(path: '/show', name: 'mercredi_front_user_show')]
     public function show(): Response
     {
-        /** @var User */
+        /** @var User $user */
         $user = $this->getUser();
-        if (null == $user) {
+        if (null === $user) {
             $this->addFlash('warning', 'Votre compte n\'est pas encore actif');
 
             return $this->redirectToRoute('mercredi_front_home');
@@ -54,15 +47,12 @@ final class ProfileController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/redirect", name="mercredi_front_profile_redirect")
-     */
-    public function redirectByProfile(): Response
+    #[Route(path: '/redirect', name: 'mercredi_front_profile_redirect')]
+    public function redirectByProfile(): RedirectResponse
     {
-        /** @var User */
+        /** @var User $user */
         $user = $this->getUser();
-
-        if (null != $user) {
+        if (null !== $user) {
             $roles = $user->getRoles();
             $del_val = 'ROLE_USER';
 
@@ -91,16 +81,13 @@ final class ProfileController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_home');
             }
         }
-
         $this->addFlash('warning', 'Aucun rôle ne vous a été attribué');
 
         return $this->redirectToRoute('mercredi_front_home');
     }
 
-    /**
-     * @Route("/select", name="mercredi_front_select_profile")
-     * @IsGranted("ROLE_MERCREDI")
-     */
+    #[Route(path: '/select', name: 'mercredi_front_select_profile')]
+    #[IsGranted(data: 'ROLE_MERCREDI')]
     public function selectProfile(): Response
     {
         return $this->render(
@@ -110,16 +97,13 @@ final class ProfileController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/edit", name="mercredi_front_user_edit")
-     * @IsGranted("ROLE_MERCREDI")
-     */
+    #[Route(path: '/edit', name: 'mercredi_front_user_edit')]
+    #[IsGranted(data: 'ROLE_MERCREDI')]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->flush();
 
@@ -137,17 +121,13 @@ final class ProfileController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/password", name="mercredi_front_user_password")
-     * @IsGranted("ROLE_MERCREDI")
-     */
+    #[Route(path: '/password', name: 'mercredi_front_user_password')]
+    #[IsGranted(data: 'ROLE_MERCREDI')]
     public function password(Request $request): Response
     {
         $user = $this->getUser();
-
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $this->userPasswordEncoder->hashPassword($user, $form->getData()->getPlainPassword());
             $user->setPassword($password);

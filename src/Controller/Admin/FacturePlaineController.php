@@ -15,31 +15,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class FactureController.
- *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/facture_plaine")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/facture_plaine')]
 class FacturePlaineController extends AbstractController
 {
-    private FacturePlaineHandler $facturePlaineHandler;
-    private RelationRepository $relationRepository;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        FacturePlaineHandler $facturePlaineHandler,
-        RelationRepository $relationRepository,
-        PlainePresenceRepository $plainePresenceRepository
+        private FacturePlaineHandler $facturePlaineHandler,
+        private RelationRepository $relationRepository,
+        private PlainePresenceRepository $plainePresenceRepository
     ) {
-        $this->facturePlaineHandler = $facturePlaineHandler;
-        $this->relationRepository = $relationRepository;
-        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
-    /**
-     * @Route("/{id}/manual", name="mercredi_admin_facture_select_plaine", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/manual', name: 'mercredi_admin_facture_select_plaine', methods: ['GET', 'POST'])]
     public function selectPlaine(Request $request, Tuteur $tuteur): Response
     {
         $relations = $this->relationRepository->findByTuteur($tuteur);
@@ -59,22 +47,21 @@ class FacturePlaineController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{tuteur}/{plaine}/manual", name="mercredi_admin_facture_new_plaine", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{tuteur}/{plaine}/manual', name: 'mercredi_admin_facture_new_plaine', methods: ['GET', 'POST'])]
     public function newManual(Request $request, Tuteur $tuteur, Plaine $plaine): Response
     {
         $presences = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
         $form = $this->createForm(ValidateForm::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $facture = $this->facturePlaineHandler->newInstance($plaine, $tuteur);
             $this->facturePlaineHandler->handleManually($facture, $plaine);
 
             $this->addFlash('success', 'Facture générée');
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute('mercredi_admin_facture_show', [
+                'id' => $facture->getId(),
+            ]);
         }
 
         return $this->render(

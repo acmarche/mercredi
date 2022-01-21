@@ -6,12 +6,14 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Scolaire\Repository\AnneeScolaireRepository')]
-class AnneeScolaire
+#[ORM\Entity(repositoryClass: AnneeScolaireRepository::class)]
+class AnneeScolaire implements Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -50,7 +52,7 @@ class AnneeScolaire
 
     public function addEnfant(Enfant $enfant): self
     {
-        if (!$this->enfants->contains($enfant)) {
+        if (! $this->enfants->contains($enfant)) {
             $this->enfants[] = $enfant;
             $enfant->setAnneeScolaire($this);
         }

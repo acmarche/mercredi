@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Sante\Message;
 
 final class SanteFicheUpdated
 {
-    private int $santeFicheId;
-
-    public function __construct(int $santeFicheId)
-    {
-        $this->santeFicheId = $santeFicheId;
+    public function __construct(
+        private int $santeFicheId
+    ) {
     }
 
     public function getSanteFicheId(): int

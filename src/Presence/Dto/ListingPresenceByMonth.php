@@ -23,13 +23,11 @@ final class ListingPresenceByMonth
      * @var JourListing[]
      */
     private array $joursListing;
-    private PresenceRepository $presenceRepository;
-    private JourRepository $jourRepository;
 
-    public function __construct(PresenceRepository $presenceRepository, JourRepository $jourRepository)
-    {
-        $this->presenceRepository = $presenceRepository;
-        $this->jourRepository = $jourRepository;
+    public function __construct(
+        private PresenceRepository $presenceRepository,
+        private JourRepository $jourRepository
+    ) {
     }
 
     public function create(DateTimeInterface $dateTime): self

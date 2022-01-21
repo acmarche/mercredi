@@ -20,53 +20,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/checkup")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+
+#[Route(path: '/checkup')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class CheckupController extends AbstractController
 {
-    private EnfantRepository $enfantRepository;
-    private TuteurRepository $tuteurRepository;
-    private UserRepository $userRepository;
-    private PresenceRepository $presenceRepository;
-    private OrdreService $ordreService;
-    private JourRepository $jourRepository;
-    private FactureRepository $factureRepository;
-    private FactureCalculatorInterface $factureCalculator;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private PresenceCalculatorInterface $presenceCalculator;
     private $tutru = null;
 
     public function __construct(
-        EnfantRepository $enfantRepository,
-        TuteurRepository $tuteurRepository,
-        UserRepository $userRepository,
-        PresenceRepository $presenceRepository,
-        OrdreService $ordreService,
-        JourRepository $jourRepository,
-        FactureRepository $factureRepository,
-        FactureCalculatorInterface $factureCalculator,
-        FacturePresenceRepository $facturePresenceRepository,
-        PresenceCalculatorInterface $presenceCalculator
+        private EnfantRepository $enfantRepository,
+        private TuteurRepository $tuteurRepository,
+        private UserRepository $userRepository,
+        private PresenceRepository $presenceRepository,
+        private OrdreService $ordreService,
+        private JourRepository $jourRepository,
+        private FactureRepository $factureRepository,
+        private FactureCalculatorInterface $factureCalculator,
+        private FacturePresenceRepository $facturePresenceRepository,
+        private PresenceCalculatorInterface $presenceCalculator
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->tuteurRepository = $tuteurRepository;
-        $this->userRepository = $userRepository;
-        $this->presenceRepository = $presenceRepository;
-        $this->ordreService = $ordreService;
-        $this->jourRepository = $jourRepository;
-        $this->factureRepository = $factureRepository;
-        $this->factureCalculator = $factureCalculator;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->presenceCalculator = $presenceCalculator;
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_checkup_index")
-     */
+    #[Route(path: '/', name: 'mercredi_admin_checkup_index')]
     public function checkup(): Response
     {
         return $this->render(
@@ -76,9 +51,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/orphelin", name="mercredi_admin_checkup_orphelin")
-     */
+    #[Route(path: '/orphelin', name: 'mercredi_admin_checkup_orphelin')]
     public function orphelin(): Response
     {
         return $this->render(
@@ -89,9 +62,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/sansenfants", name="mercredi_admin_checkup_sansenfant")
-     */
+    #[Route(path: '/sansenfants', name: 'mercredi_admin_checkup_sansenfant')]
     public function sansenfant(): Response
     {
         return $this->render(
@@ -102,9 +73,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/plantage", name="mercredi_admin_plantage")
-     */
+    #[Route(path: '/plantage', name: 'mercredi_admin_plantage')]
     public function plantage(): Response
     {
         $this->tutru->getAll();
@@ -116,28 +85,38 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/accounts", name="mercredi_admin_checkup_accounts")
-     */
+    #[Route(path: '/accounts', name: 'mercredi_admin_checkup_accounts')]
     public function accounts(): Response
     {
         $bad = [];
         $users = $this->userRepository->findAllOrderByNom();
         foreach ($users as $user) {
             if ($user->getRoles() < 1) {
-                $bad[] = ['error' => 'Aucun rôle', 'user' => $user];
+                $bad[] = [
+                    'error' => 'Aucun rôle',
+                    'user' => $user,
+                ];
                 continue;
             }
             if ($user->hasRole(MercrediSecurityRole::ROLE_PARENT) && 0 === \count($user->getTuteurs())) {
-                $bad[] = ['error' => 'Rôle parent, mais aucun parent associé', 'user' => $user];
+                $bad[] = [
+                    'error' => 'Rôle parent, mais aucun parent associé',
+                    'user' => $user,
+                ];
                 continue;
             }
             if ($user->hasRole(MercrediSecurityRole::ROLE_ANIMATEUR) && 0 === \count($user->getAnimateurs())) {
-                $bad[] = ['error' => 'Rôle animateur, mais aucun animateur associé', 'user' => $user];
+                $bad[] = [
+                    'error' => 'Rôle animateur, mais aucun animateur associé',
+                    'user' => $user,
+                ];
                 continue;
             }
             if ($user->hasRole(MercrediSecurityRole::ROLE_ECOLE) && 0 === \count($user->getEcoles())) {
-                $bad[] = ['error' => 'Rôle école, mais aucune école associée', 'user' => $user];
+                $bad[] = [
+                    'error' => 'Rôle école, mais aucune école associée',
+                    'user' => $user,
+                ];
                 continue;
             }
         }
@@ -150,9 +129,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/doublons", name="mercredi_admin_checkup_doublons")
-     */
+    #[Route(path: '/doublons', name: 'mercredi_admin_checkup_doublons')]
     public function doublon(): Response
     {
         $tuteurs = $this->tuteurRepository->findDoublon();
@@ -167,9 +144,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/presences", name="mercredi_admin_checkup_presence")
-     */
+    #[Route(path: '/presences', name: 'mercredi_admin_checkup_presence')]
     public function presences(): Response
     {
         $dateTime = new DateTime('01-10-2021');
@@ -189,9 +164,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/factures", name="mercredi_admin_checkup_presence")
-     */
+    #[Route(path: '/factures', name: 'mercredi_admin_checkup_presence')]
     public function factures(): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth('10-2021');
@@ -212,7 +185,7 @@ final class CheckupController extends AbstractController
                 }
                 $prixFactured = $presenceFactured->getCoutBrut();
                 $ordreFactured = $presenceFactured->getOrdre();
-                if ($prix != $prixFactured) {
+                if ($prix !== $prixFactured) {
                     $newcout = 0;
                     $data[$i]['tuteur'] = $tuteur;
                     $data[$i]['facture'] = $facture;
@@ -226,7 +199,7 @@ final class CheckupController extends AbstractController
                             $presence
                         );
                     }
-                    if (!isset($data[$i]['montant'])) {
+                    if (! isset($data[$i]['montant'])) {
                         $data[$i]['montant'] = 0;
                     }
                     $data[$i]['montant'] += ($newcout - $presenceFactured->getCoutCalculated());

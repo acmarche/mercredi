@@ -17,7 +17,9 @@ final class SearchEnfantEcoleType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                    ],
                 ]
             )
             ->add(
@@ -26,7 +28,9 @@ final class SearchEnfantEcoleType extends AbstractType
                 [
                     'label' => 'Inscrit aux accueils',
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                    ],
                 ]
             );
     }

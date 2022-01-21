@@ -25,7 +25,9 @@ final class UserType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -33,7 +35,9 @@ final class UserType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -41,7 +45,9 @@ final class UserType extends AbstractType
                 EmailType::class,
                 [
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -50,7 +56,9 @@ final class UserType extends AbstractType
                 [
                     'label' => 'Téléphone',
                     'required' => false,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(

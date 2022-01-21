@@ -8,11 +8,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FactureUtils
 {
-    public SluggerInterface $slugger;
-
-    public function __construct(SluggerInterface $slugger)
-    {
-        $this->slugger = $slugger;
+    public function __construct(
+        public SluggerInterface $slugger
+    ) {
     }
 
     /**

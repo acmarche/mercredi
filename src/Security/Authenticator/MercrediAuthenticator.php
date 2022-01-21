@@ -38,18 +38,11 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator;
-    private UserRepository $userRepository;
-    private ParameterBagInterface $parameterBag;
-
     public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        UserRepository $userRepository,
-        ParameterBagInterface $parameterBag
+        private UrlGeneratorInterface $urlGenerator,
+        private UserRepository $userRepository,
+        private ParameterBagInterface $parameterBag
     ) {
-        $this->urlGenerator = $urlGenerator;
-        $this->userRepository = $userRepository;
-        $this->parameterBag = $parameterBag;
     }
 
     public function supports(Request $request): bool
@@ -87,11 +80,6 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
         return new RedirectResponse($this->urlGenerator->generate('mercredi_front_profile_redirect'));
     }
 
-    protected function getLoginUrl(Request $request): string
-    {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
-    }
-
     /**
      * Override to change what happens after a bad username/password is submitted.
      */
@@ -124,5 +112,10 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
     public function isInteractive(): bool
     {
         return true;
+    }
+
+    protected function getLoginUrl(Request $request): string
+    {
+        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

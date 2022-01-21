@@ -10,8 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserEcoleDto
 {
-    private User $user;
-
     /**
      * @var Ecole[]|ArrayCollection
      */
@@ -19,9 +17,9 @@ final class AssociateUserEcoleDto
 
     private bool $sendEmail = true;
 
-    public function __construct(UserInterface $user)
-    {
-        $this->user = $user;
+    public function __construct(
+        private UserInterface $user
+    ) {
         $this->ecoles = new ArrayCollection();
     }
 
@@ -50,7 +48,7 @@ final class AssociateUserEcoleDto
 
     public function addEcole(Ecole $ecole): self
     {
-        if (!$this->ecoles->contains($ecole)) {
+        if (! $this->ecoles->contains($ecole)) {
             $this->ecoles[] = $ecole;
         }
 

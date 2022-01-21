@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Page\Message;
 
 final class PageUpdated
 {
-    private int $pageId;
-
-    public function __construct(int $pageId)
-    {
-        $this->pageId = $pageId;
+    public function __construct(
+        private int $pageId
+    ) {
     }
 
     public function getPageId(): int

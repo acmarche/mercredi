@@ -10,7 +10,7 @@ trait CreancesTrait
     /**
      * @var Collection|Creance[]
      */
-    #[ORM\OneToMany(targetEntity: 'AcMarche\Mercredi\Entity\Facture\Creance', mappedBy: 'tuteur', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: Creance::class, mappedBy: 'tuteur', cascade: ['remove'])]
     private Collection $creances;
 
     /**
@@ -24,7 +24,7 @@ trait CreancesTrait
     /**
      * @param Creance[]|Collection $creances
      */
-    public function setCreances(Collection $creances): void
+    public function setCreances(array|Collection $creances): void
     {
         $this->creances = $creances;
     }

@@ -9,11 +9,9 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 final class ResponseIsCompleteValidator extends ConstraintValidator
 {
-    private SanteChecker $santeChecker;
-
-    public function __construct(SanteChecker $santeChecker)
-    {
-        $this->santeChecker = $santeChecker;
+    public function __construct(
+        private SanteChecker $santeChecker
+    ) {
     }
 
     /**
@@ -27,9 +25,9 @@ final class ResponseIsCompleteValidator extends ConstraintValidator
     {
         if (is_iterable($questions)) {
             foreach ($questions as $question) {
-                if (!$this->santeChecker->checkQuestionOk($question)) {
+                if (! $this->santeChecker->checkQuestionOk($question)) {
                     $order = $question->getDisplayOrder() ?: 0;
-                    if (true === $question->getComplement()) {
+                    if ($question->getComplement()) {
                         $txt = $question->getNom().' : Indiquez => '.$question->getComplementLabel();
                     } else {
                         $txt = $question->getNom().' répondez par oui ou non';

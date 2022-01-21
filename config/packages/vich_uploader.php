@@ -11,7 +11,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mercredi_enfant_image' => [
                     'uri_prefix' => '/files/enfants',
                     'upload_destination' => '%kernel.project_dir%/public/files/enfants',
-                    'directory_namer' => ['service' => DirectoryNamer::class],
+                    'directory_namer' => [
+                        'service' => DirectoryNamer::class,
+                    ],
                     'namer' => 'vich_uploader.namer_uniqid',
                     'inject_on_load' => false,
                 ],

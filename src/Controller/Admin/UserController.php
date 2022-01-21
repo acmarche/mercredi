@@ -15,40 +15,32 @@ use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/user")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/user')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class UserController extends AbstractController
 {
-    private UserRepository $userRepository;
-    private UserPasswordHasherInterface $userPasswordEncoder;
-
     public function __construct(
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordEncoder,
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $userPasswordEncoder,
         private MessageBusInterface $dispatcher
     ) {
-        $this->userRepository = $userRepository;
-        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
      * Lists all User entities.
-     *
-     * @Route("/", name="mercredi_admin_user_index", methods={"GET", "POST"})
      */
+    #[Route(path: '/', name: 'mercredi_admin_user_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $form = $this->createForm(UserSearchType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
@@ -70,17 +62,13 @@ final class UserController extends AbstractController
 
     /**
      * Displays a form to create a new User utilisateur.
-     *
-     * @Route("/new", name="mercredi_admin_user_new", methods={"GET", "POST"})
      */
+    #[Route(path: '/new', name: 'mercredi_admin_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $user = new User();
-
         $form = $this->createForm(UserType::class, $user);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
                 $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
@@ -90,7 +78,9 @@ final class UserController extends AbstractController
             $this->userRepository->flush();
             $this->dispatcher->dispatch(new UserCreated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', [
+                'id' => $user->getId(),
+            ]);
         }
 
         return $this->render(
@@ -103,19 +93,15 @@ final class UserController extends AbstractController
 
     /**
      * Displays a form to create a new User utilisateur.
-     *
-     * @Route("/new/tuteur/{id}", name="mercredi_admin_user_new_from_tuteur", methods={"GET", "POST"})
      */
+    #[Route(path: '/new/tuteur/{id}', name: 'mercredi_admin_user_new_from_tuteur', methods: ['GET', 'POST'])]
     public function newFromTuteur(Request $request, Tuteur $tuteur): Response
     {
         $user = User::newFromObject($tuteur);
         $user->addRole(MercrediSecurityRole::ROLE_PARENT);
         $user->addTuteur($tuteur);
-
         $form = $this->createForm(UserType::class, $user);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
                 $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
@@ -125,7 +111,9 @@ final class UserController extends AbstractController
             $this->userRepository->flush();
             $this->dispatcher->dispatch(new UserCreated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', [
+                'id' => $user->getId(),
+            ]);
         }
 
         return $this->render(
@@ -138,9 +126,8 @@ final class UserController extends AbstractController
 
     /**
      * Finds and displays a User utilisateur.
-     *
-     * @Route("/{id}", name="mercredi_admin_user_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'mercredi_admin_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render(
@@ -153,20 +140,19 @@ final class UserController extends AbstractController
 
     /**
      * Displays a form to edit an existing User utilisateur.
-     *
-     * @Route("/{id}/edit", name="mercredi_admin_user_edit", methods={"GET", "POST"})
      */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user): Response
     {
         $editForm = $this->createForm(UserEditType::class, $user);
-
         $editForm->handleRequest($request);
-
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->userRepository->flush();
             $this->dispatcher->dispatch(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', [
+                'id' => $user->getId(),
+            ]);
         }
 
         return $this->render(
@@ -180,20 +166,19 @@ final class UserController extends AbstractController
 
     /**
      * Displays a form to edit an existing User utilisateur.
-     *
-     * @Route("/{id}/roles", name="mercredi_admin_user_roles", methods={"GET", "POST"})
      */
+    #[Route(path: '/{id}/roles', name: 'mercredi_admin_user_roles', methods: ['GET', 'POST'])]
     public function roles(Request $request, User $user): Response
     {
         $form = $this->createForm(UserRoleType::class, $user);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->flush();
             $this->dispatcher->dispatch(new UserUpdated($user->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('mercredi_admin_user_show', [
+                'id' => $user->getId(),
+            ]);
         }
 
         return $this->render(
@@ -207,10 +192,9 @@ final class UserController extends AbstractController
 
     /**
      * Deletes a User utilisateur.
-     *
-     * @Route("/{id}/delete", name="mercredi_admin_user_delete", methods={"POST"})
      */
-    public function delete(Request $request, User $user): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $id = $user->getId();

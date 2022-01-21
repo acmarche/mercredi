@@ -14,43 +14,32 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/plaine_jour")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/plaine_jour')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class PlaineJourController extends AbstractController
 {
-    private PlaineAdminHandler $plaineAdminHandler;
-    private PlainePresenceRepository $plainePresenceRepository;
-    private GroupingInterface $grouping;
-
     public function __construct(
-        PlaineAdminHandler $plaineHandler,
-        PlainePresenceRepository $plainePresenceRepository,
-        GroupingInterface $grouping
+        private PlaineAdminHandler $plaineAdminHandler,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private GroupingInterface $grouping
     ) {
-        $this->plaineAdminHandler = $plaineHandler;
-        $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->grouping = $grouping;
     }
 
-    /**
-     * @Route("/edit/{id}", name="mercredi_admin_plaine_jour_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/edit/{id}', name: 'mercredi_admin_plaine_jour_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Plaine $plaine): Response
     {
         $this->plaineAdminHandler->initJours($plaine);
-
         $form = $this->createForm(PlaineJoursType::class, $plaine);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $jours = $form->get('jours')->getData();
             $this->plaineAdminHandler->handleEditJours($plaine, $jours);
 
             $this->addFlash('success', 'les dates ont bien été enregistrées');
 
-            return $this->redirectToRoute('mercredi_admin_plaine_show', ['id' => $plaine->getId()]);
+            return $this->redirectToRoute('mercredi_admin_plaine_show', [
+                'id' => $plaine->getId(),
+            ]);
         }
 
         return $this->render(
@@ -62,9 +51,7 @@ final class PlaineJourController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_plaine_jour_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_plaine_jour_show', methods: ['GET'])]
     public function show(Jour $jour): Response
     {
         $plaine = $jour->getPlaine();

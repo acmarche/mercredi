@@ -10,11 +10,9 @@ use AcMarche\Mercredi\Utils\SortUtils;
 
 class GroupingMarche implements GroupingInterface
 {
-    private ScolaireUtils $scolaireUtils;
-
-    public function __construct(ScolaireUtils $scolaireUtils)
-    {
-        $this->scolaireUtils = $scolaireUtils;
+    public function __construct(
+        private ScolaireUtils $scolaireUtils
+    ) {
     }
 
     public function groupEnfantsForPresence(array $enfants): array

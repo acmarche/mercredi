@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Plaine\Message;
 
 final class PlaineUpdated
 {
-    private int $plaineId;
-
-    public function __construct(int $plaineId)
-    {
-        $this->plaineId = $plaineId;
+    public function __construct(
+        private int $plaineId
+    ) {
     }
 
     public function getPlaineId(): int

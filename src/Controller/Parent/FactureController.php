@@ -12,36 +12,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class FactureController.
- *
- * @IsGranted("ROLE_MERCREDI_PARENT")
- * @Route("/facture")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
+#[Route(path: '/facture')]
 final class FactureController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private FactureRepository $factureRepository;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private FactureCalculatorInterface $factureCalculator;
-    private factureRenderInterface $factureRender;
-
     public function __construct(
-        FactureRepository $factureRepository,
-        FacturePresenceRepository $facturePresenceRepository,
-        FactureCalculatorInterface $factureCalculator,
-        factureRenderInterface $factureRender
+        private FactureRepository $factureRepository,
+        private FacturePresenceRepository $facturePresenceRepository,
+        private FactureCalculatorInterface $factureCalculator,
+        private factureRenderInterface $factureRender
     ) {
-        $this->factureRepository = $factureRepository;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->factureCalculator = $factureCalculator;
-        $this->factureRender = $factureRender;
     }
 
-    /**
-     * @Route("/", name="mercredi_parent_facture_index", methods={"GET", "POST"})
-     */
+    #[Route(path: '/', name: 'mercredi_parent_facture_index', methods: ['GET', 'POST'])]
     public function index(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
@@ -58,15 +44,12 @@ final class FactureController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}/show", name="mercredi_parent_facture_show", methods={"GET"})
-     */
+    #[Route(path: '/{uuid}/show', name: 'mercredi_parent_facture_show', methods: ['GET'])]
     public function show(Facture $facture): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $html = $this->factureRender->render($facture);
 
         return $this->render(

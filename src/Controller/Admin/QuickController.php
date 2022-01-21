@@ -15,39 +15,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/parent_enfant")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/parent_enfant')]
 final class QuickController extends AbstractController
 {
-    private TuteurRepository $tuteurRepository;
-    private EnfantRepository $enfantRepository;
-    private RelationRepository $relationRepository;
-    private AssociationTuteurHandler $associationHandler;
-
     public function __construct(
-        TuteurRepository $tuteurRepository,
-        EnfantRepository $enfantRepository,
-        RelationRepository $relationRepository,
-        AssociationTuteurHandler $associationHandler
+        private TuteurRepository $tuteurRepository,
+        private EnfantRepository $enfantRepository,
+        private RelationRepository $relationRepository,
+        private AssociationTuteurHandler $associationHandler
     ) {
-        $this->tuteurRepository = $tuteurRepository;
-        $this->enfantRepository = $enfantRepository;
-        $this->relationRepository = $relationRepository;
-        $this->associationHandler = $associationHandler;
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_parent_enfant_new")
-     */
+    #[Route(path: '/', name: 'mercredi_admin_parent_enfant_new')]
     public function new(Request $request): Response
     {
         $form = $this->createForm(TuteurEnfantQuickType::class, new TuteurEnfantDto());
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $tuteur = $form->getData()->getTuteur();
             $enfant = $form->getData()->getEnfant();

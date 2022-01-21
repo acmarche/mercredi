@@ -16,21 +16,12 @@ use Doctrine\ORM\NonUniqueResultException;
 
 final class PresenceHandler implements PresenceHandlerInterface
 {
-    private PresenceRepository $presenceRepository;
-    private PresenceUtils $presenceUtils;
-    private PresenceConstraints $presenceConstraints;
-    private GroupingInterface $grouping;
-
     public function __construct(
-        PresenceRepository $presenceRepository,
-        PresenceUtils $presenceUtils,
-        PresenceConstraints $presenceConstraints,
-        GroupingInterface $grouping
+        private PresenceRepository $presenceRepository,
+        private PresenceUtils $presenceUtils,
+        private PresenceConstraints $presenceConstraints,
+        private GroupingInterface $grouping
     ) {
-        $this->presenceRepository = $presenceRepository;
-        $this->presenceUtils = $presenceUtils;
-        $this->presenceConstraints = $presenceConstraints;
-        $this->grouping = $grouping;
     }
 
     /**
@@ -45,7 +36,7 @@ final class PresenceHandler implements PresenceHandlerInterface
                 continue;
             }
 
-            if (!$this->checkConstraints($jour)) {
+            if (! $this->checkConstraints($jour)) {
                 continue;
             }
 
@@ -69,7 +60,7 @@ final class PresenceHandler implements PresenceHandlerInterface
     {
         $this->presenceConstraints->execute($jour);
         foreach ($this->presenceConstraints as $constraint) {
-            if (!$constraint->check($jour)) {
+            if (! $constraint->check($jour)) {
                 $constraint->addFlashError($jour);
 
                 return false;

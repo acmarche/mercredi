@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Animateur\Message;
 
 final class AnimateurCreated
 {
-    private int $animateurId;
-
-    public function __construct(int $animateurId)
-    {
-        $this->animateurId = $animateurId;
+    public function __construct(
+        private int $animateurId
+    ) {
     }
 
     public function getAnimateurId(): int

@@ -19,7 +19,7 @@ class EcoleUtils
     /**
      * @param Ecole[]|ArrayCollection $ecoles
      */
-    public static function getNamesEcole(iterable $ecoles): string
+    public static function getNamesEcole(array|ArrayCollection $ecoles): string
     {
         $noms = array_map(
             fn ($ecole) => $ecole->getNom(),

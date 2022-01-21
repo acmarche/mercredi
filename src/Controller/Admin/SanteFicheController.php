@@ -14,52 +14,37 @@ use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/santeFiche")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/santeFiche')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class SanteFicheController extends AbstractController
 {
-    private SanteFicheRepository $santeFicheRepository;
-    private SanteHandler $santeHandler;
-    private SanteChecker $santeChecker;
-    private SanteQuestionRepository $santeQuestionRepository;
-    private OrganisationRepository $organisationRepository;
-
     public function __construct(
-        SanteFicheRepository $santeFicheRepository,
-        SanteQuestionRepository $santeQuestionRepository,
-        OrganisationRepository $organisationRepository,
-        SanteHandler $santeHandler,
-        SanteChecker $santeChecker,
+        private SanteFicheRepository $santeFicheRepository,
+        private SanteQuestionRepository $santeQuestionRepository,
+        private OrganisationRepository $organisationRepository,
+        private SanteHandler $santeHandler,
+        private SanteChecker $santeChecker,
         private MessageBusInterface $dispatcher
     ) {
-        $this->santeFicheRepository = $santeFicheRepository;
-        $this->santeHandler = $santeHandler;
-        $this->santeChecker = $santeChecker;
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->organisationRepository = $organisationRepository;
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_sante_fiche_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_sante_fiche_show', methods: ['GET'])]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', [
+                'id' => $enfant->getId(),
+            ]);
         }
-
         $isComplete = $this->santeChecker->isComplete($santeFiche);
         $questions = $this->santeQuestionRepository->findAllOrberByPosition();
         $organisation = $this->organisationRepository->getOrganisation();
@@ -76,26 +61,24 @@ final class SanteFicheController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_sante_fiche_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_sante_fiche_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         if ([] === $santeFiche->getAccompagnateurs()) {
             $santeFiche->addAccompagnateur(' ');
         }
-
         $form = $this->createForm(SanteFicheFullType::class, $santeFiche);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $questions = $form->getData()->getQuestions();
             $this->santeHandler->handle($santeFiche, $questions);
 
             $this->dispatcher->dispatch(new SanteFicheUpdated($santeFiche->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_sante_fiche_show', [
+                'id' => $enfant->getId(),
+            ]);
         }
 
         return $this->render(
@@ -107,9 +90,7 @@ final class SanteFicheController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_sante_fiche_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_sante_fiche_delete', methods: ['POST'])]
     public function delete(Request $request, SanteFiche $santeFiche): RedirectResponse
     {
         $enfant = null;
@@ -121,6 +102,8 @@ final class SanteFicheController extends AbstractController
             $this->dispatcher->dispatch(new SanteFicheDeleted($id));
         }
 
-        return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+        return $this->redirectToRoute('mercredi_admin_enfant_show', [
+            'id' => $enfant->getId(),
+        ]);
     }
 }

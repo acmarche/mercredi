@@ -26,54 +26,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/message")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/message')]
 final class MessageController extends AbstractController
 {
-    private PresenceRepository $presenceRepository;
-    private RelationRepository $relationRepository;
-    private SearchHelper $searchHelper;
-    private TuteurUtils $tuteurUtils;
-    private MessageFactory $messageFactory;
-    private MessageHandler $messageHandler;
-    private PresenceHandlerInterface $presenceHandler;
-    private MessageRepository $messageRepository;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        PresenceRepository $presenceRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        RelationRepository $relationRepository,
-        MessageRepository $messageRepository,
-        SearchHelper $searchHelper,
-        TuteurUtils $tuteurUtils,
-        MessageFactory $messageFactory,
-        MessageHandler $messageHandler,
-        PresenceHandlerInterface $presenceHandler
+        private PresenceRepository $presenceRepository,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private RelationRepository $relationRepository,
+        private MessageRepository $messageRepository,
+        private SearchHelper $searchHelper,
+        private TuteurUtils $tuteurUtils,
+        private MessageFactory $messageFactory,
+        private MessageHandler $messageHandler,
+        private PresenceHandlerInterface $presenceHandler
     ) {
-        $this->presenceRepository = $presenceRepository;
-        $this->relationRepository = $relationRepository;
-        $this->searchHelper = $searchHelper;
-        $this->tuteurUtils = $tuteurUtils;
-        $this->messageFactory = $messageFactory;
-        $this->messageHandler = $messageHandler;
-        $this->presenceHandler = $presenceHandler;
-        $this->messageRepository = $messageRepository;
-        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
-    /**
-     * @Route("/", name="mercredi_message_index")
-     */
+    #[Route(path: '/', name: 'mercredi_message_index')]
     public function index(Request $request): Response
     {
         $form = $this->createForm(SearchMessageType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $ecole = $data['ecole'];
@@ -96,7 +71,7 @@ final class MessageController extends AbstractController
                 $tuteurs[] = PresenceUtils::extractTuteurs($presences);
             }
 
-            if (!$jour && !$ecole && !$plaine) {
+            if (! $jour && ! $ecole && ! $plaine) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
@@ -106,7 +81,6 @@ final class MessageController extends AbstractController
             $relations = $this->relationRepository->findTuteursActifs();
             $tuteurs = RelationUtils::extractTuteurs($relations);
         }
-
         $emails = $this->tuteurUtils->getEmails($tuteurs);
         $tuteursWithOutEmails = $this->tuteurUtils->filterTuteursWithOutEmail($tuteurs);
         $this->searchHelper->saveSearch(SearchHelper::MESSAGE_INDEX, $emails);
@@ -121,23 +95,16 @@ final class MessageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/jour/{id}", name="mercredi_message_new_jour")
-     */
+    #[Route(path: '/jour/{id}', name: 'mercredi_message_new_jour')]
     public function fromJour(Request $request, Jour $jour): Response
     {
         $presences = $this->presenceRepository->findByDay($jour);
-
         $tuteurs = PresenceUtils::extractTuteurs($presences);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
-
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
-
         $form = $this->createForm(MessageType::class, $message);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
@@ -158,9 +125,7 @@ final class MessageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/groupe/{id}", name="mercredi_message_new_groupescolaire")
-     */
+    #[Route(path: '/groupe/{id}', name: 'mercredi_message_new_groupescolaire')]
     public function fromGroupeScolaire(Request $request, GroupeScolaire $groupeScolaire): Response
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST);
@@ -169,23 +134,16 @@ final class MessageController extends AbstractController
 
             return $this->redirectToRoute('mercredi_admin_presence_index');
         }
-
         $jour = $args['jour'];
         $ecole = $args['ecole'];
-
         $data = $this->presenceHandler->searchAndGrouping($jour, $ecole, false);
         $enfants = $data[$groupeScolaire->getId()]['enfants'] ?? [];
-
         $tuteurs = $this->tuteurUtils->getTuteursByEnfants($enfants);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
-
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
-
         $form = $this->createForm(MessageType::class, $message);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
@@ -205,23 +163,16 @@ final class MessageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/plaine/{id}", name="mercredi_message_new_plaine")
-     */
+    #[Route(path: '/plaine/{id}', name: 'mercredi_message_new_plaine')]
     public function fromPlaine(Request $request, Plaine $plaine): Response
     {
         $presences = $this->plainePresenceRepository->findByPlaine($plaine);
-
         $tuteurs = PresenceUtils::extractTuteurs($presences);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
-
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
-
         $form = $this->createForm(MessagePlaineType::class, $message);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $attachCourrier = (bool) $form->get('attachCourriers')->getData();
             $this->messageHandler->handleFromPlaine($plaine, $message, $attachCourrier);
@@ -243,19 +194,14 @@ final class MessageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_message_new")
-     */
+    #[Route(path: '/new', name: 'mercredi_message_new')]
     public function new(Request $request): Response
     {
         $emails = $this->searchHelper->getArgs(SearchHelper::MESSAGE_INDEX);
-
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
-
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->messageHandler->handle($message);
 
@@ -275,9 +221,7 @@ final class MessageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("archive", name="mercredi_message_archive")
-     */
+    #[Route(path: 'archive', name: 'mercredi_message_archive')]
     public function archive(): Response
     {
         $messages = $this->messageRepository->findall();
@@ -290,9 +234,7 @@ final class MessageController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/show/{id}", name="mercredi_message_show", methods={"GET"})
-     */
+    #[Route(path: '/show/{id}', name: 'mercredi_message_show', methods: ['GET'])]
     public function show(Message $message): Response
     {
         return $this->render(

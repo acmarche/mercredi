@@ -26,19 +26,6 @@ final class RelationRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Relation::class);
     }
 
-    private function getQlB(): QueryBuilder
-    {
-        return $this->createQueryBuilder('relation')
-            ->leftJoin('relation.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('relation.enfant', 'enfant', 'WITH')
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
-            ->leftJoin('tuteur.users', 'users', 'WITH')
-            ->addSelect('tuteur', 'enfant', 'sante_fiche', 'users')
-            ->orderBy('enfant.nom', 'ASC')
-            ->orderBy('enfant.prenom', 'ASC')
-            ->orderBy('enfant.birthday', 'ASC');
-    }
-
     /**
      * @return Relation[] Returns an array of Relation objects
      */
@@ -93,7 +80,10 @@ final class RelationRepository extends ServiceEntityRepository
 
     public function findOneByTuteurAndEnfant(Tuteur $tuteur, Enfant $enfant): ?Relation
     {
-        return $this->findOneBy(['tuteur' => $tuteur, 'enfant' => $enfant]);
+        return $this->findOneBy([
+            'tuteur' => $tuteur,
+            'enfant' => $enfant,
+        ]);
     }
 
     /**
@@ -152,5 +142,18 @@ final class RelationRepository extends ServiceEntityRepository
             ->setParameter('enfants', $enfants)
             ->getQuery()
             ->getResult();
+    }
+
+    private function getQlB(): QueryBuilder
+    {
+        return $this->createQueryBuilder('relation')
+            ->leftJoin('relation.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('relation.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('tuteur.users', 'users', 'WITH')
+            ->addSelect('tuteur', 'enfant', 'sante_fiche', 'users')
+            ->orderBy('enfant.nom', 'ASC')
+            ->orderBy('enfant.prenom', 'ASC')
+            ->orderBy('enfant.birthday', 'ASC');
     }
 }

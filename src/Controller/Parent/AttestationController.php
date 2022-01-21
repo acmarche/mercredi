@@ -11,26 +11,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/attestation")
- */
+
+#[Route(path: '/attestation')]
 final class AttestationController extends AbstractController
 {
     use GetTuteurTrait;
     use PdfDownloaderTrait;
-    public RelationRepository $relationRepository;
 
-    public function __construct(RelationRepository $relationRepository)
-    {
-        $this->relationRepository = $relationRepository;
+    public function __construct(
+        public RelationRepository $relationRepository
+    ) {
     }
 
-    /**
-     * @Route("/{year}/{uuid}", name="mercredi_parent_attestation")
-     * @IsGranted("enfant_show", subject="enfant")
-     */
+    #[Route(path: '/{year}/{uuid}', name: 'mercredi_parent_attestation')]
+    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
     public function default(int $year, Enfant $enfant): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {

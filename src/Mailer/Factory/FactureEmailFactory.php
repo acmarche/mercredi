@@ -26,21 +26,12 @@ class FactureEmailFactory
     use OrganisationPropertyInitTrait;
     use PdfDownloaderTrait;
 
-    private FactureFactory $factureFactory;
-    private ParameterBagInterface $parameterBag;
-    private FacturePdfPresenceInterface $facturePdfPresence;
-    private FacturePdfPlaineInterface $facturePdfPlaine;
-
     public function __construct(
-        FacturePdfPresenceInterface $facturePdfPresence,
-        FacturePdfPlaineInterface $facturePdfPlaine,
-        FactureFactory $factureFactory,
-        ParameterBagInterface $parameterBag
+        private FacturePdfPresenceInterface $facturePdfPresence,
+        private FacturePdfPlaineInterface $facturePdfPlaine,
+        private FactureFactory $factureFactory,
+        private ParameterBagInterface $parameterBag
     ) {
-        $this->factureFactory = $factureFactory;
-        $this->parameterBag = $parameterBag;
-        $this->facturePdfPresence = $facturePdfPresence;
-        $this->facturePdfPlaine = $facturePdfPlaine;
     }
 
     public function initFromAndToForForm(?Facture $facture = null): array
@@ -58,7 +49,7 @@ class FactureEmailFactory
     }
 
     /**
-     * @param Facture $facture
+     * @param Facture $from
      */
     public function messageFacture(string $from, string $sujet, string $body): NotificationEmailJf
     {
@@ -106,7 +97,7 @@ class FactureEmailFactory
         $factureFile = $path.'facture-'.$facture->getId().'.pdf';
 
         $date = $facture->getFactureLe();
-        if (!is_readable($factureFile)) {
+        if (! is_readable($factureFile)) {
             throw new Exception('Pdf non trouvé '.$factureFile);
         }
         $message->attachFromPath($factureFile, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');

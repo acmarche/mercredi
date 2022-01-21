@@ -24,57 +24,39 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class FactureController.
- *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/facture/send")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/facture/send')]
 final class FactureSendController extends AbstractController
 {
-    private FactureRepository $factureRepository;
-    private FacturePdfFactoryTrait $facturePdfFactory;
-    private FactureEmailFactory $factureEmailFactory;
-    private NotificationMailer $notificationMailer;
-    private FactureCronRepository $factureCronRepository;
-    private FactureFactory $factureFactory;
-    private AdminEmailFactory $adminEmailFactory;
-
     public function __construct(
-        FactureRepository $factureRepository,
-        FactureCronRepository $factureCronRepository,
-        FacturePdfFactoryTrait $facturePdfFactory,
-        FactureEmailFactory $factureEmailFactory,
-        NotificationMailer $notificationMailer,
-        FactureFactory $factureFactory,
-        AdminEmailFactory $adminEmailFactory
+        private FactureRepository $factureRepository,
+        private FactureCronRepository $factureCronRepository,
+        private FacturePdfFactoryTrait $facturePdfFactory,
+        private FactureEmailFactory $factureEmailFactory,
+        private NotificationMailer $notificationMailer,
+        private FactureFactory $factureFactory,
+        private AdminEmailFactory $adminEmailFactory
     ) {
-        $this->factureRepository = $factureRepository;
-        $this->facturePdfFactory = $facturePdfFactory;
-        $this->factureEmailFactory = $factureEmailFactory;
-        $this->notificationMailer = $notificationMailer;
-        $this->factureCronRepository = $factureCronRepository;
-        $this->factureFactory = $factureFactory;
-        $this->adminEmailFactory = $adminEmailFactory;
     }
 
-    /**
-     * @Route("/select/month", name="mercredi_admin_facture_send_select_month", methods={"GET", "POST"})
-     */
+    #[Route(path: '/select/month', name: 'mercredi_admin_facture_send_select_month', methods: ['GET', 'POST'])]
     public function selectMonth(Request $request): Response
     {
         $form = $this->createForm(FactureSelectSendType::class);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $mois = $form->get('mois')->getData();
             $mode = $form->get('mode')->getData();
             if ('mail' === $mode) {
-                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $mois]);
+                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', [
+                    'month' => $mois,
+                ]);
             }
             if ('papier' === $mode) {
-                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_paper', ['month' => $mois]);
+                return $this->redirectToRoute('mercredi_admin_facture_send_all_by_paper', [
+                    'month' => $mois,
+                ]);
             }
         }
 
@@ -86,16 +68,13 @@ final class FactureSendController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/one", name="mercredi_admin_facture_send_one", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/one', name: 'mercredi_admin_facture_send_one', methods: ['GET', 'POST'])]
     public function sendOneFacture(Request $request, Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
         $args = $this->factureEmailFactory->initFromAndToForForm($facture);
         $form = $this->createForm(FactureSendType::class, $args);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
@@ -109,7 +88,9 @@ final class FactureSendController extends AbstractController
             $this->addFlash('success', 'La facture a bien été envoyée');
             $this->factureRepository->flush();
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute('mercredi_admin_facture_show', [
+                'id' => $facture->getId(),
+            ]);
         }
 
         return $this->render(
@@ -122,16 +103,12 @@ final class FactureSendController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/all/mail/{month}", name="mercredi_admin_facture_send_all_by_mail", methods={"GET", "POST"})
-     */
+    #[Route(path: '/all/mail/{month}', name: 'mercredi_admin_facture_send_all_by_mail', methods: ['GET', 'POST'])]
     public function sendAllFacture(Request $request, string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndToForForm());
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             if ([] === $factures) {
@@ -152,7 +129,10 @@ final class FactureSendController extends AbstractController
 
             return $this->redirectToRoute(
                 'mercredi_admin_facture_create_pdf_all',
-                ['month' => $month, 'pause' => 0]
+                [
+                    'month' => $month,
+                    'pause' => 0,
+                ]
             );
         }
 
@@ -166,19 +146,16 @@ final class FactureSendController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/all/pdf/{month}/{pause}", name="mercredi_admin_facture_create_pdf_all", methods={"GET"})
-     */
+    #[Route(path: '/all/pdf/{month}/{pause}', name: 'mercredi_admin_facture_create_pdf_all', methods: ['GET'])]
     public function pdfAll(string $month, int $pause): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
-
         if (null === $this->factureCronRepository->findOneByMonth($month)) {
             $this->addFlash('danger', 'Erreur aucun cron trouvé');
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }
-        if (1 == $pause) {
+        if (1 === $pause) {
             return $this->render(
                 '@AcMarcheMercrediAdmin/facture/create_pdf.html.twig',
                 [
@@ -193,7 +170,9 @@ final class FactureSendController extends AbstractController
         } catch (Exception $e) {
             $this->addFlash('danger', 'Erreur survenue: '.$e->getMessage());
 
-            return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', ['month' => $month]);
+            return $this->redirectToRoute('mercredi_admin_facture_send_all_by_mail', [
+                'month' => $month,
+            ]);
         }
         if ($finish) {
             $this->addFlash(
@@ -203,7 +182,10 @@ final class FactureSendController extends AbstractController
         } else {
             return $this->redirectToRoute(
                 'mercredi_admin_facture_create_pdf_all',
-                ['month' => $month, 'pause' => 1]
+                [
+                    'month' => $month,
+                    'pause' => 1,
+                ]
             );
         }
 
@@ -217,24 +199,19 @@ final class FactureSendController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/all/sending/{month}/{pause}", name="mercredi_admin_facture_sending_all", methods={"GET"})
-     */
+    #[Route(path: '/all/sending/{month}/{pause}', name: 'mercredi_admin_facture_sending_all', methods: ['GET'])]
     public function sendAll(string $month, int $pause): Response
     {
         $i = 0;
-
         $cron = $this->factureCronRepository->findOneByMonth($month);
         $factures = $this->factureRepository->findFacturesByMonthNotSend($month);
         $count = \count($factures);
         $finish = 0 === $count;
-
         $messageBase = $this->factureEmailFactory->messageFacture(
             $cron->getFromAdresse(),
             $cron->getSubject(),
             $cron->getBody()
         );
-
         foreach ($factures as $facture) {
             $messageFacture = clone $messageBase; //sinon attachs multiple
 
@@ -290,9 +267,7 @@ final class FactureSendController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/all/paper/{month}", name="mercredi_admin_facture_send_all_by_paper", methods={"GET"})
-     */
+    #[Route(path: '/all/paper/{month}', name: 'mercredi_admin_facture_send_all_by_paper', methods: ['GET'])]
     public function facturesPapier(string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);
@@ -311,9 +286,7 @@ final class FactureSendController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/download/paper/{month}", name="mercredi_admin_facture_send_download_by_paper", methods={"GET"})
-     */
+    #[Route(path: '/download/paper/{month}', name: 'mercredi_admin_facture_send_download_by_paper', methods: ['GET'])]
     public function downloadFacturePapier(string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonthOnlyPaper($month);

@@ -16,11 +16,9 @@ use Symfony\Component\Ldap\LdapInterface;
  */
 class LdapMercredi implements LdapInterface
 {
-    private AdapterInterface $adapter;
-
-    public function __construct(AdapterInterface $adapter)
-    {
-        $this->adapter = $adapter;
+    public function __construct(
+        private AdapterInterface $adapter
+    ) {
     }
 
     /**
@@ -60,8 +58,6 @@ class LdapMercredi implements LdapInterface
      *
      * @param string $adapter The adapter name
      * @param array  $config  The adapter's configuration
-     *
-     * @return static
      */
     public static function create(string $adapter, array $config = []): self
     {

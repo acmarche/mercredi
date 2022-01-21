@@ -42,7 +42,9 @@ final class PresenceNewType extends AbstractType
 
                         return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
                     },
-                    'attr' => ['style' => 'height:150px;'],
+                    'attr' => [
+                        'style' => 'height:150px;',
+                    ],
                     'group_by' => fn ($date) => $date->getDateJour()->format('m').'-'.$date->getDateJour()->format('Y'),
                 ]
             );

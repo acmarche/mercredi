@@ -30,10 +30,7 @@ final class CarbonProvider extends BaseProvider
         return Carbon::createFromDate($year, $month, $day)->toDateTime();
     }
 
-    /**
-     * @return CarbonImmutable|bool
-     */
-    public function carbonFromFormat(string $format, string $date)
+    public function carbonFromFormat(string $format, string $date): bool|CarbonImmutable
     {
         return CarbonImmutable::createFromFormat($format, $date);
     }

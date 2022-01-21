@@ -69,19 +69,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->set(Ldap::class)
             ->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])
             ->tag('ldap');
-        $services->set(Adapter::class)->args(
-            [
+        $services->set(Adapter::class)
+            ->args(
                 [
-                    'host' => '%env(ACLDAP_URL)%',
-                    'port' => 636,
-                    'encryption' => 'ssl',
-                    'options' => [
-                        'protocol_version' => 3,
-                        'referrals' => false,
+                    [
+                        'host' => '%env(ACLDAP_URL)%',
+                        'port' => 636,
+                        'encryption' => 'ssl',
+                        'options' => [
+                            'protocol_version' => 3,
+                            'referrals' => false,
+                        ],
                     ],
-                ],
-            ]
-        );
+                ]
+            );
 
         $services->set(LdapMercredi::class)
             ->arg('$adapter', service(Adapter::class))

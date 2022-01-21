@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Migration;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Paiement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,31 +18,32 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PaiementRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Paiement::class);
     }
-
-    use OrmCrudTrait;
 
     /**
      * Retourne les paiments lies a l'enfant tuteur.
      *
      * @return Paiement[]
      */
-    public function getByEnfantTuteur(EnfantTuteur $enfant_tuteur, $date = null)
+    public function getByEnfantTuteur(EnfantTuteur $enfant_tuteur, $date = null): Paiement|array
     {
         $enfant_id = $enfant_tuteur->getEnfant()->getId();
         $tuteur_id = $enfant_tuteur->getTuteur()->getId();
 
-        $args = ['enfant_id' => $enfant_id, 'tuteur_id' => $tuteur_id];
+        $args = [
+            'enfant_id' => $enfant_id,
+            'tuteur_id' => $tuteur_id,
+        ];
         if ($date) {
             $args['date'] = $date;
         }
 
-        $paiements = $this->search($args);
-
-        return $paiements;
+        return $this->search($args);
     }
 
     /**
@@ -49,13 +51,13 @@ class PaiementRepository extends ServiceEntityRepository
      *
      * @return Paiement[]|Paiement
      */
-    public function search($args)
+    public function search($args): array|Paiement
     {
-        $tuteur_id = isset($args['tuteur_id']) ? $args['tuteur_id'] : null;
-        $enfant_id = isset($args['enfant_id']) ? $args['enfant_id'] : 0;
-        $date = isset($args['date']) ? $args['date'] : null;
-        $cloture = isset($args['cloture']) ? $args['cloture'] : null;
-        $one = isset($args['one']) ? $args['one'] : false;
+        $tuteur_id = $args['tuteur_id'] ?? null;
+        $enfant_id = $args['enfant_id'] ?? 0;
+        $date = $args['date'] ?? null;
+        $cloture = $args['cloture'] ?? null;
+        $one = $args['one'] ?? false;
 
         $qb = $this->createQueryBuilder('p');
         $qb->leftJoin('p.tuteur', 't', 'WITH');
@@ -79,10 +81,10 @@ class PaiementRepository extends ServiceEntityRepository
                 ->setParameter('date', '%'.$date.'%');
         }
 
-        if (1 == $cloture) {
+        if (1 === $cloture) {
             $qb->andwhere('p.cloture = :cloture')
                 ->setParameter('cloture', 1);
-        } elseif (-1 == $cloture) {
+        } elseif (-1 === $cloture) {
             $qb->andwhere('p.cloture = :cloture')
                 ->setParameter('cloture', 0);
         }
@@ -95,19 +97,14 @@ class PaiementRepository extends ServiceEntityRepository
             return $query->getOneOrNullResult();
         }
 
-        $results = $query->getResult();
-
-        return $results;
+        return $query->getResult();
     }
 
-    /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getForList(Tuteur $tuteur = null)
+    public function getForList(Tuteur $tuteur = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('p');
 
-        if ($tuteur) {
+        if (null !== $tuteur) {
             $qb->andwhere('p.tuteur = :tuteur')
                 ->setParameter('tuteur', $tuteur);
         }

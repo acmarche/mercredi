@@ -12,11 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class SanteFicheEtape3Type extends AbstractType
 {
-    private SanteChecker $santeChecker;
-
-    public function __construct(SanteChecker $santeChecker)
-    {
-        $this->santeChecker = $santeChecker;
+    public function __construct(
+        private SanteChecker $santeChecker
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void

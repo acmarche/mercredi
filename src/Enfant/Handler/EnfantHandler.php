@@ -10,13 +10,10 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
 final class EnfantHandler
 {
-    private EnfantRepository $enfantRepository;
-    private RelationRepository $relationRepository;
-
-    public function __construct(EnfantRepository $enfantRepository, RelationRepository $relationRepository)
-    {
-        $this->enfantRepository = $enfantRepository;
-        $this->relationRepository = $relationRepository;
+    public function __construct(
+        private EnfantRepository $enfantRepository,
+        private RelationRepository $relationRepository
+    ) {
     }
 
     public function newHandle(Enfant $enfant, Tuteur $tuteur): void

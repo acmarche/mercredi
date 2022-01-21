@@ -16,17 +16,13 @@ final class DateConstraint implements PresenceConstraintInterface
      */
     private const FORMAT = 'Y-m-d';
     private FlashBagInterface $flashBag;
-    private Environment $environment;
-    private PresenceUtils $presenceUtils;
 
     public function __construct(
         RequestStack $requestStack,
-        Environment $environment,
-        PresenceUtils $presenceUtils
+        private Environment $environment,
+        private PresenceUtils $presenceUtils
     ) {
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
-        $this->environment = $environment;
-        $this->presenceUtils = $presenceUtils;
     }
 
     /**
@@ -58,7 +54,9 @@ final class DateConstraint implements PresenceConstraintInterface
     {
         $content = $this->environment->render(
             '@AcMarcheMercrediParent/presence/_error_delais.txt.twig',
-            ['jour' => $jour]
+            [
+                'jour' => $jour,
+            ]
         );
         $this->flashBag->add('danger', $content);
     }

@@ -47,11 +47,7 @@ final class SortUtils
                 $dateB = $presenceB->getJour()->getDateJour();
                 $dateB->format('Y-m-d');
 
-                if ($dateA === $dateB) {
-                    return 0;
-                }
-
-                return $dateA > $dateB ? 1 : -1;
+                return $dateB <=> $dateA;
             }
         );
 
@@ -66,11 +62,7 @@ final class SortUtils
                 $groupeA = $dataA['groupe'];
                 $groupeB = $dataB['groupe'];
 
-                if ($groupeA->getOrdre() === $groupeB->getOrdre()) {
-                    return 0;
-                }
-
-                return $groupeA->getOrdre() > $groupeB->getOrdre() ? 1 : -1;
+                return $groupeB->getOrdre() <=> $groupeA->getOrdre();
             }
         );
 
@@ -96,9 +88,9 @@ final class SortUtils
                 if ($dateA === $dateB) {
                     if ($enfantA->getPrenom() > $enfantB->getPrenom()) {
                         return +1;
-                    } else {
-                        return -1;
                     }
+
+                    return -1;
                 }
 
                 return $dateA > $dateB ? +1 : -1;

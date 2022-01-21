@@ -8,18 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- */
+
 final class DefaultController extends AbstractController
 {
     use GetEcolesTrait;
     use OrganisationPropertyInitTrait;
 
-    /**
-     * @Route("/", name="mercredi_ecole_home")
-     * @IsGranted("ROLE_MERCREDI_ECOLE")
-     */
+    #[Route(path: '/', name: 'mercredi_ecole_home')]
+    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
     public function default(): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
@@ -29,10 +25,8 @@ final class DefaultController extends AbstractController
         return $this->redirectToRoute('mercredi_ecole_ecole_index');
     }
 
-    /**
-     * @Route("/nouveau", name="mercredi_ecole_nouveau")
-     * @IsGranted("ROLE_MERCREDI_ECOLE")
-     */
+    #[Route(path: '/nouveau', name: 'mercredi_ecole_nouveau')]
+    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
     public function nouveau(): Response
     {
         return $this->render(

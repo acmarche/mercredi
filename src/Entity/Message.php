@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use AcMarche\Mercredi\Message\Repository\MessageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,35 +13,29 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'message')]
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Message\Repository\MessageRepository')]
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message implements TimestampableInterface
 {
     use IdTrait;
     use TimestampableTrait;
+    public bool $attachCourriers;
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private ?string $from = null;
     /**
      * Assert\NotBlank().
      */
     private ?string $to = null;
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'text', nullable: false)]
+    #[Assert\NotBlank]
     private ?string $sujet = null;
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'text', nullable: false)]
+    #[Assert\NotBlank]
     private ?string $texte = null;
     private ?UploadedFile $file = null;
 
     #[ORM\Column(type: 'array', nullable: false)]
     private Collection $destinataires;
-    public bool $attachCourriers;
 
     public function __construct()
     {

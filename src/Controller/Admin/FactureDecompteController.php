@@ -8,43 +8,36 @@ use AcMarche\Mercredi\Facture\Form\FactureDecompteType;
 use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class FactureController.
- *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/facture_decompte")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/facture_decompte')]
 final class FactureDecompteController extends AbstractController
 {
-    private FactureDecompteRepository $factureDecompteRepository;
-
     public function __construct(
-        FactureDecompteRepository $factureDecompteRepository
+        private FactureDecompteRepository $factureDecompteRepository
     ) {
-        $this->factureDecompteRepository = $factureDecompteRepository;
     }
 
-    /**
-     * @Route("/{id}/new", name="mercredi_admin_facture_decompte_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/new', name: 'mercredi_admin_facture_decompte_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Facture $facture): Response
     {
         $factureDecompte = new FactureDecompte($facture);
-
         $form = $this->createForm(FactureDecompteType::class, $factureDecompte);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->factureDecompteRepository->persist($factureDecompte);
             $this->factureDecompteRepository->flush();
 
             $this->addFlash('success', 'Le décompte a bien été ajouté');
 
-            return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+            return $this->redirectToRoute('mercredi_admin_facture_show', [
+                'id' => $facture->getId(),
+            ]);
         }
 
         return $this->render(
@@ -57,9 +50,7 @@ final class FactureDecompteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/show", name="mercredi_admin_facture_decompte_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}/show', name: 'mercredi_admin_facture_decompte_show', methods: ['GET'])]
     public function show(FactureDecompte $factureDecompte): Response
     {
         $facture = $factureDecompte->getFacture();
@@ -73,19 +64,18 @@ final class FactureDecompteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_facture_decompte_edit", methods={"GET", "POST"}).
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_facture_decompte_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, FactureDecompte $factureDecompte): Response
     {
         $form = $this->createForm(FactureDecompteType::class, $factureDecompte);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->factureDecompteRepository->flush();
             $this->addFlash('success', 'Le décompte a bien été modifié');
 
-            return $this->redirectToRoute('mercredi_admin_facture_decompte_show', ['id' => $factureDecompte->getId()]);
+            return $this->redirectToRoute('mercredi_admin_facture_decompte_show', [
+                'id' => $factureDecompte->getId(),
+            ]);
         }
 
         return $this->render(
@@ -98,10 +88,8 @@ final class FactureDecompteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_facture_decompte_delete", methods={"POST"})
-     */
-    public function delete(Request $request, FactureDecompte $factureDecompte): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_facture_decompte_delete', methods: ['POST'])]
+    public function delete(Request $request, FactureDecompte $factureDecompte): RedirectResponse
     {
         $facture = $factureDecompte->getFacture();
         if ($this->isCsrfTokenValid('delete'.$factureDecompte->getId(), $request->request->get('_token'))) {
@@ -111,6 +99,8 @@ final class FactureDecompteController extends AbstractController
             $this->addFlash('success', 'Le décompte a bien été supprimé');
         }
 
-        return $this->redirectToRoute('mercredi_admin_facture_show', ['id' => $facture->getId()]);
+        return $this->redirectToRoute('mercredi_admin_facture_show', [
+            'id' => $facture->getId(),
+        ]);
     }
 }

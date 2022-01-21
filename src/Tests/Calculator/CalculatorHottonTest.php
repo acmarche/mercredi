@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CalculatorHottonTest extends KernelTestCase
@@ -25,12 +26,12 @@ class CalculatorHottonTest extends KernelTestCase
         self::assertSame(0.0, $calculator->calculate($presence));
     }
 
-    public function testOrdre()
+    public function testOrdre(): void
     {
         $container = static::getContainer();
         $calculator = $container->get(PresenceCalculatorInterface::class);
 
-        $jour = new  Jour(new \DateTime());
+        $jour = new  Jour(new DateTime());
         $jour->setPrix1(3);
         $jour->setPrix2(2);
         $jour->setPrix3(1);

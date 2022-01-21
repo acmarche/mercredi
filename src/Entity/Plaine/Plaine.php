@@ -12,14 +12,16 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Plaine\Repository\PlaineRepository')]
-class Plaine implements SluggableInterface
+#[ORM\Entity(repositoryClass: PlaineRepository::class)]
+class Plaine implements SluggableInterface, Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -34,6 +36,7 @@ class Plaine implements SluggableInterface
     use CommunicationTrait;
     use FacturesTrait;
     use IdOldTrait;
+    public array $enfants = [];
     /**
      * @var Jour[]
      */
@@ -51,7 +54,6 @@ class Plaine implements SluggableInterface
      */
     #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'plaine', cascade: ['remove'])]
     private Collection $factures;
-    public array $enfants = [];
 
     public function __construct()
     {

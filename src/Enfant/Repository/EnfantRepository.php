@@ -24,17 +24,12 @@ final class EnfantRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    private JourRepository $jourRepository;
-    private PresenceRepository $presenceRepository;
-
     public function __construct(
         ManagerRegistry $managerRegistry,
-        JourRepository $jourRepository,
-        PresenceRepository $presenceRepository
+        private JourRepository $jourRepository,
+        private PresenceRepository $presenceRepository
     ) {
         parent::__construct($managerRegistry, Enfant::class);
-        $this->jourRepository = $jourRepository;
-        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -179,7 +174,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         $jours = $this->jourRepository->findByAnimateur($animateur);
 
-        if (0 == \count($jours)) {
+        if (0 === \count($jours)) {
             return [];
         }
 
@@ -198,7 +193,7 @@ final class EnfantRepository extends ServiceEntityRepository
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
         $jours = null !== $jour ? [$jour] : $this->jourRepository->findByAnimateur($animateur);
-        if (0 == \count($jours)) {
+        if (0 === \count($jours)) {
             return [];
         }
 
@@ -212,6 +207,15 @@ final class EnfantRepository extends ServiceEntityRepository
         return $queryBuilder
             ->andWhere('presences IN (:presences)')
             ->setParameter('presences', $presences)->getQuery()->getResult();
+    }
+
+    public function findDoublon(): array
+    {
+        return $this->createQueryBuilder('enfant')
+            ->select('count(enfant.nom) as lignes, enfant.nom, enfant.prenom')
+            ->addGroupBy('enfant.nom')
+            ->addGroupBy('enfant.prenom')
+            ->getQuery()->getResult();
     }
 
     private function getOrCreateQueryBuilder(): QueryBuilder
@@ -230,14 +234,5 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         return $this->getOrCreateQueryBuilder()
             ->andWhere('enfant.archived = 0');
-    }
-
-    public function findDoublon(): array
-    {
-        return $this->createQueryBuilder('enfant')
-            ->select('count(enfant.nom) as lignes, enfant.nom, enfant.prenom')
-            ->addGroupBy('enfant.nom')
-            ->addGroupBy('enfant.prenom')
-            ->getQuery()->getResult();
     }
 }

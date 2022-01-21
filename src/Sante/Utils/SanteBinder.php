@@ -9,15 +9,10 @@ use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
 final class SanteBinder
 {
-    private SanteQuestionRepository $santeQuestionRepository;
-    private SanteReponseRepository $santeReponseRepository;
-
     public function __construct(
-        SanteQuestionRepository $santeQuestionRepository,
-        SanteReponseRepository $santeReponseRepository
+        private SanteQuestionRepository $santeQuestionRepository,
+        private SanteReponseRepository $santeReponseRepository
     ) {
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->santeReponseRepository = $santeReponseRepository;
     }
 
     /**
@@ -26,7 +21,7 @@ final class SanteBinder
     public function bindResponses(SanteFiche $santeFiche): array
     {
         $questions = $this->santeQuestionRepository->findAllOrberByPosition();
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             $santeFiche->setQuestions($questions);
 
             return $questions;

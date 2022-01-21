@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Sante\Message;
 
 final class SanteQuestionDeleted
 {
-    private int $santeQuestionId;
-
-    public function __construct(int $santeQuestionId)
-    {
-        $this->santeQuestionId = $santeQuestionId;
+    public function __construct(
+        private int $santeQuestionId
+    ) {
     }
 
     public function getSanteQuestionId(): int

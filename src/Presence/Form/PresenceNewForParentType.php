@@ -14,11 +14,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PresenceNewForParentType extends AbstractType
 {
-    private PresenceDaysProviderInterface $presenceDaysProvider;
-
-    public function __construct(PresenceDaysProviderInterface $presenceDaysProvider)
-    {
-        $this->presenceDaysProvider = $presenceDaysProvider;
+    public function __construct(
+        private PresenceDaysProviderInterface $presenceDaysProvider
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
@@ -43,7 +41,9 @@ final class PresenceNewForParentType extends AbstractType
 
                         return ucfirst(DateUtils::formatFr($jour->getDatejour()).' '.$peda);
                     },
-                    'attr' => ['style' => 'height:150px;'],
+                    'attr' => [
+                        'style' => 'height:150px;',
+                    ],
                     'group_by' => fn ($date) => $date->getDateJour()->format('m').'-'.$date->getDateJour()->format('Y'),
                 ]
             );

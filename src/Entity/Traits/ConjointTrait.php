@@ -9,7 +9,9 @@ trait ConjointTrait
     /**
      * @var string|null
      */
-    #[ORM\Column(type: 'string', length: 200, nullable: true, options: ['comment' => 'pere, mere, oncle...'])]
+    #[ORM\Column(type: 'string', length: 200, nullable: true, options: [
+        'comment' => 'pere, mere, oncle...',
+    ])]
     private ?string $relation_conjoint = null;
 
     /**

@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -104,8 +105,8 @@ final class FactureRepository extends ServiceEntityRepository
         ?Ecole $ecole,
         ?Plaine $plaine,
         ?bool $paye,
+        ?DateTimeInterface $datePaiement,
         ?string $monthYear = null,
-        ?\DateTimeInterface $datePaiement,
         ?string $communication = null
     ): array {
         $queryBuilder = $this->getQBl();

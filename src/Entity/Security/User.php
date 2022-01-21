@@ -23,16 +23,15 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @UniqueEntity("email")
- * @UniqueEntity("username")
- */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
+#[UniqueEntity(fields: 'email')]
+#[UniqueEntity(fields: 'username')]
+class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, Stringable
 {
     use IdTrait;
     use EmailTrait;
@@ -48,6 +47,8 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
     use AnimateursTrait;
     use LastLoginTrait;
     use IdOldTrait;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $salt = null;
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $telephone = null;
     #[ORM\Column(type: 'string', length: 50, unique: true)]
@@ -57,8 +58,6 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
-    #[ORM\Column(type: 'string', nullable: true)]
-    protected ?string $salt = null;
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
     #[ORM\OneToMany(targetEntity: ResetPasswordRequest::class, mappedBy: 'user', cascade: ['remove'])]
@@ -71,10 +70,13 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
         $this->animateurs = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
+    }
+
     /**
      * @param object|Tuteur| $object
-     *
-     * @return static
      */
     public static function newFromObject(object $object): self
     {
@@ -85,11 +87,6 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface
         $user->setTelephone($object->getTelephone());
 
         return $user;
-    }
-
-    public function __toString(): string
-    {
-        return mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 
     public function setSalt(string $salt): void

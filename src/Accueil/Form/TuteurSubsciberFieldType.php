@@ -23,9 +23,7 @@ class TuteurSubsciberFieldType implements EventSubscriberInterface
      */
     public function OnPreSetData(FormEvent $event): void
     {
-        /**
-         * @var Presence
-         */
+        /** @var Presence $presence */
         $presence = $event->getData();
         $enfant = $presence->getEnfant();
 
@@ -34,7 +32,7 @@ class TuteurSubsciberFieldType implements EventSubscriberInterface
             $form = $event->getForm();
 
             //new
-            if (!$presence || null === $presence->getId()) {
+            if (! $presence || null === $presence->getId()) {
                 $form->add(
                     'jours',
                     EntityType::class,

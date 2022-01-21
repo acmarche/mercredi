@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class JourVoter extends Voter
 {
-    public RelationRepository $relationRepository;
     public const ADD = 'jour_new';
     public const SHOW = 'jour_show';
     public const EDIT = 'jour_edit';
@@ -28,7 +27,6 @@ final class JourVoter extends Voter
 
     private ?UserInterface $user = null;
     private Jour $jour;
-    private Security $security;
     /**
      * @var Jour[]|ArrayCollection
      */
@@ -36,16 +34,14 @@ final class JourVoter extends Voter
     private ?Animateur $animateur = null;
 
     public function __construct(
-        RelationRepository $relationRepository,
-        Security $security
+        public RelationRepository $relationRepository,
+        private Security $security
     ) {
-        $this->security = $security;
-        $this->relationRepository = $relationRepository;
     }
 
     protected function supports($attribute, $subject): bool
     {
-        if ($subject && !$subject instanceof Jour) {
+        if ($subject && ! $subject instanceof Jour) {
             return false;
         }
 
@@ -58,7 +54,7 @@ final class JourVoter extends Voter
 
     protected function voteOnAttribute($attribute, $jour, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof UserInterface) {
+        if (! $token->getUser() instanceof UserInterface) {
             return false;
         }
 
@@ -70,26 +66,21 @@ final class JourVoter extends Voter
             return true;
         }
 
-        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR)) {
+        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_ANIMATEUR)) {
             return false;
         }
 
-        if (!$this->checkJoursAnimateur()) {
+        if (! $this->checkJoursAnimateur()) {
             return false;
         }
 
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView();
-            case self::ADD:
-                return $this->canAdd();
-            case self::EDIT:
-                return $this->canEdit();
-            case self::DELETE:
-                return $this->canDelete();
-        }
-
-        return false;
+        return match ($attribute) {
+            self::SHOW => $this->canView(),
+            self::ADD => $this->canAdd(),
+            self::EDIT => $this->canEdit(),
+            self::DELETE => $this->canDelete(),
+            default => false,
+        };
     }
 
     private function canView(): bool
@@ -116,7 +107,7 @@ final class JourVoter extends Voter
     {
         $this->animateur = $this->user->getAnimateur();
 
-        if (!$this->animateur instanceof Animateur) {
+        if (! $this->animateur instanceof Animateur) {
             return false;
         }
 

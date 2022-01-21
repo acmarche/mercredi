@@ -29,31 +29,6 @@ final class PresenceRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Presence::class);
     }
 
-    private function createQBlBase(): QueryBuilder
-    {
-        return $this->createQueryBuilder('presence')
-            ->leftJoin('presence.jour', 'jour', 'WITH')
-            ->leftJoin('presence.enfant', 'enfant', 'WITH')
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
-            ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire', 'WITH')
-            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('jour.plaine', 'plaine', 'WITH')
-            ->leftJoin('presence.reduction', 'reduction', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
-    }
-
-    private function createQBl(): QueryBuilder
-    {
-        return $this->createQBlBase()
-            ->andWhere('jour.plaine IS NULL');
-    }
-
-    private function createQBlPlaine(): QueryBuilder
-    {
-        return $this->createQBlBase()
-            ->andWhere('jour.plaine IS NOT NULL');
-    }
-
     /**
      * @return Jour[]
      */
@@ -140,8 +115,6 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * Quand on ajoute une présence.
      *
-     * @return ?Presence
-     *
      * @throws NonUniqueResultException
      */
     public function isRegistered(Enfant $enfant, Jour $jour): ?Presence
@@ -210,5 +183,30 @@ final class PresenceRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    private function createQBlBase(): QueryBuilder
+    {
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire', 'WITH')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
+            ->leftJoin('presence.reduction', 'reduction', 'WITH')
+            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
+    }
+
+    private function createQBl(): QueryBuilder
+    {
+        return $this->createQBlBase()
+            ->andWhere('jour.plaine IS NULL');
+    }
+
+    private function createQBlPlaine(): QueryBuilder
+    {
+        return $this->createQBlBase()
+            ->andWhere('jour.plaine IS NOT NULL');
     }
 }

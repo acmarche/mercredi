@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminEmailFactory
@@ -17,7 +16,7 @@ class AdminEmailFactory
     /**
      * @param UserInterface|User $user
      */
-    public function messageEnfantCreated(UserInterface $user, Enfant $enfant): NotificationEmail
+    public function messageEnfantCreated(User|UserInterface $user, Enfant $enfant): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
@@ -40,7 +39,7 @@ class AdminEmailFactory
     /**
      * @param array|Enfant[] $enfants
      */
-    public function messagEnfantsOrphelins(array $enfants): NotificationEmail
+    public function messagEnfantsOrphelins(array $enfants): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->getEmailAddressOrganisation();
@@ -63,7 +62,7 @@ class AdminEmailFactory
     /**
      * @param array|Tuteur[] $tuteurs
      */
-    public function messageTuteurArchived(array $tuteurs): NotificationEmail
+    public function messageTuteurArchived(array $tuteurs): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->getEmailAddressOrganisation();
@@ -84,9 +83,9 @@ class AdminEmailFactory
     }
 
     /**
-     * @param array|Tuteur[] $tuteurs
+     * @param array|Tuteur[] $subject
      */
-    public function messageAlert(string $subject, string $texte): NotificationEmail
+    public function messageAlert(string $subject, string $texte): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $email = $this->getEmailAddressOrganisation();

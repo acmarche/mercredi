@@ -23,26 +23,15 @@ class SendFactureCommand extends Command
     protected static $defaultName = 'mercredi:send-facture';
     protected static $defaultDescription = 'Envoie les factures par mail';
 
-    private FactureRepository $factureRepository;
-    private FactureEmailFactory $factureEmailFactory;
-    private NotificationMailer $notificationMailer;
-    private AdminEmailFactory $adminEmailFactory;
-    private FactureCronRepository $factureCronRepository;
-
     public function __construct(
-        FactureRepository $factureRepository,
-        FactureCronRepository $factureCronRepository,
-        FactureEmailFactory $factureEmailFactory,
-        AdminEmailFactory $adminEmailFactory,
-        NotificationMailer $notificationMailer,
+        private FactureRepository $factureRepository,
+        private FactureCronRepository $factureCronRepository,
+        private FactureEmailFactory $factureEmailFactory,
+        private AdminEmailFactory $adminEmailFactory,
+        private NotificationMailer $notificationMailer,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->factureRepository = $factureRepository;
-        $this->factureEmailFactory = $factureEmailFactory;
-        $this->notificationMailer = $notificationMailer;
-        $this->adminEmailFactory = $adminEmailFactory;
-        $this->factureCronRepository = $factureCronRepository;
     }
 
     protected function configure(): void
@@ -79,7 +68,7 @@ class SendFactureCommand extends Command
             );
 
             foreach ($factures as $facture) {
-                if (null != $facture->getEnvoyeLe() && !$force) {
+                if (null !== $facture->getEnvoyeLe() && ! $force) {
                     continue;
                 }
 

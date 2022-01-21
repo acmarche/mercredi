@@ -7,9 +7,6 @@ use Doctrine\Common\Collections\Collection;
 
 trait PresencesTrait
 {
-    /**
-     * @var Collection
-     */
     private Collection $presences;
 
     /**
@@ -22,7 +19,7 @@ trait PresencesTrait
 
     public function addPresence(Presence $presence): self
     {
-        if (!$this->presences->contains($presence)) {
+        if (! $this->presences->contains($presence)) {
             $this->presences[] = $presence;
             $presence->setEnfant($this);
         }

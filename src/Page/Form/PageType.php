@@ -20,7 +20,9 @@ final class PageType extends AbstractType
                 [
                     'label' => 'Titre',
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -29,7 +31,9 @@ final class PageType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Contenu',
-                    'attr' => ['cols' => 5],
+                    'attr' => [
+                        'cols' => 5,
+                    ],
                 ]
             );
     }

@@ -13,48 +13,36 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/jour")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/jour')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class JourController extends AbstractController
 {
-    private JourRepository $jourRepository;
-    private TarificationFormGeneratorInterface $tarificationFormGenerator;
-    private PresenceRepository $presenceRepository;
-
     public function __construct(
-        JourRepository $jourRepository,
-        TarificationFormGeneratorInterface $tarificationFormGenerator,
-        PresenceRepository $presenceRepository,
+        private JourRepository $jourRepository,
+        private TarificationFormGeneratorInterface $tarificationFormGenerator,
+        private PresenceRepository $presenceRepository,
         private MessageBusInterface $dispatcher
     ) {
-        $this->jourRepository = $jourRepository;
-        $this->tarificationFormGenerator = $tarificationFormGenerator;
-        $this->presenceRepository = $presenceRepository;
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_jour_index", methods={"GET", "POST"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_jour_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $form = $this->createForm(SearchJourType::class);
         $form->handleRequest($request);
         $archived = false;
         $pedagogique = null;
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $archived = $data['archived'];
             $pedagogique = $data['pedagogique'];
         }
-
         $jours = $this->jourRepository->search($archived, $pedagogique);
 
         return $this->render(
@@ -66,22 +54,21 @@ final class JourController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_admin_jour_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new', name: 'mercredi_admin_jour_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $jour = new Jour();
         $form = $this->createForm(JourType::class, $jour);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->jourRepository->persist($jour);
             $this->jourRepository->flush();
 
             $this->dispatcher->dispatch(new JourCreated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_tarif', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_tarif', [
+                'id' => $jour->getId(),
+            ]);
         }
 
         return $this->render(
@@ -93,22 +80,20 @@ final class JourController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/tarif/{id}", name="mercredi_admin_jour_tarif", methods={"GET", "POST"})
-     */
+    #[Route(path: '/tarif/{id}', name: 'mercredi_admin_jour_tarif', methods: ['GET', 'POST'])]
     public function tarif(Request $request, Jour $jour): Response
     {
         $form = $this->tarificationFormGenerator->generateForm($jour);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->jourRepository->persist($jour);
             $this->jourRepository->flush();
 
             $this->dispatcher->dispatch(new JourCreated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_show', [
+                'id' => $jour->getId(),
+            ]);
         }
 
         return $this->render(
@@ -120,9 +105,7 @@ final class JourController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_jour_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_jour_show', methods: ['GET'])]
     public function show(Jour $jour): Response
     {
         $tarifs = $this->tarificationFormGenerator->generateTarifsHtml($jour);
@@ -138,21 +121,20 @@ final class JourController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_jour_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_jour_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Jour $jour): Response
     {
         $form = $this->createForm(JourType::class, $jour);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->jourRepository->flush();
             //todo switch pedagogique
 
             $this->dispatcher->dispatch(new JourUpdated($jour->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_jour_show', ['id' => $jour->getId()]);
+            return $this->redirectToRoute('mercredi_admin_jour_show', [
+                'id' => $jour->getId(),
+            ]);
         }
 
         return $this->render(
@@ -164,10 +146,8 @@ final class JourController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_jour_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Jour $jour): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_jour_delete', methods: ['POST'])]
+    public function delete(Request $request, Jour $jour): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$jour->getId(), $request->request->get('_token'))) {
             $jourId = $jour->getId();

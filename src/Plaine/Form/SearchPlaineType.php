@@ -17,7 +17,10 @@ final class SearchPlaineType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom', 'autocomplete' => 'off'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -26,7 +29,9 @@ final class SearchPlaineType extends AbstractType
                 [
                     'label' => 'Afficher les plaines archivées',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             );
     }

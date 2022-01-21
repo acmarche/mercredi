@@ -20,7 +20,9 @@ final class UserSearchType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                    ],
                 ]
             )
             ->add(

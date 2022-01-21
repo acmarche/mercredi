@@ -7,15 +7,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AssociateUserAnimateurDto
 {
-    private UserInterface $user;
-
     private ?Animateur $animateur = null;
 
     private bool $sendEmail = true;
 
-    public function __construct(UserInterface $user)
-    {
-        $this->user = $user;
+    public function __construct(
+        private UserInterface $user
+    ) {
     }
 
     public function getUser(): UserInterface

@@ -11,11 +11,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class TuteurUtils
 {
-    private RelationRepository $relationRepository;
-
-    public function __construct(RelationRepository $relationRepository)
-    {
-        $this->relationRepository = $relationRepository;
+    public function __construct(
+        private RelationRepository $relationRepository
+    ) {
     }
 
     public static function getTelephones(Tuteur $tuteur): string
@@ -45,19 +43,19 @@ final class TuteurUtils
             return false;
         }
 
-        if (!$tuteur->getNom()) {
+        if (! $tuteur->getNom()) {
             return false;
         }
 
-        if (!$tuteur->getPrenom()) {
+        if (! $tuteur->getPrenom()) {
             return false;
         }
 
-        if (!$tuteur->getRue()) {
+        if (! $tuteur->getRue()) {
             return false;
         }
 
-        if (!$tuteur->getCodePostal()) {
+        if (! $tuteur->getCodePostal()) {
             return false;
         }
 
@@ -91,7 +89,7 @@ final class TuteurUtils
     /**
      * @param UserInterface|User $user
      */
-    public function getTuteurByUser(UserInterface $user): ?Tuteur
+    public function getTuteurByUser(User|UserInterface $user): ?Tuteur
     {
         $tuteurs = $user->getTuteurs();
 
@@ -125,9 +123,7 @@ final class TuteurUtils
             $emails[] = $tuteur->getEmailConjoint();
         }
 
-        $emails = array_unique($emails);
-
-        return $emails;
+        return array_unique($emails);
     }
 
     /**
@@ -141,7 +137,7 @@ final class TuteurUtils
     {
         $data = [];
         foreach ($tuteurs as $tuteur) {
-            if (!$this->tuteurIsActif($tuteur)) {
+            if (! $this->tuteurIsActif($tuteur)) {
                 continue;
             }
             $t = self::getEmailsOfOneTuteur($tuteur);

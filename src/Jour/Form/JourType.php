@@ -32,7 +32,9 @@ final class JourType extends AbstractType
                 [
                     'label' => 'Journée pédagoque',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             )
             ->add(

@@ -24,18 +24,16 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 final class EnfantType extends AbstractType
 {
-    private Security $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
+    public function __construct(
+        private Security $security
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $year = new DateTime('today');
         $year = $year->format('Y');
-        $isAdmin = !$this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
+        $isAdmin = ! $this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
 
         $formBuilder
             ->add(
@@ -133,7 +131,9 @@ final class EnfantType extends AbstractType
                     'required' => false,
                     'label' => 'Autorisation de diffusion de ses photos',
                     'help' => 'Cochez si vous autorisez la diffusion des photos de l\'enfant',
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             )
             ->add(
@@ -143,7 +143,9 @@ final class EnfantType extends AbstractType
                     'label' => 'Archiver',
                     'help' => 'Ces données seront toujours visibles, mais il ne pourra plus être inscrit nul part',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             )
             ->add(
@@ -153,7 +155,9 @@ final class EnfantType extends AbstractType
                     'label' => 'Accueils des écoles',
                     'required' => false,
                     'help' => 'L\'enfant vient-il en accueil dans les écoles ?',
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             )
             ->add(

@@ -20,7 +20,9 @@ final class FacturePayerType extends AbstractType
                     'label' => 'Date de paiement',
                     'widget' => 'single_text',
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             );
     }

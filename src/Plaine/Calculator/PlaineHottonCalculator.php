@@ -11,15 +11,10 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PlaineHottonCalculator implements PlaineCalculatorInterface
 {
-    private OrdreService $ordreService;
-    private ReductionCalculator $reductionCalculator;
-
     public function __construct(
-        OrdreService $ordreService,
-        ReductionCalculator $reductionCalculator
+        private OrdreService $ordreService,
+        private ReductionCalculator $reductionCalculator
     ) {
-        $this->ordreService = $ordreService;
-        $this->reductionCalculator = $reductionCalculator;
     }
 
     /**
@@ -52,15 +47,6 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
         return $this->ordreService->getOrdreOnPresence($presence);
     }
 
-    private function applicateReduction(PresenceInterface $presence, float $cout): float
-    {
-        if (null !== ($reduction = $presence->getReduction())) {
-            return $this->reductionCalculator->applicate($reduction, $cout);
-        }
-
-        return $cout;
-    }
-
     public function getPrixByOrdre(Plaine $plaine, $ordre): float
     {
         if ($ordre > 1) {
@@ -68,5 +54,14 @@ final class PlaineHottonCalculator implements PlaineCalculatorInterface
         }
 
         return $plaine->getPrix1();
+    }
+
+    private function applicateReduction(PresenceInterface $presence, float $cout): float
+    {
+        if (null !== ($reduction = $presence->getReduction())) {
+            return $this->reductionCalculator->applicate($reduction, $cout);
+        }
+
+        return $cout;
     }
 }

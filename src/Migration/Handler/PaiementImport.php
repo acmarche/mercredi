@@ -12,17 +12,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PaiementImport
 {
     private SymfonyStyle $io;
-    private MigrationRepository $migrationRepository;
     private MercrediPdo $pdo;
-    private PaiementRepository $paiementRepository;
 
     public function __construct(
-        PaiementRepository $paiementRepository,
-        MigrationRepository $migrationRepository
+        private PaiementRepository $paiementRepository,
+        private MigrationRepository $migrationRepository
     ) {
-        $this->migrationRepository = $migrationRepository;
         $this->pdo = new MercrediPdo();
-        $this->paiementRepository = $paiementRepository;
     }
 
     public function import(SymfonyStyle $io): void
@@ -39,7 +35,7 @@ class PaiementImport
             $this->io->writeln($data->date_paiement);
             $paiement = new Paiement();
             $paiement->setTuteur($tuteur);
-            if ($enfant) {
+            if (null !== $enfant) {
                 $paiement->setEnfant($enfant);
             }
             if ($datePaiement = DateTime::createFromFormat('Y-m-d', $data->date_paiement)) {

@@ -14,21 +14,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class PlaineAdminHandler
 {
-    private PlaineRepository $plaineRepository;
-    private JourRepository $jourRepository;
-    private FactureHandlerInterface $factureHandler;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        PlaineRepository $plaineRepository,
-        JourRepository $jourRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        FactureHandlerInterface $factureHandler
+        private PlaineRepository $plaineRepository,
+        private JourRepository $jourRepository,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private FactureHandlerInterface $factureHandler
     ) {
-        $this->plaineRepository = $plaineRepository;
-        $this->jourRepository = $jourRepository;
-        $this->factureHandler = $factureHandler;
-        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     /**
@@ -48,7 +39,7 @@ final class PlaineAdminHandler
     /**
      * @param Jour[]|ArrayCollection $newJours
      */
-    public function handleEditJours(Plaine $plaine, iterable $newJours): void
+    public function handleEditJours(Plaine $plaine, array|ArrayCollection $newJours): void
     {
         foreach ($newJours as $jour) {
             if ($jour->getId()) {
@@ -59,6 +50,11 @@ final class PlaineAdminHandler
         }
         $this->removeJours($plaine, $newJours);
         $this->jourRepository->flush();
+    }
+
+    public function handleOpeningRegistrations(Plaine $plaine): ?Plaine
+    {
+        return $this->plaineRepository->findPlaineOpen($plaine);
     }
 
     /**
@@ -75,10 +71,10 @@ final class PlaineAdminHandler
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 if ($presences = $this->plainePresenceRepository->findByDay($jour, $plaine)) {
                     foreach ($presences as $presence) {
-                        if (!$this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PLAINE)) {
+                        if (! $this->factureHandler->isBilled($presence->getId(), FactureInterface::OBJECT_PLAINE)) {
                             $this->jourRepository->remove($presence);
                         }
                     }
@@ -86,10 +82,5 @@ final class PlaineAdminHandler
                 $this->jourRepository->remove($jour);
             }
         }
-    }
-
-    public function handleOpeningRegistrations(Plaine $plaine): ?Plaine
-    {
-        return $this->plaineRepository->findPlaineOpen($plaine);
     }
 }

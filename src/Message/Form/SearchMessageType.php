@@ -35,7 +35,9 @@ final class SearchMessageType extends AbstractType
                 [
                     'required' => false,
                     'placeholder' => 'Choisissez une école',
-                    'attr' => ['class' => 'sr-only'],
+                    'attr' => [
+                        'class' => 'sr-only',
+                    ],
                     'class' => Ecole::class,
                     'query_builder' => fn (EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
                 ]
@@ -46,7 +48,9 @@ final class SearchMessageType extends AbstractType
                 [
                     'required' => false,
                     'placeholder' => 'Choisissez une plaine',
-                    'attr' => ['class' => 'sr-only'],
+                    'attr' => [
+                        'class' => 'sr-only',
+                    ],
                     'class' => Plaine::class,
                     'query_builder' => fn (PlaineRepository $plaineRepository) => $plaineRepository->getQbForListing(),
                 ]

@@ -11,20 +11,17 @@ use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
 final class SanteFactory
 {
-    private SanteFicheRepository $santeFicheRepository;
-    private SanteReponseRepository $santeReponseRepository;
-
     public function __construct(
-        SanteFicheRepository $santeFicheRepository,
-        SanteReponseRepository $santeReponseRepository
+        private SanteFicheRepository $santeFicheRepository,
+        private SanteReponseRepository $santeReponseRepository
     ) {
-        $this->santeFicheRepository = $santeFicheRepository;
-        $this->santeReponseRepository = $santeReponseRepository;
     }
 
     public function getSanteFicheByEnfant(Enfant $enfant): SanteFiche
     {
-        if (null === ($santeFiche = $this->santeFicheRepository->findOneBy(['enfant' => $enfant]))) {
+        if (null === ($santeFiche = $this->santeFicheRepository->findOneBy([
+            'enfant' => $enfant,
+        ]))) {
             $santeFiche = new SanteFiche($enfant);
             $this->santeFicheRepository->persist($santeFiche);
         }

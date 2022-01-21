@@ -7,12 +7,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait IbanTrait
 {
-    /**
-     * @Assert\Iban(
-     *     message="This is not a valid International Bank Account Number (IBAN)."
-     * )
-     */
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[Assert\Iban(message: 'This is not a valid International Bank Account Number (IBAN).')]
     protected ?string $iban = null;
 
     public function getIban(): ?string

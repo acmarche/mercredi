@@ -45,7 +45,9 @@ final class SearchPresenceType extends AbstractType
                     'query_builder' => fn (EcoleRepository $ecoleRepository) => $ecoleRepository->getQbForListing(),
                     'required' => false,
                     'placeholder' => 'Choisissez une école',
-                    'attr' => ['class' => 'sr-only'],
+                    'attr' => [
+                        'class' => 'sr-only',
+                    ],
                 ]
             )
             ->add(

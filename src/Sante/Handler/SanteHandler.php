@@ -13,21 +13,12 @@ use Doctrine\Common\Collections\Collection;
 
 final class SanteHandler
 {
-    private SanteFicheRepository $santeFicheRepository;
-    private SanteFactory $santeFactory;
-    private SanteBinder $santeBinder;
-    private SanteReponseRepository $santeReponseRepository;
-
     public function __construct(
-        SanteFicheRepository $santeFicheRepository,
-        SanteReponseRepository $santeReponseRepository,
-        SanteFactory $santeFactory,
-        SanteBinder $santeBinder
+        private SanteFicheRepository $santeFicheRepository,
+        private SanteReponseRepository $santeReponseRepository,
+        private SanteFactory $santeFactory,
+        private SanteBinder $santeBinder
     ) {
-        $this->santeFicheRepository = $santeFicheRepository;
-        $this->santeFactory = $santeFactory;
-        $this->santeBinder = $santeBinder;
-        $this->santeReponseRepository = $santeReponseRepository;
     }
 
     public function init(Enfant $enfant, bool $bind = true): SanteFiche
@@ -47,7 +38,7 @@ final class SanteHandler
      *
      * @return void|null
      */
-    public function handle(SanteFiche $santeFiche, Collection $questions): void
+    public function handle(SanteFiche $santeFiche, array|Collection $questions): void
     {
         $this->santeFicheRepository->flush();
         foreach ($questions as $question) {

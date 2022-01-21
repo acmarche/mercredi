@@ -13,16 +13,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class FicheSanteImport
 {
     private SymfonyStyle $io;
-    private EnfantRepository $enfantRepository;
-    private MigrationRepository $migrationRepository;
     private MercrediPdo $pdo;
 
     public function __construct(
-        EnfantRepository $enfantRepository,
-        MigrationRepository $migrationRepository
+        private EnfantRepository $enfantRepository,
+        private MigrationRepository $migrationRepository
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->migrationRepository = $migrationRepository;
         $this->pdo = new MercrediPdo();
     }
 

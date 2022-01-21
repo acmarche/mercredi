@@ -12,16 +12,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PlainePresenceImport
 {
     private SymfonyStyle $io;
-    private TuteurRepository $tuteurRepository;
-    private MigrationRepository $migrationRepository;
     private MercrediPdo $pdo;
 
     public function __construct(
-        TuteurRepository $tuteurRepository,
-        MigrationRepository $migrationRepository
+        private TuteurRepository $tuteurRepository,
+        private MigrationRepository $migrationRepository
     ) {
-        $this->tuteurRepository = $tuteurRepository;
-        $this->migrationRepository = $migrationRepository;
         $this->pdo = new MercrediPdo();
     }
 
@@ -35,7 +31,7 @@ class PlainePresenceImport
             $plaine_enfants = $this->pdo->getAllWhere('plaine_presences', 'plaine_enfant_id = '.$data->id, false);
             foreach ($plaine_enfants as $plaineEnfant) {
                 $jour = $this->migrationRepository->getJourPlaine($plaineEnfant->jour_id);
-                if (!$plaineEnfant->tuteur_id) {
+                if (! $plaineEnfant->tuteur_id) {
                     $io->error($plaine->getNom().' => '.$enfant);
                     $relations = $this->pdo->getAllWhere('enfant_tuteur', 'enfant_id = '.$data->enfant_id, false);
                     $count = is_countable($relations) ? \count($relations) : 0;

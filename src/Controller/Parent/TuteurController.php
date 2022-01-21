@@ -8,38 +8,30 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/tuteur")
- */
+
+#[Route(path: '/tuteur')]
 final class TuteurController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private TuteurRepository $tuteurRepository;
-
-    public function __construct(TuteurRepository $tuteurRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->tuteurRepository = $tuteurRepository;
+    public function __construct(
+        private TuteurRepository $tuteurRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_parent_tuteur_show", methods={"GET"})
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/', name: 'mercredi_parent_tuteur_show', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function show(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
 
         return $this->render(
@@ -51,19 +43,15 @@ final class TuteurController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/edit", name="mercredi_parent_tuteur_edit", methods={"GET", "POST"})
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/edit', name: 'mercredi_parent_tuteur_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function edit(Request $request): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $form = $this->createForm(TuteurType::class, $this->tuteur);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tuteurRepository->flush();
 

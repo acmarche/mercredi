@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Ecole\Message;
 
 final class EcoleUpdated
 {
-    private int $ecoleId;
-
-    public function __construct(int $ecoleId)
-    {
-        $this->ecoleId = $ecoleId;
+    public function __construct(
+        private int $ecoleId
+    ) {
     }
 
     public function getEcoleId(): int

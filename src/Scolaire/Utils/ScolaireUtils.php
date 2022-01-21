@@ -8,11 +8,9 @@ use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 
 final class ScolaireUtils
 {
-    private GroupeScolaireRepository $groupeScolaireRepository;
-
-    public function __construct(GroupeScolaireRepository $groupeScolaireRepository)
-    {
-        $this->groupeScolaireRepository = $groupeScolaireRepository;
+    public function __construct(
+        private GroupeScolaireRepository $groupeScolaireRepository
+    ) {
     }
 
     /**
@@ -38,11 +36,11 @@ final class ScolaireUtils
     }
 
     /**
-     * @param Enfant $enfant
+     * @param Enfant $age
      */
     public function findGroupeScolaireEnfantByAge(?float $age): ?GroupeScolaire
     {
-        if (!$age) {
+        if (! $age) {
             return null;
         }
 

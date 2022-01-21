@@ -9,10 +9,7 @@ final class PresenceSelectDays
 {
     use EnfantTrait;
 
-    /**
-     * @var array
-     */
-    protected $jours;
+    protected array $jours;
 
     public function __construct(Enfant $enfant)
     {

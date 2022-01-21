@@ -58,7 +58,9 @@ final class AccueilType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false,
-                    'attr' => ['rows' => 2],
+                    'attr' => [
+                        'rows' => 2,
+                    ],
                 ]
             );
         $formBuilder->addEventSubscriber(new AddFieldTuteurSubscriber());

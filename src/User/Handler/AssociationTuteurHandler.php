@@ -15,25 +15,16 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AssociationTuteurHandler
 {
-    private TuteurRepository $tuteurRepository;
     private FlashBagInterface $flashBag;
-    private UserFactory $userFactory;
-    private NotificationMailer $notificationMailer;
-    private UserEmailFactory $userEmailFactory;
 
     public function __construct(
-        TuteurRepository $tuteurRepository,
-        UserFactory $userFactory,
-        NotificationMailer $notificationMailer,
-        UserEmailFactory $userEmailFactory,
+        private TuteurRepository $tuteurRepository,
+        private UserFactory $userFactory,
+        private NotificationMailer $notificationMailer,
+        private UserEmailFactory $userEmailFactory,
         RequestStack $requestStack
     ) {
-        $this->tuteurRepository = $tuteurRepository;
-
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
-        $this->userFactory = $userFactory;
-        $this->notificationMailer = $notificationMailer;
-        $this->userEmailFactory = $userEmailFactory;
     }
 
     public function suggestTuteur(User $user, AssociateUserTuteurDto $associateUserTuteurDto): void
@@ -43,7 +34,7 @@ final class AssociationTuteurHandler
             if (null !== $tuteur) {
                 $associateUserTuteurDto->setTuteur($tuteur);
             }
-        } catch (NonUniqueResultException $e) {
+        } catch (NonUniqueResultException) {
         }
     }
 
@@ -57,7 +48,7 @@ final class AssociationTuteurHandler
             $user->getTuteurs()->clear();
         }
 
-        if (!$tuteur) {
+        if (null === $tuteur) {
             $this->flashBag->add('danger', 'Aucun tuteur sélectionné.');
 
             return;

@@ -22,7 +22,9 @@ final class PlaineGroupeType extends AbstractType
                 [
                     'class' => GroupeScolaire::class,
                     'query_builder' => fn (GroupeScolaireRepository $groupeScolaireRepository) => $groupeScolaireRepository->getQbForListingPlaine(),
-                    'attr' => ['readonly' => true],
+                    'attr' => [
+                        'readonly' => true,
+                    ],
                     'label' => false,
                 ]
             )

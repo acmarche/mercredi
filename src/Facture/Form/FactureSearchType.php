@@ -24,7 +24,9 @@ final class FactureSearchType extends AbstractType
                 IntegerType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Numéro'],
+                    'attr' => [
+                        'placeholder' => 'Numéro',
+                    ],
                 ]
             )
             ->add(
@@ -32,7 +34,9 @@ final class FactureSearchType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom du parent'],
+                    'attr' => [
+                        'placeholder' => 'Nom du parent',
+                    ],
                 ]
             )
             ->add(
@@ -40,7 +44,9 @@ final class FactureSearchType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom de l\'enfant'],
+                    'attr' => [
+                        'placeholder' => 'Nom de l\'enfant',
+                    ],
                 ]
             )
             ->add(
@@ -59,7 +65,9 @@ final class FactureSearchType extends AbstractType
                 TextType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Communication'],
+                    'attr' => [
+                        'placeholder' => 'Communication',
+                    ],
                 ]
             )
             ->add(
@@ -69,7 +77,9 @@ final class FactureSearchType extends AbstractType
                     'class' => Ecole::class,
                     'required' => false,
                     'placeholder' => 'Choisissez une école',
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'attr' => [
+                        'class' => 'custom-select my-1 mr-sm-2',
+                    ],
                 ]
             )
             ->add(
@@ -79,7 +89,9 @@ final class FactureSearchType extends AbstractType
                     'class' => Plaine::class,
                     'required' => false,
                     'placeholder' => 'Choisissez une plaine',
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                    'attr' => [
+                        'class' => 'custom-select my-1 mr-sm-2',
+                    ],
                 ]
             )
             ->add(
@@ -88,7 +100,10 @@ final class FactureSearchType extends AbstractType
                 [
                     'label' => 'Payé',
                     'placeholder' => 'Payé ou non',
-                    'choices' => ['Payée' => 1, 'Non payée' => 0],
+                    'choices' => [
+                        'Payée' => 1,
+                        'Non payée' => 0,
+                    ],
                     'required' => false,
                 ]
             )

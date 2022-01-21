@@ -54,7 +54,9 @@ final class PlaineType extends AbstractType
                 CollectionType::class,
                 [
                     'entry_type' => PlaineGroupeEditWithoutFileType::class,
-                    'entry_options' => ['label' => false],
+                    'entry_options' => [
+                        'label' => false,
+                    ],
                     'label' => 'xx',
                 ]
             )
@@ -71,7 +73,9 @@ final class PlaineType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false,
-                    'attr' => ['rows' => 8],
+                    'attr' => [
+                        'rows' => 8,
+                    ],
                 ]
             );
     }

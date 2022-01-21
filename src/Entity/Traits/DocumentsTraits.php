@@ -22,7 +22,7 @@ trait DocumentsTraits
 
     public function addDocument(Document $document): self
     {
-        if (!$this->documents->contains($document)) {
+        if (! $this->documents->contains($document)) {
             $this->documents[] = $document;
         }
 

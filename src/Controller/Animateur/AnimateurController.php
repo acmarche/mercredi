@@ -8,38 +8,30 @@ use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/animateur")
- * @IsGranted("ROLE_MERCREDI_ANIMATEUR")
- */
+#[Route(path: '/animateur')]
+#[IsGranted(data: 'ROLE_MERCREDI_ANIMATEUR')]
 final class AnimateurController extends AbstractController
 {
     use GetAnimateurTrait;
 
-    private AnimateurRepository $animateurRepository;
-    private EnfantRepository $enfantRepository;
-
-    public function __construct(AnimateurRepository $animateurRepository, EnfantRepository $enfantRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->animateurRepository = $animateurRepository;
-        $this->enfantRepository = $enfantRepository;
+    public function __construct(
+        private AnimateurRepository $animateurRepository,
+        private EnfantRepository $enfantRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_animateur_animateur_show", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_animateur_animateur_show', methods: ['GET'])]
     public function show(): Response
     {
         if (($t = $this->hasAnimateur()) !== null) {
             return $t;
         }
-
         $this->denyAccessUnlessGranted('animateur_show', $this->animateur);
 
         return $this->render(
@@ -50,20 +42,15 @@ final class AnimateurController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/edit", name="mercredi_animateur_animateur_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/edit', name: 'mercredi_animateur_animateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request): Response
     {
         if (($t = $this->hasAnimateur()) !== null) {
             return $t;
         }
-
         $this->denyAccessUnlessGranted('animateur_edit', $this->animateur);
-
         $form = $this->createForm(AnimateurType::class, $this->animateur);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->animateurRepository->flush();
 

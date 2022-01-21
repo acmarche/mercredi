@@ -14,21 +14,12 @@ final class SantePdfFactoryTrait
 {
     use PdfDownloaderTrait;
 
-    private SanteQuestionRepository $santeQuestionRepository;
-    private OrganisationRepository $organisationRepository;
-    private SanteChecker $santeChecker;
-    private Environment $environment;
-
     public function __construct(
-        SanteQuestionRepository $santeQuestionRepository,
-        OrganisationRepository $organisationRepository,
-        SanteChecker $santeChecker,
-        Environment $environment
+        private SanteQuestionRepository $santeQuestionRepository,
+        private OrganisationRepository $organisationRepository,
+        private SanteChecker $santeChecker,
+        private Environment $environment
     ) {
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->organisationRepository = $organisationRepository;
-        $this->santeChecker = $santeChecker;
-        $this->environment = $environment;
     }
 
     public function santeFiche(SanteFiche $santeFiche): Response

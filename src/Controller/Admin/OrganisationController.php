@@ -10,32 +10,29 @@ use AcMarche\Mercredi\Organisation\Message\OrganisationUpdated;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/organisation")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/organisation')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class OrganisationController extends AbstractController
 {
-    private OrganisationRepository $organisationRepository;
-
-    public function __construct(OrganisationRepository $organisationRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->organisationRepository = $organisationRepository;
+    public function __construct(
+        private OrganisationRepository $organisationRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_organisation_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_organisation_index', methods: ['GET'])]
     public function index(): Response
     {
         if (null !== ($organisation = $this->organisationRepository->getOrganisation())) {
-            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', [
+                'id' => $organisation->getId(),
+            ]);
         }
 
         return $this->render(
@@ -46,28 +43,28 @@ final class OrganisationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_admin_organisation_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new', name: 'mercredi_admin_organisation_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         if (null !== ($organisation = $this->organisationRepository->getOrganisation())) {
             $this->addFlash('danger', 'Une seule organisation peut être enregistrée');
 
-            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', [
+                'id' => $organisation->getId(),
+            ]);
         }
-
         $organisation = new Organisation();
         $form = $this->createForm(OrganisationType::class, $organisation);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->organisationRepository->persist($organisation);
             $this->organisationRepository->flush();
 
             $this->dispatcher->dispatch(new OrganisationCreated($organisation->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', [
+                'id' => $organisation->getId(),
+            ]);
         }
 
         return $this->render(
@@ -79,9 +76,7 @@ final class OrganisationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_organisation_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_organisation_show', methods: ['GET'])]
     public function show(Organisation $organisation): Response
     {
         return $this->render(
@@ -92,20 +87,19 @@ final class OrganisationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_organisation_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_organisation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Organisation $organisation): Response
     {
         $form = $this->createForm(OrganisationType::class, $organisation);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->organisationRepository->flush();
 
             $this->dispatcher->dispatch(new OrganisationUpdated($organisation->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_organisation_show', ['id' => $organisation->getId()]);
+            return $this->redirectToRoute('mercredi_admin_organisation_show', [
+                'id' => $organisation->getId(),
+            ]);
         }
 
         return $this->render(
@@ -117,10 +111,8 @@ final class OrganisationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_organisation_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Organisation $organisation): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_organisation_delete', methods: ['POST'])]
+    public function delete(Request $request, Organisation $organisation): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$organisation->getId(), $request->request->get('_token'))) {
             $id = $organisation->getId();

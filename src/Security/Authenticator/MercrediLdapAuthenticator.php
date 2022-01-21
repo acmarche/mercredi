@@ -36,18 +36,11 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator;
-    private UserRepository $userRepository;
-    private ParameterBagInterface $parameterBag;
-
     public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        UserRepository $userRepository,
-        ParameterBagInterface $parameterBag
+        private UrlGeneratorInterface $urlGenerator,
+        private UserRepository $userRepository,
+        private ParameterBagInterface $parameterBag
     ) {
-        $this->urlGenerator = $urlGenerator;
-        $this->userRepository = $userRepository;
-        $this->parameterBag = $parameterBag;
     }
 
     public function authenticate(Request $request): Passport
@@ -64,7 +57,7 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
                 new PasswordUpgradeBadge($password, $this->userRepository), //SelfValidatingPassport?
             ];
 
-        $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
+        $query = "(&(|(sAMAccountName=*${email}*))(objectClass=person))";
         $badges[] = new LdapBadge(
             LdapMercredi::class,
             $this->parameterBag->get(Option::LDAP_DN),

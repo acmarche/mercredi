@@ -22,7 +22,9 @@ final class SanteQuestionType extends AbstractType
                     'label' => 'Un complément d\'information est-il nécessaire ?',
                     'help' => 'Cochez la case si c\'est le cas. ',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             )
             ->add(

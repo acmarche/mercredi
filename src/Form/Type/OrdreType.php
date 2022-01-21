@@ -15,7 +15,9 @@ final class OrdreType extends AbstractType
             [
                 'required' => true,
                 'choices' => MercrediConstantes::ORDRES,
-                'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                'attr' => [
+                    'class' => 'custom-select my-1 mr-sm-2',
+                ],
             ]
         );
     }

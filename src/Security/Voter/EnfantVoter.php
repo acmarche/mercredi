@@ -30,26 +30,18 @@ final class EnfantVoter extends Voter
 
     private UserInterface $user;
     private Enfant $enfant;
-    private TuteurUtils $tuteurUtils;
-    private Security $security;
-    private RelationRepository $relationRepository;
-    private EnfantRepository $enfantRepository;
 
     public function __construct(
-        RelationRepository $relationRepository,
-        TuteurUtils $tuteurUtils,
-        EnfantRepository $enfantRepository,
-        Security $security
+        private RelationRepository $relationRepository,
+        private TuteurUtils $tuteurUtils,
+        private EnfantRepository $enfantRepository,
+        private Security $security
     ) {
-        $this->tuteurUtils = $tuteurUtils;
-        $this->security = $security;
-        $this->relationRepository = $relationRepository;
-        $this->enfantRepository = $enfantRepository;
     }
 
     protected function supports($attribute, $subject): bool
     {
-        if ($subject && !$subject instanceof Enfant) {
+        if ($subject && ! $subject instanceof Enfant) {
             return false;
         }
 
@@ -62,7 +54,7 @@ final class EnfantVoter extends Voter
 
     protected function voteOnAttribute($attribute, $enfant, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof UserInterface) {
+        if (! $token->getUser() instanceof UserInterface) {
             return false;
         }
 
@@ -73,18 +65,13 @@ final class EnfantVoter extends Voter
             return true;
         }
 
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView();
-            case self::ADD:
-                return $this->canAdd();
-            case self::EDIT:
-                return $this->canEdit();
-            case self::DELETE:
-                return $this->canDelete();
-        }
-
-        return false;
+        return match ($attribute) {
+            self::SHOW => $this->canView(),
+            self::ADD => $this->canAdd(),
+            self::EDIT => $this->canEdit(),
+            self::DELETE => $this->canDelete(),
+            default => false,
+        };
     }
 
     private function canView(): bool
@@ -121,7 +108,7 @@ final class EnfantVoter extends Voter
     private function checkAnimateur(): bool
     {
         $animateur = $this->user->getAnimateur();
-        if (!$animateur instanceof Animateur) {
+        if (! $animateur instanceof Animateur) {
             return false;
         }
 
@@ -132,13 +119,13 @@ final class EnfantVoter extends Voter
 
     private function checkTuteur(): bool
     {
-        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
+        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return false;
         }
 
         $tuteur = null;
         $tuteur = $this->tuteurUtils->getTuteurByUser($this->user);
-        if (!$tuteur instanceof Tuteur) {
+        if (! $tuteur instanceof Tuteur) {
             return false;
         }
 
@@ -155,7 +142,7 @@ final class EnfantVoter extends Voter
     private function checkEcoles(): bool
     {
         $ecoles = $this->user->getEcoles();
-        if (0 == \count($ecoles)) {
+        if (0 === (is_countable($ecoles) ? \count($ecoles) : 0)) {
             return false;
         }
 

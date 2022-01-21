@@ -19,62 +19,40 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/presence")
- * @IsGranted("ROLE_MERCREDI_PARENT")
- */
+#[Route(path: '/presence')]
+#[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
 final class PresenceController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private PresenceRepository $presenceRepository;
-    private PresenceHandlerInterface $presenceHandler;
-    private RelationUtils $relationUtils;
-    private SanteChecker $santeChecker;
-    private SanteHandler $santeHandler;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private PresenceCalculatorInterface $presenceCalculator;
-
-    private PresenceDaysProviderInterface $presenceDaysProvider;
-
     public function __construct(
-        RelationUtils $relationUtils,
-        PresenceRepository $presenceRepository,
-        PresenceHandlerInterface $presenceHandler,
-        SanteChecker $santeChecker,
-        SanteHandler $santeHandler,
-        PresenceCalculatorInterface $presenceCalculator,
-        PresenceDaysProviderInterface $presenceDaysProvider,
-        FacturePresenceRepository $facturePresenceRepository,
+        private RelationUtils $relationUtils,
+        private PresenceRepository $presenceRepository,
+        private PresenceHandlerInterface $presenceHandler,
+        private SanteChecker $santeChecker,
+        private SanteHandler $santeHandler,
+        private PresenceCalculatorInterface $presenceCalculator,
+        private PresenceDaysProviderInterface $presenceDaysProvider,
+        private FacturePresenceRepository $facturePresenceRepository,
         private MessageBusInterface $dispatcher
     ) {
-        $this->presenceRepository = $presenceRepository;
-        $this->presenceHandler = $presenceHandler;
-        $this->relationUtils = $relationUtils;
-        $this->santeChecker = $santeChecker;
-        $this->santeHandler = $santeHandler;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->presenceCalculator = $presenceCalculator;
-        $this->presenceDaysProvider = $presenceDaysProvider;
     }
 
     /**
      * Etape 1 select enfant.
-     *
-     * @Route("/select/enfant", name="mercredi_parent_presence_select_enfant", methods={"GET"})
      */
+    #[Route(path: '/select/enfant', name: 'mercredi_parent_presence_select_enfant', methods: ['GET'])]
     public function selectEnfant(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
 
         return $this->render(
@@ -87,29 +65,26 @@ final class PresenceController extends AbstractController
 
     /**
      * Etape 2.
-     *
-     * @Route("/select/jour/{uuid}", name="mercredi_parent_presence_select_jours", methods={"GET", "POST"})
-     * @IsGranted("enfant_edit", subject="enfant")
      */
+    #[Route(path: '/select/jour/{uuid}', name: 'mercredi_parent_presence_select_jours', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
     public function selectJours(Request $request, Enfant $enfant): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
         $santeFiche = $this->santeHandler->init($enfant);
-
-        if (!$this->santeChecker->isComplete($santeFiche)) {
+        if (! $this->santeChecker->isComplete($santeFiche)) {
             $this->addFlash('danger', 'La fiche santé de votre enfant doit être complétée');
 
-            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [
+                'uuid' => $enfant->getUuid(),
+            ]);
         }
-
         $presenceSelectDays = new PresenceSelectDays($enfant);
         $form = $this->createForm(PresenceNewForParentType::class, $presenceSelectDays);
-
         $dates = $this->presenceDaysProvider->getAllDaysToSubscribe($enfant);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $days = $form->getData()->getJours();
 
@@ -117,7 +92,9 @@ final class PresenceController extends AbstractController
 
             $this->dispatcher->dispatch(new PresenceCreated($days));
 
-            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_enfant_show', [
+                'uuid' => $enfant->getUuid(),
+            ]);
         }
 
         return $this->render(
@@ -130,10 +107,8 @@ final class PresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}", name="mercredi_parent_presence_show", methods={"GET"})
-     * @IsGranted("presence_show", subject="presence")
-     */
+    #[Route(path: '/{uuid}', name: 'mercredi_parent_presence_show', methods: ['GET'])]
+    #[IsGranted(data: 'presence_show', subject: 'presence')]
     public function show(Presence $presence): Response
     {
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
@@ -148,18 +123,18 @@ final class PresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_parent_presence_delete", methods={"POST"})
-     * @IsGranted("presence_edit", subject="presence")
-     */
+    #[Route(path: '/{id}/delete', name: 'mercredi_parent_presence_delete', methods: ['POST'])]
+    #[IsGranted(data: 'presence_edit', subject: 'presence')]
     public function delete(Request $request, Presence $presence): RedirectResponse
     {
         $enfant = $presence->getEnfant();
         if ($this->isCsrfTokenValid('delete'.$presence->getId(), $request->request->get('_token'))) {
-            if (!DeleteConstraint::canBeDeleted($presence)) {
+            if (! DeleteConstraint::canBeDeleted($presence)) {
                 $this->addFlash('danger', 'Une présence passée ne peut être supprimée');
 
-                return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+                return $this->redirectToRoute('mercredi_parent_enfant_show', [
+                    'uuid' => $enfant->getUuid(),
+                ]);
             }
             $presenceId = $presence->getId();
             $this->presenceRepository->remove($presence);
@@ -167,6 +142,8 @@ final class PresenceController extends AbstractController
             $this->dispatcher->dispatch(new PresenceDeleted($presenceId));
         }
 
-        return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+        return $this->redirectToRoute('mercredi_parent_enfant_show', [
+            'uuid' => $enfant->getUuid(),
+        ]);
     }
 }

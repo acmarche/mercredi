@@ -17,15 +17,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ParametreImport
 {
     private SymfonyStyle $io;
-    private EnfantRepository $enfantRepository;
-    private MigrationRepository $migrationRepository;
 
     public function __construct(
-        EnfantRepository $enfantRepository,
-        MigrationRepository $migrationRepository
+        private EnfantRepository $enfantRepository,
+        private MigrationRepository $migrationRepository
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->migrationRepository = $migrationRepository;
     }
 
     public function setIo(SymfonyStyle $io): void
@@ -129,14 +125,14 @@ class ParametreImport
         }
     }
 
-    private function getGroupeScolaire(AnneeScolaire $anneeScolaire): GroupeScolaire
+    private function getGroupeScolaire(AnneeScolaire $anneeScolaire): ?GroupeScolaire
     {
         $groupeName = 'grands';
-        if (\in_array($anneeScolaire->getNom(), ['PM', '1M', '2M'])) {
+        if (\in_array($anneeScolaire->getNom(), ['PM', '1M', '2M'], true)) {
             $groupeName = 'petits';
         }
 
-        if (\in_array($anneeScolaire->getNom(), ['3M', '1P', '2P'])) {
+        if (\in_array($anneeScolaire->getNom(), ['3M', '1P', '2P'], true)) {
             $groupeName = 'moyens';
         }
 

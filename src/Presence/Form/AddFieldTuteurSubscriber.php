@@ -14,14 +14,14 @@ class AddFieldTuteurSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {
-        return [FormEvents::PRE_SET_DATA => 'preSetData'];
+        return [
+            FormEvents::PRE_SET_DATA => 'preSetData',
+        ];
     }
 
     public function preSetData(FormEvent $event): void
     {
-        /**
-         * @var Presence|Accueil $presence
-         */
+        /** @var Presence|Accueil $presence */
         $presence = $event->getData();
         $form = $event->getForm();
 

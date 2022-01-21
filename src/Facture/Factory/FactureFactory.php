@@ -15,13 +15,10 @@ final class FactureFactory
 {
     use PdfDownloaderTrait;
 
-    private ParameterBagInterface $parameterBag;
-    private FacturePdfPresenceInterface $facturePdfPresence;
-
-    public function __construct(FacturePdfPresenceInterface $facturePdfPresence, ParameterBagInterface $parameterBag)
-    {
-        $this->parameterBag = $parameterBag;
-        $this->facturePdfPresence = $facturePdfPresence;
+    public function __construct(
+        private FacturePdfPresenceInterface $facturePdfPresence,
+        private ParameterBagInterface $parameterBag
+    ) {
     }
 
     public function newInstance(Tuteur $tuteur): Facture

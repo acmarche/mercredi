@@ -10,7 +10,9 @@ use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SiteWebTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
+use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -18,8 +20,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @Vich\Uploadable
  */
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Organisation\Repository\OrganisationRepository')]
-class Organisation
+#[ORM\Entity(repositoryClass: OrganisationRepository::class)]
+class Organisation implements Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -33,19 +35,16 @@ class Organisation
     private ?string $initiale = null;
     /**
      * overload pour nullable false.
-     *
-     * @Assert\Email()
      */
     #[ORM\Column(name: 'email', type: 'string', length: 50, nullable: false)]
+    #[Assert\Email]
     private ?string $email = null;
     /**
      * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
      *
      * note This is not a mapped field of entity metadata, just a simple property.
-     * @Assert\Image(
-     *     maxSize="7M"
-     * )
      */
+    #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;
 
     public function __toString(): string

@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Fixture\Command;
 use AcMarche\Mercredi\Fixture\FixtureLoader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
-use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,17 +15,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class LoadfixturesCommand extends Command
 {
     protected static $defaultName = 'mercredi:load-fixtures';
-    private EntityManagerInterface $entityManager;
-    private FixtureLoader $fixtureLoader;
 
     public function __construct(
-        FixtureLoader $fixtureLoader,
-        EntityManagerInterface $entityManager,
+        private FixtureLoader $fixtureLoader,
+        private EntityManagerInterface $entityManager,
         ?string $name = null
     ) {
         parent::__construct($name);
-        $this->entityManager = $entityManager;
-        $this->fixtureLoader = $fixtureLoader;
     }
 
     protected function configure(): void

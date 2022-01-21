@@ -11,28 +11,23 @@ use AcMarche\Mercredi\Note\Message\NoteUpdated;
 use AcMarche\Mercredi\Note\Repository\NoteRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/note")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/note')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class NoteController extends AbstractController
 {
-    private NoteRepository $noteRepository;
-
-    public function __construct(NoteRepository $noteRepository,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->noteRepository = $noteRepository;
+    public function __construct(
+        private NoteRepository $noteRepository,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_note_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_note_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render(
@@ -58,7 +53,9 @@ final class NoteController extends AbstractController
 
             $this->dispatcher->dispatch(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute('mercredi_admin_note_show', [
+                'id' => $note->getId(),
+            ]);
         }
 
         return $this->render(
@@ -70,22 +67,21 @@ final class NoteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new/enfant/{id}", name="mercredi_admin_note_new_enfant", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new/enfant/{id}', name: 'mercredi_admin_note_new_enfant', methods: ['GET', 'POST'])]
     public function newForEnfant(Request $request, Enfant $enfant): Response
     {
         $note = new Note($enfant);
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->noteRepository->persist($note);
             $this->noteRepository->flush();
 
             $this->dispatcher->dispatch(new NoteCreated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute('mercredi_admin_note_show', [
+                'id' => $note->getId(),
+            ]);
         }
 
         return $this->render(
@@ -98,9 +94,7 @@ final class NoteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_note_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_note_show', methods: ['GET'])]
     public function show(Note $note): Response
     {
         return $this->render(
@@ -112,9 +106,7 @@ final class NoteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/enfant/{id}", name="mercredi_admin_note_enfant_show", methods={"GET"})
-     */
+    #[Route(path: '/enfant/{id}', name: 'mercredi_admin_note_enfant_show', methods: ['GET'])]
     public function enfant(Enfant $enfant): Response
     {
         return $this->render(
@@ -126,20 +118,19 @@ final class NoteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_note_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_note_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Note $note): Response
     {
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->noteRepository->flush();
 
             $this->dispatcher->dispatch(new NoteUpdated($note->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_note_show', ['id' => $note->getId()]);
+            return $this->redirectToRoute('mercredi_admin_note_show', [
+                'id' => $note->getId(),
+            ]);
         }
 
         return $this->render(
@@ -151,10 +142,8 @@ final class NoteController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_note_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Note $note): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_note_delete', methods: ['POST'])]
+    public function delete(Request $request, Note $note): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
             $enfant = $note->getEnfant();
@@ -163,7 +152,9 @@ final class NoteController extends AbstractController
             $this->noteRepository->flush();
             $this->dispatcher->dispatch(new NoteDeleted($noteId));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', [
+                'id' => $enfant->getId(),
+            ]);
         }
 
         return $this->redirectToRoute('mercredi_admin_note_index');

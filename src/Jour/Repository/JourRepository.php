@@ -24,12 +24,11 @@ final class JourRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    private PresenceRepository $presenceRepository;
-
-    public function __construct(ManagerRegistry $managerRegistry, PresenceRepository $presenceRepository)
-    {
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        private PresenceRepository $presenceRepository
+    ) {
         parent::__construct($managerRegistry, Jour::class);
-        $this->presenceRepository = $presenceRepository;
     }
 
     public function getQlNotPlaine(bool $archive = false): QueryBuilder

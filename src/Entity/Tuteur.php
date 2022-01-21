@@ -25,6 +25,7 @@ use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,9 +33,10 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Tuteur\Repository\TuteurRepository')]
-class Tuteur implements SluggableInterface, TimestampableInterface
+#[ORM\Entity(repositoryClass: TuteurRepository::class)]
+class Tuteur implements SluggableInterface, TimestampableInterface, Stringable
 {
     use IdTrait;
     use NomTrait;

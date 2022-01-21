@@ -6,21 +6,23 @@ use AcMarche\Mercredi\Entity\Traits\ContentTrait;
 use AcMarche\Mercredi\Entity\Traits\DocumentsTraits;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
+use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Page\Repository\PageRepository')]
-class Page implements SluggableInterface
+#[ORM\Entity(repositoryClass: PageRepository::class)]
+class Page implements SluggableInterface, Stringable
 {
-    public bool $system;
     use IdTrait;
     use NomTrait;
     use ContentTrait;
     use SluggableTrait;
     use DocumentsTraits;
+    public bool $system;
     #[ORM\Column(type: 'text', length: 100, nullable: true)]
     private ?string $slug_system = null;
     #[ORM\Column(type: 'smallint', nullable: true)]

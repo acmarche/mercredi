@@ -38,7 +38,7 @@ trait FileTrait
      *
      * @param File|UploadedFile $file
      */
-    public function setFile(?File $file = null): void
+    public function setFile(File|UploadedFile $file = null): void
     {
         $this->file = $file;
 

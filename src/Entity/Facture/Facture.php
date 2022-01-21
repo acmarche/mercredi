@@ -16,17 +16,18 @@ use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Facture\Repository\FactureRepository')]
-class Facture implements TimestampableInterface, UuidableInterface, FactureInterface
+#[ORM\Entity(repositoryClass: FactureRepository::class)]
+class Facture implements TimestampableInterface, UuidableInterface, FactureInterface, Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -43,8 +44,16 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     use UserAddTrait;
     use CommunicationTrait;
     use PlaineTrait;
+
     #[ORM\ManyToOne(targetEntity: Tuteur::class, inversedBy: 'factures')]
     private ?Tuteur $tuteur = null;
+    /**
+     * Use for commu factory.
+     *
+     * @var array|Ecole[]
+     */
+    public array $ecolesListing = [];
+    public ?FactureDetailDto $factureDetailDto = null;
     #[ORM\ManyToOne(targetEntity: Plaine::class, inversedBy: 'factures')]
     private ?Plaine $plaine = null;
     #[ORM\Column(type: 'datetime', nullable: false)]
@@ -65,16 +74,10 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     private float $montant_obsolete;
     #[ORM\Column(type: 'boolean', nullable: true)]
     private float $cloture_obsolete;
-    /**
-     * Use for commu factory.
-     *
-     * @var array|Ecole[]
-     */
-    public array $ecolesListing = [];
-    public ?FactureDetailDto $factureDetailDto = null;
 
-    public function __construct(Tuteur $tuteur)
-    {
+    public function __construct(
+          Tuteur $tuteur
+    ) {
         $this->tuteur = $tuteur;
         $this->facturePresences = new ArrayCollection();
         $this->factureReductions = new ArrayCollection();

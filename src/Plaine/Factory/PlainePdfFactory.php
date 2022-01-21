@@ -15,24 +15,13 @@ class PlainePdfFactory
 {
     use PdfDownloaderTrait;
 
-    private GroupingInterface $grouping;
-    private PresenceRepository $presenceRepository;
-    private ParameterBagInterface $parameterBag;
-    private Environment $environment;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        GroupingInterface $grouping,
-        PresenceRepository $presenceRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        ParameterBagInterface $parameterBag,
-        Environment $environment
+        private GroupingInterface $grouping,
+        private PresenceRepository $presenceRepository,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private ParameterBagInterface $parameterBag,
+        private Environment $environment
     ) {
-        $this->grouping = $grouping;
-        $this->presenceRepository = $presenceRepository;
-        $this->parameterBag = $parameterBag;
-        $this->environment = $environment;
-        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     public function generate(Plaine $plaine): Response

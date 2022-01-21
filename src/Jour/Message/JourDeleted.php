@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Jour\Message;
 
 final class JourDeleted
 {
-    private int $jourId;
-
-    public function __construct(int $jourId)
-    {
-        $this->jourId = $jourId;
+    public function __construct(
+        private int $jourId
+    ) {
     }
 
     public function getJourId(): int

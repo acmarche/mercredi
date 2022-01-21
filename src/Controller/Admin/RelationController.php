@@ -13,31 +13,24 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/relation")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/relation')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class RelationController extends AbstractController
 {
-    private RelationRepository $relationRepository;
-    private RelationHandler $relationHandler;
-
-    public function __construct(RelationRepository $relationRepository, RelationHandler $relationHandler,
-        private MessageBusInterface $dispatcher)
-    {
-        $this->relationRepository = $relationRepository;
-        $this->relationHandler = $relationHandler;
+    public function __construct(
+        private RelationRepository $relationRepository,
+        private RelationHandler $relationHandler,
+        private MessageBusInterface $dispatcher
+    ) {
     }
 
-    /**
-     * @Route("/attach/enfant/{id}", name="mercredi_admin_relation_attach_enfant", methods={"POST"})
-     */
+    #[Route(path: '/attach/enfant/{id}', name: 'mercredi_admin_relation_attach_enfant', methods: ['POST'])]
     public function attachEnfant(Request $request, Tuteur $tuteur): RedirectResponse
     {
         if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
@@ -49,29 +42,32 @@ final class RelationController extends AbstractController
             } catch (Exception $e) {
                 $this->addFlash('danger', $e->getMessage());
 
-                return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+                return $this->redirectToRoute('mercredi_admin_tuteur_show', [
+                    'id' => $tuteur->getId(),
+                ]);
             }
         } else {
             $this->addFlash('danger', 'Formulaire non valide');
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', [
+            'id' => $tuteur->getId(),
+        ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_relation_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_relation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Relation $relation): Response
     {
         $form = $this->createForm(RelationType::class, $relation);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->relationRepository->flush();
 
             $this->dispatcher->dispatch(new RelationUpdated($relation->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $relation->getEnfant()->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', [
+                'id' => $relation->getEnfant()->getId(),
+            ]);
         }
 
         return $this->render(
@@ -83,33 +79,30 @@ final class RelationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/delete", name="mercredi_admin_relation_delete", methods={"POST"})
-     */
+    #[Route(path: '/delete', name: 'mercredi_admin_relation_delete', methods: ['POST'])]
     public function delete(Request $request): RedirectResponse
     {
         $relationId = $request->request->get('relationid');
-
-        if (!$relationId) {
+        if (! $relationId) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
-        if (!$relation instanceof Relation) {
+        if (! $relation instanceof Relation) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
-
         $tuteur = $relation->getTuteur();
-
         if ($this->isCsrfTokenValid('delete'.$relation->getId(), $request->request->get('_token'))) {
             $this->relationRepository->remove($relation);
             $this->relationRepository->flush();
             $this->dispatcher->dispatch(new RelationDeleted($relationId));
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', [
+            'id' => $tuteur->getId(),
+        ]);
     }
 }

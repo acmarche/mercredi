@@ -15,7 +15,10 @@ final class SearchPresenceByMonthType extends AbstractType
                 'mois',
                 TextType::class,
                 [
-                    'attr' => ['placeholder' => '05/2020', 'autocomplete' => 'off'],
+                    'attr' => [
+                        'placeholder' => '05/2020',
+                        'autocomplete' => 'off',
+                    ],
                     'help' => 'Exemple: 05/2020',
                 ]
             );

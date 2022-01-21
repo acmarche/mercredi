@@ -41,13 +41,14 @@ use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
+use Stringable;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @Vich\Uploadable
  */
 #[ORM\Entity]
-class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface
+class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface, Stringable
 {
     use IdTrait;
     use NomTrait;

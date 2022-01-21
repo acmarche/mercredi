@@ -31,49 +31,23 @@ use DateTime;
 
 class MigrationRepository
 {
-    private UserRepository $userRepository;
-    private EcoleRepository $ecoleRepository;
-    private AnneeScolaireRepository $anneeScolaireRepository;
-    private GroupeScolaireRepository $groupeScolaireRepository;
     private MercrediPdo $pdo;
-    private TuteurRepository $tuteurRepository;
-    private EnfantRepository $enfantRepository;
-    private SanteFicheRepository $santeFicheRepository;
-    private SanteQuestionRepository $santeQuestionRepository;
-    private JourRepository $jourRepository;
-    private ReductionRepository $reductionRepository;
-    private PlaineRepository $plaineRepository;
-    private PresenceRepository $presenceRepository;
-    private PaiementRepository $paiementRepository;
 
     public function __construct(
-        UserRepository $userRepository,
-        EcoleRepository $ecoleRepository,
-        AnneeScolaireRepository $anneeScolaireRepository,
-        GroupeScolaireRepository $groupeScolaireRepository,
-        TuteurRepository $tuteurRepository,
-        EnfantRepository $enfantRepository,
-        SanteFicheRepository $santeFicheRepository,
-        SanteQuestionRepository $santeQuestionRepository,
-        JourRepository $jourRepository,
-        PlaineRepository $plaineRepository,
-        ReductionRepository $reductionRepository,
-        PresenceRepository $presenceRepository,
-        PaiementRepository $paiementRepository
+        private UserRepository $userRepository,
+        private EcoleRepository $ecoleRepository,
+        private AnneeScolaireRepository $anneeScolaireRepository,
+        private GroupeScolaireRepository $groupeScolaireRepository,
+        private TuteurRepository $tuteurRepository,
+        private EnfantRepository $enfantRepository,
+        private SanteFicheRepository $santeFicheRepository,
+        private SanteQuestionRepository $santeQuestionRepository,
+        private JourRepository $jourRepository,
+        private PlaineRepository $plaineRepository,
+        private ReductionRepository $reductionRepository,
+        private PresenceRepository $presenceRepository,
+        private PaiementRepository $paiementRepository
     ) {
-        $this->userRepository = $userRepository;
-        $this->ecoleRepository = $ecoleRepository;
-        $this->anneeScolaireRepository = $anneeScolaireRepository;
-        $this->groupeScolaireRepository = $groupeScolaireRepository;
-        $this->tuteurRepository = $tuteurRepository;
-        $this->enfantRepository = $enfantRepository;
-        $this->santeFicheRepository = $santeFicheRepository;
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->jourRepository = $jourRepository;
-        $this->reductionRepository = $reductionRepository;
-        $this->plaineRepository = $plaineRepository;
-        $this->presenceRepository = $presenceRepository;
-        $this->paiementRepository = $paiementRepository;
         $this->pdo = new MercrediPdo();
     }
 
@@ -81,17 +55,23 @@ class MigrationRepository
     {
         $user = $this->pdo->getAllWhere('users', 'id = '.$userId, true);
 
-        return $this->userRepository->findOneBy(['email' => $user->email]);
+        return $this->userRepository->findOneBy([
+            'email' => $user->email,
+        ]);
     }
 
     public function getAnneeScolaire(string $name): ?AnneeScolaire
     {
-        return $this->anneeScolaireRepository->findOneBy(['nom' => $name]);
+        return $this->anneeScolaireRepository->findOneBy([
+            'nom' => $name,
+        ]);
     }
 
     public function getGroupeScolaire(string $name): ?GroupeScolaire
     {
-        return $this->groupeScolaireRepository->findOneBy(['nom' => $name]);
+        return $this->groupeScolaireRepository->findOneBy([
+            'nom' => $name,
+        ]);
     }
 
     public function getTuteur(int $tuteurId): ?Tuteur
@@ -99,9 +79,15 @@ class MigrationRepository
         $tuteurOld = $this->pdo->getAllWhere('tuteur', 'id = '.$tuteurId, true);
         $slug = preg_replace('#_#', '-', $tuteurOld->slugname);
 
-        if (($tuteur = $this->tuteurRepository->findOneBy(['slug' => $slug])) === null) {
+        if (($tuteur = $this->tuteurRepository->findOneBy([
+            'slug' => $slug,
+        ])) === null) {
             $tuteur = $this->tuteurRepository->findOneBy(
-                ['nom' => $tuteurOld->nom, 'prenom' => $tuteurOld->prenom, 'code_postal' => $tuteurOld->code_postal]
+                [
+                    'nom' => $tuteurOld->nom,
+                    'prenom' => $tuteurOld->prenom,
+                    'code_postal' => $tuteurOld->code_postal,
+                ]
             );
         }
 
@@ -113,7 +99,9 @@ class MigrationRepository
         $enfantOld = $this->pdo->getAllWhere('enfant', 'id = '.$enfantId, true);
         $slug = preg_replace('#_#', '-', $enfantOld->slugname);
 
-        if (($enfant = $this->enfantRepository->findOneBy(['slug' => $slug])) === null) {
+        if (($enfant = $this->enfantRepository->findOneBy([
+            'slug' => $slug,
+        ])) === null) {
             $enfant = $this->enfantRepository->findOneBy(
                 [
                     'nom' => $enfantOld->nom,
@@ -130,7 +118,9 @@ class MigrationRepository
     {
         $ecole = $this->pdo->getAllWhere('ecole', 'id = '.$ecoleId, true);
 
-        return $this->ecoleRepository->findOneBy(['nom' => $ecole->nom]);
+        return $this->ecoleRepository->findOneBy([
+            'nom' => $ecole->nom,
+        ]);
     }
 
     public function getSanteFiche(int $santeFicheId): ?SanteFiche
@@ -138,14 +128,18 @@ class MigrationRepository
         $santeFiche = $this->pdo->getAllWhere('sante_fiche', 'id = '.$santeFicheId, true);
         $enfant = $this->getEnfant($santeFiche->enfant_id);
 
-        return $this->santeFicheRepository->findOneBy(['enfant' => $enfant]);
+        return $this->santeFicheRepository->findOneBy([
+            'enfant' => $enfant,
+        ]);
     }
 
     public function getSanteQuestion($questionId): ?SanteQuestion
     {
         $question = $this->pdo->getAllWhere('sante_question', 'id = '.$questionId, true);
 
-        return $this->santeQuestionRepository->findOneBy(['nom' => $question->intitule]);
+        return $this->santeQuestionRepository->findOneBy([
+            'nom' => $question->intitule,
+        ]);
     }
 
     public function getJour(int $jourId): ?Jour
@@ -153,7 +147,9 @@ class MigrationRepository
         $jour = $this->pdo->getAllWhere('jour', 'id = '.$jourId, true);
 
         return $this->jourRepository->findOneBy(
-            ['date_jour' => DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
+            [
+                'date_jour' => DateTime::createFromFormat('Y-m-d', $jour->date_jour),
+            ]
         );
     }
 
@@ -162,7 +158,9 @@ class MigrationRepository
         $jour = $this->pdo->getAllWhere('plaine_jours', 'id = '.$jourId, true);
 
         return $this->jourRepository->findOneBy(
-            ['date_jour' => DateTime::createFromFormat('Y-m-d', $jour->date_jour)]
+            [
+                'date_jour' => DateTime::createFromFormat('Y-m-d', $jour->date_jour),
+            ]
         );
     }
 
@@ -170,7 +168,9 @@ class MigrationRepository
     {
         $reduction = $this->pdo->getAllWhere('reduction', 'id = '.$reductionId, true);
 
-        return $this->reductionRepository->findOneBy(['nom' => $reduction->nom]);
+        return $this->reductionRepository->findOneBy([
+            'nom' => $reduction->nom,
+        ]);
     }
 
     public function getPaiement(int $paiementId): ?Paiement
@@ -178,7 +178,10 @@ class MigrationRepository
         $paiement = $this->pdo->getAllWhere('paiement', 'id = '.$paiementId, true);
 
         return $this->paiementRepository->findOneBy(
-            ['tuteur' => $paiement->tuteur_id, 'date_paiement' => DateTime::createFromFormat('Y-m-d', $paiement->date_paiement)]
+            [
+                'tuteur' => $paiement->tuteur_id,
+                'date_paiement' => DateTime::createFromFormat('Y-m-d', $paiement->date_paiement),
+            ]
         );
     }
 
@@ -186,15 +189,21 @@ class MigrationRepository
     {
         $plaine = $this->pdo->getAllWhere('plaine', 'id = '.$plaineId, true);
 
-        return $this->plaineRepository->findOneBy(['nom' => $plaine->intitule]);
+        return $this->plaineRepository->findOneBy([
+            'nom' => $plaine->intitule,
+        ]);
     }
 
     public function getPresence(int $tuteurId, Enfant $enfant, Jour $jour): Presence
     {
         $tuteur = $this->getTuteur($tuteurId);
 
-        $presence = $this->presenceRepository->findOneBy(['enfant' => $enfant, 'tuteur' => $tuteur, 'jour' => $jour]);
-        if (null === $presence) {
+        $presence = $this->presenceRepository->findOneBy([
+            'enfant' => $enfant,
+            'tuteur' => $tuteur,
+            'jour' => $jour,
+        ]);
+        if (! $presence instanceof Presence) {
             dd(
                 $enfant->getId().' '.$enfant->getNom().' '.$enfant->getPrenom().' '.$tuteur->getId(
                 ).' '.' '.$tuteur->getNom().' '.$tuteur->getPrenom().' '.$jour->getDateJour()->format(

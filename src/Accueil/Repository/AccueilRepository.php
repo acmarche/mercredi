@@ -27,16 +27,6 @@ final class AccueilRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Accueil::class);
     }
 
-    private function createQbl(): QueryBuilder
-    {
-        return $this->createQueryBuilder('accueil')
-            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
-            ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->addSelect('enfant', 'ecole', 'tuteur')
-            ->orderBy('accueil.date_jour', 'DESC');
-    }
-
     public function getQbForListing(): QueryBuilder
     {
         return $this->createQbl();
@@ -187,5 +177,15 @@ final class AccueilRepository extends ServiceEntityRepository
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
             ->getQuery()->getResult();
+    }
+
+    private function createQbl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('accueil')
+            ->leftJoin('accueil.enfant', 'enfant', 'WITH')
+            ->leftJoin('accueil.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->addSelect('enfant', 'ecole', 'tuteur')
+            ->orderBy('accueil.date_jour', 'DESC');
     }
 }

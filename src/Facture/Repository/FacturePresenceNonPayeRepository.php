@@ -12,18 +12,11 @@ use DateTimeInterface;
 
 class FacturePresenceNonPayeRepository
 {
-    private PresenceRepository $presenceRepository;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private AccueilRepository $accueilRepository;
-
     public function __construct(
-        PresenceRepository $presenceRepository,
-        AccueilRepository $accueilRepository,
-        FacturePresenceRepository $facturePresenceRepository
+        private PresenceRepository $presenceRepository,
+        private AccueilRepository $accueilRepository,
+        private FacturePresenceRepository $facturePresenceRepository
     ) {
-        $this->presenceRepository = $presenceRepository;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->accueilRepository = $accueilRepository;
     }
 
     /**
@@ -43,7 +36,9 @@ class FacturePresenceNonPayeRepository
         );
         $idsNonPayes = array_diff($ids, $idPayes);
 
-        return $this->presenceRepository->findBy(['id' => $idsNonPayes]);
+        return $this->presenceRepository->findBy([
+            'id' => $idsNonPayes,
+        ]);
     }
 
     /**
@@ -63,6 +58,8 @@ class FacturePresenceNonPayeRepository
         );
         $idsNonPayes = array_diff($ids, $idPayes);
 
-        return $this->accueilRepository->findBy(['id' => $idsNonPayes]);
+        return $this->accueilRepository->findBy([
+            'id' => $idsNonPayes,
+        ]);
     }
 }

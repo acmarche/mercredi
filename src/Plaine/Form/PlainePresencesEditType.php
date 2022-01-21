@@ -34,7 +34,11 @@ final class PlainePresencesEditType extends AbstractType
                         'required' => false,
                         'multiple' => true,
                         'expanded' => true,
-                        'constraints' => [new Count(['min' => 1])],
+                        'constraints' => [
+                            new Count([
+                                'min' => 1,
+                            ]),
+                        ],
                     ]
                 );
             }

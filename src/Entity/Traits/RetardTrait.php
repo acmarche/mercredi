@@ -8,10 +8,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait RetardTrait
 {
-    /**
-     * @Assert\Type("datetime")
-     */
     #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\Type(type: 'datetime')]
     private ?DateTimeInterface $heure_retard = null;
 
     public function getHeureRetard(): ?DateTimeInterface

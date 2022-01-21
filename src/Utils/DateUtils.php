@@ -21,11 +21,9 @@ use Twig\Environment;
 
 final class DateUtils
 {
-    private Environment $environment;
-
-    public function __construct(Environment $environment)
-    {
-        $this->environment = $environment;
+    public function __construct(
+        private Environment $environment
+    ) {
     }
 
     /**
@@ -44,7 +42,7 @@ final class DateUtils
         throw new Exception('Mauvais format de date: '.$mois);
     }
 
-    public static function formatFr(DateTimeInterface $dateTime, ?int $format = IntlDateFormatter::FULL): string
+    public static function formatFr(DateTimeInterface $dateTime, ?int $format = IntlDateFormatter::FULL): bool|string
     {
         $intlDateFormatter = new IntlDateFormatter(
             Locale::getDefault(),
@@ -144,7 +142,7 @@ final class DateUtils
         return $date->toImmutable();
     }
 
-    public function createDateImmutableFromYearMonth(int $year, int $month): CarbonImmutable
+    public function createDateImmutableFromYearMonth(int $year, int $month): static|string
     {
         return CarbonImmutable::create($year, $month, 01)->locale('fr');
     }

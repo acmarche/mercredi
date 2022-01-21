@@ -5,33 +5,26 @@ namespace AcMarche\Mercredi\Entity;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
 use AcMarche\Mercredi\Reduction\Validator as AcMarcheReductionAssert;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @AcMarcheReductionAssert\PourcentageOrForfait()
  */
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Reduction\Repository\ReductionRepository')]
-class Reduction
+#[ORM\Entity(repositoryClass: ReductionRepository::class)]
+class Reduction implements Stringable
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
-    /**
-     * @Assert\Range(
-     *      min = 0,
-     *      max = 100
-     *     )
-     */
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Assert\Range(min: 0, max: 100)]
     private ?float $pourcentage = null;
-    /**
-     * @Assert\Range(
-     *      min = 0
-     *     )
-     */
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Assert\Range(min: 0)]
     private ?float $forfait = null;
 
     public function __toString(): string

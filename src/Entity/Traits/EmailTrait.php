@@ -9,9 +9,9 @@ trait EmailTrait
 {
     /**
      * @var string|null
-     * @Assert\Email()
      */
     #[ORM\Column(name: 'email', type: 'string', length: 50, nullable: true)]
+    #[Assert\Email]
     private ?string $email = null;
 
     public function getEmail(): ?string

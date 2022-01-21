@@ -7,11 +7,9 @@ use AcMarche\Mercredi\Page\Repository\PageRepository;
 
 final class PageFactory
 {
-    private PageRepository $pageRepository;
-
-    public function __construct(PageRepository $pageRepository)
-    {
-        $this->pageRepository = $pageRepository;
+    public function __construct(
+        private PageRepository $pageRepository
+    ) {
     }
 
     public function createHomePage(): Page

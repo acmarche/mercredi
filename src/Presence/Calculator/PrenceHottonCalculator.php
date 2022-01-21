@@ -11,15 +11,10 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PrenceHottonCalculator implements PresenceCalculatorInterface
 {
-    private OrdreService $ordreService;
-    private ReductionCalculator $reductionCalculator;
-
     public function __construct(
-        OrdreService $ordreService,
-        ReductionCalculator $reductionCalculator
+        private OrdreService $ordreService,
+        private ReductionCalculator $reductionCalculator
     ) {
-        $this->ordreService = $ordreService;
-        $this->reductionCalculator = $reductionCalculator;
     }
 
     public function calculate(PresenceInterface $presence): float
@@ -50,7 +45,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
         if ($ordre >= 3) {
             return $jour->getPrix3();
         }
-        if (2 == $ordre) {
+        if (2 === $ordre) {
             return $jour->getPrix2();
         }
 

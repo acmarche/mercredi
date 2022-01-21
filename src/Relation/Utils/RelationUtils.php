@@ -9,11 +9,9 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 
 final class RelationUtils
 {
-    private RelationRepository $relationRepository;
-
-    public function __construct(RelationRepository $relationRepository)
-    {
-        $this->relationRepository = $relationRepository;
+    public function __construct(
+        private RelationRepository $relationRepository
+    ) {
     }
 
     /**

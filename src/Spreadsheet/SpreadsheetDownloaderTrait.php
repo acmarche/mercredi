@@ -19,7 +19,7 @@ trait SpreadsheetDownloaderTrait
         // Create the excel file in the tmp directory of the system
         try {
             $xlsx->save($temp_file);
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         $binaryFileResponse = new BinaryFileResponse($temp_file);

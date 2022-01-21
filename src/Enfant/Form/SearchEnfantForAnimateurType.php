@@ -19,7 +19,9 @@ class SearchEnfantForAnimateurType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom'],
+                    'attr' => [
+                        'placeholder' => 'Nom',
+                    ],
                 ]
             );
     }

@@ -24,55 +24,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/plaine")
- */
+#[Route(path: '/plaine')]
 final class PlaineController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private PlaineRepository $plaineRepository;
-    private RelationUtils $relationUtils;
-    private PlaineHandlerInterface $plaineHandler;
-    private SanteHandler $santeHandler;
-    private SanteChecker $santeChecker;
-    private PlainePresenceRepository $plainePresenceRepository;
-    private FacturePlaineHandlerInterface $facturePlaineHandler;
-    private FactureEmailFactory $factureEmailFactory;
-    private NotificationMailer $notificationMailer;
-    private AdminEmailFactory $adminEmailFactory;
-    private FactureRepository $factureRepository;
-
     public function __construct(
-        PlaineRepository $plaineRepository,
-        RelationUtils $relationUtils,
-        SanteHandler $santeHandler,
-        SanteChecker $santeChecker,
-        PlainePresenceRepository $plainePresenceRepository,
-        FacturePlaineHandlerInterface $facturePlaineHandler,
-        FactureEmailFactory $factureEmailFactory,
-        NotificationMailer $notificationMailer,
-        AdminEmailFactory $adminEmailFactory,
-        PlaineHandlerInterface $plaineHandler,
-        FactureRepository $factureRepository
+        private PlaineRepository $plaineRepository,
+        private RelationUtils $relationUtils,
+        private SanteHandler $santeHandler,
+        private SanteChecker $santeChecker,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private FacturePlaineHandlerInterface $facturePlaineHandler,
+        private FactureEmailFactory $factureEmailFactory,
+        private NotificationMailer $notificationMailer,
+        private AdminEmailFactory $adminEmailFactory,
+        private PlaineHandlerInterface $plaineHandler,
+        private FactureRepository $factureRepository
     ) {
-        $this->plaineRepository = $plaineRepository;
-        $this->relationUtils = $relationUtils;
-        $this->plaineHandler = $plaineHandler;
-        $this->santeHandler = $santeHandler;
-        $this->santeChecker = $santeChecker;
-        $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->facturePlaineHandler = $facturePlaineHandler;
-        $this->factureEmailFactory = $factureEmailFactory;
-        $this->notificationMailer = $notificationMailer;
-        $this->adminEmailFactory = $adminEmailFactory;
-        $this->factureRepository = $factureRepository;
     }
 
-    /**
-     * @Route("/open", name="mercredi_parent_plaine_open")
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/open', name: 'mercredi_parent_plaine_open')]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function open(): Response
     {
         $plaine = $this->plaineRepository->findPlaineOpen();
@@ -85,23 +58,18 @@ final class PlaineController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/show", name="mercredi_parent_plaine_show")
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/{id}/show', name: 'mercredi_parent_plaine_show')]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function show(Plaine $plaine): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $tuteur = $this->tuteur;
         $inscriptions = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
         $enfantsInscrits = PresenceUtils::extractEnfants($inscriptions);
         $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
-
         $resteEnfant = \count($enfantsInscrits) !== \count($enfants);
-
         $facture = null;
         if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
             $facture = $this->factureRepository->findByTuteurAndPlaine($tuteur, $plaine);
@@ -121,27 +89,25 @@ final class PlaineController extends AbstractController
 
     /**
      * Etape 1 select enfant.
-     *
-     * @Route("/select/enfant", name="mercredi_parent_plaine_select_enfant", methods={"GET", "POST"})
      */
+    #[Route(path: '/select/enfant', name: 'mercredi_parent_plaine_select_enfant', methods: ['GET', 'POST'])]
     public function selectEnfant(Request $request): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
-        $form = $this->createForm(SelectEnfantType::class, null, ['enfants' => $enfants]);
-
+        $form = $this->createForm(SelectEnfantType::class, null, [
+            'enfants' => $enfants,
+        ]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $plaine = $this->plaineRepository->findPlaineOpen();
             $enfantsSelected = $form->get('enfants')->getData();
             foreach ($enfantsSelected as $enfant) {
                 $santeFiche = $this->santeHandler->init($enfant);
 
-                if (!$this->santeChecker->isComplete($santeFiche)) {
+                if (! $this->santeChecker->isComplete($santeFiche)) {
                     $this->addFlash('danger', 'La fiche santé de '.$enfant.' doit être complétée');
 
                     continue;
@@ -169,29 +135,23 @@ final class PlaineController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/confirmation", name="mercredi_parent_plaine_presence_confirmation", methods={"GET", "POST"})
-     */
+    #[Route(path: '/confirmation', name: 'mercredi_parent_plaine_presence_confirmation', methods: ['GET', 'POST'])]
     public function confirmation(Request $request): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $tuteur = $this->tuteur;
         $plaine = $this->plaineRepository->findPlaineOpen();
-
         if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
-            return $this->redirectToRoute('mercredi_parent_plaine_show', ['id' => $plaine->getId()]);
+            return $this->redirectToRoute('mercredi_parent_plaine_show', [
+                'id' => $plaine->getId(),
+            ]);
         }
-
         $enfantsInscrits = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $tuteur);
         $enfants = $this->relationUtils->findEnfantsByTuteur($tuteur);
-
         $form = $this->createForm(PlaineConfirmationType::class);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $this->plaineHandler->confirm($plaine, $tuteur);
@@ -200,7 +160,9 @@ final class PlaineController extends AbstractController
                 $this->addFlash('danger', 'Erreur survenue: '.$e->getMessage());
             }
 
-            return $this->redirectToRoute('mercredi_parent_plaine_show', ['id' => $plaine->getId()]);
+            return $this->redirectToRoute('mercredi_parent_plaine_show', [
+                'id' => $plaine->getId(),
+            ]);
         }
 
         return $this->render(

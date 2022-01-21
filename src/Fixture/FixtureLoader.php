@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
@@ -24,7 +23,6 @@ final class FixtureLoader
         private EnfantRepository $enfantRepository,
         private AccueilRepository $accueilRepository
     ) {
-
     }
 
     public function getPath(): string
@@ -67,10 +65,20 @@ final class FixtureLoader
         $ormPurger->purge();
 
         $this->loader->load($files, [], [], PurgeMode::createDeleteMode());
-        $tuteurSimposn = $this->tuteurRepository->findOneBy(['prenom' => 'Homer']);
-        $enfant = $this->enfantRepository->findOneBy(['prenom' => 'Bart']);
-        $presence = $this->presenceRepository->findOneBy(['tuteur' => $tuteurSimposn, 'enfant' => $enfant]);
-        $acceuil = $this->accueilRepository->findOneBy(['tuteur' => $tuteurSimposn, 'enfant' => $enfant]);
+        $tuteurSimposn = $this->tuteurRepository->findOneBy([
+            'prenom' => 'Homer',
+        ]);
+        $enfant = $this->enfantRepository->findOneBy([
+            'prenom' => 'Bart',
+        ]);
+        $presence = $this->presenceRepository->findOneBy([
+            'tuteur' => $tuteurSimposn,
+            'enfant' => $enfant,
+        ]);
+        $acceuil = $this->accueilRepository->findOneBy([
+            'tuteur' => $tuteurSimposn,
+            'enfant' => $enfant,
+        ]);
 
         $this->loader->load(
             [

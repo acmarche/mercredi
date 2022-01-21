@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Migration;
 
 use Exception;
 use PDO;
+use PDOStatement;
 use Symfony\Component\Dotenv\Dotenv;
 
 class MercrediPdo
@@ -42,7 +43,7 @@ class MercrediPdo
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function execQuery($sql)
+    public function execQuery($sql): bool|PDOStatement
     {
         if (null === $this->bdd) {
             $this->connect();
@@ -50,7 +51,7 @@ class MercrediPdo
         // var_dump($sql);
         $query = $this->bdd->query($sql);
         $error = $this->bdd->errorInfo();
-        if ('0000' != $error[0]) {
+        if ('0000' !== $error[0]) {
             //    var_dump($error[2]);
             // mail('jf@marche.be', 'duobac error sql', $error[2]);
 

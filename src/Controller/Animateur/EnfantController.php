@@ -15,45 +15,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/enfant")
- */
+
+#[Route(path: '/enfant')]
 final class EnfantController extends AbstractController
 {
     use GetAnimateurTrait;
 
-    private EnfantRepository $enfantRepository;
-    private SanteHandler $santeHandler;
-    private SanteChecker $santeChecker;
-    private PresenceRepository $presenceRepository;
-    private RelationRepository $relationRepository;
-
     public function __construct(
-        EnfantRepository $enfantRepository,
-        SanteHandler $santeHandler,
-        SanteChecker $santeChecker,
-        PresenceRepository $presenceRepository,
-        RelationRepository $relationRepository
+        private EnfantRepository $enfantRepository,
+        private SanteHandler $santeHandler,
+        private SanteChecker $santeChecker,
+        private PresenceRepository $presenceRepository,
+        private RelationRepository $relationRepository
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->santeHandler = $santeHandler;
-        $this->santeChecker = $santeChecker;
-        $this->presenceRepository = $presenceRepository;
-        $this->relationRepository = $relationRepository;
     }
 
-    /**
-     * @Route("/", name="mercredi_animateur_enfant_index", methods={"GET", "POST"})
-     * @IsGranted("ROLE_MERCREDI_ANIMATEUR")
-     */
+    #[Route(path: '/', name: 'mercredi_animateur_enfant_index', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_ANIMATEUR')]
     public function index(Request $request): Response
     {
         if (($hasAnimateur = $this->hasAnimateur()) !== null) {
             return $hasAnimateur;
         }
-
         $nom = null;
         $form = $this->createForm(
             SearchEnfantForAnimateurType::class,
@@ -63,12 +46,10 @@ final class EnfantController extends AbstractController
             ]
         );
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
         }
-
         $enfants = $this->enfantRepository->searchForAnimateur($this->animateur, $nom);
 
         return $this->render(
@@ -80,10 +61,8 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}", name="mercredi_animateur_enfant_show", methods={"GET"})
-     * @IsGranted("enfant_show", subject="enfant")
-     */
+    #[Route(path: '/{uuid}', name: 'mercredi_animateur_enfant_show', methods: ['GET'])]
+    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);

@@ -8,9 +8,6 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Mercredi\Utils\DateUtils;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use IntlDateFormatter;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -30,18 +27,13 @@ final class SpreadsheetFactory
      */
     private const COLONNE = 1;
 
-    private ScolaireUtils $scolaireUtils;
-
-    public function __construct(ScolaireUtils $scolaireUtils)
-    {
-        $this->scolaireUtils = $scolaireUtils;
+    public function __construct(
+        private ScolaireUtils $scolaireUtils
+    ) {
     }
 
-    /**
-     * @param DateTime|DateTimeImmutable $dateTime
-     */
     public function createXlsByMonthForOne(
-        DateTimeInterface $dateTime,
+        \DateTime|\DateTimeImmutable $dateTime,
         ListingPresenceByMonth $listingPresenceByMonth
     ): Spreadsheet {
         $spreadsheet = new Spreadsheet();

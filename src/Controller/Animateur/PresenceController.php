@@ -11,37 +11,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/presence")
- * @IsGranted("ROLE_MERCREDI_ANIMATEUR")
- */
+#[Route(path: '/presence')]
+#[IsGranted(data: 'ROLE_MERCREDI_ANIMATEUR')]
 final class PresenceController extends AbstractController
 {
     use GetAnimateurTrait;
 
-    private PresenceRepository $presenceRepository;
-    private EnfantRepository $enfantRepository;
-    private JourRepository $jourRepository;
-
     public function __construct(
-        PresenceRepository $presenceRepository,
-        JourRepository $jourRepository,
-        EnfantRepository $enfantRepository
+        private PresenceRepository $presenceRepository,
+        private JourRepository $jourRepository,
+        private EnfantRepository $enfantRepository
     ) {
-        $this->presenceRepository = $presenceRepository;
-        $this->enfantRepository = $enfantRepository;
-        $this->jourRepository = $jourRepository;
     }
 
-    /**
-     * @Route("/", name="mercredi_animateur_presence_index", methods={"GET", "POST"}).
-     */
+    #[Route(path: '/', name: 'mercredi_animateur_presence_index', methods: ['GET', 'POST'])]
     public function index(): Response
     {
         if (($response = $this->hasAnimateur()) !== null) {
             return $response;
         }
-
         $jours = $this->jourRepository->findByAnimateur($this->animateur);
 
         return $this->render(
@@ -52,16 +40,13 @@ final class PresenceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_animateur_presence_show", methods={"GET", "POST"}).
-     */
+    #[Route(path: '/{id}', name: 'mercredi_animateur_presence_show', methods: ['GET', 'POST'])]
     public function show(Jour $jour): Response
     {
         $this->denyAccessUnlessGranted('jour_show', $jour);
         if (($response = $this->hasAnimateur()) !== null) {
             return $response;
         }
-
         $enfants = $this->enfantRepository->searchForAnimateur($this->animateur, null, $jour);
 
         return $this->render(

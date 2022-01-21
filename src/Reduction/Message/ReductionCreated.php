@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Reduction\Message;
 
 final class ReductionCreated
 {
-    private int $ecoleId;
-
-    public function __construct(int $reductionId)
-    {
-        $this->ecoleId = $reductionId;
+    public function __construct(
+        private int $ecoleId
+    ) {
     }
 
     public function getReductionId(): int

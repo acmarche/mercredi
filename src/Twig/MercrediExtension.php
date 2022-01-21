@@ -45,7 +45,7 @@ final class MercrediExtension extends AbstractExtension
         return MercrediConstantes::getAbsenceTxt($number);
     }
 
-    public function monthFr(int $number)
+    public function monthFr(int $number): int|string
     {
         return self::MONTHS[$number] ?? $number;
     }
@@ -54,6 +54,6 @@ final class MercrediExtension extends AbstractExtension
     {
         $ids = array_map(fn ($object) => $object->getId(), $objects);
 
-        return \in_array($number, $ids);
+        return \in_array($number, $ids, true);
     }
 }

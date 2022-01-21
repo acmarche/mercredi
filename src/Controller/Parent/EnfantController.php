@@ -17,66 +17,39 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/enfant")
- */
+
+#[Route(path: '/enfant')]
 final class EnfantController extends AbstractController
 {
     use GetTuteurTrait;
 
-    private EnfantRepository $enfantRepository;
-    private RelationUtils $relationUtils;
-    private SanteHandler $santeHandler;
-    private SanteChecker $santeChecker;
-    private PresenceRepository $presenceRepository;
-    private PlainePresenceRepository $plainePresenceRepository;
-    private AccueilRepository $accueilRepository;
-    private EnfantHandler $enfantHandler;
-    private AdminEmailFactory $adminEmailFactory;
-    private NotificationMailer $notifcationMailer;
-
     public function __construct(
-        EnfantRepository $enfantRepository,
-        SanteHandler $santeHandler,
-        RelationUtils $relationUtils,
-        SanteChecker $santeChecker,
-        PresenceRepository $presenceRepository,
-        PlainePresenceRepository $plainePresenceRepository,
-        AccueilRepository $accueilRepository,
-        EnfantHandler $enfantHandler,
-        AdminEmailFactory $adminEmailFactory,
-        NotificationMailer $notifcationMailer,
+        private EnfantRepository $enfantRepository,
+        private SanteHandler $santeHandler,
+        private RelationUtils $relationUtils,
+        private SanteChecker $santeChecker,
+        private PresenceRepository $presenceRepository,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private AccueilRepository $accueilRepository,
+        private EnfantHandler $enfantHandler,
+        private AdminEmailFactory $adminEmailFactory,
+        private NotificationMailer $notifcationMailer,
         private MessageBusInterface $dispatcher
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->relationUtils = $relationUtils;
-        $this->santeHandler = $santeHandler;
-        $this->santeChecker = $santeChecker;
-        $this->presenceRepository = $presenceRepository;
-        $this->plainePresenceRepository = $plainePresenceRepository;
-        $this->accueilRepository = $accueilRepository;
-        $this->enfantHandler = $enfantHandler;
-        $this->adminEmailFactory = $adminEmailFactory;
-        $this->notifcationMailer = $notifcationMailer;
     }
 
-    /**
-     * @Route("/", name="mercredi_parent_enfant_index", methods={"GET"})
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/', name: 'mercredi_parent_enfant_index', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function index(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
         $this->santeChecker->isCompleteForEnfants($enfants);
 
@@ -89,17 +62,14 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="mercredi_parent_enfant_new", methods={"GET", "POST"})
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/new', name: 'mercredi_parent_enfant_new', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function new(Request $request): Response
     {
         $this->hasTuteur();
         $enfant = new Enfant();
         $form = $this->createForm(EnfantEditForParentType::class, $enfant);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantHandler->newHandle($enfant, $this->tuteur);
             $this->dispatcher->dispatch(new EnfantCreated($enfant->getId()));
@@ -107,7 +77,9 @@ final class EnfantController extends AbstractController
             $message = $this->adminEmailFactory->messageEnfantCreated($this->getUser(), $enfant);
             $this->notifcationMailer->sendAsEmailNotification($message);
 
-            return $this->redirectToRoute('mercredi_parent_enfant_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_parent_enfant_show', [
+                'uuid' => $enfant->getUuid(),
+            ]);
         }
 
         return $this->render(
@@ -119,10 +91,8 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}", name="mercredi_parent_enfant_show", methods={"GET"})
-     * @IsGranted("enfant_show", subject="enfant")
-     */
+    #[Route(path: '/{uuid}', name: 'mercredi_parent_enfant_show', methods: ['GET'])]
+    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);

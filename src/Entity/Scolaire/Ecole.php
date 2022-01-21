@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Scolaire;
 
+use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -14,9 +15,10 @@ use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Ecole\Repository\EcoleRepository')]
-class Ecole
+#[ORM\Entity(repositoryClass: EcoleRepository::class)]
+class Ecole implements Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -59,7 +61,7 @@ class Ecole
 
     public function addEnfant(Enfant $enfant): self
     {
-        if (!$this->enfants->contains($enfant)) {
+        if (! $this->enfants->contains($enfant)) {
             $this->enfants[] = $enfant;
             $enfant->setEcole($this);
         }

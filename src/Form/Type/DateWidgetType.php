@@ -14,7 +14,9 @@ final class DateWidgetType extends AbstractType
             [
                 'widget' => 'single_text',
                 'required' => true,
-                'attr' => ['autocomplete' => 'off'],
+                'attr' => [
+                    'autocomplete' => 'off',
+                ],
             ]
         );
     }

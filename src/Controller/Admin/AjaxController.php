@@ -13,36 +13,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/ajax")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/ajax')]
 final class AjaxController extends AbstractController
 {
-    private EnfantRepository $enfantRepository;
-    private TuteurRepository $tuteurRepository;
-    private SanteQuestionRepository $santeQuestionRepository;
-    private PageRepository $pageRepository;
-
     public function __construct(
-        EnfantRepository $enfantRepository,
-        TuteurRepository $tuteurRepository,
-        SanteQuestionRepository $santeQuestionRepository,
-        PageRepository $pageRepository
+        private EnfantRepository $enfantRepository,
+        private TuteurRepository $tuteurRepository,
+        private SanteQuestionRepository $santeQuestionRepository,
+        private PageRepository $pageRepository
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->tuteurRepository = $tuteurRepository;
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->pageRepository = $pageRepository;
     }
 
     /**
      * not use.
-     *
-     * @Route("/tuteurs", name="mercredi_admin_ajax_tuteurs")
      */
+    #[Route(path: '/tuteurs', name: 'mercredi_admin_ajax_tuteurs')]
     public function tuteurs(Request $request): Response
     {
         $keyword = $request->get('q');
@@ -51,12 +38,12 @@ final class AjaxController extends AbstractController
             $tuteurs = $this->tuteurRepository->search($keyword);
         }
 
-        return $this->render('@AcMarcheMercredi/commun/tuteur/_list.html.twig', ['tuteurs' => $tuteurs]);
+        return $this->render('@AcMarcheMercredi/commun/tuteur/_list.html.twig', [
+            'tuteurs' => $tuteurs,
+        ]);
     }
 
-    /**
-     * @Route("/enfants/link", name="mercredi_admin_ajax_enfants", methods={"GET"})
-     */
+    #[Route(path: '/enfants/link', name: 'mercredi_admin_ajax_enfants', methods: ['GET'])]
     public function enfants(Request $request): Response
     {
         $keyword = $request->get('q');
@@ -65,12 +52,12 @@ final class AjaxController extends AbstractController
             $enfants = $this->enfantRepository->findByName($keyword, true, 10);
         }
 
-        return $this->render('@AcMarcheMercredi/commun/enfant/_list.html.twig', ['enfants' => $enfants]);
+        return $this->render('@AcMarcheMercredi/commun/enfant/_list.html.twig', [
+            'enfants' => $enfants,
+        ]);
     }
 
-    /**
-     * @Route("/enfants/nolink", name="mercredi_admin_ajax_enfants_no_link", methods={"GET"})
-     */
+    #[Route(path: '/enfants/nolink', name: 'mercredi_admin_ajax_enfants_no_link', methods: ['GET'])]
     public function enfantsNoLink(Request $request): Response
     {
         $keyword = $request->get('q');
@@ -79,24 +66,25 @@ final class AjaxController extends AbstractController
             $enfants = $this->enfantRepository->findByName($keyword, true, 10);
         }
 
-        return $this->render('@AcMarcheMercredi/commun/enfant/_list_not_link.html.twig', ['enfants' => $enfants]);
+        return $this->render('@AcMarcheMercredi/commun/enfant/_list_not_link.html.twig', [
+            'enfants' => $enfants,
+        ]);
     }
 
     /**
      * not use.
-     *
-     * @Route("/plaine/date", name="mercredi_admin_ajax_plaine_new_date")
      */
+    #[Route(path: '/plaine/date', name: 'mercredi_admin_ajax_plaine_new_date')]
     public function plaineDate(Request $request): Response
     {
         $index = $request->get('index', 0);
 
-        return $this->render('@AcMarcheMercrediAdmin/plaine/_new_line.html.twig', ['index' => $index]);
+        return $this->render('@AcMarcheMercrediAdmin/plaine/_new_line.html.twig', [
+            'index' => $index,
+        ]);
     }
 
-    /**
-     * @Route("/q/sort/", name="mercredi_admin_ajax_question_sort", methods={"POST"})
-     */
+    #[Route(path: '/q/sort/', name: 'mercredi_admin_ajax_question_sort', methods: ['POST'])]
     public function trierQuestion(Request $request): JsonResponse
     {
         //    $isAjax = $request->isXmlHttpRequest();
@@ -115,9 +103,7 @@ final class AjaxController extends AbstractController
         return $this->json('<div class="alert alert-success">Tri enregistré</div>');
     }
 
-    /**
-     * @Route("/q/sort/{id}", name="mercredi_admin_ajax_page_sort", methods={"POST", "PATCH"})
-     */
+    #[Route(path: '/q/sort/{id}', name: 'mercredi_admin_ajax_page_sort', methods: ['POST', 'PATCH'])]
     public function trierPage(Request $request, int $id): Response
     {
         $isAjax = $request->isXmlHttpRequest();

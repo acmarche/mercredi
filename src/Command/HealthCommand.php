@@ -13,23 +13,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class HealthCommand extends Command
 {
     protected static $defaultName = 'mercredi:health';
-    private EnfantRepository $enfantRepository;
-    private NotificationMailer $notifcationMailer;
-    private TuteurRepository $tuteurRepository;
-    private AdminEmailFactory $adminEmailFactory;
 
     public function __construct(
-        EnfantRepository $enfantRepository,
-        TuteurRepository $tuteurRepository,
-        AdminEmailFactory $adminEmailFactory,
-        NotificationMailer $notifcationMailer,
+        private EnfantRepository $enfantRepository,
+        private TuteurRepository $tuteurRepository,
+        private AdminEmailFactory $adminEmailFactory,
+        private NotificationMailer $notifcationMailer,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->enfantRepository = $enfantRepository;
-        $this->notifcationMailer = $notifcationMailer;
-        $this->tuteurRepository = $tuteurRepository;
-        $this->adminEmailFactory = $adminEmailFactory;
     }
 
     protected function configure(): void

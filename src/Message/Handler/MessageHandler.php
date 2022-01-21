@@ -14,21 +14,14 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 final class MessageHandler
 {
     use InitMailerTrait;
-
-    private MessageRepository $messageRepository;
-    private EmailFactory $emailFactory;
     private FlashBagInterface $flashBag;
-    private NotificationMailer $notificationMailer;
 
     public function __construct(
-        MessageRepository $messageRepository,
-        EmailFactory $emailFactory,
-        NotificationMailer $notificationMailer,
+        private MessageRepository $messageRepository,
+        private EmailFactory $emailFactory,
+        private NotificationMailer $notificationMailer,
         RequestStack $requestStack
     ) {
-        $this->messageRepository = $messageRepository;
-        $this->emailFactory = $emailFactory;
-        $this->notificationMailer = $notificationMailer;
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
     }
 

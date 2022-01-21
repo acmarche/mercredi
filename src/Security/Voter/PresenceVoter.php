@@ -29,20 +29,14 @@ final class PresenceVoter extends Voter
     public const DELETE = 'presence_delete';
 
     public ?Tuteur $tuteurOfUser = null;
-    private RelationRepository $relationRepository;
-    private TuteurUtils $tuteurUtils;
-    private Security $security;
     private ?UserInterface $user = null;
     private ?Enfant $enfant = null;
 
     public function __construct(
-        RelationRepository $relationRepository,
-        TuteurUtils $tuteurUtils,
-        Security $security
+        private RelationRepository $relationRepository,
+        private TuteurUtils $tuteurUtils,
+        private Security $security
     ) {
-        $this->relationRepository = $relationRepository;
-        $this->tuteurUtils = $tuteurUtils;
-        $this->security = $security;
     }
 
     protected function supports($attribute, $subject): bool
@@ -56,7 +50,7 @@ final class PresenceVoter extends Voter
 
     protected function voteOnAttribute($attribute, $presence, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof UserInterface) {
+        if (! $token->getUser() instanceof UserInterface) {
             return false;
         }
 
@@ -67,18 +61,13 @@ final class PresenceVoter extends Voter
             return true;
         }
 
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView();
-            case self::ADD:
-                return $this->canAdd();
-            case self::EDIT:
-                return $this->canEdit();
-            case self::DELETE:
-                return $this->canDelete();
-        }
-
-        return false;
+        return match ($attribute) {
+            self::SHOW => $this->canView(),
+            self::ADD => $this->canAdd(),
+            self::EDIT => $this->canEdit(),
+            self::DELETE => $this->canDelete(),
+            default => false,
+        };
     }
 
     private function canView(): bool
@@ -126,13 +115,13 @@ final class PresenceVoter extends Voter
 
     private function checkTuteur(): bool
     {
-        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
+        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_PARENT)) {
             return false;
         }
 
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if (!$this->tuteurOfUser instanceof Tuteur) {
+        if (! $this->tuteurOfUser instanceof Tuteur) {
             return false;
         }
 

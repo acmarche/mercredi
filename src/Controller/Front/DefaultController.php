@@ -8,25 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- */
+
 final class DefaultController extends AbstractController
 {
-    private PageRepository $pageRepository;
-    private PageFactory $pageFactory;
-
     public function __construct(
-        PageRepository $pageRepository,
-        PageFactory $pageFactory
+        private PageRepository $pageRepository,
+        private PageFactory $pageFactory
     ) {
-        $this->pageRepository = $pageRepository;
-        $this->pageFactory = $pageFactory;
     }
 
-    /**
-     * @Route("/", name="mercredi_front_home")
-     */
+    #[Route(path: '/', name: 'mercredi_front_home')]
     public function index(): Response
     {
         $homePage = $this->pageRepository->findHomePage();
@@ -42,9 +33,7 @@ final class DefaultController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/menu/front", name="mercredi_front_menu_page")
-     */
+    #[Route(path: '/menu/front', name: 'mercredi_front_menu_page')]
     public function menu(): Response
     {
         $pages = $this->pageRepository->findAll();

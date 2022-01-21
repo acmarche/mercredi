@@ -6,21 +6,18 @@ use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 final class EmailFactory
 {
     use OrganisationPropertyInitTrait;
 
-    private StorageInterface $storage;
-
-    public function __construct(StorageInterface $storage)
-    {
-        $this->storage = $storage;
+    public function __construct(
+        private StorageInterface $storage
+    ) {
     }
 
-    public function create(Message $message): NotificationEmail
+    public function create(Message $message): NotificationEmailJf
     {
         $notification = NotificationEmailJf::asPublicEmailJf();
         $notification->subject($message->getSujet())
@@ -47,7 +44,7 @@ final class EmailFactory
         return $notification;
     }
 
-    public function createForPlaine(Plaine $plaine, Message $message, bool $attachCourriers): NotificationEmail
+    public function createForPlaine(Plaine $plaine, Message $message, bool $attachCourriers): NotificationEmailJf
     {
         $notification = NotificationEmailJf::asPublicEmailJf();
         $notification->subject($message->getSujet())

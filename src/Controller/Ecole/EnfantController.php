@@ -16,71 +16,48 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Search\Form\SearchEnfantEcoleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @Route("/enfant")
- */
+
+#[Route(path: '/enfant')]
 final class EnfantController extends AbstractController
 {
     use GetEcolesTrait;
 
-    private EnfantRepository $enfantRepository;
-    private SanteHandler $santeHandler;
-    private SanteChecker $santeChecker;
-    private PresenceRepository $presenceRepository;
-    private AccueilRepository $accueilRepository;
-    private RelationRepository $relationRepository;
-    private SanteQuestionRepository $santeQuestionRepository;
-    private OrganisationRepository $organisationRepository;
-
     public function __construct(
-        EnfantRepository $enfantRepository,
-        SanteHandler $santeHandler,
-        SanteChecker $santeChecker,
-        PresenceRepository $presenceRepository,
-        AccueilRepository $accueilRepository,
-        RelationRepository $relationRepository,
-        SanteQuestionRepository $santeQuestionRepository,
-        OrganisationRepository $organisationRepository,
+        private EnfantRepository $enfantRepository,
+        private SanteHandler $santeHandler,
+        private SanteChecker $santeChecker,
+        private PresenceRepository $presenceRepository,
+        private AccueilRepository $accueilRepository,
+        private RelationRepository $relationRepository,
+        private SanteQuestionRepository $santeQuestionRepository,
+        private OrganisationRepository $organisationRepository,
         private MessageBusInterface $dispatcher
     ) {
-        $this->enfantRepository = $enfantRepository;
-        $this->santeHandler = $santeHandler;
-        $this->santeChecker = $santeChecker;
-        $this->presenceRepository = $presenceRepository;
-        $this->accueilRepository = $accueilRepository;
-        $this->relationRepository = $relationRepository;
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->organisationRepository = $organisationRepository;
     }
 
-    /**
-     * @Route("/", name="mercredi_ecole_enfant_index", methods={"GET", "POST"})
-     * @IsGranted("ROLE_MERCREDI_ECOLE")
-     */
+    #[Route(path: '/', name: 'mercredi_ecole_enfant_index', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
     public function index(Request $request): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
-
         $nom = null;
         $accueil = true;
-        $form = $this->createForm(SearchEnfantEcoleType::class, ['accueil' => true]);
+        $form = $this->createForm(SearchEnfantEcoleType::class, [
+            'accueil' => true,
+        ]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
             $accueil = $data['accueil'];
         }
-
         $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom, $accueil);
 
         return $this->render(
@@ -92,10 +69,8 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/show/{uuid}", name="mercredi_ecole_enfant_show", methods={"GET"})
-     * @IsGranted("enfant_show", subject="enfant")
-     */
+    #[Route(path: '/show/{uuid}', name: 'mercredi_ecole_enfant_show', methods: ['GET'])]
+    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
@@ -116,21 +91,20 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{uuid}/edit", name="mercredi_ecole_enfant_edit", methods={"GET", "POST"})
-     * @IsGranted("enfant_edit", subject="enfant")
-     */
+    #[Route(path: '/{uuid}/edit', name: 'mercredi_ecole_enfant_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
     public function edit(Request $request, Enfant $enfant): Response
     {
         $form = $this->createForm(EnfantEditForEcoleType::class, $enfant);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantRepository->flush();
 
             $this->dispatcher->dispatch(new EnfantUpdated($enfant->getId()));
 
-            return $this->redirectToRoute('mercredi_ecole_enfant_index', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_ecole_enfant_index', [
+                'uuid' => $enfant->getUuid(),
+            ]);
         }
 
         return $this->render(
@@ -142,20 +116,18 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/sante/{uuid}", name="mercredi_ecole_sante_fiche_show", methods={"GET"})
-     * @IsGranted("enfant_show", subject="enfant")
-     */
+    #[Route(path: '/sante/{uuid}', name: 'mercredi_ecole_sante_fiche_show', methods: ['GET'])]
+    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
     public function santeFiche(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
-            return $this->redirectToRoute('mercredi_ecole_enfant_show', ['uuid' => $enfant->getUuid()]);
+            return $this->redirectToRoute('mercredi_ecole_enfant_show', [
+                'uuid' => $enfant->getUuid(),
+            ]);
         }
-
         $isComplete = $this->santeChecker->isComplete($santeFiche);
         $questions = $this->santeQuestionRepository->findAllOrberByPosition();
         $organisation = $this->organisationRepository->getOrganisation();

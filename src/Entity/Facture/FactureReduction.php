@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use AcMarche\Mercredi\Facture\Validator as AcMarcheValidator;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @AcMarcheValidator\PourcentageOrForfait()
  */
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Facture\Repository\FactureReductionRepository')]
+#[ORM\Entity(repositoryClass: FactureReductionRepository::class)]
 #[ORM\Table(name: 'facture_reduction')]
 class FactureReduction implements TimestampableInterface, UuidableInterface
 {
@@ -26,28 +27,21 @@ class FactureReduction implements TimestampableInterface, UuidableInterface
     use FactureTrait;
     use UuidableTrait;
     use TimestampableTrait;
+
     #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'factureReductions')]
     private FactureInterface $facture;
-    /**
-     * @Assert\Range(
-     *      min = 0
-     * )
-     */
     #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: true)]
+    #[Assert\Range(min: 0)]
     private ?float $forfait = null;
-    /**
-     * @Assert\Range(
-     *      min = 0,
-     *      max = 100
-     *)
-     */
     #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: true)]
+    #[Assert\Range(min: 0, max: 100)]
     private ?float $pourcentage = null;
     #[ORM\Column(type: 'datetime', nullable: false)]
     private ?DateTimeInterface $dateLe = null;
 
-    public function __construct(Facture $facture)
-    {
+    public function __construct(
+        Facture $facture
+    ) {
         $this->facture = $facture;
     }
 

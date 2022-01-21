@@ -27,39 +27,18 @@ use DateTime;
 
 final class FactureHandler implements FactureHandlerInterface
 {
-    private FactureRepository $factureRepository;
-    private FactureFactory $factureFactory;
-    private PresenceCalculatorInterface $presenceCalculator;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private PresenceRepository $presenceRepository;
-    private AccueilRepository $accueilRepository;
-    private AccueilCalculatorInterface $accueilCalculator;
-    private TuteurRepository $tuteurRepository;
-    private CommunicationFactoryInterface $communicationFactory;
-    private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository;
-
     public function __construct(
-        FactureRepository $factureRepository,
-        FacturePresenceRepository $facturePresenceRepository,
-        FactureFactory $factureFactory,
-        PresenceCalculatorInterface $presenceCalculator,
-        PresenceRepository $presenceRepository,
-        AccueilRepository $accueilRepository,
-        AccueilCalculatorInterface $accueilCalculator,
-        TuteurRepository $tuteurRepository,
-        CommunicationFactoryInterface $communicationFactory,
-        FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
+        private FactureRepository $factureRepository,
+        private FacturePresenceRepository $facturePresenceRepository,
+        private FactureFactory $factureFactory,
+        private PresenceCalculatorInterface $presenceCalculator,
+        private PresenceRepository $presenceRepository,
+        private AccueilRepository $accueilRepository,
+        private AccueilCalculatorInterface $accueilCalculator,
+        private TuteurRepository $tuteurRepository,
+        private CommunicationFactoryInterface $communicationFactory,
+        private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
     ) {
-        $this->factureRepository = $factureRepository;
-        $this->factureFactory = $factureFactory;
-        $this->presenceCalculator = $presenceCalculator;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->presenceRepository = $presenceRepository;
-        $this->accueilRepository = $accueilRepository;
-        $this->accueilCalculator = $accueilCalculator;
-        $this->tuteurRepository = $tuteurRepository;
-        $this->communicationFactory = $communicationFactory;
-        $this->facturePresenceNonPayeRepository = $facturePresenceNonPayeRepository;
     }
 
     public function newFacture(Tuteur $tuteur): FactureInterface
@@ -74,8 +53,12 @@ final class FactureHandler implements FactureHandlerInterface
      */
     public function handleManually(FactureInterface $facture, array $presencesId, array $accueilsId): Facture
     {
-        $presences = $this->presenceRepository->findBy(['id' => $presencesId]);
-        $accueils = $this->accueilRepository->findBy(['id' => $accueilsId]);
+        $presences = $this->presenceRepository->findBy([
+            'id' => $presencesId,
+        ]);
+        $accueils = $this->accueilRepository->findBy([
+            'id' => $accueilsId,
+        ]);
 
         $this->finish($facture, $presences, $accueils);
         $this->flush();
@@ -122,6 +105,39 @@ final class FactureHandler implements FactureHandlerInterface
         return $factures;
     }
 
+    public function isBilled(int $presenceId, string $type): bool
+    {
+        return (bool) $this->facturePresenceRepository->findByIdAndType($presenceId, $type);
+    }
+
+    public function isSended(int $presenceId, string $type): bool
+    {
+        if (($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) !== null) {
+            return null !== $facturePresence->getFacture()->getEnvoyeLe();
+        }
+
+        return false;
+    }
+
+    public function registerDataOnFacturePresence(
+        FactureInterface $facture,
+        PresenceInterface $presence,
+        FacturePresence $facturePresence
+    ): void {
+        $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
+        $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
+        $enfant = $presence->getEnfant();
+        if (($ecole = $enfant->getEcole()) !== null) {
+            $facture->ecolesListing[$ecole->getId()] = $ecole;
+        }
+        $facturePresence->setNom($enfant->getNom());
+        $facturePresence->setPrenom($enfant->getPrenom());
+        $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
+        $facturePresence->setOrdre($ordre);
+        $facturePresence->setAbsent($presence->getAbsent());
+        $facturePresence->setCoutBrut($this->presenceCalculator->getPrixByOrdre($presence, $ordre));
+    }
+
     private function handleByTuteur(Tuteur $tuteur, CarbonInterface $date): ?Facture
     {
         $facture = $this->newFacture($tuteur);
@@ -139,20 +155,6 @@ final class FactureHandler implements FactureHandlerInterface
         return $facture;
     }
 
-    public function isBilled(int $presenceId, string $type): bool
-    {
-        return (bool) $this->facturePresenceRepository->findByIdAndType($presenceId, $type);
-    }
-
-    public function isSended(int $presenceId, string $type): bool
-    {
-        if (($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) !== null) {
-            return null != $facturePresence->getFacture()->getEnvoyeLe();
-        }
-
-        return false;
-    }
-
     /**
      * @param array|Presence[] $presences
      * @param array|Accueil[]  $accueils
@@ -164,7 +166,7 @@ final class FactureHandler implements FactureHandlerInterface
         $this->attachRetard($facture, $accueils);
         $this->factureFactory->setEcoles($facture);
 
-        if (!$facture->getId()) {
+        if (! $facture->getId()) {
             $this->factureRepository->persist($facture);
         }
 
@@ -206,25 +208,6 @@ final class FactureHandler implements FactureHandlerInterface
             $this->facturePresenceRepository->persist($facturePresence);
             $facture->addFacturePresence($facturePresence);
         }
-    }
-
-    public function registerDataOnFacturePresence(
-        FactureInterface $facture,
-        PresenceInterface $presence,
-        FacturePresence $facturePresence
-    ): void {
-        $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
-        $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
-        $enfant = $presence->getEnfant();
-        if (($ecole = $enfant->getEcole()) !== null) {
-            $facture->ecolesListing[$ecole->getId()] = $ecole;
-        }
-        $facturePresence->setNom($enfant->getNom());
-        $facturePresence->setPrenom($enfant->getPrenom());
-        $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
-        $facturePresence->setOrdre($ordre);
-        $facturePresence->setAbsent($presence->getAbsent());
-        $facturePresence->setCoutBrut($this->presenceCalculator->getPrixByOrdre($presence, $ordre));
     }
 
     private function flush(): void

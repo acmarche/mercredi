@@ -5,14 +5,13 @@ namespace AcMarche\Mercredi\Pdf;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Service\Attribute\Required;
 
 trait PdfDownloaderTrait
 {
     public Pdf $pdf;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setPdf(Pdf $pdf): void
     {
         $this->pdf = $pdf;

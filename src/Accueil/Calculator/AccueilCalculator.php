@@ -9,11 +9,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class AccueilCalculator implements AccueilCalculatorInterface
 {
-    private ParameterBagInterface $parameterBag;
-
-    public function __construct(ParameterBagInterface $parameterBag)
-    {
-        $this->parameterBag = $parameterBag;
+    public function __construct(
+        private ParameterBagInterface $parameterBag
+    ) {
     }
 
     public function calculate(Accueil $accueil): float

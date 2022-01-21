@@ -8,42 +8,33 @@ use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\Registration\MessageHandler\RegisterCreatedHandler;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 final class RegistrationController extends AbstractController
 {
-    private UserPasswordHasherInterface $userPasswordEncoder;
-    private UserRepository $userRepository;
-    private RegisterCreatedHandler $registerCreatedHandler;
-
     public function __construct(
-        RegisterCreatedHandler $registerCreatedHandler,
-        UserPasswordHasherInterface $userPasswordEncoder,
-        UserRepository $userRepository,
+        private RegisterCreatedHandler $registerCreatedHandler,
+        private UserPasswordHasherInterface $userPasswordEncoder,
+        private UserRepository $userRepository,
         private MessageBusInterface $dispatcher
     ) {
-        $this->userPasswordEncoder = $userPasswordEncoder;
-        $this->userRepository = $userRepository;
-        $this->registerCreatedHandler = $registerCreatedHandler;
     }
 
-    /**
-     * @Route("/register", name="mercredi_front_register")
-     */
+    #[Route(path: '/register', name: 'mercredi_front_register')]
     public function register(Request $request): Response
     {
-        if (!$this->registerCreatedHandler->isOpen()) {
+        if (! $this->registerCreatedHandler->isOpen()) {
             return $this->redirectToRoute('mercredi_front_home');
         }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -72,10 +63,8 @@ final class RegistrationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/verify/email", name="app_verify_email")
-     */
-    public function verifyUserEmail(Request $request): Response
+    #[Route(path: '/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request): RedirectResponse
     {
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
@@ -85,7 +74,6 @@ final class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('mercredi_front_register');
         }
-
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('mercredi_front_register');

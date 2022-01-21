@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Relation\Message;
 
 final class RelationCreated
 {
-    private int $relationId;
-
-    public function __construct(int $relationId)
-    {
-        $this->relationId = $relationId;
+    public function __construct(
+        private int $relationId
+    ) {
     }
 
     public function getRelationId(): int

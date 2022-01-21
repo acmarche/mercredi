@@ -12,38 +12,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- */
+
 final class DefaultController extends AbstractController
 {
     use GetTuteurTrait;
     use OrganisationPropertyInitTrait;
 
-    private RelationUtils $relationUtils;
-    private SanteChecker $santeChecker;
-    private FactureRepository $factureRepository;
-
     public function __construct(
-        RelationUtils $relationUtils,
-        SanteChecker $santeChecker,
-        FactureRepository $factureRepository
+        private RelationUtils $relationUtils,
+        private SanteChecker $santeChecker,
+        private FactureRepository $factureRepository
     ) {
-        $this->relationUtils = $relationUtils;
-        $this->santeChecker = $santeChecker;
-        $this->factureRepository = $factureRepository;
     }
 
-    /**
-     * @Route("/", name="mercredi_parent_home")
-     * @IsGranted("ROLE_MERCREDI_PARENT")
-     */
+    #[Route(path: '/', name: 'mercredi_parent_home')]
+    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function default(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-
         $enfants = $this->relationUtils->findEnfantsByTuteur($this->tuteur);
         $this->santeChecker->isCompleteForEnfants($enfants);
         $tuteurIsComplete = TuteurUtils::coordonneesIsComplete($this->tuteur);
@@ -61,9 +49,7 @@ final class DefaultController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/nouveau", name="mercredi_parent_nouveau")
-     */
+    #[Route(path: '/nouveau', name: 'mercredi_parent_nouveau')]
     public function nouveau(): Response
     {
         return $this->render(

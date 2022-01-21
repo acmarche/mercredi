@@ -6,13 +6,15 @@ use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'sante_question')]
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository')]
-class SanteQuestion
+#[ORM\Entity(repositoryClass: SanteQuestionRepository::class)]
+class SanteQuestion implements Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -114,7 +116,7 @@ class SanteQuestion
 
     public function addReponse(SanteReponse $reponse): self
     {
-        if (!$this->reponse->contains($reponse)) {
+        if (! $this->reponse->contains($reponse)) {
             $this->reponse[] = $reponse;
             $reponse->setQuestion($this);
         }

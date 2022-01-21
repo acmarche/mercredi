@@ -8,11 +8,9 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 
 class CommunicationFactoryHotton implements CommunicationFactoryInterface
 {
-    private FactureRepository $factureRepository;
-
-    public function __construct(FactureRepository $factureRepository)
-    {
-        $this->factureRepository = $factureRepository;
+    public function __construct(
+        private FactureRepository $factureRepository
+    ) {
     }
 
     /**
@@ -65,7 +63,7 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
     public function generateForPlaine(Plaine $plaine, FactureInterface $facture): string
     {
         $communication = $plaine->getCommunication();
-        if (!$communication) {
+        if (! $communication) {
             return $plaine->getSlug().' '.$facture->getId();
         }
 

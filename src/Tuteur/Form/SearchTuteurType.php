@@ -17,7 +17,10 @@ final class SearchTuteurType extends AbstractType
                 SearchType::class,
                 [
                     'required' => false,
-                    'attr' => ['placeholder' => 'Nom, prénom ou email', 'autocomplete' => 'off'],
+                    'attr' => [
+                        'placeholder' => 'Nom, prénom ou email',
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -26,7 +29,9 @@ final class SearchTuteurType extends AbstractType
                 [
                     'label' => 'Afficher les parents archivés',
                     'required' => false,
-                    'label_attr' => ['class' => 'switch-custom'],
+                    'label_attr' => [
+                        'class' => 'switch-custom',
+                    ],
                 ]
             );
     }

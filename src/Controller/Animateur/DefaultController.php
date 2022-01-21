@@ -8,19 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController.
- *
- * @IsGranted("ROLE_MERCREDI_ANIMATEUR")
- */
+
+#[IsGranted(data: 'ROLE_MERCREDI_ANIMATEUR')]
 final class DefaultController extends AbstractController
 {
     use OrganisationPropertyInitTrait;
     use GetAnimateurTrait;
 
-    /**
-     * @Route("/", name="mercredi_animateur_home")
-     */
+    #[Route(path: '/', name: 'mercredi_animateur_home')]
     public function default(): Response
     {
         if (($response = $this->hasAnimateur()) !== null) {
@@ -30,9 +25,7 @@ final class DefaultController extends AbstractController
         return $this->redirectToRoute('mercredi_animateur_enfant_index');
     }
 
-    /**
-     * @Route("/nouveau", name="mercredi_animateur_nouveau")
-     */
+    #[Route(path: '/nouveau', name: 'mercredi_animateur_nouveau')]
     public function nouveau(): Response
     {
         return $this->render(

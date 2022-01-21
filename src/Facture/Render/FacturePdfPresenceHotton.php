@@ -12,21 +12,12 @@ use Twig\Environment;
 
 class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
 {
-    private Environment $environment;
-    private OrganisationRepository $organisationRepository;
-    private FactureUtils $factureUtils;
-    private FacturePresenceRepository $facturePresenceRepository;
-
     public function __construct(
-        Environment $environment,
-        OrganisationRepository $organisationRepository,
-        FactureUtils $factureUtils,
-        FacturePresenceRepository $facturePresenceRepository
+        private Environment $environment,
+        private OrganisationRepository $organisationRepository,
+        private FactureUtils $factureUtils,
+        private FacturePresenceRepository $facturePresenceRepository
     ) {
-        $this->environment = $environment;
-        $this->organisationRepository = $organisationRepository;
-        $this->factureUtils = $factureUtils;
-        $this->facturePresenceRepository = $facturePresenceRepository;
     }
 
     public function render(FactureInterface $facture): string
@@ -72,8 +63,15 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
                 'peda' => 0,
                 'mercredi' => 0,
                 'accueils' => [
-                    'Soir' => ['nb' => 0, 'cout' => 0],
-                    'Matin' => ['nb' => 0, 'cout' => 0],
+                    'Soir' => [
+                        'nb' => 0,
+                        'cout' => 0,
+                    ],
+                    'Matin' => [
+                        'nb' => 0,
+                        'cout' => 0,
+                        
+                    ],
                 ],
             ];
         }
@@ -132,7 +130,7 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
         if ($facturePresence->isPedagogique()) {
             ++$data['enfants'][$slug->toString()]['peda'];
         }
-        if (!$facturePresence->isPedagogique()) {
+        if (! $facturePresence->isPedagogique()) {
             ++$data['enfants'][$slug->toString()]['mercredi'];
         }
         $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCoutCalculated();

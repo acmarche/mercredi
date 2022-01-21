@@ -11,27 +11,20 @@ use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 
 final class SanteChecker
 {
-    private SanteQuestionRepository $santeQuestionRepository;
-    private SanteReponseRepository $santeReponseRepository;
-    private SanteHandler $santeHandler;
-
     public function __construct(
-        SanteQuestionRepository $santeQuestionRepository,
-        SanteReponseRepository $santeReponseRepository,
-        SanteHandler $santeHandler
+        private SanteQuestionRepository $santeQuestionRepository,
+        private SanteReponseRepository $santeReponseRepository,
+        private SanteHandler $santeHandler
     ) {
-        $this->santeQuestionRepository = $santeQuestionRepository;
-        $this->santeReponseRepository = $santeReponseRepository;
-        $this->santeHandler = $santeHandler;
     }
 
     public function identiteEnfantIsComplete(Enfant $enfant): bool
     {
-        if (!$enfant->getNom()) {
+        if (! $enfant->getNom()) {
             return false;
         }
 
-        if (!$enfant->getPrenom()) {
+        if (! $enfant->getPrenom()) {
             return false;
         }
 
@@ -44,7 +37,7 @@ final class SanteChecker
 
     public function isComplete(SanteFiche $santeFiche): bool
     {
-        if (!$santeFiche->getId()) {
+        if (! $santeFiche->getId()) {
             return false;
         }
 
@@ -57,7 +50,7 @@ final class SanteChecker
 
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
-            if (!$this->checkQuestionOk($question)) {
+            if (! $this->checkQuestionOk($question)) {
                 return false;
             }
         }
@@ -74,7 +67,7 @@ final class SanteChecker
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
-            if (!$this->checkQuestionOk($question)) {
+            if (! $this->checkQuestionOk($question)) {
                 $questionsnotOk[] = $question;
             }
         }
@@ -89,7 +82,7 @@ final class SanteChecker
             return false;
         }
         //si complement on verifie si mis
-        if (true === $santeQuestion->getComplement()) {
+        if ($santeQuestion->getComplement()) {
             //on repond non
             if (0 === (int) $santeQuestion->getReponseTxt()) {
                 return true;
@@ -98,7 +91,7 @@ final class SanteChecker
                 return false;
             }
 
-            return '' != trim($santeQuestion->getRemarque());
+            return '' !== trim($santeQuestion->getRemarque());
         }
 
         return true;

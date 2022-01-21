@@ -15,12 +15,10 @@ trait PhotoTrait
      * @Vich\UploadableField(mapping="mercredi_enfant_image", fileNameProperty="photoName")
      *
      * note This is not a mapped field of entity metadata, just a simple property.
-     * @Assert\Image(
-     *     maxSize="7M"
-     * )
      *
      * @var UploadedFile
      */
+    #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;
 
     /**
@@ -44,7 +42,7 @@ trait PhotoTrait
      *
      * @param File|UploadedFile $file
      */
-    public function setPhoto(?File $file = null): void
+    public function setPhoto(File|UploadedFile $file = null): void
     {
         $this->photo = $file;
 

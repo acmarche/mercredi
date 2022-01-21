@@ -12,15 +12,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class TuteurImport
 {
     private SymfonyStyle $io;
-    private TuteurRepository $tuteurRepository;
-    private MigrationRepository $migrationRepository;
 
     public function __construct(
-        TuteurRepository $tuteurRepository,
-        MigrationRepository $migrationRepository
+        private TuteurRepository $tuteurRepository,
+        private MigrationRepository $migrationRepository
     ) {
-        $this->tuteurRepository = $tuteurRepository;
-        $this->migrationRepository = $migrationRepository;
     }
 
     public function import(SymfonyStyle $io): void

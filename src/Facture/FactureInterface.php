@@ -22,6 +22,8 @@ interface FactureInterface
     public const OBJECT_ACCUEIL = 'accueil';
     public const OBJECT_PLAINE = 'plaine';
 
+    public function __toString(): string;
+
     public function getId(): ?int;
 
     public function getRue(): ?string;
@@ -39,8 +41,6 @@ interface FactureInterface
     public function getCommunication(): ?string;
 
     public function setCommunication(string $communication): self;
-
-    public function __toString(): string;
 
     public function getEnfants(): array;
 

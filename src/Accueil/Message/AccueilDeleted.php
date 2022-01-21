@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\Accueil\Message;
 
 final class AccueilDeleted
 {
-    private int $accueilId;
-
-    public function __construct(int $accueilId)
-    {
-        $this->accueilId = $accueilId;
+    public function __construct(
+        private int $accueilId
+    ) {
     }
 
     public function getAccueilId(): int

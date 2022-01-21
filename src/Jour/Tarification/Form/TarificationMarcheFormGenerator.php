@@ -10,13 +10,10 @@ use Twig\Environment;
 
 final class TarificationMarcheFormGenerator implements TarificationFormGeneratorInterface
 {
-    private FormFactoryInterface $formFactory;
-    private Environment $environment;
-
-    public function __construct(FormFactoryInterface $formFactory, Environment $environment)
-    {
-        $this->formFactory = $formFactory;
-        $this->environment = $environment;
+    public function __construct(
+        private FormFactoryInterface $formFactory,
+        private Environment $environment
+    ) {
     }
 
     public function generateForm(Jour $jour): FormInterface
@@ -28,7 +25,9 @@ final class TarificationMarcheFormGenerator implements TarificationFormGenerator
     {
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/jour/tarif/_detail_progressif.html.twig',
-            ['jour' => $jour]
+            [
+                'jour' => $jour,
+            ]
         );
     }
 }

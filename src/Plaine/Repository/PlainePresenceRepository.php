@@ -24,19 +24,6 @@ final class PlainePresenceRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Presence::class);
     }
 
-    private function createQBl(): QueryBuilder
-    {
-        return $this->createQueryBuilder('presence')
-            ->leftJoin('presence.jour', 'jour', 'WITH')
-            ->leftJoin('presence.enfant', 'enfant', 'WITH')
-            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
-            ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire', 'WITH')
-            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
-            ->leftJoin('jour.plaine', 'plaine', 'WITH')
-            ->leftJoin('presence.reduction', 'reduction', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
-    }
-
     /**
      * @return Enfant[]
      */
@@ -160,5 +147,18 @@ final class PlainePresenceRepository extends ServiceEntityRepository
             ->setParameter('plaine', $plaine)
             ->addOrderBy('enfant.nom')
             ->getQuery()->getResult();
+    }
+
+    private function createQBl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('presence')
+            ->leftJoin('presence.jour', 'jour', 'WITH')
+            ->leftJoin('presence.enfant', 'enfant', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire', 'WITH')
+            ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
+            ->leftJoin('presence.reduction', 'reduction', 'WITH')
+            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
     }
 }

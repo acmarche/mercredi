@@ -17,7 +17,7 @@ class ProcessUtils
         $process->run();
 
         // executes after the command finishes
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             var_dump($process);
             throw new ProcessFailedException($process);
         }

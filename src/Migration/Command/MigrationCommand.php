@@ -27,48 +27,23 @@ final class MigrationCommand extends Command
      * @var string
      */
     protected static $defaultName = 'mercredi:migration';
-    private ParametreImport $parametreImport;
-    private EnfantImport $enfantImport;
-    private TuteurImport $tuteurImport;
-    private UserImport $userImport;
-    private UserRepository $userRepository;
-    private UserPasswordHasherInterface $passwordHasher;
-    private FicheSanteImport $ficheSanteImport;
-    private PresenceImport $presenceImport;
-    private PlaineImport $plaineImport;
-    private PlainePresenceImport $plainePresenceImport;
-    private FactureImport $factureImport;
-    private PaiementImport $paiementImport;
 
     public function __construct(
-        ParametreImport $parametreImport,
-        UserImport $userImport,
-        TuteurImport $tuteurImport,
-        EnfantImport $enfantImport,
-        FicheSanteImport $ficheSanteImport,
-        PresenceImport $presenceImport,
-        UserRepository $userRepository,
-        PlaineImport $plaineImport,
-        PlainePresenceImport $plainePresenceImport,
-        FactureImport $factureImport,
-        UserPasswordHasherInterface $passwordHasher,
-        PaiementImport $paiementImport,
+        private ParametreImport $parametreImport,
+        private UserImport $userImport,
+        private TuteurImport $tuteurImport,
+        private EnfantImport $enfantImport,
+        private FicheSanteImport $ficheSanteImport,
+        private PresenceImport $presenceImport,
+        private UserRepository $userRepository,
+        private PlaineImport $plaineImport,
+        private PlainePresenceImport $plainePresenceImport,
+        private FactureImport $factureImport,
+        private UserPasswordHasherInterface $passwordHasher,
+        private PaiementImport $paiementImport,
         ?string $name = null
     ) {
         parent::__construct($name);
-
-        $this->parametreImport = $parametreImport;
-        $this->enfantImport = $enfantImport;
-        $this->tuteurImport = $tuteurImport;
-        $this->userImport = $userImport;
-        $this->userRepository = $userRepository;
-        $this->passwordHasher = $passwordHasher;
-        $this->ficheSanteImport = $ficheSanteImport;
-        $this->presenceImport = $presenceImport;
-        $this->plaineImport = $plaineImport;
-        $this->plainePresenceImport = $plainePresenceImport;
-        $this->factureImport = $factureImport;
-        $this->paiementImport = $paiementImport;
     }
 
     protected function configure(): void
@@ -83,7 +58,7 @@ final class MigrationCommand extends Command
         $symfonyStyle = new SymfonyStyle($input, $output);
         $this->parametreImport->setIo($symfonyStyle);
 
-        if ('all' == $input->getArgument('name')) {
+        if ('all' === $input->getArgument('name')) {
             $this->parametreImport->importAll();
             $this->userImport->import($symfonyStyle);
             $this->tuteurImport->import($symfonyStyle);
@@ -156,7 +131,9 @@ final class MigrationCommand extends Command
 
                 return Command::SUCCESS;
             case 'password':
-                $user = $this->userRepository->findOneBy(['username' => 'jfsenechal']);
+                $user = $this->userRepository->findOneBy([
+                    'username' => 'jfsenechal',
+                ]);
                 $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
                 $this->userRepository->flush();
 

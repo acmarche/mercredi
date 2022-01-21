@@ -16,27 +16,14 @@ use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 
 class FacturePlaineHandler implements FacturePlaineHandlerInterface
 {
-    private FactureFactory $factureFactory;
-    private CommunicationFactoryInterface $communicationFactory;
-    private FactureRepository $factureRepository;
-    private PlaineCalculatorInterface $plaineCalculator;
-    private FacturePresenceRepository $facturePresenceRepository;
-    private PlainePresenceRepository $plainePresenceRepository;
-
     public function __construct(
-        FactureFactory $factureFactory,
-        CommunicationFactoryInterface $communicationFactory,
-        PlainePresenceRepository $plainePresenceRepository,
-        FactureRepository $factureRepository,
-        PlaineCalculatorInterface $plaineCalculator,
-        FacturePresenceRepository $facturePresenceRepository
+        private FactureFactory $factureFactory,
+        private CommunicationFactoryInterface $communicationFactory,
+        private PlainePresenceRepository $plainePresenceRepository,
+        private FactureRepository $factureRepository,
+        private PlaineCalculatorInterface $plaineCalculator,
+        private FacturePresenceRepository $facturePresenceRepository
     ) {
-        $this->factureFactory = $factureFactory;
-        $this->communicationFactory = $communicationFactory;
-        $this->factureRepository = $factureRepository;
-        $this->plaineCalculator = $plaineCalculator;
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->plainePresenceRepository = $plainePresenceRepository;
     }
 
     public function newInstance(Plaine $plaine, Tuteur $tuteur): FactureInterface
@@ -59,7 +46,7 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
         $this->attachPresences($facture, $plaine, $presences);
         $this->factureFactory->setEcoles($facture);
 
-        if (!$facture->getId()) {
+        if (! $facture->getId()) {
             $this->factureRepository->persist($facture);
         }
 

@@ -4,11 +4,9 @@ namespace AcMarche\Mercredi\ServiceIterator;
 
 final class Register
 {
-    private iterable $secondaryFlows;
-
-    public function __construct(iterable $secondaryFlows)
-    {
-        $this->secondaryFlows = $secondaryFlows;
+    public function __construct(
+        private iterable $secondaryFlows
+    ) {
     }
 
     public function exe(): void

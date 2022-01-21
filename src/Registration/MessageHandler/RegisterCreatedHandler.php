@@ -19,33 +19,16 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 final class RegisterCreatedHandler implements MessageHandlerInterface
 {
     private FlashBagInterface $flashBag;
-    private UserRepository $userRepository;
-    private RegistrationMailerFactory $registrationMailerFactory;
-    private VerifyEmailHelperInterface $verifyEmailHelper;
-    private NotificationMailer $notificationMailer;
-    private ParameterBagInterface $parameterBag;
 
     public function __construct(
-        UserRepository $userRepository,
+        private UserRepository $userRepository,
         RequestStack $requestStack,
-        RegistrationMailerFactory $registrationMailerFactory,
-        VerifyEmailHelperInterface $verifyEmailHelper,
-        NotificationMailer $notificationMailer,
-        ParameterBagInterface $parameterBag
+        private RegistrationMailerFactory $registrationMailerFactory,
+        private VerifyEmailHelperInterface $verifyEmailHelper,
+        private NotificationMailer $notificationMailer,
+        private ParameterBagInterface $parameterBag
     ) {
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
-        $this->userRepository = $userRepository;
-        $this->registrationMailerFactory = $registrationMailerFactory;
-        $this->verifyEmailHelper = $verifyEmailHelper;
-        $this->notificationMailer = $notificationMailer;
-        $this->parameterBag = $parameterBag;
-    }
-
-    public function isOpen(): bool
-    {
-        $register = (bool) $this->parameterBag->get(Option::REGISTER);
-
-        return true == $register;
     }
 
     public function __invoke(RegisterCreated $registerCreated): void
@@ -76,6 +59,13 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         $this->flashBag->add('success', 'Votre compte a bien été créé, consultez votre boite mail');
+    }
+
+    public function isOpen(): bool
+    {
+        $register = (bool) $this->parameterBag->get(Option::REGISTER);
+
+        return true === $register;
     }
 
     /**

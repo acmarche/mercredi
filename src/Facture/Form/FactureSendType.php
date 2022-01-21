@@ -39,7 +39,10 @@ final class FactureSendType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => true,
-                    'attr' => ['rows' => 10, 'cols' => 50],
+                    'attr' => [
+                        'rows' => 10,
+                        'cols' => 50,
+                    ],
                 ]
             );
     }

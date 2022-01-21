@@ -18,15 +18,14 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/enfant")
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- */
+#[Route(path: '/enfant')]
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class EnfantController extends AbstractController
 {
     public function __construct(
@@ -39,20 +38,16 @@ final class EnfantController extends AbstractController
         private PlainePresenceRepository $plainePresenceRepository,
         private MessageBusInterface $dispatcher
     ) {
-
     }
 
-    /**
-     * @Route("/", name="mercredi_admin_enfant_index", methods={"GET", "POST"})
-     * @Route("/all/{all}", name="mercredi_admin_enfant_all", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'mercredi_admin_enfant_index', methods: ['GET', 'POST'])]
+    #[Route(path: '/all/{all}', name: 'mercredi_admin_enfant_all', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $form = $this->createForm(SearchEnfantType::class);
         $form->handleRequest($request);
         $enfants = [];
         $search = false;
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $this->searchHelper->saveSearch(SearchHelper::ENFANT_LIST, $data);
@@ -75,20 +70,19 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new/{id}", name="mercredi_admin_enfant_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/new/{id}', name: 'mercredi_admin_enfant_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Tuteur $tuteur): Response
     {
         $enfant = new Enfant();
         $form = $this->createForm(EnfantType::class, $enfant);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantHandler->newHandle($enfant, $tuteur);
             $this->dispatcher->dispatch(new EnfantCreated($enfant->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', [
+                'id' => $enfant->getId(),
+            ]);
         }
 
         return $this->render(
@@ -100,9 +94,7 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_enfant_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_enfant_show', methods: ['GET'])]
     public function show(Enfant $enfant): Response
     {
         $relations = $this->relationRepository->findByEnfant($enfant);
@@ -125,20 +117,19 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_enfant_edit", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_enfant_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Enfant $enfant): Response
     {
         $form = $this->createForm(EnfantType::class, $enfant);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->enfantRepository->flush();
 
             $this->dispatcher->dispatch(new EnfantUpdated($enfant->getId()));
 
-            return $this->redirectToRoute('mercredi_admin_enfant_show', ['id' => $enfant->getId()]);
+            return $this->redirectToRoute('mercredi_admin_enfant_show', [
+                'id' => $enfant->getId(),
+            ]);
         }
 
         return $this->render(
@@ -150,10 +141,8 @@ final class EnfantController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_enfant_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Enfant $enfant): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_enfant_delete', methods: ['POST'])]
+    public function delete(Request $request, Enfant $enfant): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
             $enfantId = $enfant->getId();

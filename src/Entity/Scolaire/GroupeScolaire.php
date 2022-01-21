@@ -8,35 +8,31 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @UniqueEntity(fields={"age_minimum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge minimum")
- * @UniqueEntity(fields={"age_maximum", "is_plaine"}, message="Déjà un groupe plaine avec cette âge maximum")
- */
 #[ORM\Table]
 #[ORM\UniqueConstraint(columns: ['age_minimum', 'is_plaine'])]
 #[ORM\UniqueConstraint(columns: ['age_maximum', 'is_plaine'])]
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository')]
-class GroupeScolaire
+#[ORM\Entity(repositoryClass: GroupeScolaireRepository::class)]
+#[UniqueEntity(fields: ['age_minimum', 'is_plaine'], message: 'Déjà un groupe plaine avec cette âge minimum')]
+#[UniqueEntity(fields: ['age_maximum', 'is_plaine'], message: 'Déjà un groupe plaine avec cette âge maximum')]
+class GroupeScolaire implements Stringable
 {
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
     use OrdreTrait;
-    /**
-     * @Assert\LessThan(propertyPath="age_maximum")
-     */
     #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
+    #[Assert\LessThan(propertyPath: 'age_maximum')]
     private ?float $age_minimum = null;
-    /**
-     * @Assert\GreaterThan(propertyPath="age_minimum")
-     */
     #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
+    #[Assert\GreaterThan(propertyPath: 'age_minimum')]
     private ?float $age_maximum = null;
     #[ORM\Column(type: 'boolean', length: 10, nullable: false)]
     private ?bool $is_plaine = false;
@@ -104,7 +100,7 @@ class GroupeScolaire
 
     public function addEnfant(Enfant $enfant): self
     {
-        if (!$this->enfants->contains($enfant)) {
+        if (! $this->enfants->contains($enfant)) {
             $this->enfants[] = $enfant;
             $enfant->setGroupeScolaire($this);
         }
@@ -132,7 +128,7 @@ class GroupeScolaire
 
     public function addAnneesScolaire(AnneeScolaire $anneesScolaire): self
     {
-        if (!$this->annees_scolaires->contains($anneesScolaire)) {
+        if (! $this->annees_scolaires->contains($anneesScolaire)) {
             $this->annees_scolaires[] = $anneesScolaire;
             $anneesScolaire->setGroupeScolaire($this);
         }
@@ -160,7 +156,7 @@ class GroupeScolaire
 
     public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if (!$this->plaine_groupes->contains($plaineGroupe)) {
+        if (! $this->plaine_groupes->contains($plaineGroupe)) {
             $this->plaine_groupes[] = $plaineGroupe;
             $plaineGroupe->setGroupeScolaire($this);
         }

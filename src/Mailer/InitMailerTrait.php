@@ -8,23 +8,20 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\RecipientInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 trait InitMailerTrait
 {
     private MailerInterface $mailer;
     private NotifierInterface $notifier;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setMailer(MailerInterface $mailer): void
     {
         $this->mailer = $mailer;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setNotifier(NotifierInterface $notifier): void
     {
         $this->notifier = $notifier;

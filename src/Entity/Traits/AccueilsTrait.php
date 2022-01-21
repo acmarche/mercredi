@@ -24,7 +24,7 @@ trait AccueilsTrait
 
     public function addAccueil(Accueil $accueil): self
     {
-        if (!$this->accueils->contains($accueil)) {
+        if (! $this->accueils->contains($accueil)) {
             $this->accueils[] = $accueil;
             $accueil->setEnfant($this);
         }

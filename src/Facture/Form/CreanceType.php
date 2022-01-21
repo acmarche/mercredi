@@ -39,7 +39,9 @@ class CreanceType extends AbstractType
                     'label' => 'Date de créance',
                     'widget' => 'single_text',
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(
@@ -49,7 +51,9 @@ class CreanceType extends AbstractType
                     'label' => 'Date de paiement',
                     'widget' => 'single_text',
                     'required' => false,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(

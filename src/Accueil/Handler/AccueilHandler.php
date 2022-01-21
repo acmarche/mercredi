@@ -14,20 +14,14 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class AccueilHandler
 {
-    private AccueilRepository $accueilRepository;
-    private EnfantRepository $enfantRepository;
-    private TuteurRepository $tuteurRepository;
     private FlashBagInterface $flashBag;
 
     public function __construct(
-        AccueilRepository $accueilRepository,
-        EnfantRepository $enfantRepository,
-        TuteurRepository $tuteurRepository,
+        private AccueilRepository $accueilRepository,
+        private EnfantRepository $enfantRepository,
+        private TuteurRepository $tuteurRepository,
         RequestStack $requestStack
     ) {
-        $this->accueilRepository = $accueilRepository;
-        $this->enfantRepository = $enfantRepository;
-        $this->tuteurRepository = $tuteurRepository;
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
     }
 
@@ -92,7 +86,7 @@ final class AccueilHandler
 
     private function updateAccueil(Accueil $accueilExistant, Accueil $accueilSubmited): void
     {
-        if (0 == $accueilSubmited->getDuree()) {
+        if (0 === $accueilSubmited->getDuree()) {
             $this->accueilRepository->remove($accueilExistant);
         } else {
             $accueilExistant->setHeure($accueilSubmited->getHeure());

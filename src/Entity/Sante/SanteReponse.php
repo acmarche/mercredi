@@ -14,21 +14,15 @@ class SanteReponse
 {
     use IdTrait;
     use IdOldTrait;
-    #[ORM\ManyToOne(targetEntity: SanteQuestion::class, inversedBy: 'reponse')]
-    #[ORM\JoinColumn(nullable: false)]
-    private SanteQuestion $question;
-    #[ORM\ManyToOne(targetEntity: SanteFiche::class, inversedBy: 'reponses', cascade: ['remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private SanteFiche $sante_fiche;
     #[ORM\Column(type: 'boolean')]
     private bool $reponse;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $remarque = null;
 
-    public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
-    {
-        $this->sante_fiche = $santeFiche;
-        $this->question = $santeQuestion;
+    public function __construct(
+        #[ORM\ManyToOne(targetEntity: SanteFiche::class, inversedBy: 'reponses', cascade: ['remove'])] #[ORM\JoinColumn(nullable: false)] private SanteFiche $sante_fiche,
+        #[ORM\ManyToOne(targetEntity: SanteQuestion::class, inversedBy: 'reponse')] #[ORM\JoinColumn(nullable: false)] private SanteQuestion $question
+    ) {
         $this->reponse = false;
     }
 

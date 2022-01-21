@@ -32,21 +32,29 @@ final class PageRepository extends ServiceEntityRepository
      */
     public function findAll(): array
     {
-        return $this->findBy([], ['position' => 'ASC']);
+        return $this->findBy([], [
+            'position' => 'ASC',
+        ]);
     }
 
     public function findHomePage(): ?Page
     {
-        return $this->findOneBy([self::SLUG_SYSTEM => 'home']);
+        return $this->findOneBy([
+            self::SLUG_SYSTEM => 'home',
+        ]);
     }
 
     public function findContactPage(): ?Page
     {
-        return $this->findOneBy([self::SLUG_SYSTEM => 'contact']);
+        return $this->findOneBy([
+            self::SLUG_SYSTEM => 'contact',
+        ]);
     }
 
     public function findModalitePage(): ?Page
     {
-        return $this->findOneBy([self::SLUG_SYSTEM => 'modalites-pratiques']);
+        return $this->findOneBy([
+            self::SLUG_SYSTEM => 'modalites-pratiques',
+        ]);
     }
 }

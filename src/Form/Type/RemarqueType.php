@@ -12,7 +12,9 @@ final class RemarqueType extends AbstractType
     {
         $optionsResolver->setDefaults(
             [
-                'attr' => ['rows' => 3],
+                'attr' => [
+                    'rows' => 3,
+                ],
                 'required' => false,
             ]
         );

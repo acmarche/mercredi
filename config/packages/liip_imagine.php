@@ -3,7 +3,15 @@
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->extension('liip_imagine', ['resolvers' => ['default' => ['web_path' => null]]]);
+    $containerConfigurator->extension('liip_imagine', [
+        'resolvers' => [
+            'default' => [
+                'web_path' => null,
+                
+                
+            ],
+        ],
+    ]);
 
     $containerConfigurator->extension(
         'liip_imagine',
@@ -12,7 +20,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'cache' => null,
                 'mercredi_thumb' => [
                     'quality' => 100,
-                    'filters' => ['thumbnail' => ['size' => [250, 188], 'mode' => 'inset']],
+                    'filters' => [
+                        'thumbnail' => [
+                            'size' => [250, 188],
+                            'mode' => 'inset',
+                            
+                        ],
+                    ],
+                    
                 ],
             ],
         ]

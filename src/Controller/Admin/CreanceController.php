@@ -8,27 +8,21 @@ use AcMarche\Mercredi\Facture\Form\CreanceType;
 use AcMarche\Mercredi\Facture\Repository\CreanceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @IsGranted("ROLE_MERCREDI_ADMIN")
- * @Route("/creance")
- */
+#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[Route(path: '/creance')]
 final class CreanceController extends AbstractController
 {
-    private CreanceRepository $creanceRepository;
-
     public function __construct(
-        CreanceRepository $creanceRepository
+        private CreanceRepository $creanceRepository
     ) {
-        $this->creanceRepository = $creanceRepository;
     }
 
-    /**
-     * @Route("/{id}", name="mercredi_admin_creance_index", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'mercredi_admin_creance_index', methods: ['GET'])]
     public function index(Tuteur $tuteur): Response
     {
         $creances = $this->creanceRepository->findByTuteur($tuteur);
@@ -42,23 +36,21 @@ final class CreanceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/new", name="mercredi_admin_creance_new", methods={"GET", "POST"})
-     */
+    #[Route(path: '/{id}/new', name: 'mercredi_admin_creance_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Tuteur $tuteur): Response
     {
         $creance = new Creance($tuteur);
-
         $form = $this->createForm(CreanceType::class, $creance);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->creanceRepository->persist($creance);
             $this->creanceRepository->flush();
 
             $this->addFlash('success', 'La créance a bien été ajoutée');
 
-            return $this->redirectToRoute('mercredi_admin_creance_show', ['id' => $creance->getId()]);
+            return $this->redirectToRoute('mercredi_admin_creance_show', [
+                'id' => $creance->getId(),
+            ]);
         }
 
         return $this->render(
@@ -70,9 +62,7 @@ final class CreanceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/show", name="mercredi_admin_creance_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}/show', name: 'mercredi_admin_creance_show', methods: ['GET'])]
     public function show(Creance $creance): Response
     {
         $tuteur = $creance->getTuteur();
@@ -86,20 +76,19 @@ final class CreanceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="mercredi_admin_creance_edit", methods={"GET", "POST"}).
-     */
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_creance_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Creance $creance): Response
     {
         $form = $this->createForm(CreanceType::class, $creance);
         $form->handleRequest($request);
         $tuteur = $creance->getTuteur();
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->creanceRepository->flush();
             $this->addFlash('success', 'La créance a bien été modifiée');
 
-            return $this->redirectToRoute('mercredi_admin_creance_show', ['id' => $creance->getId()]);
+            return $this->redirectToRoute('mercredi_admin_creance_show', [
+                'id' => $creance->getId(),
+            ]);
         }
 
         return $this->render(
@@ -112,13 +101,10 @@ final class CreanceController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/delete", name="mercredi_admin_creance_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Creance $creance): Response
+    #[Route(path: '/{id}/delete', name: 'mercredi_admin_creance_delete', methods: ['POST'])]
+    public function delete(Request $request, Creance $creance): RedirectResponse
     {
         $tuteur = $creance->getTuteur();
-
         if ($this->isCsrfTokenValid('delete'.$creance->getId(), $request->request->get('_token'))) {
             $this->creanceRepository->remove($creance);
             $this->creanceRepository->flush();
@@ -126,6 +112,8 @@ final class CreanceController extends AbstractController
             $this->addFlash('success', 'La créance a bien été supprimée');
         }
 
-        return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+        return $this->redirectToRoute('mercredi_admin_tuteur_show', [
+            'id' => $tuteur->getId(),
+        ]);
     }
 }

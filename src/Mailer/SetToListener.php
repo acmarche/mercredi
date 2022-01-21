@@ -12,7 +12,7 @@ class SetToListener implements EventSubscriberInterface
     public function onMessage(MessageEvent $event): void
     {
         $email = $event->getMessage();
-        if (!$email instanceof Email) {
+        if (! $email instanceof Email) {
             return;
         }
         //$email->bcc(new Address('xx@xx.be', 'Test mail'));

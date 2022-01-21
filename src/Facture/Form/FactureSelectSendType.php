@@ -24,7 +24,10 @@ final class FactureSelectSendType extends AbstractType
                 ChoiceType::class,
                 [
                     'placeholder' => 'Par mail ou par papier',
-                    'choices' => ['Mail' => 'mail', 'Papier' => 'papier'],
+                    'choices' => [
+                        'Mail' => 'mail',
+                        'Papier' => 'papier',
+                    ],
                     'required' => true,
                     'help' => 'Par papier, un pdf sera généré',
                 ]

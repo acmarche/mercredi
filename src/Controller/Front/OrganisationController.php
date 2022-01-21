@@ -7,24 +7,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class OrganisationController.
- *
- * @Route("/organisation")
- */
+
+#[Route(path: '/organisation')]
 final class OrganisationController extends AbstractController
 {
-    private OrganisationRepository $organisationRepository;
-
     public function __construct(
-        OrganisationRepository $organisationRepository
+        private OrganisationRepository $organisationRepository
     ) {
-        $this->organisationRepository = $organisationRepository;
     }
 
-    /**
-     * @Route("/show", name="mercredi_organisation_show")
-     */
+    #[Route(path: '/show', name: 'mercredi_organisation_show')]
     public function organisation(): Response
     {
         $organisation = $this->organisationRepository->getOrganisation();
@@ -37,9 +29,7 @@ final class OrganisationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/title", name="mercredi_organisation_title")
-     */
+    #[Route(path: '/title', name: 'mercredi_organisation_title')]
     public function organisationTitle(): Response
     {
         $organisation = $this->organisationRepository->getOrganisation();
@@ -52,9 +42,7 @@ final class OrganisationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/short", name="mercredi_organisation_short")
-     */
+    #[Route(path: '/short', name: 'mercredi_organisation_short')]
     public function organisationShort(): Response
     {
         $organisation = $this->organisationRepository->getOrganisation();

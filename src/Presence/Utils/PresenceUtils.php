@@ -16,15 +16,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class PresenceUtils
 {
-    private RelationRepository $relationRepository;
-    private ParameterBagInterface $parameterBag;
-
     public function __construct(
-        ParameterBagInterface $parameterBag,
-        RelationRepository $relationRepository
+        private ParameterBagInterface $parameterBag,
+        private RelationRepository $relationRepository
     ) {
-        $this->relationRepository = $relationRepository;
-        $this->parameterBag = $parameterBag;
     }
 
     public function getDeadLineDatePresence(): Carbon
@@ -154,14 +149,14 @@ final class PresenceUtils
         array_map(
             function ($presence) use ($plaines) {
                 $jour = $presence->getJour();
-                if (!$jour) {
+                if (! $jour) {
                     return null;
                 }
                 $plaine = $jour->getPlaine();
-                if (null === $plaine) {
+                if (! $plaine instanceof Plaine) {
                     return null;
                 }
-                if (!$plaines->contains($plaine)) {
+                if (! $plaines->contains($plaine)) {
                     $plaines->add($plaine);
                 }
             },

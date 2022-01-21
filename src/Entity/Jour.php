@@ -15,24 +15,22 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\PedagogiqueTrait;
 use AcMarche\Mercredi\Entity\Traits\PrixTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use DateTime;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @UniqueEntity("date_jour", "pedagogique", "plaine")
- */
 #[ORM\Table]
 #[ORM\UniqueConstraint(columns: ['date_jour', 'pedagogique', 'plaine_id'])]
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Jour\Repository\JourRepository')]
-class Jour implements TimestampableInterface
+#[ORM\Entity(repositoryClass: JourRepository::class)]
+#[UniqueEntity(fields: 'date_jour', message: 'pedagogique')]
+class Jour implements TimestampableInterface, Stringable
 {
     use IdTrait;
     use TimestampableTrait;
@@ -45,13 +43,6 @@ class Jour implements TimestampableInterface
     use AnimateursTrait;
     use PlaineTrait;
     use IdOldTrait;
-    /**
-     * @var DateTime|null
-     *
-     * @Assert\Type("datetime")
-     */
-    #[ORM\Column(name: 'date_jour', type: 'date')]
-    private ?DateTimeInterface $date_jour;
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
@@ -72,8 +63,9 @@ class Jour implements TimestampableInterface
     /**
      * @param DateTime|DateTimeImmutable|null $date_jour
      */
-    public function __construct(?DateTimeInterface $date_jour = null)
-    {
+    public function __construct(
+        #[ORM\Column(name: 'date_jour', type: 'date')] private ?\DateTimeInterface $date_jour = null
+    ) {
         $this->presences = new ArrayCollection();
         $this->animateurs = new ArrayCollection();
         $this->ecoles = new ArrayCollection();
@@ -82,7 +74,6 @@ class Jour implements TimestampableInterface
         $this->prix3 = 0;
         $this->forfait = 0;
         $this->pedagogique = false;
-        $this->date_jour = $date_jour;
     }
 
     public function __toString(): string
@@ -112,7 +103,7 @@ class Jour implements TimestampableInterface
 
     public function addPresence(Presence $presence): self
     {
-        if (!$this->presences->contains($presence)) {
+        if (! $this->presences->contains($presence)) {
             $this->presences[] = $presence;
             $presence->setJour($this);
         }
@@ -140,7 +131,7 @@ class Jour implements TimestampableInterface
 
     public function addEcole(Ecole $ecole): self
     {
-        if (!$this->ecoles->contains($ecole)) {
+        if (! $this->ecoles->contains($ecole)) {
             $this->ecoles[] = $ecole;
         }
 

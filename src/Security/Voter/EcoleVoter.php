@@ -20,29 +20,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class EcoleVoter extends Voter
 {
-    public UserInterface $user;
     public const INDEX = 'ecole_index';
     public const SHOW = 'ecole_show';
     public const ADD = 'ecole_add';
     public const EDIT = 'ecole_edit';
     public const DELETE = 'ecole_delete';
-
-    private Security $security;
+    public UserInterface $user;
     private ?Ecole $ecole = null;
     /**
      * @var Ecole[]|Collection
      */
     private iterable $ecoles;
 
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
+    public function __construct(
+        private Security $security
+    ) {
     }
 
     protected function supports($attribute, $subject): bool
     {
         //a cause de index pas d'ecole defini
-        if ($subject && !$subject instanceof Ecole) {
+        if ($subject && ! $subject instanceof Ecole) {
             return false;
         }
 
@@ -51,7 +49,7 @@ final class EcoleVoter extends Voter
 
     protected function voteOnAttribute($attribute, $ecole, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof UserInterface) {
+        if (! $token->getUser() instanceof UserInterface) {
             return false;
         }
 
@@ -61,26 +59,20 @@ final class EcoleVoter extends Voter
             return true;
         }
 
-        if (!$this->security->isGranted(MercrediSecurityRole::ROLE_ECOLE)) {
+        if (! $this->security->isGranted(MercrediSecurityRole::ROLE_ECOLE)) {
             return false;
         }
 
         $this->ecole = $ecole;
         $this->ecoles = $this->user->getEcoles();
 
-        switch ($attribute) {
-            case self::INDEX:
-                return $this->canIndex();
-            case self::SHOW:
-                return $this->canView();
-            case self::DELETE:
-            case self::ADD:
-                return false; //only admin
-            case self::EDIT:
-                return $this->canEdit();
-        }
-
-        return false;
+        return match ($attribute) {
+            self::INDEX => $this->canIndex(),
+            self::SHOW => $this->canView(),
+            self::DELETE, self::ADD => false,
+            self::EDIT => $this->canEdit(),
+            default => false,
+        };
     }
 
     private function canIndex(): bool
@@ -95,7 +87,7 @@ final class EcoleVoter extends Voter
 
     private function canEdit(): bool
     {
-        if (!$this->checkEcoles()) {
+        if (! $this->checkEcoles()) {
             return false;
         }
         if (null === $this->ecole) {
@@ -107,6 +99,6 @@ final class EcoleVoter extends Voter
 
     private function checkEcoles(): bool
     {
-        return 0 != \count($this->ecoles);
+        return 0 !== \count($this->ecoles);
     }
 }

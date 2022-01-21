@@ -12,13 +12,10 @@ use AcMarche\Mercredi\Utils\SortUtils;
 
 final class OrdreService
 {
-    private RelationRepository $relationRepository;
-    private PresenceRepository $presenceRepository;
-
-    public function __construct(RelationRepository $relationRepository, PresenceRepository $presenceRepository)
-    {
-        $this->relationRepository = $relationRepository;
-        $this->presenceRepository = $presenceRepository;
+    public function __construct(
+        private RelationRepository $relationRepository,
+        private PresenceRepository $presenceRepository
+    ) {
     }
 
     /**
@@ -34,7 +31,7 @@ final class OrdreService
         return null;
     }
 
-    public function getOrdreOnPresence(PresenceInterface $presence): float
+    public function getOrdreOnPresence(PresenceInterface $presence): int
     {
         /*
          * Ordre force sur la presence

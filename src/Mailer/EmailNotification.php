@@ -11,12 +11,14 @@ use Symfony\Component\Notifier\Recipient\RecipientInterface;
 
 class EmailNotification extends Notification implements EmailNotificationInterface
 {
-    private TemplatedEmail $templatedEmail;
-
-    public function __construct(TemplatedEmail $templatedEmail, string $subject = '', array $channels = [])
+    public function __construct(
+        private TemplatedEmail $templatedEmail,
+        string $subject = '',
+        array $channels = [
+        ]
+    )
     {
         parent::__construct($subject, $channels);
-        $this->templatedEmail = $templatedEmail;
     }
 
     public function asEmailMessage(EmailRecipientInterface $recipient, string $transport = null): ?EmailMessage

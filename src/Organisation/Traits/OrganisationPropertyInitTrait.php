@@ -4,15 +4,14 @@ namespace AcMarche\Mercredi\Organisation\Traits;
 
 use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use Symfony\Contracts\Service\Attribute\Required;
 
 trait OrganisationPropertyInitTrait
 {
     private OrganisationRepository $organisationRepository;
     private ?Organisation $organisation = null;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setorganisationRepository(OrganisationRepository $organisationRepository): void
     {
         $this->organisationRepository = $organisationRepository;

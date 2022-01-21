@@ -59,7 +59,9 @@ final class FactureEditType extends AbstractType
                     'label' => 'Date de la facture',
                     'widget' => 'single_text',
                     'required' => true,
-                    'attr' => ['autocomplete' => 'off'],
+                    'attr' => [
+                        'autocomplete' => 'off',
+                    ],
                 ]
             )
             ->add(

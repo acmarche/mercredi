@@ -31,7 +31,9 @@ final class ContactType extends AbstractType
                 'texte',
                 TextareaType::class,
                 [
-                    'attr' => ['rows' => 5],
+                    'attr' => [
+                        'rows' => 5,
+                    ],
                 ]
             );
     }

@@ -18,11 +18,9 @@ use Symfony\Component\Security\Core\Security;
 
 final class TuteurType extends AbstractType
 {
-    private Security $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
+    public function __construct(
+        private Security $security
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
@@ -48,35 +46,35 @@ final class TuteurType extends AbstractType
                 'rue',
                 TextType::class,
                 [
-                    'required' => !$isAdmin,
+                    'required' => ! $isAdmin,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => !$isAdmin,
+                    'required' => ! $isAdmin,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => !$isAdmin,
+                    'required' => ! $isAdmin,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    'required' => !$isAdmin,
+                    'required' => ! $isAdmin,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    'required' => !$isAdmin,
+                    'required' => ! $isAdmin,
                 ]
             )
             ->add(
@@ -115,7 +113,9 @@ final class TuteurType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false,
-                    'attr' => ['rows' => 4],
+                    'attr' => [
+                        'rows' => 4,
+                    ],
                 ]
             )
             ->add(

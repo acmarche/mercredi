@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PaiementTrait
 {
-    #[ORM\ManyToOne(targetEntity: 'AcMarche\Mercredi\Entity\Paiement')]
+    #[ORM\ManyToOne(targetEntity: Paiement::class)]
     private ?Paiement $paiement = null;
 
     public function getPaiement(): ?Paiement

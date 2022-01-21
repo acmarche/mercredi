@@ -18,26 +18,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class FactureImport
 {
-    private TuteurRepository $tuteurRepository;
-    private MigrationRepository $migrationRepository;
-    private FactureHandler $factureHandler;
-    private CommunicationFactoryInterface $communicationFactory;
-    private PresenceCalculatorInterface $presenceCalculator;
     private MercrediPdo $pdo;
     private SymfonyStyle $io;
 
     public function __construct(
-        TuteurRepository $tuteurRepository,
-        MigrationRepository $migrationRepository,
-        FactureHandler $factureHandler,
-        CommunicationFactoryInterface $communicationFactory,
-        PresenceCalculatorInterface $presenceCalculator
+        private TuteurRepository $tuteurRepository,
+        private MigrationRepository $migrationRepository,
+        private FactureHandler $factureHandler,
+        private CommunicationFactoryInterface $communicationFactory,
+        private PresenceCalculatorInterface $presenceCalculator
     ) {
-        $this->tuteurRepository = $tuteurRepository;
-        $this->migrationRepository = $migrationRepository;
-        $this->factureHandler = $factureHandler;
-        $this->communicationFactory = $communicationFactory;
-        $this->presenceCalculator = $presenceCalculator;
     }
 
     public function import(SymfonyStyle $io): void
@@ -50,7 +40,7 @@ class FactureImport
             $tuteur = $this->migrationRepository->getTuteur((int) $paiement->tuteur_id);
             $facture = $this->createFacture($paiement, $tuteur);
             $type = FactureInterface::OBJECT_PRESENCE;
-            if ('Plaine' == $paiement->type_paiement) {
+            if ('Plaine' === $paiement->type_paiement) {
                 $type = FactureInterface::OBJECT_PLAINE;
             }
             $this->treatment($facture, $paiement, $type);

@@ -13,24 +13,13 @@ use AcMarche\Mercredi\Reduction\Calculator\ReductionCalculator;
 
 class FactureCalculator implements FactureCalculatorInterface
 {
-    private FacturePresenceRepository $facturePresenceRepository;
-    private FactureReductionRepository $factureReductionRepository;
-    private FactureComplementRepository $factureComplementRepository;
-    private ReductionCalculator $reductionCalculator;
-    private FactureDecompteRepository $factureDecompteRepository;
-
     public function __construct(
-        FacturePresenceRepository $facturePresenceRepository,
-        FactureReductionRepository $factureReductionRepository,
-        FactureComplementRepository $factureComplementRepository,
-        FactureDecompteRepository $factureDecompteRepository,
-        ReductionCalculator $reductionCalculator
+        private FacturePresenceRepository $facturePresenceRepository,
+        private FactureReductionRepository $factureReductionRepository,
+        private FactureComplementRepository $factureComplementRepository,
+        private FactureDecompteRepository $factureDecompteRepository,
+        private ReductionCalculator $reductionCalculator
     ) {
-        $this->facturePresenceRepository = $facturePresenceRepository;
-        $this->factureReductionRepository = $factureReductionRepository;
-        $this->factureComplementRepository = $factureComplementRepository;
-        $this->reductionCalculator = $reductionCalculator;
-        $this->factureDecompteRepository = $factureDecompteRepository;
     }
 
     public function total(FactureInterface $facture): float
@@ -115,7 +104,7 @@ class FactureCalculator implements FactureCalculatorInterface
         return $reductionForfait;
     }
 
-    public function totalDecomptes(FactureInterface $facture): float
+    public function totalDecomptes(FactureInterface $facture): float|int
     {
         $total = 0;
         foreach ($this->factureDecompteRepository->findByFacture($facture) as $decompte) {
@@ -161,7 +150,7 @@ class FactureCalculator implements FactureCalculatorInterface
         return $complementPourcentage;
     }
 
-    public function totalPlaine(FactureInterface $facture): float
+    public function totalPlaine(FactureInterface $facture): float|int
     {
         $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
             $facture,

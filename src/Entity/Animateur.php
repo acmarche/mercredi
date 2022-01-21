@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity;
 
+use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Security\User;
@@ -20,9 +21,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 
-#[ORM\Entity(repositoryClass: 'AcMarche\Mercredi\Animateur\Repository\AnimateurRepository')]
-class Animateur implements TimestampableInterface
+#[ORM\Entity(repositoryClass: AnimateurRepository::class)]
+class Animateur implements TimestampableInterface, Stringable
 {
     use IdTrait;
     use NomTrait;

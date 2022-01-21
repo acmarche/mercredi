@@ -23,26 +23,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class AccueilVoter extends Voter
 {
-    public ?Tuteur $tuteurOfUser = null;
     public const ADD = 'accueil_new';
     public const SHOW = 'accueil_show';
     public const EDIT = 'accueil_edit';
     public const DELETE = 'accueil_delete';
-
-    private Security $security;
+    public ?Tuteur $tuteurOfUser = null;
     private ?UserInterface $user = null;
     private Enfant $enfant;
-    private RelationRepository $relationRepository;
-    private TuteurUtils $tuteurUtils;
 
     public function __construct(
-        Security $security,
-        RelationRepository $relationRepository,
-        TuteurUtils $tuteurUtils
+        private Security $security,
+        private RelationRepository $relationRepository,
+        private TuteurUtils $tuteurUtils
     ) {
-        $this->security = $security;
-        $this->relationRepository = $relationRepository;
-        $this->tuteurUtils = $tuteurUtils;
     }
 
     protected function supports($attribute, $subject): bool
@@ -56,7 +49,7 @@ final class AccueilVoter extends Voter
 
     protected function voteOnAttribute($attribute, $accueil, TokenInterface $token): bool
     {
-        if (!$token->getUser() instanceof UserInterface) {
+        if (! $token->getUser() instanceof UserInterface) {
             return false;
         }
 
@@ -83,7 +76,7 @@ final class AccueilVoter extends Voter
     {
         $ecoles = $this->user->getEcoles();
 
-        if (0 == \count($ecoles)) {
+        if (0 === (is_countable($ecoles) ? \count($ecoles) : 0)) {
             return false;
         }
 
@@ -94,7 +87,7 @@ final class AccueilVoter extends Voter
     {
         $this->tuteurOfUser = $this->tuteurUtils->getTuteurByUser($this->user);
 
-        if (!$this->tuteurOfUser instanceof Tuteur) {
+        if (! $this->tuteurOfUser instanceof Tuteur) {
             return false;
         }
 
