@@ -42,4 +42,5 @@ Feature: Gestion des questions
 
   Scenario: Je trie les questions
     Then I follow "Ordre d'affichage"
+    #Then print last response
     Then I should see "Tri des questions"

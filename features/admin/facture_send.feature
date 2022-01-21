@@ -15,8 +15,8 @@ Feature: Gestion des factures
   Scenario: J'envoie une facture d'un tuteur
     Then I follow "Simpson"
     Then I follow "Ses factures"
-    Then I should see "Mardi 6 Octobre 2020"
-    Then I follow "Mardi 6 Octobre 2020"
+    Then I should see "06-2020"
+    Then I follow "06-2020"
     Then I follow "Envoyer par mail"
     And I fill in "facture_send[sujet]" with "Voici votre facture"
     And I fill in "facture_send[texte]" with "Payer sur le compte x"

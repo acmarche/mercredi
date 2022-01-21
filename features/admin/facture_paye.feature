@@ -12,8 +12,8 @@ Feature: Gestion des factures
     Then I should see "Simpson"
     Then I follow "Simpson"
     Then I follow "Ses factures"
-    Then I should see "Mardi 6 Octobre 2020"
-    Then I follow "Mardi 6 Octobre 2020"
+    Then I should see "06-2020"
+    Then I follow "06-2020"
     Then I should see "mercredi 6 mai 2020"
 
   Scenario: Je paye totalement

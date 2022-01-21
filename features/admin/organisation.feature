@@ -25,6 +25,7 @@ Feature: Gestion de l' organisation
     And I fill in "organisation[rue]" with "Rue des Armoiries"
     And I fill in "organisation[code_postal]" with "6900"
     And I fill in "organisation[localite]" with "Hargimont"
+    And I fill in "organisation[email]" with "paradis@marche.be"
     And I press "Sauvegarder"
     Then I should see "Le paradis des enfants"
     Then I should see "Rue des Armoiries"
