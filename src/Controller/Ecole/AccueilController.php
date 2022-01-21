@@ -215,8 +215,8 @@ final class AccueilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $accueils = $request->request->get('accueils');
-            $tuteurs = $request->request->get('tuteurs');
+            $accueils = $request->request->all('accueils');
+            $tuteurs = $request->request->all('tuteurs');
 
             $this->accueilHandler->handleCollections($accueils, $tuteurs, $heure);
             $this->addFlash('success', 'Les acceuils ont bien été sauvegardés');
