@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -36,12 +37,15 @@ class Message implements TimestampableInterface
     #[ORM\Column(type: 'text', nullable: false)]
     private ?string $texte = null;
     private ?UploadedFile $file = null;
-    /**
-     * @var array|null
-     */
+
     #[ORM\Column(type: 'array', nullable: false)]
     private Collection $destinataires;
     public bool $attachCourriers;
+
+    public function __construct()
+    {
+        $this->destinataires = new ArrayCollection();
+    }
 
     public function getFrom(): ?string
     {
@@ -102,9 +106,9 @@ class Message implements TimestampableInterface
         return $this->destinataires;
     }
 
-    public function setDestinataires(Collection $destinataires): self
+    public function setDestinataires(array $destinataires): self
     {
-        $this->destinataires = $destinataires;
+        $this->destinataires = new ArrayCollection($destinataires);
 
         return $this;
     }

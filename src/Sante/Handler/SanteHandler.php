@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Sante\Factory\SanteFactory;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteBinder;
+use Doctrine\Common\Collections\Collection;
 
 final class SanteHandler
 {
@@ -42,11 +43,11 @@ final class SanteHandler
     /**
      * Si pas de reponse ou remarque on ne cree pas la reponse.
      *
-     * @param SanteQuestion[] $questions
+     * @param SanteQuestion[]|Collection $questions
      *
      * @return void|null
      */
-    public function handle(SanteFiche $santeFiche, array $questions): void
+    public function handle(SanteFiche $santeFiche, Collection $questions): void
     {
         $this->santeFicheRepository->flush();
         foreach ($questions as $question) {
