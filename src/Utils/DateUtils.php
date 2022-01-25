@@ -142,7 +142,7 @@ final class DateUtils
         return $date->toImmutable();
     }
 
-    public function createDateImmutableFromYearMonth(int $year, int $month): static|string
+    public function createDateImmutableFromYearMonth(int $year, int $month): CarbonImmutable
     {
         return CarbonImmutable::create($year, $month, 01)->locale('fr');
     }

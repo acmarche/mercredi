@@ -152,6 +152,7 @@ final class AccueilController extends AbstractController
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
             $weekSelected = $week;
         } else {
+            //pas de week quand on change de mois
             $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);
             $weekSelected = $date->format('W');
         }
