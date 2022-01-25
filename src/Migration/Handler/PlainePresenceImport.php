@@ -39,7 +39,7 @@ class PlainePresenceImport
                     }
                     if ($count > 1) {
                         $io->error(
-                            'Pas de tuteur id '.$plaine->getNom().' => '.$enfant.'PlaineEnfant id '.$plainePresence->id
+                            $plaine->getNom().';'.$enfant.';'.$plainePresence->id
                         );
                     }
                 } else {
