@@ -32,7 +32,7 @@ class PlainePresenceImport
             foreach ($plaine_enfants as $plaineEnfant) {
                 $jour = $this->migrationRepository->getJourPlaine($plaineEnfant->jour_id);
                 if (! $plaineEnfant->tuteur_id) {
-                    $io->error($plaine->getNom().' => '.$enfant);
+                    $io->error('Pas de tuteur id '.$plaine->getNom().' => '.$enfant. 'PlaineEnfant id '.$plaineEnfant->id);
                     $relations = $this->pdo->getAllWhere('enfant_tuteur', 'enfant_id = '.$data->enfant_id, false);
                     $count = is_countable($relations) ? \count($relations) : 0;
                     if ($count > 0) {
