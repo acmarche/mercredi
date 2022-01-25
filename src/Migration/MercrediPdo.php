@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Migration;
 use Exception;
 use PDO;
 use PDOStatement;
-use Symfony\Component\Dotenv\Dotenv;
 
 class MercrediPdo
 {
@@ -13,14 +12,12 @@ class MercrediPdo
 
     public function connect(): void
     {
-        new Dotenv();
         $dsn = 'mysql:host=localhost;dbname=mercredi';
         $username = $_ENV['MERCREDI_USER'];
         $password = $_ENV['MERCREDI_PASSWORD'];
         $options = [
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
         ];
-
         $this->bdd = new PDO($dsn, $username, $password, $options);
     }
 
@@ -51,8 +48,8 @@ class MercrediPdo
         // var_dump($sql);
         $query = $this->bdd->query($sql);
         $error = $this->bdd->errorInfo();
-        if ('0000' !== $error[0]) {
-            //    var_dump($error[2]);
+        if ('00000' !== $error[0]) {
+            var_dump($error);
             // mail('jf@marche.be', 'duobac error sql', $error[2]);
 
             throw new Exception($error[2]);
