@@ -47,10 +47,12 @@ final class AccueilController extends AbstractController
         $accueils = [];
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
+        $search = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $date = $data['date_jour'];
             $heure = $data['heure'];
+            $search = true;
             $accueils = $this->accueilRepository->findByDateAndHeure($date, $heure);
         }
 
@@ -59,6 +61,7 @@ final class AccueilController extends AbstractController
             [
                 'accueils' => $accueils,
                 'form' => $form->createView(),
+                'search' => $search,
             ]
         );
     }

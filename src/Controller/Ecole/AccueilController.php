@@ -55,6 +55,7 @@ final class AccueilController extends AbstractController
             return $response;
         }
         $accueils = [];
+        $search = false;
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -62,6 +63,7 @@ final class AccueilController extends AbstractController
             $date = $data['date_jour'];
             $heure = $data['heure'];
             $ecoles = $this->ecoles;
+            $search = true;
             $accueils = $this->accueilRepository->findByDateAndHeureAndEcoles($date, $heure, $ecoles);
         }
 
@@ -70,6 +72,7 @@ final class AccueilController extends AbstractController
             [
                 'accueils' => $accueils,
                 'form' => $form->createView(),
+                'search' => $search,
             ]
         );
     }
@@ -145,9 +148,18 @@ final class AccueilController extends AbstractController
         );
     }
 
-    #[Route(path: '/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}', name: 'mercredi_ecole_accueil_inscriptions', methods: ['GET', 'POST'])]
-    public function inscriptions(Request $request, Ecole $ecole, int $year, int $month, string $heure, int $week = 0): Response
-    {
+    #[Route(path: '/inscriptions/{id}/year/{year}/month/{month}/week/{week}/heure/{heure}', name: 'mercredi_ecole_accueil_inscriptions', methods: [
+        'GET',
+        'POST',
+    ])]
+    public function inscriptions(
+        Request $request,
+        Ecole $ecole,
+        int $year,
+        int $month,
+        string $heure,
+        int $week = 0
+    ): Response {
         if (0 !== $week) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
             $weekSelected = $week;
@@ -228,10 +240,10 @@ final class AccueilController extends AbstractController
             $dateRetard = $data['date_retard'];
             $heureRetard = $data['heure_retard'];
             if (($accueil = $this->accueilRepository->findOneByEnfantAndDayAndHour(
-                $enfant,
-                $dateRetard,
-                AccueilInterface::SOIR
-            )) === null) {
+                    $enfant,
+                    $dateRetard,
+                    AccueilInterface::SOIR
+                )) === null) {
                 $this->addFlash('danger', 'Aucun accueil encodé pour ce jour là. Veuillez d\'abord ajouté un accueil');
             } else {
                 $dateRetard->setTime($heureRetard->format('H'), $heureRetard->format('i'));

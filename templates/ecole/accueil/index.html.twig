@@ -3,7 +3,7 @@
 {% block body %}
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Accueils par date</h3>
+            <h3>{% if search %} {{ accueils|length }} {% endif %} Accueils par date</h3>
         </div>
         <div class="card-body">
             {{ form_start(form) }}
