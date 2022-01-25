@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 final class PlaineAdminHandler
 {
@@ -37,9 +38,9 @@ final class PlaineAdminHandler
     }
 
     /**
-     * @param Jour[]|ArrayCollection $newJours
+     * @param Jour[]|Collection $newJours
      */
-    public function handleEditJours(Plaine $plaine, array|ArrayCollection $newJours): void
+    public function handleEditJours(Plaine $plaine, array|Collection $newJours): void
     {
         foreach ($newJours as $jour) {
             if ($jour->getId()) {
