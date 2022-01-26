@@ -25,7 +25,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         $content = $this->prepareContent($facture);
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/pdf.html.twig',
+            '@AcMarcheMercrediAdmin/facture/marche/pdf.html.twig',
             [
                 'content' => $content,
             ]
@@ -41,7 +41,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         }
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/pdf.html.twig',
+            '@AcMarcheMercrediAdmin/facture/marche/pdf.html.twig',
             [
                 'content' => $content,
             ]
@@ -60,19 +60,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
             $data['enfants'][$slug] = [
                 'enfant' => $enfant,
                 'cout' => 0,
-                'peda' => 0,
                 'mercredi' => 0,
-                'accueils' => [
-                    'Soir' => [
-                        'nb' => 0,
-                        'cout' => 0,
-                    ],
-                    'Matin' => [
-                        'nb' => 0,
-                        'cout' => 0,
-                        
-                    ],
-                ],
             ];
         }
 
@@ -81,17 +69,9 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
             $facture,
             FactureInterface::OBJECT_PRESENCE
         );
-        $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_ACCUEIL
-        );
 
         foreach ($facturePresences as $facturePresence) {
             $data = $this->groupPresences($facturePresence, $data);
-        }
-
-        foreach ($factureAccueils as $factureAccueil) {
-            $data = $this->groupAccueils($factureAccueil, $data);
         }
 
         foreach ($data['enfants'] as $enfant) {
@@ -99,37 +79,21 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         }
 
         return $this->environment->render(
-            '@AcMarcheMercrediAdmin/facture/hotton/_presence_content_pdf.html.twig',
+            '@AcMarcheMercrediAdmin/facture/marche/_presence_content_pdf.html.twig',
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'organisation' => $organisation,
                 'data' => $data,
-                'countAccueils' => \count($factureAccueils),
                 'countPresences' => \count($facturePresences),
             ]
         );
-    }
-
-    private function groupAccueils(FacturePresence $facturePresence, array $data): array
-    {
-        $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
-        $slug = $this->factureUtils->slugger->slug($enfant);
-        $heure = $facturePresence->getHeure();
-        $duree = $facturePresence->getDuree();
-        $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCoutCalculated();
-        $data['enfants'][$slug->toString()]['accueils'][$heure]['nb'] += $duree;
-
-        return $data;
     }
 
     private function groupPresences(FacturePresence $facturePresence, array $data): array
     {
         $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
         $slug = $this->factureUtils->slugger->slug($enfant);
-        if ($facturePresence->isPedagogique()) {
-            ++$data['enfants'][$slug->toString()]['peda'];
-        }
         if (! $facturePresence->isPedagogique()) {
             ++$data['enfants'][$slug->toString()]['mercredi'];
         }
