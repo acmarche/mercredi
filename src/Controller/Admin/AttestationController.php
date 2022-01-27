@@ -4,7 +4,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
-use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
 final class AttestationController extends AbstractController
 {
-    use PdfDownloaderTrait;
-
     public function __construct(
         private FactureRepository $factureRepository,
         private FactureUtils $factureUtils
