@@ -1,8 +1,10 @@
 <?php
 
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
+use AcMarche\Mercredi\Facture\Render\FacturePdfPresenceHotton;
 use AcMarche\Mercredi\Jour\Tarification\Form\TarificationHottonFormGenerator;
 use AcMarche\Mercredi\Namer\DirectoryNamer;
 use AcMarche\Mercredi\Parameter\Option;
@@ -13,18 +15,18 @@ use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\LdapInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_EMAILS_FACTURE)%');
     $parameters->set(Option::EMAILS_FACTURE, '%env(MERCREDI_EMAILS_FACTURE)%');
-    $parameters->set(Option::REGISTER, (bool) '%env(MERCREDI_REGISTER)%');
+    $parameters->set(Option::REGISTER, (bool)'%env(MERCREDI_REGISTER)%');
     $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
     $parameters->set(Option::PRESENCE_PRIX1, '%env(MERCREDI_PRESENCE_PRIX1)%');
     $parameters->set(Option::PRESENCE_PRIX2, '%env(MERCREDI_PRESENCE_PRIX2)%');
@@ -55,6 +57,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(TarificationFormGeneratorInterface::class, TarificationHottonFormGenerator::class);
     $services->alias(PresenceCalculatorInterface::class, PrenceHottonCalculator::class);
     $services->alias(PlaineCalculatorInterface::class, PlaineHottonCalculator::class);
+    $services->alias(FacturePdfPresenceInterface::class, FacturePdfPresenceHotton::class);
 
     $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
 
