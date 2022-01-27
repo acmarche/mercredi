@@ -39,6 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
         'form_login' => [],
         'entry_point' => MercrediAuthenticator::class,
+        'switch_user' => true,
     ];
 
     if (interface_exists(LdapInterface::class)) {
@@ -64,7 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'security',
         [
             'role_hierarchy' => [
-                'ROLE_MERCREDI_ADMIN' => ['ROLE_MERCREDI'],
+                'ROLE_MERCREDI_ADMIN' => ['ROLE_MERCREDI', 'ROLE_ALLOWED_TO_SWITCH'],
                 'ROLE_MERCREDI_PARENT' => ['ROLE_MERCREDI'],
                 'ROLE_MERCREDI_ECOLE' => ['ROLE_MERCREDI'],
                 'ROLE_MERCREDI_ANIMATEUR' => ['ROLE_MERCREDI'],

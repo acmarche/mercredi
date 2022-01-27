@@ -19,7 +19,10 @@
 </head>
 <body class="d-flex flex-column h-100 {% block body_class %}{% endblock %}">
 <!-- Top nav bar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-to2p shadow-sm border-bottom d-print-none">
+<nav class="navbar navbar-expand-lg {% if is_granted('IS_IMPERSONATOR') %}
+    navbar-dark bg-dark
+    {% else %}navbar-light bg-light
+{% endif %} fixed-to2p shadow-sm border-bottom d-print-none">
     <div class="container">
         {% block brand %}
             <a class="navbar-brand" href="{{ path('mercredi_front_home') }}">
