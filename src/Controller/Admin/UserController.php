@@ -39,6 +39,7 @@ final class UserController extends AbstractController
     #[Route(path: '/', name: 'mercredi_admin_user_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
+        $users = [];
         $form = $this->createForm(UserSearchType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -47,8 +48,6 @@ final class UserController extends AbstractController
             $role = $data['role'];
 
             $users = $this->userRepository->findByNameOrRoles($nom, $role);
-        } else {
-            $users = $this->userRepository->findAllOrderByNom();
         }
 
         return $this->render(
@@ -56,6 +55,7 @@ final class UserController extends AbstractController
             [
                 'users' => $users,
                 'form' => $form->createView(),
+                'search' => $form->isSubmitted(),
             ]
         );
     }
