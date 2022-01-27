@@ -36,12 +36,11 @@ final class TuteurController extends AbstractController
     {
         $form = $this->createForm(SearchTuteurType::class);
         $form->handleRequest($request);
-        $search = false;
+
         $tuteurs = [];
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $this->searchHelper->saveSearch(SearchHelper::TUTEUR_LIST, $data);
-            $search = true;
             $tuteurs = $this->tuteurRepository->search($data['nom'], $data['archived']);
         }
 
@@ -50,7 +49,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteurs' => $tuteurs,
                 'form' => $form->createView(),
-                'search' => $search,
+                'search' => $form->isSubmitted()
             ]
         );
     }

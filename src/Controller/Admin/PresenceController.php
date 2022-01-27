@@ -55,7 +55,7 @@ final class PresenceController extends AbstractController
     public function index(Request $request): Response
     {
         $data = [];
-        $search = $displayRemarque = false;
+        $displayRemarque = false;
         $jour = null;
         $form = $this->createForm(SearchPresenceType::class);
         $form->handleRequest($request);
@@ -66,7 +66,6 @@ final class PresenceController extends AbstractController
             $displayRemarque = $dataForm['displayRemarque'];
             $ecole = $dataForm['ecole'];
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $dataForm);
-            $search = true;
             $data = $this->presenceHandler->searchAndGrouping($jour, $ecole, $displayRemarque);
         }
 
@@ -75,7 +74,7 @@ final class PresenceController extends AbstractController
             [
                 'datas' => $data,
                 'form' => $form->createView(),
-                'search' => $search,
+                'search' => $form->isSubmitted(),
                 'jour' => $jour,
                 'display_remarques' => $displayRemarque,
             ]
@@ -88,7 +87,6 @@ final class PresenceController extends AbstractController
     #[Route(path: '/by/month', name: 'mercredi_admin_presence_by_month', methods: ['GET', 'POST'])]
     public function indexByMonth(Request $request): Response
     {
-        $search = false;
         $mois = null;
         $listingPresences = [];
         $form = $this->createForm(SearchPresenceByMonthType::class);
@@ -107,7 +105,6 @@ final class PresenceController extends AbstractController
 
             $listingPresences = $this->listingPresenceByMonth->create($date);
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST_BY_MONTH, $data);
-            $search = true;
         }
 
         return $this->render(
@@ -115,7 +112,7 @@ final class PresenceController extends AbstractController
             [
                 'form' => $form->createView(),
                 'search_form' => $form->createView(),
-                'search' => $search,
+                'search' => $form->isSubmitted(),
                 'month' => $mois,
                 'listingPresences' => $listingPresences,
             ]

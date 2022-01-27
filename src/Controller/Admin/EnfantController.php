@@ -47,11 +47,9 @@ final class EnfantController extends AbstractController
         $form = $this->createForm(SearchEnfantType::class);
         $form->handleRequest($request);
         $enfants = [];
-        $search = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $this->searchHelper->saveSearch(SearchHelper::ENFANT_LIST, $data);
-            $search = true;
             $enfants = $this->enfantRepository->search(
                 $data['nom'],
                 $data['ecole'],
@@ -65,7 +63,7 @@ final class EnfantController extends AbstractController
             [
                 'enfants' => $enfants,
                 'form' => $form->createView(),
-                'search' => $search,
+                'search' => $form->isSubmitted(),
             ]
         );
     }

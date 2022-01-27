@@ -34,12 +34,11 @@ final class AnimateurController extends AbstractController
     {
         $form = $this->createForm(SearchAnimateurType::class);
         $form->handleRequest($request);
-        $search = false;
+
         $animateurs = [];
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $this->searchHelper->saveSearch(SearchHelper::TUTEUR_LIST, $data);
-            $search = true;
             $animateurs = $this->animateurRepository->search($data['nom']);
         }
 
@@ -48,7 +47,7 @@ final class AnimateurController extends AbstractController
             [
                 'animateurs' => $animateurs,
                 'form' => $form->createView(),
-                'search' => $search,
+                'search' => $form->isSubmitted()
             ]
         );
     }
