@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,7 +42,11 @@ final class SearchAccueilByDate extends AbstractType
                     'class' => Ecole::class,
                     'required' => false,
                 ]
-            );
+            )
+            ->add('groupEcole', CheckboxType::class, [
+                'label' => 'Grouper par école',
+                    'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Accueil\Message\AccueilCreated;
 use AcMarche\Mercredi\Accueil\Message\AccueilDeleted;
 use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Accueil\Utils\AccueilUtils;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
@@ -45,6 +46,8 @@ final class AccueilController extends AbstractController
     public function index(Request $request): Response
     {
         $accueils = [];
+        $grouped = false;
+        $date = null;
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -52,7 +55,13 @@ final class AccueilController extends AbstractController
             $date = $data['date_jour'];
             $heure = $data['heure'];
             $ecole = $data['ecole'];
+            $grouped = $data['groupEcole'];
             $accueils = $this->accueilRepository->findByDateHeureAndEcole($date, $heure, $ecole);
+            $count = count($accueils);
+
+            if ($grouped) {
+                $accueils = AccueilUtils::groupByEcole($accueils);
+            }
         }
 
         return $this->render(
@@ -61,6 +70,9 @@ final class AccueilController extends AbstractController
                 'accueils' => $accueils,
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),
+                'grouped' => $grouped,
+                'dateSelected' => $date,
+                'count' => $count,
             ]
         );
     }
