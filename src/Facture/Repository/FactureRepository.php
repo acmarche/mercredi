@@ -104,6 +104,7 @@ final class FactureRepository extends ServiceEntityRepository
             ->andWhere('facture.payeLe IS NOT NULL')
             ->andWhere('facture.mois LIKE :year')
             ->setParameter('year', '%'.$year.'%')
+            ->addOrderBy('facture.nom')
             ->getQuery()->getResult();
     }
 
