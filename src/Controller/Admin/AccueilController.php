@@ -48,6 +48,8 @@ final class AccueilController extends AbstractController
         $accueils = [];
         $grouped = false;
         $date = null;
+        $count =0;
+        $heure='';
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,6 +75,7 @@ final class AccueilController extends AbstractController
                 'grouped' => $grouped,
                 'dateSelected' => $date,
                 'count' => $count,
+                'heure' => $heure,
             ]
         );
     }

@@ -1,5 +1,5 @@
 {% if dateSelected %}
-    <h4>Accueils du {{ dateSelected|format_date('full') }}</h4>
+    <h4>Accueils du {{ dateSelected|format_date('full') }}{% if heure %} ({{ heure }}){% endif %}</h4>
 {% endif %}
 <table class="table table-bordered">
     <thead>
