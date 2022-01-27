@@ -52,8 +52,9 @@ final class AccueilController extends AbstractController
             $data = $form->getData();
             $date = $data['date_jour'];
             $heure = $data['heure'];
+            $ecole = $data['ecole'];
             $search = true;
-            $accueils = $this->accueilRepository->findByDateAndHeure($date, $heure);
+            $accueils = $this->accueilRepository->findByDateHeureAndEcole($date, $heure, $ecole);
         }
 
         return $this->render(

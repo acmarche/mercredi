@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Accueil\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
+use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Carbon\CarbonPeriod;
 use DateTimeInterface;
@@ -60,7 +61,7 @@ final class AccueilRepository extends ServiceEntityRepository
      */
     public function findByEnfantAndDaysAndHeure(Enfant $enfant, CarbonPeriod $weekPeriod, string $heure): array
     {
-        $days = array_map(fn ($date) => $date->toDateString(), $weekPeriod->toArray());
+        $days = array_map(fn($date) => $date->toDateString(), $weekPeriod->toArray());
 
         return $this->createQbl()
             ->andWhere('accueil.enfant = :enfant')
@@ -136,7 +137,7 @@ final class AccueilRepository extends ServiceEntityRepository
     /**
      * @return Accueil[]
      */
-    public function findByDateAndHeure(DateTimeInterface $date, ?string $heure): array
+    public function findByDateHeureAndEcole(DateTimeInterface $date, ?string $heure, ?Ecole $ecole): array
     {
         $qb = $this->createQbl()
             ->andWhere('accueil.date_jour = :date')
@@ -147,6 +148,12 @@ final class AccueilRepository extends ServiceEntityRepository
                 ->setParameter('heure', $heure)
                 ->getQuery()->getResult();
         }
+        if ($ecole) {
+            $qb->andWhere('enfant.ecole = :ecole')
+                ->setParameter('ecole', $ecole)
+                ->getQuery()->getResult();
+        }
+        $qb->orderBy('enfant.nom', 'ASC');
 
         return $qb->getQuery()->getResult();
     }
