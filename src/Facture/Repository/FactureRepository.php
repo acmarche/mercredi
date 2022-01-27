@@ -98,6 +98,18 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
+    public function findFacturesPaid(int $year): array
+    {
+        return $this->getQBl()
+            ->andWhere('facture.payeLe IS NOT NULL')
+            ->andWhere('facture.mois LIKE :year')
+            ->setParameter('year', '%'.$year.'%')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
     public function search(
         ?int $numero,
         ?string $tuteur,
