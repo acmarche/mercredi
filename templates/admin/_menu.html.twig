@@ -30,7 +30,11 @@
     <ul class="dropdown-menu" aria-labelledby="dropdown02">
         <li><a class="dropdown-item" href="{{ path('mercredi_admin_presence_index') }}">Listing</a></li>
         <li><a class="dropdown-item" href="{{ path('mercredi_admin_presence_by_month') }}">Par mois</a></li>
-        <li><a class="dropdown-item" href="{{ path('mercredi_admin_accueil_index') }}">Accueils des écoles</a>
+        {% if mercredi_accueil == 'true' %}
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_accueil_index') }}">Accueils des écoles</a>
+            </li>
+        {% endif %}
     </ul>
 </li>
 
@@ -39,16 +43,16 @@
        href="{{ path('mercredi_admin_plaine_index') }}">Les plaines</a>
 </li>
 
- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-euro-sign"></i> Les factures</a>
-        <ul class="dropdown-menu" aria-labelledby="dropdown03">
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_facture_index') }}">Rechercher</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_facture_new_month_all') }}">Générer</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_facture_send_select_month') }}">Envoyer</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_attestation') }}">Payés</a></li>
-        </ul>
- </li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-euro-sign"></i> Les factures</a>
+    <ul class="dropdown-menu" aria-labelledby="dropdown03">
+        <li><a class="dropdown-item" href="{{ path('mercredi_admin_facture_index') }}">Rechercher</a></li>
+        <li><a class="dropdown-item" href="{{ path('mercredi_admin_facture_new_month_all') }}">Générer</a></li>
+        <li><a class="dropdown-item" href="{{ path('mercredi_admin_facture_send_select_month') }}">Envoyer</a></li>
+        <li><a class="dropdown-item" href="{{ path('mercredi_admin_attestation') }}">Payés</a></li>
+    </ul>
+</li>
 
 {% if is_granted('ROLE_MERCREDI_ADMIN') %}
     <li class="nav-item dropdown">

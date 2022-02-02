@@ -27,6 +27,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::EMAIL_SENDER, '%env(MERCREDI_EMAILS_FACTURE)%');
     $parameters->set(Option::EMAILS_FACTURE, '%env(MERCREDI_EMAILS_FACTURE)%');
     $parameters->set(Option::REGISTER, (bool)'%env(MERCREDI_REGISTER)%');
+    $parameters->set(Option::ACCUEIL, (bool)'%env(MERCREDI_ACCUEIL)%');
+    $parameters->set(Option::PAIEMENT, (bool)'%env(MERCREDI_PAIEMENT)%');
     $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
     $parameters->set(Option::PRESENCE_PRIX1, '%env(MERCREDI_PRESENCE_PRIX1)%');
     $parameters->set(Option::PRESENCE_PRIX2, '%env(MERCREDI_PRESENCE_PRIX2)%');

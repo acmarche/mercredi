@@ -16,6 +16,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
             'globals' => [
                 'mercredi_register' => '%env(MERCREDI_REGISTER)%',
+                'mercredi_accueil' => '%env(MERCREDI_ACCUEIL)%',
+                'mercredi_paiement' => '%env(MERCREDI_PAIEMENT)%',
                 'presence_nb_days' => '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%',
                 'pedagogique_nb_days' => '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%',
                 'bootcdn' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css',

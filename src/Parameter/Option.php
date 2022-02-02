@@ -5,6 +5,8 @@ namespace AcMarche\Mercredi\Parameter;
 class Option
 {
     public const REGISTER = 'mercredi.register';
+    public const ACCUEIL = 'mercredi.accueil';
+    public const PAIEMENT = 'mercredi.paiement';
     public const ACCUEIL_PRIX = 'mercredi.accueil_prix';
     public const PRESENCE_PRIX1 = 'mercredi.presence_prix1';
     public const PRESENCE_PRIX2 = 'mercredi.presence_prix2';
