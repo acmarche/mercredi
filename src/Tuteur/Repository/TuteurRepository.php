@@ -35,7 +35,9 @@ final class TuteurRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('tuteur')
             ->leftJoin('tuteur.relations', 'relations', 'WITH')
             ->addSelect('relations')
-            ->andWhere('tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword OR tuteur.email_conjoint LIKE :keyword OR tuteur.email LIKE :keyword')
+            ->andWhere(
+                'tuteur.nom LIKE :keyword OR tuteur.prenom LIKE :keyword OR tuteur.email_conjoint LIKE :keyword OR tuteur.email LIKE :keyword'
+            )
             ->setParameter('keyword', '%'.$keyword.'%')
             ->andwhere('tuteur.archived = :archive')
             ->setParameter('archive', $archived)
@@ -117,5 +119,29 @@ final class TuteurRepository extends ServiceEntityRepository
             ->addGroupBy('tuteur.nom')
             ->addGroupBy('tuteur.prenom')
             ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Tuteur[]
+     */
+    public function findArchived(?string $nom): array
+    {
+        $qb = $this->createQueryBuilder('tuteur');
+        $qb->leftJoin('tuteur.relations', 'relations', 'WITH');
+        $qb->leftJoin('relations.enfant', 'enfant', 'WITH');
+        $qb->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH');
+        $qb->addSelect('relations', 'enfant', 'sante_fiche');
+
+        if ($nom) {
+            $qb->andwhere(
+                'tuteur.nom LIKE :nom OR tuteur.prenom LIKE :nom OR tuteur.nom_conjoint LIKE :nom 
+                OR tuteur.prenom_conjoint LIKE :nom OR tuteur.email LIKE :nom OR tuteur.email_conjoint LIKE :nom'
+            )
+                ->setParameter('nom', '%'.$nom.'%');
+        }
+
+        return $qb->andwhere('enfant.archive = 1')->orderBy('tuteur.nom')
+            ->getQuery()
+            ->getResult();
     }
 }
