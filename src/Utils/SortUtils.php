@@ -99,4 +99,32 @@ final class SortUtils
 
         return $data;
     }
+
+    /**
+     * @param Enfant[] $data
+     *
+     * @return Enfant[]
+     */
+    public static function sortByName(array $data): array
+    {
+        usort(
+            $data,
+            function ($enfantA, $enfantB) {
+                $nameA = $enfantA->getNom();
+                $nameB = $enfantB->getNom();
+
+                if ($nameA === $nameB) {
+                    if ($enfantA->getPrenom() > $enfantB->getPrenom()) {
+                        return +1;
+                    }
+
+                    return -1;
+                }
+
+                return $nameA > $nameB ? +1 : -1;
+            }
+        );
+
+        return $data;
+    }
 }
