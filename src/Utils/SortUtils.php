@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Utils;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Tuteur;
 
 final class SortUtils
 {
@@ -101,9 +102,9 @@ final class SortUtils
     }
 
     /**
-     * @param Enfant[] $data
+     * @param Enfant[]|Tuteur[] $data
      *
-     * @return Enfant[]
+     * @return Enfant[]|Tuteur[]|array
      */
     public static function sortByName(array $data): array
     {

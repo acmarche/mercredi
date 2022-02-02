@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use AcMarche\Mercredi\Utils\SortUtils;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -64,6 +65,7 @@ final class PresenceUtils
             $presences
         );
         $data = [];
+        $tuteurs = SortUtils::sortByName($tuteurs);
         foreach ($tuteurs as $tuteur) {
             $data[$tuteur->getId()] = $tuteur;
         }
@@ -96,6 +98,7 @@ final class PresenceUtils
             );
 
         $data = [];
+        $enfants = SortUtils::sortByName($enfants);
         foreach ($enfants as $enfant) {
             $data[$enfant->getId()] = $enfant;
         }
