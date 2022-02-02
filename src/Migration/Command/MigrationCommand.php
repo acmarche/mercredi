@@ -14,6 +14,7 @@ use AcMarche\Mercredi\Migration\Handler\PresenceImport;
 use AcMarche\Mercredi\Migration\Handler\TuteurImport;
 use AcMarche\Mercredi\Migration\Handler\UserImport;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,13 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AsCommand(name: 'mercredi:migration')]
 final class MigrationCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'mercredi:migration';
-
     public function __construct(
         private ParametreImport $parametreImport,
         private UserImport $userImport,
@@ -134,8 +131,8 @@ final class MigrationCommand extends Command
                 $user = $this->userRepository->findOneBy([
                     'username' => 'jfsenechal',
                 ]);
-                $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
-                $this->userRepository->flush();
+            //    $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
+             //   $this->userRepository->flush();
 
                 return Command::SUCCESS;
         }
