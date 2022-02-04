@@ -36,7 +36,7 @@ final class DefaultController extends AbstractController
     #[Route(path: '/menu/front', name: 'mercredi_front_menu_page')]
     public function menu(): Response
     {
-        $pages = $this->pageRepository->findAll();
+        $pages = $this->pageRepository->findToDisplayMenu();
 
         return $this->render(
             '@AcMarcheMercredi/front/_menu_top.html.twig',
