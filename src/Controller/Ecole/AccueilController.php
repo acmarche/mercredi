@@ -70,7 +70,7 @@ final class AccueilController extends AbstractController
             [
                 'accueils' => $accueils,
                 'form' => $form->createView(),
-                'search' => $form->isSubmitted()
+                'search' => $form->isSubmitted(),
             ]
         );
     }
@@ -160,11 +160,9 @@ final class AccueilController extends AbstractController
     ): Response {
         if (0 !== $week) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
-            $weekSelected = $week;
         } else {
             //pas de week quand on change de mois
             $date = $this->dateUtils->createDateImmutableFromYearMonth($year, $month);
-            $weekSelected = $date->format('W');
         }
         $weekPeriod = $this->dateUtils->getWeekByNumber($date, $week);
         $data = [];
@@ -181,14 +179,12 @@ final class AccueilController extends AbstractController
                     'duree' => $accueil->getDuree(),
                     'tuteur' => $accueil->getTuteur()->getId(),
                 ];
-                $weekAccueil = $accueil->getDateJour()->format('W');
-                if ($weekSelected === $weekAccueil) {
-                    $tuteurSelected = $accueil->getTuteur()->getId();
-                }
+                $tuteurSelected = $accueil->getTuteur()->getId();
             }
             $rows['tuteurSelected'] = $tuteurSelected;
             $data[$enfant->getId()] = $rows;
         }
+
         $form = $this->createForm(InscriptionsType::class, $data);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

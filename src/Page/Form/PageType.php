@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Page\Form;
 use AcMarche\Mercredi\Entity\Page;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,6 +23,17 @@ final class PageType extends AbstractType
                     'required' => true,
                     'attr' => [
                         'autocomplete' => 'off',
+                    ],
+                ]
+            )
+            ->add(
+                'menu',
+                CheckboxType::class,
+                [
+                    'label' => 'Afficher dans le menu',
+                    'required' => false,
+                    'attr' => [
+                        'help' => 'off',
                     ],
                 ]
             )

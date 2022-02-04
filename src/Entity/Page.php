@@ -27,6 +27,10 @@ class Page implements SluggableInterface, Stringable
     private ?string $slug_system = null;
     #[ORM\Column(type: 'smallint', nullable: true)]
     private ?int $position = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $menu;
+
     /**
      * @var Document[]
      */
@@ -36,6 +40,7 @@ class Page implements SluggableInterface, Stringable
     public function __construct()
     {
         $this->system = false;
+        $this->menu = true;
         $this->documents = new ArrayCollection();
     }
 
@@ -77,4 +82,15 @@ class Page implements SluggableInterface, Stringable
 
         return $this;
     }
+
+    public function isMenu(): bool
+    {
+        return $this->menu;
+    }
+
+    public function setMenu(bool $menu): void
+    {
+        $this->menu = $menu;
+    }
+
 }
