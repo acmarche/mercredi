@@ -29,9 +29,9 @@ final class DateUtils
     /**
      * @param string $mois 05/2020
      *
+     * @return DateTime|DateTimeImmutable
      * @throws Exception
      *
-     * @return DateTime|DateTimeImmutable
      */
     public static function createDateTimeFromDayMonth(string $mois): \DateTime
     {
@@ -171,5 +171,10 @@ final class DateUtils
         }
 
         return \count($birthdays) !== \count(array_unique($birthdays));
+    }
+
+    public static function dayIsWeek(DateTimeInterface $date): bool
+    {
+        return $date->format('N') < 6;
     }
 }

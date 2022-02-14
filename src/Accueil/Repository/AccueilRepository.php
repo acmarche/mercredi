@@ -141,18 +141,18 @@ final class AccueilRepository extends ServiceEntityRepository
     {
         $qb = $this->createQbl()
             ->andWhere('accueil.date_jour = :date')
-            ->setParameter('date', $date);
+            ->setParameter('date', $date->format('Y-m-d'));
 
         if ($heure) {
             $qb->andWhere('accueil.heure = :heure')
-                ->setParameter('heure', $heure)
-                ->getQuery()->getResult();
+                ->setParameter('heure', $heure);
         }
+
         if ($ecole) {
             $qb->andWhere('enfant.ecole = :ecole')
-                ->setParameter('ecole', $ecole)
-                ->getQuery()->getResult();
+                ->setParameter('ecole', $ecole);
         }
+
         $qb->orderBy('enfant.nom', 'ASC');
 
         return $qb->getQuery()->getResult();

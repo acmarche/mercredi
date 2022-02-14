@@ -179,7 +179,7 @@ final class AccueilController extends AbstractController
                     'duree' => $accueil->getDuree(),
                     'tuteur' => $accueil->getTuteur()->getId(),
                 ];
-                $tuteurSelected = $accueil->getTuteur()->getId();
+            //    $tuteurSelected = $accueil->getTuteur()->getId();
             }
             $rows['tuteurSelected'] = $tuteurSelected;
             $data[$enfant->getId()] = $rows;
