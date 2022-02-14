@@ -93,20 +93,20 @@ final class PresenceOneController extends AbstractController
                     $this->addFlash('danger', $e->getMessage());
                 }
             }
-        }
-        $ages = [
-            'all' => count($childs),
-            'mat' => 0,
-            'prim' => 0,
-        ];
 
+            $ages = [
+                'all' => count($childs),
+                'mat' => 0,
+                'prim' => 0,
+            ];
 
-        $ref = DateUtils::createDateTimeFromDayMonth($months[0].'/'.$year);
-        foreach ($childs as $child) {
-            if ($child->getAge($ref) > 6) {
-                $ages['prim']++;
-            } else {
-                $ages['mat']++;
+            $ref = DateUtils::createDateTimeFromDayMonth($months[0].'/'.$year);
+            foreach ($childs as $child) {
+                if ($child->getAge($ref) > 6) {
+                    $ages['prim']++;
+                } else {
+                    $ages['mat']++;
+                }
             }
         }
 
