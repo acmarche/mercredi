@@ -30,8 +30,7 @@ final class PresenceOneController extends AbstractController
     {
         $form = $this->createForm(SearchAccueilForQuarter::class, ['year' => date('Y')]);
         $form->handleRequest($request);
-        $data = [];
-        $childs = [];
+        $childs = $data = $ages = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
