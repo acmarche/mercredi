@@ -29,7 +29,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Table]
 #[ORM\UniqueConstraint(columns: ['date_jour', 'pedagogique', 'plaine_id'])]
 #[ORM\Entity(repositoryClass: JourRepository::class)]
-#[UniqueEntity(fields: 'date_jour', message: 'pedagogique')]
+#[UniqueEntity(fields: ['date_jour', 'pedagogique', 'plaine'], message: 'Cette valeur existe déjà')]
 class Jour implements TimestampableInterface, Stringable
 {
     use IdTrait;
@@ -43,6 +43,7 @@ class Jour implements TimestampableInterface, Stringable
     use AnimateursTrait;
     use PlaineTrait;
     use IdOldTrait;
+
     /**
      * J'ai mis la definition pour pouvoir mettre le cascade.
      *
@@ -59,13 +60,13 @@ class Jour implements TimestampableInterface, Stringable
     private Collection $animateurs;
     #[ORM\ManyToMany(targetEntity: Ecole::class)]
     private Collection $ecoles;
+    #[ORM\Column(name: 'date_jour', type: 'date')]
+    private ?\DateTimeInterface $date_jour = null;
 
-    /**
-     * @param DateTime|DateTimeImmutable|null $date_jour
-     */
     public function __construct(
-        #[ORM\Column(name: 'date_jour', type: 'date')] private ?\DateTimeInterface $date_jour = null
+        ?\DateTimeInterface $date_jour
     ) {
+        $this->date_jour = $date_jour;
         $this->presences = new ArrayCollection();
         $this->animateurs = new ArrayCollection();
         $this->ecoles = new ArrayCollection();
@@ -103,7 +104,7 @@ class Jour implements TimestampableInterface, Stringable
 
     public function addPresence(Presence $presence): self
     {
-        if (! $this->presences->contains($presence)) {
+        if (!$this->presences->contains($presence)) {
             $this->presences[] = $presence;
             $presence->setJour($this);
         }
@@ -131,7 +132,7 @@ class Jour implements TimestampableInterface, Stringable
 
     public function addEcole(Ecole $ecole): self
     {
-        if (! $this->ecoles->contains($ecole)) {
+        if (!$this->ecoles->contains($ecole)) {
             $this->ecoles[] = $ecole;
         }
 
