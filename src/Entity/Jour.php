@@ -64,7 +64,7 @@ class Jour implements TimestampableInterface, Stringable
     private ?\DateTimeInterface $date_jour = null;
 
     public function __construct(
-        ?\DateTimeInterface $date_jour
+        ?\DateTimeInterface $date_jour=null
     ) {
         $this->date_jour = $date_jour;
         $this->presences = new ArrayCollection();
