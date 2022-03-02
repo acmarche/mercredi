@@ -13,35 +13,16 @@ trait PhotoTrait
 {
     /**
      * @Vich\UploadableField(mapping="mercredi_enfant_image", fileNameProperty="photoName")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @var UploadedFile
      */
     #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $photoName = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $mime = null;
 
-    /**
-     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
-     *
-     * @param File|UploadedFile $file
-     */
     public function setPhoto(File|UploadedFile $file = null): void
     {
         $this->photo = $file;
