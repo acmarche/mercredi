@@ -28,6 +28,10 @@ final class AttestationController extends AbstractController
         $total = count($factures);
         $data = $this->factureUtils->groupByTuteur($factures);
 
+        foreach ($data as $tuteurId => $row) {
+            $data[$tuteurId]['factures_all'] = $this->factureRepository->findByTuteurAndYear($tuteurId, $year);
+        }
+
         return $this->render(
             '@AcMarcheMercredi/admin/attestation/index.html.Twig',
             [

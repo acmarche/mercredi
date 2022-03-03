@@ -13,18 +13,31 @@
                     <th>Nom</th>
                     <th>Nbre factures</th>
                     <th>Montant</th>
+                    <th>Email</th>
                 </tr>
                 </thead>
                 {% for row in data %}
                     <tr>
                         <td>
-                            <a href="{{ path('mercredi_admin_tuteur_show', {'id': row.tuteur.id}) }}">{{ row.tuteur }}</a>
+                            <a href="{{ path('mercredi_admin_facture_index_by_tuteur', {'id': row.tuteur.id}) }}">{{ row.tuteur }}</a>
+                            <br>
+                            <span class="text-muted">
+                                {{ row.tuteur.rue }} <br/>
+                                {{ row.tuteur.codepostal }} {{ row.tuteur.localite }}
+                            </span>
                         </td>
                         <td>
-                            {{ row.factures|length }}
+                            {{ row.factures|length }} / {{ row.factures_all|length }}
                         </td>
                         <td>
                             {{ row.total|format_currency('euros') }}
+                        </td>
+                        <td>
+                            {% if row.tuteur.users|length > 0 %}
+                                {{ row.tuteur.users.0.email }}
+                            {% else %}
+                                {{ row.tuteur.email }} {{ row.tuteur.emailConjoint }}
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

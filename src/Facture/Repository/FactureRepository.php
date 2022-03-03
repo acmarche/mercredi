@@ -183,4 +183,17 @@ final class FactureRepository extends ServiceEntityRepository
             ->setParameter('plaine', $plaine)
             ->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * @return Facture[]
+     */
+    public function findByTuteurAndYear(int $tuteurId, int $year): array
+    {
+        return $this->getQBl()
+            ->andWhere('facture.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteurId)
+            ->andWhere('facture.mois LIKE :year')
+            ->setParameter('year', '%'.$year.'%')
+            ->getQuery()->getResult();
+    }
 }
