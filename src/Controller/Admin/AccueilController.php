@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
+use AcMarche\Mercredi\Accueil\Form\AccueilRetardAdminTpe;
 use AcMarche\Mercredi\Accueil\Form\AccueilType;
 use AcMarche\Mercredi\Accueil\Form\SearchAccueilByDate;
 use AcMarche\Mercredi\Accueil\Handler\AccueilHandler;
@@ -48,8 +49,8 @@ final class AccueilController extends AbstractController
         $accueils = [];
         $grouped = false;
         $date = null;
-        $count =0;
-        $heure='';
+        $count = 0;
+        $heure = '';
         $form = $this->createForm(SearchAccueilByDate::class, []);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -196,5 +197,46 @@ final class AccueilController extends AbstractController
         return $this->redirectToRoute('mercredi_admin_enfant_show', [
             'id' => $enfant->getId(),
         ]);
+    }
+
+    #[Route(path: '/{id}/retard', name: 'mercredi_admin_accueil_retard', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'accueil_show', subject: 'accueil')]
+    public function retard(Request $request, Accueil $accueil): Response
+    {
+        $args = [
+            'heure_retard' => $accueil->getHeureRetard(),
+        ];
+        $enfant = $accueil->getEnfant();
+
+        $form = $this->createForm(AccueilRetardAdminTpe::class, $args);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $heureRetard = $data['heure_retard'];
+            $delete = $data['delete'];
+            if ($delete) {
+                $accueil->setHeureRetard(null);
+                $this->addFlash('success', 'Le retard a bien été supprimé');
+            } else {
+                $dateRetard = $accueil->getDateJour();
+                $dateRetard->setTime($heureRetard->format('H'), $heureRetard->format('i'));
+                $accueil->setHeureRetard($dateRetard);
+                $this->addFlash('success', 'Le retard a bien été ajouté');
+            }
+            $this->accueilRepository->flush();
+
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [
+                'id' => $accueil->getId(),
+            ]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/accueil/retard.html.twig',
+            [
+                'enfant' => $enfant,
+                'form' => $form->createView(),
+            ]
+        );
     }
 }
