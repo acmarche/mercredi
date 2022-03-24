@@ -24,16 +24,15 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 final class EnfantType extends AbstractType
 {
-    public function __construct(
-        private Security $security
-    ) {
+    public function __construct(private Security $security)
+    {
     }
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $year = new DateTime('today');
         $year = $year->format('Y');
-        $isAdmin = ! $this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
+        $isAdmin = !$this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
 
         $formBuilder
             ->add(
@@ -165,6 +164,7 @@ final class EnfantType extends AbstractType
                 VichImageType::class,
                 [
                     'required' => false,
+                    'image_uri' => false,
                 ]
             );
     }
