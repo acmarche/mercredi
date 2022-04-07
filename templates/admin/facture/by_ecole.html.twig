@@ -4,26 +4,61 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Rechercher des factures {% if search %} <span
+            <h3>Factures par ecoles {% if search %} <span
                         class="badge bg-info">{{ factures|length }}</span> {% endif %}</h3>
         </div>
 
         <div class="card-body">
 
-            {% include '@AcMarcheMercredi/admin/facture/_search.html.twig' %}
+            {{ form_start(form, { 'attr': {'class': 'row row-cols-lg-auto g-1 align-items-center hidden-print'}}) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.mois, {label_attr: {class: 'sr-only'} }) }}
+            <div class="col-12"></div>
+            {{ form_row(form.ecole, {label_attr: {class: 'sr-only'} }) }}
+            <div class="col-12">
+                <button class="btn btn-primary ml-2 mb-3" type="submit"><i class="fas fa-search"></i> Rechercher
+                </button>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+            <br/>
 
             {% if search %}
+                <h4>Groupage par ecole</h4>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Ecole</th>
+                        <th>Montant</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ecole, montant in group %}
+                        <tr>
+                            <td>
+                                {{ ecole }}
+                            </td>
+                            <td>
+                                {{ montant }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>Total</th>
+                        <td>{{ totalGroup }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <br/><br/>
+
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <th>Numéro</th>
                         <th>Mois</th>
-                        <th>Facturé à</th>
                         <th>Enfants</th>
                         <th>Ecoles</th>
-                        <th>Payé le</th>
-                        <th>Envoyé le</th>
-                        <th>Communication</th>
                         <th>Montant</th>
                     </tr>
                     </thead>
@@ -38,22 +73,8 @@
                             <td>
                                 {{ facture.mois }}
                             </td>
-                            <td>
-                                <a href="{{ path('mercredi_admin_tuteur_show', { 'id': facture.tuteur.id }) }}">
-                                    {{ facture.tuteur }}
-                                </a>
-                            </td>
                             <td>{{ facture.enfants|join(',') }}</td>
                             <td>{{ facture.ecoles|join(',') }}</td>
-                            <td>
-                                {{ facture.payeLe ? facture.payeLe | format_date('full') }}
-                            </td>
-                            <td>
-                                {{ facture.envoyeLe ? facture.envoyeLe | format_date('medium') }}
-                            </td>
-                            <td>
-                                {{ facture.communication }}
-                            </td>
                             <td>
                                 {% if facture.factureDetailDto %}
                                     {{ facture.factureDetailDto.total|format_currency('euro') }}
@@ -62,7 +83,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="9">
+                            <td colspan="5">
                                 Aucune facture trouvée
                             </td>
                         </tr>
@@ -70,7 +91,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th colspan="8"><strong>Total des factures</strong></th>
+                        <th colspan="4"><strong>Total des factures</strong></th>
                         <td>{{ total|format_currency('euro') }}</td>
                     </tr>
                     </tfoot>

@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Form\FactureEditType;
 use AcMarche\Mercredi\Facture\Form\FactureManualType;
 use AcMarche\Mercredi\Facture\Form\FacturePayerType;
+use AcMarche\Mercredi\Facture\Form\FactureSearchByEcoleType;
 use AcMarche\Mercredi\Facture\Form\FactureSearchType;
 use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
 use AcMarche\Mercredi\Facture\Message\FactureCreated;
@@ -120,8 +121,8 @@ final class FactureController extends AbstractController
         $form = $this->createForm(FactureManualType::class, $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = (array) $request->request->all('presences');
-            $accueilsF = (array) $request->request->all('accueils');
+            $presencesF = (array)$request->request->all('presences');
+            $accueilsF = (array)$request->request->all('accueils');
             $this->factureHandler->handleManually($facture, $presencesF, $accueilsF);
 
             $this->dispatcher->dispatch(new FactureCreated($facture->getId()));
@@ -285,5 +286,47 @@ final class FactureController extends AbstractController
         return $this->redirectToRoute('mercredi_admin_tuteur_show', [
             'id' => $tuteur->getId(),
         ]);
+    }
+
+    #[Route(path: '/byecole', name: 'mercredi_admin_facture_by_ecole', methods: ['GET', 'POST'])]
+    public function byEcoles(Request $request): Response
+    {
+        $factures = [];
+        $form = $this->createForm(FactureSearchByEcoleType::class);
+        $form->handleRequest($request);
+        $total = 0;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dataForm = $form->getData();
+            $factures = $this->factureRepository->byEcoleAndMonth(
+                $dataForm['ecole'],
+                $dataForm['mois'],
+            );
+        }
+        foreach ($factures as $facture) {
+            $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
+            $total += $facture->factureDetailDto->total;
+        }
+
+        $group = [];
+        $totalGroup = 0;
+        foreach ($factures as $facture) {
+            if (!isset($group[$facture->getEcoles()])) {
+                $group[$facture->getEcoles()] = 0;
+            }
+            $group[$facture->getEcoles()] += $facture->factureDetailDto->total;
+            $totalGroup += $facture->factureDetailDto->total;
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/by_ecole.html.twig',
+            [
+                'factures' => $factures,
+                'form' => $form->createView(),
+                'search' => $form->isSubmitted(),
+                'total' => $total,
+                'group' => $group,
+                'totalGroup' => $totalGroup,
+            ]
+        );
     }
 }

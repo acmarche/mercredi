@@ -196,4 +196,26 @@ final class FactureRepository extends ServiceEntityRepository
             ->setParameter('year', '%'.$year.'%')
             ->getQuery()->getResult();
     }
+
+    /**
+     * @return Facture[]
+     */
+    public function byEcoleAndMonth(
+        ?Ecole $ecole,
+       ?string $monthYear = null,
+    ): array {
+        $queryBuilder = $this->getQBl();
+
+        if (null !== $ecole) {
+            $queryBuilder->andWhere('facture.ecoles LIKE :ecole')
+                ->setParameter('ecole', '%'.$ecole.'%');
+        }
+
+        if (null !== $monthYear) {
+            $queryBuilder->andWhere('facture.mois = :monthYear')
+                ->setParameter('monthYear', $monthYear);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
