@@ -114,13 +114,21 @@
             </tr>
             </tbody>
             <tfoot>
+
+            </tfoot>
+        </table>
+
+        {% include '@AcMarcheMercredi/admin/facture/pdf/_complements.html.twig' %}
+        {% include '@AcMarcheMercredi/admin/facture/pdf/_reductions.html.twig' %}
+        {% include '@AcMarcheMercredi/admin/facture/pdf/_decomptes.html.twig' %}
+
+        <table class="table table-bordered">
             <tr>
                 <th>Total à payer</th>
                 <td class="text-end" colspan="{{ data.enfants|length }}">
-                    <strong>{{ data.cout | format_currency('eur') }}</strong>
+                    <strong>{{ dto.total | format_currency('eur') }}</strong>
                 </td>
             </tr>
-            </tfoot>
         </table>
 
         <p class="text-center">

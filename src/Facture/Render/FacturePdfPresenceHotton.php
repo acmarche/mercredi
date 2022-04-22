@@ -2,10 +2,14 @@
 
 namespace AcMarche\Mercredi\Facture\Render;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureDecompteRepository;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureReductionRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Twig\Environment;
@@ -16,7 +20,11 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
         private Environment $environment,
         private OrganisationRepository $organisationRepository,
         private FactureUtils $factureUtils,
-        private FacturePresenceRepository $facturePresenceRepository
+        private FacturePresenceRepository $facturePresenceRepository  ,
+        private FactureReductionRepository $factureReductionRepository,
+        private FactureComplementRepository $factureComplementRepository,
+        private FactureCalculatorInterface $factureCalculator,
+        private FactureDecompteRepository $factureDecompteRepository
     ) {
     }
 
@@ -98,6 +106,12 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
             $data['cout'] += $enfant['cout'];
         }
 
+        $factureReductions = $this->factureReductionRepository->findByFacture($facture);
+        $factureComplements = $this->factureComplementRepository->findByFacture($facture);
+        $factureDecomptes = $this->factureDecompteRepository->findByFacture($facture);
+
+        $dto = $this->factureCalculator->createDetail($facture);
+
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/hotton/_presence_content_pdf.html.twig',
             [
@@ -107,6 +121,10 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
                 'data' => $data,
                 'countAccueils' => \count($factureAccueils),
                 'countPresences' => \count($facturePresences),
+                'factureReductions' => $factureReductions,
+                'factureComplements' => $factureComplements,
+                'factureDecomptes' => $factureDecomptes,
+                'dto' => $dto,
             ]
         );
     }

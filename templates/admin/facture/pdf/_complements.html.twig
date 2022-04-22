@@ -1,0 +1,24 @@
+{% if factureComplements | length > 0 %}
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th colspan="2">Complément(s)</th>
+        </tr>
+        </thead>
+        {% for complement in factureComplements %}
+            <tr>
+                <td>
+                    {{ complement.nom }}
+                </td>
+                <td class="text-end">
+                    {% if complement.pourcentage %}
+                        {{ complement.pourcentage| format_number }} %
+                    {% endif %}
+                    {% if complement.forfait %}
+                        {{ complement.forfait|format_currency('eur') }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

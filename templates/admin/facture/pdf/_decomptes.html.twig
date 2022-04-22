@@ -1,0 +1,19 @@
+{% if factureDecomptes | length > 0 %}
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th colspan="2">Décompte(s)</th>
+        </tr>
+        </thead>
+        {% for decompte in factureDecomptes %}
+            <tr>
+                <td>
+                    {{ decompte.payeLe|format_date('full') }}
+                </td>
+                <td>
+                    {{ decompte.montant|format_currency('eur') }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
