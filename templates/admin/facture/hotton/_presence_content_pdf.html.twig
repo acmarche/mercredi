@@ -32,7 +32,7 @@
             <br/>
             <div>Implantation scolaire {{ facture.ecoles }}</div>
         </div>
-        <p class="mt-5">
+        <p class="mt-3">
             Nous vous invitons à verser le montant mentionné ci-dessous dans les 30 jours.
             <br/><br/>
             Le détail est consultable, en ligne, via votre compte ATL (www.atl-hotton.be).
@@ -113,9 +113,6 @@
                 {% endfor %}
             </tr>
             </tbody>
-            <tfoot>
-
-            </tfoot>
         </table>
 
         {% include '@AcMarcheMercredi/admin/facture/pdf/_complements.html.twig' %}
