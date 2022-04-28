@@ -17,7 +17,11 @@
                     {{ accueil.enfant }}
                 </a>
             </td>
-            <td>{{ accueil.dateJour| format_date('full') }}</td>
+            <td>
+                <a href="{{ path('mercredi_admin_accueil_show', {'id': accueil.id}) }}">
+                    {{ accueil.dateJour| format_date('full') }}
+                </a>
+            </td>
             <td>{{ accueil.heure }}</td>
             <td>{{ accueil.tuteur }}</td>
             <td>{{ accueil.enfant ? accueil.enfant.ecole : '' }}</td>
