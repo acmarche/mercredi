@@ -22,9 +22,6 @@ class Message implements TimestampableInterface
 
     #[Assert\NotBlank]
     private ?string $from = null;
-    /**
-     * Assert\NotBlank().
-     */
     private ?string $to = null;
     #[ORM\Column(type: 'text', nullable: false)]
     #[Assert\NotBlank]
@@ -35,7 +32,7 @@ class Message implements TimestampableInterface
     private ?UploadedFile $file = null;
 
     #[ORM\Column(type: 'array', nullable: false)]
-    private Collection $destinataires;
+    private Collection|array $destinataires;
 
     public function __construct()
     {
