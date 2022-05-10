@@ -93,7 +93,7 @@ class Message implements TimestampableInterface
         $this->file = $file;
     }
 
-    public function getDestinataires(): Collection
+    public function getDestinataires(): Collection|array
     {
         return $this->destinataires;
     }
