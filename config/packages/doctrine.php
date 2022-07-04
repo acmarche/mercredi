@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Config\DoctrineConfig;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\Env;
+//use function Symfony\Component\DependencyInjection\Loader\Configurator\Env;
 
 return static function (DoctrineConfig $doctrine) {
 
