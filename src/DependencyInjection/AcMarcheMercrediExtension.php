@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-final class AcMarcheMercrediExtension extends Extension implements PrependExtensionInterface
+final class AcMarcheMercrediExtension
 {
     private PhpFileLoader $loader;
 
