@@ -1,0 +1,26 @@
+<!-- Modal candidat -->
+<div class="modal fade" id="unpaidModal" tabindex="-1" role="dialog" aria-labelledby="unpaidModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unpaidModalLabel">Annuler le paiement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                </button>
+            </div>
+            <div class="modal-body">
+                Pour la facture numéro {{ facture.id }} ?
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ path('mercredi_admin_facture_unpaid', {'id': facture.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('unpaid' ~ facture.id) }}">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Annuler
+                    </button>
+                    <button type="submit" class="btn btn-danger">Annuler le paiement</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

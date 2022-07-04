@@ -16,6 +16,7 @@ use AcMarche\Mercredi\Facture\Form\FactureSelectMonthType;
 use AcMarche\Mercredi\Facture\Message\FactureCreated;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use AcMarche\Mercredi\Facture\Message\FacturesCreated;
+use AcMarche\Mercredi\Facture\Message\FactureUnpaided;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
@@ -285,6 +286,21 @@ final class FactureController extends AbstractController
 
         return $this->redirectToRoute('mercredi_admin_tuteur_show', [
             'id' => $tuteur->getId(),
+        ]);
+    }
+
+    #[Route(path: '/{id}/unpaid', name: 'mercredi_admin_facture_unpaid', methods: ['POST'])]
+    public function unpaid(Request $request, Facture $facture): RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('unpaid'.$facture->getId(), $request->request->get('_token'))) {
+            $factureId = $facture->getId();
+            $facture->setPayeLe(null);
+            $this->factureRepository->flush();
+            $this->dispatcher->dispatch(new FactureUnpaided($factureId));
+        }
+
+        return $this->redirectToRoute('mercredi_admin_facture_show', [
+            'id' => $facture->getId(),
         ]);
     }
 
