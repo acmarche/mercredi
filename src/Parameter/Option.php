@@ -14,7 +14,6 @@ class Option
     public const PLAINE_PRIX1 = 'mercredi.plaine_prix1';
     public const PLAINE_PRIX2 = 'mercredi.plaine_prix2';
     public const PLAINE_PRIX3 = 'mercredi.plaine_prix3';
-    public const EMAIL_SENDER = 'mercredi.email_sender';
     public const EMAILS_FACTURE = 'mercredi.emails_facture';
     public const PRESENCE_DEADLINE_DAYS = 'mercredi.presence_deadline_days';
     public const PEDAGOGIQUE_DEADLINE_DAYS = 'mercredi.pedagogique_deadline_days';
