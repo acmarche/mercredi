@@ -1,10 +1,9 @@
 <?php
 
 use Symfony\Component\Mailer\Messenger\SendEmailMessage;
-use Symfony\Config\FrameworkConfig;
+use Symfony\Config\Framework\MessengerConfig;
 
-return static function (FrameworkConfig $framework) {
-    $messenger = $framework->messenger();
+return static function (MessengerConfig $messenger) {
     $messenger
         ->transport('async', [
             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
@@ -19,5 +18,5 @@ return static function (FrameworkConfig $framework) {
                 'multiplier' => 2,
             ],
         ]);
-    $messenger->routing(SendEmailMessage::class)->senders(['async']);
+    //$messenger->routing(SendEmailMessage::class)->senders(['async']);
 };
