@@ -1,9 +1,10 @@
 <?php
 
 use Symfony\Component\Mailer\Messenger\SendEmailMessage;
-use Symfony\Config\Framework\MessengerConfig;
+use Symfony\Config\FrameworkConfig;
 
-return static function (MessengerConfig $messenger) {
+return static function (FrameworkConfig $framework) {
+    $messenger = $framework->messenger();
     $messenger
         ->transport('async', [
             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
