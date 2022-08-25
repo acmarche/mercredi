@@ -30,7 +30,7 @@ final class JourType extends AbstractType
                 'pedagogique',
                 CheckboxType::class,
                 [
-                    'label' => 'Journée pédagoque',
+                    'label' => 'Journée pédagogique',
                     'required' => false,
                     'label_attr' => [
                         'class' => 'switch-custom',
