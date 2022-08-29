@@ -24,7 +24,7 @@ final class QuickController extends AbstractController
         private TuteurRepository $tuteurRepository,
         private EnfantRepository $enfantRepository,
         private RelationRepository $relationRepository,
-        private AssociationTuteurHandler $associationHandler
+        private AssociationTuteurHandler $associationTuteurHandler
     ) {
     }
 
@@ -48,8 +48,8 @@ final class QuickController extends AbstractController
             $this->relationRepository->flush();
             $user = $password = null;
 
-            if ($tuteur->getEmail()) {
-                $user = $this->associationHandler->handleCreateUserFromTuteur($tuteur);
+            if ($tuteur->createAccount) {
+                $user = $this->associationTuteurHandler->handleCreateUserFromTuteur($tuteur);
                 $password = $user->getPlainPassword();
                 $this->addFlash('success', 'Un compte a été créé pour le parent');
             }

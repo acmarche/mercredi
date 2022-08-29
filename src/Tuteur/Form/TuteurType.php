@@ -46,35 +46,35 @@ final class TuteurType extends AbstractType
                 'rue',
                 TextType::class,
                 [
-                    'required' => ! $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'code_postal',
                 IntegerType::class,
                 [
-                    'required' => ! $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'localite',
                 TextType::class,
                 [
-                    'required' => ! $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'email',
                 EmailType::class,
                 [
-                    'required' => ! $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
                 'telephone',
                 TextType::class,
                 [
-                    'required' => ! $isAdmin,
+                    'required' => !$isAdmin,
                 ]
             )
             ->add(
@@ -134,6 +134,17 @@ final class TuteurType extends AbstractType
                     'help' => 'Recevoir une copie papier ?',
                 ]
             );
+        if ($isAdmin) {
+            $formBuilder->add(
+                'createAccount',
+                CheckboxType::class,
+                [
+                    'label' => 'Créer un compte',
+                    'required' => false,
+                    'help' => 'Si vous cochez cette case, un compte sera créé. Le parent recevra par mail les informations de connexion',
+                ]
+            );
+        }
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

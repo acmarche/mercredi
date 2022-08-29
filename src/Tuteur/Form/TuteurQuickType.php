@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Tuteur\Form;
 
 use AcMarche\Mercredi\Entity\Tuteur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -55,7 +56,6 @@ final class TuteurQuickType extends AbstractType
                 EmailType::class,
                 [
                     'required' => false,
-                    'help' => 'Si une adresse mail est encodée, un compte sera créé et le parent sera notifié par mail',
                 ]
             )
             ->add(
@@ -63,6 +63,15 @@ final class TuteurQuickType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
+                ]
+            )
+            ->add(
+                'createAccount',
+                CheckboxType::class,
+                [
+                    'label' => 'Créer un compte',
+                    'required' => false,
+                    'help' => 'Si vous cochez cette case, un compte sera créé. Le parent recevra par mail les informations de connexion',
                 ]
             );
     }

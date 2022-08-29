@@ -1,0 +1,6 @@
+{% if user %}
+    <strong>Le compte {{ user }} {% if password %} a été créé {% else %} a été associé {% endif %}</strong>
+    <br><br>
+    Adresse mail pour se connecter: {{ user.email }}<br>
+    {% if password %} Mot de passe: {{ password }}    {% endif %}    <br>
+{% endif %}

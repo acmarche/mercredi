@@ -18,12 +18,7 @@
                     href="{{ path('mercredi_admin_enfant_show',{'id': enfant.id}) }}">{{ enfant }}</a> a bien été
             ajoutée
             <br><br>
-            {% if user %}
-                <strong>Le compte {{ user }} {% if password %} a été créé {% else %} a été associé {% endif %}</strong>
-                <br><br>
-                Adresse mail pour se connecter: {{ user.email }}<br>
-                {% if password %} Mot de passe: {{ password }}    {% endif %}    <br>
-            {% endif %}
+            {% include '@AcMarcheMercrediAdmin/quick/_account_info.html.twig' %}
         </div>
     </div>
 {% endblock %}

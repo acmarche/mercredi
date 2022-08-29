@@ -11,6 +11,7 @@ use AcMarche\Mercredi\Tuteur\Message\TuteurCreated;
 use AcMarche\Mercredi\Tuteur\Message\TuteurDeleted;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,7 +28,8 @@ final class TuteurController extends AbstractController
         private TuteurRepository $tuteurRepository,
         private RelationRepository $relationRepository,
         private SearchHelper $searchHelper,
-        private MessageBusInterface $dispatcher
+        private MessageBusInterface $dispatcher,
+        private AssociationTuteurHandler $associationTuteurHandler
     ) {
     }
 
@@ -49,7 +51,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteurs' => $tuteurs,
                 'form' => $form->createView(),
-                'search' => $form->isSubmitted()
+                'search' => $form->isSubmitted(),
             ]
         );
     }
@@ -65,6 +67,17 @@ final class TuteurController extends AbstractController
             $this->tuteurRepository->flush();
 
             $this->dispatcher->dispatch(new TuteurCreated($tuteur->getId()));
+
+            if ($tuteur->createAccount) {
+                $user = $this->associationTuteurHandler->handleCreateUserFromTuteur($tuteur);
+                $password = $user->getPlainPassword();
+                $this->addFlash('success', 'Un compte a été créé pour le parent');
+                $accountInfo = $this->renderView('@AcMarcheMercrediAdmin/quick/_account_info.txt.twig', [
+                    'user' => $user,
+                    'password' => $password,
+                ]);
+                $this->addFlash('info', $accountInfo);
+            }
 
             return $this->redirectToRoute('mercredi_admin_tuteur_show', [
                 'id' => $tuteur->getId(),

@@ -60,6 +60,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface, Stringable
     use IbanTrait;
     use CreancesTrait;
     use IdOldTrait;
+
     /**
      * @var Relation[]
      */
@@ -82,6 +83,8 @@ class Tuteur implements SluggableInterface, TimestampableInterface, Stringable
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'tuteurs')]
     private Collection $users;
+
+    public bool $createAccount = false;
 
     public function __construct()
     {
