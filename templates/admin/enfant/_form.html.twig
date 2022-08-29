@@ -38,7 +38,9 @@
 
     <div class="col-6">
         {{ form_row(form.photoAutorisation) }}
-        {{ form_row(form.accueilEcole) }}
+        {% if form.accueilEcole is defined %}
+            {{ form_row(form.accueilEcole) }}
+        {% endif %}
     </div>
     <div class="col-6">
         {{ form_row(form.remarque) }}

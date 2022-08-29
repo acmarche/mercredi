@@ -15,11 +15,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class EnfantQuickType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $year = new DateTime('today');

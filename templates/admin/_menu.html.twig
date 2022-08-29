@@ -30,7 +30,7 @@
     <ul class="dropdown-menu" aria-labelledby="dropdown02">
         <li><a class="dropdown-item" href="{{ path('mercredi_admin_presence_index') }}">Listing</a></li>
         <li><a class="dropdown-item" href="{{ path('mercredi_admin_presence_by_month') }}">Par mois</a></li>
-        {% if mercredi_accueil == 'true' %}
+        {% if mercredi_accueil == true %}
             <li>
                 <a class="dropdown-item" href="{{ path('mercredi_admin_accueil_index') }}">Accueils des écoles</a>
             </li>

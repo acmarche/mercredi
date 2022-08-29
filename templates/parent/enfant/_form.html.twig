@@ -26,7 +26,9 @@
         {{ form_row(form.annee_scolaire) }}
     </div>
     <div class="col-12 col-md-4">
-        {{ form_row(form.accueilEcole) }}
+        {% if form.accueilEcole is defined %}
+            {{ form_row(form.accueilEcole) }}
+        {% endif %}
     </div>
     <div class="col-12 col-md-12">
         {{ form_row(form.photoAutorisation) }}
