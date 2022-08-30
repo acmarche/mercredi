@@ -85,8 +85,8 @@ class MigrationRepository
         $slug = preg_replace('#_#', '-', $tuteurOld->slugname);
 
         if (($tuteur = $this->tuteurRepository->findOneBy([
-            'slug' => $slug,
-        ])) === null) {
+                'slug' => $slug,
+            ])) === null) {
             $tuteur = $this->tuteurRepository->findOneBy(
                 [
                     'nom' => $tuteurOld->nom,
@@ -104,14 +104,19 @@ class MigrationRepository
         return $this->pdo->getAllWhere('tuteur', 'id = '.$tuteurId, true);
     }
 
+    public function getEnfantStd(int $enfantId): \stdClass
+    {
+        return $this->pdo->getAllWhere('enfant', 'id = '.$enfantId, true);
+    }
+
     public function getEnfant(int $enfantId): ?Enfant
     {
         $enfantOld = $this->pdo->getAllWhere('enfant', 'id = '.$enfantId, true);
         $slug = preg_replace('#_#', '-', $enfantOld->slugname);
 
         if (($enfant = $this->enfantRepository->findOneBy([
-            'slug' => $slug,
-        ])) === null) {
+                'slug' => $slug,
+            ])) === null) {
             $enfant = $this->enfantRepository->findOneBy(
                 [
                     'nom' => $enfantOld->nom,
@@ -174,6 +179,11 @@ class MigrationRepository
         );
     }
 
+    public function getPlaineEnfantStd(int $id): ?\stdClass
+    {
+        return $this->pdo->getAllWhere('plaine_enfant', 'id = '.$id, true);
+    }
+
     public function getReduction(int $reductionId): ?Reduction
     {
         $reduction = $this->pdo->getAllWhere('reduction', 'id = '.$reductionId, true);
@@ -213,7 +223,7 @@ class MigrationRepository
             'tuteur' => $tuteur,
             'jour' => $jour,
         ]);
-        if (! $presence instanceof Presence) {
+        if (!$presence instanceof Presence) {
             dd(
                 $enfant->getId().' '.$enfant->getNom().' '.$enfant->getPrenom().' '.$tuteur->getId(
                 ).' '.' '.$tuteur->getNom().' '.$tuteur->getPrenom().' '.$jour->getDateJour()->format(

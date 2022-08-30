@@ -6,9 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait IdOldTrait
 {
-    /**
-     * @var int|null
-     */
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $idOld = null;
 

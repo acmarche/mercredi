@@ -130,7 +130,7 @@ final class MigrationCommand extends Command
 
                 return Command::SUCCESS;
             case 'fix':
-                $this->fixImport->import($symfonyStyle);
+                $this->fixImport->fixPaiementPlaine($symfonyStyle);
 
                 return Command::SUCCESS;
             case 'password':
