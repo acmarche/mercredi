@@ -7,9 +7,11 @@ use AcMarche\Mercredi\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,7 +19,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
     use OrmCrudTrait;
 
@@ -27,13 +29,13 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     }
 
     /**
-     * @see UserProviderListener::checkPassport
-     *
      * @return int|mixed|string|null
      *
      * @throws NonUniqueResultException
+     * @see UserProviderListener::checkPassport
+     *
      */
-    public function loadUserByIdentifier(string $username)
+    public function loadUserByIdentifier(string $username): ?UserInterface
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.email = :username OR user.username = :username')
@@ -62,7 +64,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (! $user instanceof User) {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
@@ -106,4 +108,5 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             ->getQuery()
             ->getResult();
     }
+
 }
