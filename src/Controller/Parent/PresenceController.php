@@ -146,4 +146,21 @@ final class PresenceController extends AbstractController
             'uuid' => $enfant->getUuid(),
         ]);
     }
+
+    #[Route(path: '/non/payes', name: 'mercredi_parent_presence_non_payes', methods: ['POST', 'GET'])]
+    public function nonPaye(): Response
+    {
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
+        }
+
+        $presences = $this->presenceRepository->findWithOutPaiement($this->tuteur);
+
+        return $this->render(
+            '@AcMarcheMercrediParent/presence/non_payes.html.twig',
+            [
+                'presences' => $presences,
+            ]
+        );
+    }
 }

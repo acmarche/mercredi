@@ -224,29 +224,14 @@ final class PresenceController extends AbstractController
     }
 
     #[Route(path: '/non/payes', name: 'mercredi_admin_presence_non_payes', methods: ['POST', 'GET'])]
-    public function nonPaye(Request $request): Response
+    public function nonPaye(): Response
     {
-        $data = $presences = [];
-
-        $form = $this->createForm(SearchPresenceType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $dataForm = $form->getData();
-            /** @var Jour $jour */
-            $jour = $dataForm['jour'];
-            $displayRemarque = $dataForm['displayRemarque'];
-            $ecole = $dataForm['ecole'];
-            $data = $this->presenceHandler->searchAndGrouping($jour, $ecole, $displayRemarque);
-        }
-
         $presences = $this->presenceRepository->findWithOutPaiement();
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/non_paye.html.twig',
             [
                 'presences' => $presences,
-                'form' => $form->createView(),
-                'search' => $form->isSubmitted(),
             ]
         );
     }

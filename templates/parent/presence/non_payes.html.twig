@@ -1,0 +1,49 @@
+{% extends '@AcMarcheMercrediParent/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ presences|length }} présence(s) non payée(s)</h3>
+        <div class="card-body">
+
+            <div class="alert alert-warning">
+                Présences non payées entre le 01-01-2019 et 01-07-2022
+            </div>
+
+            {% if presences|length > 0 %}
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Enfant</th>
+                        <th>Tuteur</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for presence in presences %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('mercredi_parent_enfant_show', {'uuid': presence.enfant.uuid}) }}">
+                                    {{ presence.enfant }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_parent_tuteur_show') }}">
+                                    {{ presence.tuteur }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_parent_presence_show', {'uuid': presence.uuid}) }}">
+                                    {{ presence.jour|format_date('full') }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

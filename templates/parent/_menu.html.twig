@@ -19,3 +19,8 @@
     <a class="nav-link"
        href="{{ path('mercredi_parent_tuteur_show') }}"><i class="fas fa-list-alt"></i> Mes coordonnées</a>
 </li>
+
+<li class="nav-item{% if action == 'mercredi_parent_presence_non_payes' %} active {% endif %}">
+    <a class="nav-link"
+       href="{{ path('mercredi_parent_presence_non_payes') }}"><i class="fas fa-list-alt"></i> Présences non payes</a>
+</li>
