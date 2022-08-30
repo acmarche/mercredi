@@ -60,6 +60,11 @@ class MigrationRepository
         ]);
     }
 
+    public function getUserStd(int $userId): \stdClass
+    {
+        return $this->pdo->getAllWhere('users', 'id = '.$userId, true);
+    }
+
     public function getAnneeScolaire(string $name): ?AnneeScolaire
     {
         return $this->anneeScolaireRepository->findOneBy([
@@ -92,6 +97,11 @@ class MigrationRepository
         }
 
         return $tuteur;
+    }
+
+    public function getTuteurOld(int $tuteurId): \stdClass
+    {
+        return $this->pdo->getAllWhere('tuteur', 'id = '.$tuteurId, true);
     }
 
     public function getEnfant(int $enfantId): ?Enfant

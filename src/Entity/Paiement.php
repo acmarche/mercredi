@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
+use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Migration\PaiementRepository;
 use DateTime;
 use DateTimeImmutable;
@@ -21,6 +22,8 @@ class Paiement implements Stringable
 {
     use TimestampableTrait;
     use UserAddTrait;
+    use IdOldTrait;
+
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]

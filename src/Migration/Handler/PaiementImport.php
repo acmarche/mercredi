@@ -25,6 +25,7 @@ class PaiementImport
     {
         $this->io = $io;
         $paiements = $this->pdo->getAll('paiement');
+        $io->writeln(count($paiements).' counts ');
         foreach ($paiements as $data) {
             $tuteur = $this->migrationRepository->getTuteur($data->tuteur_id);
             $enfant = null;

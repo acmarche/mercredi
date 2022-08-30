@@ -12,7 +12,7 @@ class MercrediPdo
 
     public function connect(): void
     {
-        $dsn = 'mysql:host=localhost;dbname=mercredi';
+        $dsn = 'mysql:host=localhost;dbname=mercredi_old';
         $username = $_ENV['MERCREDI_USER'];
         $password = $_ENV['MERCREDI_PASSWORD'];
         $options = [

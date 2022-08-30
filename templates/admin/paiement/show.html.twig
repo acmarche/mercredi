@@ -5,7 +5,7 @@
     <div class="card mb-3">
 
         <h3 class="card-header">
-            Paiements de <a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">{{ tuteur }}</a>
+         {{ paiements|length }} paiements de <a href="{{ path('mercredi_admin_tuteur_show', {'id': tuteur.id}) }}">{{ tuteur }}</a>
         </h3>
 
         <div class="card-body">

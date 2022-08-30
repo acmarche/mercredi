@@ -185,6 +185,19 @@ final class PresenceRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * @return Presence[]
+     */
+    public function findWithOutPaiement(): array
+    {
+        return $this->createQBl()
+            ->andWhere('presence.paiement IS NULL')
+            ->andWhere('jour.plaine IS NULL')
+            ->addOrderBy('jour.date_jour')
+            ->addOrderBy('enfant.nom')
+            ->getQuery()->getResult();
+    }
+
     private function createQBlBase(): QueryBuilder
     {
         return $this->createQueryBuilder('presence')

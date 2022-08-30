@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Organisation;
 use AcMarche\Mercredi\Migration\Handler\EnfantImport;
 use AcMarche\Mercredi\Migration\Handler\FactureImport;
 use AcMarche\Mercredi\Migration\Handler\FicheSanteImport;
+use AcMarche\Mercredi\Migration\Handler\FixImport;
 use AcMarche\Mercredi\Migration\Handler\PaiementImport;
 use AcMarche\Mercredi\Migration\Handler\ParametreImport;
 use AcMarche\Mercredi\Migration\Handler\PlaineImport;
@@ -36,6 +37,7 @@ final class MigrationCommand extends Command
         private PlaineImport $plaineImport,
         private PlainePresenceImport $plainePresenceImport,
         private FactureImport $factureImport,
+        private FixImport $fixImport,
         private UserPasswordHasherInterface $passwordHasher,
         private PaiementImport $paiementImport,
         ?string $name = null
@@ -100,7 +102,7 @@ final class MigrationCommand extends Command
             case 'sante':
                 $this->ficheSanteImport->import($symfonyStyle);
                 $this->ficheSanteImport->importReponse($symfonyStyle);
-                // no break
+            // no break
             case 'presence':
                 $this->presenceImport->import($symfonyStyle);
 
@@ -127,12 +129,16 @@ final class MigrationCommand extends Command
                 $this->paiementImport->import($symfonyStyle);
 
                 return Command::SUCCESS;
+            case 'fix':
+                $this->fixImport->import($symfonyStyle);
+
+                return Command::SUCCESS;
             case 'password':
                 $user = $this->userRepository->findOneBy([
                     'username' => 'jfsenechal',
                 ]);
-            //    $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
-             //   $this->userRepository->flush();
+                //    $user->setPassword($this->passwordHasher->hashPassword($user, 'homer'));
+                //   $this->userRepository->flush();
 
                 return Command::SUCCESS;
         }
