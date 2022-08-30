@@ -236,7 +236,6 @@ final class PresenceController extends AbstractController
             $jour = $dataForm['jour'];
             $displayRemarque = $dataForm['displayRemarque'];
             $ecole = $dataForm['ecole'];
-            $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST, $dataForm);
             $data = $this->presenceHandler->searchAndGrouping($jour, $ecole, $displayRemarque);
         }
 

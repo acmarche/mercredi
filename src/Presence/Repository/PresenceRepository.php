@@ -190,10 +190,17 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findWithOutPaiement(): array
     {
+        $dateStart = \DateTime::createFromFormat('Y-m-d', '2019-01-01');
+        $dateEnd = \DateTime::createFromFormat('Y-m-d', '2022-07-01');
+
         return $this->createQBl()
             ->andWhere('presence.paiement IS NULL')
             ->andWhere('jour.plaine IS NULL')
-            ->addOrderBy('jour.date_jour')
+            ->andWhere('jour.date_jour >= :datestart')
+            ->setParameter('datestart', $dateStart)
+            ->andWhere('jour.date_jour <= :dateend')
+            ->setParameter('dateend', $dateEnd)
+            ->addOrderBy('jour.date_jour', 'DESC')
             ->addOrderBy('enfant.nom')
             ->getQuery()->getResult();
     }

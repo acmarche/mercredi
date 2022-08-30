@@ -6,6 +6,40 @@
         <h3 class="card-header">Liste des présences non payés {{ presences|length }}</h3>
         <div class="card-body">
 
+            <div class="alert alert-warning">
+                Présences non payées entre le 01-01-2019 et 01-07-2022
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Enfant</th>
+                    <th>Tuteur</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for presence in presences %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_admin_enfant_show', {'id': presence.enfant.id}) }}">
+                                {{ presence.enfant }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path('mercredi_admin_tuteur_show', {'id': presence.tuteur.id}) }}">
+                                {{ presence.tuteur }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                                {{ presence.jour|format_date('full') }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
