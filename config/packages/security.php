@@ -23,7 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mercredi_user_provider' => [
                     'entity' => [
                         'class' => User::class,
-                        'property' => 'username',
                     ],
                 ],
             ],
