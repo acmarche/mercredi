@@ -155,11 +155,13 @@ final class PresenceController extends AbstractController
         }
 
         $presences = $this->presenceRepository->findWithOutPaiement($this->tuteur);
+        $presencesPlaines = $this->presenceRepository->findWithOutPaiementPlaine($this->tuteur);
 
         return $this->render(
             '@AcMarcheMercrediParent/presence/non_payes.html.twig',
             [
                 'presences' => $presences,
+                'presencesPlaines' => $presencesPlaines,
             ]
         );
     }

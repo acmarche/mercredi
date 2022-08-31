@@ -227,11 +227,13 @@ final class PresenceController extends AbstractController
     public function nonPaye(): Response
     {
         $presences = $this->presenceRepository->findWithOutPaiement();
+        $presencesPlaines = $this->presenceRepository->findWithOutPaiementPlaine();
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/non_paye.html.twig',
             [
                 'presences' => $presences,
+                'presencesPlaines' => $presencesPlaines,
             ]
         );
     }

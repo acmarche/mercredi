@@ -211,6 +211,32 @@ final class PresenceRepository extends ServiceEntityRepository
         return $qbl->getQuery()->getResult();
     }
 
+    /**
+     * @return Presence[]
+     */
+    public function findWithOutPaiementPlaine(?Tuteur $tuteur = null): array
+    {
+        $dateStart = \DateTime::createFromFormat('Y-m-d', '2019-01-01');
+        $dateEnd = \DateTime::createFromFormat('Y-m-d', '2022-07-01');
+
+        $qbl = $this->createQBlPlaine()
+            ->andWhere('presence.paiement IS NULL')
+            ->andWhere('jour.plaine IS NULL')
+            ->andWhere('jour.date_jour >= :datestart')
+            ->setParameter('datestart', $dateStart)
+            ->andWhere('jour.date_jour <= :dateend')
+            ->setParameter('dateend', $dateEnd)
+            ->addOrderBy('jour.date_jour', 'DESC')
+            ->addOrderBy('enfant.nom');
+
+        if ($tuteur) {
+            $qbl->andWhere('presence.tuteur = :tuteur')
+                ->setParameter('tuteur', $tuteur);
+        }
+
+        return $qbl->getQuery()->getResult();
+    }
+
     private function createQBlBase(): QueryBuilder
     {
         return $this->createQueryBuilder('presence')
