@@ -3,43 +3,89 @@
 {% block body %}
 
     <div class="card">
-        <h3 class="card-header">Liste des présences non payés {{ presences|length }}</h3>
+        <h3 class="card-header">Liste des présences non payés</h3>
         <div class="card-body">
 
             <div class="alert alert-warning">
                 Présences non payées entre le 01-01-2019 et 01-07-2022
             </div>
+            <div class="alert alert-info">
+                Taper CTRL + F pour faire une recherche dans la page
+            </div>
 
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Enfant</th>
-                    <th>Tuteur</th>
-                    <th>Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for presence in presences %}
+            <hr>
+            <a href="#plaines">Les plaines en bas de page</a>
+            <hr>
+            <h4 class="text-success">Mercredi et journée pédagogique</h4>
+
+            {% for data in presences %}
+                <h5 class="text-warning">{{ data.tuteur }}
+                    <span class="text-muted">{{ data.presences|length }}</span>
+                </h5>
+                <table class="table table-bordered">
+                    <thead>
                     <tr>
-                        <td>
-                            <a href="{{ path('mercredi_admin_enfant_show', {'id': presence.enfant.id}) }}">
-                                {{ presence.enfant }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ path('mercredi_admin_tuteur_show', {'id': presence.tuteur.id}) }}">
-                                {{ presence.tuteur }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
-                                {{ presence.jour|format_date('full') }}
-                            </a>
-                        </td>
+                        <th>Enfant</th>
+                        <th>Date</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for presence in data.presences %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('mercredi_admin_enfant_show', {'id': presence.enfant.id}) }}">
+                                    {{ presence.enfant }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                                    {{ presence.jour|format_date('full') }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+
+            <hr><hr>
+            <h4 class="text-success" id="plaines">Plaines</h4>
+
+            {% for data in presencesPlaines %}
+                <h5 class="text-warning">{{ data.tuteur }}
+                    <span class="text-muted">{{ data.presences|length }}</span>
+                </h5>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Enfant</th>
+                        <th>Plaine</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for presence in data.presences %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('mercredi_admin_enfant_show', {'id': presence.enfant.id}) }}">
+                                    {{ presence.enfant }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_admin_plaine_show', {'id': presence.jour.plaine.id}) }}">
+                                    {{ presence.jour.plaine }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                                    {{ presence.jour|format_date('full') }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

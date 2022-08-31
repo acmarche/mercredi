@@ -168,4 +168,19 @@ final class PresenceUtils
 
         return $plaines->toArray();
     }
+
+    /**
+     * @param Presence[] $presences
+     */
+    public static function groupByTuteur(array $presences): array
+    {
+        $data = [];
+        foreach ($presences as $presence) {
+           $tuteur = $presence->getTuteur();
+            $data[$tuteur->getId()]['tuteur'] = $tuteur;
+            $data[$tuteur->getId()]['presences'][] = $presence;
+        }
+
+        return $data;
+    }
 }

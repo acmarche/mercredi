@@ -21,6 +21,7 @@ use AcMarche\Mercredi\Presence\Message\PresenceCreated;
 use AcMarche\Mercredi\Presence\Message\PresenceDeleted;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Utils\DateUtils;
@@ -226,8 +227,8 @@ final class PresenceController extends AbstractController
     #[Route(path: '/non/payes', name: 'mercredi_admin_presence_non_payes', methods: ['POST', 'GET'])]
     public function nonPaye(): Response
     {
-        $presences = $this->presenceRepository->findWithOutPaiement();
-        $presencesPlaines = $this->presenceRepository->findWithOutPaiementPlaine();
+        $presences = PresenceUtils::groupByTuteur($this->presenceRepository->findWithOutPaiement());
+        $presencesPlaines = PresenceUtils::groupByTuteur($this->presenceRepository->findWithOutPaiementPlaine());
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/non_paye.html.twig',
