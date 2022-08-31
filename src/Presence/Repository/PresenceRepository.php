@@ -195,7 +195,6 @@ final class PresenceRepository extends ServiceEntityRepository
 
         $qbl = $this->createQBl()
             ->andWhere('presence.paiement IS NULL')
-            ->andWhere('jour.plaine IS NULL')
             ->andWhere('jour.date_jour >= :datestart')
             ->setParameter('datestart', $dateStart)
             ->andWhere('jour.date_jour <= :dateend')
@@ -221,7 +220,6 @@ final class PresenceRepository extends ServiceEntityRepository
 
         $qbl = $this->createQBlPlaine()
             ->andWhere('presence.paiement IS NULL')
-            ->andWhere('jour.plaine IS NULL')
             ->andWhere('jour.date_jour >= :datestart')
             ->setParameter('datestart', $dateStart)
             ->andWhere('jour.date_jour <= :dateend')
