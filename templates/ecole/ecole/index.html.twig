@@ -10,7 +10,9 @@
             <th>Nom</th>
             <th>Localité</th>
             <th>Téléphone</th>
-            <th>Inscrire</th>
+            {% if mercredi_accueil %}
+                <th>Inscrire</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -23,9 +25,11 @@
                 </td>
                 <td>{{ ecole.localite }}</td>
                 <td>{{ ecole.telephone }}</td>
-                <td>
-                    {% include '@AcMarcheMercredi/ecole/ecole/_btn_inscriptions.html.twig' %}
-                </td>
+                {% if mercredi_accueil %}
+                    <td>
+                        {% include '@AcMarcheMercredi/ecole/ecole/_btn_inscriptions.html.twig' %}
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>

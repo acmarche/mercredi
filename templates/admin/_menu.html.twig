@@ -30,7 +30,7 @@
     <ul class="dropdown-menu" aria-labelledby="dropdown02">
         <li><a class="dropdown-item" href="{{ path('mercredi_admin_presence_index') }}">Listing</a></li>
         <li><a class="dropdown-item" href="{{ path('mercredi_admin_presence_by_month') }}">Par mois</a></li>
-        {% if mercredi_accueil == true %}
+        {% if mercredi_accueil %}
             <li>
                 <a class="dropdown-item" href="{{ path('mercredi_admin_accueil_index') }}">Accueils des écoles</a>
             </li>
@@ -38,7 +38,7 @@
                 <a class="dropdown-item" href="{{ path('mercredi_admin_presence_by_quarter') }}">Par trimestre</a>
             </li>
         {% endif %}
-        {% if mercredi_paiement == true %}
+        {% if mercredi_paiement %}
             <li>
                 <a class="dropdown-item" href="{{ path('mercredi_admin_presence_non_payes') }}">Non payés</a>
             </li>
