@@ -44,6 +44,10 @@ final class PlaineController extends AbstractController
     ) {
     }
 
+    /**
+     * Render from layout !
+     * @return Response
+     */
     #[Route(path: '/open', name: 'mercredi_parent_plaine_open')]
     #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function open(): Response
