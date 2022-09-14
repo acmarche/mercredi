@@ -49,7 +49,7 @@ final class EmailFactory
         $notification = NotificationEmailJf::asPublicEmailJf();
         $notification->subject($message->getSujet())
             ->from($message->getFrom())
-            ->htmlTemplate('@AcMarcheMercrediAdmin/admin/mail.html.twig')
+            ->htmlTemplate('@AcMarcheMercrediEmail/admin/mail.html.twig')
             ->context(
                 [
                     'texte' => $message->getTexte(),
