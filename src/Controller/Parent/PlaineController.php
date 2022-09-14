@@ -49,6 +49,10 @@ final class PlaineController extends AbstractController
     public function open(): Response
     {
         $plaine = $this->plaineRepository->findPlaineOpen();
+        if (!$plaine) {
+            $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
+            return $this->redirectToRoute('mercredi_parent_home');
+        }
 
         return $this->render(
             '@AcMarcheMercrediParent/plaine/_open.html.twig',
@@ -103,11 +107,15 @@ final class PlaineController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $plaine = $this->plaineRepository->findPlaineOpen();
+            if (!$plaine) {
+                $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
+                return $this->redirectToRoute('mercredi_parent_home');
+            }
             $enfantsSelected = $form->get('enfants')->getData();
             foreach ($enfantsSelected as $enfant) {
                 $santeFiche = $this->santeHandler->init($enfant);
 
-                if (! $this->santeChecker->isComplete($santeFiche)) {
+                if (!$this->santeChecker->isComplete($santeFiche)) {
                     $this->addFlash('danger', 'La fiche santé de '.$enfant.' doit être complétée');
 
                     continue;
@@ -143,6 +151,10 @@ final class PlaineController extends AbstractController
         }
         $tuteur = $this->tuteur;
         $plaine = $this->plaineRepository->findPlaineOpen();
+        if (!$plaine) {
+            $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
+            return $this->redirectToRoute('mercredi_parent_home');
+        }
         if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
             return $this->redirectToRoute('mercredi_parent_plaine_show', [
                 'id' => $plaine->getId(),
