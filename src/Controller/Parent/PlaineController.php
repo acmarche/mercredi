@@ -49,10 +49,6 @@ final class PlaineController extends AbstractController
     public function open(): Response
     {
         $plaine = $this->plaineRepository->findPlaineOpen();
-        if (!$plaine) {
-            $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
-            return $this->redirectToRoute('mercredi_parent_home');
-        }
 
         return $this->render(
             '@AcMarcheMercrediParent/plaine/_open.html.twig',
