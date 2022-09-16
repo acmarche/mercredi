@@ -186,4 +186,15 @@ final class JourRepository extends ServiceEntityRepository
             ->addOrderBy('jour.date_jour', 'ASC')
             ->getQuery()->getResult();
     }
+
+    public function findByPlaineQb(Plaine $plaine): QueryBuilder
+    {
+        return $this->createQueryBuilder('jour')
+            ->leftJoin('jour.plaine', 'plaine', 'WITH')
+            ->addSelect('plaine')
+            ->setParameter('plaine', $plaine)
+            ->andWhere('jour.plaine = :plaine')
+            ->addOrderBy('jour.date_jour', 'ASC');
+
+    }
 }

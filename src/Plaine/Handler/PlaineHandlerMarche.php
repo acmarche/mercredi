@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Plaine\Handler;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -19,7 +20,7 @@ use Doctrine\Common\Collections\Collection;
 use Exception;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class PlaineHandlerHotton implements PlaineHandlerInterface
+class PlaineHandlerMarche implements PlaineHandlerInterface
 {
     public function __construct(
         private PlainePresenceRepository $plainePresenceRepository,
@@ -31,9 +32,16 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
     ) {
     }
 
+    /**
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @param Enfant $enfant
+     * @param array|Jour[] $jours
+     * @return void
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): void
     {
-       // $jours = $plaine->getJours();
         $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
     }
 

@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Contrat\Plaine\FacturePlaineHandlerInterface;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
@@ -11,6 +12,7 @@ use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Form\PlaineConfirmationType;
 use AcMarche\Mercredi\Plaine\Form\SelectEnfantType;
+use AcMarche\Mercredi\Plaine\Form\SelectJourType;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -35,6 +37,7 @@ final class PlaineController extends AbstractController
         private SanteHandler $santeHandler,
         private SanteChecker $santeChecker,
         private PlainePresenceRepository $plainePresenceRepository,
+        private EnfantRepository $enfantRepository,
         private FacturePlaineHandlerInterface $facturePlaineHandler,
         private FactureEmailFactory $factureEmailFactory,
         private NotificationMailer $notificationMailer,
@@ -109,6 +112,7 @@ final class PlaineController extends AbstractController
             $plaine = $this->plaineRepository->findPlaineOpen();
             if (!$plaine) {
                 $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
+
                 return $this->redirectToRoute('mercredi_parent_home');
             }
             $enfantsSelected = $form->get('enfants')->getData();
@@ -118,26 +122,84 @@ final class PlaineController extends AbstractController
                 if (!$this->santeChecker->isComplete($santeFiche)) {
                     $this->addFlash('danger', 'La fiche santé de '.$enfant.' doit être complétée');
 
-                    continue;
+                    return $this->redirectToRoute('mercredi_parent_plaine_show', [
+                        'id' => $plaine->getId(),
+                    ]);
                 }
-
-                if (null !== $plaine) {
-                    $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
-                    $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
-                }
+                /* if (null !== $plaine) {
+                     $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
+                     $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
+                 }*/
             }
 
-            return $this->redirectToRoute(
-                'mercredi_parent_plaine_presence_confirmation',
-                [
-                ]
-            );
+            $session = $request->getSession();
+            $ids = [];
+            foreach ($enfantsSelected as $enfant) {
+                $ids[] = $enfant->getId();
+            }
+            $session->set('enfants', $ids);
+
+            return $this->redirectToRoute('mercredi_parent_plaine_select_jour');
         }
 
         return $this->render(
             '@AcMarcheMercrediParent/plaine/select_enfant.html.twig',
             [
                 'enfants' => $enfants,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * Etape 2 select jours.
+     */
+    #[Route(path: '/select/jours', name: 'mercredi_parent_plaine_select_jour', methods: ['GET', 'POST'])]
+    public function selectJours(Request $request): Response
+    {
+        if (($hasTuteur = $this->hasTuteur()) !== null) {
+            return $hasTuteur;
+        }
+        $plaine = $this->plaineRepository->findPlaineOpen();
+        if (!$plaine) {
+            $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
+
+            return $this->redirectToRoute('mercredi_parent_home');
+        }
+
+        $form = $this->createForm(SelectJourType::class, null, [
+            'plaine' => $plaine,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $jours = $form->get('jours')->getData();
+            $session = $request->getSession();
+            $enfantIds = $session->get('enfants');
+            if (count($enfantIds) === 0) {
+                $this->addFlash('danger', 'Aucun enfant sélectionné');
+
+                return $this->redirectToRoute('mercredi_parent_plaine_show', [
+                    'id' => $plaine->getId(),
+                ]);
+            }
+
+            $enfants = $this->enfantRepository->findBy(['id' => $enfantIds]);
+            foreach ($enfants as $enfant) {
+                $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
+                $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
+            }
+
+            return $this->redirectToRoute('mercredi_parent_plaine_show', [
+                'id' => $plaine->getId(),
+            ]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediParent/plaine/select_jour.html.twig',
+            [
+                'plaine' => $plaine,
                 'form' => $form->createView(),
             ]
         );
@@ -153,6 +215,7 @@ final class PlaineController extends AbstractController
         $plaine = $this->plaineRepository->findPlaineOpen();
         if (!$plaine) {
             $this->addFlash('danger', 'Aucune plaine ouverte aux inscriptions n\'a été trouvée');
+
             return $this->redirectToRoute('mercredi_parent_home');
         }
         if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {

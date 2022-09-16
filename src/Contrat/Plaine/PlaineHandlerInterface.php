@@ -10,7 +10,7 @@ use Exception;
 
 interface PlaineHandlerInterface
 {
-    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): void;
+    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): void;
 
     public function handleEditPresences(
         Tuteur $tuteur,
