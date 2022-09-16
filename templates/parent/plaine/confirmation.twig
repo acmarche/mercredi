@@ -11,28 +11,28 @@
                 <strong>La réception du paiment de la facture fera preuve de confirmation des inscriptions !</strong>
             </div>
 
-            <h5 class="text-success">
-                Vous avez inscrit
+            <h5 class="text-success">Enfant(s) inscrit(s)</h5>
+            <ul class="list-group">
                 {% for enfant in enfantsInscrits %}
-                    {{ enfant }},
+                    <li class="list-group-item">{{ enfant }}</li>
                 {% endfor %}
-            </h5><br>
-            .<br>
-
+            </ul>
+            <br>
+            <br>
             {% if enfantsInscrits|length > 0 %}
-                {{ form_start(form) }}
-                {{ form_errors(form) }}
-                <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
-                    Obtenir ma facture
-                </button>
-                {% if enfants|length > enfantsInscrits|length %}
-                    ou  <a class="btn btn-primary mr-1 mb-2" href="{{ path('mercredi_parent_plaine_select_enfant') }}">
-                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    Inscrire d'autres enfants
-                </a>
-                {% endif %}
-                {{ form_end(form) }}
-            {% endif %}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Obtenir ma facture
+            </button>
+            {{ form_end(form) }}
+            {% endif %}<br>
+            <div class="alert alert-danger">
+                Assurez vous d'inscrire tous vos enfants avant de recevoir votre facture
+            </div>
+        </div>
+        <div class="card-footer">
+            <i class="fas fa-arrow-left"></i> <a href="{{ path('mercredi_parent_plaine_show', {'id': plaine.id}) }}">Annuler</a>
         </div>
     </div>
 

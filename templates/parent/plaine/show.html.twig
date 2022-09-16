@@ -11,7 +11,6 @@
                 <br/>
                 <a href="{{ path('mercredi_parent_plaine_select_enfant') }}" role="button" class="btn btn-primary mb-3"><i
                             class="fas fa-user-plus"></i> Inscrire mes enfants</a>
-
             {% endif %}
 
             {% if enfants|length > 0 %}
@@ -20,6 +19,7 @@
                     <tr>
                         <th>Nom</th>
                         <th>Inscrits aux dates</th>
+                        <th></th>
                     </tr>
                     {% for enfant in enfants %}
                         <tr>
@@ -27,9 +27,17 @@
                             <td>
                                 {% for inscription in inscriptions %}
                                     {% if inscription.enfant.id == enfant.id %}
-                                        {{ inscription.jour.dateJour| date('d/m') }}
+                                        {{ inscription.jour.dateJour| date('d/m') }}{% if loop.last == false %},{% endif %}
                                     {% endif %}
                                 {% endfor %}
+                            </td>
+                            <td>
+                                {% if facture is null %}
+                                    <i class="far fa-calendar-alt"></i>
+                                    <a href="{{ path('mercredi_parent_plaine_presence_edit', {'plaine': plaine.id, 'uuid': enfant.uuid}) }}">
+                                        Changer les dates
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}
