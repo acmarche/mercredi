@@ -27,7 +27,7 @@ final class AssocierParentController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/{id}', name: 'mercredi_user_associate_tuteur', methods: ['GET', 'POST'])]
+    #[Route(path: '/associate/{id}', name: 'mercredi_user_associate_tuteur', methods: ['GET', 'POST'])]
     public function associate(Request $request, User $user): Response
     {
         if (! $user->isParent()) {
@@ -58,7 +58,7 @@ final class AssocierParentController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'mercredi_user_dissociate_tuteur', methods: ['POST'])]
+    #[Route(path: '/dissociate/{id}', name: 'mercredi_user_dissociate_tuteur', methods: ['POST'])]
     public function dissociate(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
