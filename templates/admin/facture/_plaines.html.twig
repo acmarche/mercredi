@@ -4,7 +4,6 @@
     <tr>
         <th>Enfant</th>
         <th>Date</th>
-        <th>Ordre</th>
         <th>Coût</th>
     </tr>
     </thead>
@@ -20,7 +19,6 @@
                     {{ facturePlaine.presenceDate | format_date('full') }}
                 {% endif %}
             </td>
-            <td>{{ facturePlaine.ordre }}</td>
             <td>{{ facturePlaine.coutCalculated|format_currency('eur') }}</td>
         </tr>
     {% endfor %}
