@@ -9,7 +9,11 @@
             </h3>
         </div>
         <div class="card-body">
-
+            {% if facture.payeLe is null %}
+            <div class="alert alert-warning">
+                Facture non payée
+            </div>
+            {% endif %}
             <a href="{{ path('mercredi_commun_export_facture_pdf', {'uuid': facture.uuid}) }}"
                class="btn btn-primary mb-3"
                role='button'> <i class="fas fa-file-pdf"></i> Exporter en pdf</a>
@@ -17,7 +21,6 @@
                role='button'> <i class="fas fa-list"></i> Retour à la liste</a>
 
             {{ content|raw }}
-
         </div>
         <div class="card-footer text-muted mt-3">
             Crée le {{ facture.createdAt | format_date('full') }} par {{ facture.userAdd }}. Mis à jour

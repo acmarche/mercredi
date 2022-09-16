@@ -11,16 +11,14 @@
     {% for enfant in enfants %}
         <tr>
             <td>
-                <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
-                    {{ enfant.nom }}
-                </a>
+                {{ enfant.nom }}
             </td>
             <td>{{ enfant.prenom }}</td>
             <td>
                 <a href="{{ path('mercredi_admin_plaine_presence_show', {'plaine': plaine.id, 'enfant': enfant.id}) }}">Détails</a>
             </td>
         </tr>
-        {% else %}
+    {% else %}
         <tr>
             <td colspan="3">Aucun</td>
         </tr>
