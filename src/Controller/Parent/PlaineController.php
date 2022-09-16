@@ -219,6 +219,8 @@ final class PlaineController extends AbstractController
             return $this->redirectToRoute('mercredi_parent_home');
         }
         if ($this->plaineHandler->isRegistrationFinalized($plaine, $tuteur)) {
+            $this->addFlash('danger', 'Tout est finalisé');
+
             return $this->redirectToRoute('mercredi_parent_plaine_show', [
                 'id' => $plaine->getId(),
             ]);

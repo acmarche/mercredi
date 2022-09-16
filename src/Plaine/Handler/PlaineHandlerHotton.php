@@ -41,10 +41,10 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
         Tuteur $tuteur,
         Enfant $enfant,
         array $currentJours,
-        Collection $collection
+        Collection $newJours
     ): void {
-        $enMoins = array_diff($currentJours, $collection->toArray());
-        $enPlus = array_diff($collection->toArray(), $currentJours);
+        $enMoins = array_diff($currentJours, $newJours->toArray());
+        $enPlus = array_diff($newJours->toArray(), $currentJours);
 
         foreach ($enPlus as $jour) {
             $presence = new Presence($tuteur, $enfant, $jour);

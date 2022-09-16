@@ -16,7 +16,7 @@ interface PlaineHandlerInterface
         Tuteur $tuteur,
         Enfant $enfant,
         array $currentJours,
-        Collection $collection
+        Collection $newJours
     ): void;
 
     public function removeEnfant(Plaine $plaine, Enfant $enfant): void;
