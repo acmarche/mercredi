@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Factory;
 
+use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
@@ -20,7 +21,8 @@ final class FactureFactory
     public function __construct(
         private FacturePdfPresenceInterface $facturePdfPresence,
         private ParameterBagInterface $parameterBag,
-        private FactureRepository $factureRepository
+        private FactureRepository $factureRepository,
+        private FacturePdfPlaineInterface $facturePdfPlaine,
     ) {
     }
 
@@ -83,7 +85,13 @@ final class FactureFactory
 
     public function createHtml(FactureInterface $facture): string
     {
-        return $this->facturePdfPresence->render($facture);
+        if ($facture->getPlaineNom()) {
+            $html = $this->facturePdfPlaine->render($facture);
+        } else {
+            $html = $this->facturePdfPresence->render($facture);
+        }
+
+        return $html;
     }
 
     public function getBasePathFacture(string $month): string
