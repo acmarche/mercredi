@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: DocumentRepository::class)]
 class Document implements TimestampableInterface, UuidableInterface, Stringable
 {
@@ -27,12 +25,13 @@ class Document implements TimestampableInterface, UuidableInterface, Stringable
     use TimestampableTrait;
     use NomTrait;
     use FileTrait;
-    /**
-     * @Vich\UploadableField(mapping="mercredi_document", fileNameProperty="fileName", mimeType="mimeType", size="fileSize")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     */
-    #[Assert\File(maxSize: '10M', mimeTypes: ['application/pdf', 'application/x-pdf', 'image/*'], mimeTypesMessage: 'Uniquement des images ou Pdf')]
+
+    #[Vich\UploadableField(mapping: 'mercredi_document', fileNameProperty: 'fileName', mimeType: 'mimeType', size: 'fileSize')]
+    #[Assert\File(maxSize: '10M', mimeTypes: [
+        'application/pdf',
+        'application/x-pdf',
+        'image/*',
+    ], mimeTypesMessage: 'Uniquement des images ou Pdf')]
     private ?File $file = null;
 
     public function __toString(): string

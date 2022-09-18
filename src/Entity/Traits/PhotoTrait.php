@@ -11,9 +11,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 trait PhotoTrait
 {
-    /**
-     * @Vich\UploadableField(mapping="mercredi_enfant_image", fileNameProperty="photoName")
-     */
+    #[Vich\UploadableField(mapping: 'mercredi_enfant_image', fileNameProperty: 'photoName')]
     #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;
 

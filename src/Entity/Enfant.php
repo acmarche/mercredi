@@ -44,10 +44,8 @@ use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
 use Stringable;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- */
 #[ORM\Entity]
+#[Vich\Uploadable]
 class Enfant implements SluggableInterface, TimestampableInterface, UuidableInterface, Stringable
 {
     use IdTrait;
@@ -78,6 +76,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use RegistreNationalTrait;
     use PoidsTrait;
     use IdOldTrait;
+
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $photo_autorisation;
     #[ORM\ManyToOne(targetEntity: AnneeScolaire::class, inversedBy: 'enfants')]
@@ -134,7 +133,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     public function getTuteurs(): array
     {
         return array_map(
-            fn ($relation) => $relation->getTuteur(),
+            fn($relation) => $relation->getTuteur(),
             $this->getRelations()->toArray()
         );
     }

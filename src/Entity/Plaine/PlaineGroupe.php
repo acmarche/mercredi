@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity()]
 #[ORM\Table(name: 'plaine_groupe')]
 #[ORM\UniqueConstraint(columns: ['plaine_id', 'groupe_scolaire_id'])]
@@ -23,11 +24,8 @@ class PlaineGroupe implements TimestampableInterface, Stringable
     use TimestampableTrait;
     #[ORM\Column(type: 'integer')]
     private ?int $inscription_maximum = 0;
-    /**
-     * @Vich\UploadableField(mapping="mercredi_groupe", fileNameProperty="fileName", mimeType="mimeType", size="fileSize")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     */
+
+    #[Vich\UploadableField(mapping: 'mercredi_groupe', fileNameProperty: 'fileName', mimeType: 'mimeType', size: 'fileSize')]
     #[Assert\File(maxSize: '10M', mimeTypes: ['application/pdf', 'application/x-pdf', 'image/*'], mimeTypesMessage: 'Uniquement des images ou Pdf')]
     private ?File $file = null;
 

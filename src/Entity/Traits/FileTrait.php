@@ -11,21 +11,12 @@ trait FileTrait
 {
     private ?File $file = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $fileName = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $mimeType = null;
 
-    /**
-     * @var int|null
-     */
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $fileSize = null;
 

@@ -17,10 +17,8 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- */
 #[ORM\Entity(repositoryClass: OrganisationRepository::class)]
+#[Vich\Uploadable]
 class Organisation implements Stringable
 {
     use IdTrait;
