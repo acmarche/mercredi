@@ -28,11 +28,10 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
 
     public function newInstance(Plaine $plaine, Tuteur $tuteur): FactureInterface
     {
-        $facture = $this->factureFactory->newInstance($tuteur);
+        $facture = $this->factureFactory->newInstance($tuteur, $plaine);
         $jours = $plaine->getJours();
         $facture->setMois($jours[0]);
         $facture->setPlaineNom($plaine->getNom());
-        $facture->setPlaine($plaine);
 
         return $facture;
     }

@@ -4,8 +4,10 @@ namespace AcMarche\Mercredi\Facture\Factory;
 
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
+use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use DateTime;
 use Exception;
@@ -17,13 +19,23 @@ final class FactureFactory
 
     public function __construct(
         private FacturePdfPresenceInterface $facturePdfPresence,
-        private ParameterBagInterface $parameterBag
+        private ParameterBagInterface $parameterBag,
+        private FactureRepository $factureRepository
     ) {
     }
 
-    public function newInstance(Tuteur $tuteur): Facture
+    public function newInstance(Tuteur $tuteur, ?Plaine $plaine = null): Facture
     {
-        $facture = new Facture($tuteur);
+        if ($plaine) {
+            $facture = $this->factureRepository->findByTuteurAndPlaine($tuteur, $plaine);
+            if (!$facture) {
+                $facture = new Facture($tuteur);
+                $facture->setPlaine($plaine);
+            }
+        }
+        if (!$facture) {
+            $facture = new Facture($tuteur);
+        }
         $facture->setFactureLe(new DateTime());
         $facture->setNom($tuteur->getNom());
         $facture->setPrenom($tuteur->getPrenom());

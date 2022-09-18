@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
+use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Mailer\NotificationEmailJf;
@@ -30,6 +31,7 @@ class FactureEmailFactory
         private FacturePdfPresenceInterface $facturePdfPresence,
         private FacturePdfPlaineInterface $facturePdfPlaine,
         private FactureFactory $factureFactory,
+        private FacturePdfFactoryTrait $facturePdfFactory,
         private ParameterBagInterface $parameterBag
     ) {
     }
@@ -97,7 +99,7 @@ class FactureEmailFactory
         $factureFile = $path.'facture-'.$facture->getId().'.pdf';
 
         $date = $facture->getFactureLe();
-        if (! is_readable($factureFile)) {
+        if (!is_readable($factureFile)) {
             throw new Exception('Pdf non trouvé '.$factureFile);
         }
         $message->attachFromPath($factureFile, 'facture_'.$date->format('d-m-Y').'.pdf', 'application/pdf');
@@ -108,7 +110,7 @@ class FactureEmailFactory
      */
     public function attachFactureOnTheFly(FactureInterface $facture, Email $message): void
     {
-        $htmlInvoice = $this->factureFactory->createHtml($facture);
+        $htmlInvoice = $this->facturePdfFactory->generate($facture);
         $invoicepdf = $this->getPdf()->getOutputFromHtml($htmlInvoice);
 
         $date = $facture->getFactureLe();
