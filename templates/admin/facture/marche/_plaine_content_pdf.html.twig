@@ -27,7 +27,7 @@
         <div class="text-center">
             <div>
                 Accueils extra-scolaires organisés par l’ASBL Espaces Parents Enfants<br>
-                <strong>{{ plaine }}</strong>
+                <strong>{{ plaine.nom }}</strong>
             </div>
         </div>
         <p class="mt-5">
@@ -35,35 +35,22 @@
             En cas de difficultés liées au règlement de la facture, <br>
             veuillez contacter la cheffe d’équipe, Madame Wigny, au 084/32 69 90<br>
         </p>
-        <table class="table table-bordered">
+        <h4 class="text-success">Présences</h4>
+        <table class="table table-bordered table-hover">
+            <thead>
             <tr>
-                <th>Nom</th>
-                <th>Inscrits aux dates</th>
+                <th>Enfant</th>
+                <th>Date</th>
             </tr>
-            {% for enfant in enfants %}
+            </thead>
+            {% for facturePlaine in facturePlaines %}
                 <tr>
-                    <td>{{ enfant }}</td>
+                    <td>{{ facturePlaine.nom }} {{ facturePlaine.prenom }}</td>
                     <td>
-                        {% for inscription in inscriptions %}
-                            {% if inscription.enfant.id == enfant.id %}
-                                {{ inscription.jour.dateJour| date('d/m') }},
-                            {% endif %}
-                        {% endfor %}
+                        {{ facturePlaine.presenceDate | format_date('full') }}
                     </td>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="2">Aucun</td>
-                </tr>
             {% endfor %}
-            <tfoot>
-            <tr>
-                <th>Total à payer</th>
-                <td class="text-end">
-                    <strong>{{ dto.total | format_currency('eur') }}</strong>
-                </td>
-            </tr>
-            </tfoot>
         </table>
 
         <p class="text-center">
@@ -80,7 +67,7 @@
                     Sylvie WIGNY
                 </td>
             </tr>
-            <tr>
+            <!--   <tr>
                 <td>
                     <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/dewez.jpg')) }}"
                          height="70" alt="signature"/>
@@ -89,11 +76,11 @@
                     <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/chaplier.jpg')) }}"
                          height="70" alt="signature"/>
                 </td>
-            </tr>
+            </tr>-->
         </table>
     </div>
     <div class="card-footer text-success mt-3">
-        A payer: {{ data.cout | format_currency('eur') }}<br>
+        A payer: {{ dto.total | format_currency('eur') }}<br>
         IBAN: B E 2 3 0 9 1 0 1 9 6 1 9 6 9 1<br>
         BIC: G K C C B E B B<br>
         Communication: {{ facture.communication }}

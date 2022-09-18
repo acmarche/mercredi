@@ -74,7 +74,7 @@
                 <tr>
                     <th>Total à payer</th>
                     <td class="text-right" colspan="{{ data.enfants|length }}">
-                        <strong>{{ data.cout | format_currency('eur') }}</strong>
+                        <strong>{{ dto.total | format_currency('eur') }}</strong>
                     </td>
                 </tr>
                 </tfoot>
@@ -84,7 +84,7 @@
             </p>
         </div>
         <div class="card-footer text-success mt-3">
-            A payer: {{ data.cout | format_currency('eur') }}<br>
+            A payer: {{ dto.total | format_currency('eur') }}<br>
             IBAN: BE27 0016 3639 7373<br>
             Communication: {{ facture.communication }}
         </div>

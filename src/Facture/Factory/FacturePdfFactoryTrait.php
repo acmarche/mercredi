@@ -14,18 +14,11 @@ final class FacturePdfFactoryTrait
 {
     use PdfDownloaderTrait;
 
-    private FacturePdfPresenceInterface $facturePdfPresence;
-    private FacturePdfPlaineInterface $facturePdfPlaine;
-    private SluggerInterface $slugger;
-
     public function __construct(
-        FacturePdfPresenceInterface $facturePdfPresence,
-        FacturePdfPlaineInterface $facturePdfPlaine,
-        SluggerInterface $slugger
+        private FacturePdfPresenceInterface $facturePdfPresence,
+        private FacturePdfPlaineInterface $facturePdfPlaine,
+        private SluggerInterface $slugger
     ) {
-        $this->facturePdfPresence = $facturePdfPresence;
-        $this->facturePdfPlaine = $facturePdfPlaine;
-        $this->slugger = $slugger;
     }
 
     public function generate(FactureInterface $facture): Response

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Render;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use Twig\Environment;
@@ -15,6 +16,7 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
         private OrganisationRepository $organisationRepository,
         private FactureCalculatorInterface $factureCalculator,
         private PlainePresenceRepository $plainePresenceRepository,
+        private FacturePresenceRepository $facturePresenceRepository,
         private Environment $environment
     ) {
     }
@@ -33,12 +35,14 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
 
     private function prepareContent(FactureInterface $facture): string
     {
-        $plaine = $facture->getPlaine();
         $tuteur = $facture->getTuteur();
-        $organisation = $this->organisationRepository->getOrganisation();
-
+        $plaine = $facture->getPlaine();
+        $facturePlaines = $this->facturePresenceRepository->findByFactureAndType(
+            $facture,
+            FactureInterface::OBJECT_PLAINE
+        );
         $dto = $this->factureCalculator->createDetail($facture);
-        $inscriptions = $this->plainePresenceRepository->findByPlaineAndTuteur($plaine, $tuteur);
+        $organisation = $this->organisationRepository->getOrganisation();
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $tuteur);
 
         return $this->environment->render(
@@ -47,7 +51,7 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'enfants' => $enfants,
-                'inscriptions' => $inscriptions,
+                'facturePlaines' => $facturePlaines,
                 'organisation' => $organisation,
                 'dto' => $dto,
                 'plaine' => $plaine,
