@@ -19,6 +19,7 @@ use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Exception;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Twig\Environment;
 
 class PlaineHandlerMarche implements PlaineHandlerInterface
 {
@@ -28,7 +29,8 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private FactureEmailFactory $factureEmailFactory,
         private NotificationMailer $notificationMailer,
         private AdminEmailFactory $adminEmailFactory,
-        private PresenceHandlerInterface $presenceHandler
+        private PresenceHandlerInterface $presenceHandler,
+        private Environment $environment
     ) {
     }
 
@@ -108,8 +110,9 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
             throw new Exception($error);
         }
 
+        $body = $this->environment->render('@AcMarcheMercrediAdmin/message/_plaine_facture_text.html.twig');
         $from = $this->factureEmailFactory->getEmailAddressOrganisation();
-        $message = $this->factureEmailFactory->messageFacture($from, 'Inscription à la plaine', 'Coucou');
+        $message = $this->factureEmailFactory->messageFacture($from, 'Votre inscription à '.$plaine->getNom(), $body);
         $this->factureEmailFactory->setTos($message, $emails);
         $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
 
