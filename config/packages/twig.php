@@ -10,9 +10,9 @@ return static function (TwigConfig $twig) {
         ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/animateur', 'AcMarcheMercrediAnimateur',)
         ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/email', 'AcMarcheMercrediEmail',)
         ->formThemes(['bootstrap_5_layout.html.twig'])
-        ->global('mercredi_register', filter_var('%env(MERCREDI_REGISTER)%', FILTER_VALIDATE_BOOLEAN))
-        ->global('mercredi_accueil', filter_var('%env(MERCREDI_ACCUEIL)%', FILTER_VALIDATE_BOOLEAN))
-        ->global('mercredi_paiement', filter_var('%env(MERCREDI_PAIEMENT)%', FILTER_VALIDATE_BOOLEAN))
+        ->global('mercredi_register', '%env(MERCREDI_REGISTER)%')
+        ->global('mercredi_accueil', '%env(MERCREDI_ACCUEIL)%')
+        ->global('mercredi_paiement', '%env(MERCREDI_PAIEMENT)%')
         ->global('presence_nb_days', '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%',)
         ->global('pedagogique_nb_days', '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%',)
         ->global(

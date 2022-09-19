@@ -16,7 +16,7 @@
     <i class="fas fa-hand-holding-usd"></i>
     Ses créances</a>
 
-{% if mercredi_paiement %}
+{% if mercredi_paiement > 1 %}
     <a href="{{ path('mercredi_admin_paiement_index', {'id': tuteur.id}) }}" class="btn btn-primary" role='button'>
         <i class="fas fa-dollar-sign"></i>
         Ses paiements</a>
