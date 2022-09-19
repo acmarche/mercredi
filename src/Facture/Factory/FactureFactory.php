@@ -28,6 +28,7 @@ final class FactureFactory
 
     public function newInstance(Tuteur $tuteur, ?Plaine $plaine = null): Facture
     {
+        $facture = null;
         if ($plaine) {
             $facture = $this->factureRepository->findByTuteurAndPlaine($tuteur, $plaine);
             if (!$facture) {
