@@ -32,11 +32,17 @@ class FacturePlaineController extends AbstractController
     {
         $relations = $this->relationRepository->findByTuteur($tuteur);
         $enfants = RelationUtils::extractEnfants($relations);
-        $plaines = [[]];
+        $plainesTmp = $plaines = [];
         foreach ($enfants as $enfant) {
-            $plaines[] = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
+            $plainesTmp[] = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
         }
-        $plaines = array_merge(...$plaines);
+        foreach ($plainesTmp as $plaine2) {
+            foreach ($plaine2 as $plaine) {
+                if ($plaine instanceof Plaine) {
+                    $plaines[$plaine->getId()] = $plaine;
+                }
+            }
+        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_plaine/select_plaine.html.twig',

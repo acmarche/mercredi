@@ -59,7 +59,8 @@ final class PlainePresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Plaine[]|ArrayCollection
+     * @param Enfant $enfant
+     * @return iterable|Plaine[]
      */
     public function findPlainesByEnfant(Enfant $enfant): iterable
     {

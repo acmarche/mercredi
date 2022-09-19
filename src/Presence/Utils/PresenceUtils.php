@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use AcMarche\Mercredi\Utils\SortUtils;
 use Carbon\Carbon;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class PresenceUtils
@@ -61,7 +60,7 @@ final class PresenceUtils
     public static function extractTuteurs(array $presences): array
     {
         $tuteurs = array_map(
-            fn ($presence) => $presence->getTuteur(),
+            fn($presence) => $presence->getTuteur(),
             $presences
         );
         $data = [];
@@ -115,7 +114,7 @@ final class PresenceUtils
     {
         $jours =
             array_map(
-                fn ($presence) => $presence->getJour(),
+                fn($presence) => $presence->getJour(),
                 $presences
             );
         $data = [];
@@ -144,29 +143,24 @@ final class PresenceUtils
     /**
      * @param Presence[] $presences
      *
-     * @return ArrayCollection|Plaine[]
+     * @return Plaine[]
      */
     public static function extractPlainesFromPresences(array $presences): array
     {
-        $plaines = new ArrayCollection();
-        array_map(
-            function ($presence) use ($plaines) {
-                $jour = $presence->getJour();
-                if (! $jour) {
-                    return null;
-                }
-                $plaine = $jour->getPlaine();
-                if (! $plaine instanceof Plaine) {
-                    return null;
-                }
-                if (! $plaines->contains($plaine)) {
-                    $plaines->add($plaine);
-                }
-            },
-            $presences
-        );
+        $plaines = [];
+        foreach ($presences as $presence) {
+            $jour = $presence->getJour();
+            if (!$jour instanceof Jour) {
+                continue;
+            }
+            $plaine = $jour->getPlaine();
+            if (!$plaine instanceof Plaine) {
+                continue;
+            }
+            $plaines[$plaine->getId()] = $plaine;
+        }
 
-        return $plaines->toArray();
+        return $plaines;
     }
 
     /**
@@ -176,7 +170,7 @@ final class PresenceUtils
     {
         $data = [];
         foreach ($presences as $presence) {
-           $tuteur = $presence->getTuteur();
+            $tuteur = $presence->getTuteur();
             $data[$tuteur->getId()]['tuteur'] = $tuteur;
             $data[$tuteur->getId()]['presences'][] = $presence;
         }
