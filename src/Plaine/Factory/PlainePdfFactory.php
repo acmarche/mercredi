@@ -38,7 +38,7 @@ class PlainePdfFactory
         $data = [];
         $dataEnfants = [];
         $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
-        $groupeForce->setNom('Non classé');
+        $groupeForce->setNom('Scolaire non classé');
         $stats = [];
         foreach ($plaine->getPlaineGroupes() as $plaineGroupe) {
             foreach ($dates as $date) {

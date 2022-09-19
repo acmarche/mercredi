@@ -39,7 +39,7 @@ class GroupingMarche implements GroupingInterface
         $date = $jour->getDateJour();
         if ($plaine->getPlaineGroupes()->count() > 0) {
             $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
-            $groupeForce->setNom('Non classé');
+            $groupeForce->setNom('Petits');
         } else {
             $groupeForce = new GroupeScolaire();
             $groupeForce->setNom('Inexistant');
