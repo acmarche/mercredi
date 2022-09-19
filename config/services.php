@@ -55,11 +55,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DirectoryNamer::class)
         ->public();
 
-    $services->alias(TarificationFormGeneratorInterface::class, TarificationHottonFormGenerator::class);
-    $services->alias(PresenceCalculatorInterface::class, PrenceHottonCalculator::class);
-    $services->alias(PlaineCalculatorInterface::class, PlaineHottonCalculator::class);
-    $services->alias(FacturePdfPresenceInterface::class, FacturePdfPresenceHotton::class);
-
     $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
 
     $services->instanceof(AfterUserRegistration::class)
