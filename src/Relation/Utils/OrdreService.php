@@ -33,7 +33,7 @@ final class OrdreService
 
     public function getOrdreOnPresence(PresenceInterface $presence): int
     {
-        /*
+        /**
          * Ordre force sur la presence
          */
         if (0 !== ($presence->getOrdre())) {
@@ -46,7 +46,7 @@ final class OrdreService
         if ($ordreRelation = $this->getOrdreOnRelation($enfant, $tuteur)) {
             $ordreBase = $ordreRelation;
         }
-        /*
+        /**
          * quand enfant premier, fratrie pas d'importance
          */
         if (1 === $ordreBase) {
@@ -61,7 +61,7 @@ final class OrdreService
             [$tuteur]
         );
 
-        /*
+        /**
          * Pas de fratries
          * Force 1
          */
@@ -81,7 +81,7 @@ final class OrdreService
         }
 
         $presents[] = $enfant;
-        /*
+        /**
          * si pas de date naissance on force 1;
          */
         foreach ($presents as $present) {
@@ -108,6 +108,7 @@ final class OrdreService
     public function getFratriesPresents(Presence $presence): array
     {
         $tuteur = $presence->getTuteur();
+
         /**
          * Ordre suivant la fratries.
          */
@@ -123,7 +124,7 @@ final class OrdreService
         $jour = $presence->getJour();
         $presents = [];
         foreach ($fratries as $fratry) {
-            if (null !== $this->presenceRepository->findByTuteurEnfantAndJour($tuteur, $fratry, $jour)) {
+            if (null !== $this->presenceRepository->findByTuteurEnfantAndJourPlaineOrNot($tuteur, $fratry, $jour)) {
                 $presents[] = $fratry;
             }
         }

@@ -59,6 +59,22 @@ final class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
+       /**
+     * Pour le calcul du cout de la presence
+     * On check s'il y a des frères et soeurs présents.
+     */
+    public function findByTuteurEnfantAndJourPlaineOrNot(Tuteur $tuteur, Enfant $enfant, Jour $jour): ?Presence
+    {
+        return $this->createQBlBase()
+            ->andWhere('presence.enfant = :enfant')
+            ->setParameter('enfant', $enfant)
+            ->andWhere('presence.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('presence.jour = :jour')
+            ->setParameter('jour', $jour)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * @return Presence[]
      */
