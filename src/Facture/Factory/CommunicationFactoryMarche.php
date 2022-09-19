@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 
-class CommunicationFactoryHotton implements CommunicationFactoryInterface
+class CommunicationFactoryMarche implements CommunicationFactoryInterface
 {
     public function __construct(
         private FactureRepository $factureRepository

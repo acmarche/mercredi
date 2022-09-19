@@ -28,7 +28,7 @@ class FacturePlaineController extends AbstractController
     }
 
     #[Route(path: '/{id}/manual', name: 'mercredi_admin_facture_select_plaine', methods: ['GET', 'POST'])]
-    public function selectPlaine(Request $request, Tuteur $tuteur): Response
+    public function selectPlaine(Tuteur $tuteur): Response
     {
         $relations = $this->relationRepository->findByTuteur($tuteur);
         $enfants = RelationUtils::extractEnfants($relations);

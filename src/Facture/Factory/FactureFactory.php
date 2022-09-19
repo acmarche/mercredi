@@ -31,6 +31,7 @@ final class FactureFactory
         $facture = null;
         if ($plaine) {
             $facture = $this->factureRepository->findByTuteurAndPlaine($tuteur, $plaine);
+
             if (!$facture) {
                 $facture = new Facture($tuteur);
                 $facture->setPlaine($plaine);
