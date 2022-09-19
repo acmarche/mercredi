@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Command;
 
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,16 +12,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
 
+#[AsCommand(
+    name: 'mercredi:test-mail',
+    description: 'Test envoie mail'
+)]
 class MailTestCommand extends Command
 {
     use InitMailerTrait;
 
-    protected static $defaultName = 'mercredi:test-mail';
-
     protected function configure(): void
     {
         $this
-            ->setDescription('Test envoie mail')
             ->addArgument('from', InputArgument::REQUIRED, 'Expéditeur')
             ->addArgument('to', InputArgument::REQUIRED, 'Destinataire');
     }

@@ -49,7 +49,11 @@ final class PlaineMarcheCalculator implements PlaineCalculatorInterface
 
     public function getPrixByOrdre(Plaine $plaine, $ordre): float
     {
-        if ($ordre > 1) {
+        if ($ordre > 2) {
+            return $plaine->getPrix3();
+        }
+
+        if ($ordre == 2) {
             return $plaine->getPrix2();
         }
 

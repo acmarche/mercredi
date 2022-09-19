@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use DateTime;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,11 +19,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
+#[AsCommand(
+    name: 'mercredi:send-facture',
+    description: 'Envoie les factures par mail'
+)]
 class SendFactureCommand extends Command
 {
-    protected static $defaultName = 'mercredi:send-facture';
-    protected static $defaultDescription = 'Envoie les factures par mail';
-
     public function __construct(
         private FactureRepository $factureRepository,
         private FactureCronRepository $factureCronRepository,
@@ -43,7 +45,7 @@ class SendFactureCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $force = (bool) $input->getOption('force');
+        $force = (bool)$input->getOption('force');
         /* $month = $input->getArgument('month');
 
          if (preg_match("#^\d{2}-\d{4}$#", $month) == false) {
@@ -68,7 +70,7 @@ class SendFactureCommand extends Command
             );
 
             foreach ($factures as $facture) {
-                if (null !== $facture->getEnvoyeLe() && ! $force) {
+                if (null !== $facture->getEnvoyeLe() && !$force) {
                     continue;
                 }
 

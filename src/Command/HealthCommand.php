@@ -6,14 +6,17 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'mercredi:health',
+    description: 'Vérifie l\'intégrité des données'
+)]
 class HealthCommand extends Command
 {
-    protected static $defaultName = 'mercredi:health';
-
     public function __construct(
         private EnfantRepository $enfantRepository,
         private TuteurRepository $tuteurRepository,
@@ -22,12 +25,6 @@ class HealthCommand extends Command
         string $name = null
     ) {
         parent::__construct($name);
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setDescription('Vérifie l\'intégrité des données');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
