@@ -37,11 +37,8 @@ class Organisation implements Stringable
     #[ORM\Column(name: 'email', type: 'string', length: 50, nullable: false)]
     #[Assert\Email]
     private ?string $email = null;
-    /**
-     * @Vich\UploadableField(mapping="mercredi_organisation_image", fileNameProperty="photoName")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     */
+
+    #[Vich\UploadableField(mapping: 'mercredi_organisation_image', fileNameProperty: 'photoName')]
     #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;
 
