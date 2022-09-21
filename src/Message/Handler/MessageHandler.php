@@ -57,10 +57,11 @@ final class MessageHandler
      */
     public function handleFromPlaine(Plaine $plaine, Message $message, bool $attachCourrier): void
     {
-        $templatedEmail = $this->emailFactory->createForPlaine($message);
         $recipients = $this->recipientsForPlaine($plaine);
+        $templatedBase = $this->emailFactory->createForPlaine($message);
 
         foreach ($recipients as $recipient) {
+            $templatedEmail = clone($templatedBase);
             $emails = $recipient['emails'];
             if (count($emails) == 0) {
                 $emails = ['jf@marche.be'];
@@ -72,6 +73,7 @@ final class MessageHandler
             }
             $templatedEmail->to(...$emails);
             $this->notificationMailer->sendAsEmailNotification($templatedEmail);
+            unset($templatedEmail);
         }
 
         $this->messageRepository->persist($message);
