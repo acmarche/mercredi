@@ -162,7 +162,6 @@ final class MessageController extends AbstractController
     {
         $presences = $this->plainePresenceRepository->findByPlaine($plaine);
         $tuteurs = PresenceUtils::extractTuteurs($presences);
-        dump($tuteurs);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
