@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Message\Factory;
 
 use AcMarche\Mercredi\Entity\Message;
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Mailer\NotificationEmailJf;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -30,7 +30,7 @@ final class EmailFactory
                 ]
             );
 
-        /*
+        /**
          * Pieces jointes.
          */
         if (null !== ($uploadedFile = $message->getFile())) {
@@ -44,7 +44,7 @@ final class EmailFactory
         return $notification;
     }
 
-    public function createForPlaine(Plaine $plaine, Message $message, bool $attachCourriers): NotificationEmailJf
+    public function createForPlaine(Message $message): NotificationEmailJf
     {
         $notification = NotificationEmailJf::asPublicEmailJf();
         $notification->subject($message->getSujet())
@@ -57,22 +57,36 @@ final class EmailFactory
                 ]
             );
 
-        /*
-         * Pieces jointes.
+        /**
+         * Piece jointe.
          */
-        if ($attachCourriers) {
-            foreach ($plaine->getPlaineGroupes() as $plaineGroupe) {
-                if ($plaineGroupe->getFileName()) {
-                    $path = $this->storage->resolvePath($plaineGroupe, 'file');
-                    $notification->attachFromPath(
-                        $path,
-                        $plaineGroupe->getGroupeScolaire()->getNom(),
-                        $plaineGroupe->getMimeType()
-                    );
-                }
-            }
+        if (null !== ($uploadedFile = $message->getFile())) {
+            $notification->attachFromPath(
+                $uploadedFile->getRealPath(),
+                $uploadedFile->getClientOriginalName(),
+                $uploadedFile->getClientMimeType()
+            );
         }
 
         return $notification;
+    }
+
+    /**
+     * @param NotificationEmailJf $notification
+     * @param array|PlaineGroupe[] $groupes
+     * @return void
+     */
+    public function attachmentsForPlaine(NotificationEmailJf $notification, array $groupes): void
+    {
+        foreach ($groupes as $plaineGroupe) {
+            if ($plaineGroupe->getFileName()) {
+                $path = $this->storage->resolvePath($plaineGroupe, 'file');
+                $notification->attachFromPath(
+                    $path,
+                    $plaineGroupe->getGroupeScolaire()->getNom(),
+                    $plaineGroupe->getMimeType()
+                );
+            }
+        }
     }
 }

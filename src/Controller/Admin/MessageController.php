@@ -13,11 +13,13 @@ use AcMarche\Mercredi\Message\Form\MessageType;
 use AcMarche\Mercredi\Message\Form\SearchMessageType;
 use AcMarche\Mercredi\Message\Handler\MessageHandler;
 use AcMarche\Mercredi\Message\Repository\MessageRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -65,7 +67,7 @@ final class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if (! $jour && ! $ecole) {
+            if (!$jour && !$ecole) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
@@ -163,17 +165,20 @@ final class MessageController extends AbstractController
         $presences = $this->plainePresenceRepository->findByPlaine($plaine);
         $tuteurs = PresenceUtils::extractTuteurs($presences);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
+
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
         $form = $this->createForm(MessagePlaineType::class, $message);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $attachCourrier = (bool) $form->get('attachCourriers')->getData();
-            $this->messageHandler->handleFromPlaine($plaine, $message, $attachCourrier);
+            $attachCourrier = (bool)$form->get('attachCourriers')->getData();
+            $this->messageHandler->handleFromPlaine($plaine, $message,$attachCourrier);
 
             $this->addFlash('success', 'Le message a bien été envoyé');
 
-            return $this->redirectToRoute('mercredi_message_index');
+         /*   return $this->redirectToRoute('mercredi_admin_plaine_show', [
+                'id' => $plaine->getId(),
+            ]);*/
         }
 
         return $this->render(
@@ -183,7 +188,6 @@ final class MessageController extends AbstractController
                 'form' => $form->createView(),
                 'emails' => $emails,
                 'plaine' => $plaine,
-                'tuteurs' => [],
             ]
         );
     }
