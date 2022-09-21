@@ -53,7 +53,6 @@ final class MessageController extends AbstractController
             $data = $form->getData();
             $ecole = $data['ecole'];
             $jour = $data['jour'];
-            $plaine = $data['plaine'];
             $tuteurs = [[]];
 
             if ($jour) {
@@ -66,12 +65,7 @@ final class MessageController extends AbstractController
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
 
-            if ($plaine) {
-                $presences = $this->plainePresenceRepository->findByPlaine($plaine);
-                $tuteurs[] = PresenceUtils::extractTuteurs($presences);
-            }
-
-            if (! $jour && ! $ecole && ! $plaine) {
+            if (! $jour && ! $ecole) {
                 $relations = $this->relationRepository->findTuteursActifs();
                 $tuteurs[] = RelationUtils::extractTuteurs($relations);
             }
@@ -168,6 +162,7 @@ final class MessageController extends AbstractController
     {
         $presences = $this->plainePresenceRepository->findByPlaine($plaine);
         $tuteurs = PresenceUtils::extractTuteurs($presences);
+        dump($tuteurs);
         $emails = $this->tuteurUtils->getEmails($tuteurs);
         $message = $this->messageFactory->createInstance();
         $message->setDestinataires($emails);
