@@ -50,7 +50,7 @@ Feature: Gestion des enfants
     And I press "Rechercher"
     Then I should see "Gauthie"
     Then I follow "Gauthie"
-    Then I press "Supprimer l'enfant"
+    Then I press "Supprimer la fiche l'enfant"
    # Then print last response
     Then I should see "L'enfant a bien été supprimé"
 
@@ -61,7 +61,7 @@ Feature: Gestion des enfants
     And I press "Rechercher"
     Then I should see "Peret"
     Then I follow "Peret"
-    Then I press "Supprimer l'enfant"
+    Then I press "Supprimer la fiche l'enfant"
     Then I should see "L'enfant a bien été supprimé"
 
   Scenario: Rechercher un enfant

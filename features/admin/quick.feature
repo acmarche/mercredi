@@ -22,6 +22,7 @@ Feature: Ajout rapide d'un tuteur et d'un enfant
     And I select "2015" from "tuteur_enfant_quick[enfant][birthday][year]"
     And I select "Waha" from "tuteur_enfant_quick[enfant][ecole]"
     And I select "3M" from "tuteur_enfant_quick[enfant][annee_scolaire]"
+    And I check "Créer un compte"
     And I press "Sauvegarder"
     Then I should see "Un compte a été créé pour le parent"
     Then I should see "La fiche parent FLANDERS Ned bien été ajoutée"

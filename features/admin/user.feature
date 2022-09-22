@@ -39,6 +39,7 @@ Feature: Gestion des utilisateurs
     Then I should see "Parent"
 
   Scenario: Modifier un utilisateur
+    And I press "Rechercher"
     When I follow "Cohen Leonard"
     Then I follow "Modifier"
     And I fill in "user_edit[nom]" with "De Vinci"
@@ -46,6 +47,7 @@ Feature: Gestion des utilisateurs
     Then I should see "DE VINCI Leonard"
 
   Scenario: Je modifie les rôles d'un utilisateur
+    And I press "Rechercher"
     When I follow "Cohen Leonard"
     Then I follow "Rôles"
     And I check "Ecole"
@@ -54,6 +56,7 @@ Feature: Gestion des utilisateurs
     Then I should see "ROLE_MERCREDI_ECOLE"
 
   Scenario: Je change le mot de passe et je me connecte avec le nouveau mot de passe
+    And I press "Rechercher"
     When I follow "Cohen Albert"
     Then I follow "Changer le mot de passe"
     And I fill in "user_password[plainPassword]" with "lisa"
@@ -66,6 +69,7 @@ Feature: Gestion des utilisateurs
     Then I should see "SIMPSON Homer"
 
   Scenario: Supprimer un utilisateur
+    And I press "Rechercher"
     When I follow "Cohen Albert"
     Then I press "Supprimer l'utilisateur"
    # Then print last response

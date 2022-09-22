@@ -31,7 +31,7 @@ Feature: Gestion des dates d'accueil
     And I fill in "jour[date_jour]" with "2020-05-09"
     And I check "Aye"
     And I check "Hollogne"
-    And I check "Journée pédagoque"
+    And I check "Journée pédagogique"
     And I press "Sauvegarder"
     Then I should see "Tarifs pour la journée du 09-05-2020"
     And I fill in "jour_tarification_full_day[prix1]" with "4"

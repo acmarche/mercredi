@@ -11,6 +11,7 @@ Feature: Gestion des utilisateurs
     Given I am logged in as an admin
     Given I am on "/admin/user/"
     Then I should see "Liste des utilisateurs"
+    And I press "Rechercher"
 
   Scenario: J'associe un parent sans les bons droits
     When I follow "Cohen Leonard"
