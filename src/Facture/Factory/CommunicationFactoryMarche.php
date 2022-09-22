@@ -43,6 +43,28 @@ class CommunicationFactoryMarche implements CommunicationFactoryInterface
      *
      * Exemple : La communication structurée suivante +++ 201 / 8000 / 53522 +++ se rapporte donc à la facture n° 535 de l’année 2018.
      */
+
+    public function generateForPlaine(Plaine $plaine, FactureInterface $facture): string
+    {
+        $communication = $plaine->getCommunication();
+
+        if (!$communication) {
+            $communication = $plaine->getSlug();
+        }
+
+        if (!$id = $facture->getId()) {
+            $id = rand(1, 999);
+        }
+
+        $communication .= ' '.$facture->getNom().' '.$id;
+
+        if ($this->checkExist($communication)) {
+            $communication .= '-'.rand(1, 100);
+        }
+
+        return $communication;
+    }
+
     public function generateForPresence(FactureInterface $facture): string
     {
         $ecoles = '';
@@ -54,19 +76,22 @@ class CommunicationFactoryMarche implements CommunicationFactoryInterface
             }
         }
 
+        if (!$id = $facture->getId()) {
+            $id = rand(1, 999);
+        }
+
         //list($month, $year) = explode('-', $facture->getMois());
-        $communication = $ecoles.' '.$facture->getId().' '.$facture->getMois();
+        $communication = $id.' - '.$facture->getMois();
+
+        if ($this->checkExist($communication)) {
+            $communication .= '-'.rand(1, 100);
+        }
 
         return $communication;
     }
 
-    public function generateForPlaine(Plaine $plaine, FactureInterface $facture): string
+    private function checkExist(string $communication): bool
     {
-        $communication = $plaine->getCommunication();
-        if (! $communication) {
-            return $plaine->getSlug().' '.$facture->getNom().' '.$facture->getId();
-        }
-
-        return $communication.' '.$facture->getId();
+        return $this->factureRepository->findByCommunication($communication) != null;
     }
 }

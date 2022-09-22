@@ -54,8 +54,14 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
             }
         }
 
-        //list($month, $year) = explode('-', $facture->getMois());
-        $communication = $ecoles.' '.$facture->getId().' '.$facture->getMois();
+        if (!$id = $facture->getId()) {
+            $id = rand(1, 999);
+        }
+
+        $communication = $ecoles.' '.$id.' '.$facture->getMois();
+        if ($this->checkExist($communication)) {
+            $communication .= '-'.rand(1, 100);
+        }
 
         return $communication;
     }
@@ -63,10 +69,26 @@ class CommunicationFactoryHotton implements CommunicationFactoryInterface
     public function generateForPlaine(Plaine $plaine, FactureInterface $facture): string
     {
         $communication = $plaine->getCommunication();
-        if (! $communication) {
-            return $plaine->getSlug().' '.$facture->getNom().' '.$facture->getId();
+
+        if (!$communication) {
+            $communication = $plaine->getSlug();
         }
 
-        return $communication.' '.$facture->getId();
+        if (!$id = $facture->getId()) {
+            $id = rand(1, 999);
+        }
+
+        $communication .= ' '.$facture->getNom().' '.$id;
+
+        if ($this->checkExist($communication)) {
+            $communication .= '-'.rand(1, 100);
+        }
+
+        return $communication;
+    }
+
+    private function checkExist(string $communication): bool
+    {
+        return $this->factureRepository->findByCommunication($communication) != null;
     }
 }

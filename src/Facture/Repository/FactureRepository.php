@@ -202,7 +202,7 @@ final class FactureRepository extends ServiceEntityRepository
      */
     public function byEcoleAndMonth(
         ?Ecole $ecole,
-       ?string $monthYear = null,
+        ?string $monthYear = null,
     ): array {
         $queryBuilder = $this->getQBl();
 
@@ -217,5 +217,14 @@ final class FactureRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findByCommunication(string $communication): ?Facture
+    {
+        return $this->getQBl()
+            ->andWhere('facture.communication = :communication')
+            ->setParameter('communication', $communication)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
