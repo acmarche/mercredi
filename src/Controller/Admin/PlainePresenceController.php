@@ -104,7 +104,7 @@ final class PlainePresenceController extends AbstractController
     #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
     public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): RedirectResponse
     {
-        $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant);
+        $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant, $plaine->getJours());
         $this->addFlash('success', "L'enfant a bien été inscrit");
 
         return $this->redirectToRoute(
