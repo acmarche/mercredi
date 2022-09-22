@@ -63,9 +63,7 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
 
     public function isOpen(): bool
     {
-        $register = (bool) $this->parameterBag->get(Option::REGISTER);
-
-        return true === $register;
+        return (int) $this->parameterBag->get(Option::REGISTER) > 0;
     }
 
     /**

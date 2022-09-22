@@ -30,6 +30,7 @@ final class RegistrationController extends AbstractController
     public function register(Request $request): Response
     {
         if (! $this->registerCreatedHandler->isOpen()) {
+            $this->addFlash('danger','La création de compte est désactivé');
             return $this->redirectToRoute('mercredi_front_home');
         }
         $user = new User();
