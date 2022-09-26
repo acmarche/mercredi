@@ -28,7 +28,7 @@ trait GetTuteurTrait
         }
 
         if (!$this->tuteur = $this->tuteurUtils->getTuteurByUser($user)) {
-            return $this->redirectToRoute('mercredi_parent_home');
+            return $this->redirectToRoute('mercredi_parent_nouveau');
         }
 
         return null;
