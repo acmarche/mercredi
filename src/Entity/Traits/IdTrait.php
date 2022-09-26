@@ -12,7 +12,7 @@ trait IdTrait
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    public ?int $id = null;
 
     public function getId(): ?int
     {
