@@ -172,13 +172,13 @@ final class MessageController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $attachCourrier = (bool)$form->get('attachCourriers')->getData();
-            $this->messageHandler->handleFromPlaine($plaine, $message,$attachCourrier);
+            $this->messageHandler->handleFromPlaine($plaine, $message, $attachCourrier);
 
             $this->addFlash('success', 'Le message a bien été envoyé');
 
-         /*   return $this->redirectToRoute('mercredi_admin_plaine_show', [
+            return $this->redirectToRoute('mercredi_admin_plaine_show', [
                 'id' => $plaine->getId(),
-            ]);*/
+            ]);
         }
 
         return $this->render(
