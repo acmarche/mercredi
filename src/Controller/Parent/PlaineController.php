@@ -187,8 +187,12 @@ final class PlaineController extends AbstractController
 
             $enfants = $this->enfantRepository->findBy(['id' => $enfantIds]);
             foreach ($enfants as $enfant) {
-                $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
-                $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
+                try {
+                    $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
+                    $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
+                } catch (Exception $exception) {
+                    $this->addFlash('danger', $exception->getMessage());
+                }
             }
 
             return $this->redirectToRoute('mercredi_parent_plaine_show', [

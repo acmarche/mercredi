@@ -13,7 +13,9 @@ use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -30,7 +32,9 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private NotificationMailer $notificationMailer,
         private AdminEmailFactory $adminEmailFactory,
         private PresenceHandlerInterface $presenceHandler,
-        private Environment $environment
+        private Environment $environment,
+        private GroupingInterface $grouping,
+        private PlaineGroupeRepository $plaineGroupeRepository
     ) {
     }
 
@@ -41,9 +45,26 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param array|Jour[] $jours
      * @return void
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Exception
      */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): void
     {
+        $jour = $plaine->getFirstDay();
+        $age = $enfant->getAge($jour->getDateJour(), true);
+        $groupe = $this->grouping->findGroupeScolaireByAge($age);
+        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
+        if ($plaineGroupe) {
+            $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
+            $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+            if (isset($data[$groupe->id])) {
+                $inscrits = $data[$groupe->id]['enfants'];
+                if ($inscrits > $plaineGroupe->getInscriptionMaximum()) {
+                    throw new Exception(
+                        "$enfant n' a pas pu être inscrit, il n'y a plus de place pour cette catégorie d'âge"
+                    );
+                }
+            }
+        }
         $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
     }
 
