@@ -37,13 +37,9 @@ class GroupingMarche implements GroupingInterface
         $groups = [];
         $jour = $plaine->getFirstDay();
         $date = $jour->getDateJour();
-        if ($plaine->getPlaineGroupes()->count() > 0) {
-            $groupeForce = $plaine->getPlaineGroupes()[0]->getGroupeScolaire();
-            $groupeForce->setNom('Petits');
-        } else {
-            $groupeForce = new GroupeScolaire();
-            $groupeForce->setNom('Inexistant');
-        }
+        $groupeForce = new GroupeScolaire();
+        $groupeForce->setNom('Age non determine');
+        $groupeForce->id = 99999;
         foreach ($enfants as $enfant) {
             $groupe = $this->findGroupeScolaireByAge($enfant->getAge($date, true));
             if (null === $groupe) {
