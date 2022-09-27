@@ -21,6 +21,7 @@ use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Exception;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 class PlaineHandlerMarche implements PlaineHandlerInterface
@@ -34,7 +35,8 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private PresenceHandlerInterface $presenceHandler,
         private Environment $environment,
         private GroupingInterface $grouping,
-        private PlaineGroupeRepository $plaineGroupeRepository
+        private PlaineGroupeRepository $plaineGroupeRepository,
+        private Security $security
     ) {
     }
 
@@ -49,19 +51,21 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): void
     {
-        $jour = $plaine->getFirstDay();
-        $age = $enfant->getAge($jour->getDateJour(), true);
-        $groupe = $this->grouping->findGroupeScolaireByAge($age);
-        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
-        if ($plaineGroupe) {
-            $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
-            $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
-            if (isset($data[$groupe->id])) {
-                $inscrits = $data[$groupe->id]['enfants'];
-                if ($inscrits > $plaineGroupe->getInscriptionMaximum()) {
-                    throw new Exception(
-                        "$enfant n' a pas pu être inscrit, il n'y a plus de place pour cette catégorie d'âge"
-                    );
+        if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
+            $jour = $plaine->getFirstDay();
+            $age = $enfant->getAge($jour->getDateJour(), true);
+            $groupe = $this->grouping->findGroupeScolaireByAge($age);
+            $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
+            if ($plaineGroupe) {
+                $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
+                $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+                if (isset($data[$groupe->id])) {
+                    $inscrits = $data[$groupe->id]['enfants'];
+                    if (count($inscrits) > $plaineGroupe->getInscriptionMaximum()) {
+                        throw new Exception(
+                            "$enfant n' a pas pu être inscrit, il n'y a plus de place pour cette catégorie d'âge"
+                        );
+                    }
                 }
             }
         }
