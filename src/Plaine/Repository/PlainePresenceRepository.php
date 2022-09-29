@@ -72,7 +72,7 @@ final class PlainePresenceRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]|ArrayCollection
      */
-    public function findEnfantsByJour(Jour $jour, Plaine $plaine): array
+    public function findEnfantsByPlaineAndJour(Plaine $plaine, Jour $jour): array
     {
         $presences = $this->findByDay($jour, $plaine);
 
