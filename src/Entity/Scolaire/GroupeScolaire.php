@@ -28,6 +28,7 @@ class GroupeScolaire implements Stringable
     use NomTrait;
     use RemarqueTrait;
     use OrdreTrait;
+
     #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
     #[Assert\LessThan(propertyPath: 'age_maximum')]
     private ?float $age_minimum = null;
@@ -36,11 +37,6 @@ class GroupeScolaire implements Stringable
     private ?float $age_maximum = null;
     #[ORM\Column(type: 'boolean', length: 10, nullable: false)]
     private ?bool $is_plaine = false;
-    /**
-     * @var Enfant[]
-     */
-    #[ORM\OneToMany(targetEntity: Enfant::class, mappedBy: 'groupe_scolaire')]
-    private Collection $enfants;
     /**
      * @var AnneeScolaire[]
      */
@@ -54,9 +50,14 @@ class GroupeScolaire implements Stringable
     #[ORM\OneToMany(targetEntity: PlaineGroupe::class, mappedBy: 'groupe_scolaire', cascade: ['remove'])]
     private Collection $plaine_groupes;
 
+    /**
+     * @var array|Enfant[]
+     */
+    public array $enfants = [];
+
     public function __construct()
     {
-        $this->enfants = new ArrayCollection();
+        $this->enfants = [];
         $this->annees_scolaires = new ArrayCollection();
         $this->plaine_groupes = new ArrayCollection();
     }
@@ -91,34 +92,6 @@ class GroupeScolaire implements Stringable
     }
 
     /**
-     * @return Collection|Enfant[]
-     */
-    public function getEnfants(): Collection
-    {
-        return $this->enfants;
-    }
-
-    public function addEnfant(Enfant $enfant): self
-    {
-        if (! $this->enfants->contains($enfant)) {
-            $this->enfants[] = $enfant;
-            $enfant->setGroupeScolaire($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEnfant(Enfant $enfant): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->enfants->removeElement($enfant) && $enfant->getGroupeScolaire() === $this) {
-            $enfant->setGroupeScolaire(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|AnneeScolaire[]
      */
     public function getAnneesScolaires(): Collection
@@ -128,7 +101,7 @@ class GroupeScolaire implements Stringable
 
     public function addAnneesScolaire(AnneeScolaire $anneesScolaire): self
     {
-        if (! $this->annees_scolaires->contains($anneesScolaire)) {
+        if (!$this->annees_scolaires->contains($anneesScolaire)) {
             $this->annees_scolaires[] = $anneesScolaire;
             $anneesScolaire->setGroupeScolaire($this);
         }
@@ -156,7 +129,7 @@ class GroupeScolaire implements Stringable
 
     public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
     {
-        if (! $this->plaine_groupes->contains($plaineGroupe)) {
+        if (!$this->plaine_groupes->contains($plaineGroupe)) {
             $this->plaine_groupes[] = $plaineGroupe;
             $plaineGroupe->setGroupeScolaire($this);
         }

@@ -81,7 +81,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     private bool $photo_autorisation;
     #[ORM\ManyToOne(targetEntity: AnneeScolaire::class, inversedBy: 'enfants')]
     private ?AnneeScolaire $annee_scolaire = null;
-    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'enfants')]
+    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class)]
     private ?GroupeScolaire $groupe_scolaire = null;
     #[ORM\ManyToOne(targetEntity: Ecole::class, inversedBy: 'enfants')]
     private ?Ecole $ecole = null;
