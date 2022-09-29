@@ -13,7 +13,7 @@ trait JourTrait
         return $this->jour;
     }
 
-    public function setJour(Jour $jour): void
+    public function setJour(?Jour $jour): void
     {
         $this->jour = $jour;
     }

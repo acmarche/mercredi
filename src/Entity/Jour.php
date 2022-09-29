@@ -61,10 +61,10 @@ class Jour implements TimestampableInterface, Stringable
     #[ORM\ManyToMany(targetEntity: Ecole::class)]
     private Collection $ecoles;
     #[ORM\Column(name: 'date_jour', type: 'date')]
-    private ?\DateTimeInterface $date_jour = null;
+    private ?\DateTimeInterface $date_jour;
 
     public function __construct(
-        ?\DateTimeInterface $date_jour=null
+        ?\DateTimeInterface $date_jour = null
     ) {
         $this->date_jour = $date_jour;
         $this->presences = new ArrayCollection();
