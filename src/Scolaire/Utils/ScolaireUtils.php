@@ -34,16 +34,4 @@ final class ScolaireUtils
 
         return $groupes[0];
     }
-
-    /**
-     * @param Enfant $age
-     */
-    public function findGroupeScolaireEnfantByAge(?float $age): ?GroupeScolaire
-    {
-        if (! $age) {
-            return null;
-        }
-
-        return $this->groupeScolaireRepository->findGroupePlaineByAge($age);
-    }
 }
