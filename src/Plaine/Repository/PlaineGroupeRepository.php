@@ -41,4 +41,20 @@ final class PlaineGroupeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @param Plaine $plaine
+     * @return array|PlaineGroupe[]
+     */
+    public function findByPlaine(Plaine $plaine): array
+    {
+        return $this->createQueryBuilder('plaine_groupe')
+            ->leftJoin('plaine_groupe.groupe_scolaire', 'groupeScolaire', 'WITH')
+            ->addSelect('groupeScolaire')
+            ->andWhere('plaine_groupe.plaine = :plaine')
+            ->setParameter('plaine', $plaine)
+            ->orderBy('groupeScolaire.ordre')
+            ->getQuery()
+            ->getResult();
+    }
 }
