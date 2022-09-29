@@ -59,8 +59,17 @@ class PlainePresenceController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $new = $plainePresencesDto->getJours();
-            $this->plaineHandler->handleEditPresences($this->tuteur, $enfant, $currentJours, $new);
-            $this->addFlash('success', 'Les présences ont bien été modifiées');
+            $daysFull = $this->plaineHandler->handleEditPresences($plaine, $this->tuteur, $enfant, $currentJours, $new);
+            if (count($daysFull) > 0) {
+                $text = "Attention $enfant n'a pas pu être inscrit aux dates suivantes, il n'y a plus de place pour cette catégorie d'âge: <ul>";
+                foreach ($daysFull as $day) {
+                    $text .= '<li>'.$day->getDateJour()->format('d-m').'</li>';
+                }
+                $text .= "</ul>";
+                $this->addFlash('danger', $text);
+            } else {
+                $this->addFlash('success', 'Les présences ont bien été modifiées');
+            }
 
             return $this->redirectToRoute(
                 'mercredi_parent_plaine_show',

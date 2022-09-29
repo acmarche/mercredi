@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Contrat\Plaine;
 
 use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Common\Collections\Collection;
@@ -10,14 +11,30 @@ use Exception;
 
 interface PlaineHandlerInterface
 {
-    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): void;
+    /**
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @param Enfant $enfant
+     * @param iterable $jours
+     * @return array|Jour[]
+     */
+    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): array;
 
+    /**
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @param Enfant $enfant
+     * @param array $currentJours
+     * @param Collection $newJours
+     * @return array|Jour[]
+     */
     public function handleEditPresences(
+        Plaine $plaine,
         Tuteur $tuteur,
         Enfant $enfant,
         array $currentJours,
         Collection $newJours
-    ): void;
+    ): array;
 
     public function removeEnfant(Plaine $plaine, Enfant $enfant): void;
 

@@ -126,10 +126,6 @@ final class PlaineController extends AbstractController
                         'id' => $plaine->getId(),
                     ]);
                 }
-                /* if (null !== $plaine) {
-                     $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant);
-                     $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
-                 }*/
             }
 
             $session = $request->getSession();
@@ -187,11 +183,16 @@ final class PlaineController extends AbstractController
 
             $enfants = $this->enfantRepository->findBy(['id' => $enfantIds]);
             foreach ($enfants as $enfant) {
-                try {
-                    $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
+                $daysFull = $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
+                if (count($daysFull) > 0) {
+                    $text = "Attention $enfant n'a pas pu être inscrit aux dates suivantes, il n'y a plus de place pour cette catégorie d'âge: <ul>";
+                    foreach ($daysFull as $day) {
+                        $text .= '<li>'.$day->getDateJour()->format('d-m').'</li>';
+                    }
+                    $text .= "</ul>";
+                    $this->addFlash('danger', $text);
+                } else {
                     $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
-                } catch (Exception $exception) {
-                    $this->addFlash('danger', $exception->getMessage());
                 }
             }
 

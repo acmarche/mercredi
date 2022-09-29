@@ -40,19 +40,19 @@ class Plaine implements SluggableInterface, Stringable
     /**
      * @var Jour[]
      */
-    #[ORM\OneToMany(targetEntity: Jour::class, mappedBy: 'plaine', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'plaine', targetEntity: Jour::class, cascade: ['remove'])]
     private Collection $jours;
     /**
      * @var PlaineGroupe[]|null
      */
-    #[ORM\OneToMany(targetEntity: PlaineGroupe::class, mappedBy: 'plaine', cascade: ['remove', 'persist'])]
+    #[ORM\OneToMany(mappedBy: 'plaine', targetEntity: PlaineGroupe::class, cascade: ['remove', 'persist'])]
     private Collection $plaine_groupes;
-    #[ORM\Column(type: 'string', length: 100, nullable: true, unique: false)]
+    #[ORM\Column(type: 'string', length: 100, unique: false, nullable: true)]
     private ?string $communication = null;
     /**
      * @var Facture[]
      */
-    #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'plaine', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'plaine', targetEntity: Facture::class, cascade: ['remove'])]
     private Collection $factures;
 
     public function __construct()

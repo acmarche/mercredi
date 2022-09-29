@@ -185,7 +185,7 @@ final class PlainePresenceController extends AbstractController
                 $tuteur = $presences[0]->getTuteur();
             }
 
-            $this->plaineHandler->handleEditPresences($tuteur, $enfant, $currentJours, $new);
+            $this->plaineHandler->handleEditPresences($plaine, $tuteur, $enfant, $currentJours, $new);
             $this->addFlash('success', 'Les présences ont bien été modifiées');
 
             return $this->redirectToRoute(

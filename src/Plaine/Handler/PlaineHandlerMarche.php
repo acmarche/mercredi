@@ -45,42 +45,37 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param Tuteur $tuteur
      * @param Enfant $enfant
      * @param array|Jour[] $jours
-     * @return void
+     * @return array
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws Exception
      */
-    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): void
+    public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): array
     {
+        $daysFull = [];
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
-            $jour = $plaine->getFirstDay();
-            $age = $enfant->getAge($jour->getDateJour(), true);
-            $groupe = $this->grouping->findGroupeScolaireByAge($age);
-            $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
-            if ($plaineGroupe) {
-                $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
-                $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
-                if (isset($data[$groupe->id])) {
-                    $inscrits = $data[$groupe->id]['enfants'];
-                    if (count($inscrits) > $plaineGroupe->getInscriptionMaximum()) {
-                        throw new Exception(
-                            "$enfant n' a pas pu être inscrit, il n'y a plus de place pour cette catégorie d'âge"
-                        );
-                    }
-                }
-            }
+            $result = $this->removeFullDays($plaine, $enfant, $jours);
+            $jours = $result[0];
+            $daysFull = $result[1];
         }
+
         $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
+
+        return $daysFull;
     }
 
     public function handleEditPresences(
+        Plaine $plaine,
         Tuteur $tuteur,
         Enfant $enfant,
         array $currentJours,
         Collection $newJours
-    ): void {
+    ): array {
         $enMoins = array_diff($currentJours, $newJours->toArray());
         $enPlus = array_diff($newJours->toArray(), $currentJours);
 
+        $result = $this->removeFullDays($plaine, $enfant, $enPlus);
+        $enPlus = $result[0];
+        $daysFull = $result[1];
         foreach ($enPlus as $jour) {
             $presence = new Presence($tuteur, $enfant, $jour);
             $this->plainePresenceRepository->persist($presence);
@@ -94,6 +89,8 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         }
         //?todo for currentJours set confirmed false ?
         $this->plainePresenceRepository->flush();
+
+        return $daysFull;
     }
 
     public function removeEnfant(Plaine $plaine, Enfant $enfant): void
@@ -153,5 +150,37 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $facture->setEnvoyeA(implode(',', $emails));
         $facture->setEnvoyeLe(new DateTime());
         $this->plainePresenceRepository->flush();
+    }
+
+    /**
+     * @param Plaine $plaine
+     * @param Enfant $enfant
+     * @param array $jours
+     * @return array
+     */
+    private function removeFullDays(Plaine $plaine, Enfant $enfant, array $jours): array
+    {
+        $daysFull = [];
+        $firstDayPlaine = $plaine->getFirstDay();
+        $age = $enfant->getAge($firstDayPlaine->getDateJour(), true);
+        $groupe = $this->grouping->findGroupeScolaireByAge($age);
+        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
+        if ($plaineGroupe) {
+            foreach ($jours as $key => $jour) {
+                $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
+                $groupesScolaires = $this->grouping->groupEnfantsForPlaine($plaine, $enfantsByDay);
+                $groupeSeleced = $groupesScolaires[$groupe->getId()] ?? null;
+                if ($groupeSeleced === null) {
+                    continue;
+                }
+                $enfants = $groupeSeleced['enfants'];
+                if (count($enfants) > $plaineGroupe->getInscriptionMaximum()) {
+                    unset($jours[$key]);
+                    $daysFull[] = $jour;
+                }
+            }
+        }
+
+        return [$jours, $daysFull];
     }
 }

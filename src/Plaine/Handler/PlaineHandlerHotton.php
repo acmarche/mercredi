@@ -21,12 +21,13 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
     }
 
     public function handleEditPresences(
+        Plaine $plaine,
         Tuteur $tuteur,
         Enfant $enfant,
         array $currentJours,
         Collection $newJours
-    ): void {
-
+    ): array {
+        return [];
     }
 
     public function removeEnfant(Plaine $plaine, Enfant $enfant): void

@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Contrat\Presence\PresenceConstraintInterface;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Twig\Environment;
 
 final class DateConstraint implements PresenceConstraintInterface
@@ -15,14 +14,14 @@ final class DateConstraint implements PresenceConstraintInterface
      * @var string
      */
     private const FORMAT = 'Y-m-d';
-    private FlashBagInterface $flashBag;
+    private RequestStack $requestStack;
 
     public function __construct(
         RequestStack $requestStack,
         private Environment $environment,
         private PresenceUtils $presenceUtils
     ) {
-        $this->flashBag = $requestStack->getSession()?->getFlashBag();
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -38,13 +37,14 @@ final class DateConstraint implements PresenceConstraintInterface
         $deadLinePedagogique = $this->presenceUtils->getDeadLineDatePedagogique();
         $deadLinePresence = $this->presenceUtils->getDeadLineDatePresence();
 
-        /*
+        /**
          * Si journee pedagogique
          */
         if ($jour->isPedagogique()) {
             return $deadLinePedagogique->format(self::FORMAT) <= $datePresence->format(self::FORMAT);
         }
-        /*
+
+        /**
          * Pas pédagogique
          */
         return $deadLinePresence->format(self::FORMAT) <= $datePresence->format(self::FORMAT);
@@ -58,6 +58,7 @@ final class DateConstraint implements PresenceConstraintInterface
                 'jour' => $jour,
             ]
         );
-        $this->flashBag->add('danger', $content);
+        $flashBag = $this->requestStack->getSession()?->getFlashBag();
+        $flashBag->add('danger', $content);
     }
 }
