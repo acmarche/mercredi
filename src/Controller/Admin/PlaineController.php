@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
+use AcMarche\Mercredi\Plaine\Dto\PlaineGroupingByDayDto;
 use AcMarche\Mercredi\Plaine\Form\PlaineOpenType;
 use AcMarche\Mercredi\Plaine\Form\PlaineType;
 use AcMarche\Mercredi\Plaine\Form\SearchPlaineType;
@@ -67,8 +68,8 @@ final class PlaineController extends AbstractController
     public function new(Request $request): Response
     {
         $plaine = new Plaine();
-        foreach ($this->groupeScolaireRepository->findAllForPlaineOrderByNom() as $groupe) {
-            $plaineGroupe = new PlaineGroupe($plaine, $groupe);
+        foreach ($this->groupeScolaireRepository->findAllForPlaineOrderByNom() as $groupeScolaire) {
+            $plaineGroupe = new PlaineGroupe($plaine, $groupeScolaire);
             $plaine->addPlaineGroupe($plaineGroupe);
         }
         $form = $this->createForm(PlaineType::class, $plaine);
@@ -102,15 +103,26 @@ final class PlaineController extends AbstractController
                 'id' => $plaine->getId(),
             ]);
         }
+        /**
+         * @var PlaineGroupingByDayDto[] $data
+         */
+        $data = [];
+        foreach ($plaine->getJours() as $jour) {
+            $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
+            $groupes = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+            $plaineGroupingDto = new PlaineGroupingByDayDto($jour, $enfants, $groupes);
+            $data[$jour->getId()] = $plaineGroupingDto;
+        }
+
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
-        $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+        $this->grouping->setEnfantsByGroupeScolaire($plaine, $enfants);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',
             [
                 'plaine' => $plaine,
                 'enfants' => $enfants,
-                'datas' => $data,
+                'data' => $data,
             ]
         );
     }

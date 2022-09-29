@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Plaine\Dto\PlaineGroupingByDayDto;
 use AcMarche\Mercredi\Plaine\Form\PlaineJoursType;
 use AcMarche\Mercredi\Plaine\Handler\PlaineAdminHandler;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
@@ -55,15 +56,17 @@ final class PlaineJourController extends AbstractController
     public function show(Jour $jour): Response
     {
         $plaine = $jour->getPlaine();
-        $enfants = $this->plainePresenceRepository->findEnfantsByJour($jour, $plaine);
-        $data = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+        $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
+        $groupes = $this->grouping->groupEnfantsForPlaine($plaine, $enfants);
+
+        $plaineGroupingDto = new PlaineGroupingByDayDto($jour, $enfants, $groupes);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_jour/show.html.twig',
             [
                 'jour' => $jour,
                 'plaine' => $plaine,
-                'datas' => $data,
+                'datas' => $plaineGroupingDto,
             ]
         );
     }

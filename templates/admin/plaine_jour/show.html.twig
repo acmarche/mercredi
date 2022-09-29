@@ -10,7 +10,7 @@
         </div>
         <div class="card-body">
             {% include '@AcMarcheMercrediAdmin/plaine_jour/_actions.html.twig' %}
-            {% for data in datas %}
+            {% for data in datas.groupes %}
                 {% set groupe = data.groupe %}
                 {% set enfants = data.enfants %}
                 <h3>{{ groupe.nom | title }}</h3>

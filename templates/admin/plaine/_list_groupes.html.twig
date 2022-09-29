@@ -10,13 +10,9 @@
     </thead>
     <tbody>
     {% for plaineGroupe in plaine.plaineGroupes %}
-        {% set inscrits = 0 %}
-        {% if datas[plaineGroupe.groupeScolaire.id] is defined %}
-            {% set inscrits = datas[plaineGroupe.groupeScolaire.id]['enfants']|length %}
-        {% endif %}
         <tr>
             <td>{{ plaineGroupe.groupeScolaire.nom }}</td>
-            <td>{{ inscrits }} /{{ plaineGroupe.inscriptionMaximum }}</td>
+            <td>{{ plaineGroupe.enfants|length }} /{{ plaineGroupe.inscriptionMaximum }}</td>
             <td>
                 {% if plaineGroupe.fileName %}
                     <a href="{{ vich_uploader_asset(plaineGroupe,'file') }}" target="_blank">Télécharger</a>
