@@ -2,7 +2,7 @@
 
 {% block body -%}
     <div class="card mb-3">
-        <h3 class="card-header">Liste des utilisateurs</h3>
+        <h3 class="card-header">Liste des utilisateurs {% if search %}{{ users | length }}{% endif %}</h3>
         <div class="card-body">
             <a href="{{ path('mercredi_admin_user_new') }}" class="btn btn-primary m-2">
                 <i class="fas fa-plus"></i> Ajouter un utilisateur
@@ -11,7 +11,6 @@
             {% include '@AcMarcheMercrediAdmin/user/_search.html.twig' %}
 
             {% if search %}
-                <h4 class="badge bg-secondary">{{ users | length }} trouvé(s)</h4>
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
