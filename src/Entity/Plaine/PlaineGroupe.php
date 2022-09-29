@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Plaine;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Traits\FileTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
@@ -22,17 +23,33 @@ class PlaineGroupe implements TimestampableInterface, Stringable
     use IdTrait;
     use FileTrait;
     use TimestampableTrait;
+
+    #[ORM\ManyToOne(targetEntity: Plaine::class, cascade: ['persist'], inversedBy: 'plaine_groupes')]
+    #[ORM\JoinColumn(nullable: false)] private ?Plaine $plaine;
+
+    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'plaine_groupes')]
+    private ?GroupeScolaire $groupe_scolaire;
+
     #[ORM\Column(type: 'integer')]
     private ?int $inscription_maximum = 0;
 
-    #[Vich\UploadableField(mapping: 'mercredi_groupe', fileNameProperty: 'fileName', mimeType: 'mimeType', size: 'fileSize')]
-    #[Assert\File(maxSize: '10M', mimeTypes: ['application/pdf', 'application/x-pdf', 'image/*'], mimeTypesMessage: 'Uniquement des images ou Pdf')]
+    #[Vich\UploadableField(mapping: 'mercredi_groupe', fileNameProperty: 'fileName', size: 'fileSize', mimeType: 'mimeType')]
+    #[Assert\File(maxSize: '10M', mimeTypes: [
+        'application/pdf',
+        'application/x-pdf',
+        'image/*',
+    ], mimeTypesMessage: 'Uniquement des images ou Pdf')]
     private ?File $file = null;
 
-    public function __construct(
-        #[ORM\ManyToOne(targetEntity: Plaine::class, inversedBy: 'plaine_groupes', cascade: ['persist'])] #[ORM\JoinColumn(nullable: false)] private ?Plaine $plaine,
-        #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'plaine_groupes')] private ?GroupeScolaire $groupe_scolaire
-    ) {
+    /**
+     * @var array|Enfant[] $enfants
+     */
+    public array $enfants=[];
+
+    public function __construct(Plaine $plaine, GroupeScolaire $groupeScolaire)
+    {
+        $this->plaine = $plaine;
+        $this->groupe_scolaire = $groupeScolaire;
     }
 
     public function __toString(): string
