@@ -158,7 +158,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param array $jours
      * @return array
      */
-    private function removeFullDays(Plaine $plaine, Enfant $enfant, array $jours): array
+    private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
         $daysFull = [];
         $firstDayPlaine = $plaine->getFirstDay();
