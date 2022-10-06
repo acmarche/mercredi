@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Facture\Render;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\FactureInterface;
@@ -16,7 +17,8 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         private Environment $environment,
         private OrganisationRepository $organisationRepository,
         private FactureUtils $factureUtils,
-        private FacturePresenceRepository $facturePresenceRepository
+        private FacturePresenceRepository $facturePresenceRepository,
+        private FactureCalculatorInterface $factureCalculator
     ) {
     }
 
@@ -78,6 +80,8 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
             $data['cout'] += $enfant['cout'];
         }
 
+        $dto = $this->factureCalculator->createDetail($facture);
+
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/marche/_presence_content_pdf.html.twig',
             [
@@ -86,6 +90,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
                 'organisation' => $organisation,
                 'data' => $data,
                 'countPresences' => \count($facturePresences),
+                'dto'=>$dto
             ]
         );
     }
