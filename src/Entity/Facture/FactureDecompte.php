@@ -28,7 +28,7 @@ class FactureDecompte implements TimestampableInterface, UuidableInterface
     private FactureInterface $facture;
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $payeLe = null;
-    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: false)]
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
     #[Assert\Range(min: '0.1')]
     private ?float $montant = null;
 

@@ -35,9 +35,9 @@ class FacturePresence
     private ?int $duree = null;
     #[ORM\Column(type: 'date', nullable: false)]
     private ?DateTimeInterface $presenceDate = null;
-    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: false)]
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
     private ?float $cout_brut = null;
-    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: false)]
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
     private ?float $cout_calculated = null;
 
     public function __construct(

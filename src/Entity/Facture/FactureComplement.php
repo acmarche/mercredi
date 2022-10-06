@@ -30,10 +30,10 @@ class FactureComplement implements TimestampableInterface, UuidableInterface
 
     #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'factureComplements')]
     private FactureInterface $facture;
-    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
     #[Assert\Range(min: 0)]
     private ?float $forfait = null;
-    #[ORM\Column(type: 'decimal', precision: 4, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
     #[Assert\Range(min: 0, max: 100)]
     private ?float $pourcentage = null;
     #[ORM\Column(type: 'datetime', nullable: false)]
