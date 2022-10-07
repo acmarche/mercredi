@@ -7,7 +7,9 @@ use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Handler\FacturePlaineHandler;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
@@ -161,20 +163,11 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
         $daysFull = [];
-        $firstDayPlaine = $plaine->getFirstDay();
-        $age = $enfant->getAge($firstDayPlaine->getDateJour(), true);
-        $groupe = $this->grouping->findGroupeScolaireByAge($age);
-        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
+        $groupesScolaire = $this->grouping->findGroupeScolaire($enfant);
+        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupesScolaire);
         if ($plaineGroupe) {
             foreach ($jours as $key => $jour) {
-                $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
-                $groupesScolaires = $this->grouping->groupEnfantsForPlaine($plaine, $enfantsByDay);
-                $groupeSeleced = $groupesScolaires[$groupe->getId()] ?? null;
-                if ($groupeSeleced === null) {
-                    continue;
-                }
-                $enfants = $groupeSeleced['enfants'];
-                if (count($enfants) > $plaineGroupe->getInscriptionMaximum()) {
+                if ($this->isDayFull($plaine, $jour, $groupesScolaire, $plaineGroupe)) {
                     unset($jours[$key]);
                     $daysFull[] = $jour;
                 }
@@ -182,5 +175,23 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         }
 
         return [$jours, $daysFull];
+    }
+
+    private function isDayFull(
+        Plaine $plaine,
+        Jour $jour,
+        GroupeScolaire $groupeScolaireReferent,
+        PlaineGroupe $plaineGroupe
+    ): bool {
+        $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
+        $enfants = array_filter($enfantsByDay, function ($enfant) use ($plaine, $groupeScolaireReferent) {
+            if (!$groupeScolaire = $this->grouping->findGroupeScolaire($enfant)) {
+                return false;
+            }
+
+            return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
+        });
+
+        return count($enfants) > $plaineGroupe->getInscriptionMaximum();
     }
 }

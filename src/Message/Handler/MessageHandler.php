@@ -86,12 +86,10 @@ final class MessageHandler
         $recipients = [];
 
         foreach ($presences as $presence) {
-            $jour = $presence->getJour();
             $tuteur = $presence->getTuteur();
             $enfant = $presence->getEnfant();
             $emails = $this->tuteurUtils->getEmailsOfOneTuteur($tuteur);
-            $age = $enfant->getAge($jour->getDateJour(), true);
-            $groupe = $this->grouping->findGroupeScolaireByAge($age);
+            $groupe = $this->grouping->findGroupeScolaire($enfant);
             $recipients[$tuteur->getId()] = ['emails' => $emails];
             if (!$groupe) {
                 continue;

@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Entity\Traits\ShortNameTrait;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,6 +27,7 @@ class GroupeScolaire implements Stringable
 {
     use IdTrait;
     use NomTrait;
+    use ShortNameTrait;
     use RemarqueTrait;
     use OrdreTrait;
 

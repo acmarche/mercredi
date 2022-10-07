@@ -4,15 +4,9 @@ namespace AcMarche\Mercredi\Scolaire\Utils;
 
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
-use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 
 final class ScolaireUtils
 {
-    public function __construct(
-        private GroupeScolaireRepository $groupeScolaireRepository
-    ) {
-    }
-
     /**
      * Retourne le groupe scolaire de l'enfant
      * Si a pas retourne le groupe scolaire de son année
@@ -30,8 +24,10 @@ final class ScolaireUtils
             return $groupeScolaire;
         }
 
-        $groupes = $this->groupeScolaireRepository->findGroupesNotPlaine();
+        $groupeScolaire = new GroupeScolaire();
+        $groupeScolaire->setNom('Non classé');
+        $groupeScolaire->id = 0;
 
-        return $groupes[0];
+        return $groupeScolaire;
     }
 }

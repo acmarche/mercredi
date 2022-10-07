@@ -9,7 +9,7 @@
             <strong>{{ row.enfants|length }} enfants:</strong>
             <div class="text-muted">
                 {% for groupe in row.groupes %}
-                    {{ groupe.groupe.nom|first|title }} ({{ groupe.enfants|length }}) <br>
+                    {{ groupe.groupe.short_name }} ({{ groupe.enfants|length }}) <br>
                 {% endfor %}
             </div>
         </li>

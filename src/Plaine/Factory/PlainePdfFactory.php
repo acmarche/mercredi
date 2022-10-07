@@ -52,7 +52,7 @@ class PlainePdfFactory
             $jour = $presence->getJour();
             $enfantId = $enfant->getId();
             $age = $enfant->getAge($firstDay, true);
-            $groupeScolaire = $this->grouping->findGroupeScolaireByAge($age);
+            $groupeScolaire = $this->grouping->findGroupeScolaire($enfant);
             if (null === $groupeScolaire) {
                 $groupeScolaire = $groupeForce;
             }

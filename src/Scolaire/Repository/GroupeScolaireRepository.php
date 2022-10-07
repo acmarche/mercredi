@@ -57,7 +57,7 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
             ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
     }
 
-    public function findGroupePlaineByAge(float $age): ?GroupeScolaire
+    public function findGroupeScolairePlaineByAge(float $age): ?GroupeScolaire
     {
         return $this->createQueryBuilder('groupe_scolaire')
             ->andWhere('groupe_scolaire.is_plaine = 1')

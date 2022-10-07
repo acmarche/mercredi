@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
-use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use AcMarche\Mercredi\Utils\SortUtils;
 
@@ -14,8 +13,7 @@ class GroupingMarche implements GroupingInterface
 {
     public function __construct(
         private ScolaireUtils $scolaireUtils,
-        private PlaineGroupeRepository $plaineGroupeRepository,
-        private GroupeScolaireRepository $groupeScolaireRepository
+        private PlaineGroupeRepository $plaineGroupeRepository
     ) {
     }
 
@@ -23,7 +21,7 @@ class GroupingMarche implements GroupingInterface
     {
         $groups = [];
         foreach ($enfants as $enfant) {
-            $groupe = $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
+            $groupe = $this->findGroupeScolaire($enfant);
             $groups[$groupe->getId()]['groupe'] = $groupe;
             $groups[$groupe->getId()]['enfants'][] = $enfant;
         }
@@ -38,33 +36,15 @@ class GroupingMarche implements GroupingInterface
      */
     public function groupEnfantsForPlaine(Plaine $plaine, array $enfants): array
     {
-        $groups = [];
-        $jour = $plaine->getFirstDay();
-        $date = $jour->getDateJour();
-        $groupeForce = new GroupeScolaire();
-        $groupeForce->setNom('Age non determine');
-        $groupeForce->id = 99999;
-        foreach ($enfants as $enfant) {
-            $groupe = $this->findGroupeScolaireByAge($enfant->getAge($date, true));
-            if (null === $groupe) {
-                $groupe = $groupeForce;
-            }
-            $groups[$groupe->getId()]['groupe'] = $groupe;
-            $groups[$groupe->getId()]['enfants'][] = $enfant;
-        }
-
-        return SortUtils::sortGroupesScolairesByOrder($groups);
+        return $this->groupEnfantsForPresence($enfants);
     }
 
     public function setEnfantsByGroupeScolaire(Plaine $plaine, array $enfants)
     {
-        $jour = $plaine->getFirstDay();
-        $date = $jour->getDateJour();
-
         foreach ($this->plaineGroupeRepository->findByPlaine($plaine) as $plaineGroupe) {
             $goupeScolaireId = $plaineGroupe->getGroupeScolaire()->getId();
             foreach ($enfants as $enfant) {
-                $groupe = $this->findGroupeScolaireByAge($enfant->getAge($date, true));
+                $groupe = $this->findGroupeScolaire($enfant);
                 if (null === $groupe) {
                     continue;
                 }
@@ -77,7 +57,11 @@ class GroupingMarche implements GroupingInterface
 
     public function findGroupeScolaireByAge(float $age): ?GroupeScolaire
     {
-        return $this->groupeScolaireRepository->findGroupePlaineByAge($age);
+        return null;
     }
 
+    public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null): ?GroupeScolaire
+    {
+        return $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
+    }
 }
