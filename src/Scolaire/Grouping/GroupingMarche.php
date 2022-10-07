@@ -39,7 +39,7 @@ class GroupingMarche implements GroupingInterface
         return $this->groupEnfantsForPresence($enfants);
     }
 
-    public function setEnfantsByGroupeScolaire(Plaine $plaine, array $enfants)
+    public function setEnfantsForGroupesScolaire(Plaine $plaine, array $enfants)
     {
         foreach ($this->plaineGroupeRepository->findByPlaine($plaine) as $plaineGroupe) {
             $goupeScolaireId = $plaineGroupe->getGroupeScolaire()->getId();

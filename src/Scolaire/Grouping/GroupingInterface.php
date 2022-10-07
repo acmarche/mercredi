@@ -14,7 +14,7 @@ interface GroupingInterface
 
     public function groupEnfantsForPlaine(Plaine $plaine, array $enfants): array;
 
-    public function setEnfantsByGroupeScolaire(Plaine $plaine, array $enfants);
+    public function setEnfantsForGroupesScolaire(Plaine $plaine, array $enfants);
 
     public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null ):?GroupeScolaire;
 

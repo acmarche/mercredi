@@ -115,7 +115,7 @@ final class PlaineController extends AbstractController
         }
 
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
-        $this->grouping->setEnfantsByGroupeScolaire($plaine, $enfants);
+        $this->grouping->setEnfantsForGroupesScolaire($plaine, $enfants);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/show.html.twig',
