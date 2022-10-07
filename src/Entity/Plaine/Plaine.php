@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity\Plaine;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Facture\FacturesTrait;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
 use AcMarche\Mercredi\Entity\Traits\CommunicationTrait;
 use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
@@ -54,6 +55,11 @@ class Plaine implements SluggableInterface, Stringable
      */
     #[ORM\OneToMany(mappedBy: 'plaine', targetEntity: Facture::class, cascade: ['remove'])]
     private Collection $factures;
+
+    /**
+     * @var array|GroupeScolaire[] $groupesScolaire
+     */
+    public array $groupesScolaire;
 
     public function __construct()
     {
