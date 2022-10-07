@@ -28,6 +28,15 @@ final class ScolaireUtils
         $groupeScolaire->setNom('Non classé');
         $groupeScolaire->id = 0;
 
+        return $this->createGroupeScolaireNonClasse();
+    }
+
+    public function createGroupeScolaireNonClasse(): GroupeScolaire
+    {
+        $groupeScolaire = new GroupeScolaire();
+        $groupeScolaire->setNom('Non classé');
+        $groupeScolaire->id = 0;
+
         return $groupeScolaire;
     }
 }
