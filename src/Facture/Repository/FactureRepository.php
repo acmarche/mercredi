@@ -48,6 +48,16 @@ final class FactureRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    public function findFacturesByTuteurAndMonth(Tuteur $tuteur, string $month): ?Facture
+    {
+        return $this->getQBl()
+            ->andWhere('facture.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture.mois = :mois')
+            ->setParameter('mois', $month)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * @return Facture[]
      */
