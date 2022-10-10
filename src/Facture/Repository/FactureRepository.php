@@ -146,7 +146,7 @@ final class FactureRepository extends ServiceEntityRepository
 
         if (null !== $plaine) {
             $queryBuilder->andWhere('facture.plaine = :plaine')
-                ->setParameter('plaine', $plaine->getNom());
+                ->setParameter('plaine', $plaine);
         }
 
         if (null !== $monthYear) {
