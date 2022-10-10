@@ -43,7 +43,7 @@ final class FacturePresenceController extends AbstractController
         $form = $this->createForm(FactureAttachType::class, $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = (array) $request->request->all('presences');
+            $presencesF = $request->request->all('presences');
             $this->factureHandler->handleManually($facture, $presencesF, []);
 
             $this->addFlash('success', 'Les présences ont bien été attachées');
