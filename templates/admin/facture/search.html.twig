@@ -46,10 +46,10 @@
                             <td>{{ facture.enfants|join(',') }}</td>
                             <td>{{ facture.ecoles|join(',') }}</td>
                             <td>
-                                {{ facture.payeLe ? facture.payeLe | format_date('full') }}
+                                {{ facture.payeLe ? facture.payeLe | format_date('short') }}
                             </td>
                             <td>
-                                {{ facture.envoyeLe ? facture.envoyeLe | format_date('medium') }}
+                                {{ facture.envoyeLe ? facture.envoyeLe | format_date('short') }}
                             </td>
                             <td>
                                 {{ facture.communication }}
