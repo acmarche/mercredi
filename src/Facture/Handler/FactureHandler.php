@@ -47,7 +47,7 @@ final class FactureHandler implements FactureHandlerInterface
     }
 
     /**
-     * @param Facture     $facture
+     * @param Facture $facture
      * @param array|int[] $presencesId
      * @param array|int[] $accueilsId
      */
@@ -107,7 +107,7 @@ final class FactureHandler implements FactureHandlerInterface
 
     public function isBilled(int $presenceId, string $type): bool
     {
-        return (bool) $this->facturePresenceRepository->findByIdAndType($presenceId, $type);
+        return (bool)$this->facturePresenceRepository->findByIdAndType($presenceId, $type);
     }
 
     public function isSended(int $presenceId, string $type): bool
@@ -157,7 +157,7 @@ final class FactureHandler implements FactureHandlerInterface
 
     /**
      * @param array|Presence[] $presences
-     * @param array|Accueil[]  $accueils
+     * @param array|Accueil[] $accueils
      */
     private function finish(Facture $facture, array $presences, array $accueils): Facture
     {
@@ -166,7 +166,7 @@ final class FactureHandler implements FactureHandlerInterface
         $this->attachRetard($facture, $accueils);
         $this->factureFactory->setEcoles($facture);
 
-        if (! $facture->getId()) {
+        if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
 
@@ -176,7 +176,7 @@ final class FactureHandler implements FactureHandlerInterface
     /**
      * @param array|Presence[] $presences
      */
-    private function attachPresences(Facture $facture, array $presences): void
+    public function attachPresences(Facture $facture, array $presences): void
     {
         foreach ($presences as $presence) {
             $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
