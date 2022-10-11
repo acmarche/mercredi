@@ -15,14 +15,23 @@ class FactureCron implements TimestampableInterface
     use IdTrait;
     use UserAddTrait;
     use TimestampableTrait;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
+    private string $fromAdresse;
+    #[ORM\Column(type: 'string', length: 150, nullable: false)]
+    private string $subject;
+    #[ORM\Column(type: 'text', nullable: false)]
+    private string $body;
+    #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)]
+    private string $month;
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $done = false;
 
     public function __construct(
-        #[ORM\Column(type: 'string', length: 50, nullable: false)] private string $fromAdresse,
-        #[ORM\Column(type: 'string', length: 150, nullable: false)] private string $subject,
-        #[ORM\Column(type: 'text', nullable: false)] private string $body,
-        #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)] private string $month
+        string $fromAdresse,
+        string $subject,
+        string $body,
+        string $month
     ) {
     }
 
