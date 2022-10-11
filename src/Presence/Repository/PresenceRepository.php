@@ -59,7 +59,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-       /**
+    /**
      * Pour le calcul du cout de la presence
      * On check s'il y a des frères et soeurs présents.
      */
@@ -222,6 +222,28 @@ final class PresenceRepository extends ServiceEntityRepository
             $qbl->andWhere('presence.tuteur = :tuteur')
                 ->setParameter('tuteur', $tuteur);
         }
+
+        return $qbl->getQuery()->getResult();
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findWithOutPaiementAndFacture(): array
+    {
+        $dateStart = \DateTime::createFromFormat('Y-m-d', '2019-01-01');
+        $dateEnd = \DateTime::createFromFormat('Y-m-d', '2022-07-01');
+
+        $qbl = $this->createQBl()
+            ->andWhere('presence.paiement IS NULL')
+            ->andWhere('jour.date_jour >= :datestart')
+            ->setParameter('datestart', $dateStart)
+            ->andWhere('jour.date_jour <= :dateend')
+            ->setParameter('dateend', $dateEnd)
+            ->addOrderBy('jour.date_jour', 'DESC')
+            ->addOrderBy('enfant.nom');
+
+
 
         return $qbl->getQuery()->getResult();
     }
