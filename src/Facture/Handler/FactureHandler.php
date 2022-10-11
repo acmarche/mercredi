@@ -68,6 +68,21 @@ final class FactureHandler implements FactureHandlerInterface
         return $facture;
     }
 
+    /**
+     * @param Facture $facture
+     * @param array|int[] $presencesId
+     * @param array|int[] $accueilsId
+     */
+    public function handleManuallyNotResolved(FactureInterface $facture, array $presences, array $accueilsId): Facture
+    {
+        $this->finish($facture, $presences, []);
+        $this->flush();
+        $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
+        $this->flush();
+
+        return $facture;
+    }
+
     public function generateByMonthForTuteur(Tuteur $tuteur, string $month): ?FactureInterface
     {
         [$month, $year] = explode('-', $month);
