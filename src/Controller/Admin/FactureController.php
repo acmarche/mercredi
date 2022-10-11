@@ -122,8 +122,8 @@ final class FactureController extends AbstractController
         $form = $this->createForm(FactureManualType::class, $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $presencesF = (array)$request->request->all('presences');
-            $accueilsF = (array)$request->request->all('accueils');
+            $presencesF = $request->request->all('presences');
+            $accueilsF = $request->request->all('accueils');
             $this->factureHandler->handleManually($facture, $presencesF, $accueilsF);
 
             $this->dispatcher->dispatch(new FactureCreated($facture->getId()));
