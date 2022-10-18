@@ -109,6 +109,9 @@ final class MessageHandler
                     $recipients[$tuteur->getId()]['groupes'] = [$plaineGroupe];
                 }
             }
+            else {
+                $recipients[$tuteur->getId()]['groupes'] = [];
+            }
         }
 
         return $recipients;
