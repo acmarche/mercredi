@@ -15,6 +15,7 @@ use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Mime\Address;
 
 final class MessageHandler
 {
@@ -71,7 +72,10 @@ final class MessageHandler
                     $this->emailFactory->attachmentsForPlaine($templatedEmail, $recipient['groupes']);
                 }
             }
-            $templatedEmail->to(...$emails);
+            //$templatedEmail->to(...$emails);
+            foreach ($emails as $email) {
+                $templatedEmail->addTo(new Address('shirley.rosditrosset@ac.marche.be', $email));
+            }
             $this->notificationMailer->sendAsEmailNotification($templatedEmail);
             unset($templatedEmail);
         }
