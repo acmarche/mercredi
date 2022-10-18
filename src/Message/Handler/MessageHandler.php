@@ -64,7 +64,7 @@ final class MessageHandler
         foreach ($recipients as $recipient) {
             $templatedEmail = clone($templatedBase);
             $emails = $recipient['emails'];
-            if (count($emails) == 0) {
+            if (is_array($emails) && count($emails) == 0) {
                 $emails = ['jf@marche.be'];
             }
             if ($attachCourrier) {
@@ -74,7 +74,7 @@ final class MessageHandler
             }
             //$templatedEmail->to(...$emails);
             foreach ($emails as $email) {
-                $templatedEmail->addTo(new Address('shirley.rosditrosset@ac.marche.be', $email));
+                $templatedEmail->addTo(new Address('jf@marche.be', $email));
             }
             $this->notificationMailer->sendAsEmailNotification($templatedEmail);
             unset($templatedEmail);
