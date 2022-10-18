@@ -64,7 +64,7 @@ final class MessageHandler
         foreach ($recipients as $recipient) {
             $templatedEmail = clone($templatedBase);
             $emails = $recipient['emails'];
-            if (is_array($emails) && count($emails) == 0) {
+            if (is_array($emails) || count($emails) == 0) {
                 $emails = ['jf@marche.be'];
             }
             if ($attachCourrier) {
