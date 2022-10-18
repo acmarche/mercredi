@@ -15,7 +15,6 @@ use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Mime\Address;
 
 final class MessageHandler
 {
@@ -64,10 +63,9 @@ final class MessageHandler
         foreach ($recipients as $recipient) {
             $templatedEmail = clone($templatedBase);
             $emails = $recipient['emails'];
-            if(!$emails) {
+            if (!$emails) {
                 $emails = ['jf@marche.be'];
-            }
-            elseif(count($emails) == 0) {
+            } elseif (count($emails) == 0) {
                 $emails = ['jf@marche.be'];
             }
             if ($attachCourrier) {
@@ -75,10 +73,10 @@ final class MessageHandler
                     $this->emailFactory->attachmentsForPlaine($templatedEmail, $recipient['groupes']);
                 }
             }
-            //$templatedEmail->to(...$emails);
-            foreach ($emails as $email) {
-                $templatedEmail->addTo(new Address('jf@marche.be', $email));
-            }
+            $templatedEmail->to(...$emails);
+            /*  foreach ($emails as $email) {
+                  $templatedEmail->addTo(new Address('jf@marche.be', $email));
+              }*/
             $this->notificationMailer->sendAsEmailNotification($templatedEmail);
             unset($templatedEmail);
         }
@@ -108,8 +106,7 @@ final class MessageHandler
                 } else {
                     $recipients[$tuteur->getId()]['groupes'] = [$plaineGroupe];
                 }
-            }
-            else {
+            } else {
                 $recipients[$tuteur->getId()]['groupes'] = [];
             }
         }
