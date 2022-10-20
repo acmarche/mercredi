@@ -97,6 +97,7 @@ final class MessageHandler
             $groupe = $this->grouping->findGroupeScolaire($enfant);
             $recipients[$tuteur->getId()] = ['emails' => $emails];
             if (!$groupe) {
+                $recipients[$tuteur->getId()]['groupes'] = [];
                 continue;
             }
             $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
