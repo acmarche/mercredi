@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
-use AcMarche\Mercredi\Scolaire\Grouping\GroupingMarche;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
