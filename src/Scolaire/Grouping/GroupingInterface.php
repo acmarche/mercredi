@@ -16,6 +16,6 @@ interface GroupingInterface
 
     public function setEnfantsForGroupesScolaire(Plaine $plaine, array $enfants);
 
-    public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null ):?GroupeScolaire;
+    public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null ): GroupeScolaire;
 
 }

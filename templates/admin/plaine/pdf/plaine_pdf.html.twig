@@ -41,8 +41,8 @@
         <thead>
         <tr>
             <th style="width: 20%;">Enfants</th>
-            {% for datep in dates %}
-                <th style="text-align: center;">{{ datep.datejour | date('d-m') }}</th>
+            {% for datePlaine in datesPlaine %}
+                <th style="text-align: center;">{{ datePlaine.datejour | date('d-m') }}</th>
             {% endfor %}
         </tr>
         </thead>
@@ -57,10 +57,10 @@
                 <td style="width: 45%;">
                     <strong>{{ enfant }}</strong> ({{ age }})
                     <br/>
-                    {% include 'plaine/pdf/_coordonnees.html.twig' %}
+                    {% include '@AcMarcheMercrediAdmin/plaine/pdf/_coordonnees.html.twig' %}
                 </td>
-                {% for datep in dates %}
-                    {% set dateId = datep.id %}
+                {% for datePlaine in datesPlaine %}
+                    {% set dateId = datePlaine.id %}
                     <td class="text-center">
                         {% if inIds(dateId, jours) %}
                             <img src="data:image/jpg;base64,{{ images.ok }}"
@@ -77,10 +77,10 @@
         <tfoot>
         <tr>
             <td><strong>Nombre d'enfants par jour (moins6/total)</strong></td>
-            {% for date in dates %}
+            {% for datePlaine in datesPlaine %}
                 <td class='text-center'>
-                    {{ stats[groupe.id][date.id]['moins6'] }} /
-                    {{ stats[groupe.id][date.id]['total'] }}
+                    {{ stats[groupe.id][datePlaine.id]['moins6'] }} /
+                    {{ stats[groupe.id][datePlaine.id]['total'] }}
                 </td>
             {% endfor %}
         </tr>

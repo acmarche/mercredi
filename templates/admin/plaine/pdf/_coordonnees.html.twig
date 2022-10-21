@@ -1,0 +1,49 @@
+{% if tuteur %}
+    <span class="text-muted">
+
+        {{ tuteur }}
+
+        {% if tuteur.telephone %}
+            | {{ tuteur.telephone }}
+        {% endif %}
+
+        {% if tuteur.telephoneBureau %}
+            | {{ tuteur.telephoneBureau }}
+        {% endif %}
+
+        {% if tuteur.gsm %}
+            | {{ tuteur.gsm }}
+        {% endif %}
+
+        {% if tuteur.nomconjoint %}
+            <br/> {{ tuteur.nomconjoint }}
+        {% endif %}
+
+        {% if tuteur.prenomconjoint %}
+            {{ tuteur.prenomconjoint }}
+        {% endif %}
+
+        {% if tuteur.gsmconjoint %}
+            | {{ tuteur.gsmconjoint }}
+        {% endif %}
+
+        {% if tuteur.telephoneconjoint %}
+            | {{ tuteur.telephoneconjoint }}
+        {% endif %}
+
+        {% if tuteur.telephoneBureauconjoint %}
+            | {{ tuteur.telephoneBureauconjoint }}
+        {% endif %}
+
+        {% if enfant.remarque %}
+            <br/>{{ enfant.remarque }}
+        {% endif %}
+
+        {% if enfant.santeFiche %}
+            {% if  enfant.santeFiche.accompagnateurs|length > 0 %}
+                <br/>
+                <strong>Accompagnateurs: </strong> {{ enfant.santeFiche.accompagnateurs | join(', ') }}
+            {% endif %}
+        {% endif %}
+    </span>
+{% endif %}
