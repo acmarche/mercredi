@@ -78,7 +78,7 @@ class PlainePdfFactory
             ]
         );
 
-        return new Response($html);
+        //return new Response($html);
         $name = $plaine->getSlug();
 
         $this->pdf->setOption('footer-right', '[page]/[toPage]');
