@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Plaine\Factory;
 
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
+use AcMarche\Mercredi\Plaine\Dto\PdfPlaine;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
@@ -33,17 +34,13 @@ class PlainePdfFactory
         $images = $this->getImagesBase64();
         $dates = $plaine->getJours();
         $firstDay = $plaine->getFirstDay()->getDateJour();
-
-        $enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
-        $this->grouping->setEnfantsForGroupesScolaire($plaine, $enfants);
+        $pdfPlaine = new PdfPlaine($plaine, $dates->toArray(), $firstDay);
 
         $presences = $this->plainePresenceRepository->findByPlaine($plaine);
         /**
          * par enfant je dois avoir quel tuteur en garde
          * jours presents.
          */
-        $data = [];
-        $dataEnfants = [];
         $stats = [];
         $groupesScolaire = $this->groupeScolaireRepository->findAll();
         $groupesScolaire[] = $this->scolaireUtils->createGroupeScolaireNonClasse();
@@ -59,19 +56,15 @@ class PlainePdfFactory
             $enfant = $presence->getEnfant();
             $tuteur = $presence->getTuteur();
             $jour = $presence->getJour();
-            $enfantId = $enfant->getId();
             $age = $enfant->getAge($firstDay, true);
             $groupeScolaireEnfant = $this->grouping->findGroupeScolaire($enfant);
-            ++$stats[$groupeScolaireEnfant->getId()][$jour->getId()]['total'];
+            $groupeScolaireId = $groupeScolaireEnfant->getId();
+            ++$stats[$groupeScolaireId][$jour->getId()]['total'];
             if ($age < 6) {
-                ++$stats[$groupeScolaireEnfant->getId()][$jour->getId()]['moins6'];
+                ++$stats[$groupeScolaireId][$jour->getId()]['moins6'];
             }
-            $dataEnfants[$enfantId]['enfant'] = $enfant;
-            $dataEnfants[$enfantId]['tuteur'] = $tuteur;
-            $dataEnfants[$enfantId]['jours'][] = $jour;
-            $data[$groupeScolaireEnfant->getId()]['groupe'] = $groupeScolaireEnfant;
-            $data[$groupeScolaireEnfant->getId()]['enfants'] = $dataEnfants;
-            $data[$groupeScolaireEnfant->getId()]['stats'] = $stats;
+            $enfant->tuteur = $tuteur;
+            $pdfPlaine->addEnfant($groupeScolaireEnfant, $enfant, $jour);
         }
 
         $html = $this->environment->render(
@@ -79,14 +72,13 @@ class PlainePdfFactory
             [
                 'plaine' => $plaine,
                 'firstDay' => $firstDay,
-                'datesPlaine' => $dates,
-                'datas' => $data,
+                'pdfPlaine' => $pdfPlaine,
                 'stats' => $stats,
                 'images' => $images,
             ]
         );
 
-        //return new Response($html);
+        return new Response($html);
         $name = $plaine->getSlug();
 
         $this->pdf->setOption('footer-right', '[page]/[toPage]');

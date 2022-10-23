@@ -105,6 +105,13 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     #[ORM\OneToMany(targetEntity: Accueil::class, mappedBy: 'enfant', cascade: ['remove'])]
     private Collection $accueils;
 
+    /**
+     * @var array|Jour[] $jours
+     */
+    public array $jours=[];
+
+    public Tuteur $tuteur;
+
     public function __construct()
     {
         $this->relations = new ArrayCollection();
