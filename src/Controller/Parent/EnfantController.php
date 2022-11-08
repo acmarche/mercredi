@@ -66,6 +66,11 @@ final class EnfantController extends AbstractController
     #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
     public function new(Request $request): Response
     {
+        if ($this->getParameter('mercredi.add_enfant') < 1) {
+            $this->addFlash('danger', 'L\'ajout d\'un enfant n\'est pas autorisé');
+
+            return $this->redirectToRoute('mercredi_parent_home');
+        }
         $this->hasTuteur();
         $enfant = new Enfant();
         $form = $this->createForm(EnfantEditForParentType::class, $enfant);

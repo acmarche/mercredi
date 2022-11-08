@@ -6,6 +6,7 @@ class Option
 {
     public const REGISTER = 'mercredi.register';
     public const ACCUEIL = 'mercredi.accueil';
+    public const ADD_ENFANT = 'mercredi.add_enfant';
     public const PAIEMENT = 'mercredi.paiement';
     public const ACCUEIL_PRIX = 'mercredi.accueil_prix';
     public const PRESENCE_PRIX1 = 'mercredi.presence_prix1';
