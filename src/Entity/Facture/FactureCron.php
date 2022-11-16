@@ -33,6 +33,10 @@ class FactureCron implements TimestampableInterface
         string $body,
         string $month
     ) {
+        $this->fromAdresse = $fromAdresse;
+        $this->subject = $subject;
+        $this->body = $body;
+        $this->month = $month;
     }
 
     public function getMonth(): string
