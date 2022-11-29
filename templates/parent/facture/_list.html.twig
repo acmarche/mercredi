@@ -11,12 +11,18 @@
     {% for facture in factures %}
         <tr>
             <td>
-                  N° {{ facture.id }}
+                N° {{ facture.id }}
             </td>
             <td>
                 {{ facture.factureLe | format_date('full') | title }}
             </td>
-            <td>{{ facture.payeLe ? facture.payeLe | format_date('full','full') : '<span class="text-danger">Non payé</span>' }}</td>
+            <td>
+                {% if facture.payeLe %}
+                    {{ facture.payeLe | format_date('full') | title }}
+                {% else %}
+                    <span class="text-danger">Non payée</span>
+                {% endif %}
+            </td>
             <td>
                 <a href="{{ path('mercredi_parent_facture_show', {'uuid': facture.uuid}) }}">
                     Détails
