@@ -52,10 +52,12 @@
                 <td>
                     {% if facture.payeLe %}
                         {{ facture.payeLe | format_date('full') }}
-                        <button type="button" class="btn btn-light btn-sm float-end" data-bs-toggle="modal"
-                                data-bs-target="#unpaidModal">
-                            <i class="fas fa-minus-circle"></i> Annuler le paiement
-                        </button>
+                        {% if is_granted('ROLE_MERCREDI_ADMIN') %}
+                            <button type="button" class="btn btn-light btn-sm float-end" data-bs-toggle="modal"
+                                    data-bs-target="#unpaidModal">
+                                <i class="fas fa-minus-circle"></i> Annuler le paiement
+                            </button>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
