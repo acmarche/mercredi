@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 final class ContactType extends AbstractType
 {
@@ -18,6 +19,12 @@ final class ContactType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Votre nom',
+                    'constraints' => [
+                        new Length([
+                            'min' => 3,
+                            'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        ]),
+                    ],
                 ]
             )
             ->add(

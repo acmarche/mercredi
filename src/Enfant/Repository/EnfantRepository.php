@@ -146,7 +146,7 @@ final class EnfantRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function searchForEcole(iterable $ecoles, ?string $nom, bool $strict = true)
+    public function searchForEcole(iterable $ecoles, ?string $nom, bool $accueil = true)
     {
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
@@ -158,7 +158,7 @@ final class EnfantRepository extends ServiceEntityRepository
         $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
             ->setParameter('ecoles', $ecoles);
 
-        if ($strict) {
+        if ($accueil) {
             $queryBuilder->andWhere('enfant.accueil_ecole = 1');
         }
 

@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Utils\PropertyUtil;
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Exception;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -29,7 +28,7 @@ final class UserAddSubscriber implements EventSubscriberInterface
     public function prePersist(LifecycleEventArgs $lifecycleEventArgs): void
     {
         $object = $lifecycleEventArgs->getObject();
-        if (! $this->propertyUtil->getPropertyAccessor()->isWritable($object, 'userAdd')) {
+        if (!$this->propertyUtil->getPropertyAccessor()->isWritable($object, 'userAdd')) {
             return;
         }
 
@@ -45,12 +44,14 @@ final class UserAddSubscriber implements EventSubscriberInterface
 
         $user = $this->security->getUser();
 
-        if (! $user instanceof UserInterface) {
-            throw new Exception('You must be login');
+        if (!$user instanceof UserInterface) {
+            // throw new Exception('You must be login');
         }
-
-        if ($user) {
-            $entity->setUserAdd($user->getUserIdentifier());
+        if ($user instanceof UserInterface) {
+            $identifier = $user->getUserIdentifier();
+        } else {
+            $identifier = 'jfsenechal';
         }
+        $entity->setUserAdd($identifier);
     }
 }

@@ -1,12 +1,14 @@
-<div class="btn-group">
+{% if mercredi_accueil > 1 %}
+    <div class="btn-group">
 
-{% include '@AcMarcheMercredi/ecole/ecole/_btn_inscriptions.html.twig' %}
-</div>
+        {% include '@AcMarcheMercredi/ecole/ecole/_btn_inscriptions.html.twig' %}
+    </div>
+{% endif %}
 
 <a class="btn btn-primary" role="button"
    href="{{ path('mercredi_ecole_enfant_index') }}"><i class="fas fa-list"></i> Les enfants</a>
 
- <a href="{{ path('mercredi_ecole_ecole_index') }}" class="btn btn-primary" role='button'><i
-                    class="fas fa-list"></i>
-            Retour à la Liste</a>
+<a href="{{ path('mercredi_ecole_ecole_index') }}" class="btn btn-primary" role='button'><i
+            class="fas fa-list"></i>
+    Retour à la Liste</a>
 <br/><br/>

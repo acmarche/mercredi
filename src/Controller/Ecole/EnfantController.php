@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
@@ -53,11 +54,17 @@ final class EnfantController extends AbstractController
             'accueil' => true,
         ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
-            $accueil = $data['accueil'];
+            $accueil = $data['accueil'] ?? false;
         }
+
+        if ($this->getParameter(Option::ACCUEIL) < 2) {
+            $accueil = false;
+        }
+
         $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom, $accueil);
 
         return $this->render(
@@ -121,7 +128,7 @@ final class EnfantController extends AbstractController
     public function santeFiche(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-        if (! $santeFiche->getId()) {
+        if (!$santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
             return $this->redirectToRoute('mercredi_ecole_enfant_show', [
