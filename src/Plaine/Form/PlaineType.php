@@ -18,8 +18,8 @@ final class PlaineType extends AbstractType
         $formBuilder
             ->add('nom')
             ->add('communication', TextType::class, [
-                'required' => true,
-                'help' => 'Communication pour les virements bancaires',
+                'required' => false,
+                'help' => 'Communication pour les virements bancaires.',
             ])
             ->add(
                 'prix1',

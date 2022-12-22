@@ -2,5 +2,6 @@
     <div class="alert alert-info">
         <a href="{{ path('mercredi_parent_plaine_show', {'id': plaine.id}) }}" class="alert-link">{{ plaine }} est ouverte aux
             inscriptions</a>
+        <span class="text-muted mt-2">{{ plaine.remarque|nl2br }}</span>
     </div>
 {% endif %}
