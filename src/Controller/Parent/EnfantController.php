@@ -15,7 +15,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +44,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/', name: 'mercredi_parent_enfant_index', methods: ['GET'])]
-    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
+    #[IsGranted( 'ROLE_MERCREDI_PARENT')]
     public function index(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
@@ -63,7 +63,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'mercredi_parent_enfant_new', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
+    #[IsGranted( 'ROLE_MERCREDI_PARENT')]
     public function new(Request $request): Response
     {
         if ($this->getParameter('mercredi.add_enfant') < 1) {
@@ -97,7 +97,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_enfant_show', methods: ['GET'])]
-    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
+    #[IsGranted( 'enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);

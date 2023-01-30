@@ -19,18 +19,19 @@ use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
 use DateTime;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/accueil')]
-#[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
+#[IsGranted('ROLE_MERCREDI_ECOLE')]
 final class AccueilController extends AbstractController
 {
     use GetEcolesTrait;
@@ -48,7 +49,7 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/index', name: 'mercredi_ecole_accueils_index', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
+    #[IsGranted('ROLE_MERCREDI_ECOLE')]
     public function index(Request $request): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
@@ -76,9 +77,9 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_ecole_accueil_new', methods: ['GET', 'POST'])]
-    #[Entity(data: 'tuteur', expr: 'repository.find(tuteur)')]
-    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
-    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
+    #[Entity(TuteurRepository::class)]
+    #[Entity(EnfantRepository::class)]
+    #[IsGranted('enfant_edit', subject: 'enfant')]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
         $accueil = new Accueil($tuteur, $enfant);
@@ -103,7 +104,7 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/show', name: 'mercredi_ecole_accueil_show', methods: ['GET'])]
-    #[IsGranted(data: 'accueil_show', subject: 'accueil')]
+    #[IsGranted('accueil_show', subject: 'accueil')]
     public function show(Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
@@ -122,7 +123,7 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/edit', name: 'mercredi_ecole_accueil_edit', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'accueil_edit', subject: 'accueil')]
+    #[IsGranted('accueil_edit', subject: 'accueil')]
     public function edit(Request $request, Accueil $accueil): Response
     {
         $form = $this->createForm(AccueilType::class, $accueil);
@@ -179,7 +180,7 @@ final class AccueilController extends AbstractController
                     'duree' => $accueil->getDuree(),
                     'tuteur' => $accueil->getTuteur()->getId(),
                 ];
-            //    $tuteurSelected = $accueil->getTuteur()->getId();
+                //    $tuteurSelected = $accueil->getTuteur()->getId();
             }
             $rows['tuteurSelected'] = $tuteurSelected;
             $data[$enfant->getId()] = $rows;
@@ -220,7 +221,7 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/retard', name: 'mercredi_ecole_accueil_retard', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
+    #[IsGranted('enfant_show', subject: 'enfant')]
     public function retard(Request $request, Enfant $enfant): Response
     {
         $args = [

@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ class AjaxController extends AbstractController
     }
 
     #[Route(path: '/accueil/ajax/duree', name: 'mercredi_ecole_ajax_duree', methods: ['POST'])]
-    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
+    #[IsGranted('ROLE_MERCREDI_ECOLE')]
     public function updateDuree(Request $request): Response
     {
         $data = json_decode($request->getContent(), null, 512, JSON_THROW_ON_ERROR);
@@ -35,7 +35,5 @@ class AjaxController extends AbstractController
         $accueil = $this->accueilRepository->findByEnfantDateAndHeure($enfant, $date, $heure);
 
         return $this->json($data);
-
-        return $this->json('<div class="alert alert-success">Tri enregistré</div>');
     }
 }

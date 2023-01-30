@@ -7,18 +7,15 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\User\Dto\AssociateUserEcoleDto;
 use AcMarche\Mercredi\User\Form\AssociateEcoleType;
 use AcMarche\Mercredi\User\Handler\AssociationEcoleHandler;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * User controller.
- */
 #[Route(path: '/security/associer/ecole')]
-#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class AssocierEcoleController extends AbstractController
 {
     public function __construct(

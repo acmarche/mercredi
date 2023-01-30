@@ -8,7 +8,7 @@ use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireCreated;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireDeleted;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireUpdated;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/groupe_scolaire')]
-#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class GroupeScolaireController extends AbstractController
 {
     public function __construct(

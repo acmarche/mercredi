@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Animateur\Form\AnimateurType;
 use AcMarche\Mercredi\Animateur\Message\AnimateurUpdated;
 use AcMarche\Mercredi\Animateur\Repository\AnimateurRepository;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +14,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/animateur')]
-#[IsGranted(data: 'ROLE_MERCREDI_ANIMATEUR')]
+#[IsGranted('ROLE_MERCREDI_ANIMATEUR')]
 final class AnimateurController extends AbstractController
 {
     use GetAnimateurTrait;

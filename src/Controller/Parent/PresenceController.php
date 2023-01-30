@@ -17,7 +17,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +26,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/presence')]
-#[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
+#[IsGranted( 'ROLE_MERCREDI_PARENT')]
 final class PresenceController extends AbstractController
 {
     use GetTuteurTrait;
@@ -67,7 +67,7 @@ final class PresenceController extends AbstractController
      * Etape 2.
      */
     #[Route(path: '/select/jour/{uuid}', name: 'mercredi_parent_presence_select_jours', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
+    #[IsGranted( 'enfant_edit', subject: 'enfant')]
     public function selectJours(Request $request, Enfant $enfant): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
@@ -108,7 +108,7 @@ final class PresenceController extends AbstractController
     }
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_presence_show', methods: ['GET'])]
-    #[IsGranted(data: 'presence_show', subject: 'presence')]
+    #[IsGranted( 'presence_show', subject: 'presence')]
     public function show(Presence $presence): Response
     {
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
@@ -124,7 +124,7 @@ final class PresenceController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'mercredi_parent_presence_delete', methods: ['POST'])]
-    #[IsGranted(data: 'presence_edit', subject: 'presence')]
+    #[IsGranted( 'presence_edit', subject: 'presence')]
     public function delete(Request $request, Presence $presence): RedirectResponse
     {
         $enfant = $presence->getEnfant();

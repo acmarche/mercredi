@@ -7,10 +7,10 @@ use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 final class DefaultController extends AbstractController
@@ -26,7 +26,7 @@ final class DefaultController extends AbstractController
     }
 
     #[Route(path: '/', name: 'mercredi_parent_home')]
-    #[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
+    #[IsGranted('ROLE_MERCREDI_PARENT')]
     public function default(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {

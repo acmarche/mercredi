@@ -7,7 +7,6 @@ use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/profile')]
-#[IsGranted(data: 'IS_AUTHENTICATED_FULLY')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class ProfileController extends AbstractController
 {
     public function __construct(
@@ -58,7 +58,7 @@ final class ProfileController extends AbstractController
 
             $roles = array_filter(
                 $roles,
-                fn ($e) => $e !== $del_val
+                fn($e) => $e !== $del_val
             );
 
             if (\count($roles) > 1) {
@@ -87,7 +87,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/select', name: 'mercredi_front_select_profile')]
-    #[IsGranted(data: 'ROLE_MERCREDI')]
+    #[IsGranted('ROLE_MERCREDI')]
     public function selectProfile(): Response
     {
         return $this->render(
@@ -98,7 +98,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/edit', name: 'mercredi_front_user_edit')]
-    #[IsGranted(data: 'ROLE_MERCREDI')]
+    #[IsGranted('ROLE_MERCREDI')]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
@@ -122,7 +122,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/password', name: 'mercredi_front_user_password')]
-    #[IsGranted(data: 'ROLE_MERCREDI')]
+    #[IsGranted('ROLE_MERCREDI')]
     public function password(Request $request): Response
     {
         $user = $this->getUser();

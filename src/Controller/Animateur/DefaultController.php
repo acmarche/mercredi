@@ -3,13 +3,13 @@
 namespace AcMarche\Mercredi\Controller\Animateur;
 
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[IsGranted(data: 'ROLE_MERCREDI_ANIMATEUR')]
+#[IsGranted('ROLE_MERCREDI_ANIMATEUR')]
 final class DefaultController extends AbstractController
 {
     use OrganisationPropertyInitTrait;

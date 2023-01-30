@@ -15,7 +15,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Search\Form\SearchEnfantEcoleType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +42,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/', name: 'mercredi_ecole_enfant_index', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
+    #[IsGranted( 'ROLE_MERCREDI_ECOLE')]
     public function index(Request $request): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
@@ -77,7 +77,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/show/{uuid}', name: 'mercredi_ecole_enfant_show', methods: ['GET'])]
-    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
+    #[IsGranted( 'enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
@@ -99,7 +99,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/edit', name: 'mercredi_ecole_enfant_edit', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
+    #[IsGranted( 'enfant_edit', subject: 'enfant')]
     public function edit(Request $request, Enfant $enfant): Response
     {
         $form = $this->createForm(EnfantEditForEcoleType::class, $enfant);
@@ -124,7 +124,7 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/sante/{uuid}', name: 'mercredi_ecole_sante_fiche_show', methods: ['GET'])]
-    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
+    #[IsGranted( 'enfant_show', subject: 'enfant')]
     public function santeFiche(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);

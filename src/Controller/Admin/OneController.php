@@ -4,14 +4,13 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/one')]
-#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class OneController extends AbstractController
 {
     use PdfDownloaderTrait;
@@ -29,5 +28,13 @@ final class OneController extends AbstractController
             [
             ]
         );
+    }
+
+    #[Route('/one', name: 'app_one')]
+    public function index(): Response
+    {
+        return $this->render('one/index.html.twig', [
+            'controller_name' => 'OneController',
+        ]);
     }
 }

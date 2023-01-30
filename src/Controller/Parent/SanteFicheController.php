@@ -13,15 +13,15 @@ use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/santeFiche')]
-#[IsGranted(data: 'ROLE_MERCREDI_PARENT')]
+#[IsGranted('ROLE_MERCREDI_PARENT')]
 final class SanteFicheController extends AbstractController
 {
     public function __construct(
@@ -35,11 +35,11 @@ final class SanteFicheController extends AbstractController
     }
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_sante_fiche_show', methods: ['GET'])]
-    #[IsGranted(data: 'enfant_show', subject: 'enfant')]
+    #[IsGranted('enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-        if (! $santeFiche->getId()) {
+        if (!$santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
             return $this->redirectToRoute('mercredi_parent_sante_fiche_edit', [
@@ -63,7 +63,7 @@ final class SanteFicheController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/edit/etape1', name: 'mercredi_parent_sante_fiche_edit', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
+    #[IsGranted('enfant_edit', subject: 'enfant')]
     public function edit(Request $request, Enfant $enfant): Response
     {
         $form = $this->createForm(SanteFicheEtape1Type::class, $enfant);
@@ -87,7 +87,7 @@ final class SanteFicheController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/edit/etape2', name: 'mercredi_parent_sante_fiche_edit_etape2', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
+    #[IsGranted('enfant_edit', subject: 'enfant')]
     public function editEtape2(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant, false);
@@ -116,7 +116,7 @@ final class SanteFicheController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/edit/etape3', name: 'mercredi_parent_sante_fiche_edit_etape3', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'enfant_edit', subject: 'enfant')]
+    #[IsGranted('enfant_edit', subject: 'enfant')]
     public function editEtape3(Request $request, Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);

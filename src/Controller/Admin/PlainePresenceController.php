@@ -13,22 +13,24 @@ use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\Form\SearchNameType;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Utils\SortUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/plaine/presence')]
-#[IsGranted(data: 'ROLE_MERCREDI_ADMIN')]
+#[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class PlainePresenceController extends AbstractController
 {
     public function __construct(
@@ -69,9 +71,12 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    #[Route(path: '/select/tuteur/{plaine}/{enfant}', name: 'mercredi_admin_plaine_presence_select_tuteur', methods: ['GET', 'POST'])]
-    #[Entity(data: 'plaine', expr: 'repository.find(plaine)')]
-    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
+    #[Route(path: '/select/tuteur/{plaine}/{enfant}', name: 'mercredi_admin_plaine_presence_select_tuteur', methods: [
+        'GET',
+        'POST',
+    ])]
+    #[Entity(PlaineRepository::class)]
+    #[Entity(EnfantRepository::class)]
     public function selectTuteur(Plaine $plaine, Enfant $enfant): Response
     {
         $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
@@ -98,10 +103,13 @@ final class PlainePresenceController extends AbstractController
         );
     }
 
-    #[Route(path: '/confirmation/{plaine}/{tuteur}/{enfant}', name: 'mercredi_admin_plaine_presence_confirmation', methods: ['GET', 'POST'])]
-    #[Entity(data: 'tuteur', expr: 'repository.find(tuteur)')]
-    #[Entity(data: 'plaine', expr: 'repository.find(plaine)')]
-    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
+    #[Route(path: '/confirmation/{plaine}/{tuteur}/{enfant}', name: 'mercredi_admin_plaine_presence_confirmation', methods: [
+        'GET',
+        'POST',
+    ])]
+    #[Entity(TuteurRepository::class)]
+    #[Entity(PlaineRepository::class)]
+    #[Entity(EnfantRepository::class)]
     public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): RedirectResponse
     {
         $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant, $plaine->getJours());
@@ -212,7 +220,7 @@ final class PlainePresenceController extends AbstractController
     {
         $enfant = null;
         if ($this->isCsrfTokenValid('deletePresence'.$plaine->getId(), $request->request->get('_token'))) {
-            $presenceId = (int) $request->request->get('presence');
+            $presenceId = (int)$request->request->get('presence');
             if (0 === $presenceId) {
                 $this->addFlash('danger', 'Référence à la présence non trouvée');
 

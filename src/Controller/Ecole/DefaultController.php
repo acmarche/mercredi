@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +15,7 @@ final class DefaultController extends AbstractController
     use OrganisationPropertyInitTrait;
 
     #[Route(path: '/', name: 'mercredi_ecole_home')]
-    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
+    #[IsGranted( 'ROLE_MERCREDI_ECOLE')]
     public function default(): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
@@ -26,7 +26,7 @@ final class DefaultController extends AbstractController
     }
 
     #[Route(path: '/nouveau', name: 'mercredi_ecole_nouveau')]
-    #[IsGranted(data: 'ROLE_MERCREDI_ECOLE')]
+    #[IsGranted( 'ROLE_MERCREDI_ECOLE')]
     public function nouveau(): Response
     {
         return $this->render(
