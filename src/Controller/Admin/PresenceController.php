@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -24,16 +25,17 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Search\SearchHelper;
+use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
+use Doctrine\ORM\Mapping\Entity;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/presence')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -121,8 +123,8 @@ final class PresenceController extends AbstractController
     }
 
     #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_admin_presence_new', methods: ['GET', 'POST'])]
-    #[Entity(data: 'tuteur', expr: 'repository.find(tuteur)')]
-    #[Entity(data: 'enfant', expr: 'repository.find(enfant)')]
+    #[Entity(TuteurRepository::class)]
+    #[Entity(EnfantRepository::class)]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
         $presenceSelectDays = new PresenceSelectDays($enfant);
