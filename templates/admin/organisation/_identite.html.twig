@@ -28,6 +28,17 @@
         <i class="fas fa-phone-alt"></i> {{ organisation.telephone }} {{ organisation.telephoneBureau }}<br/>
     {% endif %}
 
+    <table class="table table-bordered mt-2">
+        <tr>
+            <th>Nom du responsable</th>
+            <td>{{ organisation.responsable_nom }} {{ organisation.responsable_prenom }} {{ organisation.responsable_fonction }}</td>
+        </tr>
+        <tr>
+            <th>Numéro de compte</th>
+            <td>{{ organisation.numero_compte }}</td>
+        </tr>
+    </table>
+
     {% if organisation.remarque %}
         <br/><br/>
         <span class="text-muted">{{ organisation.remarque | nl2br }}</span>

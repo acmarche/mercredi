@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PhotoTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
+use AcMarche\Mercredi\Entity\Traits\ResponsableTrait;
 use AcMarche\Mercredi\Entity\Traits\SiteWebTrait;
 use AcMarche\Mercredi\Entity\Traits\TelephonieTrait;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -29,6 +30,8 @@ class Organisation implements Stringable
     use TelephonieTrait;
     use RemarqueTrait;
     use PhotoTrait;
+    use ResponsableTrait;
+
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $initiale = null;
     /**
@@ -41,6 +44,9 @@ class Organisation implements Stringable
     #[Vich\UploadableField(mapping: 'mercredi_organisation_image', fileNameProperty: 'photoName')]
     #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;
+
+    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    public ?string $numero_compte = null;
 
     public function __toString(): string
     {
