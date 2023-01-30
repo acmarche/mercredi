@@ -244,7 +244,6 @@ final class PresenceRepository extends ServiceEntityRepository
             ->addOrderBy('enfant.nom');
 
 
-
         return $qbl->getQuery()->getResult();
     }
 
@@ -271,6 +270,26 @@ final class PresenceRepository extends ServiceEntityRepository
         }
 
         return $qbl->getQuery()->getResult();
+    }
+
+    /**
+     * @param int $year
+     * @return array|Presence[]
+     */
+    public function OneByYear(Tuteur $tuteur, Enfant $enfant, int $year): array
+    {
+
+        return
+            $this->createQBlBase()
+                ->andWhere('presence.tuteur = :tuteur')
+                ->setParameter('tuteur', $tuteur)
+                ->andWhere('presence.enfant = :enfant')
+                ->setParameter('enfant', $enfant)
+                ->andWhere('presence.paiement IS NULL')
+                ->andWhere('jour.date_jour LIKE :year')
+                ->setParameter('year', $year.'-%')
+                ->getQuery()
+                ->getResult();
     }
 
     private function createQBlBase(): QueryBuilder

@@ -3,7 +3,16 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,10 +22,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class OneController extends AbstractController
 {
-    use PdfDownloaderTrait;
+    use PdfDownloaderTrait, OrganisationPropertyInitTrait;
 
     public function __construct(
-        private AccueilRepository $accueilRepository
+        private AccueilRepository $accueilRepository,
+        private JourRepository $jourRepository,
+        private PresenceRepository $presenceRepository,
+        private FacturePresenceRepository $facturePresenceRepository,
+        private PresenceCalculatorInterface $presenceCalculator,
+        private OrdreService $ordreService,
     ) {
     }
 
@@ -24,17 +38,43 @@ final class OneController extends AbstractController
     public function default(): Response
     {
         return $this->render(
-            '@AcMarcheMercredi/admin/one/index.html.Twig',
+            '@AcMarcheMercredi/admin/one/index.html.twig',
             [
             ]
         );
     }
 
-    #[Route('/one', name: 'app_one')]
-    public function index(): Response
+    #[Route('/new/{tuteur}/{enfant}/{year}', name: 'mercredi_admin_one_new')]
+    public function index(Tuteur $tuteur, Enfant $enfant, int $year): Response
     {
-        return $this->render('one/index.html.twig', [
-            'controller_name' => 'OneController',
+        $presences = $this->presenceRepository->OneByYear($tuteur, $enfant, $year);
+        if (count($presences) === 0) {
+            $this->addFlash('danger', 'Aucune présence en '.$year.' pour cette enfant');
+
+            return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
+        }
+
+        foreach ($presences as $presence) {
+            $presence->cout = $this->presenceCalculator->calculate($presence);
+        }
+
+        $quarters = PresenceUtils::groupByQuarter($presences);
+        $dates = [
+            1 => '01/01/'.$year.' => 31/03/'.$year,
+            2 => '01/04/'.$year.' => 31/06/'.$year,
+            3 => '01/07/'.$year.' => 31/09/'.$year,
+            4 => '01/10/'.$year.' => 31/12/'.$year,
+        ];
+
+        return $this->render('@AcMarcheMercredi/admin/one/new.html.twig', [
+            'quarters' => $quarters,
+            'tuteur' => $tuteur,
+            'enfant' => $enfant,
+            'year' => $year,
+            'dates' => $dates,
+            'today' => new \DateTime(),
+            'signature' => null,
+            'organisation' => $this->organisation,
         ]);
     }
 }

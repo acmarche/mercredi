@@ -52,6 +52,24 @@ final class PresenceUtils
         return $all;
     }
 
+    public static function groupByQuarter(array $presences): array
+    {
+        $all = [1 => [], 2 => [], 3 => [], 4 => []];
+        foreach ($presences as $presence) {
+            $jour = $presence->getJour()->getDateJour();
+            $monthNumber = $jour->format('n');
+            $i = match (true) {
+                $monthNumber < 4 => 1,
+                $monthNumber < 7 => 2,
+                $monthNumber < 10 => 3,
+                default => 4
+            };
+            $all[$i][] = $presence;
+        }
+
+        return $all;
+    }
+
     /**
      * @param Presence[] $presences
      *
