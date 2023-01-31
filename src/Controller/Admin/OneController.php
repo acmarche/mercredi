@@ -65,13 +65,34 @@ final class OneController extends AbstractController
             3 => '01/07/'.$year.' => 31/09/'.$year,
             4 => '01/10/'.$year.' => 31/12/'.$year,
         ];
+        $data = [
+            1 => ['total' => 0, 'presences' => []],
+            2 => ['total' => 0, 'presences' => []],
+            3 => ['total' => 0, 'presences' => []],
+            4 => ['total' => 0, 'presences' => []],
+        ];
+
+        foreach ($quarters as $key => $row) {
+            $data[$key]['dates'] = $dates[$key];
+            foreach ($row as $item) {
+                $data[$key]['presences'][] = $item;
+                $data[$key]['total'] += $item->cout;
+            }
+        }
+
+        foreach ($data as $key => $row) {
+            if (count($row['presences']) > 0) {
+                $data[$key]['prix'] = $row['total'] / count($row['presences']);
+            } else {
+                $data[$key]['prix'] = 0;
+            }
+        }
 
         return $this->render('@AcMarcheMercredi/admin/one/new.html.twig', [
-            'quarters' => $quarters,
+            'data' => $data,
             'tuteur' => $tuteur,
             'enfant' => $enfant,
             'year' => $year,
-            'dates' => $dates,
             'today' => new \DateTime(),
             'signature' => null,
             'organisation' => $this->organisation,

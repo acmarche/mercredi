@@ -83,13 +83,13 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
         <th>Tarif journalier</th>
         <th>Montant perçu</th>
     </tr>
-    {% for key,quarter in quarters %}
+    {% for key,quarter in data %}
         <tr>
             <td>Période {{ key }}</td>
-            <td>{{ dates[key] }}</td>
-            <td>{{ quarter|length }}</td>
-            <td>X euros</td>
-            <td>X euros</td>
+            <td>{{ quarter['dates'] }}</td>
+            <td>{{ quarter['presences']|length }}</td>
+            <td>{{ quarter['prix']|format_currency('eur') }}</td>
+            <td>{{ quarter['total']|format_currency('eur') }}</td>
         </tr>
     {% endfor %}
 </table>
