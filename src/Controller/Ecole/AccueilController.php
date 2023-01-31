@@ -19,10 +19,8 @@ use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
 use DateTime;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,8 +75,6 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_ecole_accueil_new', methods: ['GET', 'POST'])]
-    #[Entity(TuteurRepository::class)]
-    #[Entity(EnfantRepository::class)]
     #[IsGranted('enfant_edit', subject: 'enfant')]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {

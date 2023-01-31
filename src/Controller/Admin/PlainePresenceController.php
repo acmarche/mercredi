@@ -13,14 +13,11 @@ use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresenceEditType;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
 use AcMarche\Mercredi\Presence\Message\PresenceUpdated;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\Form\SearchNameType;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Utils\SortUtils;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,8 +72,6 @@ final class PlainePresenceController extends AbstractController
         'GET',
         'POST',
     ])]
-    #[Entity(PlaineRepository::class)]
-    #[Entity(EnfantRepository::class)]
     public function selectTuteur(Plaine $plaine, Enfant $enfant): Response
     {
         $tuteurs = $this->relationRepository->findTuteursByEnfant($enfant);
@@ -107,9 +102,6 @@ final class PlainePresenceController extends AbstractController
         'GET',
         'POST',
     ])]
-    #[Entity(TuteurRepository::class)]
-    #[Entity(PlaineRepository::class)]
-    #[Entity(EnfantRepository::class)]
     public function confirmation(Plaine $plaine, Tuteur $tuteur, Enfant $enfant): RedirectResponse
     {
         $this->plaineHandler->handleAddEnfant($plaine, $tuteur, $enfant, $plaine->getJours());

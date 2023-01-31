@@ -13,22 +13,19 @@ use AcMarche\Mercredi\Accueil\Message\AccueilUpdated;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Accueil\Utils\AccueilUtils;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use Doctrine\ORM\Mapping\Entity;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/accueil')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -100,8 +97,6 @@ final class AccueilController extends AbstractController
     }
 
     #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_admin_accueil_new', methods: ['GET', 'POST'])]
-    #[Entity(TuteurRepository::class)]
-    #[Entity(EnfantRepository::class)]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
         $accueil = new Accueil($tuteur, $enfant);

@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceHandlerInterface;
-use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
@@ -25,9 +24,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Search\SearchHelper;
-use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
-use Doctrine\ORM\Mapping\Entity;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -84,9 +81,6 @@ final class PresenceController extends AbstractController
         );
     }
 
-    /**
-     * Liste toutes les presences par mois.
-     */
     #[Route(path: '/by/month', name: 'mercredi_admin_presence_by_month', methods: ['GET', 'POST'])]
     public function indexByMonth(Request $request): Response
     {
@@ -123,8 +117,6 @@ final class PresenceController extends AbstractController
     }
 
     #[Route(path: '/new/{tuteur}/{enfant}', name: 'mercredi_admin_presence_new', methods: ['GET', 'POST'])]
-    #[Entity(TuteurRepository::class)]
-    #[Entity(EnfantRepository::class)]
     public function new(Request $request, Tuteur $tuteur, Enfant $enfant): Response
     {
         $presenceSelectDays = new PresenceSelectDays($enfant);
