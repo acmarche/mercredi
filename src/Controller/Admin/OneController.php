@@ -58,7 +58,7 @@ final class OneController extends AbstractController
 
         $presencesPaid = [];
         foreach ($presences as $presence) {
-            if($this->factureCalculator->isPresencePaid($presence)){
+            if ($this->factureCalculator->isPresencePaid($presence)) {
                 $presencesPaid[] = $presence;
             }
         }
@@ -97,7 +97,7 @@ final class OneController extends AbstractController
             }
         }
 
-        return $this->render('@AcMarcheMercredi/admin/one/new.html.twig', [
+        $html = $this->renderView('@AcMarcheMercredi/admin/one/new.html.twig', [
             'data' => $data,
             'tuteur' => $tuteur,
             'enfant' => $enfant,
@@ -106,5 +106,7 @@ final class OneController extends AbstractController
             'signature' => null,
             'organisation' => $this->organisation,
         ]);
+
+        return $this->downloadPdf($html, 'one-'.$enfant->getSlug().'-'.$year.'.pdf');
     }
 }

@@ -1,14 +1,35 @@
-{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/pdf.css')) }}" rel="stylesheet">
+    <link href="{{ bootcdn }}" rel="stylesheet">
+    <link href="{{ absolute_url(asset('bundles/acmarchemercredi/css/print.css')) }}" rel="stylesheet" media="print">
+    <title>Fiche santé</title>
+    <style>
+        table {
+            page-break-inside: auto
+        }
 
-{% block body %}
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
 
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
     <div class="card mb-3">
-        <div class="card-header">
-            <h3>One</h3>
-        </div>
         <div class="card-body">
             {% include '@AcMarcheMercrediAdmin/one/_attestation_2022.html.twig' %}
         </div>
     </div>
-
-{% endblock %}
+</div>

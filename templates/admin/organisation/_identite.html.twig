@@ -28,16 +28,13 @@
         <i class="fas fa-phone-alt"></i> {{ organisation.telephone }} {{ organisation.telephoneBureau }}<br/>
     {% endif %}
 
-    <table class="table table-bordered mt-2">
-        <tr>
-            <th>Nom du responsable</th>
-            <td>{{ organisation.responsable_nom }} {{ organisation.responsable_prenom }} {{ organisation.responsable_fonction }}</td>
-        </tr>
-        <tr>
-            <th>Numéro de compte</th>
-            <td>{{ organisation.numero_compte }}</td>
-        </tr>
-    </table>
+    {% if organisation.numero_compte %}
+        <i class="fas fa-bank"></i> {{ organisation.numero_compte }}<br/>
+    {% endif %}
+
+    {% if organisation.responsable_nom %}
+        <i class="fas fa-user"></i> {{ organisation.responsable_nom }} {{ organisation.responsable_prenom }} {{ organisation.responsable_fonction }}<br/>
+    {% endif %}
 
     {% if organisation.remarque %}
         <br/><br/>
