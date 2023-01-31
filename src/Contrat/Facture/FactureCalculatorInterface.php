@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Contrat\Facture;
 
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;
 
@@ -43,4 +44,6 @@ interface FactureCalculatorInterface
      * Total des pourcentages a appliquer sur le total de la facture.
      */
     public function totalComplementPourcentage(FactureInterface $facture): float;
+
+    public function isPresencePaid(Presence $presence): bool;
 }

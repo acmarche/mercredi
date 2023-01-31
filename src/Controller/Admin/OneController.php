@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -31,6 +32,7 @@ final class OneController extends AbstractController
         private FacturePresenceRepository $facturePresenceRepository,
         private PresenceCalculatorInterface $presenceCalculator,
         private OrdreService $ordreService,
+        private FactureCalculatorInterface $factureCalculator
     ) {
     }
 
@@ -54,11 +56,18 @@ final class OneController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
 
+        $presencesPaid = [];
         foreach ($presences as $presence) {
+            if($this->factureCalculator->isPresencePaid($presence)){
+                $presencesPaid[] = $presence;
+            }
+        }
+
+        foreach ($presencesPaid as $presence) {
             $presence->cout = $this->presenceCalculator->calculate($presence);
         }
 
-        $quarters = PresenceUtils::groupByQuarter($presences);
+        $quarters = PresenceUtils::groupByQuarter($presencesPaid);
         $dates = [
             1 => '01/01/'.$year.' => 31/03/'.$year,
             2 => '01/04/'.$year.' => 31/06/'.$year,

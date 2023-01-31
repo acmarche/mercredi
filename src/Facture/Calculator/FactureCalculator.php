@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Facture\Calculator;
 
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Facture\Dto\FactureDetailDto;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
@@ -163,5 +164,21 @@ class FactureCalculator implements FactureCalculatorInterface
         }
 
         return $cout;
+    }
+
+    public function isPresencePaid(Presence $presence): bool
+    {
+        $presenceFacture = $this->facturePresenceRepository->findByPresence($presence);
+        if ($presenceFacture) {
+            $facture = $presenceFacture->getFacture();
+            if ($facture->getPayeLe()) {
+                return true;
+            }
+        }
+        if ($presence->getPaiement()) {
+            return true;
+        }
+
+        return false;
     }
 }
