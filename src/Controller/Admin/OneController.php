@@ -103,7 +103,6 @@ final class OneController extends AbstractController
             'enfant' => $enfant,
             'year' => $year,
             'today' => new \DateTime(),
-            'signature' => null,
             'organisation' => $this->organisation,
         ]);
 

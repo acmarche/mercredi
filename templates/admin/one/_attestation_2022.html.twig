@@ -1,4 +1,4 @@
-ATTESTATION N°XXXX  (ANNEE DES DEPENSES   {{ year }})
+<h2>ATTESTATION N°{{ tuteur.id}}  (ANNEE DES DEPENSES   {{ year }})</h2>
 <hr/>
 <br/>
 Cette attestation vaut comme attestation annuelle délivrée conformément à l’art. 6318/8,<br>
@@ -15,7 +15,7 @@ Code postal :  {{ organisation.codePostal }}   Commune :  {{ organisation.locali
 L’organisme qui assure la garde, certifie qu’il (cochez la case adéquate) :
 <br/><br>
 <ul class="list-group">
-    <li class="list-group-item"><input type="checkbox">
+    <li class="list-group-item"><input type="checkbox" checked>
         est autorisé, agréé, subsidié, contrôlé ou surveillé ou a reçu un label de qualité par l'Office de la Naissance
         et de l'Enfance ou par « Kind & Gezin » / « Opgroeien regie » ou par le gouvernement de la Communauté
         germanophone ;
@@ -106,9 +106,8 @@ Personne habilitée à représenter l’organisme de garde ou représentant la p
 <br/><br>
 Nom :{{ organisation.responsable_nom }} {{ organisation.responsable_prenom }}<br>
 Qualité :{{ organisation.responsable_fonction }}<br>
-Signature :
 <br/><br>
-{{ signature }}
+<img src="{{ asset('bundles/acmarchemercredi/images/signature_girard.jpg') }}" alt="signature">
 <br/><br>
 Explications
 <br/><br>
