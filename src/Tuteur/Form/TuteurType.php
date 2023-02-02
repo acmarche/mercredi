@@ -71,6 +71,14 @@ final class TuteurType extends AbstractType
                 ]
             )
             ->add(
+                'registre_national',
+                TextType::class,
+                [
+                    'label' => 'Numéro national',
+                    'required' => !$isAdmin,
+                ]
+            )
+            ->add(
                 'telephone',
                 TextType::class,
                 [

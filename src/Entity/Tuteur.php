@@ -21,6 +21,7 @@ use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PapierTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\PresencesTuteurTrait;
+use AcMarche\Mercredi\Entity\Traits\RegistreNationalTrait;
 use AcMarche\Mercredi\Entity\Traits\RelationsTrait;
 use AcMarche\Mercredi\Entity\Traits\RemarqueTrait;
 use AcMarche\Mercredi\Entity\Traits\SexeTrait;
@@ -60,6 +61,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface, Stringable
     use IbanTrait;
     use CreancesTrait;
     use IdOldTrait;
+    use RegistreNationalTrait;
 
     /**
      * @var Relation[]

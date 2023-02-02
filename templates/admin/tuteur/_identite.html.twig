@@ -29,6 +29,10 @@
         <td><a href='mailto:{{ tuteur.email }}'>{{ tuteur.email }}</a></td>
     </tr>
     <tr>
+        <th><span class="fas fa-museum"></span> Numéro national</th>
+        <td>{{ tuteur.registreNational }}</td>
+    </tr>
+    <tr>
         <th><span class="far fa-envelope"></span> Facture papier</th>
         <td>{{ tuteur.facturePapier ? 'oui' : 'non' }}</td>
     </tr>
