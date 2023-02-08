@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
+use AcMarche\Mercredi\Migration\PaiementRepository;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -29,6 +30,7 @@ final class OneController extends AbstractController
         private AccueilRepository $accueilRepository,
         private JourRepository $jourRepository,
         private PresenceRepository $presenceRepository,
+        private PaiementRepository $paiementRepository,
         private FacturePresenceRepository $facturePresenceRepository,
         private PresenceCalculatorInterface $presenceCalculator,
         private OrdreService $ordreService,
@@ -46,7 +48,7 @@ final class OneController extends AbstractController
         );
     }
 
-    #[Route('/new/{tuteur}/{enfant}/{year}', name: 'mercredi_admin_one_new')]
+    #[Route('/attestation/{tuteur}/{enfant}/{year}', name: 'mercredi_admin_one_new')]
     public function index(Tuteur $tuteur, Enfant $enfant, int $year): Response
     {
         $presences = $this->presenceRepository->OneByYear($tuteur, $enfant, $year);
@@ -56,6 +58,55 @@ final class OneController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
 
+        if ($year > 2021) {
+            $html = $this->newOne($tuteur, $enfant, $year, $presences);
+        } else {
+            $html = $this->oldOne($tuteur, $enfant, $year, $presences);
+        }
+
+        //  return new Response($html);
+
+        return $this->downloadPdf($html, 'one-'.$enfant->getSlug().'-'.$year.'.pdf');
+    }
+
+    private function oldOne(Tuteur $tuteur, Enfant $enfant, int $year, array $presences): string
+    {
+        /**
+         * Paiements.
+         */
+        $paiments = $this->paiementRepository->getByEnfantTuteur($tuteur, $enfant, $year);
+        if (0 == count($paiments)) {
+            return 'Aucun paiement en '.$year.'<div class="page-breaker"></div>';
+        }
+
+        $presencesPaid = [];
+        foreach ($presences as $presence) {
+            if ($this->factureCalculator->isPresencePaid($presence)) {
+                $presencesPaid[] = $presence;
+            }
+        }
+
+        foreach ($presencesPaid as $presence) {
+            $presence->cout = $this->presenceCalculator->calculate($presence);
+        }
+
+        $totalPaiement = 0;
+        foreach ($paiments as $paiment) {
+            $totalPaiement += $paiment->getMontant();
+        }
+
+        return $this->renderView('@AcMarcheMercredi/admin/attestation/fiscale/index.html.twig', [
+            'tuteur' => $tuteur,
+            'enfant' => $enfant,
+            'presences' => $presences,
+            'totalpaiement' => $totalPaiement,
+            'year' => $year,
+            'organisation' => $this->organisation,
+        ]);
+    }
+
+    private function newOne(Tuteur $tuteur, Enfant $enfant, int $year, array $presences): string
+    {
         $presencesPaid = [];
         foreach ($presences as $presence) {
             if ($this->factureCalculator->isPresencePaid($presence)) {
@@ -97,7 +148,7 @@ final class OneController extends AbstractController
             }
         }
 
-        $html = $this->renderView('@AcMarcheMercredi/admin/one/new.html.twig', [
+        return $this->renderView('@AcMarcheMercredi/admin/attestation/one/2022.html.twig', [
             'data' => $data,
             'tuteur' => $tuteur,
             'enfant' => $enfant,
@@ -105,7 +156,5 @@ final class OneController extends AbstractController
             'today' => new \DateTime(),
             'organisation' => $this->organisation,
         ]);
-
-        return $this->downloadPdf($html, 'one-'.$enfant->getSlug().'-'.$year.'.pdf');
     }
 }

@@ -1,0 +1,136 @@
+<strong><span style="text-decoration: underline;">Cadre II:</span></strong>
+<span class="text-muted" style="font-size: 12px;"> (À remplir par l’institution, le milieu d’accueil, la crèche, la famille d’accueil, l’école maternelle ou
+ primaire, le pouvoir organisateur de l’école maternelle ou primaire, le pouvoir public local, communautaire ou
+ régional)</span>
+<br/><br/>
+
+<table class="table">
+    <tr>
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td style="width: 5%">1.</td>
+        <td style="width: 45%">Numéro d’ordre de l’attestation:</td>
+        <td> epe-{{ year }}-{{ enfant.id }}</td>
+    </tr>
+    <tr>
+        <td>2.</td>
+        <td>Nom, Prénom et adresse du débiteur <br/>des frais de garde de l’enfant:</td>
+        <td>
+            <table class="table table-bordered" style="font-size: 1.4em;">
+                <tr>
+                    <td>
+                        {{ tuteur }}
+                        <br/>
+                        {{ tuteur.rue }}
+                        <br/>
+                        {{ tuteur.codepostal }} {{ tuteur.localite }}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>3.</td>
+        <td>Nom et prénom de l’enfant:</td>
+        <td>{{ enfant }}</td>
+    </tr>
+    <tr>
+        <td>4.</td>
+        <td>Date de naissance de l'enfant:</td>
+        <td>{% if enfant.birthday %} {{ enfant.birthday | date('d-m-Y') }} {% endif %}</td>
+    </tr>
+    <tr>
+        <td>5.</td>
+        <td colspan="2">Jours auxquels l’enfant a été gardé en <strong>{{ year }}</strong></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="2">
+            {% for presence in presences %}
+                {{ presence.jour.datejour | date('d-m') }}
+                {% if not loop.last %} | {% endif %}
+                {% if loop.index == 12 %} <br/> {% endif %}
+            {% else %}
+                <p class="text-warning">Aucune !</p>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>6.</td>
+        <td>Nombre de jours de garde:</td>
+        <td>{{ presences | length }}</td>
+    </tr>
+    <tr>
+        <td>7.</td>
+        <td>Tarif journalier (2):</td>
+        <td>
+            <strong>Tarifs par mercredi **</strong><br/>
+            Premier enfant : 5.50 €<br/>
+            Deuxième enfant :3.50 €<br/>
+            Les suivants: 2.50 €
+            <br/><br/>
+            <strong> Tarifs des journées pédagogiques et plaines de vacances par jour **</strong><br/>
+            {% if year > 2016 %}
+                Premier enfant : 8 €<br/>
+                Deuxième enfant : 5 €<br/>
+                Les suivants: 3 €<br/>
+            {% else %}
+                Premier enfant : 7 €<br/>
+                Deuxième enfant : 4 €<br/>
+                Les suivants: 2 €<br/>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>8.</td>
+        <td>Montant total perçu:</td>
+        <td><strong>{{ totalpaiement }} €</strong></td>
+    </tr>
+</table>
+
+Le soussigné certifie exacts les renseignements mentionnés ci-avant.
+<br/><br/>
+<div style="text-align: right">
+    <table class="table2" style="border: none; width: 100%;">
+        <tr>
+            <td style="width: 40%;border: none;"></td>
+            <td style="width: 60%;border: none;">Fait à {{ organisation.localite }} le {{ "now"|date('d-m-Y') }}</td>
+        </tr>
+    </table>
+
+    <table class="table2" style="border: none; width: 100%;margin-top: 30px;">
+        <tr>
+            <td style="width: 60%;border: none;"></td>
+            <td style="border: none;">Pour le conseil d'administration
+            </td>
+        </tr>
+    </table>
+
+    <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signature_girard.jpg')) }}" height="70"
+         alt="signature">
+
+    <table class="table" style="border: none;">
+        <tr>
+            <td style="width: 60%;border: none;"></td>
+            <td style="width: 40%;border: none;" class="text-right">
+                {{ organisation.responsable_nom }} {{ organisation.responsable_prenom }}<br/>
+                {{ organisation.responsable_fonction }}
+            </td>
+        </tr>
+    </table>
+</div>
+<p class="text-muted">**Prix de base sans les réductions appliquées.</p>
+<br/>
+<table class="table" style="border: none;">
+    <tr>
+        <td>Nom et adresse du service traitant:</td>
+        <td>
+            {{ organisation.nom }}<br/>
+            {{ organisation.rue }}<br/>
+            {{ organisation.codePostal }} {{ organisation.localite }}<br/>
+        </td>
+    </tr>
+</table>
+<br/>
+<div class="page-breaker"></div>
