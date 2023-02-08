@@ -1,9 +1,5 @@
 {% extends '@AcMarcheMercredi/front/layout.html.twig' %}
 
-{% block title %}
-    {{ parent() }} -
-    {{ page.nom }}
-{% endblock %}
 
 {% block body_class %}homeBg{% endblock %}
 
@@ -11,11 +7,11 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>{{ page.nom }}</h3>
+
         </div>
 
         <div class="card-body">
-            {{ page.content|raw }}
+
         </div>
     </div>
 

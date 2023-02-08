@@ -168,15 +168,15 @@ class FactureCalculator implements FactureCalculatorInterface
 
     public function isPresencePaid(Presence $presence): bool
     {
+        if ($presence->getPaiement()) {
+            return true;
+        }
         $presenceFacture = $this->facturePresenceRepository->findByPresence($presence);
         if ($presenceFacture) {
             $facture = $presenceFacture->getFacture();
             if ($facture->getPayeLe()) {
                 return true;
             }
-        }
-        if ($presence->getPaiement()) {
-            return true;
         }
 
         return false;

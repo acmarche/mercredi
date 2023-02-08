@@ -1,4 +1,4 @@
-<h2>ATTESTATION N°{{ enfant.id}}  (ANNEE DES DEPENSES   {{ year }})</h2>
+<h2>ATTESTATION N°{{ enfant.id }} (ANNEE DES DEPENSES {{ year }})</h2>
 <hr/>
 <br/>
 Cette attestation vaut comme attestation annuelle délivrée conformément à l’art. 6318/8,<br>
@@ -65,8 +65,8 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
 <br/><br>
 3. Coordonnées de l'enfant :
 <br/><br>
-Nom  : {{ enfant.nom }}
-Prénom : {{ enfant.prenom }}
+Nom  : {{ enfant.nom }}<br>
+Prénom : {{ enfant.prenom }}<br>
 Numéro d'identification du Registre national ou, le cas échéant, le numéro d'identification de la BCSS : {{ enfant.registreNational }}
 <br>
 Date de naissance : {{ enfant.birthday|date('d-m-Y') }} .<br>
@@ -89,14 +89,36 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
             <td>Période {{ key }}</td>
             <td>{{ quarter['dates'] }}</td>
             <td>{{ quarter['presences']|length }}</td>
-            <td>{{ quarter['prix']|format_currency('eur') }}</td>
+            <td>Voir ci-dessous</td>
             <td>{{ quarter['total']|format_currency('eur') }}</td>
         </tr>
     {% endfor %}
 </table>
-
-<br/><br>
-Le soussigné certifie exacts les renseignements mentionnés ci-avant.
+<br/>
+<strong>Tarif journalier</strong>
+<br>
+<table class="table table-bordered">
+    <tr>
+        <td>
+            <strong>Tarifs par mercredi **</strong><br/>
+            Premier enfant : 6 €<br/>
+            Deuxième enfant :4 €<br/>
+            Les suivants: 3 €
+        </td>
+        <td>
+            <strong>Tarifs des journées pédagogiques et plaines de vacances par jour **</strong><br/>
+            Premier enfant : 8 €<br/>
+            Deuxième enfant : 6 €<br/>
+            Les suivants: 4 €<br/>
+        </td>
+        <td>
+            <strong>** Des réductions peuvent être appliquées suivant différents critères</strong>
+        </td>
+    </tr>
+</table>
+<br/><br/>
+<br/>
+Le soussigné certifie exact les renseignements mentionnés ci-avant.
 <br/><br>
 
 Fait à {{ organisation.localite }}, le {{ today|date('d-m-Y') }}
@@ -107,7 +129,8 @@ Personne habilitée à représenter l’organisme de garde ou représentant la p
 Nom :{{ organisation.responsable_nom }} {{ organisation.responsable_prenom }}<br>
 Qualité :{{ organisation.responsable_fonction }}<br>
 <br/><br>
-<img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signature_girard.jpg')) }}" height="70" alt="signature">
+<img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signature_girard.jpg')) }}" height="70"
+     alt="signature">
 <br/><br>
 Explications
 <br/><br>
@@ -122,19 +145,19 @@ Explications
 - de l’organisation établie dans l’Espace économique européen qui organise une garde à domicile pour des enfants malades par des gardiens professionnels,
 - du (de la) gardien(ne) indépendant(e) qui garde un enfant malade dans le cadre de son activité professionnelle qu’il (elle) exerce au sein de l’Espace économique européen.
 <br><br>
-(3)    A compléter quand l’organisme qui assure la garde n’est autorisé(e), agréé(e), subsidié(e), etc … que pendant une partie de l’année pour laquelle l’attestation est établie.
+(3) À compléter quand l’organisme qui assure la garde n’est autorisé(e), agréé(e), subsidié(e), etc … que pendant une partie de l’année pour laquelle l’attestation est établie.
 <br><br>
 (4)    Il s’agit :
 <br><br>
--    soit de l’Office de la Naissance et de l’Enfance ou de « Kind & Gezin » / « Opgroeien regie » ou du gouvernement de la Communauté germanophone ;
--    soit des pouvoirs publics locaux, communautaires ou régionaux ;
--    soit des institutions publiques étrangères établies dans un autre Etat membre de l’Espace économique européen ;
--    soit de l’école établie dans l’Espace économique européen ou du pouvoir organisateur de l’école établie dans l’Espace économique européen avec laquelle (lequel) les institutions ou les milieux d’accueil ont un lien.
+- soit de l’Office de la Naissance et de l’Enfance ou de « Kind & Gezin » / « Opgroeien regie » ou du gouvernement de la Communauté germanophone ;
+- soit des pouvoirs publics locaux, communautaires ou régionaux ;
+- soit des institutions publiques étrangères établies dans un autre Etat membre de l’Espace économique européen ;
+- soit de l’école établie dans l’Espace économique européen ou du pouvoir organisateur de l’école établie dans l’Espace économique européen avec laquelle (lequel) les institutions ou les milieux d’accueil ont un lien.
 <br><br>
-(5)    Les données mentionnées sur l'attestation ne peuvent concerner que la partie de l'année précédant le 14ème anniversaire de l'enfant ou le 21ème anniversaire de l’enfant avec un handicap lourd.
+(5) Les données mentionnées sur l'attestation ne peuvent concerner que la partie de l'année précédant le 14ème anniversaire de l'enfant ou le 21ème anniversaire de l’enfant avec un handicap lourd.
 <br><br>
-(6)    Si plusieurs tarifs sont appliqués, il convient de fournir le détail du nombre total de jours de garde par tarif appliqué. Le tarif journalier ne doit cependant être mentionné que s’il est supérieur au montant maximum par jour de garde. Ce montant est indexé.
+(6) Si plusieurs tarifs sont appliqués, il convient de fournir le détail du nombre total de jours de garde par tarif appliqué. Le tarif journalier ne doit cependant être mentionné que s’il est supérieur au montant maximum par jour de garde. Ce montant est indexé.
 <br><br>
-(7)    S’il y a un mandataire, sa signature doit être précédée de la mention "par procuration".
+(7) S’il y a un mandataire, sa signature doit être précédée de la mention "par procuration".
 La signature n’est pas obligatoire pour l’envoi électronique d’une copie à l’administration par l’application Belcotax on-web, l’utilisateur devant s’enregistrer pour utiliser celle-ci.
 <br>

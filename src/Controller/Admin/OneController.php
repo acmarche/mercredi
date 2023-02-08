@@ -64,16 +64,13 @@ final class OneController extends AbstractController
             $html = $this->oldOne($tuteur, $enfant, $year, $presences);
         }
 
-        //  return new Response($html);
+        //   return new Response($html);
 
         return $this->downloadPdf($html, 'one-'.$enfant->getSlug().'-'.$year.'.pdf');
     }
 
     private function oldOne(Tuteur $tuteur, Enfant $enfant, int $year, array $presences): string
     {
-        /**
-         * Paiements.
-         */
         $paiments = $this->paiementRepository->getByEnfantTuteur($tuteur, $enfant, $year);
         if (0 == count($paiments)) {
             return 'Aucun paiement en '.$year.'<div class="page-breaker"></div>';
@@ -86,10 +83,6 @@ final class OneController extends AbstractController
             }
         }
 
-        foreach ($presencesPaid as $presence) {
-            $presence->cout = $this->presenceCalculator->calculate($presence);
-        }
-
         $totalPaiement = 0;
         foreach ($paiments as $paiment) {
             $totalPaiement += $paiment->getMontant();
@@ -98,7 +91,7 @@ final class OneController extends AbstractController
         return $this->renderView('@AcMarcheMercredi/admin/attestation/fiscale/index.html.twig', [
             'tuteur' => $tuteur,
             'enfant' => $enfant,
-            'presences' => $presences,
+            'presences' => $presencesPaid,
             'totalpaiement' => $totalPaiement,
             'year' => $year,
             'organisation' => $this->organisation,
@@ -116,6 +109,7 @@ final class OneController extends AbstractController
 
         foreach ($presencesPaid as $presence) {
             $presence->cout = $this->presenceCalculator->calculate($presence);
+            dump($presence->getJour()->getDateJour()->format('Y-m-d'));
         }
 
         $quarters = PresenceUtils::groupByQuarter($presencesPaid);

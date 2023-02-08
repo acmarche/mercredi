@@ -12,7 +12,7 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 {
-    public array $ecoles;
+    public array $ecoles = [];
 
     public function __construct(
         private OrdreService $ordreService,
@@ -22,7 +22,7 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 
     public function calculate(PresenceInterface $presence): float
     {
-        /*
+        /**
          * Absence.avec certificat
          */
         if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
