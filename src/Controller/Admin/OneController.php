@@ -109,7 +109,6 @@ final class OneController extends AbstractController
 
         foreach ($presencesPaid as $presence) {
             $presence->cout = $this->presenceCalculator->calculate($presence);
-            dump($presence->getJour()->getDateJour()->format('Y-m-d'));
         }
 
         $quarters = PresenceUtils::groupByQuarter($presencesPaid);
