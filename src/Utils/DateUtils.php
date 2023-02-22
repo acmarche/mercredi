@@ -33,7 +33,7 @@ final class DateUtils
      * @throws Exception
      *
      */
-    public static function createDateTimeFromDayMonth(string $mois): \DateTime
+    public static function createDateTimeFromDayMonth(string $mois): DateTime
     {
         if ($date = DateTime::createFromFormat('d/m/Y', '01/'.$mois)) {
             return $date;
@@ -81,6 +81,20 @@ final class DateUtils
         $dateInterval = new DateInterval('P1D');
 
         return new DatePeriod($start, $dateInterval, $end);
+    }
+
+    /**
+     * @param int $year
+     * @return array|DateTime[]
+     */
+    public static function getMonthsOfYear(int $year): array
+    {
+        $months = [];
+        for ($i = 1; $i < 13; $i++) {
+            $months[] = DateTime::createFromFormat('Y-m-d', $year.'-'.$i.-01);
+        }
+
+        return $months;
     }
 
     public function renderMonth(Ecole $ecole, string $heure, int $weekSelected, CarbonInterface $date): string
@@ -150,7 +164,7 @@ final class DateUtils
     public static function getMonths(DateTimeInterface $dateBegin): CarbonPeriod
     {
         $date = Carbon::instance($dateBegin);
-        $today = Carbon::instance(new \DateTime());
+        $today = Carbon::instance(new DateTime());
 
         $firstDayOfWeek = $date->toMutable()->toDateString();
         $lastDayOffWeek = $today->toDateString(); //+6

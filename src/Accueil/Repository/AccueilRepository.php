@@ -159,6 +159,22 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Accueil[]
+     */
+    public function findByMonthHeureAndEcole(DateTimeInterface $date, ?string $heure, ?Ecole $ecole): array
+    {
+        return $this->createQbl()
+            ->andWhere('accueil.date_jour LIKE :date')
+            ->setParameter('date', $date->format('Y-m').'%')
+            ->andWhere('accueil.heure = :heure')
+            ->setParameter('heure', $heure)
+            ->andWhere('enfant.ecole = :ecole')
+            ->setParameter('ecole', $ecole)
+            ->orderBy('enfant.nom', 'ASC')
+            ->getQuery()->getResult();
+    }
+
+    /**
      * @return array|Accueil[]
      */
     public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array

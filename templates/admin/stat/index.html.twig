@@ -1,0 +1,49 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Stats</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                {% for month,item in data %}
+                    <tr>
+                        <th>{{ month }}</th>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% for row in item %}
+                        <tr>
+                            <td></td>
+                            <th>{{ row.ecole }}</th>
+                            <th>
+                                <div class="row">
+                                    {% for heure,z in row.accueils %}
+                                        <div class="col-6">
+                                            {{ heure }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <th></th>
+                            <td>
+                                <div class="row">
+                                    {% for heure,z in row.accueils %}
+                                        <div class="col-6">
+                                            {{ z|length }} accueils
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
