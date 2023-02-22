@@ -32,11 +32,18 @@ class QrCodeGenerator
         ];
 
         $data = $this->executeRequest($this->base_uri, ['query' => $params]);
+        $fileName = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$facture->getUuid().'.png';
+        $filePath = DIRECTORY_SEPARATOR.'public'.$fileName;
 
-        $path = $this->parameterBag->get('kernel.project_dir').$facture->getUuid().'.png';
-        $filesystem = new Filesystem();
-        $filesystem->dumpFile($path, $data);
+        $imageFullPath = $this->parameterBag->get('kernel.project_dir').$filePath;
+        try {
+            $filesystem = new Filesystem();
+            $filesystem->dumpFile($imageFullPath, $data);
+        }
+        catch (\Exception $exception){
 
-        return $path;
+        }
+
+        return $fileName;
     }
 }
