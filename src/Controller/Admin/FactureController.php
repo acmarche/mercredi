@@ -20,14 +20,16 @@ use AcMarche\Mercredi\Facture\Message\FactureUnpaided;
 use AcMarche\Mercredi\Facture\Message\FactureUpdated;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\QrCode\QrCodeGenerator;
 use Exception;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\DoctrineBehaviors\Exception\ShouldNotHappenException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -40,7 +42,8 @@ final class FactureController extends AbstractController
         private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         private FactureCalculatorInterface $factureCalculator,
         private FactureRenderInterface $factureRender,
-        private MessageBusInterface $dispatcher
+        private MessageBusInterface $dispatcher,
+        private QrCodeGenerator $qrCodeGenerator
     ) {
     }
 
@@ -212,7 +215,14 @@ final class FactureController extends AbstractController
     public function show(Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
+        $dto = $this->factureCalculator->createDetail($facture);
         $html = $this->factureRender->render($facture);
+        $img =null;
+        try {
+            $img = $this->qrCodeGenerator->generate($facture, $dto->total);
+        } catch (ShouldNotHappenException $e) {
+            $this->addFlash('danger', 'erreur image qrcode '.$e->getMessage());
+        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
@@ -220,6 +230,7 @@ final class FactureController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'content' => $html,
+                'img' => $img,
             ]
         );
     }

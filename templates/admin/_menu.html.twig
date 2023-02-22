@@ -70,22 +70,50 @@
         <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-cog"></i> Paramètres...</a>
         <ul class="dropdown-menu" aria-labelledby="dropdown03">
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_jour_index') }}">Les jours d'accueil</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_user_index') }}">Les utilisateurs</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_page_index') }}">Les pages</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_note_index') }}">Les notes</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_animateur_index') }}">Les animateurs</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_ecole_index') }}">Les écoles</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_sante_question_index') }}">Questionnaire
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_jour_index') }}">Les jours d'accueil</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_user_index') }}">Les utilisateurs</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_page_index') }}">Les pages</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_note_index') }}">Les notes</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_animateur_index') }}">Les animateurs</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_ecole_index') }}">Les écoles</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_sante_question_index') }}">Questionnaire
                     santé</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_reduction_index') }}">Les réductions</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_annee_scolaire_index') }}">Les années
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_reduction_index') }}">Les réductions</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_annee_scolaire_index') }}">Les années
                     scolaires</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_groupe_scolaire_index') }}">Les groupes
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_groupe_scolaire_index') }}">Les groupes
                     scolaires</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_organisation_index') }}">L'organisation</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_message_archive') }}">Messages envoyés</a></li>
-            <li><a class="dropdown-item" href="{{ path('mercredi_admin_checkup_index') }}">Checkup</a></li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_organisation_index') }}">L'organisation</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_message_archive') }}">Messages envoyés</a>
+            </li>
+            {% if mercredi_accueil > 1 %}
+                <li>
+                    <a class="dropdown-item" href="{{ path('mercredi_admin_stat_index') }}">Statistiques</a>
+                </li>
+            {% endif %}
+            <li>
+                <a class="dropdown-item" href="{{ path('mercredi_admin_checkup_index') }}">Checkup</a>
+            </li>
         </ul>
     </li>
 {% endif %}
