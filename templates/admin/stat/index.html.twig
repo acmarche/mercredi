@@ -20,7 +20,10 @@
                 {% for month,item in data %}
                     <tr>
                         <th>{{ month }}</th>
-                        <td></td>
+                        <td>
+                            {{ factureLate[month]['factures']|length }} factures dont
+                            {{ factureLate[month]['complement'] }} avec complément(s)
+                        </td>
                         <td></td>
                     </tr>
                     {% for row in item %}

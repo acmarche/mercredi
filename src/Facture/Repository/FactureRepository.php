@@ -237,4 +237,16 @@ final class FactureRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @param DateTimeInterface $date
+     * @return array|Facture[]
+     */
+    public function findByMonthYear(DateTimeInterface $date): array
+    {
+        return $this->getQBl()->andWhere('facture.mois LIKE :monthYear')
+            ->setParameter('monthYear', $date->format('m-Y').'%')
+            ->getQuery()
+            ->getResult();
+    }
 }

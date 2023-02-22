@@ -5,6 +5,8 @@ namespace AcMarche\Mercredi\Controller\Admin;
 use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureComplementRepository;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +22,9 @@ final class StatController extends AbstractController
     public function __construct(
         private AccueilRepository $accueilRepository,
         private PresenceRepository $presenceRepository,
-        private EcoleRepository $ecoleRepository
+        private EcoleRepository $ecoleRepository,
+        private FactureRepository $factureRepository,
+        private FactureComplementRepository $factureComplementRepository
     ) {
     }
 
@@ -31,9 +35,18 @@ final class StatController extends AbstractController
         $months = DateUtils::getMonthsOfYear($year);
         $ecoles = $this->ecoleRepository->findAllOrderByNom();
         $data = [];
+        $facturesLate = [];
         foreach ($months as $month) {
             $monthKey = $month->format('Y-m');
+            $factureComplet = 0;
             $data[$monthKey] = [];
+            $facturesLate[$monthKey]['factures'] = $this->factureRepository->findByMonthYear($month);
+            foreach ($facturesLate[$monthKey]['factures'] as $facture) {
+                if (count($this->factureComplementRepository->findByFacture($facture)) > 0) {
+                    $factureComplet++;
+                }
+            }
+            $facturesLate[$monthKey]['complement'] = $factureComplet;
 
             foreach ($ecoles as $ecole) {
                 $data[$monthKey][$ecole->getId()]['ecole'] = $ecole;
@@ -62,6 +75,7 @@ final class StatController extends AbstractController
             '@AcMarcheMercrediAdmin/stat/index.html.twig',
             [
                 'data' => $data,
+                'factureLate' => $facturesLate,
                 'years' => $years,
                 'yearSelected' => $year,
             ]
