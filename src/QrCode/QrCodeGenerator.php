@@ -20,9 +20,11 @@ class QrCodeGenerator
 
     /**
      * @throws ShouldNotHappenException
+     * @throws \Exception
      */
     public function generate(Facture $facture, float $amount): string
     {
+        return '';
         $this->connect();
         $params = [
             'bname' => $this->organisation->getNom(),
