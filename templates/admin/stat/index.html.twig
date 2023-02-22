@@ -4,9 +4,18 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Stats</h3>
+            <h3>Stats en {{ yearSelected }}</h3>
         </div>
         <div class="card-body">
+
+            <ul class="list-group list-group-horizontal mb-3">
+                {% for year in years %}
+                    <li class="list-group-item">
+                        <a href="{{ path('mercredi_admin_stat_index', {'year': year}) }}">{{ year }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
             <table class="table table-bordered">
                 {% for month,item in data %}
                     <tr>
@@ -21,10 +30,11 @@
                             <th>
                                 <div class="row">
                                     {% for heure,z in row.accueils %}
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             {{ heure }}
                                         </div>
                                     {% endfor %}
+                                    <div class="col-4">Mercredi/péda</div>
                                 </div>
                             </th>
                         </tr>
@@ -34,10 +44,13 @@
                             <td>
                                 <div class="row">
                                     {% for heure,z in row.accueils %}
-                                        <div class="col-6">
-                                            {{ z|length }} accueils
+                                        <div class="col-4">
+                                            {{ z.accueils|length }} accueils<br/>
+                                            {{ z.countHours }} heures<br/>
+                                            {{ z.retard|length }} retard
                                         </div>
                                     {% endfor %}
+                                    <div class="col-4">{{ row.presences|length }} présences</div>
                                 </div>
                             </td>
                         </tr>

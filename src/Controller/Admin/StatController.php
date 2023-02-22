@@ -6,12 +6,11 @@ use AcMarche\Mercredi\Accueil\Contrat\AccueilInterface;
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Ecole\Repository\EcoleRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Search\Form\SearchNameType;
 use AcMarche\Mercredi\Utils\DateUtils;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/stats')]
@@ -25,22 +24,36 @@ final class StatController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'mercredi_admin_stat_index')]
-    public function default(): Response
+    #[Route(path: '/{year}', name: 'mercredi_admin_stat_index')]
+    public function default(int $year = 2023): Response
     {
-        $form = $this->createForm(SearchNameType::class);
-        $year = 2023;
+        $years = range(date('Y') - 2, date('Y') + 1);
         $months = DateUtils::getMonthsOfYear($year);
         $ecoles = $this->ecoleRepository->findAllOrderByNom();
         $data = [];
         foreach ($months as $month) {
             $monthKey = $month->format('Y-m');
             $data[$monthKey] = [];
+
             foreach ($ecoles as $ecole) {
                 $data[$monthKey][$ecole->getId()]['ecole'] = $ecole;
+                $presences = $this->presenceRepository->findByEcoleAndMonth($ecole, $month);
+                $data[$monthKey][$ecole->getId()]['presences'] = $presences;
                 foreach (AccueilInterface::HEURES as $heure => $name) {
+                    $countHours = 0;
+                    $retard = 0;
                     $accueils = $this->accueilRepository->findByMonthHeureAndEcole($month, $heure, $ecole);
-                    $data[$monthKey][$ecole->getId()]['accueils'][$heure] = $accueils;
+                    foreach ($accueils as $accueil) {
+                        $countHours += $accueil->getDuree();
+                        if ($accueil->getHeureRetard()) {
+                            $retard++;
+                        }
+                    }
+                    $data[$monthKey][$ecole->getId()]['accueils'][$heure] = [
+                        'accueils' => $accueils,
+                        'countHours' => $countHours,
+                        'retard' => $retard,
+                    ];
                 }
             }
         }
@@ -49,7 +62,8 @@ final class StatController extends AbstractController
             '@AcMarcheMercrediAdmin/stat/index.html.twig',
             [
                 'data' => $data,
-                'form' => $form->createView(),
+                'years' => $years,
+                'yearSelected' => $year,
             ]
         );
     }

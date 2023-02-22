@@ -129,6 +129,19 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Presence[]
+     */
+    public function findByEcoleAndMonth(Ecole $ecole, DateTimeInterface $date): array
+    {
+        return $this->createQBl()
+            ->andWhere('ecole = :ecole')
+            ->setParameter('ecole', $ecole)
+            ->andWhere('jour.date_jour LIKE :date')
+            ->setParameter('date', $date->format('Y-m').'%')
+            ->getQuery()->getResult();
+    }
+
+    /**
      * Quand on ajoute une présence.
      *
      * @throws NonUniqueResultException
@@ -300,7 +313,8 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('presence.tuteur', 'tuteur', 'WITH')
             ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->leftJoin('presence.reduction', 'reduction', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine');
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine','ecole');
     }
 
     private function createQBl(): QueryBuilder
