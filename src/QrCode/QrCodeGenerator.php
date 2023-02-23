@@ -42,7 +42,12 @@ class QrCodeGenerator
             $filesystem = new Filesystem();
             $filesystem->dumpFile($imageFullPath, $data);
         } catch (\Exception $exception) {
-            return $exception->getMessage();
+            throw new \Exception($exception->getMessage());
+        }
+
+        $mime = \mime_content_type($imageFullPath);
+        if ($mime != 'image/png') {
+            throw new \Exception($data);
         }
 
         return $fileName;
