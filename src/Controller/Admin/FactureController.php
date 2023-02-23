@@ -215,14 +215,7 @@ final class FactureController extends AbstractController
     public function show(Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
-        $dto = $this->factureCalculator->createDetail($facture);
         $html = $this->factureRender->render($facture);
-        $img =null;
-        try {
-            $img = $this->qrCodeGenerator->generate($facture, $dto->total);
-        } catch (ShouldNotHappenException $e) {
-            $this->addFlash('danger', 'erreur image qrcode '.$e->getMessage());
-        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/show.html.twig',
@@ -230,6 +223,25 @@ final class FactureController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'content' => $html,
+            ]
+        );
+    }
+
+    #[Route(path: '/{id}/qrcode', name: 'mercredi_admin_facture_qrcode', methods: ['GET'])]
+    public function qrcode(Facture $facture): Response
+    {
+        $dto = $this->factureCalculator->createDetail($facture);
+        $img = null;
+        try {
+            $img = $this->qrCodeGenerator->generate($facture, $dto->total);
+        } catch (ShouldNotHappenException|Exception $e) {
+            $this->addFlash('danger', 'erreur image qrcode '.$e->getMessage());
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/qrcode.html.twig',
+            [
+                'facture' => $facture,
                 'img' => $img,
             ]
         );

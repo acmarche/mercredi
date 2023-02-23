@@ -1,0 +1,17 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>
+                Qrcode de la facture {{ facture.id }}
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info m-3">
+                Essais qrcode pour facture.
+            </div>
+            <img src="{{ img }}" alt="qrcode">
+        </div>
+    </div>
+{% endblock %}

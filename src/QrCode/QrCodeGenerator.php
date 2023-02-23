@@ -24,7 +24,6 @@ class QrCodeGenerator
      */
     public function generate(Facture $facture, float $amount): string
     {
-        return '';
         $this->connect();
         $params = [
             'bname' => $this->organisation->getNom(),
@@ -34,6 +33,7 @@ class QrCodeGenerator
         ];
 
         $data = $this->executeRequest($this->base_uri, ['query' => $params]);
+
         $fileName = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$facture->getUuid().'.png';
         $filePath = DIRECTORY_SEPARATOR.'public'.$fileName;
 
@@ -41,9 +41,8 @@ class QrCodeGenerator
         try {
             $filesystem = new Filesystem();
             $filesystem->dumpFile($imageFullPath, $data);
-        }
-        catch (\Exception $exception){
-
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
         }
 
         return $fileName;

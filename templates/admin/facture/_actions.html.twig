@@ -95,6 +95,12 @@
     </div>
 
     <div class="col-auto">
+        <a href="{{ path('mercredi_admin_facture_qrcode', {'id': facture.id}) }}" class="btn btn-primary"
+           role='button'>
+            <i class="fas fa-qrcode"></i> QrCode</a>
+    </div>
+
+    <div class="col-auto">
         <a href="{{ path('mercredi_admin_facture_index', {'id': tuteur.id}) }}" class="btn btn-primary" role='button'><i
                     class="fas fa-list"></i> Retour à la Liste</a>
     </div>
