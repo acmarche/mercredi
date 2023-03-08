@@ -191,4 +191,28 @@ final class DateUtils
     {
         return $date->format('N') < 6;
     }
+
+    public static function quarterDates(int $year): array
+    {
+        $format = 'd/m/Y';
+
+        return [
+            1 => [
+                'startDate' => \DateTime::createFromFormat($format, '01/01/'.$year),
+                'endDate' => \DateTime::createFromFormat($format, '31/03/'.$year),
+            ],
+            2 => [
+                'startDate' => \DateTime::createFromFormat($format, '01/04/'.$year),
+                'endDate' => \DateTime::createFromFormat($format, '31/06/'.$year),
+            ],
+            3 => [
+                'startDate' => \DateTime::createFromFormat($format, '01/07/'.$year),
+                'endDate' => \DateTime::createFromFormat($format, '31/09/'.$year),
+            ],
+            4 => [
+                'startDate' => \DateTime::createFromFormat($format, '01/10/'.$year),
+                'endDate' => \DateTime::createFromFormat($format, '31/12/'.$year),
+            ],
+        ];
+    }
 }

@@ -43,7 +43,7 @@ class PaiementRepository extends ServiceEntityRepository
     /**
      * @return Paiement[]
      */
-    public function getByEnfantTuteur(Tuteur $tuteur, Enfant $enfant, int $year = null):array
+    public function getByEnfantTuteur(Tuteur $tuteur, Enfant $enfant, int $year = null): array
     {
         return $this->createQueryBuilder('paiement')
             ->andWhere('paiement.tuteur = :tuteur')
@@ -52,6 +52,21 @@ class PaiementRepository extends ServiceEntityRepository
             ->setParameter('enfant', $enfant)
             ->andWhere('paiement.date_paiement LIKE :year')
             ->setParameter('year', $year.'%')
+            ->addOrderBy('paiement.date_paiement', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    /**
+     * @param int $year
+     * @return array|Paiement[]
+     */
+    public function findByYear(int $year): array
+    {
+        return $this->createQueryBuilder('paiement')
+            ->andWhere('paiement.date_paiement LIKE :year')
+            ->setParameter('year', $year.'-%')
             ->addOrderBy('paiement.date_paiement', 'DESC')
             ->getQuery()
             ->getResult();

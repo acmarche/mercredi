@@ -1,0 +1,17 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h3>Attestations Spf</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{{ path('mercredi_admin_attestation_spf', {'year': 2022}) }}">
+                        Année 2022 Xls</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Presence\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
+use AcMarche\Mercredi\Entity\Paiement;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -289,7 +290,7 @@ final class PresenceRepository extends ServiceEntityRepository
      * @param int $year
      * @return array|Presence[]
      */
-    public function OneByYear(Tuteur $tuteur, Enfant $enfant, int $year): array
+    public function findByTuteurAndEnfantAndYear(Tuteur $tuteur, Enfant $enfant, int $year): array
     {
         return
             $this->createQBlBase()
@@ -299,6 +300,34 @@ final class PresenceRepository extends ServiceEntityRepository
                 ->setParameter('enfant', $enfant)
                 ->andWhere('jour.date_jour LIKE :year')
                 ->setParameter('year', $year.'-%')
+                ->getQuery()
+                ->getResult();
+    }
+
+    /**
+     * @param int $year
+     * @return array|Presence[]
+     */
+    public function findByYear(int $year): array
+    {
+        return
+            $this->createQBlBase()
+                ->andWhere('jour.date_jour LIKE :year')
+                ->setParameter('year', $year.'-%')
+                ->getQuery()
+                ->getResult();
+    }
+
+    /**
+     * @param Paiement $paiement
+     * @return array|Presence[]
+     */
+    public function findByPaiement(Paiement $paiement): array
+    {
+        return
+            $this->createQBlBase()
+                ->andWhere('presence.paiement = :paiement')
+                ->setParameter('paiement', $paiement)
                 ->getQuery()
                 ->getResult();
     }
@@ -314,7 +343,7 @@ final class PresenceRepository extends ServiceEntityRepository
             ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->leftJoin('presence.reduction', 'reduction', 'WITH')
             ->leftJoin('enfant.ecole', 'ecole', 'WITH')
-            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine','ecole');
+            ->addSelect('enfant', 'tuteur', 'sante_fiche', 'groupe_scolaire', 'jour', 'reduction', 'plaine', 'ecole');
     }
 
     private function createQBl(): QueryBuilder
@@ -328,4 +357,5 @@ final class PresenceRepository extends ServiceEntityRepository
         return $this->createQBlBase()
             ->andWhere('jour.plaine IS NOT NULL');
     }
+
 }
