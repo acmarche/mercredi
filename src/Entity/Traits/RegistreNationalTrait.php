@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Entity\Traits;
 
+use AcMarche\Mercredi\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 
 trait RegistreNationalTrait
@@ -14,8 +15,11 @@ trait RegistreNationalTrait
         return $this->registre_national;
     }
 
-    public function setRegistreNational(string $prenom): void
+    public function setRegistreNational(?string $registryNumber): void
     {
-        $this->registre_national = $prenom;
+        if ($registryNumber) {
+            $registryNumber = StringUtils::cleanNationalRegister($registryNumber);
+        }
+        $this->registre_national = $registryNumber;
     }
 }

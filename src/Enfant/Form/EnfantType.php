@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Scolaire\AnneeScolaire;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
+use AcMarche\Mercredi\Form\Type\RegistryNumberType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
@@ -63,9 +64,8 @@ final class EnfantType extends AbstractType
             )
             ->add(
                 'registre_national',
-                TextType::class,
+                RegistryNumberType::class,
                 [
-                    'label' => 'Numéro national',
                     'required' => $isAdmin,
                 ]
             )

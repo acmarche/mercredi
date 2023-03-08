@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Tuteur\Form;
 
 use AcMarche\Mercredi\Data\MercrediConstantes;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Form\Type\RegistryNumberType;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -72,9 +73,8 @@ final class TuteurType extends AbstractType
             )
             ->add(
                 'registre_national',
-                TextType::class,
+                RegistryNumberType::class,
                 [
-                    'label' => 'Numéro national',
                     'required' => !$isAdmin,
                 ]
             )
