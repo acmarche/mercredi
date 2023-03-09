@@ -48,7 +48,7 @@ class XlsGenerator
             ->setCellValue($lettre++.$ligne, StringUtils::cleanNationalRegister($enfant->getRegistreNational(), true))
             ->setCellValue($lettre++.$ligne, $enfant->getNom())
             ->setCellValue($lettre++.$ligne, $enfant->getPrenom())
-            ->setCellValue($lettre++.$ligne, $enfant->getBirthday()->format('d/m/Y'))
+            ->setCellValue($lettre++.$ligne, $enfant->getBirthday()?->format('d/m/Y'))
             ->setCellValue($lettre++.$ligne, $tuteur->getRue())
             ->setCellValue($lettre++.$ligne, $tuteur->getCodePostal())
             ->setCellValue($lettre++.$ligne, $tuteur->getLocalite())
