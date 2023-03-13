@@ -32,7 +32,9 @@ class QrCodeGenerator
             'info' => $facture->getCommunication(),
         ];
 
-        $data = $this->executeRequest($this->base_uri, ['query' => $params]);
+        $url = 'https://epc-qr.eu/?for=Hotton&euro=25&pp=maco';
+        $data = $this->executeRequest($url);
+       // $data = $this->executeRequest($this->base_uri, ['query' => $params]);
 
         $fileName = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$facture->getUuid().'.png';
         $filePath = DIRECTORY_SEPARATOR.'public'.$fileName;
