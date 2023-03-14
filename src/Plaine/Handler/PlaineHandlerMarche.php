@@ -78,6 +78,8 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $enPlus = array_diff($newJours->toArray(), $currentJours);
 
         $result = $this->removeFullDays($plaine, $enfant, $enPlus);
+
+        dd($result);
         $enPlus = $result[0];
         $daysFull = $result[1];
         foreach ($enPlus as $jour) {
@@ -165,15 +167,14 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
         $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
-        $groupesScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
-        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupesScolaire);
+        $groupeScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
+        $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupeScolaire);
         if (!$plaineGroupe) {
             return [[], $jours];
         }
-
         $daysFull = [];
         foreach ($jours as $key => $jour) {
-            if ($this->isDayFull($plaine, $jour, $groupesScolaire, $plaineGroupe)) {
+            if ($this->isDayFull($plaine, $jour, $groupeScolaire, $plaineGroupe)) {
                 unset($jours[$key]);
                 $daysFull[] = $jour;
             }
@@ -190,7 +191,14 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     ): bool {
         $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
         $enfants = array_filter($enfantsByDay, function ($enfant) use ($plaine, $groupeScolaireReferent) {
-            if (!$groupeScolaire = $this->grouping->findGroupeScolaire($enfant)) {
+
+            $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
+            if (!$age) {
+                return false;
+            }
+            $groupeScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
+
+            if (!$groupeScolaire) {
                 return false;
             }
 

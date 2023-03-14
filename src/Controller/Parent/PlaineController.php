@@ -122,8 +122,8 @@ final class PlaineController extends AbstractController
                 if (!$this->santeChecker->isComplete($santeFiche)) {
                     $this->addFlash('danger', 'La fiche santé de '.$enfant.' doit être complétée');
 
-                    return $this->redirectToRoute('mercredi_parent_plaine_show', [
-                        'id' => $plaine->getId(),
+                    return $this->redirectToRoute('mercredi_parent_sante_fiche_show', [
+                        'uuid' => $enfant->getUuid(),
                     ]);
                 }
             }
