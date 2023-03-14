@@ -40,7 +40,7 @@ final class EnfantQuickType extends AbstractType
                 BirthdayType::class,
                 [
                     'label' => 'Né le',
-                    'required' => false,
+                    'required' => true,
                     'years' => range($year - 15, $year),
                 ]
             )

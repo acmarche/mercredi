@@ -58,7 +58,7 @@ final class EnfantType extends AbstractType
                 BirthdayType::class,
                 [
                     'label' => 'Né le',
-                    'required' => $isAdmin,
+                    'required' => true,
                     'years' => range($year - 15, $year),
                 ]
             )

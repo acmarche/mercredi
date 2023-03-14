@@ -17,6 +17,7 @@ class RegistryNumberType extends AbstractType
                 'label' => 'Numéro national',
                 'help' => 'Uniquement les chiffres. (11 chiffres)',
                 'constraints' => [new RegistryNumber()],
+                'attr' => ['autocomplete' => 'off'],
             ]
         );
     }
