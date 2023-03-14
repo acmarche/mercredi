@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Contrat\Plaine;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Common\Collections\Collection;
 use Exception;
@@ -47,4 +48,12 @@ interface PlaineHandlerInterface
      * @throws Exception
      */
     public function confirm(Plaine $plaine, Tuteur $tuteur): void;
+
+    /**
+     * @param Enfant $enfant
+     * @param Plaine $plaine
+     * @return GroupeScolaire
+     * @throws Exception
+     */
+    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): GroupeScolaire;
 }

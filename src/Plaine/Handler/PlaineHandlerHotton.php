@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Plaine\Handler;
 use AcMarche\Mercredi\Contrat\Plaine\PlaineHandlerInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Common\Collections\Collection;
 use Exception;
@@ -46,5 +47,10 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
     public function confirm(Plaine $plaine, Tuteur $tuteur): void
     {
 
+    }
+
+    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): GroupeScolaire
+    {
+        return new GroupeScolaire();
     }
 }

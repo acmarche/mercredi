@@ -68,10 +68,10 @@
             {% endif %}
 
             <hr>
-            <h5 class="text-success">Dates de la plaine</h5>
+            <h5 class="text-success">Dates de la plaine:</h5>
             <div class="text-muted">
                 {% for jour in plaine.jours %}
-                    {{ jour.dateJour|format_date('full')|title }},
+                    {{ jour.dateJour|format_date('medium')|title }},
                 {% endfor %}
             </div>
 

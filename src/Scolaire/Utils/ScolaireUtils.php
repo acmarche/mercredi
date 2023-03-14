@@ -24,10 +24,6 @@ final class ScolaireUtils
             return $groupeScolaire;
         }
 
-        $groupeScolaire = new GroupeScolaire();
-        $groupeScolaire->setNom('Non classé');
-        $groupeScolaire->id = 0;
-
         return $this->createGroupeScolaireNonClasse();
     }
 

@@ -17,7 +17,7 @@ use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
+use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -36,7 +36,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private AdminEmailFactory $adminEmailFactory,
         private PresenceHandlerInterface $presenceHandler,
         private Environment $environment,
-        private GroupeScolaireRepository $groupeScolaireRepository,
+        private GroupingInterface $grouping,
         private PlaineGroupeRepository $plaineGroupeRepository,
         private Security $security
     ) {
@@ -49,7 +49,6 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param array|Jour[] $jours
      * @return array
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws Exception
      */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): array
     {
@@ -169,13 +168,12 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param Enfant $enfant
      * @param array $jours
      * @return array //freeDays,fullDays
-     * @throws Exception
      */
     private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
         $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
+        if ($groupeScolaire->getId() == 0) {
 
-        if (!$groupeScolaire) {
             return [[], $jours->toArray()];
         }
 
@@ -205,17 +203,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $enfants = array_filter(
             $enfantsByDay,
             function ($enfant) use ($plaine, $groupeScolaireReferent) {
-
-                $groupeScolaire = false;
-                try {
-                    $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
-                } catch (Exception) {
-
-                }
-
-                if (!$groupeScolaire) {
-                    return false;
-                }
+                $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
 
                 return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
             }
@@ -225,23 +213,13 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     }
 
     /**
+     * Groupe scolaire suivant l'année scolaire
      * @param Enfant $enfant
      * @param Plaine $plaine
-     * @return GroupeScolaire|null
-     * @throws Exception
+     * @return GroupeScolaire
      */
-    private function getGroupeScolaire(Enfant $enfant, Plaine $plaine): ?GroupeScolaire
+    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): GroupeScolaire
     {
-        $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
-        if (!$age) {
-            throw new Exception('Âge non trouvé pour '.$enfant->getPrenom().'. A-t-il une date de naissance encodée ?');
-        }
-        $groupeScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
-
-        if (!$groupeScolaire) {
-            throw new Exception('Groupe de plaine non trouvé pour son âge: '.$age.' ans');
-        }
-
-        return $groupeScolaire;
+        return $this->grouping->findGroupeScolaire($enfant);
     }
 }
