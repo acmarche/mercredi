@@ -3,7 +3,7 @@
     <thead>
     <tr>
         <th>Nom</th>
-        <th>Maximum inscrits par groupe</th>
+        <th>Nombre maximum d'inscriptions par groupe</th>
         <th>Courrier</th>
         <th>Modifier</th>
     </tr>
@@ -12,7 +12,7 @@
     {% for plaineGroupe in plaine.plaineGroupes %}
         <tr>
             <td>{{ plaineGroupe.groupeScolaire.nom }}</td>
-            <td>{{ plaineGroupe.enfants|length }} /{{ plaineGroupe.inscriptionMaximum }}</td>
+            <td>{{ plaineGroupe.inscriptionMaximum }}</td>
             <td>
                 {% if plaineGroupe.fileName %}
                     <a href="{{ vich_uploader_asset(plaineGroupe,'file') }}" target="_blank">Télécharger</a>
