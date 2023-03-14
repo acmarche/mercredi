@@ -19,6 +19,7 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -183,7 +184,12 @@ final class PlaineController extends AbstractController
 
             $enfants = $this->enfantRepository->findBy(['id' => $enfantIds]);
             foreach ($enfants as $enfant) {
-                $daysFull = $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
+                try {
+                    $daysFull = $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
+                } catch (NonUniqueResultException|Exception $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                    continue;
+                }
                 if (count($daysFull) > 0) {
                     $text = "Attention $enfant n'a pas pu être inscrit aux dates suivantes, il n'y a plus de place pour cette catégorie d'âge: <ul>";
                     foreach ($daysFull as $day) {

@@ -17,6 +17,8 @@ interface PlaineHandlerInterface
      * @param Enfant $enfant
      * @param iterable $jours
      * @return array|Jour[]
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Exception
      */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): array;
 
@@ -27,6 +29,7 @@ interface PlaineHandlerInterface
      * @param array $currentJours
      * @param Collection $newJours
      * @return array|Jour[]
+     * @throws Exception
      */
     public function handleEditPresences(
         Plaine $plaine,

@@ -17,14 +17,13 @@ use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
-use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 class PlaineHandlerMarche implements PlaineHandlerInterface
@@ -37,7 +36,6 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private AdminEmailFactory $adminEmailFactory,
         private PresenceHandlerInterface $presenceHandler,
         private Environment $environment,
-        private GroupingInterface $grouping,
         private GroupeScolaireRepository $groupeScolaireRepository,
         private PlaineGroupeRepository $plaineGroupeRepository,
         private Security $security
@@ -67,6 +65,15 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         return $daysFull;
     }
 
+    /**
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @param Enfant $enfant
+     * @param array $currentJours
+     * @param Collection $newJours
+     * @return array|Jour[]
+     * @throws Exception
+     */
     public function handleEditPresences(
         Plaine $plaine,
         Tuteur $tuteur,
@@ -79,7 +86,6 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
 
         $result = $this->removeFullDays($plaine, $enfant, $enPlus);
 
-        dd($result);
         $enPlus = $result[0];
         $daysFull = $result[1];
         foreach ($enPlus as $jour) {
@@ -163,15 +169,21 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param Enfant $enfant
      * @param array $jours
      * @return array //freeDays,fullDays
+     * @throws Exception
      */
     private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
-        $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
-        $groupeScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
+        $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
+
+        if (!$groupeScolaire) {
+            return [[], $jours->toArray()];
+        }
+
         $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupeScolaire);
         if (!$plaineGroupe) {
-            return [[], $jours];
+            return [[], $jours->toArray()];
         }
+
         $daysFull = [];
         foreach ($jours as $key => $jour) {
             if ($this->isDayFull($plaine, $jour, $groupeScolaire, $plaineGroupe)) {
@@ -190,21 +202,46 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         PlaineGroupe $plaineGroupe
     ): bool {
         $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
-        $enfants = array_filter($enfantsByDay, function ($enfant) use ($plaine, $groupeScolaireReferent) {
+        $enfants = array_filter(
+            $enfantsByDay,
+            function ($enfant) use ($plaine, $groupeScolaireReferent) {
 
-            $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
-            if (!$age) {
-                return false;
+                $groupeScolaire = false;
+                try {
+                    $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
+                } catch (Exception) {
+
+                }
+
+                if (!$groupeScolaire) {
+                    return false;
+                }
+
+                return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
             }
-            $groupeScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
-
-            if (!$groupeScolaire) {
-                return false;
-            }
-
-            return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
-        });
+        );
 
         return count($enfants) > $plaineGroupe->getInscriptionMaximum();
+    }
+
+    /**
+     * @param Enfant $enfant
+     * @param Plaine $plaine
+     * @return GroupeScolaire|null
+     * @throws Exception
+     */
+    private function getGroupeScolaire(Enfant $enfant, Plaine $plaine): ?GroupeScolaire
+    {
+        $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
+        if (!$age) {
+            throw new Exception('Âge non trouvé pour '.$enfant->getPrenom().'. A-t-il une date de naissance encodée ?');
+        }
+        $groupeScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
+
+        if (!$groupeScolaire) {
+            throw new Exception('Groupe de plaine non trouvé pour son âge: '.$age.' ans');
+        }
+
+        return $groupeScolaire;
     }
 }
