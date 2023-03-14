@@ -18,6 +18,7 @@ use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
+use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -37,6 +38,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private PresenceHandlerInterface $presenceHandler,
         private Environment $environment,
         private GroupingInterface $grouping,
+        private GroupeScolaireRepository $groupeScolaireRepository,
         private PlaineGroupeRepository $plaineGroupeRepository,
         private Security $security
     ) {
@@ -158,19 +160,22 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param Plaine $plaine
      * @param Enfant $enfant
      * @param array $jours
-     * @return array
+     * @return array //freeDays,fullDays
      */
     private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
-        $daysFull = [];
-        $groupesScolaire = $this->grouping->findGroupeScolaire($enfant);
+        $age = $enfant->getAge($plaine->getFirstDay()->getDateJour());
+        $groupesScolaire = $this->groupeScolaireRepository->findGroupeScolairePlaineByAge($age);
         $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupesScolaire);
-        if ($plaineGroupe) {
-            foreach ($jours as $key => $jour) {
-                if ($this->isDayFull($plaine, $jour, $groupesScolaire, $plaineGroupe)) {
-                    unset($jours[$key]);
-                    $daysFull[] = $jour;
-                }
+        if (!$plaineGroupe) {
+            return [[], $jours];
+        }
+
+        $daysFull = [];
+        foreach ($jours as $key => $jour) {
+            if ($this->isDayFull($plaine, $jour, $groupesScolaire, $plaineGroupe)) {
+                unset($jours[$key]);
+                $daysFull[] = $jour;
             }
         }
 
