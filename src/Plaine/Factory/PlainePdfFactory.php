@@ -58,6 +58,9 @@ class PlainePdfFactory
             $jour = $presence->getJour();
             $age = $enfant->getAge($firstDay, true);
             $groupeScolaireEnfant = $this->grouping->findGroupeScolaire($enfant);
+            if (!$groupeScolaireEnfant) {
+                continue;
+            }
             $groupeScolaireId = $groupeScolaireEnfant->getId();
             ++$stats[$groupeScolaireId][$jour->getId()]['total'];
             if ($age < 6) {

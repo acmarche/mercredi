@@ -184,6 +184,25 @@ final class PlaineController extends AbstractController
 
             $enfants = $this->enfantRepository->findBy(['id' => $enfantIds]);
             foreach ($enfants as $enfant) {
+                $groupeScolaire = $this->plaineHandler->getGroupeScolaire($enfant, $plaine);
+                if (!$groupeScolaire) {
+                    $this->addFlash(
+                        'danger',
+                        'Enfant non inscrit,aucun groupe scolaire trouvé pour  :'.$enfant->getPrenom()
+                    );
+
+                    continue;
+                }
+                $plaineGroupe = $this->plaineHandler->getPlaineGroupe($plaine, $groupeScolaire);
+                if (!$plaineGroupe) {
+                    $this->addFlash(
+                        'danger',
+                        'Enfant non inscrit,aucun de groupe de plaine trouvé pour  :'.$enfant->getPrenom()
+                    );
+
+                    continue;
+                }
+
                 try {
                     $daysFull = $this->plaineHandler->handleAddEnfant($plaine, $this->tuteur, $enfant, $jours);
                 } catch (NonUniqueResultException|Exception $e) {

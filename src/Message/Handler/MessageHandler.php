@@ -95,11 +95,12 @@ final class MessageHandler
             $enfant = $presence->getEnfant();
             $emails = $this->tuteurUtils->getEmailsOfOneTuteur($tuteur);
             $groupe = $this->grouping->findGroupeScolaire($enfant);
-            $recipients[$tuteur->getId()] = ['emails' => $emails];
             if (!$groupe) {
                 $recipients[$tuteur->getId()]['groupes'] = [];
                 continue;
             }
+            $recipients[$tuteur->getId()] = ['emails' => $emails];
+
             $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe);
             if ($plaineGroupe) {
                 if (isset($recipients[$tuteur->getId()]['groupes'])) {

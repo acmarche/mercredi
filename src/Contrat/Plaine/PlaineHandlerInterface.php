@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Contrat\Plaine;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Entity\Tuteur;
 use Doctrine\Common\Collections\Collection;
@@ -52,8 +53,14 @@ interface PlaineHandlerInterface
     /**
      * @param Enfant $enfant
      * @param Plaine $plaine
-     * @return GroupeScolaire
-     * @throws Exception
+     * @return GroupeScolaire|null
      */
-    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): GroupeScolaire;
+    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): ?GroupeScolaire;
+
+    /**
+     * @param Plaine $plaine
+     * @param GroupeScolaire $groupeScolaire
+     * @return PlaineGroupe|null
+     */
+    public function getPlaineGroupe(Plaine $plaine, GroupeScolaire $groupeScolaire): ?PlaineGroupe;
 }

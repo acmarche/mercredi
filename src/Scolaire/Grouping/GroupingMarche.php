@@ -22,6 +22,9 @@ class GroupingMarche implements GroupingInterface
         $groups = [];
         foreach ($enfants as $enfant) {
             $groupe = $this->findGroupeScolaire($enfant);
+            if (!$groupe) {
+                continue;
+            }
             $groups[$groupe->getId()]['groupe'] = $groupe;
             $groups[$groupe->getId()]['enfants'][] = $enfant;
         }
@@ -60,7 +63,7 @@ class GroupingMarche implements GroupingInterface
         return null;
     }
 
-    public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null): GroupeScolaire
+    public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null): ?GroupeScolaire
     {
         return $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
     }
