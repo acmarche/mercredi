@@ -185,6 +185,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
             if ($jours instanceof Collection) {
                 $jours = $jours->toArray();
             }
+            return [[], $jours];
         }
 
         $daysFull = [];
