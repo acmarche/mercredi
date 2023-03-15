@@ -173,13 +173,18 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     {
         $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
         if ($groupeScolaire->getId() == 0) {
+            if ($jours instanceof Collection) {
+                $jours = $jours->toArray();
+            }
 
-            return [[], $jours->toArray()];
+            return [[], $jours];
         }
 
         $plaineGroupe = $this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupeScolaire);
         if (!$plaineGroupe) {
-            return [[], $jours->toArray()];
+            if ($jours instanceof Collection) {
+                $jours = $jours->toArray();
+            }
         }
 
         $daysFull = [];
