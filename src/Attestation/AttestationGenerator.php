@@ -19,7 +19,7 @@ class AttestationGenerator
     ) {
     }
 
-    public function newOne(Tuteur $tuteur, Enfant $enfant, int $year, array $presences): array
+    public function newOne(int $year, array $presences): array
     {
         $presencesPaid = [];
         foreach ($presences as $presence) {

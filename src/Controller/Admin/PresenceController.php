@@ -150,6 +150,7 @@ final class PresenceController extends AbstractController
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
         $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
         $fratries = $this->ordreService->getFratriesPresents($presence);
+        $plaine = $presence->getJour()->getPlaine();
 
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/show.html.twig',
@@ -158,6 +159,7 @@ final class PresenceController extends AbstractController
                 'facturePresence' => $facturePresence,
                 'fratries' => $fratries,
                 'ordre' => $ordre,
+                'plaine' => $plaine,
                 'enfant' => $presence->getEnfant(),
             ]
         );

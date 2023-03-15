@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Form\SearchEnfantType;
 use AcMarche\Mercredi\Enfant\Handler\EnfantHandler;
@@ -36,7 +37,8 @@ final class EnfantController extends AbstractController
         private PresenceUtils $presenceUtils,
         private SearchHelper $searchHelper,
         private PlainePresenceRepository $plainePresenceRepository,
-        private MessageBusInterface $dispatcher
+        private MessageBusInterface $dispatcher,
+        private FactureCalculatorInterface $factureCalculator
     ) {
     }
 
@@ -96,11 +98,14 @@ final class EnfantController extends AbstractController
     public function show(Enfant $enfant): Response
     {
         $relations = $this->relationRepository->findByEnfant($enfant);
-        $data = $this->presenceRepository->findByEnfant($enfant);
-        $presencesGrouped = $this->presenceUtils->groupByYear($data);
+        $presences = $this->presenceRepository->findAllByEnfant($enfant);
+        $presencesGrouped = $this->presenceUtils->groupByYear($presences);
         $fratries = $this->relationRepository->findFrateries($enfant);
         $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
-        $year = date('Y');
+        $currentYear = date('Y');
+        foreach ($presences as $presence) {
+            $presence->paid = $this->factureCalculator->isPresencePaid($presence);
+        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/show.html.twig',
@@ -110,7 +115,7 @@ final class EnfantController extends AbstractController
                 'relations' => $relations,
                 'prensencesGrouped' => $presencesGrouped,
                 'plaines' => $plaines,
-                'currentYear' => $year,
+                'currentYear' => $currentYear,
             ]
         );
     }

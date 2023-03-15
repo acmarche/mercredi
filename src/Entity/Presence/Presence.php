@@ -61,6 +61,7 @@ class Presence implements TimestampableInterface, PresenceInterface, UuidableInt
      */
     public array $fratries = [];
     public int $ordreTmp = 0;
+    public bool $paid = false;
 
     public function __construct(Tuteur $tuteur, Enfant $enfant, Jour $jour)
     {

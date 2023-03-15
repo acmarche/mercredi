@@ -102,7 +102,7 @@ final class EnfantController extends AbstractController
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
-        $presences = $this->presenceRepository->findByEnfant($enfant);
+        $presences = $this->presenceRepository->findWithoutPlaineByEnfant($enfant);
         $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
         $accueils = $this->accueilRepository->findByEnfant($enfant);
 

@@ -27,6 +27,20 @@
                         {% endif %}
                     </td>
                 </tr>
+                {% if mercredi_paiement > 1 %}
+                    <tr>
+                        <th>Paiement (ancien système)</th>
+                        <td>
+                            {% if presence.paiement %}
+                                <a href="{{ path('mercredi_admin_paiement_index', {'id': presence.tuteur.id}) }}">
+                                    Paiement du {{ presence.paiement.datePaiement|date('m-d-Y') }}
+                                </a>
+                            {% else %}
+                                Non
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <th>Sous la garde de</th>
                     <td>
@@ -38,6 +52,14 @@
                 <tr>
                     <th>Pédagogique</th>
                     <td>{{ presence.jour.pedagogique ? 'Oui' : 'Non' }}</td>
+                </tr>
+                <tr>
+                    <th>Plaine</th>
+                    <td>
+                        {% if plaine %}
+                            <a href="{{ path('mercredi_admin_plaine_show', {'id': plaine.id}) }}">{{ plaine }}</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <th>Absent</th>

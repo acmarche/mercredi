@@ -1,9 +1,11 @@
 <table class="table table-bordered">
     <thead>
     <tr>
-        <th>Date</th>
-        <th>Tuteur</th>
-        <th>Remarque</th>
+        <th style="width: 20%">Date</th>
+        <th style="width: 20%">Tuteur</th>
+        <th style="width: 10%">Payé</th>
+        <th style="width: 25%">Plaine</th>
+        <th style="width: 25%">Remarque</th>
     </tr>
     </thead>
     <tbody>
@@ -20,12 +22,14 @@
             <td>
                 {{ presence.tuteur }}
             </td>
+            <td>
+                {{ presence.paid ? 'Oui' : 'Non' }}
+            </td>
+            <td>
+                {{ presence.jour.plaine }}
+            </td>
             <td class="text-muted">
                 {{ presence.remarque }}
-
-                {% if presence.jour.plaine %}
-                    {{ presence.jour.plaine }}
-                {% endif %}
             </td>
         </tr>
     {% endfor %}

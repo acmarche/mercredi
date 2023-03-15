@@ -87,7 +87,7 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
     {% for key,quarter in data %}
         <tr>
             <td>Période {{ key }}</td>
-            <td>{{ quarter['dates'] }}</td>
+            <td>Du {{ quarter['dates']['startDate']|date('d-m') }} au {{ quarter['dates']['endDate']|date('d-m-Y') }}</td>
             <td>{{ quarter['presences']|length }}</td>
             <td>Voir ci-dessous</td>
             <td>{{ quarter['total']|format_currency('eur') }}</td>

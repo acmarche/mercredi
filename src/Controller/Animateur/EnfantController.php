@@ -67,7 +67,7 @@ final class EnfantController extends AbstractController
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
-        $presences = $this->presenceRepository->findByEnfant($enfant);
+        $presences = $this->presenceRepository->findWithoutPlaineByEnfant($enfant);
         $relations = $this->relationRepository->findByEnfant($enfant);
 
         return $this->render(

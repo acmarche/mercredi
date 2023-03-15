@@ -10,7 +10,7 @@
             </li>
         {% endfor %}
     </ul>
-    <div class="tab-content" id="presencesContent">
+    <div class="tab-content mt-3" id="presencesContent">
         {% for year, monthData in prensencesGrouped %}
             <div class="tab-pane fade {% if year == currentYear %}show active{% endif %}" id="content-{{ year }}" role="tabpanel"
                  aria-labelledby="tab-{{ year }}">

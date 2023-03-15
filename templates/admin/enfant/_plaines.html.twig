@@ -10,7 +10,8 @@
     {% for plaine in plaines %}
         <tr>
             <td>
-                <a href="{{ path('mercredi_admin_plaine_show', { 'id': plaine.id }) }}" class="card-link">
+                <a href="{{ path('mercredi_admin_plaine_presence_show', {'enfant': enfant.id ,'plaine': plaine.id }) }}"
+                   class="card-link">
                     {{ plaine }}
                 </a>
             </td>
