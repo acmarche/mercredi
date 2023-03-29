@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/ecole')]
-#[IsGranted( 'ROLE_MERCREDI_ECOLE')]
+#[IsGranted('ROLE_MERCREDI_ECOLE')]
 final class EcoleController extends AbstractController
 {
     use GetEcolesTrait;
@@ -43,10 +43,16 @@ final class EcoleController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'mercredi_ecole_ecole_show', methods: ['GET'])]
-    #[IsGranted( 'ecole_show', subject: 'ecole')]
+    #[IsGranted('ecole_show', subject: 'ecole')]
     public function show(Ecole $ecole): Response
     {
-        $enfants = $this->enfantRepository->findByEcolesForEcole([$ecole]);
+        $accueil = $this->getParameter('mercredi.accueil');
+        if ($accueil > 0) {
+            $enfants = $this->enfantRepository->findByEcolesForEcole([$ecole]);
+        }
+        else {
+            $enfants = $this->enfantRepository->findByEcolesForEcoleMarche([$ecole]);
+        }
         $today = Carbon::today();
 
         return $this->render(

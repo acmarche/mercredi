@@ -12,20 +12,20 @@
                 </div>
                 <div class="flex-grow-1 ms-3">
                     {% include '@AcMarcheMercredi/commun/enfant/_identite.html.twig' %}
-                    <br/>
-                    Inscris aux accueil du matin et soir:
-                    {% if enfant.isAccueilEcole %}
-                        Oui
-                    {% else %}
-                        Non
+                    {% if mercredi_accueil > 1 %}
+                        <br/>
+                        Inscris aux accueils du matin et soir:
+                        {% if enfant.isAccueilEcole %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
+                        <br/>
                     {% endif %}
-                    <br/>
                 </div>
             </div>
             <br/>
         </div>
     </div>
-
     {% include '@AcMarcheMercredi/ecole/enfant/_accueils.html.twig' %}
-
 {% endblock %}

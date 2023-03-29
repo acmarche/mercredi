@@ -39,7 +39,8 @@
     </div>
     <div class="card mb-3">
         <div class="card-header">
-            <h4>Liste des enfants inscrits aux accueils</h4>
+            <h4>Liste des {{ enfants|length }} enfants
+                {% if mercredi_accueil >1 %} inscrits aux accueils{% endif %}</h4>
         </div>
         <div class="card-body">
             <table class="table table-bordered table-hover">

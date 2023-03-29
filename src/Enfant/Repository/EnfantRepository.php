@@ -82,7 +82,22 @@ final class EnfantRepository extends ServiceEntityRepository
     {
         return $this->getNotArchivedQueryBuilder()
             ->andWhere('enfant.ecole IN (:ecoles)')
-            ->setParameter('ecoles', $ecoles)->andWhere('enfant.accueil_ecole = 1')
+            ->setParameter('ecoles', $ecoles)
+            ->andWhere('enfant.accueil_ecole = 1')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $ecoles
+     *
+     * @return Enfant[]
+     * //todo cleaning
+     */
+    public function findByEcolesForEcoleMarche(iterable $ecoles): array
+    {
+        return $this->getNotArchivedQueryBuilder()
+            ->andWhere('enfant.ecole IN (:ecoles)')
+            ->setParameter('ecoles', $ecoles)
             ->getQuery()->getResult();
     }
 

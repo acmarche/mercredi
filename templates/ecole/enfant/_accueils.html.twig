@@ -1,40 +1,42 @@
-<div class="card">
+{% if enfant.isAccueilEcole %}
+    <div class="card">
 
-    <h5 class="card-header">Ses accueils </h5>
-    <div class="card-body">
-        {% if accueils | length > 0 %}
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th title="Nombre de demi heure">Nb d'unité</th>
-                    <th>Matin/soir</th>
-                    <th>Retard ?</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for accueil in accueils %}
+        <h5 class="card-header">Ses accueils </h5>
+        <div class="card-body">
+            {% if accueils | length > 0 %}
+                <table class="table table-bordered table-hover">
+                    <thead>
                     <tr>
-                        <td>
-                            <a href="{{ path('mercredi_ecole_accueil_show', { 'uuid': accueil.uuid }) }}">
-                                {{ accueil.dateJour|format_date('full') }}
-                            </a>
-                        </td>
-                        <td>
-                            {{ accueil.duree }}
-                        </td>
-                        <td>
-                            {{ accueil.heure }}
-                        </td>
-                        <td>
-                            {{ accueil.heureRetard ? accueil.heureRetard|format_datetime('none', 'short') }}
-                        </td>
+                        <th>Date</th>
+                        <th title="Nombre de demi heure">Nb d'unité</th>
+                        <th>Matin/soir</th>
+                        <th>Retard ?</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            Aucun
-        {% endif %}
+                    </thead>
+                    <tbody>
+                    {% for accueil in accueils %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('mercredi_ecole_accueil_show', { 'uuid': accueil.uuid }) }}">
+                                    {{ accueil.dateJour|format_date('full') }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ accueil.duree }}
+                            </td>
+                            <td>
+                                {{ accueil.heure }}
+                            </td>
+                            <td>
+                                {{ accueil.heureRetard ? accueil.heureRetard|format_datetime('none', 'short') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Aucun
+            {% endif %}
+        </div>
     </div>
-</div>
+{% endif %}
