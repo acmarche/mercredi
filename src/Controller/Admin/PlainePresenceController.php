@@ -173,8 +173,10 @@ final class PlainePresenceController extends AbstractController
         $presences = $this->plainePresenceRepository->findByPlaineAndEnfant($plaine, $enfant);
         $currentJours = PresenceUtils::extractJours($presences);
         $plainePresencesDto->setJours($currentJours);
+
         $form = $this->createForm(PlainePresencesEditType::class, $plainePresencesDto);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $new = $plainePresencesDto->getJours();
             if ([] === $presences) {
