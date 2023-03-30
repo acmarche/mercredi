@@ -82,7 +82,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     ): array {
         $enMoins = array_diff($currentJours, $newJours->toArray());
         $enPlus = array_diff($newJours->toArray(), $currentJours);
-        $daysFull = 0;
+        $daysFull = [];
 
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             $result = $this->removeFullDays($plaine, $enfant, $enPlus);
