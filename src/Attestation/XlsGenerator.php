@@ -31,8 +31,8 @@ class XlsGenerator
             foreach ($item['tuteurs'] as $row) {
                 $tuteur = $row['tuteur'];
                 $presences = $row['presences'];
-                $quarters = $this->attestationGenerator->groupByQuarter($presences, $year);
-                $this->addLine($enfant, $tuteur, $quarters, $ligne);
+                $total = $row['total'];
+                $this->addLine($enfant, $tuteur, $presences, $total, $ligne, $year);
                 $ligne++;
             }
         }
@@ -40,8 +40,14 @@ class XlsGenerator
         return $spreadsheet;
     }
 
-    private function addLine(Enfant $enfant, Tuteur $tuteur, array $data, int $ligne): void
-    {
+    private function addLine(
+        Enfant $enfant,
+        Tuteur $tuteur,
+        array $presences,
+        float $total,
+        int $ligne,
+        int $year
+    ): void {
         $lettre = 'A';
         $this->worksheet
             ->setCellValue($lettre++.$ligne, 'eft-'.$enfant->getId().'-tut-'.$tuteur->getId())
@@ -60,22 +66,12 @@ class XlsGenerator
             ->setCellValue($lettre++.$ligne, $tuteur->getRue())
             ->setCellValue($lettre++.$ligne, $tuteur->getCodePostal())
             ->setCellValue($lettre++.$ligne, $tuteur->getLocalite())
-            ->setCellValue($lettre++.$ligne, 150);
-
-        $format = 'd/m/Y';
-        foreach ($data as $key => $quarter) {
-            $countPresences = count($quarter['presences']);
-            if ($countPresences > 0) {
-                $dateStart = $quarter['dates']['startDate'];
-                $dateEnd = $quarter['dates']['endDate'];
-                $this->worksheet
-                    ->setCellValue($lettre++.$ligne, $dateStart->format($format))
-                    ->setCellValue($lettre++.$ligne, $dateEnd->format($format))
-                    ->setCellValue($lettre++.$ligne, $countPresences)
-                    ->setCellValue($lettre++.$ligne, $quarter['prix'])
-                    ->setCellValue($lettre++.$ligne, $quarter['total']);
-            }
-        }
+            ->setCellValue($lettre++.$ligne, 150)
+            ->setCellValue($lettre++.$ligne, '01/01/'.$year)
+            ->setCellValue($lettre++.$ligne, '31/12/'.$year)
+            ->setCellValue($lettre++.$ligne, count($presences))
+            ->setCellValue($lettre++.$ligne, '')
+            ->setCellValue($lettre++.$ligne, $total);
     }
 
     private function setTitles(): void

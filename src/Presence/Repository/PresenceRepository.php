@@ -317,7 +317,7 @@ final class PresenceRepository extends ServiceEntityRepository
 
     /**
      * @param int $year
-     * @return array|Presence[]
+     * @return Presence[]
      */
     public function findByYear(int $year): array
     {

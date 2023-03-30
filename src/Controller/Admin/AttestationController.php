@@ -67,7 +67,7 @@ final class AttestationController extends AbstractController
         }
 
         if ($year > 2021) {
-            $data = $this->attestationGenerator->newOne($year, $presences);
+            $data = $this->attestationGenerator->newOne($presences);
             $html = $this->renderView('@AcMarcheMercredi/admin/attestation/one/2022.html.twig', [
                 'data' => $data,
                 'tuteur' => $tuteur,
