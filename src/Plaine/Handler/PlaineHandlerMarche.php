@@ -82,11 +82,14 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     ): array {
         $enMoins = array_diff($currentJours, $newJours->toArray());
         $enPlus = array_diff($newJours->toArray(), $currentJours);
+        $daysFull = 0;
 
-        $result = $this->removeFullDays($plaine, $enfant, $enPlus);
+        if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
+            $result = $this->removeFullDays($plaine, $enfant, $enPlus);
+            $enPlus = $result[0];
+            $daysFull = $result[1];
+        }
 
-        $enPlus = $result[0];
-        $daysFull = $result[1];
         foreach ($enPlus as $jour) {
             $presence = new Presence($tuteur, $enfant, $jour);
             $this->plainePresenceRepository->persist($presence);
@@ -211,6 +214,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
             $enfantsByDay,
             function ($enfant) use ($plaine, $groupeScolaireReferent) {
                 $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
+
                 return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
             }
         );
