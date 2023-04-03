@@ -22,7 +22,7 @@ interface FactureHandlerInterface
 
     public function isBilled(int $presenceId, string $type): bool;
 
-    public function isSended(int $presenceId, string $type): bool;
+    public function isSent(int $presenceId, string $type): bool;
 
     public function registerDataOnFacturePresence(
         FactureInterface $facture,

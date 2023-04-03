@@ -171,7 +171,7 @@ class FactureCalculator implements FactureCalculatorInterface
         if ($presence->getPaiement()) {
             return true;
         }
-        $presenceFacture = $this->facturePresenceRepository->findByPresence($presence);
+        $presenceFacture = $this->facturePresenceRepository->findByPresence($presence,type: null);
         if ($presenceFacture) {
             $facture = $presenceFacture->getFacture();
             if ($facture->getPayeLe()) {

@@ -9,6 +9,8 @@ use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -31,9 +33,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByIdsAndType(array $presenceIds, string $type): array
     {
-        return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->addSelect('facture')
+        return $this->createQbl()
             ->andWhere('facture_presence.presenceId IN (:presences)')
             ->setParameter('presences', $presenceIds)
             ->andWhere('facture_presence.objectType = :type')
@@ -41,16 +41,22 @@ final class FacturePresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findByIdAndType(int $presenceId, string $type): ?FacturePresence
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findByIdAndType(int $presenceId, ?string $type): ?FacturePresence
     {
-        return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->addSelect('facture')
+        $qbl = $this->createQbl()
             ->andWhere('facture_presence.presenceId = :presence')
-            ->setParameter('presence', $presenceId)
-            ->andWhere('facture_presence.objectType = :type')
-            ->setParameter('type', $type)
-            ->getQuery()->getOneOrNullResult();
+            ->setParameter('presence', $presenceId);
+
+        if ($type) {
+            $qbl
+                ->andWhere('facture_presence.objectType = :type')
+                ->setParameter('type', $type);
+        }
+
+        return $qbl->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -58,10 +64,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByFactureAndType(FactureInterface $facture, string $type): array
     {
-        return $this->createQueryBuilder('facture_presence')
-            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
-            ->leftJoin('facture_presence.reduction', 'reduction', 'WITH')
-            ->addSelect('facture', 'reduction')
+        return $this->createQbl()
             ->andWhere('facture_presence.facture = :fact')
             ->setParameter('fact', $facture)
             ->andWhere('facture_presence.objectType = :type')
@@ -69,9 +72,14 @@ final class FacturePresenceRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findByPresence(PresenceInterface $presence): ?FacturePresence
-    {
-        return $this->findByIdAndType($presence->getId(), FactureInterface::OBJECT_PRESENCE);
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findByPresence(
+        PresenceInterface $presence,
+        ?string $type = FactureInterface::OBJECT_PRESENCE
+    ): ?FacturePresence {
+        return $this->findByIdAndType($presence->getId(), $type);
     }
 
     public function findByAccueil(Accueil $accueil): ?FacturePresence
@@ -79,8 +87,10 @@ final class FacturePresenceRepository extends ServiceEntityRepository
         return $this->findByIdAndType($accueil->getId(), FactureInterface::OBJECT_ACCUEIL);
     }
 
-    public function findByPlaine(Plaine $plaine): ?FacturePresence
-    {
-        return $this->findByIdAndType($plaine->getId(), FactureInterface::OBJECT_PLAINE);
+    private function createQbl(): QueryBuilder {
+        return $this->createQueryBuilder('facture_presence')
+            ->leftJoin('facture_presence.facture', 'facture', 'WITH')
+            ->leftJoin('facture_presence.reduction', 'reduction', 'WITH')
+            ->addSelect('facture', 'reduction');
     }
 }

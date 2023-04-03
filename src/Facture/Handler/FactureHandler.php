@@ -125,7 +125,7 @@ final class FactureHandler implements FactureHandlerInterface
         return (bool)$this->facturePresenceRepository->findByIdAndType($presenceId, $type);
     }
 
-    public function isSended(int $presenceId, string $type): bool
+    public function isSent(int $presenceId, string $type): bool
     {
         if (($facturePresence = $this->facturePresenceRepository->findByIdAndType($presenceId, $type)) !== null) {
             return null !== $facturePresence->getFacture()->getEnvoyeLe();
