@@ -99,10 +99,15 @@ final class EnfantController extends AbstractController
     {
         $relations = $this->relationRepository->findByEnfant($enfant);
         $presences = $this->presenceRepository->findAllByEnfant($enfant);
+
         $presencesGrouped = $this->presenceUtils->groupByYear($presences);
         $fratries = $this->relationRepository->findFrateries($enfant);
         $plaines = $this->plainePresenceRepository->findPlainesByEnfant($enfant);
-        $currentYear = date('Y');
+
+        end($presencesGrouped);
+        $key = key($presencesGrouped);
+        $currentYear = $key;//if empty in current year
+
         foreach ($presences as $presence) {
             $presence->paid = $this->factureCalculator->isPresencePaid($presence);
         }
