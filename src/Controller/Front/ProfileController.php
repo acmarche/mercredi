@@ -52,6 +52,7 @@ final class ProfileController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        dump($user);
         if (null !== $user) {
             $roles = $user->getRoles();
             $del_val = 'ROLE_USER';
@@ -60,7 +61,7 @@ final class ProfileController extends AbstractController
                 $roles,
                 fn($e) => $e !== $del_val
             );
-
+dump($roles);
             if (\count($roles) > 1) {
                 return $this->redirectToRoute('mercredi_front_select_profile');
             }
