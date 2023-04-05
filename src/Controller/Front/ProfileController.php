@@ -53,6 +53,11 @@ final class ProfileController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         dump($user);
+return $this->render(
+            '@AcMarcheMercredi/front/user/select_profile.html.twig',
+            [
+            ]
+        );
         if (null !== $user) {
             $roles = $user->getRoles();
             $del_val = 'ROLE_USER';
