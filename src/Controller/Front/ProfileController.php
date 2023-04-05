@@ -48,7 +48,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/redirect', name: 'mercredi_front_profile_redirect')]
-    public function redirectByProfile(): RedirectResponse
+    public function redirectByProfile(): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -83,7 +83,11 @@ dump($roles);
             }
         }
         $this->addFlash('warning', 'Aucun rôle ne vous a été attribué');
-
+return $this->render(
+            '@AcMarcheMercredi/front/user/select_profile.html.twig',
+            [
+            ]
+        );
         return $this->redirectToRoute('mercredi_front_home');
     }
 
