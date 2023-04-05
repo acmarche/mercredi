@@ -61,17 +61,11 @@ final class ProfileController extends AbstractController
                 $roles,
                 fn($e) => $e !== $del_val
             );
-dd($roles);
 
-return $this->render(
-            '@AcMarcheMercredi/front/user/select_profile.html.twig',
-            [
-            ]
-        );
             if (\count($roles) > 1) {
                 return $this->redirectToRoute('mercredi_front_select_profile');
             }
-
+dd($roles);
             if ($user->hasRole('ROLE_MERCREDI_PARENT')) {
                 return $this->redirectToRoute('mercredi_parent_home');
             }
@@ -98,7 +92,7 @@ return $this->render(
     }
 
     #[Route(path: '/select', name: 'mercredi_front_select_profile')]
-    #[IsGranted('ROLE_MERCREDI')]
+
     public function selectProfile(): Response
     {
         return $this->render(
