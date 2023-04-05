@@ -86,7 +86,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/select', name: 'mercredi_front_select_profile')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('ROLE_MERCREDI')]
     public function selectProfile(): Response
     {
         return $this->render(
