@@ -8,7 +8,6 @@ use AcMarche\Mercredi\User\Form\UserPasswordType;
 use AcMarche\Mercredi\User\Message\UserUpdated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -28,7 +27,6 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/show', name: 'mercredi_front_user_show')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function show(): Response
     {
         /** @var User $user */
@@ -65,7 +63,7 @@ final class ProfileController extends AbstractController
             if (\count($roles) > 1) {
                 return $this->redirectToRoute('mercredi_front_select_profile');
             }
-dd($roles);
+
             if ($user->hasRole('ROLE_MERCREDI_PARENT')) {
                 return $this->redirectToRoute('mercredi_parent_home');
             }
@@ -83,22 +81,16 @@ dd($roles);
             }
         }
         $this->addFlash('warning', 'Aucun rôle ne vous a été attribué');
-return $this->render(
-            '@AcMarcheMercredi/front/user/select_profile.html.twig',
-            [
-            ]
-        );
+
         return $this->redirectToRoute('mercredi_front_home');
     }
 
     #[Route(path: '/select', name: 'mercredi_front_select_profile')]
-
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function selectProfile(): Response
     {
         return $this->render(
-            '@AcMarcheMercredi/front/user/select_profile.html.twig',
-            [
-            ]
+            '@AcMarcheMercredi/front/user/select_profile.html.twig'
         );
     }
 
