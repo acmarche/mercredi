@@ -62,6 +62,12 @@ final class ProfileController extends AbstractController
                 fn($e) => $e !== $del_val
             );
 dump($roles);
+
+return $this->render(
+            '@AcMarcheMercredi/front/user/select_profile.html.twig',
+            [
+            ]
+        );
             if (\count($roles) > 1) {
                 return $this->redirectToRoute('mercredi_front_select_profile');
             }
