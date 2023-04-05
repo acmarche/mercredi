@@ -18,7 +18,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/profile')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class ProfileController extends AbstractController
 {
     public function __construct(
@@ -29,6 +28,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route(path: '/show', name: 'mercredi_front_user_show')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function show(): Response
     {
         /** @var User $user */
@@ -52,7 +52,7 @@ final class ProfileController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        dump($user);
+        dd($user);
 return $this->render(
             '@AcMarcheMercredi/front/user/select_profile.html.twig',
             [
