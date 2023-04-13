@@ -84,13 +84,15 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
         <th>Tarif journalier</th>
         <th>Montant perçu</th>
     </tr>
-    {% for key,quarter in data %}
+    {% for item in data %}
+        {% set presences = item['tuteurs'][tuteur.id]['presences'] %}
+        {% set total = item['tuteurs'][tuteur.id]['total'] %}
         <tr>
-            <td>Période {{ key }}</td>
-            <td>Du {{ quarter['dates']['startDate']|date('d-m') }} au {{ quarter['dates']['endDate']|date('d-m-Y') }}</td>
-            <td>{{ quarter['presences']|length }}</td>
+            <td>Année {{ year }}</td>
+            <td>Du 01-01-{{ year }} au 31-12-{{ year }}</td>
+            <td>{{ presences|length }}</td>
             <td>Voir ci-dessous</td>
-            <td>{{ quarter['total']|format_currency('eur') }}</td>
+            <td>{{ total|format_currency('eur') }}</td>
         </tr>
     {% endfor %}
 </table>

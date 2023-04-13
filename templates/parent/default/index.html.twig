@@ -9,7 +9,8 @@
         <div class="card-body">
             {% include '@AcMarcheMercrediParent/enfant/_list.html.twig' %}
 
-            <a href="{{ path('mercredi_parent_presence_select_enfant') }}" class="mt-3 btn btn-outline-primary float-end">
+            <a href="{{ path('mercredi_parent_presence_select_enfant') }}"
+               class="mt-3 btn btn-outline-primary float-end">
                 <i class="fas fa-plus"></i>
                 Inscrire aux mercredis/journées pédagogiques</a>
         </div>
@@ -21,6 +22,23 @@
         </div>
         <div class="card-body">
             {% include '@AcMarcheMercrediParent/facture/_list.html.twig' %}
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="w-50 d-inline">Mes attestations fiscales</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for enfant in enfants %}
+                    <li class="list-group-item">
+                        <a href="{{ path('mercredi_parent_attestation', {'uuid': enfant.uuid, 'year': 2022}) }}">
+                            {{ enfant }} - Attestation 2022
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 

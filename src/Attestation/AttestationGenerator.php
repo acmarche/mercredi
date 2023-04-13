@@ -17,25 +17,19 @@ class AttestationGenerator
 
     public function newOne(array $presences): array
     {
-        $presencesPaid = [];
-        foreach ($presences as $presence) {
-            if ($this->factureCalculator->isPresencePaid($presence)) {
-                $presencesPaid[] = $presence;
-            }
-        }
-
-        foreach ($presencesPaid as $presence) {
-            $presence->cout = $this->presenceCalculator->calculate($presence);
-        }
-
-        return $presencesPaid;
-
+        return $this->treatment($presences);
     }
 
     public function getDataByYear(int $year): array
     {
         $presences = $this->presenceRepository->findByYear($year);
 
+        return $this->treatment($presences);
+
+    }
+
+    private function treatment(array $presences): array
+    {
         $presencesPaid = [];
         foreach ($presences as $presence) {
             if ($this->factureCalculator->isPresencePaid($presence)) {
