@@ -19,7 +19,6 @@
                     <th>Age minimum</th>
                     <th>Age maximum</th>
                     <th>Ordre d'affichage</th>
-                    <th>Plaine</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,7 +33,6 @@
                         <td>{{ groupe_scolaire.ageMinimum ? groupe_scolaire.ageMinimum ~ ' ans' }}</td>
                         <td>{{ groupe_scolaire.ageMaximum ? groupe_scolaire.ageMaximum ~ ' ans' }}</td>
                         <td>{{ groupe_scolaire.ordre }}</td>
-                        <td>{{ groupe_scolaire.isPlaine ? 'Oui' : 'non' }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

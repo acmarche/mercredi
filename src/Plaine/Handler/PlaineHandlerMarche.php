@@ -174,7 +174,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      */
     private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
-        $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
+        $groupeScolaire = $this->getGroupeScolaire($enfant);
         if (!$groupeScolaire) {
             if ($jours instanceof Collection) {
                 $jours = $jours->toArray();
@@ -213,7 +213,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $enfants = array_filter(
             $enfantsByDay,
             function ($enfant) use ($plaine, $groupeScolaireReferent) {
-                $groupeScolaire = $this->getGroupeScolaire($enfant, $plaine);
+                $groupeScolaire = $this->getGroupeScolaire($enfant);
 
                 return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
             }
@@ -225,10 +225,9 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     /**
      * Groupe scolaire suivant l'année scolaire
      * @param Enfant $enfant
-     * @param Plaine $plaine
      * @return GroupeScolaire|null
      */
-    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): ?GroupeScolaire
+    public function getGroupeScolaire(Enfant $enfant): ?GroupeScolaire
     {
         return $this->grouping->findGroupeScolaire($enfant);
     }

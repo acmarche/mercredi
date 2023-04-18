@@ -184,7 +184,7 @@ final class PlaineController extends AbstractController
 
             $enfants = $this->enfantRepository->findBy(['id' => $enfantIds]);
             foreach ($enfants as $enfant) {
-                $groupeScolaire = $this->plaineHandler->getGroupeScolaire($enfant, $plaine);
+                $groupeScolaire = $this->plaineHandler->getGroupeScolaire($enfant);
                 if (!$groupeScolaire) {
                     $this->addFlash(
                         'danger',

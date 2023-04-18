@@ -21,7 +21,7 @@ final class PlaineGroupeType extends AbstractType
                 EntityType::class,
                 [
                     'class' => GroupeScolaire::class,
-                    'query_builder' => fn (GroupeScolaireRepository $groupeScolaireRepository) => $groupeScolaireRepository->getQbForListingPlaine(),
+                    'query_builder' => fn (GroupeScolaireRepository $groupeScolaireRepository) => $groupeScolaireRepository->getQbForListing(),
                     'attr' => [
                         'readonly' => true,
                     ],

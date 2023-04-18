@@ -25,9 +25,10 @@ class PlaineGroupe implements TimestampableInterface, Stringable
     use TimestampableTrait;
 
     #[ORM\ManyToOne(targetEntity: Plaine::class, cascade: ['persist'], inversedBy: 'plaine_groupes')]
-    #[ORM\JoinColumn(nullable: false)] private ?Plaine $plaine;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Plaine $plaine;
 
-    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class, inversedBy: 'plaine_groupes')]
+    #[ORM\ManyToOne(targetEntity: GroupeScolaire::class)]
     private ?GroupeScolaire $groupe_scolaire;
 
     #[ORM\Column(type: 'integer')]

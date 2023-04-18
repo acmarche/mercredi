@@ -9,10 +9,6 @@
         <div class="card-body">
 
             {% include '@AcMarcheMercrediAdmin/groupe_scolaire/_actions.html.twig' %}
-            <div class="alert alert-info">
-                Les âges sont utilisés pour les plaines.<br/>
-                Les années scolaires pour les accueils
-            </div>
 
             {% if groupe_scolaire.remarque %}
                 <p class="text-muted">
@@ -29,10 +25,6 @@
                 <tr>
                     <th><span class="fas fa-mobile-alt"></span> Age maximum</th>
                     <td>{{ groupe_scolaire.ageMaximum }} ans</td>
-                </tr>
-                <tr>
-                    <th><span class="fas fa-magic"></span> Plaine ?</th>
-                    <td>{{ groupe_scolaire.isPlaine ? 'Oui' : 'non' }}</td>
                 </tr>
             </table>
 

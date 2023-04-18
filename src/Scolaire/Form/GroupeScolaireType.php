@@ -25,15 +25,6 @@ final class GroupeScolaireType extends AbstractType
                 'required' => false,
             ])
             ->add(
-                'isPlaine',
-                CheckboxType::class,
-                [
-                    'label' => 'Groupe pour les plaines ?',
-                    'help' => 'Groupe utilisé pour les plaines',
-                    'required' => false,
-                ]
-            )
-            ->add(
                 'age_minimum',
                 NumberType::class,
                 [

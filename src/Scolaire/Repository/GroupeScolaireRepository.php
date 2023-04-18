@@ -29,7 +29,6 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     public function findAllOrderByOrdre(): array
     {
         return $this->createQueryBuilder('groupe_scolaire')
-            ->addOrderBy('groupe_scolaire.is_plaine')
             ->addOrderBy('groupe_scolaire.ordre', 'ASC')
             ->addOrderBy('groupe_scolaire.nom', 'ASC')
             ->getQuery()
@@ -39,37 +38,17 @@ final class GroupeScolaireRepository extends ServiceEntityRepository
     /**
      * @return GroupeScolaire[]
      */
-    public function findAllForPlaineOrderByNom(): array
+    public function findAllOrderByNom(): array
     {
-        return $this->getQbForListingPlaine()
+        return $this->getQbForListing()
             ->orderBy('groupe_scolaire.nom', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
-    /**
-     * @return GroupeScolaire[]
-     */
-    public function findGroupesNotPlaine(): array
+    public function getQbForListing(): QueryBuilder
     {
         return $this->createQueryBuilder('groupe_scolaire')
-            ->andWhere('groupe_scolaire.is_plaine != 1')
-            ->orderBy('groupe_scolaire.nom', 'DESC')->getQuery()->getResult();
-    }
-
-    public function findGroupeScolairePlaineByAge(float $age): ?GroupeScolaire
-    {
-        return $this->createQueryBuilder('groupe_scolaire')
-            ->andWhere('groupe_scolaire.is_plaine = 1')
-            ->andWhere('groupe_scolaire.age_minimum <= :age AND groupe_scolaire.age_maximum >= :age')
-            ->setParameter('age', $age)
-            ->getQuery()->getOneOrNullResult();
-    }
-
-    public function getQbForListingPlaine(): QueryBuilder
-    {
-        return $this->createQueryBuilder('groupe_scolaire')
-            ->andWhere('groupe_scolaire.is_plaine = 1')
             ->orderBy('groupe_scolaire.nom', 'DESC');
     }
 }

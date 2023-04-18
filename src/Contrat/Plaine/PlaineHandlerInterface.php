@@ -55,7 +55,7 @@ interface PlaineHandlerInterface
      * @param Plaine $plaine
      * @return GroupeScolaire|null
      */
-    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): ?GroupeScolaire;
+    public function getGroupeScolaire(Enfant $enfant): ?GroupeScolaire;
 
     /**
      * @param Plaine $plaine

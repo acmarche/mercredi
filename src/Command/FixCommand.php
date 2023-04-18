@@ -2,12 +2,11 @@
 
 namespace AcMarche\Mercredi\Command;
 
-use AcMarche\Mercredi\Facture\Handler\FactureHandler;
-use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
-use AcMarche\Mercredi\Facture\Repository\FactureRepository;
-use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
-use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
+use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
+use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
+use AcMarche\Mercredi\Plaine\Repository\PlaineRepository;
+use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,13 +19,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class FixCommand extends Command
 {
     private SymfonyStyle $io;
+    private GroupeScolaire $grands;
+    private GroupeScolaire $moyens;
+    private GroupeScolaire $petits;
 
     public function __construct(
-        private FactureRepository $factureRepository,
-        private JourRepository $jourRepository,
-        private PresenceRepository $presenceRepository,
-        private FactureHandler $factureHandler,
-        private FacturePresenceRepository $facturePresenceRepository
+        private PlaineRepository $plaineRepository,
+        private PlaineGroupeRepository $plaineGroupeRepository,
+        private GroupeScolaireRepository $groupeScolaireRepository
     ) {
         parent::__construct();
     }
@@ -34,54 +34,53 @@ class FixCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
+        $this->petits = $this->groupeScolaireRepository->find(2);
+        $this->moyens = $this->groupeScolaireRepository->find(3);
+        $this->grands = $this->groupeScolaireRepository->find(4);
 
-        /**
-         * janvier 2019 => juin 2022
-         */
-        $rows = $this->presenceRepository->findWithOutPaiement();
-        $grouped = PresenceUtils::groupByTuteur($rows);
-        foreach ($grouped as $data) {
-            $tuteur = $data['tuteur'];
-            $presences = $data['presences'];
-            foreach ($presences as $key => $presence) {
-                if ($this->facturePresenceRepository->findByPresence($presence)) {
-                  /*  $this->io->error(
-                        $presence->getId().' '.$presence->getJour()->getDateJour()->format(
-                            'Y-m-d'
-                        ).' '.$presence->getEnfant()->getPrenom()
-                    );*/
-                    unset($presences[$key]);
+        foreach ($this->plaineRepository->findAll() as $plaine) {
+            foreach ($this->plaineGroupeRepository->findByPlaine($plaine) as $groupePlaine) {
+                $groupe = $this->findGroupe($groupePlaine);
+                if (!$groupe) {
+                    $this->io->error($groupePlaine->getGroupeScolaire()->getNom());
+                    $this->io->error($groupePlaine->getGroupeScolaire()->getId());
+                    continue;
+                }
+                if (!$this->plaineGroupeRepository->findOneByPlaineAndGroupe($plaine, $groupe)) {
+                    $plaineGroupe = new PlaineGroupe($plaine, $groupe);
+                    $plaineGroupe->setInscriptionMaximum($groupePlaine->getInscriptionMaximum());
+                    $this->plaineGroupeRepository->persist($plaineGroupe);
                 }
             }
-            if (count($presences) > 0) {
-                $facture = $this->factureHandler->newFacture($tuteur);
-                $facture->setMois('2022-06');
-                $this->factureHandler->handleManuallyNotResolved($facture, $presences, []);
-            }
         }
-        $this->factureRepository->flush();
+
+        $this->plaineGroupeRepository->flush();
 
         return Command::SUCCESS;
     }
 
-
-    private function attach31Aout()
+    private function findGroupe(PlaineGroupe $plaineGroupe): ?GroupeScolaire
     {
-        $jour = $this->jourRepository->find(448);//31 aout 2022
-        $presences = $this->presenceRepository->findByDay($jour);
-
-        foreach ($presences as $presence) {
-            $facture = $this->factureRepository->findFacturesByTuteurAndMonth($presence->getTuteur(), '09-2022');
-            if ($facture) {
-                $this->io->success($presence->getEnfant()->getNom().' '.$presence->getEnfant()->getPrenom());
-                if (!$this->facturePresenceRepository->findByPresence($presence)) {
-                    $this->factureHandler->attachPresences($facture, [$presence]);
-                    $this->factureRepository->flush();
-                }
-            } else {
-                //ne sont venu que le 31 aout et pas en septembre
-                $this->io->error($presence->getEnfant()->getNom().' '.$presence->getEnfant()->getPrenom());
-            }
+        if (str_contains($plaineGroupe->getGroupeScolaire()->getNom(), 'petits')) {
+            return $this->petits;
         }
+        if (str_contains($plaineGroupe->getGroupeScolaire()->getNom(), 'Moyens')) {
+            return $this->moyens;
+        }
+        if (str_contains($plaineGroupe->getGroupeScolaire()->getNom(), 'grands')) {
+            return $this->grands;
+        }
+        if ($plaineGroupe->getGroupeScolaire()->getId() == 6) {
+            return $this->moyens;
+        }
+        if ($plaineGroupe->getGroupeScolaire()->getId() == 4) {
+            return $this->grands;
+        }
+        if ($plaineGroupe->getGroupeScolaire()->getId() == 2) {
+            return $this->petits;
+        }
+
+        return null;
     }
+
 }

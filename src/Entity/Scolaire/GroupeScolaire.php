@@ -18,11 +18,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table]
-#[ORM\UniqueConstraint(columns: ['age_minimum', 'is_plaine'])]
-#[ORM\UniqueConstraint(columns: ['age_maximum', 'is_plaine'])]
+#[ORM\UniqueConstraint(columns: ['age_minimum'])]
+#[ORM\UniqueConstraint(columns: ['age_maximum'])]
 #[ORM\Entity(repositoryClass: GroupeScolaireRepository::class)]
-#[UniqueEntity(fields: ['age_minimum', 'is_plaine'], message: 'Déjà un groupe plaine avec cette âge minimum')]
-#[UniqueEntity(fields: ['age_maximum', 'is_plaine'], message: 'Déjà un groupe plaine avec cette âge maximum')]
+#[UniqueEntity(fields: ['age_minimum'], message: 'Déjà un groupe plaine avec cette âge minimum')]
+#[UniqueEntity(fields: ['age_maximum'], message: 'Déjà un groupe plaine avec cette âge maximum')]
 class GroupeScolaire implements Stringable
 {
     use IdTrait;
@@ -37,20 +37,11 @@ class GroupeScolaire implements Stringable
     #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
     #[Assert\GreaterThan(propertyPath: 'age_minimum')]
     private ?float $age_maximum = null;
-    #[ORM\Column(type: 'boolean', length: 10, nullable: false)]
-    private ?bool $is_plaine = false;
     /**
      * @var AnneeScolaire[]
      */
     #[ORM\OneToMany(targetEntity: AnneeScolaire::class, mappedBy: 'groupe_scolaire')]
     private Collection $annees_scolaires;
-    /**
-     * Pour la cascade.
-     *
-     * @var PlaineGroupe[]
-     */
-    #[ORM\OneToMany(targetEntity: PlaineGroupe::class, mappedBy: 'groupe_scolaire', cascade: ['remove'])]
-    private Collection $plaine_groupes;
 
     /**
      * @var array|Enfant[]
@@ -61,7 +52,6 @@ class GroupeScolaire implements Stringable
     {
         $this->enfants = [];
         $this->annees_scolaires = new ArrayCollection();
-        $this->plaine_groupes = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -117,46 +107,6 @@ class GroupeScolaire implements Stringable
         if ($this->annees_scolaires->removeElement($anneesScolaire) && $anneesScolaire->getGroupeScolaire() === $this) {
             $anneesScolaire->setGroupeScolaire(null);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|PlaineGroupe[]
-     */
-    public function getPlaineGroupes(): Collection
-    {
-        return $this->plaine_groupes;
-    }
-
-    public function addPlaineGroupe(PlaineGroupe $plaineGroupe): self
-    {
-        if (!$this->plaine_groupes->contains($plaineGroupe)) {
-            $this->plaine_groupes[] = $plaineGroupe;
-            $plaineGroupe->setGroupeScolaire($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlaineGroupe(PlaineGroupe $plaineGroupe): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->plaine_groupes->removeElement($plaineGroupe) && $plaineGroupe->getGroupeScolaire() === $this) {
-            $plaineGroupe->setGroupeScolaire(null);
-        }
-
-        return $this;
-    }
-
-    public function getIsPlaine(): ?bool
-    {
-        return $this->is_plaine;
-    }
-
-    public function setIsPlaine(bool $is_plaine): self
-    {
-        $this->is_plaine = $is_plaine;
 
         return $this;
     }

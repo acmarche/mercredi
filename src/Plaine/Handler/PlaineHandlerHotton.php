@@ -49,7 +49,7 @@ class PlaineHandlerHotton implements PlaineHandlerInterface
     {
 
     }
-    public function getGroupeScolaire(Enfant $enfant, Plaine $plaine): ?GroupeScolaire
+    public function getGroupeScolaire(Enfant $enfant): ?GroupeScolaire
     {
         return null;
     }

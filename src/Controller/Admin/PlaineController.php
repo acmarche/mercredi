@@ -68,7 +68,10 @@ final class PlaineController extends AbstractController
     public function new(Request $request): Response
     {
         $plaine = new Plaine();
-        foreach ($this->groupeScolaireRepository->findAllForPlaineOrderByNom() as $groupeScolaire) {
+        foreach ($this->groupeScolaireRepository->findAllOrderByNom() as $groupeScolaire) {
+            if ($groupeScolaire->getNom() == 'Premats') {
+                continue;
+            }
             $plaineGroupe = new PlaineGroupe($plaine, $groupeScolaire);
             $plaine->addPlaineGroupe($plaineGroupe);
         }

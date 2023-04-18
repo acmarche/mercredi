@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
+use AcMarche\Mercredi\Plaine\Repository\PlaineGroupeRepository;
 use AcMarche\Mercredi\Scolaire\Form\GroupeScolaireType;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireCreated;
 use AcMarche\Mercredi\Scolaire\Message\GroupeScolaireDeleted;
@@ -22,6 +23,7 @@ final class GroupeScolaireController extends AbstractController
 {
     public function __construct(
         private GroupeScolaireRepository $groupeScolaireRepository,
+        private PlaineGroupeRepository $plaineGroupeRepository,
         private MessageBusInterface $dispatcher
     ) {
     }
@@ -80,6 +82,11 @@ final class GroupeScolaireController extends AbstractController
         $form = $this->createForm(GroupeScolaireType::class, $groupeScolaire);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            foreach ($form->getData()->getAnneesScolaires() as $anneesScolaire){
+                $anneesScolaire->setGroupeScolaire($groupeScolaire);
+            }
+
             $this->groupeScolaireRepository->flush();
 
             $this->dispatcher->dispatch(new GroupeScolaireUpdated($groupeScolaire->getId()));
@@ -103,6 +110,9 @@ final class GroupeScolaireController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$groupeScolaire->getId(), $request->request->get('_token'))) {
             $ecoleId = $groupeScolaire->getId();
+            foreach ($this->plaineGroupeRepository->findByGroupeScolaire($groupeScolaire) as $groupePlaine) {
+                $this->plaineGroupeRepository->remove($groupePlaine);
+            }
             $this->groupeScolaireRepository->remove($groupeScolaire);
             $this->groupeScolaireRepository->flush();
             $this->dispatcher->dispatch(new GroupeScolaireDeleted($ecoleId));
