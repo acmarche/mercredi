@@ -12,6 +12,8 @@ use AcMarche\Mercredi\Utils\SortUtils;
 
 final class OrdreService
 {
+    public $raison = '';
+
     public function __construct(
         private RelationRepository $relationRepository,
         private PresenceRepository $presenceRepository
@@ -37,6 +39,8 @@ final class OrdreService
          * Ordre force sur la presence
          */
         if (0 !== ($presence->getOrdre())) {
+            $this->raison = 'ordre sur la presence';
+
             return $presence->getOrdre();
         }
 
@@ -50,6 +54,8 @@ final class OrdreService
          * quand enfant premier, fratrie pas d'importance
          */
         if (1 === $ordreBase) {
+            $this->raison = 'ordre de base sur 1 (fiche enfant ou relation tuteur)';
+
             return $ordreBase;
         }
 
@@ -66,6 +72,8 @@ final class OrdreService
          * Force 1
          */
         if ([] === $fratries) {
+            $this->raison = 'pas de frateries => 1';
+
             return 1;
         }
 
@@ -77,6 +85,8 @@ final class OrdreService
          */
         $countPresents = \count($presents);
         if (0 === $countPresents) {
+            $this->raison = 'tout seule ce jour-là => 1';
+
             return 1;
         }
 
@@ -86,6 +96,8 @@ final class OrdreService
          */
         foreach ($presents as $present) {
             if (null === $present->getBirthday()) {
+                $this->raison = 'pas de date de naissance => 1';
+
                 return 1;
             }
         }
@@ -94,9 +106,14 @@ final class OrdreService
 
         foreach ($presents as $key => $present) {
             if ($present->getId() === $enfant->getId()) {
+
+                $this->raison = 'basé sur la fraterie ce jour là => 1';
+
                 return $key + 1;
             }
         }
+
+        $this->raison = 'rien trouve on force => 1';
 
         //force prix plein si on a pas de date naissance
         return 1;

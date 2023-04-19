@@ -149,6 +149,7 @@ final class FactureHandler implements FactureHandlerInterface
         $facturePresence->setPrenom($enfant->getPrenom());
         $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
         $facturePresence->setOrdre($ordre);
+        $facturePresence->ordre_raison = $this->presenceCalculator->ordre_raison;
         $facturePresence->setAbsent($presence->getAbsent());
         $facturePresence->setCoutBrut($this->presenceCalculator->getPrixByOrdre($presence, $ordre));
     }

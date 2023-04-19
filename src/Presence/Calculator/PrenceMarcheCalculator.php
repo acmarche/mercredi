@@ -13,6 +13,7 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 {
     public array $ecoles = [];
+    public string $ordre_raison = '';
 
     public function __construct(
         private OrdreService $ordreService,
@@ -54,7 +55,10 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
 
     public function getOrdreOnPresence(PresenceInterface $presence): int
     {
-        return $this->ordreService->getOrdreOnPresence($presence);
+        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $this->ordre_raison = $this->ordreService->raison;
+
+        return $ordre;
     }
 
     public function getPrixByOrdre(PresenceInterface $presence, int $ordre): float
