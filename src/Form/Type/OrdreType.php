@@ -13,11 +13,12 @@ final class OrdreType extends AbstractType
     {
         $optionsResolver->setDefaults(
             [
-                'required' => true,
+                'required' => false,
                 'choices' => MercrediConstantes::ORDRES,
                 'attr' => [
                     'class' => 'custom-select my-1 mr-sm-2',
                 ],
+                'help' => 'Ordre établi suivant les dates de naissance. Mettez une valeur ici pour forcer l\'ordre',
             ]
         );
     }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Command;
 
+use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,6 +22,7 @@ class OrdreCommand extends Command
     public function __construct(
         private OrdreService $ordreService,
         private PresenceRepository $presenceRepository,
+        private EnfantRepository $enfantRepository
     ) {
         parent::__construct();
     }
@@ -38,14 +40,17 @@ class OrdreCommand extends Command
         $presenceId = $input->getArgument('presence');
         $presence = $this->presenceRepository->find($presenceId);
 
-        $this->io->writeln($presence->getEnfant());
-        $this->io->writeln($presence->getJour()->getDateJour()->format('Y-m-d'));
-        $ordre = $this->ordreService->getOrdreOnPresence($presence, true);
-        $presents = $this->ordreService->getFratriesPresents($presence);
-        foreach ($presents as $present) {
-            $this->io->writeln('Présent: '.$present);
+        if ($presence) {
+            $this->io->writeln($presence->getEnfant());
+            $this->io->writeln($presence->getJour()->getDateJour()->format('Y-m-d'));
+            $ordre = $this->ordreService->getOrdreOnPresence($presence, true);
+            $presents = $this->ordreService->getFratriesPresents($presence);
+            foreach ($presents as $present) {
+                $this->io->writeln('Présent: '.$present);
+            }
+            $this->io->writeln('Ordre '.$ordre);
+            $this->io->writeln('Raison '.$this->ordreService->raison);
         }
-        $this->io->writeln('Ordre '.$ordre);
 
         return Command::SUCCESS;
     }

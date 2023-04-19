@@ -73,6 +73,7 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
             $ordre = $this->plaineCalculator->getOrdreOnePresence($presence);
+            $facturePresence->ordre_raison = $this->plaineCalculator->ordre_raison;
             $facturePresence->setCoutBrut($this->plaineCalculator->getPrixByOrdre($plaine, $ordre));
             $facturePresence->setCoutCalculated($this->plaineCalculator->calculateOnePresence($plaine, $presence));
         }

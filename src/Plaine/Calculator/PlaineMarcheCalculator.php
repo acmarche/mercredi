@@ -11,6 +11,8 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PlaineMarcheCalculator implements PlaineCalculatorInterface
 {
+    public ?string $ordre_raison = '';
+
     public function __construct(
         private OrdreService $ordreService,
         private ReductionCalculator $reductionCalculator
@@ -44,7 +46,10 @@ final class PlaineMarcheCalculator implements PlaineCalculatorInterface
 
     public function getOrdreOnePresence(PresenceInterface $presence): int
     {
-        return $this->ordreService->getOrdreOnPresence($presence);
+        $ordre = $this->ordreService->getOrdreOnPresence($presence);
+        $this->ordre_raison = $this->ordreService->raison;
+
+        return $ordre;
     }
 
     public function getPrixByOrdre(Plaine $plaine, $ordre): float

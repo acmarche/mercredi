@@ -5,6 +5,7 @@
         <th>Enfant</th>
         <th>Date</th>
         <th>Coût</th>
+        <th>Raison de l'ordre</th>
     </tr>
     </thead>
     {% for facturePlaine in facturePlaines %}
@@ -20,6 +21,9 @@
                 {% endif %}
             </td>
             <td>{{ facturePlaine.coutCalculated|format_currency('eur') }}</td>
+            <td class="text-muted">
+                {{ facturePlaine.ordre_raison }}
+            </td>
         </tr>
     {% endfor %}
 </table>

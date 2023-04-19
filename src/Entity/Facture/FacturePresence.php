@@ -29,6 +29,7 @@ class FacturePresence
     use OrdreTrait;
     use AbsentTrait;
     use ReductionTrait;
+
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $heure = null;
     #[ORM\Column(type: 'integer', nullable: true)]
@@ -39,6 +40,8 @@ class FacturePresence
     private ?float $cout_brut = null;
     #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
     private ?float $cout_calculated = null;
+    #[ORM\Column(type: 'string', nullable: true)]
+    public ?string $ordre_raison = null;
 
     public function __construct(
         #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'facturePresences')] private FactureInterface $facture,
