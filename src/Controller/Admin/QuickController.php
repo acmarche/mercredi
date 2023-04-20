@@ -49,9 +49,13 @@ final class QuickController extends AbstractController
             $user = $password = null;
 
             if ($tuteur->createAccount) {
-                $user = $this->associationTuteurHandler->handleCreateUserFromTuteur($tuteur);
-                $password = $user->getPlainPassword();
-                $this->addFlash('success', 'Un compte a été créé pour le parent');
+                if (!$tuteur->getEmail()) {
+                    $this->addFlash('danger', 'Le compte n\' pas été créé car vous n\'avez pas encodé de courriel');
+                } else {
+                    $user = $this->associationTuteurHandler->handleCreateUserFromTuteur($tuteur);
+                    $password = $user->getPlainPassword();
+                    $this->addFlash('success', 'Un compte a été créé pour le parent');
+                }
             }
 
             return $this->render(
