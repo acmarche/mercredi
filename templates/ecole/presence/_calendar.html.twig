@@ -7,7 +7,7 @@
                class="cal-month-previous btn-sm btn btn-outline-primary" role="button">
                 <i class="fas fa-arrow-left"></i>
             </a>
-            <strong class="cal-month-name">{{ dateSelected.monthName }} {{ dateSelected.year }}</strong>
+            <strong class="cal-month-name">{{ dateSelected.monthName|trans }} {{ dateSelected.year }}</strong>
             <select class="form-select cal-month-name d-none">
                 <option value="January">January</option>
                 <option value="February">February</option>
@@ -40,10 +40,14 @@
                     {% if day.format('Y-m-d') == dateSelected.format('Y-m-d') %}
                         {% set class = 'badge rounded-pill text-bg-success' %}
                     {% endif %}
-                    <a href="{{ path('mercredi_ecole_presence_index', {'dateSelected': day.format('Y-m-d')}) }}"
-                       class="btn cal-btn {{ class }}" role="button">
-                        {{ day.day }}
-                    </a>
+                    {% if day.format('Y-m-d') in childCare %}
+                        <a href="{{ path('mercredi_ecole_presence_index', {'dateSelected': day.format('Y-m-d')}) }}"
+                           class="btn cal-btn {{ class }}" role="button">
+                            {{ day.day }}
+                        </a>
+                    {% else %}
+                        <button disabled class="btn cal-btn" type="button">{{ day.day }}</button>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </div>

@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Calendar\DateProvider;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\NonUniqueResultException;
@@ -39,7 +40,11 @@ final class PresenceController extends AbstractController
             $dateSelected = Carbon::now()->toImmutable();
         }
 
-        $accueils = $this->jourRepository->findDaysByMonth($dateSelected);
+        $childCare = [];
+        foreach ($this->jourRepository->findDaysByMonth($dateSelected) as $day) {
+            $childCare[] = $day->getDateJour()->format('Y-m-d');
+        }
+
         $days = $this->dateProvider->daysOfMonth($dateSelected);
         $enfants = [];
 
@@ -47,7 +52,8 @@ final class PresenceController extends AbstractController
             if (!$jour = $this->jourRepository->findOneByDate($dateSelected)) {
                 $this->addFlash('danger', 'Il n\'y a pas d\'accueil ce '.$dateSelected->format('d-m-Y'));
             } else {
-                $this->presenceRepository->findPresencesByJourAndEcoles($jour, $this->ecoles->toArray());
+                $presences = $this->presenceRepository->findPresencesByJourAndEcoles($jour, $this->ecoles->toArray());
+                $enfants = PresenceUtils::extractEnfants($presences);
             }
         } catch (NonUniqueResultException $e) {
             $this->addFlash('danger', $e->getMessage());
@@ -68,6 +74,7 @@ final class PresenceController extends AbstractController
             'previous' => $previous,
             'weeks' => $weeks,
             'enfants' => $enfants,
+            'childCare' => $childCare,
         ]);
     }
 
