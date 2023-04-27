@@ -108,7 +108,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     /**
      * @var array|Jour[] $jours
      */
-    public array $jours=[];
+    public array $jours = [];
 
     public Tuteur $tuteur;
 
@@ -143,5 +143,11 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
             fn($relation) => $relation->getTuteur(),
             $this->getRelations()->toArray()
         );
+    }
+
+    public function nomPrenomBirthday(): string
+    {
+        return
+            mb_strtoupper($this->nom, 'UTF-8').' '.$this->prenom;
     }
 }

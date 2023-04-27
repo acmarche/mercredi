@@ -6,12 +6,12 @@ use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -43,18 +43,22 @@ final class AjaxController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/enfants/link', name: 'mercredi_admin_ajax_enfants', methods: ['GET'])]
-    public function enfants(Request $request): Response
+    #[Route(path: '/enfants/link', name: 'mercredi_admin_autocomplete_enfants', methods: ['GET'])]
+    public function enfants(Request $request): JsonResponse
     {
-        $keyword = $request->get('q');
-        $enfants = [];
-        if ($keyword) {
-            $enfants = $this->enfantRepository->findByName($keyword, true, 10);
+        $query = $request->query->get('query');
+        if ($query) {
+            $enfants = $this->enfantRepository->findByName($query, true, 20);
+        } else {
+            $enfants = $this->enfantRepository->findAllActif(20);
         }
+        $results = ['results' => []];
+        foreach ($enfants as $enfant) {
+            $results['results'][] = ['value' => $enfant->getId(), 'text' => $enfant->getNom().' '.$enfant->getPrenom()];
+        }
+        $results['next_page'] = null;
 
-        return $this->render('@AcMarcheMercredi/commun/enfant/_list.html.twig', [
-            'enfants' => $enfants,
-        ]);
+        return $this->json($results);
     }
 
     #[Route(path: '/enfants/nolink', name: 'mercredi_admin_ajax_enfants_no_link', methods: ['GET'])]

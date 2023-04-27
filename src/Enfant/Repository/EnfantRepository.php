@@ -35,14 +35,16 @@ final class EnfantRepository extends ServiceEntityRepository
     /**
      * @return Enfant[]
      */
-    public function findAllActif(): array
+    public function findAllActif(int $max = 10000): array
     {
-        return $this->getNotArchivedQueryBuilder()->getQuery()->getResult();
+        return $this->getNotArchivedQueryBuilder()
+            ->setMaxResults($max)->getQuery()->getResult();
     }
 
     /**
-     * @param $keyword
-     *
+     * @param string $keyword
+     * @param bool $actif
+     * @param int $max
      * @return Enfant[]
      */
     public function findByName(string $keyword, bool $actif = true, int $max = 50): array

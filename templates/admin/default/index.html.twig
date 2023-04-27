@@ -7,16 +7,17 @@
             <h3>Accès rapide</h3>
         </div>
         <div class="card-body">
-            <div class="alert alert-info">Ecrivez le nom de l'enfant pour un accès rapide</div>
+            <div class="alert alert-info">Écrivez le nom de l'enfant pour un accès rapide</div>
 
-            <div {{ stimulus_controller('autocomplete', {url: path('mercredi_admin_ajax_enfants')}) }}>
-                {{ form_start(form) }}
-                {{ form_errors(form) }}
-                {{ form_row(form.nom) }}
-                <input type='hidden' name='enfant_id' data-autocomplete-target="hidden">
-                <ul class="list-group" data-autocomplete-target="results"></ul>
-                {{ form_end(form) }}
-            </div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.nom) }}
+            <input type='hidden' name='enfant_id' data-autocomplete-target="hidden">
+            <button type="submit" name="submit" class="btn btn-primary">
+                <i class="fas fa-plane"></i> Go
+            </button>
+            {{ form_end(form) }}
+
         </div>
         <div class="card-footer">
             <a href="{{ path('mercredi_front_home') }}">
