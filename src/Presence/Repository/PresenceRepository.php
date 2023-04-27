@@ -189,6 +189,26 @@ final class PresenceRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Presence[]
+     */
+    public function findPresencesByJourAndEcoles(Jour $jour, array $ecole): array
+    {
+        $queryBuilder = $this->createQBlWithoutPlaine();
+
+        if ($jour) {
+            $queryBuilder->andWhere('presence.jour = :jour')
+                ->setParameter('jour', $jour);
+        }
+
+        if (null !== $ecole) {
+            $queryBuilder->andWhere('enfant.ecole = :ecole')
+                ->setParameter('ecole', $ecole);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param array|Jour[] $jours
      *
      * @return Presence[]

@@ -2,7 +2,7 @@
     <div class="cal">
 
         <div class="cal-month">
-            <a href="{{ path('mercredi_ecole_presence_index', {'yearmonth':previous.format('Y-m')}) }}"
+            <a href="{{ path('mercredi_ecole_presence_index', {'dateSelected':previous.format('Y-m')~'-01'}) }}"
                title="Mois précédent"
                class="cal-month-previous btn-sm btn btn-outline-primary" role="button">
                 <i class="fas fa-arrow-left"></i>
@@ -22,7 +22,7 @@
                 <option value="November">November</option>
                 <option value="December">December</option>
             </select>
-            <a href="{{ path('mercredi_ecole_presence_index', {'yearmonth':next.format('Y-m')}) }}"
+            <a href="{{ path('mercredi_ecole_presence_index', {'dateSelected':next.format('Y-m')~'-01'}) }}"
                title="Mois suivant"
                class="cal-month-next btn btn-sm btn-outline-primary" role="button">
                 <i class="fas fa-arrow-right"></i>
@@ -40,7 +40,7 @@
                     {% if day.format('Y-m-d') == dateSelected.format('Y-m-d') %}
                         {% set class = 'badge rounded-pill text-bg-success' %}
                     {% endif %}
-                    <a href="{{ path('mercredi_ecole_presence_index', {'yearmonth': dateSelected.year~'-'~dateSelected.month}) }}"
+                    <a href="{{ path('mercredi_ecole_presence_index', {'dateSelected': day.format('Y-m-d')}) }}"
                        class="btn cal-btn {{ class }}" role="button">
                         {{ day.day }}
                     </a>

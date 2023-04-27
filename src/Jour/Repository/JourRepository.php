@@ -163,6 +163,17 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
+     * @throws NonUniqueResultException
+     */
+    public function findOneByDate(\DateTimeInterface $dateTime): ?Jour
+    {
+        return $this->createQueryBuilder('jour')
+            ->andWhere('jour.date_jour LIKE :date')
+            ->setParameter('date', $dateTime->format('Y-m-d').'%')
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @return array|Jour[]
      */
     public function findByAnimateur(Animateur $animateur): array

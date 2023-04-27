@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Ecole\Utils\EcoleUtils;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -12,7 +13,7 @@ trait GetEcolesTrait
     private EcoleUtils $ecoleUtils;
 
     /**
-     * @var Ecole[]
+     * @var Ecole[]|Collection
      */
     private iterable  $ecoles;
 

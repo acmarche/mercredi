@@ -7,12 +7,15 @@ use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/presence')]
+#[IsGranted('ROLE_MERCREDI_ECOLE')]
 final class PresenceController extends AbstractController
 {
     use GetEcolesTrait;
@@ -25,43 +28,40 @@ final class PresenceController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/{yearmonth}', name: 'mercredi_ecole_presence_index')]
-    #[IsGranted('ROLE_MERCREDI_ECOLE')]
-    public function default(string $yearmonth = null): Response
+    #[Route(path: '/{dateSelected}', name: 'mercredi_ecole_presence_index')]
+    public function default(\DateTime $dateSelected = null): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
             return $response;
         }
-        $year = date('Y');
-        $currentMonth = new \DateTime();
-        $days = $this->jourRepository->findDaysByMonth($currentMonth);
-        $dateSelected = Carbon::now()->toImmutable();
-        if ($yearmonth) {
-            $dateSelected = $this->dateProvider->createDateFromYearMonth($yearmonth);
-        } else {
-            $yearmonth = $dateSelected->format('Y'.'-'.$dateSelected->month);
+
+        if (!$dateSelected) {
+            $dateSelected = Carbon::now()->toImmutable();
         }
 
-        //$presences = $this->presenceRepository->findByMonthAndCategory($yearmonth);
+        $accueils = $this->jourRepository->findDaysByMonth($dateSelected);
         $days = $this->dateProvider->daysOfMonth($dateSelected);
-        $data = [];
-        foreach ($days as $day) {
-            /*  $data[$day->day] = $this->presenceRepository->findPlanningByDayAndCategory(
-                  $day
-              );*/
-        }
         $enfants = [];
-        $next = $dateSelected->addMonth();
-        $previous = $dateSelected->subMonth();
-        $today = Carbon::today();
 
+        try {
+            if (!$jour = $this->jourRepository->findOneByDate($dateSelected)) {
+                $this->addFlash('danger', 'Il n\'y a pas d\'accueil ce '.$dateSelected->format('d-m-Y'));
+            } else {
+                $this->presenceRepository->findPresencesByJourAndEcoles($jour, $this->ecoles->toArray());
+            }
+        } catch (NonUniqueResultException $e) {
+            $this->addFlash('danger', $e->getMessage());
+        }
+
+        $carbon = new CarbonImmutable($dateSelected);
+        $next = $carbon->addMonth();
+        $previous = $carbon->subMonth();
+        $today = Carbon::today();
         $weeks = $this->dateProvider->weeksOfMonth($dateSelected);
-        //$enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom, $accueil);
-        //$presences = $this->presenceRepository->findWithoutPlaineByEnfant($enfant);
 
         return $this->render('@AcMarcheMercrediEcole/presence/index.html.twig', [
             'days' => $days,
-            'dateSelected' => $dateSelected,
+            'dateSelected' => $carbon,
             'next' => $next,
             'today' => $today,
             'weekdays' => $this->dateProvider->weekDaysName(),
