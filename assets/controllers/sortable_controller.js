@@ -1,21 +1,19 @@
-function _defineProperty(obj, key, value) {
-    if (key in obj) {
-        Object.defineProperty(obj, key, {value: value, enumerable: true, configurable: true, writable: true});
-    } else {
-        obj[key] = value;
-    }
-    return obj;
-}
-
-import {Controller} from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import Sortable from 'sortablejs';
-import Rails from '@rails/ujs';
 
-//copy past from https://github.com/stimulus-components/stimulus-sortable
-//to change method POST
 export default class _class extends Controller {
+
+    static targets = []
+
+    static values = {
+        updateUrl: String,
+        animation: String,
+        handle: String,
+    }
+
     initialize() {
         this.end = this.end.bind(this);
+        this.update = this.update.bind(this);
     }
 
     connect() {
@@ -30,28 +28,53 @@ export default class _class extends Controller {
         this.sortable = undefined;
     }
 
+    async updateSync(questions) {
+
+        const response = await fetch(`${this.updateUrlValue}`, {
+            method: 'POST',
+            body: JSON.stringify({'questions': questions}),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+
+        let responseString = await response.text();
+
+        var data = JSON.parse(responseString);
+        if (data.error) {
+
+        } else {
+
+        }
+    }
+
+    // Changed sorting within list
+    update(evt) {
+
+        let list = evt.from;
+        var radios = list.querySelectorAll('.list-group-item');
+        let questions = [];
+
+        Array.prototype.forEach.call(radios, function (el, i) {
+            questions.push(el.dataset.questionid);
+        });
+
+        this.updateSync(questions)
+    }
+
     end({
             item,
             newIndex
         }) {
-        if (!item.dataset.sortableUpdateUrl || !window._rails_loaded) return;
-        const resourceName = this.resourceNameValue;
-        const paramName = this.paramNameValue || 'position';
-        const param = resourceName ? `${resourceName}[${paramName}]` : paramName;
-        const data = new FormData();
-        data.append(param, newIndex + 1);
-        Rails.ajax({
-            url: item.dataset.sortableUpdateUrl,
-            type: 'POST',
-            data
-        });
+
     }
 
     get options() {
         return {
             animation: this.animationValue || this.defaultOptions.animation || 150,
             handle: this.handleValue || this.defaultOptions.handle || undefined,
-            onEnd: this.end
+            onEnd: this.end,
+            onUpdate: this.update
         };
     }
 
@@ -61,9 +84,3 @@ export default class _class extends Controller {
 
 }
 
-_defineProperty(_class, "values", {
-    resourceName: String,
-    paramName: String,
-    animation: Number,
-    handle: String
-});

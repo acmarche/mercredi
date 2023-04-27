@@ -1,4 +1,5 @@
 @import '~bootstrap';
+@import 'calendar.css';
 
 .search-preview {
     position: absolute;
@@ -36,6 +37,7 @@ legend.required:after {
 .icon-rose {
     color: #e83e8c;
 }
+
 /**
 loader
  */
