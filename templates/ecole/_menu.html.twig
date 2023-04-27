@@ -2,6 +2,11 @@
 
 <li class="nav-item{% if action == 'mercredi_ecole_enfant_index' %} active {% endif %}">
     <a class="nav-link"
+       href="{{ path('mercredi_ecole_presence_index') }}"><i class="fas fa-list"></i> Les présences</a>
+</li>
+
+<li class="nav-item{% if action == 'mercredi_ecole_enfant_index' %} active {% endif %}">
+    <a class="nav-link"
        href="{{ path('mercredi_ecole_enfant_index') }}"><i class="fas fa-list"></i> Les enfants</a>
 </li>
 

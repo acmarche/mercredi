@@ -1,0 +1,18 @@
+<span class="cal-month-name text-primary">
+    <strong>{{ dateSelected.monthName|capitalize }} {{ dateSelected.year }}</strong>
+</span>
+
+<a href="{{ path('mercredi_ecole_presence_index', {'yearmonth':previous.format('Y-m')}) }}"
+   title="Mois précédent"
+   class="cal-month-previous btn-sm btn btn-outline-primary" role="button">
+    <i class="fas fa-arrow-left"></i>
+</a>
+<a href="{{ path('mercredi_ecole_presence_index', {'yearmonth':next.format('Y-m')}) }}"
+   title="Mois suivant"
+   class="cal-month-next btn btn-sm btn-outline-primary" role="button">
+    <i class="fas fa-arrow-right"></i>
+</a>
+<a class="cal-month-today btn btn-sm btn-outline-primary" role="button"
+   href="#">
+    <span class="font-weight-bolder">Aujourd'hui</span>
+</a>
