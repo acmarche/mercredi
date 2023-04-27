@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Relation\Form\AddChildAutocompleteType;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
 use AcMarche\Mercredi\Tuteur\Form\SearchTuteurType;
@@ -97,12 +98,16 @@ final class TuteurController extends AbstractController
     public function show(Tuteur $tuteur): Response
     {
         $relations = $this->relationRepository->findByTuteur($tuteur);
+        $form = $this->createForm(AddChildAutocompleteType::class, null, [
+            'action' => $this->generateUrl('mercredi_admin_relation_attach_enfant', ['id' => $tuteur->getId()]),
+        ]);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/show.html.twig',
             [
                 'tuteur' => $tuteur,
                 'relations' => $relations,
+                'formAddChild' => $form,
             ]
         );
     }

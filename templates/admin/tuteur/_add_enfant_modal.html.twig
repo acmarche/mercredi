@@ -10,21 +10,11 @@
             </div>
             <div class="modal-body">
                 <h6 class="text-success" id="myModalLabel">Un enfant existant:</h6>
-
-                <form method="post" action="{{ path('mercredi_admin_relation_attach_enfant', {'id': tuteur.id}) }}">
-                    <div {{ stimulus_controller('autocomplete', {url: path('mercredi_admin_ajax_enfants_no_link')}) }}>
-                        <div class="form-group2">
-                            <label for="search"> </label>
-                            <input type="search" id="search" name="search" placeholder="Rechercher"
-                                   class="form-control" autocomplete="off" data-autocomplete-target="input">
-                        </div>
-                        <input type='hidden' name='enfantId' data-autocomplete-target="hidden">
-                        <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="_token" value="{{ csrf_token('attachEnfant' ~ tuteur.id) }}">
-                        <button type="submit" class="btn btn-primary mt-2">Définir comme enfant</button>
-                        <ul class="list-group" data-autocomplete-target="results"></ul>
-                    </div>
-                </form>
+                {{ form_start(formAddChild) }}
+                {{ form_errors(formAddChild) }}
+                {{ form_row(formAddChild.nom) }}
+                <button type="submit" class="btn btn-primary mt-2">Définir comme son enfant</button>
+                {{ form_end(formAddChild) }}
                 <br/>
                 ou <a href="{{ path('mercredi_admin_enfant_new', { 'id' : tuteur.id }) }}">ajouter un nouvel enfant</a>
 

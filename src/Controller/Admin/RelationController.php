@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Relation;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Relation\Form\AddChildAutocompleteType;
 use AcMarche\Mercredi\Relation\Form\RelationType;
 use AcMarche\Mercredi\Relation\Message\RelationCreated;
 use AcMarche\Mercredi\Relation\Message\RelationDeleted;
@@ -11,13 +12,13 @@ use AcMarche\Mercredi\Relation\Message\RelationUpdated;
 use AcMarche\Mercredi\Relation\RelationHandler;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Exception;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/relation')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -33,21 +34,24 @@ final class RelationController extends AbstractController
     #[Route(path: '/attach/enfant/{id}', name: 'mercredi_admin_relation_attach_enfant', methods: ['POST'])]
     public function attachEnfant(Request $request, Tuteur $tuteur): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('attachEnfant'.$tuteur->getId(), $request->request->get('_token'))) {
-            $enfantId = (int) $request->request->get('enfantId');
+        $form = $this->createForm(AddChildAutocompleteType::class, null, [
+            'action' => $this->generateUrl('mercredi_admin_relation_attach_enfant', ['id' => $tuteur->getId()]),
+        ]);
+        $form->handleRequest($request);
 
-            try {
-                $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfantId);
-                $this->dispatcher->dispatch(new RelationCreated($relation->getId()));
-            } catch (Exception $e) {
-                $this->addFlash('danger', $e->getMessage());
-
-                return $this->redirectToRoute('mercredi_admin_tuteur_show', [
-                    'id' => $tuteur->getId(),
-                ]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $enfant = $data['nom'];
+            if (!$enfant) {
+                $this->addFlash('danger', 'Enfant non trouvé');
+            } else {
+                try {
+                    $relation = $this->relationHandler->handleAttachEnfant($tuteur, $enfant->getId());
+                    $this->dispatcher->dispatch(new RelationCreated($relation->getId()));
+                } catch (Exception $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                }
             }
-        } else {
-            $this->addFlash('danger', 'Formulaire non valide');
         }
 
         return $this->redirectToRoute('mercredi_admin_tuteur_show', [
@@ -83,13 +87,13 @@ final class RelationController extends AbstractController
     public function delete(Request $request): RedirectResponse
     {
         $relationId = $request->request->get('relationid');
-        if (! $relationId) {
+        if (!$relationId) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
         }
         $relation = $this->relationRepository->find($relationId);
-        if (! $relation instanceof Relation) {
+        if (!$relation instanceof Relation) {
             $this->addFlash('danger', 'Relation non trouvée');
 
             return $this->redirectToRoute('mercredi_admin_home');
