@@ -16,6 +16,10 @@ use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use DateTime;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Pour migration
+ * @deprecated
+ */
 class FactureImport
 {
     private MercrediPdo $pdo;
