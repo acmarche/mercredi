@@ -53,6 +53,8 @@ class Accueil implements TimestampableInterface, UuidableInterface, Stringable
     #[ORM\Column(type: 'string', nullable: false, length: 50)]
     private ?string $heure = null;
 
+    public float $cout = 0;//pour attestation
+
     public function __construct(
         Tuteur $tuteur,
         Enfant $enfant
