@@ -97,29 +97,8 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
     {% endfor %}
 </table>
 <br/>
-<strong>Tarif journalier</strong>
-<br>
-<table class="table table-bordered">
-    <tr>
-        <td>
-            <strong>Tarifs par mercredi **</strong><br/>
-            Premier enfant : 6 €<br/>
-            Deuxième enfant :4 €<br/>
-            Les suivants: 3 €
-        </td>
-        <td>
-            <strong>Tarifs des journées pédagogiques et plaines de vacances par jour **</strong><br/>
-            Premier enfant : 8 €<br/>
-            Deuxième enfant : 6 €<br/>
-            Les suivants: 4 €<br/>
-        </td>
-        <td>
-            <strong>** Des réductions peuvent être appliquées suivant différents critères</strong>
-        </td>
-    </tr>
-</table>
-<br/><br/>
 <br/>
+
 Le soussigné certifie exact les renseignements mentionnés ci-avant.
 <br/><br>
 
@@ -131,8 +110,28 @@ Personne habilitée à représenter l’organisme de garde ou représentant la p
 Nom :{{ organisation.responsable_nom }} {{ organisation.responsable_prenom }}<br>
 Qualité :{{ organisation.responsable_fonction }}<br>
 <br/><br>
-<img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signature_girard.jpg')) }}" height="70"
-     alt="signature">
+<table class="table table-bordered text-center">
+    <tr>
+        <td>
+            La Directrice Générale,<br>
+            Marie-France DEWEZ
+        </td>
+        <td>
+            La Bourgmestre,<br>
+            Martine SCHMIT
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/dewez.jpg')) }}"
+                 height="70" alt="signature"/>
+        </td>
+        <td>
+            <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/bgmhotton.png')) }}"
+                 height="70" alt="signature"/>
+        </td>
+    </tr>
+</table>
 <br/><br>
 Explications
 <br/><br>
