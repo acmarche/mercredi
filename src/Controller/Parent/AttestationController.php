@@ -2,7 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Parent;
 
-use AcMarche\Mercredi\Attestation\AttestationGenerator;
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Attestation\AttestationGeneratorInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
@@ -22,7 +23,8 @@ final class AttestationController extends AbstractController
     public function __construct(
         private RelationRepository $relationRepository,
         private PresenceRepository $presenceRepository,
-        private AttestationGenerator $attestationGenerator,
+        private AccueilRepository $accueilRepository,
+        private AttestationGeneratorInterface $attestationGenerator,
     ) {
     }
 
@@ -33,24 +35,16 @@ final class AttestationController extends AbstractController
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
-        $presences = $this->presenceRepository->findByTuteurAndEnfantAndYear($this->tuteur, $enfant, $year);
-        if (count($presences) === 0) {
+
+        if ($this->attestationGenerator->hasAttestation($this->tuteur, $enfant, $year)) {
             $this->addFlash('danger', 'Aucune présence en '.$year.' pour cette enfant');
 
             return $this->redirectToRoute('mercredi_parent_tuteur_show');
         }
 
-        $data = $this->attestationGenerator->newOne($presences);
-        $html = $this->renderView('@AcMarcheMercredi/admin/attestation/one/2022.html.twig', [
-            'data' => $data,
-            'tuteur' => $this->tuteur,
-            'enfant' => $enfant,
-            'year' => $year,
-            'today' => new \DateTime(),
-            'organisation' => $this->organisation,
-        ]);
+        $html = $this->attestationGenerator->renderOne($this->tuteur, $enfant, $year);
 
-     //   return new Response($html);
+        //   return new Response($html);
 
         return $this->downloadPdf($html, 'attestation-'.$enfant->getSlug().'-'.$year.'.pdf');
     }

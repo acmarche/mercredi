@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Attestation;
 
+use AcMarche\Mercredi\Contrat\Attestation\AttestationGeneratorInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Utils\StringUtils;
@@ -13,7 +14,7 @@ class XlsGenerator
     private Worksheet $worksheet;
 
     public function __construct(
-        private AttestationGenerator $attestationGenerator
+        private AttestationGeneratorInterface $attestationGenerator
     ) {
     }
 

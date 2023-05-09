@@ -2,9 +2,8 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
-use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
-use AcMarche\Mercredi\Attestation\AttestationGenerator;
 use AcMarche\Mercredi\Attestation\XlsGenerator;
+use AcMarche\Mercredi\Contrat\Attestation\AttestationGeneratorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Entity\Enfant;
@@ -31,7 +30,6 @@ final class AttestationController extends AbstractController
     use PdfDownloaderTrait, OrganisationPropertyInitTrait, SpreadsheetDownloaderTrait;
 
     public function __construct(
-        private AccueilRepository $accueilRepository,
         private JourRepository $jourRepository,
         private PresenceRepository $presenceRepository,
         private PaiementRepository $paiementRepository,
@@ -40,7 +38,7 @@ final class AttestationController extends AbstractController
         private OrdreService $ordreService,
         private FactureCalculatorInterface $factureCalculator,
         private XlsGenerator $xlsGenerator,
-        private AttestationGenerator $attestationGenerator,
+        private AttestationGeneratorInterface $attestationGenerator,
         private FactureRepository $factureRepository,
         private FactureUtils $factureUtils,
     ) {
@@ -59,26 +57,13 @@ final class AttestationController extends AbstractController
     #[Route('/attestation/{tuteur}/{enfant}/{year}', name: 'mercredi_admin_attestation_new')]
     public function index(Tuteur $tuteur, Enfant $enfant, int $year): Response
     {
-        $presences = $this->presenceRepository->findByTuteurAndEnfantAndYear($tuteur, $enfant, $year);
-        if (count($presences) === 0) {
+        if ($this->attestationGenerator->hasAttestation($tuteur, $enfant, $year)) {
             $this->addFlash('danger', 'Aucune présence en '.$year.' pour cette enfant');
 
             return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }
 
-        if ($year > 2021) {
-            $data = $this->attestationGenerator->newOne($presences);
-            $html = $this->renderView('@AcMarcheMercredi/admin/attestation/one/2022.html.twig', [
-                'data' => $data,
-                'tuteur' => $tuteur,
-                'enfant' => $enfant,
-                'year' => $year,
-                'today' => new \DateTime(),
-                'organisation' => $this->organisation,
-            ]);
-        } else {
-            $html = $this->oldOne($tuteur, $enfant, $year, $presences);
-        }
+        $html = $this->attestationGenerator->renderOne($tuteur, $enfant, $year);
 
         //    return new Response($html);
 

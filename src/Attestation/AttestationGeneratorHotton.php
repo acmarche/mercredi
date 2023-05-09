@@ -2,22 +2,49 @@
 
 namespace AcMarche\Mercredi\Attestation;
 
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Attestation\AttestationGeneratorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
+use AcMarche\Mercredi\Entity\Enfant;
+use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use Twig\Environment;
 
-class AttestationGenerator
+class AttestationGeneratorHotton implements AttestationGeneratorInterface
 {
+    use OrganisationPropertyInitTrait;
+
     public function __construct(
         private PresenceRepository $presenceRepository,
+        private AccueilRepository $accueilRepository,
         private PresenceCalculatorInterface $presenceCalculator,
         private FactureCalculatorInterface $factureCalculator,
+        private Environment $environment
     ) {
     }
 
-    public function newOne(array $presences): array
+    public function hasAttestation(Tuteur $tuteur, Enfant $enfant, int $year): bool
     {
-        return $this->treatment($presences);
+        $presences = $this->presenceRepository->findByTuteurAndEnfantAndYear($tuteur, $enfant, $year);
+
+        return count($presences) === 0;
+    }
+
+    public function renderOne(Tuteur $tuteur, Enfant $enfant, int $year): string
+    {
+        $presences = $this->presenceRepository->findByTuteurAndEnfantAndYear($tuteur, $enfant, $year);
+        $data = $this->treatment($presences);
+
+        return $this->environment->render('@AcMarcheMercredi/admin/attestation/one/hotton/2022.html.twig', [
+            'data' => $data,
+            'tuteur' => $tuteur,
+            'enfant' => $enfant,
+            'year' => $year,
+            'today' => new \DateTime(),
+            'organisation' => $this->organisation,
+        ]);
     }
 
     public function getDataByYear(int $year): array
@@ -25,7 +52,6 @@ class AttestationGenerator
         $presences = $this->presenceRepository->findByYear($year);
 
         return $this->treatment($presences);
-
     }
 
     private function treatment(array $presences): array
@@ -56,4 +82,5 @@ class AttestationGenerator
 
         return $data;
     }
+
 }
