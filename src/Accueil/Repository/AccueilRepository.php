@@ -175,7 +175,7 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|Accueil[]
+     * @return Accueil[]
      */
     public function findByTuteurAndMonth(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
@@ -192,13 +192,17 @@ final class AccueilRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|Accueil[]
+     * @return Accueil[]
      */
-    public function findRetardByEnfant(Enfant $enfant): array
+    public function findByTuteurAndEnfantAndYear(?Tuteur $tuteur, Enfant $enfant, int $year): array
     {
         return $this->createQbl()
+            ->andWhere('accueil.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
             ->andWhere('accueil.enfant = :enfant')
             ->setParameter('enfant', $enfant)
+            ->andWhere('accueil.date_jour LIKE :date')
+            ->setParameter('date', $year.'%')
             ->getQuery()->getResult();
     }
 
