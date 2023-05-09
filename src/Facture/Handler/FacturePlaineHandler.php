@@ -45,7 +45,7 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
         $this->attachPresences($facture, $plaine, $presences);
         $this->factureFactory->setEcoles($facture);
 
-        if (! $facture->getId()) {
+        if (!$facture->getId()) {
             $this->factureRepository->persist($facture);
         }
 
@@ -58,10 +58,15 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
     {
         foreach ($presences as $presence) {
             if (($facturePresence = $this->facturePresenceRepository->findByIdAndType(
-                $presence->getId(),
-                FactureInterface::OBJECT_PLAINE
-            )) === null) {
-                $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PLAINE);
+                    $presence->getId(),
+                    FactureInterface::OBJECT_PLAINE
+                )) === null) {
+                $facturePresence = new FacturePresence(
+                    $facture,
+                    $presence->getEnfant()->getId(),
+                    $presence->getId(),
+                    FactureInterface::OBJECT_PLAINE
+                );
                 $this->facturePresenceRepository->persist($facturePresence);
             }
 

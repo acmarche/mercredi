@@ -43,11 +43,21 @@ class FacturePresence
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $ordre_raison = null;
 
-    public function __construct(
-        #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'facturePresences')] private FactureInterface $facture,
-        #[ORM\Column(type: 'integer', nullable: false)] private ?int $presenceId,
-        #[ORM\Column(type: 'string', length: 100, nullable: false)] private ?string $objectType
-    ) {
+    #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'facturePresences')]
+    private FactureInterface $facture;
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private ?int $presenceId;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    public ?int $enfantId;
+    #[ORM\Column(type: 'string', length: 100, nullable: false)]
+    private ?string $objectType;
+
+    public function __construct(FactureInterface $facture, ?int $enfantId, ?int $presenceId, ?string $objectType)
+    {
+        $this->facture = $facture;
+        $this->enfantId = $enfantId;
+        $this->presenceId = $presenceId;
+        $this->objectType = $objectType;
     }
 
     public function getPresenceDate(): ?\DateTimeInterface

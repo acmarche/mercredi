@@ -195,7 +195,12 @@ final class FactureHandler implements FactureHandlerInterface
     public function attachPresences(Facture $facture, array $presences): void
     {
         foreach ($presences as $presence) {
-            $facturePresence = new FacturePresence($facture, $presence->getId(), FactureInterface::OBJECT_PRESENCE);
+            $facturePresence = new FacturePresence(
+                $facture,
+                $presence->getEnfant()->getId(),
+                $presence->getId(),
+                FactureInterface::OBJECT_PRESENCE
+            );
             $this->registerDataOnFacturePresence($facture, $presence, $facturePresence);
             $facturePresence->setCoutCalculated($this->presenceCalculator->calculate($presence));
             $this->facturePresenceRepository->persist($facturePresence);
@@ -209,7 +214,12 @@ final class FactureHandler implements FactureHandlerInterface
     private function attachAccueils(Facture $facture, array $accueils): void
     {
         foreach ($accueils as $accueil) {
-            $facturePresence = new FacturePresence($facture, $accueil->getId(), FactureInterface::OBJECT_ACCUEIL);
+            $facturePresence = new FacturePresence(
+                $facture,
+                $accueil->getEnfant()->getId(),
+                $accueil->getId(),
+                FactureInterface::OBJECT_ACCUEIL
+            );
             $facturePresence->setPresenceDate($accueil->getDateJour());
             $facturePresence->setHeure($accueil->getHeure());
             $facturePresence->setDuree($accueil->getDuree());
@@ -219,6 +229,7 @@ final class FactureHandler implements FactureHandlerInterface
             }
             $facturePresence->setNom($enfant->getNom());
             $facturePresence->setPrenom($enfant->getPrenom());
+            $facturePresence->enfantId = $enfant->getId();
             $facturePresence->setCoutBrut($this->accueilCalculator->getPrix($accueil));
             $facturePresence->setCoutCalculated($this->accueilCalculator->calculate($accueil));
             $this->facturePresenceRepository->persist($facturePresence);
