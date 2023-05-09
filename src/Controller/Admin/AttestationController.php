@@ -67,7 +67,7 @@ final class AttestationController extends AbstractController
 
         //    return new Response($html);
 
-        return $this->downloadPdf($html, 'one-'.$enfant->getSlug().'-'.$year.'.pdf');
+        return $this->downloadPdf($html, 'attestation-'.$enfant->getSlug().'-'.$year.'.pdf');
     }
 
     #[Route(path: '/{year}', name: 'mercredi_admin_attestation_spf')]
