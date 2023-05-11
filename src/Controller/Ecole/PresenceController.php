@@ -47,16 +47,13 @@ final class PresenceController extends AbstractController
 
         $days = $this->dateProvider->daysOfMonth($dateSelected);
         $enfants = [];
+        $jours = $this->jourRepository->findByDate($dateSelected);
 
-        try {
-            if (!$jour = $this->jourRepository->findOneByDate($dateSelected)) {
-                $this->addFlash('danger', 'Il n\'y a pas d\'accueil ce '.$dateSelected->format('d-m-Y'));
-            } else {
-                $presences = $this->presenceRepository->findPresencesByJourAndEcoles($jour, $this->ecoles->toArray());
-                $enfants = PresenceUtils::extractEnfants($presences);
-            }
-        } catch (NonUniqueResultException $e) {
-            $this->addFlash('danger', $e->getMessage());
+        if (count($jours) === 0) {
+            $this->addFlash('danger', 'Il n\'y a pas d\'accueil ce '.$dateSelected->format('d-m-Y'));
+        } else {
+            $presences = $this->presenceRepository->findPresencesByJoursAndEcoles($jours, $this->ecoles->toArray());
+            $enfants = PresenceUtils::extractEnfants($presences);
         }
 
         $carbon = new CarbonImmutable($dateSelected);

@@ -5,7 +5,6 @@ namespace AcMarche\Mercredi\Presence\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
-use AcMarche\Mercredi\Entity\Paiement;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
@@ -42,22 +41,6 @@ final class PresenceRepository extends ServiceEntityRepository
         }
 
         return $jours;
-    }
-
-    /**
-     * Pour le calcul du cout de la presence
-     * On check s'il y a des frères et soeurs présents.
-     */
-    public function findByTuteurEnfantAndJour(Tuteur $tuteur, Enfant $enfant, Jour $jour): ?Presence
-    {
-        return $this->createQBlWithoutPlaine()
-            ->andWhere('presence.enfant = :enfant')
-            ->setParameter('enfant', $enfant)
-            ->andWhere('presence.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
-            ->andWhere('presence.jour = :jour')
-            ->setParameter('jour', $jour)
-            ->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -191,21 +174,14 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findPresencesByJourAndEcoles(Jour $jour, array $ecole): array
+    public function findPresencesByJoursAndEcoles(array $days, array $ecoles): array
     {
-        $queryBuilder = $this->createQBlWithoutPlaine();
-
-        if ($jour) {
-            $queryBuilder->andWhere('presence.jour = :jour')
-                ->setParameter('jour', $jour);
-        }
-
-        if (null !== $ecole) {
-            $queryBuilder->andWhere('enfant.ecole = :ecole')
-                ->setParameter('ecole', $ecole);
-        }
-
-        return $queryBuilder->getQuery()->getResult();
+        return $this->createQBlWithoutPlaine()
+            ->andWhere('presence.jour IN (:jours)')
+            ->setParameter('jours', $days)
+            ->andWhere('enfant.ecole IN (:ecoles)')
+            ->setParameter('ecoles', $ecoles)
+            ->getQuery()->getResult();
     }
 
     /**
@@ -274,27 +250,6 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findWithOutPaiementAndFacture(): array
-    {
-        $dateStart = \DateTime::createFromFormat('Y-m-d', '2019-01-01');
-        $dateEnd = \DateTime::createFromFormat('Y-m-d', '2022-07-01');
-
-        $qbl = $this->createQBlWithoutPlaine()
-            ->andWhere('presence.paiement IS NULL')
-            ->andWhere('jour.date_jour >= :datestart')
-            ->setParameter('datestart', $dateStart)
-            ->andWhere('jour.date_jour <= :dateend')
-            ->setParameter('dateend', $dateEnd)
-            ->addOrderBy('jour.date_jour', 'DESC')
-            ->addOrderBy('enfant.nom');
-
-
-        return $qbl->getQuery()->getResult();
-    }
-
-    /**
-     * @return Presence[]
-     */
     public function findWithOutPaiementPlaine(?Tuteur $tuteur = null): array
     {
         $dateStart = \DateTime::createFromFormat('Y-m-d', '2019-01-01');
@@ -345,20 +300,6 @@ final class PresenceRepository extends ServiceEntityRepository
             $this->createQBlBase()
                 ->andWhere('jour.date_jour LIKE :year')
                 ->setParameter('year', $year.'-%')
-                ->getQuery()
-                ->getResult();
-    }
-
-    /**
-     * @param Paiement $paiement
-     * @return array|Presence[]
-     */
-    public function findByPaiement(Paiement $paiement): array
-    {
-        return
-            $this->createQBlBase()
-                ->andWhere('presence.paiement = :paiement')
-                ->setParameter('paiement', $paiement)
                 ->getQuery()
                 ->getResult();
     }

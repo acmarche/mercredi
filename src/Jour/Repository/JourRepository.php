@@ -174,6 +174,18 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param DateTimeInterface $dateSelected
+     * @return Jour[]
+     */
+    public function findByDate(\DateTimeInterface $dateSelected): array
+    {
+        return $this->createQueryBuilder('jour')
+            ->andWhere('jour.date_jour LIKE :date')
+            ->setParameter('date', $dateSelected->format('Y-m-d').'%')
+            ->getQuery()->getResult();
+    }
+
+    /**
      * @return array|Jour[]
      */
     public function findByAnimateur(Animateur $animateur): array
@@ -208,4 +220,5 @@ final class JourRepository extends ServiceEntityRepository
             ->addOrderBy('jour.date_jour', 'ASC');
 
     }
+
 }
