@@ -49,7 +49,9 @@
                                 {{ facture.payeLe ? facture.payeLe | format_date('short') }}
                             </td>
                             <td>
-                                {{ facture.envoyeLe ? facture.envoyeLe | format_date('short') }}
+                                {% if facture.envoyeLe %}
+                                    {{ facture.envoyeLe | format_date('short') }}
+                                {% endif %}
                             </td>
                             <td>
                                 {{ facture.communication }}
