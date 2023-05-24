@@ -12,7 +12,6 @@ use DateTime;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 #[AsCommand(
-    name: 'mercredi:send-facture',
+    name: 'mercredi:facture-send',
     description: 'Envoie les factures par mail'
 )]
 class SendFactureCommand extends Command
@@ -39,21 +38,12 @@ class SendFactureCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('month', InputArgument::OPTIONAL, 'Mois format mm-yyyy')
             ->addOption('force', null, InputOption::VALUE_OPTIONAL, 'Envoye facture déjà envoyée', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $force = (bool)$input->getOption('force');
-        /* $month = $input->getArgument('month');
-
-         if (preg_match("#^\d{2}-\d{4}$#", $month) == false) {
-             $message = $this->adminEmailFactory->messagAlert("Mauvais format de date", "Date: ".$month);
-             $this->notificationMailer->sendAsEmailNotification($message);
-
-             return Command::FAILURE;
-         }*/
 
         $io = new SymfonyStyle($input, $output);
         $crons = $this->factureCronRepository->findNotDone();
