@@ -17,12 +17,12 @@ use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use DateTime;
 use Exception;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
 #[Route(path: '/facture/send')]
@@ -148,12 +148,12 @@ final class FactureSendController extends AbstractController
     #[Route(path: '/all/pdf/{month}/{pause}', name: 'mercredi_admin_facture_create_pdf_all', methods: ['GET'])]
     public function pdfAll(string $month, int $pause): Response
     {
-        $factures = $this->factureRepository->findFacturesByMonth($month);
         if (null === $this->factureCronRepository->findOneByMonth($month)) {
             $this->addFlash('danger', 'Erreur aucun cron trouvé');
 
             return $this->redirectToRoute('mercredi_admin_facture_index');
         }
+        $factures = $this->factureRepository->findFacturesByMonth($month);
         if (1 === $pause) {
             return $this->render(
                 '@AcMarcheMercrediAdmin/facture/create_pdf.html.twig',
@@ -202,7 +202,11 @@ final class FactureSendController extends AbstractController
     public function sendAll(string $month, int $pause): Response
     {
         $i = 0;
-        $cron = $this->factureCronRepository->findOneByMonth($month);
+        if (!$cron = $this->factureCronRepository->findOneByMonth($month)) {
+            $this->addFlash('danger', 'Erreur aucun cron trouvé');
+
+            return $this->redirectToRoute('mercredi_admin_facture_index');
+        }
         $factures = $this->factureRepository->findFacturesByMonthNotSend($month);
         $count = \count($factures);
         $finish = 0 === $count;
