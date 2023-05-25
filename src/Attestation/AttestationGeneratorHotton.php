@@ -40,7 +40,7 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
 
     public function renderOne(Tuteur $tuteur, Enfant $enfant, int $year): string
     {
-        $factures = $this->factureRepository->findByTuteurAndYear($tuteur, $year, true);
+        $factures = $this->factureRepository->findByTuteurAndYearPaid($tuteur, $year, true);
 
         $data = $this->treatment($factures, $tuteur, $enfant);
 
@@ -79,20 +79,27 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
                         }
                     }
                 }
-            }
-
-            $data = [];
-            foreach ($presencesPaid as $presence) {
-                $idEnfant = $enfant->getId();
-                $idTuteur = $tuteur->getId();
-                $data[$idEnfant]['enfant'] = $enfant;
-                $data[$idEnfant]['tuteurs'][$idTuteur]['tuteur'] = $tuteur;
-                $data[$idEnfant]['tuteurs'][$idTuteur]['presences'][] = $presence;
-                if (!isset($data[$idEnfant]['tuteurs'][$idTuteur]['total'])) {
-                    $data[$idEnfant]['tuteurs'][$idTuteur]['total'] = 0;
+                if ($facturePresence->getObjectType() == Facture::OBJECT_PRESENCE) {
+                    if ($presence = $this->presenceRepository->find($facturePresence->getPresenceId())) {
+                        if ($presence->getEnfant()->getId() == $enfant->getId()) {
+                            $presence->cout = $facturePresence->getCoutCalculated();
+                            $presencesPaid[] = $presence;
+                        }
+                    }
                 }
-                $data[$idEnfant]['tuteurs'][$idTuteur]['total'] += $presence->cout;
             }
+        }
+        $data = [];
+        foreach ($presencesPaid as $presence) {
+            $idEnfant = $enfant->getId();
+            $idTuteur = $tuteur->getId();
+            $data[$idEnfant]['enfant'] = $enfant;
+            $data[$idEnfant]['tuteurs'][$idTuteur]['tuteur'] = $tuteur;
+            $data[$idEnfant]['tuteurs'][$idTuteur]['presences'][] = $presence;
+            if (!isset($data[$idEnfant]['tuteurs'][$idTuteur]['total'])) {
+                $data[$idEnfant]['tuteurs'][$idTuteur]['total'] = 0;
+            }
+            $data[$idEnfant]['tuteurs'][$idTuteur]['total'] += $presence->cout;
         }
 
         return $data;

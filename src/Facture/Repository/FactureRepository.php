@@ -197,19 +197,13 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
-    public function findByTuteurAndYear(Tuteur $tuteur, int $year, ?bool $paid = null): array
+    public function findByTuteurAndYearPaid(Tuteur $tuteur, int $year): array
     {
         $qb = $this->getQBl()
             ->andWhere('facture.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur->getId())
-            ->andWhere('facture.mois LIKE :year')
+            ->andWhere('facture.payeLe LIKE :year')
             ->setParameter('year', '%'.$year.'%');
-
-        if ($paid === true) {
-            $qb->andWhere('facture.payeLe IS NOT NULL');
-        } elseif ($paid === false) {
-            $qb->andWhere('facture.payeLe IS NULL');
-        }
 
         return $qb
             ->getQuery()->getResult();
