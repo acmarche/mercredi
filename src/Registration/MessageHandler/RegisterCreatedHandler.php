@@ -10,25 +10,23 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
-final class RegisterCreatedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class RegisterCreatedHandler
 {
-    private FlashBagInterface $flashBag;
-
     public function __construct(
         private UserRepository $userRepository,
-        RequestStack $requestStack,
+        private RequestStack $requestStack,
         private RegistrationMailerFactory $registrationMailerFactory,
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private NotificationMailer $notificationMailer,
         private ParameterBagInterface $parameterBag
     ) {
-        $this->flashBag = $requestStack->getSession()?->getFlashBag();
+
     }
 
     public function __invoke(RegisterCreated $registerCreated): void
@@ -57,13 +55,13 @@ final class RegisterCreatedHandler implements MessageHandlerInterface
 
         $message = $this->registrationMailerFactory->generateMessageToAdminAccountCreated($user);
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
-
-        $this->flashBag->add('success', 'Votre compte a bien été créé, consultez votre boite mail');
+        $flashBag = $this->requestStack->getSession()?->getFlashBag();
+        $flashBag->add('success', 'Votre compte a bien été créé, consultez votre boite mail');
     }
 
     public function isOpen(): bool
     {
-        return (int) $this->parameterBag->get(Option::REGISTER) > 0;
+        return (int)$this->parameterBag->get(Option::REGISTER) > 0;
     }
 
     /**
