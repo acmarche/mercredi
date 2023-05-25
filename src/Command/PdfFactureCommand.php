@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Command;
 
 use AcMarche\Mercredi\Facture\Factory\FactureFactory;
-use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
@@ -23,7 +22,6 @@ class PdfFactureCommand extends Command
 {
     public function __construct(
         private FactureRepository $factureRepository,
-        private FactureCronRepository $factureCronRepository,
         private AdminEmailFactory $adminEmailFactory,
         private NotificationMailer $notificationMailer,
         private FactureFactory $factureFactory,
@@ -51,11 +49,6 @@ class PdfFactureCommand extends Command
             return Command::FAILURE;
         }
 
-        if (null === $this->factureCronRepository->findOneByMonth($month)) {
-            $io->error('Erreur aucun cron trouvé');
-
-            return Command::FAILURE;
-        }
         $factures = $this->factureRepository->findFacturesByMonth($month);
         try {
             $finish = $this->factureFactory->createAllPdf($factures, $month);
