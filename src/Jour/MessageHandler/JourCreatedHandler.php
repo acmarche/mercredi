@@ -5,9 +5,10 @@ namespace AcMarche\Mercredi\Jour\MessageHandler;
 use AcMarche\Mercredi\Jour\Message\JourCreated;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class JourCreatedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class JourCreatedHandler
 {
     private FlashBagInterface $flashBag;
 

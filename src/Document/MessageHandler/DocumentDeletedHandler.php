@@ -5,9 +5,10 @@ namespace AcMarche\Mercredi\Document\MessageHandler;
 use AcMarche\Mercredi\Document\Message\DocumentDeleted;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class DocumentDeletedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class DocumentDeletedHandler
 {
     private FlashBagInterface $flashBag;
 

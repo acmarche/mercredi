@@ -5,9 +5,10 @@ namespace AcMarche\Mercredi\Facture\MessageHandler;
 use AcMarche\Mercredi\Facture\Message\FactureDeleted;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class FactureDeletedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class FactureDeletedHandler
 {
     private FlashBagInterface $flashBag;
 

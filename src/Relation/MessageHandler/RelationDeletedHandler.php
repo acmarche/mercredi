@@ -5,9 +5,10 @@ namespace AcMarche\Mercredi\Relation\MessageHandler;
 use AcMarche\Mercredi\Relation\Message\RelationDeleted;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class RelationDeletedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class RelationDeletedHandler
 {
     private FlashBagInterface $flashBag;
 

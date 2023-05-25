@@ -5,9 +5,10 @@ namespace AcMarche\Mercredi\Ecole\MessageHandler;
 use AcMarche\Mercredi\Ecole\Message\EcoleUpdated;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class EcoleUpdatedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class EcoleUpdatedHandler
 {
     private FlashBagInterface $flashBag;
 

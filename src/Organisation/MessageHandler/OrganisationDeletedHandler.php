@@ -5,9 +5,10 @@ namespace AcMarche\Mercredi\Organisation\MessageHandler;
 use AcMarche\Mercredi\Organisation\Message\OrganisationDeleted;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class OrganisationDeletedHandler implements MessageHandlerInterface
+#[AsMessageHandler()]
+final class OrganisationDeletedHandler
 {
     private FlashBagInterface $flashBag;
 
