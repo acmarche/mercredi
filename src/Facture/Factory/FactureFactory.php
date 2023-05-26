@@ -85,6 +85,27 @@ final class FactureFactory
         return true;
     }
 
+
+    /**
+     * @throws Exception
+     */
+    public function createOnePdf(Facture $facture, string $month, bool $force = false): ?string
+    {
+        $path = $this->getBasePathFacture($month);
+        $fileName = $path.'facture-'.$facture->getId().'.pdf';
+        if ($force === false && is_readable($fileName)) {
+            return $fileName;
+        }
+        $htmlInvoice = $this->createHtml($facture);
+        try {
+            $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
+
+            return $fileName;
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
+
     public function createHtml(FactureInterface $facture): string
     {
         if ($facture->getPlaineNom()) {

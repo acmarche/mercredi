@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Entity\Facture;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
@@ -26,6 +27,8 @@ class FactureCron implements TimestampableInterface
     private string $month;
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $done = false;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $dateLastSync = null;
 
     public function __construct(
         string $fromAdresse,
@@ -98,4 +101,15 @@ class FactureCron implements TimestampableInterface
 
         return $this;
     }
+
+    public function getDateLastSync(): ?DateTimeInterface
+    {
+        return $this->dateLastSync;
+    }
+
+    public function setDateLastSync(?DateTimeInterface $dateLastSync): void
+    {
+        $this->dateLastSync = $dateLastSync;
+    }
+
 }

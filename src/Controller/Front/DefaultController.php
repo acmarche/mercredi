@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use AcMarche\Mercredi\Facture\Handler\FactureCronHandler;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,8 @@ final class DefaultController extends AbstractController
 {
     public function __construct(
         private PageRepository $pageRepository,
-        private PageFactory $pageFactory
+        private PageFactory $pageFactory,
+        private FactureCronHandler $factureCronHandler
     ) {
     }
 
@@ -45,4 +47,18 @@ final class DefaultController extends AbstractController
             ]
         );
     }
+
+    #[Route(path: '/cron/launch', name: 'mercredi_front_cron')]
+    public function cron(): Response
+    {
+        $this->factureCronHandler->execute();
+
+        return $this->render(
+            '@AcMarcheMercredi/default/cron.html.twig',
+            [
+
+            ]
+        );
+    }
+
 }

@@ -23,6 +23,8 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
@@ -31,7 +33,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: 'email')]
 #[UniqueEntity(fields: 'username')]
-class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, Stringable
+class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, Stringable, TimestampableInterface
 {
     use IdTrait;
     use EmailTrait;
@@ -47,6 +49,8 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
     use AnimateursTrait;
     use LastLoginTrait;
     use IdOldTrait;
+    use TimestampableTrait;
+
     #[ORM\Column(type: 'string', nullable: true)]
     protected ?string $salt = null;
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
