@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Facture\Handler\FactureCronHandler;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -49,16 +50,12 @@ final class DefaultController extends AbstractController
     }
 
     #[Route(path: '/cron/launch', name: 'mercredi_front_cron')]
-    public function cron(): Response
+    public function cron(): JsonResponse
     {
-        $this->factureCronHandler->execute();
+        $result = $this->factureCronHandler->execute();
 
-        return $this->render(
-            '@AcMarcheMercredi/default/cron.html.twig',
-            [
+        return $this->json($result);
 
-            ]
-        );
     }
 
 }
