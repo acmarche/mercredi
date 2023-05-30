@@ -41,6 +41,10 @@ class Organisation implements Stringable
     #[Assert\Email]
     private ?string $email = null;
 
+    #[ORM\Column(name: 'email_from', type: 'string', length: 50, nullable: true)]
+    #[Assert\Email]
+    public ?string $email_from = null;
+
     #[Vich\UploadableField(mapping: 'mercredi_organisation_image', fileNameProperty: 'photoName')]
     #[Assert\Image(maxSize: '7M')]
     private ?File $photo = null;

@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Organisation\Form;
 
 use AcMarche\Mercredi\Entity\Organisation;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,6 +19,11 @@ final class OrganisationType extends AbstractType
             ->add('nom')
             ->add('initiale')
             ->add('email')
+            ->add('email_from', EmailType::class, [
+                'required' => false,
+                'label' => 'Mail pour l\'envoie des factures',
+                'help' => 'Ce mail est utilisé pour l\'envoie des factures',
+            ])
             ->add('site_web')
             ->add('rue')
             ->add('code_postal')

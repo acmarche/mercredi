@@ -14,6 +14,10 @@
         <i class="far fa-envelope"></i> {{ organisation.email }}<br/>
     {% endif %}
 
+    {% if organisation.email_from %}
+        <i class="far fa-envelope"></i> {{ organisation.email_from }}<br/>
+    {% endif %}
+
     {% if organisation.siteWeb %}
         <i class="fas fa-globe-europe"></i> <a href="{{ organisation.siteWeb }}">
         {{ organisation.siteWeb }}</a>

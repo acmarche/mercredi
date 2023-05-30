@@ -18,6 +18,8 @@ final class FactureSendType extends AbstractType
                 EmailType::class,
                 [
                     'label' => 'De',
+                    'help' => 'Cette valeur ne peut être changée',
+                    'attr' => ['readonly' => true],
                 ]
             )
             ->add(
