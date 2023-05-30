@@ -12,6 +12,7 @@ use AcMarche\Mercredi\Facture\Repository\FactureCronRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Parameter\Option;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -140,8 +141,11 @@ final class FactureSendController extends AbstractController
     #[Route(path: '/all/cron/{id}', name: 'mercredi_admin_facture_cron_launch', methods: ['GET'])]
     public function cronLaunch(FactureCron $factureCron): Response
     {
+        $copies = $this->getParameter(Option::EMAILS_FACTURE);
+
         return $this->render('@AcMarcheMercrediAdmin/facture/facture_cron_launch.html.twig', [
                 'factureCron' => $factureCron,
+                'copies' => $copies,
             ]
         );
     }
