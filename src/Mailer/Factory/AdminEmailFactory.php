@@ -13,9 +13,6 @@ class AdminEmailFactory
 {
     use OrganisationPropertyInitTrait;
 
-    /**
-     * @param UserInterface|User $user
-     */
     public function messageEnfantCreated(User|UserInterface $user, Enfant $enfant): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
@@ -37,7 +34,7 @@ class AdminEmailFactory
     }
 
     /**
-     * @param array|Enfant[] $enfants
+     * @param Enfant[] $enfants
      */
     public function messagEnfantsOrphelins(array $enfants): NotificationEmailJf
     {
@@ -82,9 +79,6 @@ class AdminEmailFactory
         return $message;
     }
 
-    /**
-     * @param array|Tuteur[] $subject
-     */
     public function messageAlert(string $subject, string $texte): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
@@ -92,6 +86,19 @@ class AdminEmailFactory
         $message
             ->from($email)
             ->to($email)
+            ->subject($subject)
+            ->content($texte);
+
+        return $message;
+    }
+
+    public function messageToJf(string $subject, string $texte): NotificationEmailJf
+    {
+        $message = NotificationEmailJf::asPublicEmailJf();
+        $email = $this->getEmailAddressOrganisation();
+        $message
+            ->from($email)
+            ->to('jf@marche.be')
             ->subject($subject)
             ->content($texte);
 

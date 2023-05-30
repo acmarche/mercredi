@@ -53,6 +53,7 @@ final class DefaultController extends AbstractController
     public function cron(): JsonResponse
     {
         $result = $this->factureCronHandler->execute();
+        $this->factureCronHandler->sendResult($result);
 
         return $this->json($result);
 

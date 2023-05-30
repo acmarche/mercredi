@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
 use AcMarche\Mercredi\Mailer\Factory\FactureEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
+use Carbon\Carbon;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class FactureCronHandler
@@ -28,19 +29,24 @@ class FactureCronHandler
     {
         $result = [];
         if (!$crons = $this->factureCronRepository->findNotDone()) {
-            return ['message' => 'No crons found'];
+            return ['message' => 'No cron found'];
         }
 
-        $now = new \DateTime();
         foreach ($crons as $cron) {
             if ($cron->getDateLastSync()) {
-                if ($now->format('G:i') > $cron->getDateLastSync()->format('G:i')) {
-                    $result[] = ['message' => $cron->getId().' Last sync too early '.$now->format('Y-m-d G:i')];
+
+                $now = Carbon::now();
+                $lastSync = new Carbon($cron->getDateLastSync());
+
+                if ($now->diffInMinutes($lastSync) < 60) {
+                    $result[] = [
+                        'message' => ' Last sync too early. Minutes: '.$now->diffInMinutes($lastSync),
+                    ];
                     continue;
                 }
             }
 
-            $cron->setDateLastSync($now);
+            $cron->setDateLastSync($now->modify('-5 minutes'));
             $this->factureCronRepository->flush();
 
             $factures = $this->factureRepository->findFacturesByMonthNotSend($cron->getMonth());
@@ -115,5 +121,11 @@ class FactureCronHandler
         }
 
         return $result;
+    }
+
+    public function sendResult(array $result): void
+    {
+        $message = $this->adminEmailFactory->messageToJf('Erreur envoie facture', json_encode($result));
+        $this->notificationMailer->sendAsEmailNotification($message);
     }
 }
