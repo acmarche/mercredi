@@ -50,9 +50,6 @@ class FactureEmailFactory
         return $data;
     }
 
-    /**
-     * @param Facture $from
-     */
     public function messageFacture(string $from, string $sujet, string $body): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
