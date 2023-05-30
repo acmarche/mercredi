@@ -24,17 +24,19 @@ class FactureCronHandler
 
     }
 
-    public function execute(int $max = 50): void
+    public function execute(int $max = 50): array
     {
+        $result = [];
         if (!$crons = $this->factureCronRepository->findNotDone()) {
-            return;
+            return ['message' => 'No crons found'];
         }
 
         $now = new \DateTime();
         foreach ($crons as $cron) {
             if ($cron->getDateLastSync()) {
-                if ($now->format('G') > $cron->getDateLastSync()->format('G')) {
-                    return;
+                if ($now->format('G:i') > $cron->getDateLastSync()->format('G:i')) {
+                    $result[] = ['message' => $cron->getId().' Last sync too early '.$now->format('Y-m-d G:i')];
+                    continue;
                 }
             }
 
@@ -45,6 +47,7 @@ class FactureCronHandler
             if (\count($factures) === 0) {
                 $cron->setDone(true);
                 $this->factureCronRepository->flush();
+                $result[] = ['message' => $cron->getId().' 0 facture '];
                 continue;
             }
 
@@ -63,6 +66,7 @@ class FactureCronHandler
                     $error = 'Impossible de générer le pdf pour la facture: '.$facture->getId().' '.$e->getMessage();
                     $message = $this->adminEmailFactory->messageAlert('Erreur pdf facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
+                    $result[] = ['message' => $facture->getId().' error create pdf '.$e->getMessage()];
                     continue;
                 }
 
@@ -73,6 +77,7 @@ class FactureCronHandler
                     $error = 'Pas de mail pour la facture: '.$facture->getId();
                     $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
+                    $result[] = ['message' => $facture->getId().' error pas pdf '.$error];
                     continue;
                 }
 
@@ -84,6 +89,7 @@ class FactureCronHandler
                     $error = 'Pas de pièce jointe pour la facture: '.$facture->getId().' '.$e->getMessage();
                     $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
+                    $result[] = ['message' => $facture->getId().' error attach '.$error];
                     continue;
                 }
 
@@ -93,18 +99,21 @@ class FactureCronHandler
                     $error = 'Facture num '.$facture->getId().' '.$e->getMessage();
                     $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
+                    $result[] = ['message' => $facture->getId().' error envoie '.$error];
                     continue;
                 }
 
                 $facture->setEnvoyeA(implode(', ', $emails));
                 $facture->setEnvoyeLe(new \DateTime());
                 $this->factureRepository->flush();
-
                 ++$i;
                 if ($i > $max) {
                     break;
                 }
             }
+            $result[] = ['message' => 'count '.$i];
         }
+
+        return $result;
     }
 }
