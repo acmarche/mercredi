@@ -9,15 +9,16 @@
 
             <div class="alert alert-info">
                 L'envoi des factures a été planifié<br/>
-                L'envoi se fera par lot de 70 mails par heure<br/>
+                L'envoi se fera par lot de 50 mails par heure<br/>
                 {% if copies %}
                     Une copie des factures sera envoyée sur:  <p>{{ copies }}</p>
                 {% endif %}
             </div>
 
-            <a href="{{ path('mercredi_admin_facture_index') }}">
-                Vous pouvez suivre en regardant leur date d'envoi
-            </a>
+
+            Vous pouvez suivre l'évoluation des envois <a href="{{ path('mercredi_admin_facture_index') }}">en
+                recherchant les factures</a> et en regardant leur date d'envoi
+
 
         </div>
     </div>
