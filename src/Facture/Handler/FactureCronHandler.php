@@ -125,7 +125,7 @@ class FactureCronHandler
 
     public function sendResult(array $result): void
     {
-        $message = $this->adminEmailFactory->messageToJf('Erreur envoie facture', json_encode($result));
+        $message = $this->adminEmailFactory->messageToJf('Result envoie facture', json_encode($result));
         $this->notificationMailer->sendAsEmailNotification($message);
     }
 }

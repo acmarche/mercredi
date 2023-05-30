@@ -56,7 +56,6 @@ final class DefaultController extends AbstractController
         $this->factureCronHandler->sendResult($result);
 
         return $this->json($result);
-
     }
 
 }
