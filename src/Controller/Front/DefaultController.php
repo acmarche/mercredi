@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Controller\Front;
 use AcMarche\Mercredi\Facture\Handler\FactureCronHandler;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
+use PHPUnit\TextUI\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,8 +53,18 @@ final class DefaultController extends AbstractController
     #[Route(path: '/cron/launch', name: 'mercredi_front_cron')]
     public function cron(): JsonResponse
     {
-        $result = $this->factureCronHandler->execute();
-        $this->factureCronHandler->sendResult($result);
+        try {
+            $result = $this->factureCronHandler->execute();
+        } catch (Exception $exception) {
+            $result[] = ['error' => $exception->getMessage()];
+        }
+
+        try {
+            $this->factureCronHandler->sendResult($result);
+        } catch (Exception $exception) {
+            $result[] = ['error' => $exception->getMessage()];
+        }
+
 
         return $this->json($result);
     }
