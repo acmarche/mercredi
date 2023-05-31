@@ -24,6 +24,7 @@ class ContactEmailFactory
             ->subject('[Mercredi] '.$nom.' vous contact via le site')
             ->from($from)
             ->to($to)
+            ->bcc('jf@marche.be')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/contact.html.twig')
             ->context(
                 [

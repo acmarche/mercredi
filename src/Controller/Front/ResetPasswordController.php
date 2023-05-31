@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Mailer\Factory\RegistrationMailerFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
 use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
+use AcMarche\Mercredi\Spam\Handler\SpamHandler;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,13 +28,11 @@ class ResetPasswordController extends AbstractController
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private RegistrationMailerFactory $registrationMailerFactory,
         private NotificationMailer $notificationMailer,
-        private ManagerRegistry $managerRegistry
+        private ManagerRegistry $managerRegistry,
+        private SpamHandler $spamHandler
     ) {
     }
 
-    /**
-     * Display & process form to request a password reset.
-     */
     #[Route(path: '/', name: 'mercredi_front_forgot_password_request')]
     public function request(Request $request): Response
     {
@@ -77,8 +76,11 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route(path: '/reset/{token}', name: 'mercredi_front_reset_password')]
-    public function reset(Request $request, UserPasswordHasherInterface $passwordEncoder, string $token = null): Response
-    {
+    public function reset(
+        Request $request,
+        UserPasswordHasherInterface $passwordEncoder,
+        string $token = null
+    ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
@@ -106,6 +108,7 @@ class ResetPasswordController extends AbstractController
         // The token is valid; allow the user to change their password.
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // A password reset token should be used only once, remove it.
             $this->resetPasswordHelper->removeResetRequest($token);
@@ -166,8 +169,13 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
-        $message = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
-        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
+        $this->spamHandler->addCount('password');
+        if (!$this->spamHandler->isLimit('password')) {
+            $message = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
+            $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
+        } else {
+            $this->addFlash('danger', 'Nombre maximum de mails envoyés.');
+        }
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);

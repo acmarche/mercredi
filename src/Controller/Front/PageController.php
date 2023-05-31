@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
+use AcMarche\Mercredi\Spam\Handler\SpamHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,8 @@ final class PageController extends AbstractController
         private PageRepository $pageRepository,
         private PageFactory $pageFactory,
         private ContactEmailFactory $contactEmailFactory,
-        private NotificationMailer $notificationMailer
+        private NotificationMailer $notificationMailer,
+        private SpamHandler $spamHandler
     ) {
     }
 
@@ -59,9 +61,15 @@ final class PageController extends AbstractController
             $email = $data['email'];
             $body = $data['texte'];
 
-            $message = $this->contactEmailFactory->sendContactForm($email, $nom, $body);
-            $this->notificationMailer->sendAsEmailNotification($message);
-            $this->addFlash('success', 'Le message a bien été envoyé.');
+            $this->spamHandler->addCount('contact');
+
+            if (!$this->spamHandler->isLimit('contact')) {
+                $message = $this->contactEmailFactory->sendContactForm($email, $nom, $body);
+                $this->notificationMailer->sendAsEmailNotification($message);
+                $this->addFlash('success', 'Le message a bien été envoyé.');
+            } else {
+                $this->addFlash('danger', 'Nombre maximum de mails envoyés.');
+            }
 
             return $this->redirectToRoute('mercredi_front_contact');
         }
