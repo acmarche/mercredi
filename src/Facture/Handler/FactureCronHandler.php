@@ -113,9 +113,9 @@ class FactureCronHandler
                     continue;
                 }
 
-                $facture->setEnvoyeA(implode(', ', $emails));
-                $facture->setEnvoyeLe(new \DateTime());
-                $this->factureRepository->flush();
+                //$facture->setEnvoyeA(implode(', ', $emails));
+                //$facture->setEnvoyeLe(new \DateTime());
+                //$this->factureRepository->flush();
                 ++$i;
                 if ($i > $max) {
                     break;
