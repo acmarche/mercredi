@@ -18,7 +18,7 @@ class AdminEmailFactory
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->from($user->getEmail())
-            ->to($this->organisation->getEmail())
+            ->to($this->getEmailAddressOrganisationAdmin())
             ->subject('Un enfant a été ajouté par '.$user->getNom().' '.$user->getPrenom())
             ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_add_enfant.html.twig')
             ->context(
@@ -39,10 +39,9 @@ class AdminEmailFactory
     public function messagEnfantsOrphelins(array $enfants): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->getEmailAddressOrganisation();
         $message
-            ->from($email)
-            ->to($email)
+            ->from($this->getEmailAddressOrganisation())
+            ->to($this->getEmailAddressOrganisationAdmin())
             ->subject('Des enfants orphelins ont été trouvés')
             ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_orphelins.html.twig')
             ->context(
@@ -62,10 +61,9 @@ class AdminEmailFactory
     public function messageTuteurArchived(array $tuteurs): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->getEmailAddressOrganisation();
         $message
-            ->from($email)
-            ->to($email)
+            ->from($this->getEmailAddressOrganisation())
+            ->to($this->getEmailAddressOrganisationAdmin())
             ->subject('Les tuteurs ont été archivés')
             ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_tuteurs_archived.html.twig')
             ->context(
@@ -82,10 +80,9 @@ class AdminEmailFactory
     public function messageAlert(string $subject, string $texte): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->getEmailAddressOrganisation();
         $message
-            ->from($email)
-            ->to($email)
+            ->from($this->getEmailAddressOrganisation())
+            ->to($this->getEmailAddressOrganisationAdmin())
             ->subject($subject)
             ->content($texte);
 
@@ -95,9 +92,8 @@ class AdminEmailFactory
     public function messageToJf(string $subject, string $texte): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $email = $this->getEmailAddressOrganisation();
         $message
-            ->from($email)
+            ->from($this->getEmailAddressOrganisation())
             ->to('jf@marche.be')
             ->subject($subject)
             ->content($texte);

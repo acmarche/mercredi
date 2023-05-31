@@ -17,12 +17,11 @@ final class RegistrationMailerFactory
     use OrganisationPropertyInitTrait;
 
     public function generateMessagRegisgerSuccess(
-        User $user,
         VerifyEmailSignatureComponents $verifyEmailSignatureComponents
     ): NotificationEmail {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
-            ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
+            ->from(new Address($this->getEmailAddressOrganisation(), $this->organisation->getNom()))
             ->subject('Votre inscription Accueil Temps Libre')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_register_success.html.twig')
             ->context([
@@ -37,11 +36,10 @@ final class RegistrationMailerFactory
 
     public function generateMessageToAdminAccountCreated(User $user): NotificationEmail
     {
-        $email = $this->getEmailAddressOrganisation();
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
-            ->to($email)
-            ->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
+            ->from(new Address($this->getEmailAddressOrganisation(), $this->organisation->getNom()))
+            ->to($this->getEmailAddressOrganisationAdmin())
             ->subject('Un nouveau compte a été crée sur Accueil Temps Libre')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_new_account_created.html.twig')
             ->context(
@@ -58,7 +56,7 @@ final class RegistrationMailerFactory
     public function messageSendLinkLostPassword(User $user, ResetPasswordToken $resetPasswordToken): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $message->from(new Address($this->organisation->getEmail(), $this->organisation->getNom()))
+        $message->from(new Address($this->getEmailAddressOrganisation(), $this->organisation->getNom()))
             ->to($user->getEmail())
             ->subject('Votre demande de changement de mot de passe')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/request_password.html.twig')

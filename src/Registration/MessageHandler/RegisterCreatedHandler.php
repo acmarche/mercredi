@@ -48,7 +48,6 @@ final class RegisterCreatedHandler
         );
 
         $message = $this->registrationMailerFactory->generateMessagRegisgerSuccess(
-            $user,
             $verifyEmailSignatureComponents
         );
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());

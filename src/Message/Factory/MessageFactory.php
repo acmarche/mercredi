@@ -12,7 +12,7 @@ final class MessageFactory
     public function createInstance(): Message
     {
         $message = new Message();
-        $message->setFrom($this->organisation->getEmail());
+        $message->setFrom($this->getEmailAddressOrganisation());
 
         return $message;
     }
