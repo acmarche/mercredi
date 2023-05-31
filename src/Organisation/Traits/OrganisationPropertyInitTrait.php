@@ -27,6 +27,14 @@ trait OrganisationPropertyInitTrait
 
     public function getEmailAddressOrganisation(): string
     {
-        return null !== $this->organisation ? $this->organisation->email_from : $this->organisation->getEmail();
+        if (null !== $this->organisation) {
+            if (null !== $this->organisation->email_from) {
+                return $this->organisation->email_from;
+            }
+
+            return $this->organisation->getEmail();
+        }
+
+        return 'noemail@domain.be';
     }
 }
