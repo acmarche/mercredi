@@ -73,15 +73,14 @@ class FactureEmailFactory
     public function setTos(NotificationEmail $message, array $tos): void
     {
         foreach ($tos as $email) {
-            // $message->addTo(new Address($email));
-            $message->addTo(new Address("jf@marche.be", $email));
+            $message->addTo(new Address($email));
         }
         if ($this->parameterBag->has(Option::EMAILS_FACTURE)) {
             $copies = explode(',', $this->parameterBag->get(Option::EMAILS_FACTURE));
             if (\is_array($copies)) {
                 foreach ($copies as $copy) {
                     if (filter_var($copy, FILTER_VALIDATE_EMAIL)) {
-                        //  $message->addBcc(new Address($copy));
+                        $message->addBcc(new Address($copy));
                     }
                 }
             }
