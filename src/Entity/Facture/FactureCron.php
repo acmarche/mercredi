@@ -25,7 +25,7 @@ class FactureCron implements TimestampableInterface
     private string $body;
     #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)]
     private string $month;
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: 'boolean', nullable: false)]
     public bool $force = false;
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $done = false;
