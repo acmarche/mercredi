@@ -4,7 +4,7 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Envoie des {{ factures|length }} factures pour {{ month }}</h3>
+            <h3>Envoi de {{ facturesNotSend|length }} factures sur {{ factures|length }} pour le mois {{ month }}</h3>
         </div>
         <div class="card-body">
             {{ form_start(form) }}
@@ -21,9 +21,11 @@
                 <div class="col-6">
                     {{ form_row(form.sujet) }}
                 </div>
-
             </div>
             {{ form_row(form.texte) }}
+            {% if form.force is defined %}
+                {{ form_row(form.force) }}
+            {% endif %}
             <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-paper-plane"></i>
                 Envoyer les factures
             </button>

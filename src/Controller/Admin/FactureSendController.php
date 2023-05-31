@@ -100,6 +100,7 @@ final class FactureSendController extends AbstractController
     public function sendAllFacture(Request $request, string $month): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth($month);
+        $facturesNotSend = $this->factureRepository->findFacturesByMonthNotSend($month);
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndToForForm());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -118,6 +119,7 @@ final class FactureSendController extends AbstractController
                 $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
                 $this->factureCronRepository->persist($cron);
             }
+            $cron->force = $data['force'];
             $this->factureCronRepository->flush();
 
             return $this->redirectToRoute(
@@ -133,6 +135,7 @@ final class FactureSendController extends AbstractController
             [
                 'form' => $form->createView(),
                 'factures' => $factures,
+                'facturesNotSend' => $facturesNotSend,
                 'month' => $month,
             ]
         );

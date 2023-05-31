@@ -32,10 +32,10 @@ class FactureCronHandler
             return ['message' => 'No cron found'];
         }
 
+        $now = Carbon::now();
         foreach ($crons as $cron) {
             if ($cron->getDateLastSync()) {
 
-                $now = Carbon::now();
                 $lastSync = new Carbon($cron->getDateLastSync());
 
                 if ($now->diffInMinutes($lastSync) < 60) {
@@ -49,7 +49,11 @@ class FactureCronHandler
             $cron->setDateLastSync($now->modify('-5 minutes'));
             $this->factureCronRepository->flush();
 
-            $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
+            if ($cron->force) {
+                $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
+            } else {
+                $factures = $this->factureRepository->findFacturesByMonthNotSend($cron->getMonth());
+            }
             if (\count($factures) === 0) {
                 $cron->setDone(true);
                 $this->factureCronRepository->flush();
