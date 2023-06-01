@@ -104,13 +104,14 @@ final class FactureSendController extends AbstractController
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndToForForm());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+
             if ([] === $factures) {
                 $this->addFlash('warning', 'Aucune facture trouvée pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
             }
 
+            $data = $form->getData();
             if (($cron = $this->factureCronRepository->findOneByMonth($month)) !== null) {
                 $cron->setFromAdresse($data['from']);
                 $cron->setSubject($data['sujet']);
@@ -121,6 +122,13 @@ final class FactureSendController extends AbstractController
             }
             $cron->force = $data['force'];
             $this->factureCronRepository->flush();
+
+            if ($cron->force) {
+                foreach ($factures as $facture) {
+                    $facture->setEnvoyeLe(null);
+                    $this->factureRepository->flush();
+                }
+            }
 
             return $this->redirectToRoute(
                 'mercredi_admin_facture_cron_launch',

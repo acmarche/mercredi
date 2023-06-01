@@ -49,11 +49,8 @@ class FactureCronHandler
             $cron->setDateLastSync($now->modify('-5 minutes'));
             $this->factureCronRepository->flush();
 
-            if ($cron->force) {
-                $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
-            } else {
-                $factures = $this->factureRepository->findFacturesByMonthNotSend($cron->getMonth());
-            }
+            $factures = $this->factureRepository->findFacturesByMonthNotSend($cron->getMonth());
+
             if (\count($factures) === 0) {
                 $cron->setDone(true);
                 $this->factureCronRepository->flush();
