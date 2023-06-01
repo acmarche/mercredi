@@ -59,10 +59,12 @@ final class DefaultController extends AbstractController
             $result[] = ['error' => $exception->getMessage()];
         }
 
-        try {
-            $this->factureCronHandler->sendResult($result);
-        } catch (Exception $exception) {
-            $result[] = ['error' => $exception->getMessage()];
+        if (count($result) > 0) {
+            try {
+                $this->factureCronHandler->sendResult($result);
+            } catch (Exception $exception) {
+                $result[] = ['error' => $exception->getMessage()];
+            }
         }
 
 

@@ -29,7 +29,7 @@ class FactureCronHandler
     {
         $result = [];
         if (!$crons = $this->factureCronRepository->findNotDone()) {
-            return ['message' => 'No cron found'];
+            return [];
         }
 
         $now = Carbon::now();
