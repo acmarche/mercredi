@@ -29,6 +29,7 @@ final class AcMarcheMercrediBundle extends AbstractBundle
         $container->import('../config/packages/framework.php');
         $container->import('../config/packages/liip_imagine.php');
         $container->import('../config/packages/messenger.php');
+        $container->import('../config/packages/rate_limiter.php');
         $container->import('../config/packages/security.php');
         $container->import('../config/packages/twig.php');
         $container->import('../config/packages/vich_uploader.php');

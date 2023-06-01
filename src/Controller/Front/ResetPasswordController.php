@@ -7,7 +7,6 @@ use AcMarche\Mercredi\Mailer\Factory\RegistrationMailerFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\ResetPassword\Form\ChangePasswordFormType;
 use AcMarche\Mercredi\ResetPassword\Form\ResetPasswordRequestFormType;
-use AcMarche\Mercredi\Spam\Handler\SpamHandler;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,8 +27,7 @@ class ResetPasswordController extends AbstractController
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private RegistrationMailerFactory $registrationMailerFactory,
         private NotificationMailer $notificationMailer,
-        private ManagerRegistry $managerRegistry,
-        private SpamHandler $spamHandler
+        private ManagerRegistry $managerRegistry
     ) {
     }
 
@@ -169,13 +167,8 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
         }
 
-        $this->spamHandler->addCount('password');
-        if (!$this->spamHandler->isLimit('password')) {
-            $message = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
-            $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
-        } else {
-            $this->addFlash('danger', 'Nombre maximum de mails envoyés.');
-        }
+        $message = $this->registrationMailerFactory->messageSendLinkLostPassword($user, $resetToken);
+        $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);

@@ -4,18 +4,20 @@ namespace AcMarche\Mercredi\Spam\Handler;
 
 use AcMarche\Mercredi\Entity\Spam;
 use AcMarche\Mercredi\Spam\Repository\SpamRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 class SpamHandler
 {
-    public function __construct(private SpamRepository $spamRepository)
+    public function __construct(private RateLimiterFactory $anonymousApiLimiter, private SpamRepository $spamRepository)
     {
     }
 
-    public function isLimit(string $subject): bool
+    public function isLimit(Request $request): bool
     {
-        $spam = $this->instance($subject);
+        $limiter = $this->anonymousApiLimiter->create($request->getClientIp());
 
-        return $spam->count > 50;
+        return $limiter->consume()->isAccepted();
     }
 
     public function instance(string $subject): Spam
