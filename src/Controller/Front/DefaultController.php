@@ -9,6 +9,7 @@ use PHPUnit\TextUI\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -55,14 +56,14 @@ final class DefaultController extends AbstractController
     {
         try {
             $result = $this->factureCronHandler->execute();
-        } catch (Exception $exception) {
+        } catch (Exception|TransportExceptionInterface $exception) {
             $result[] = ['error' => $exception->getMessage()];
         }
 
         if (count($result) > 0) {
             try {
                 $this->factureCronHandler->sendResult($result);
-            } catch (Exception $exception) {
+            } catch (Exception|TransportExceptionInterface $exception) {
                 $result[] = ['error' => $exception->getMessage()];
             }
         }
