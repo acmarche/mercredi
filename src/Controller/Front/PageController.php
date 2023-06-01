@@ -13,7 +13,10 @@ use AcMarche\Mercredi\Spam\Handler\SpamHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Annotation\Route;
+use function Sodium\add;
 
 
 final class PageController extends AbstractController
@@ -24,7 +27,8 @@ final class PageController extends AbstractController
         private PageFactory $pageFactory,
         private ContactEmailFactory $contactEmailFactory,
         private NotificationMailer $notificationMailer,
-        private SpamHandler $spamHandler
+        private SpamHandler $spamHandler,
+        private RateLimiterFactory $anonymousApiLimiter
     ) {
     }
 
@@ -49,6 +53,14 @@ final class PageController extends AbstractController
     #[Route(path: '/contact', name: 'mercredi_front_contact')]
     public function contact(Request $request): Response
     {
+        $limiter = $this->anonymousApiLimiter->create($request->getClientIp());
+
+        // the argument of consume() is the number of tokens to consume
+        // and returns an object of type Limit
+        if (false === $limiter->consume()->isAccepted()) {
+            $this->addFlash('danger', 'too many');
+        }
+
         $page = $this->pageRepository->findContactPage();
         if (null === $page) {
             $page = $this->pageFactory->createContactPage();
@@ -60,6 +72,7 @@ final class PageController extends AbstractController
             $nom = $data['nom'];
             $email = $data['email'];
             $body = $data['texte'];
+
 
             $this->spamHandler->addCount('contact');
 
