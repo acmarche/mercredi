@@ -27,7 +27,7 @@ class MailerEventsSubscriber implements EventSubscriberInterface
         $message = $event->getMessage();
         $recipients = $message->getEnvelope()->getRecipients();
         $from = $message->getEnvelope()->getSender();
-        $this->logger->info("Mail sent from ".$from->getAddress()." to ".join('', $recipients));
+        $this->logger->info("Mail sent from ".$from->toString()." to ".join('', $recipients));
     }
 
     public function onMessageFailure(FailedMessageEvent $event): void
