@@ -3,14 +3,14 @@
 namespace AcMarche\Mercredi\Entity;
 
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
-use AcMarche\Mercredi\Spam\Repository\SpamRepository;
+use AcMarche\Mercredi\Spam\Repository\HistoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[ORM\Entity(repositoryClass: SpamRepository::class)]
+#[ORM\Entity(repositoryClass: HistoryRepository::class)]
 #[ORM\UniqueConstraint(columns: ['subject', 'created_at'])]
 #[UniqueEntity(fields: ['subject', 'created_at'], message: 'sujet unique')]
-class Spam
+class History
 {
     use IdTrait;
 
