@@ -52,15 +52,17 @@ final class PageController extends AbstractController
         if (null === $page) {
             $page = $this->pageFactory->createContactPage();
         }
+
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
             $email = $data['email'];
             $body = $data['texte'];
 
-            if (!$this->spamHandler->isLimit($request)) {
+            if ($this->spamHandler->isAccepted($request)) {
                 $message = $this->contactEmailFactory->sendContactForm($email, $nom, $body);
                 $this->notificationMailer->sendAsEmailNotification($message);
                 $this->addFlash('success', 'Le message a bien été envoyé.');

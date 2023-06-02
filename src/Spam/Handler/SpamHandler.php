@@ -2,28 +2,30 @@
 
 namespace AcMarche\Mercredi\Spam\Handler;
 
-use AcMarche\Mercredi\Entity\Spam;
-use AcMarche\Mercredi\Spam\Repository\SpamRepository;
+use AcMarche\Mercredi\Entity\History;
+use AcMarche\Mercredi\Spam\Repository\HistoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 class SpamHandler
 {
-    public function __construct(private RateLimiterFactory $anonymousApiLimiter, private SpamRepository $spamRepository)
-    {
+    public function __construct(
+        private RateLimiterFactory $anonymousApiLimiter,
+        private HistoryRepository $spamRepository
+    ) {
     }
 
-    public function isLimit(Request $request): bool
+    public function isAccepted(Request $request): bool
     {
         $limiter = $this->anonymousApiLimiter->create($request->getClientIp());
 
         return $limiter->consume()->isAccepted();
     }
 
-    public function instance(string $subject): Spam
+    public function instance(string $subject): History
     {
         if (!$spam = $this->spamRepository->findBySubjectAndDate($subject, new \DateTime())) {
-            $spam = new Spam($subject);
+            $spam = new History($subject);
             $spam->count = 1;
             $spam->created_at = new \DateTime();
             $this->spamRepository->persist($spam);
