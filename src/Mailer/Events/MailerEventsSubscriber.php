@@ -9,7 +9,7 @@ use Symfony\Component\Mailer\Event\SentMessageEvent;
 
 class MailerEventsSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(private LoggerInterface $mercredilogger)
     {
     }
 
@@ -31,12 +31,12 @@ class MailerEventsSubscriber implements EventSubscriberInterface
             $to .= $recipient->toString();
         }
         $from = $message->getEnvelope()->getSender();
-        $this->logger->error("Mail sent from ".$from->toString()." to ".$to);
+        $this->mercredilogger->info("[MERCREDI] Mail sent from ".$from->toString()." to ".$to);
     }
 
     public function onMessageFailure(FailedMessageEvent $event): void
     {
         $message = $event->getMessage();
-        $this->logger->error("Mail error ".$message->toString());
+        $this->mercredilogger->error("[MERCREDI] Mail error ".$message->toString());
     }
 }
