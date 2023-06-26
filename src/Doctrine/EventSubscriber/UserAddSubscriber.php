@@ -3,13 +3,14 @@
 namespace AcMarche\Mercredi\Doctrine\EventSubscriber;
 
 use AcMarche\Mercredi\Utils\PropertyUtil;
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class UserAddSubscriber implements EventSubscriberInterface
+#[AsDoctrineListener(Events::prePersist)]
+final class UserAddSubscriber
 {
     public function __construct(
         private Security $security,
