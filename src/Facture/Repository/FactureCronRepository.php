@@ -35,7 +35,7 @@ final class FactureCronRepository extends ServiceEntityRepository
     public function findOneByMonth(string $month): ?FactureCron
     {
         return $this->createQueryBuilder('cron')
-            ->andWhere('cron.month = :month')
+            ->andWhere('cron.month_date = :month')
             ->setParameter('month', $month)
             ->getQuery()->getOneOrNullResult();
     }

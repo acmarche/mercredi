@@ -49,7 +49,7 @@ class SendFactureCommand extends Command
         $crons = $this->factureCronRepository->findNotDone();
         foreach ($crons as $cron) {
             $i = 0;
-            $factures = $this->factureRepository->findFacturesByMonth($cron->getMonth());
+            $factures = $this->factureRepository->findFacturesByMonth($cron->getMonthDate());
             $count = \count($factures);
             $io->writeln($count.' factures trouvées');
 

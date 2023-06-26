@@ -49,7 +49,7 @@ class FactureCronHandler
             $cron->setDateLastSync($now->modify('-5 minutes'));
             $this->factureCronRepository->flush();
 
-            $factures = $this->factureRepository->findFacturesByMonthNotSend($cron->getMonth());
+            $factures = $this->factureRepository->findFacturesByMonthNotSend($cron->getMonthDate());
 
             if (\count($factures) === 0) {
                 $cron->setDone(true);
@@ -68,7 +68,7 @@ class FactureCronHandler
                 $messageFacture = clone $messageBase; //sinon attachs multiple
 
                 try {
-                    $this->factureFactory->createOnePdf($facture, $cron->getMonth());
+                    $this->factureFactory->createOnePdf($facture, $cron->getMonthDate());
                 } catch (\Exception $e) {
                     $error = 'Impossible de générer le pdf pour la facture: '.$facture->getId().' '.$e->getMessage();
                     $message = $this->adminEmailFactory->messageAlert('Erreur pdf facture', $error);

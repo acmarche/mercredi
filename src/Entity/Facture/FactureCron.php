@@ -24,9 +24,9 @@ class FactureCron implements TimestampableInterface
     #[ORM\Column(type: 'text', nullable: false)]
     private string $body;
     #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)]
-    private string $month;
+    private string $month_date;
     #[ORM\Column(type: 'boolean', nullable: false)]
-    public bool $force = false;
+    public bool $force_send = false;
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $done = false;
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -41,17 +41,17 @@ class FactureCron implements TimestampableInterface
         $this->fromAdresse = $fromAdresse;
         $this->subject = $subject;
         $this->body = $body;
-        $this->month = $month;
+        $this->month_date = $month;
     }
 
-    public function getMonth(): string
+    public function getMonthDate(): string
     {
-        return $this->month;
+        return $this->month_date;
     }
 
-    public function setMonth(string $month): self
+    public function setMonthDate(string $month_date): self
     {
-        $this->month = $month;
+        $this->month_date = $month_date;
 
         return $this;
     }

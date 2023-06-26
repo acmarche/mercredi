@@ -120,7 +120,7 @@ final class FactureSendController extends AbstractController
                 $cron = new FactureCron($data['from'], $data['sujet'], $data['texte'], $month);
                 $this->factureCronRepository->persist($cron);
             }
-            $cron->force = $data['force'];
+            $cron->force_send = $data['force'];
             $this->factureCronRepository->flush();
 
             if ($cron->force) {
