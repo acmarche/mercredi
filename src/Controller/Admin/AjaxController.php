@@ -73,4 +73,14 @@ final class AjaxController extends AbstractController
 
         return new Response('<div class="alert alert-danger">Faill</div>');
     }
+
+    #[Route(path: '/plaine/date', name: 'mercredi_admin_ajax_plaine_new_date')]
+    public function plaineDate(Request $request): Response
+    {
+        $index = $request->get('index', 0);
+
+        return $this->render('@AcMarcheMercrediAdmin/plaine/_new_line.html.twig', [
+            'index' => $index,
+        ]);
+    }
 }
