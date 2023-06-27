@@ -48,16 +48,6 @@ final class FactureRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findFacturesByTuteurAndMonth(Tuteur $tuteur, string $month): ?Facture
-    {
-        return $this->getQBl()
-            ->andWhere('facture.tuteur = :tuteur')
-            ->setParameter('tuteur', $tuteur)
-            ->andWhere('facture.mois = :mois')
-            ->setParameter('mois', $month)
-            ->getQuery()->getOneOrNullResult();
-    }
-
     /**
      * @return Facture[]
      */
@@ -84,11 +74,24 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
-    public function findFacturesByMonthNotSend(string $month): array
+    public function findFacturesByMonthNotPaid(string $month): array
     {
         return $this->getQBl()
             ->andWhere('facture.mois = :mois')
             ->setParameter('mois', $month)
+            ->andWhere('facture.payeLe IS NOT NULL')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
+    public function findFacturesByMonthNotSendAndNotPaid(string $month): array
+    {
+        return $this->getQBl()
+            ->andWhere('facture.mois = :mois')
+            ->setParameter('mois', $month)
+            ->andWhere('facture.payeLe IS NOT NULL')
             ->andWhere('facture.envoyeLe IS NULL')
             ->getQuery()->getResult();
     }
@@ -102,19 +105,6 @@ final class FactureRepository extends ServiceEntityRepository
             ->andWhere('facture.mois = :mois')
             ->setParameter('mois', $month)
             ->andWhere('tuteur.facture_papier = 1')
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @return Facture[]
-     */
-    public function findFacturesPaidByYear(int $year): array
-    {
-        return $this->getQBl()
-            ->andWhere('facture.payeLe IS NOT NULL')
-            ->andWhere('facture.mois LIKE :year')
-            ->setParameter('year', '%'.$year.'%')
-            ->addOrderBy('facture.nom')
             ->getQuery()->getResult();
     }
 

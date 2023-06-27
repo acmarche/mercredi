@@ -99,14 +99,15 @@ final class FactureSendController extends AbstractController
     #[Route(path: '/all/mail/{month}', name: 'mercredi_admin_facture_send_all_by_mail', methods: ['GET', 'POST'])]
     public function sendAllFacture(Request $request, string $month): Response
     {
-        $factures = $this->factureRepository->findFacturesByMonth($month);
-        $facturesNotSend = $this->factureRepository->findFacturesByMonthNotSend($month);
+        $factures = $this->factureRepository->findFacturesByMonthNotPaid($month);
+
         $form = $this->createForm(FactureSendAllType::class, $this->factureEmailFactory->initFromAndToForForm());
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ([] === $factures) {
-                $this->addFlash('warning', 'Aucune facture trouvée pour ce mois');
+                $this->addFlash('warning', 'Aucune facture non payée n\'a été trouvée pour ce mois');
 
                 return $this->redirectToRoute('mercredi_admin_facture_send_select_month');
             }
@@ -143,7 +144,6 @@ final class FactureSendController extends AbstractController
             [
                 'form' => $form->createView(),
                 'factures' => $factures,
-                'facturesNotSend' => $facturesNotSend,
                 'month' => $month,
             ]
         );

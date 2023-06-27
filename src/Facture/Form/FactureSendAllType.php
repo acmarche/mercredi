@@ -15,7 +15,7 @@ final class FactureSendAllType extends AbstractType
             ->add('force', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Forcer l\'envoi',
-                'help' => 'Si la case est cochée, les factures qui ont déjà été envoyées le seront à nouveau',
+                'help' => 'Si cette case est cochée, les factures qui ont déjà été envoyées mais non payées seront à nouveau envoyées',
             ]);
     }
 
