@@ -8,9 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class SearchPresenceByMonthType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formBuilder
+        $builder
             ->add(
                 'mois',
                 TextType::class,
@@ -22,5 +22,7 @@ final class SearchPresenceByMonthType extends AbstractType
                     'help' => 'Exemple: 05/2020',
                 ]
             );
+
+        $builder->addEventSubscriber(new AddFieldSearchPlaineSubscriber());
     }
 }

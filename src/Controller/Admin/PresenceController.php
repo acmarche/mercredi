@@ -91,6 +91,7 @@ final class PresenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $mois = $data['mois'];
+            $filter = $data['filter'];
 
             try {
                 $date = DateUtils::createDateTimeFromDayMonth($mois);
@@ -100,7 +101,7 @@ final class PresenceController extends AbstractController
                 return $this->redirectToRoute('mercredi_admin_presence_by_month');
             }
 
-            $listingPresences = $this->listingPresenceByMonth->create($date);
+            $listingPresences = $this->listingPresenceByMonth->create($date, $filter);
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST_BY_MONTH, $data);
         }
 

@@ -2,6 +2,9 @@
 {{ form_errors(form) }}
 
 {{ form_row(form.mois, {label_attr: {class: 's2r-only'}, attr:{'class': ' '} }) }}
+{% if form.filter is defined %}
+    {{ form_row(form.filter, {label_attr: {class: 's2r-only'}, attr:{'class': ' '} }) }}
+{% endif %}
 
 <button class="btn btn-primary " type="submit"><i class="fas fa-search"></i> Rechercher</button>
 

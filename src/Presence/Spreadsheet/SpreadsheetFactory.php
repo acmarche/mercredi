@@ -59,7 +59,7 @@ final class SpreadsheetFactory
         }
 
         $ligne = 3;
-        foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
+        foreach ($listingPresenceByMonth->enfants as $enfant) {
             $colonne = 'A';
 
             $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
@@ -96,7 +96,7 @@ final class SpreadsheetFactory
             ->setCellValue(++$colonne.$ligne, 'Prénom')
             ->setCellValue(++$colonne.$ligne, 'Né le');
 
-        foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
+        foreach ($listingPresenceByMonth->joursListing as $jourListing) {
             $worksheet->setCellValue(++$colonne.$ligne, $jourListing->getJour()->getDateJour()->format(self::FORMAT));
         }
         $worksheet->setCellValue(++$colonne.$ligne, 'Total');
@@ -105,7 +105,7 @@ final class SpreadsheetFactory
          * Pour chaque enfant on affiche present ou pas et son total.
          */
         $ligne = 3;
-        foreach ($listingPresenceByMonth->getEnfants() as $enfant) {
+        foreach ($listingPresenceByMonth->enfants as $enfant) {
             $colonne = 'A';
 
             $neLe = null !== $enfant->getBirthday() ? $enfant->getBirthday()->format(self::FORMAT) : '';
@@ -115,7 +115,7 @@ final class SpreadsheetFactory
                 ->setCellValue(++$colonne.$ligne, $neLe);
 
             $countPresences = 0;
-            foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
+            foreach ($listingPresenceByMonth->joursListing as $jourListing) {
                 $present = 0;
                 if ($jourListing->hasEnfant($enfant)) {
                     $present = 1;
@@ -131,15 +131,15 @@ final class SpreadsheetFactory
          * Total enfants et total enfants par jour.
          */
         $colonne = 'A';
-        $worksheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getEnfants()).' enfants');
+        $worksheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->enfants).' enfants');
         $colonne = 'D';
 
-        foreach ($listingPresenceByMonth->getJoursListing() as $jourListing) {
+        foreach ($listingPresenceByMonth->joursListing as $jourListing) {
             $worksheet->setCellValue($colonne.$ligne, \count($jourListing->getEnfants()));
             ++$colonne;
         }
 
-        $worksheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->getPresences()));
+        $worksheet->setCellValue($colonne.$ligne, \count($listingPresenceByMonth->presences));
 
         return $spreadsheet;
     }

@@ -144,11 +144,11 @@ final class CheckupController extends AbstractController
         );
     }
 
-    #[Route(path: '/presences', name: 'mercredi_admin_checkup_presence')]
+    #[Route(path: '/presences')]
     public function presences(): Response
     {
         $dateTime = new DateTime('01-10-2021');
-        $jours = $this->jourRepository->findDaysByMonth($dateTime);
+        $jours = $this->jourRepository->findDaysByMonth($dateTime, null);
         $presences = $this->presenceRepository->findByDays($jours);
         foreach ($presences as $presence) {
             $ordre = $this->ordreService->getOrdreOnPresence($presence);
@@ -164,7 +164,7 @@ final class CheckupController extends AbstractController
         );
     }
 
-    #[Route(path: '/factures', name: 'mercredi_admin_checkup_presence')]
+    #[Route(path: '/factures')]
     public function factures(): Response
     {
         $factures = $this->factureRepository->findFacturesByMonth('10-2021');
@@ -199,7 +199,7 @@ final class CheckupController extends AbstractController
                             $presence
                         );
                     }
-                    if (! isset($data[$i]['montant'])) {
+                    if (!isset($data[$i]['montant'])) {
                         $data[$i]['montant'] = 0;
                     }
                     $data[$i]['montant'] += ($newcout - $presenceFactured->getCoutCalculated());

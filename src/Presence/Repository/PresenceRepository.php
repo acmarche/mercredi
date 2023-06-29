@@ -86,7 +86,7 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findByDays(array $days): array
     {
-        return $this->createQBlWithoutPlaine()
+        return $this->createQBlBase()
             ->andWhere('presence.jour IN (:jours)')
             ->setParameter('jours', $days)
             ->addOrderBy('jour.date_jour')
@@ -99,7 +99,7 @@ final class PresenceRepository extends ServiceEntityRepository
      */
     public function findByDay(Jour $jour): array
     {
-        return $this->createQBlWithoutPlaine()
+        return $this->createQBlBase()
             ->andWhere('presence.jour = :jour')
             ->setParameter('jour', $jour)
             ->addOrderBy('enfant.nom')

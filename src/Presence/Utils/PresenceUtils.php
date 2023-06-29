@@ -16,6 +16,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class PresenceUtils
 {
+    public const types = [
+        'Mercredi et Plaines' => self::mercredi_plaine,
+        'Mercredi' => self::mercredi,
+        'Plaines' => self::plaine,
+    ];
+    public const mercredi = null;
+    public const plaine = true;
+    public const mercredi_plaine = false;
+
     public function __construct(
         private ParameterBagInterface $parameterBag,
         private RelationRepository $relationRepository

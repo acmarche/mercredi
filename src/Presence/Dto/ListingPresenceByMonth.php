@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Presence\Dto;
 
 use AcMarche\Mercredi\Entity\Enfant;
-use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -14,15 +13,15 @@ final class ListingPresenceByMonth
     /**
      * @var Presence[]
      */
-    private array $presences;
+    public array $presences;
     /**
      * @var Enfant[]
      */
-    private array $enfants;
+    public array $enfants;
     /**
      * @var JourListing[]
      */
-    private array $joursListing;
+    public array $joursListing;
 
     public function __construct(
         private PresenceRepository $presenceRepository,
@@ -30,10 +29,11 @@ final class ListingPresenceByMonth
     ) {
     }
 
-    public function create(DateTimeInterface $dateTime): self
+    public function create(DateTimeInterface $dateTime, ?bool $filter = null): self
     {
-        $daysOfMonth = $this->getDaysOfMonth($dateTime);
-        $this->presences = $this->getPresencesOfMonth($dateTime);
+        $daysOfMonth = $this->jourRepository->findDaysByMonth($dateTime, $filter);
+
+        $this->presences = $this->presenceRepository->findByDays($daysOfMonth);
         $this->enfants = $this->getEnfantsPresentsOfMonth();
 
         $joursListing = [];
@@ -41,7 +41,7 @@ final class ListingPresenceByMonth
         foreach ($daysOfMonth as $jour) {
             $presences = $this->presenceRepository->findByDay($jour);
             $enfantsByday = array_map(
-                fn ($presence) => $presence->getEnfant(),
+                fn($presence) => $presence->getEnfant(),
                 $presences
             );
             $joursListing[] = new JourListing($jour, $enfantsByday);
@@ -52,54 +52,12 @@ final class ListingPresenceByMonth
     }
 
     /**
-     * @return Jour[]
-     */
-    public function getDaysOfMonth(DateTimeInterface $dateTime): array
-    {
-        return $this->jourRepository->findDaysByMonth($dateTime);
-    }
-
-    /**
-     * @return Presence[]
-     */
-    public function getPresences(): array
-    {
-        return $this->presences;
-    }
-
-    /**
-     * @return Enfant[]
-     */
-    public function getEnfants(): array
-    {
-        return $this->enfants;
-    }
-
-    /**
-     * @return JourListing[]
-     */
-    public function getJoursListing(): array
-    {
-        return $this->joursListing;
-    }
-
-    /**
-     * @return Presence[]
-     */
-    private function getPresencesOfMonth(DateTimeInterface $dateTime): array
-    {
-        $jours = $this->jourRepository->findDaysByMonth($dateTime);
-
-        return $this->presenceRepository->findByDays($jours);
-    }
-
-    /**
      * @return Enfant[]
      */
     private function getEnfantsPresentsOfMonth(): array
     {
         $enfants = array_map(
-            fn ($presence) => $presence->getEnfant(),
+            fn($presence) => $presence->getEnfant(),
             $this->presences
         );
 

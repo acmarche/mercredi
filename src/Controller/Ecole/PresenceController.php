@@ -41,7 +41,7 @@ final class PresenceController extends AbstractController
         }
 
         $childCare = [];
-        foreach ($this->jourRepository->findDaysByMonth($dateSelected) as $day) {
+        foreach ($this->jourRepository->findDaysByMonth($dateSelected, null) as $day) {
             $childCare[] = $day->getDateJour()->format('Y-m-d');
         }
 

@@ -10,7 +10,6 @@ use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -60,18 +59,28 @@ final class JourRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param ?bool $filter null => only mercredi, true only plaine, false both
      * @return Jour[]
+     * @see PresenceUtils
      */
-    public function findDaysByMonth(DateTimeInterface $dateTime): array
+    public function findDaysByMonth(DateTimeInterface $dateTime, ?bool $filter = null): array
     {
-        return $this->createQueryBuilder('jour')
+        $qb = $this->createQueryBuilder('jour')
             ->leftJoin('jour.plaine', 'plaine', 'WITH')
             ->addSelect('plaine')
             ->andWhere('jour.date_jour LIKE :date')
             ->setParameter('date', $dateTime->format('Y-m').'%')
-            ->addOrderBy('jour.date_jour', 'ASC')
-            ->andWhere('plaine IS NULL')
-            ->getQuery()->getResult();
+            ->addOrderBy('jour.date_jour', 'ASC');
+
+        if ($filter === true) {
+            $qb->andWhere('plaine IS NOT NULL');
+        }
+
+        if ($filter === null) {
+            $qb->andWhere('plaine IS NULL');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -90,24 +99,6 @@ final class JourRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @return Jour[]
-     */
-    public function findNotArchived(): array
-    {
-        return $this->getQlNotPlaine()
-            ->getQuery()->getResult();
-    }
-
-    public function getQbForListingAnimateur(Animateur $animateur): QueryBuilder
-    {
-        return $this->getQlNotPlaine()
-            ->andWhere('plaineJour IS NULL')
-            ->andWhere(':animateur MEMBER OF jour.animateurs')
-            ->setParameter('animateur', $animateur)
-            ->orderBy('jour.date_jour', 'DESC');
     }
 
     /**
@@ -145,32 +136,6 @@ final class JourRepository extends ServiceEntityRepository
         return $this->getQbDaysNotRegisteredByEnfant($enfant)
             ->andWhere('jour.date_jour >= :date')
             ->setParameter('date', $dateTime->format('Y-m-d').'%');
-    }
-
-    /**
-     * use in Handler plaine.
-     *
-     * @throws NonUniqueResultException
-     */
-    public function findOneByDateTimeAndPlaine(\DateTimeInterface $dateTime, Plaine $plaine): ?Jour
-    {
-        return $this->createQueryBuilder('jour')
-            ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
-            ->andWhere('jour.plaine = :plaine')
-            ->setParameter('plaine', $plaine)
-            ->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findOneByDate(\DateTimeInterface $dateTime): ?Jour
-    {
-        return $this->createQueryBuilder('jour')
-            ->andWhere('jour.date_jour LIKE :date')
-            ->setParameter('date', $dateTime->format('Y-m-d').'%')
-            ->getQuery()->getOneOrNullResult();
     }
 
     /**

@@ -51,6 +51,7 @@ final class ExportController extends AbstractController
     {
         $args = $this->searchHelper->getArgs(SearchHelper::PRESENCE_LIST_BY_MONTH);
         $mois = $args['mois'] ?? null;
+        $filter = $args['filter'] ?? null;
         if (! $mois) {
             $this->addFlash('danger', 'Indiquez un mois');
 
@@ -64,7 +65,7 @@ final class ExportController extends AbstractController
             return $this->redirectToRoute('mercredi_admin_presence_by_month');
         }
         $fileName = 'listing-'.$date->format('m-Y').'.xls';
-        $listingPresences = $this->listingPresenceByMonth->create($date);
+        $listingPresences = $this->listingPresenceByMonth->create($date, $filter);
         if ($one) {
             $spreadsheet = $this->spreadsheetFactory->createXlsByMonthForOne($date, $listingPresences);
         } else {
