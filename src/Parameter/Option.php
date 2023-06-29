@@ -21,4 +21,5 @@ class Option
     public const LDAP_DN = 'mercredi.ldap.dn';
     public const LDAP_USER = 'mercredi.ldap.user';
     public const LDAP_PASSWORD = 'mercredi.ldap.password';
+    public const PLAINE = 'mercredi.plaine';
 }
