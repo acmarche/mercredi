@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Facture\Repository;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Facture\FactureCron;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,6 +21,16 @@ final class FactureCronRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, FactureCron::class);
+    }
+
+    /**
+     * @return array|FactureCron[]
+     */
+    public function findAllOrdered(): array
+    {
+        return $this->createQueryBuilder('cron')
+            ->orderBy('cron.month_date', Criteria::DESC)
+            ->getQuery()->getResult();
     }
 
     /**

@@ -1,0 +1,47 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Tâches planifiées des envois de factures</h3>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                <tr>
+                    <th>Mois</th>
+                    <th>Envoyé de</th>
+                    <th>Sujet</th>
+                    <th>Dernière syncro</th>
+                    <th>Terminé</th>
+                    <th>Force</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for factureCron in crons %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_admin_facture_cron_show', { 'id': factureCron.id }) }}">
+                                {{ factureCron.monthDate }}
+                            </a>
+                        </td>
+                        <td>{{ factureCron.fromAdresse }}</td>
+                        <td>{{ factureCron.subject }}</td>
+                        <td>
+                            {% if factureCron.dateLastSync %}
+                                {{ factureCron.dateLastSync|format_date('full') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ factureCron.done }}</td>
+                        <td>{{ factureCron.force_send }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

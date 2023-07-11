@@ -1,0 +1,42 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Détails de la tâche planifiée du {{ factureCron.monthDate }}</h3>
+
+        <div class="card-body">
+            {% include '@AcMarcheMercrediAdmin/facture_cron/_actions.html.twig' %}
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>De</th>
+                    <td>{{ factureCron.fromAdresse }}</td>
+                </tr>
+                <tr>
+                    <th>Sujet</th>
+                    <td>{{ factureCron.subject }}</td>
+                </tr>
+                <tr>
+                    <th>Dernière syncro</th>
+                    <td>
+                        {% if factureCron.dateLastSync %}
+                            {{ factureCron.dateLastSync|format_date('full') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Finis</th>
+                    <td>{{ factureCron.done }}</td>
+                </tr>
+                <tr>
+                    <th>Forcer l'envoi</th>
+                    <td>{{ factureCron.force_send }}</td>
+                </tr>
+            </table>
+
+            {{ factureCron.body|nl2br }}
+
+        </div>
+    </div>
+    {% include '@AcMarcheMercrediAdmin/facture_cron/_delete_form.html.twig' %}
+{% endblock %}
