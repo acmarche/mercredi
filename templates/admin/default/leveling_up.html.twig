@@ -1,0 +1,62 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Passage de niveau</h3>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                Pour tous les enfants actifs (non archivés) le changement d'année scolaire
+                va se faire automatiquement suivant <a href="{{ path('mercredi_admin_annee_scolaire_index') }}"
+                                                       target="_blank">
+                    le tableau des années scolaires</a>
+                <br/>
+                Pour les enfants en dernière année, ceux-ci seront automatiquement archivés
+            </div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <button type="submit" name="submit" class="btn btn-primary">
+                <i class="fas fa-socks"></i> Valider le changement d'année scolaire
+            </button>
+            {{ form_end(form) }}
+
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Année actuelle</th>
+                    <th>Année suivante</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for enfant in enfants %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
+                                {{ enfant.nom }}
+                            </a>
+                        </td>
+                        <td>{{ enfant.prenom }}</td>
+                        <td>{{ enfant.anneeScolaire }}</td>
+                        <td>
+                            {{ enfant.nextYear ?? '<span class="text-warning">Archivé</span>' }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="card-footer text-end">
+            <a href="{{ path('mercredi_admin_enfant_index') }}">
+                <i class="fas fa-arrow-left"></i>
+                Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %}

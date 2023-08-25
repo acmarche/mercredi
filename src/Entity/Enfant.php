@@ -111,6 +111,7 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     public array $jours = [];
 
     public Tuteur $tuteur;
+    public ?AnneeScolaire $nextYear = null;
 
     public function __construct()
     {

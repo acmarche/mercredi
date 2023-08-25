@@ -6,6 +6,7 @@
             <h3>Liste des années scolaires</h3>
         </div>
         <div class="card-body">
+
             <a class="btn btn-primary m-2" role="button"
                href="{{ path('mercredi_admin_annee_scolaire_new') }}"><i class="fas fa-plus"></i> Ajouter une année
                 scolaire</a>
@@ -36,6 +37,10 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+            <a class="btn btn-primary m-2" role="button"
+               href="{{ path('mercredi_admin_leveling_up') }}"><i class="fas fa-socks"></i>
+                Passage d'année scolaire</a>
         </div>
     </div>
 
