@@ -19,7 +19,6 @@ class ContactEmailFactory
             ->subject('[Mercredi] '.$nom.' vous contact via le site')
             ->from($this->getEmailAddressOrganisation())
             ->to($this->getEmailAddressOrganisationAdmin())
-            ->bcc('jf@marche.be')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/contact.html.twig')
             ->context(
                 [

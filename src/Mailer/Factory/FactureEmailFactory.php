@@ -55,7 +55,7 @@ class FactureEmailFactory
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject($sujet)
-            ->from($from)
+            ->from(new Address($this->getEmailAddressOrganisationAdmin(), $from))
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(

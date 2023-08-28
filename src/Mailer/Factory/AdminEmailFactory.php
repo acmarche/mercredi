@@ -17,7 +17,7 @@ class AdminEmailFactory
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
-            ->from($user->getEmail())
+            ->from($this->getEmailAddressOrganisationAdmin())
             ->to($this->getEmailAddressOrganisationAdmin())
             ->subject('Un enfant a été ajouté par '.$user->getNom().' '.$user->getPrenom())
             ->textTemplate('@AcMarcheMercrediEmail/admin/_mail_add_enfant.html.twig')
