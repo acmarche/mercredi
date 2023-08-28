@@ -11,19 +11,20 @@ class ContactEmailFactory
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    public function sendContactForm(string $from, string $nom, string $body): NotificationEmailJf
+    public function sendContactForm(string $email, string $nom, string $body): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
 
         $message
             ->subject('[Mercredi] '.$nom.' vous contact via le site')
-            ->from($from)
+            ->from($this->getEmailAddressOrganisation())
             ->to($this->getEmailAddressOrganisationAdmin())
             ->bcc('jf@marche.be')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/contact.html.twig')
             ->context(
                 [
                     'body' => $body,
+                    'email' => $email,
                 ]
             );
 
