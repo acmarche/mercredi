@@ -38,7 +38,7 @@ final class EnfantRepository extends ServiceEntityRepository
     public function findAllActif(int $max = 10000): array
     {
         return $this->getNotArchivedQueryBuilder()
-            ->setMaxResults($max)->getQuery()->getResult();
+            ->getQuery()->getResult();
     }
 
     /**
