@@ -24,7 +24,7 @@ class ContactEmailFactory
             ->context(
                 [
                     'body' => $body,
-                    'email' => $email,
+                    'courriel' => $email,
                 ]
             );
 
