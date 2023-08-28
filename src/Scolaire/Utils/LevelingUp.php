@@ -17,22 +17,28 @@ class LevelingUp
     /**
      * @return Enfant[]
      */
-    public function sock(bool $flush = false): array
+    public function prepare(): array
     {
         $enfants = $this->enfantRepository->findAllActif();
 
         foreach ($enfants as $enfant) {
-            if (!$enfant->nextYear = $this->anneeScolaireRepository->findNext($enfant->getAnneeScolaire())) {
-                $enfant->setArchived(true);
-            }
-            if ($flush) {
-                $enfant->setAnneeScolaire($enfant->nextYear);
-            }
-        }
-        if ($flush) {
-            $this->enfantRepository->flush();
+            $enfant->nextYear = $this->anneeScolaireRepository->findNext($enfant->getAnneeScolaire());
         }
 
         return $enfants;
     }
+
+    public function up(): void
+    {
+        $enfants = $this->enfantRepository->findAllActif();
+        foreach ($enfants as $enfant) {
+            if (!$enfant->nextYear = $this->anneeScolaireRepository->findNext($enfant->getAnneeScolaire())) {
+                $enfant->setArchived(true);
+            }
+            $enfant->setAnneeScolaire($enfant->nextYear);
+        }
+        $this->enfantRepository->flush();
+    }
+
+
 }

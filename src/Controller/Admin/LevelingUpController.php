@@ -23,9 +23,9 @@ final class LevelingUpController extends AbstractController
     {
         $form = $this->createForm(LevelingUpType::class);
         $form->handleRequest($request);
-        $enfants = $this->levelingUp->sock();
+        $enfants = $this->levelingUp->prepare();
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->levelingUp->sock(true);
+            $this->levelingUp->up();
             $this->addFlash('success', 'Le changement a bien été effectué');
 
             return $this->redirectToRoute('mercredi_admin_enfant_index');
