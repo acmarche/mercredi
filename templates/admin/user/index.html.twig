@@ -18,6 +18,7 @@
                         <th>Email</th>
                         <th>Role(s)</th>
                         <th>Associé(s) à</th>
+                        <th>Inscrit le</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,6 +41,9 @@
                                 {% for animateur in user.animateurs %}
                                     <a href="{{ path('mercredi_admin_animateur_show', {'id': animateur.id}) }}">{{ animateur }}</a>
                                 {% endfor %}
+                            </td>
+                            <td>
+                                {{ user.createdAt|date('d-m-Y') }}
                             </td>
                         </tr>
                     {% endfor %}

@@ -101,7 +101,7 @@
             </table>
         </div>
         <div class="card-footer">
-            <span class="text-muted">{{ user.roles|join(', ') }}</span>
+            <span class="text-muted">{{ user.roles|join(', ') }}. Inscrit le {% if  user.createdAt %} {{ user.createdAt |format_date('full') }}{% endif %}</span>
         </div>
     </div>
 
