@@ -18,19 +18,19 @@ class FactureCron implements TimestampableInterface
     use TimestampableTrait;
 
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private string $fromAdresse;
+    public string $fromAdresse;
     #[ORM\Column(type: 'string', length: 150, nullable: false)]
-    private string $subject;
+    public string $subject;
     #[ORM\Column(type: 'text', nullable: false)]
-    private string $body;
+    public string $body;
     #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)]
-    private string $month_date;
+    public string $month_date;
     #[ORM\Column(type: 'boolean', nullable: false)]
     public bool $force_send = false;
     #[ORM\Column(type: 'boolean', nullable: false)]
-    private bool $done = false;
+    public bool $done = false;
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?DateTimeInterface $dateLastSync = null;
+    public ?DateTimeInterface $dateLastSync = null;
 
     public function __construct(
         string $fromAdresse,

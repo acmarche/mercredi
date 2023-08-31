@@ -28,9 +28,7 @@ class FactureCronHandler
     public function execute(int $max = 50): array
     {
         $result = [];
-        if (!$crons = $this->factureCronRepository->findNotDone()) {
-            return [];
-        }
+        $crons = $this->factureCronRepository->findNotDone();
 
         $now = Carbon::now();
         foreach ($crons as $cron) {

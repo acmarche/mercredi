@@ -124,7 +124,7 @@ final class FactureSendController extends AbstractController
             $cron->force_send = $data['force'];
             $this->factureCronRepository->flush();
 
-            if ($cron->force) {
+            if ($cron->force_send) {
                 foreach ($factures as $facture) {
                     $facture->setEnvoyeLe(null);
                     $this->factureRepository->flush();

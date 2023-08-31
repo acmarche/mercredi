@@ -79,7 +79,7 @@ final class FactureRepository extends ServiceEntityRepository
         return $this->getQBl()
             ->andWhere('facture.mois = :mois')
             ->setParameter('mois', $month)
-            ->andWhere('facture.payeLe IS NOT NULL')
+            ->andWhere('facture.payeLe IS NULL')
             ->getQuery()->getResult();
     }
 
@@ -91,7 +91,7 @@ final class FactureRepository extends ServiceEntityRepository
         return $this->getQBl()
             ->andWhere('facture.mois = :mois')
             ->setParameter('mois', $month)
-            ->andWhere('facture.payeLe IS NOT NULL')
+            ->andWhere('facture.payeLe IS NULL')
             ->andWhere('facture.envoyeLe IS NULL')
             ->getQuery()->getResult();
     }
@@ -187,15 +187,13 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
-    public function findByTuteurAndYearPaid(Tuteur $tuteur, int $year): array
+    public function findByTuteurAndPaidInYear(Tuteur $tuteur, int $year): array
     {
-        $qb = $this->getQBl()
+        return $this->getQBl()
             ->andWhere('facture.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur->getId())
             ->andWhere('facture.payeLe LIKE :year')
-            ->setParameter('year', '%'.$year.'%');
-
-        return $qb
+            ->setParameter('year', '%'.$year.'%')
             ->getQuery()->getResult();
     }
 

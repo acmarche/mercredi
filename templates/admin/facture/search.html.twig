@@ -39,9 +39,7 @@
                                 {{ facture.mois }}
                             </td>
                             <td>
-                                <a href="{{ path('mercredi_admin_tuteur_show', { 'id': facture.tuteur.id }) }}">
-                                    {{ facture.tuteur }}
-                                </a>
+                                {{ facture.tuteur }}
                             </td>
                             <td>{{ facture.enfants|join(',') }}</td>
                             <td>{{ facture.ecoles|join(',') }}</td>

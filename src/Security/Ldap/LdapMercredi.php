@@ -10,7 +10,7 @@ use Symfony\Component\Ldap\Exception\DriverNotFoundException;
 use Symfony\Component\Ldap\LdapInterface;
 
 /**
- * Copy/Paste.
+ * Copy/Paste. from:
  *
  * @see Ldap
  */
@@ -24,7 +24,7 @@ class LdapMercredi implements LdapInterface
     /**
      * {@inheritdoc}
      */
-    public function bind(string $dn = null, string $password = null): void
+    public function bind(string $dn = null, #[\SensitiveParameter] string $password = null): void
     {
         $this->adapter->getConnection()->bind($dn, $password);
     }

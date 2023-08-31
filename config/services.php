@@ -1,15 +1,7 @@
 <?php
 
-use AcMarche\Mercredi\Contrat\Facture\FacturePdfPresenceInterface;
-use AcMarche\Mercredi\Contrat\Plaine\PlaineCalculatorInterface;
-use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
-use AcMarche\Mercredi\Contrat\Tarification\TarificationFormGeneratorInterface;
-use AcMarche\Mercredi\Facture\Render\FacturePdfPresenceHotton;
-use AcMarche\Mercredi\Jour\Tarification\Form\TarificationHottonFormGenerator;
 use AcMarche\Mercredi\Namer\DirectoryNamer;
 use AcMarche\Mercredi\Parameter\Option;
-use AcMarche\Mercredi\Plaine\Calculator\PlaineHottonCalculator;
-use AcMarche\Mercredi\Presence\Calculator\PrenceHottonCalculator;
 use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
@@ -57,7 +49,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DirectoryNamer::class)
         ->public();
 
-    $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
+    if (interface_exists(LoaderInterface::class)) {
+        $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
+    }
 
     $services->instanceof(AfterUserRegistration::class)
         ->tag('app.user.after_registration');

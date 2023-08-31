@@ -40,7 +40,7 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
 
     public function renderOne(Tuteur $tuteur, Enfant $enfant, int $year): string
     {
-        $factures = $this->factureRepository->findByTuteurAndYearPaid($tuteur, $year, true);
+        $factures = $this->factureRepository->findByTuteurAndPaidInYear($tuteur, $year);
 
         $data = $this->treatment($factures, $tuteur, $enfant);
 
