@@ -19,6 +19,9 @@ final class ScolaireUtils
         }
 
         $anneeScolaire = $enfant->getAnneeScolaire();
+        if (!$anneeScolaire) {
+            return $this->createGroupeScolaireNonClasse();
+        }
 
         if (($groupeScolaire = $anneeScolaire->getGroupeScolaire()) !== null) {
             return $groupeScolaire;
