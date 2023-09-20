@@ -4,7 +4,7 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            <h3>Associer un parent à {{ user }}</h3>
+            <h3>Associer un parent au compte <i>{{ user }}</i></h3>
         </div>
         <div class="card-body">
             {{ form_start(form) }}
@@ -14,6 +14,12 @@
                 Sauvegarder
             </button>
             {{ form_end(form) }}
+
+            <div class="alert alert-info mt-3">
+                Vous ne trouvez pas la fiche parent dans la liste ? <a href="{{ path('mercredi_admin_tuteur_new') }}">
+                    Créé une nouvelle fiche parent
+                </a>
+            </div>
         </div>
     </div>
 

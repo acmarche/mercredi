@@ -16,13 +16,13 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
             <li><a class="dropdown-item" href="{{ path('mercredi_user_associate_tuteur', { 'id': user.id }) }}"
-                   role="button" {% if not user.isParent == true %} disabled title="Donnez le droit de parent"{% endif %}>
+                   role="button" {% if not user.isParent == true %} disabled title="Donnez le rôle de parent"{% endif %}>
                     Associer un parent</a></li>
             <li><a class="dropdown-item" href="{{ path('mercredi_user_associate_ecole', { 'id': user.id }) }}"
-                   role="button" {% if not user.isEcole == true %} disabled title="Donnez le droit d'école" {% endif %}>
+                   role="button" {% if not user.isEcole == true %} disabled title="Donnez le rôle d'école" {% endif %}>
                     Associer une école</a></li>
             <li><a class="dropdown-item"
-                   href="{{ path('mercredi_user_associate_animateur', {'id': user.id}) }}" {% if not user.isAnimateur == true %} disabled title="Donnez le droit de animateur" {% endif %}>
+                   href="{{ path('mercredi_user_associate_animateur', {'id': user.id}) }}" {% if not user.isAnimateur == true %} disabled title="Donnez le rôle d' animateur" {% endif %}>
                     Associer un animateur</a></li>
         </ul>
     </div>
