@@ -104,7 +104,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         }
 
         return $queryBuilder
-            ->addOrderBy('user.nom', 'DESC')
+            ->addOrderBy('user.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }
