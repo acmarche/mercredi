@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Security\Checker\UserChecker;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserRoleType;
@@ -118,10 +119,13 @@ final class UserController extends AbstractController
     #[Route(path: '/{id}', name: 'mercredi_admin_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        $check = UserChecker::check($user);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
             [
                 'user' => $user,
+                'check' => $check,
             ]
         );
     }

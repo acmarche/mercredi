@@ -11,14 +11,14 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\OrdreService;
-use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
+use AcMarche\Mercredi\Security\Checker\UserChecker;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use DateTime;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/checkup')]
@@ -91,33 +91,9 @@ final class CheckupController extends AbstractController
         $bad = [];
         $users = $this->userRepository->findAllOrderByNom();
         foreach ($users as $user) {
-            if ($user->getRoles() < 1) {
-                $bad[] = [
-                    'error' => 'Aucun rôle',
-                    'user' => $user,
-                ];
-                continue;
-            }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_PARENT) && 0 === \count($user->getTuteurs())) {
-                $bad[] = [
-                    'error' => 'Rôle parent, mais aucun parent associé',
-                    'user' => $user,
-                ];
-                continue;
-            }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_ANIMATEUR) && 0 === \count($user->getAnimateurs())) {
-                $bad[] = [
-                    'error' => 'Rôle animateur, mais aucun animateur associé',
-                    'user' => $user,
-                ];
-                continue;
-            }
-            if ($user->hasRole(MercrediSecurityRole::ROLE_ECOLE) && 0 === \count($user->getEcoles())) {
-                $bad[] = [
-                    'error' => 'Rôle école, mais aucune école associée',
-                    'user' => $user,
-                ];
-                continue;
+            $check = UserChecker::check($user);
+            if (count($check) > 0) {
+                $bad[] = $check;
             }
         }
 
