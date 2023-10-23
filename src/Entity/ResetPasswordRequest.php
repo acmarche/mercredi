@@ -13,18 +13,23 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 class ResetPasswordRequest implements ResetPasswordRequestInterface
 {
     use ResetPasswordRequestTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'request_password')]
+    #[ORM\JoinColumn(nullable: false)] private object $user;
+
     public function __construct(
-        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'request_password')] #[ORM\JoinColumn(nullable: false)] private object $user,
+        User $user,
         DateTimeInterface $expiresAt,
         string $selector,
         string $hashedToken
     ) {
         $this->initialize($expiresAt, $selector, $hashedToken);
+        $this->user = $user;
     }
 
     public function getId(): ?int

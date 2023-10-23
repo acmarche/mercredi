@@ -13,6 +13,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: FactureComplementRepository::class)]
 #[ORM\Table(name: 'facture_complement')]
-class FactureComplement implements TimestampableInterface, UuidableInterface
+class FactureComplement implements TimestampableInterface, UuidableInterface, Stringable
 {
     use IdTrait;
     use NomTrait;
@@ -43,6 +44,11 @@ class FactureComplement implements TimestampableInterface, UuidableInterface
         Facture $facture
     ) {
         $this->facture = $facture;
+    }
+
+    public function __toString(): string
+    {
+        return "Complement facture ";
     }
 
     public function getForfait(): ?float

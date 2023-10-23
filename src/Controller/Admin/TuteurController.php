@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Relation\Form\AddChildAutocompleteType;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
@@ -27,6 +28,7 @@ final class TuteurController extends AbstractController
 {
     public function __construct(
         private TuteurRepository $tuteurRepository,
+        private FactureRepository $factureRepository,
         private RelationRepository $relationRepository,
         private SearchHelper $searchHelper,
         private MessageBusInterface $dispatcher,
@@ -146,6 +148,9 @@ final class TuteurController extends AbstractController
                       return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
                   }*/
 
+            foreach ($this->factureRepository->findFacturesByTuteur($tuteur) as $facture) {
+                $this->factureRepository->remove($facture);
+            }
             $id = $tuteur->getId();
             $this->tuteurRepository->remove($tuteur);
             $this->tuteurRepository->flush();

@@ -12,11 +12,12 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\UuidableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Uuidable\UuidableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FactureDecompteRepository::class)]
 #[ORM\Table(name: 'facture_decompte')]
-class FactureDecompte implements TimestampableInterface, UuidableInterface
+class FactureDecompte implements TimestampableInterface, UuidableInterface, Stringable
 {
     use IdTrait;
     use RemarqueTrait;
@@ -36,6 +37,11 @@ class FactureDecompte implements TimestampableInterface, UuidableInterface
         Facture $facture
     ) {
         $this->facture = $facture;
+    }
+
+    public function __toString(): string
+    {
+        return "Complement decompte ";
     }
 
     public function getPayeLe(): ?\DateTimeInterface

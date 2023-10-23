@@ -8,13 +8,14 @@ use AcMarche\Mercredi\Entity\Traits\OrdreTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteurTrait;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Table(name: 'relation')]
 #[ORM\UniqueConstraint(columns: ['tuteur_id', 'enfant_id'])]
 #[ORM\Entity(repositoryClass: RelationRepository::class)]
 #[UniqueEntity(fields: ['tuteur', 'enfant'], message: 'Cet enfant est déjà lié à ce parent')]
-class Relation
+class Relation implements Stringable
 {
     use IdTrait;
     use TuteurTrait;
@@ -40,6 +41,11 @@ class Relation
     ) {
         $this->tuteur = $tuteur;
         $this->enfant = $enfant;
+    }
+
+    public function __toString(): string
+    {
+        return "relation $this->tuteur => $this->enfant";
     }
 
     public function getType(): ?string

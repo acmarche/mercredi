@@ -22,21 +22,4 @@ final class HistoryRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, History::class);
     }
 
-    public function findBySubject(string $subject): ?History
-    {
-        return $this->createQueryBuilder('spam')
-            ->andWhere('spam.subject = :subject')
-            ->setParameter('subject', $subject)
-            ->getQuery()->getOneOrNullResult();
-    }
-
-    public function findBySubjectAndDate(string $subject, \DateTime $today): ?History
-    {
-        return $this->createQueryBuilder('spam')
-            ->andWhere('spam.subject = :subject')
-            ->setParameter('subject', $subject)
-            ->andWhere('spam.created_at LIKE :date')
-            ->setParameter('date', $today->format('Y-m-d'))
-            ->getQuery()->getOneOrNullResult();
-    }
 }

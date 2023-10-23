@@ -1,0 +1,37 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Historique des suppressions</h3>
+        </div>
+        <div class="card-body">
+
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Sujet</th>
+                    <th>Date</th>
+                    <th>Contenu</th>
+                </tr>
+                </thead>
+                {% for history in histories %}
+                    <tr>
+                        <td>
+                            {{ history.subject }}
+                        </td>
+                        <td>
+                            {{ history.created_at|format_date('full') }}
+                        </td>
+                        <td>
+                            {{ history.message|u.truncate(250, '…') }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

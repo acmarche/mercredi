@@ -51,7 +51,7 @@ final class UserAddSubscriber
         if ($user instanceof UserInterface) {
             $identifier = $user->getUserIdentifier();
         } else {
-            $identifier = 'jfsenechal';
+            $identifier = 'usernotfound';
         }
         $entity->setUserAdd($identifier);
     }
