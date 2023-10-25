@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     <th>Nom</th>
-                    <th>Pourcentage</th>
+                    <th>Pourcentage/Montant</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,7 +22,15 @@
                                 {{ reduction.nom }}
                             </a>
                         </td>
-                        <td>{{ reduction.pourcentage }} %</td>
+                        <td>
+                            {% if reduction.forfait %}
+                                {{ reduction.forfait|format_currency('eur') }}
+                            {% endif %}
+                            {% if reduction.pourcentage %}
+                                {{ reduction.pourcentage }} %
+                            {% endif %}
+
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

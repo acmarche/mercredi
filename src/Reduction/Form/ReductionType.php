@@ -12,14 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ReductionType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formBuilder
+        $builder
             ->add('nom')
             ->add(
                 'pourcentage',
@@ -34,8 +29,9 @@ final class ReductionType extends AbstractType
                 'forfait',
                 MoneyType::class,
                 [
+                    'label' => 'Montant fixe',
                     'required' => false,
-                    'help' => 'Montant du forfait, uniquement les chiffres',
+                    'help' => 'Montant fixe de la réduction, uniquement les chiffres',
                 ]
             )
             ->add(
@@ -47,9 +43,9 @@ final class ReductionType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $optionsResolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $optionsResolver->setDefaults(
+        $resolver->setDefaults(
             [
                 'data_class' => Reduction::class,
             ]

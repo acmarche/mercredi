@@ -8,13 +8,13 @@ use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
 use AcMarche\Mercredi\Reduction\Message\ReductionDeleted;
 use AcMarche\Mercredi\Reduction\Message\ReductionUpdated;
 use AcMarche\Mercredi\Reduction\Repository\ReductionRepository;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/reduction')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
