@@ -2,8 +2,11 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\Form\ValidateForm;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Form\AddChildAutocompleteType;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
@@ -14,13 +17,13 @@ use AcMarche\Mercredi\Tuteur\Message\TuteurDeleted;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/tuteur')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -30,6 +33,8 @@ final class TuteurController extends AbstractController
         private TuteurRepository $tuteurRepository,
         private FactureRepository $factureRepository,
         private RelationRepository $relationRepository,
+        private AccueilRepository $accueilRepository,
+        private PresenceRepository $presenceRepository,
         private SearchHelper $searchHelper,
         private MessageBusInterface $dispatcher,
         private AssociationTuteurHandler $associationTuteurHandler
@@ -139,14 +144,44 @@ final class TuteurController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'mercredi_admin_tuteur_delete', methods: ['POST'])]
-    public function delete(Request $request, Tuteur $tuteur): RedirectResponse
+    public function delete(Request $request, Tuteur $tuteur): Response
     {
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
-            /*      if (count($this->presenceRepository->findByTuteur($tuteur)) > 0) {
-                      $this->addFlash('danger', 'Ce tuteur ne peut pas être supprimé car il y a des présences à son nom');
+            $presences = $this->presenceRepository->findByTuteur($tuteur);
+            $accueils = $this->accueilRepository->findByTuteur($tuteur);
+            $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
 
-                      return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
-                  }*/
+            $form = $this->createForm(ValidateForm::class, null, [
+                'action' =>
+                    $this->generateUrl('mercredi_admin_tuteur_delete_confirmed', ['id' => $tuteur->getId()]),
+                'method' => 'POST',
+            ]);
+
+
+            return $this->render(
+                '@AcMarcheMercrediAdmin/tuteur/delete.html.twig',
+                [
+                    'tuteur' => $tuteur,
+                    'accueils' => $accueils,
+                    'presences' => $presences,
+                    'factures' => $factures,
+                    'form' => $form->createView(),
+                ]
+            );
+        }
+
+        $this->addFlash('warning', 'Page non accessible');
+
+        return $this->redirectToRoute('mercredi_admin_tuteur_index');
+    }
+
+    #[Route(path: '/{id}/delete/confirmed', name: 'mercredi_admin_tuteur_delete_confirmed', methods: ['POST'])]
+    public function deleteConfirmed(Request $request, Tuteur $tuteur): RedirectResponse
+    {
+        $form = $this->createForm(ValidateForm::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
 
             foreach ($this->factureRepository->findFacturesByTuteur($tuteur) as $facture) {
                 $this->factureRepository->remove($facture);
