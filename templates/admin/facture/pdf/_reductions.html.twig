@@ -15,8 +15,8 @@
                         {{ reduction.pourcentage|format_number }} %
                     {% endif %}
 
-                    {% if reduction.forfait %}
-                        {{ reduction.forfait|format_currency('eur') }}
+                    {% if reduction.amount %}
+                        {{ reduction.amount|format_currency('eur') }}
                     {% endif %}
                 </td>
             </tr>

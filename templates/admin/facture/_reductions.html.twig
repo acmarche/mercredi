@@ -4,7 +4,7 @@
         <thead>
         <tr>
             <th>Raison</th>
-            <th>Pourcentage ou forfait</th>
+            <th>Pourcentage ou montant fixe</th>
         </tr>
         </thead>
         {% for reduction in factureReductions %}
@@ -19,8 +19,8 @@
                         {{ reduction.pourcentage|format_number }} %
                     {% endif %}
 
-                    {% if reduction.forfait %}
-                        {{ reduction.forfait|format_currency('eur') }}
+                    {% if reduction.amount %}
+                        {{ reduction.amount|format_currency('eur') }}
                     {% endif %}
                 </td>
             </tr>

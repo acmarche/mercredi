@@ -13,12 +13,12 @@
         </tr>
     {% endif %}
     <tr>
-        <td>Total des réductions forfaitaires</td>
-        <td>{{ dto.totalReductionForfaits|format_currency('euro') }}</td>
+        <td>Total des réductions fixes</td>
+        <td>{{ dto.totalReductionAmounts|format_currency('euro') }}</td>
     </tr>
     <tr>
-        <td>Total des compléments forfaitaires</td>
-        <td>{{ dto.totalComplementForfaits|format_currency('euro') }}</td>
+        <td>Total des compléments fixes</td>
+        <td>{{ dto.totalComplementAmounts|format_currency('euro') }}</td>
     </tr>
     <tr>
         <td><strong>Total intermédiaire avant pourcentage</strong></td>

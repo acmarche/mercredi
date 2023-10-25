@@ -4,7 +4,7 @@
         <thead>
         <tr>
             <th>Raison</th>
-            <th>Pourcentage ou forfait</th>
+            <th>Pourcentage ou montant fixe</th>
         </tr>
         </thead>
         {% for complement in factureComplements %}
@@ -19,8 +19,8 @@
                         {{ complement.pourcentage| format_number }} %
                     {% endif %}
 
-                    {% if complement.forfait %}
-                        {{ complement.forfait|format_currency('eur') }}
+                    {% if complement.amount %}
+                        {{ complement.amount|format_currency('eur') }}
                     {% endif %}
                 </td>
             </tr>
