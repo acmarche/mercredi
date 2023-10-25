@@ -200,6 +200,13 @@ final class AccueilController extends AbstractController
     #[IsGranted('accueil_show', subject: 'accueil')]
     public function retard(Request $request, Accueil $accueil): Response
     {
+        if ($this->factureHandler->isBilled($accueil->getId(), FactureInterface::OBJECT_ACCUEIL)) {
+            $this->addFlash('danger', 'Un accueil déjà facturé ne peut être modifié');
+
+            return $this->redirectToRoute('mercredi_admin_accueil_show', [
+                'id' => $accueil->getId(),
+            ]);
+        }
         $args = [
             'heure_retard' => $accueil->getHeureRetard(),
         ];
