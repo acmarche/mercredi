@@ -27,9 +27,9 @@ interface FactureCalculatorInterface
     public function totalAccueils(FactureInterface $facture): float;
 
     /**
-     * Montant total des forfaits.
+     * Montant total des montants fixes.
      */
-    public function totalReductionForfaits(FactureInterface $facture): float;
+    public function totalReductionAmounts(FactureInterface $facture): float;
 
     /**
      * Total des pourcentages a appliquer sur le total de la facture.
@@ -37,9 +37,9 @@ interface FactureCalculatorInterface
     public function totalReductionPourcentage(FactureInterface $facture): float;
 
     /**
-     * Montant total des forfaits.
+     * Montant total des  montants fixes.
      */
-    public function totalComplementForfaits(FactureInterface $facture): float;
+    public function totalComplementAmounts(FactureInterface $facture): float;
 
     /**
      * Total des pourcentages a appliquer sur le total de la facture.

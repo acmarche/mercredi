@@ -9,20 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class JourTarificationDegressiveWithForfaitType extends AbstractType
-{
-    /**
-     * @var string
-     */
-    private const REQUIRED = 'required';
-    /**
-     * @var string
-     */
-    private const LABEL = 'label';
-    /**
-     * @var string
-     */
-    private const HELP = 'help';
-
+{  
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $formBuilder
@@ -32,7 +19,7 @@ final class JourTarificationDegressiveWithForfaitType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Prix 1er enfant',
-                    self::HELP => 'Uniquement les chiffres',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
             ->add(
@@ -41,7 +28,7 @@ final class JourTarificationDegressiveWithForfaitType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Prix 2iem enfant',
-                    self::HELP => 'Uniquement les chiffres',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
             ->add(
@@ -50,7 +37,7 @@ final class JourTarificationDegressiveWithForfaitType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Prix des suivants',
-                    self::HELP => 'Uniquement les chiffres',
+                    'help' => 'Uniquement les chiffres',
                 ]
             )
             ->add(
@@ -58,7 +45,7 @@ final class JourTarificationDegressiveWithForfaitType extends AbstractType
                 MoneyType::class,
                 [
                     'required' => true,
-                    self::HELP => 'Forfait d’un euro de 12h15 à 13h30',
+                    'help' => 'Forfait d’un euro de 12h15 à 13h30',
                 ]
             );
     }

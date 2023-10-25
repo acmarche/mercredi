@@ -11,6 +11,9 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 
 final class PrenceHottonCalculator implements PresenceCalculatorInterface
 {
+    public array $ecoles = [];
+    public string $ordre_raison = '';
+
     public function __construct(
         private OrdreService $ordreService,
         private ReductionCalculator $reductionCalculator
@@ -19,12 +22,19 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
 
     public function calculate(PresenceInterface $presence): float
     {
-        /*
+        /**
          * Absence.avec certificat
          */
         if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
             return 0;
         }
+
+        if (null !== ($reduction = $presence->getReduction())) {
+            if ($reduction->is_forfait === true) {
+                return $reduction->amount;
+            }
+        }
+
         $jour = $presence->getJour();
 
         if (null !== $jour->getPlaine()) {

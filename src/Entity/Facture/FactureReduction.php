@@ -33,7 +33,7 @@ class FactureReduction implements TimestampableInterface, UuidableInterface, Str
     private FactureInterface $facture;
     #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
     #[Assert\Range(min: 0, max: 999)]
-    private ?float $forfait = null;
+    private ?float $amount = null;
     #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
     #[Assert\Range(min: 0, max: 100)]
     private ?float $pourcentage = null;
@@ -51,14 +51,14 @@ class FactureReduction implements TimestampableInterface, UuidableInterface, Str
         return "Complement reduction ";
     }
 
-    public function getForfait(): ?float
+    public function getAmount(): ?float
     {
-        return $this->forfait;
+        return $this->amount;
     }
 
-    public function setForfait(?float $forfait): self
+    public function setAmount(?float $amount): self
     {
-        $this->forfait = $forfait;
+        $this->amount = $amount;
 
         return $this;
     }

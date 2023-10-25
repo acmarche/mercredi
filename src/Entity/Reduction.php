@@ -22,37 +22,21 @@ class Reduction implements Stringable
     use RemarqueTrait;
     #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\Range(min: 0, max: 100)]
-    private ?float $pourcentage = null;
+    public ?float $pourcentage = null;
     #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\Range(min: 0)]
-    private ?float $forfait = null;
+    public ?float $amount = null;
+    #[ORM\Column(nullable: true)]
+    public ?bool $is_forfait = null;
 
     public function __toString(): string
     {
         return $this->getNom().' ('.$this->pourcentage.'%)';
     }
 
-    public function getPourcentage(): ?float
+    public function getIsForfait(): ?bool
     {
-        return $this->pourcentage;
+        return $this->is_forfait;
     }
 
-    public function setPourcentage(?float $pourcentage): self
-    {
-        $this->pourcentage = $pourcentage;
-
-        return $this;
-    }
-
-    public function getForfait(): ?float
-    {
-        return $this->forfait;
-    }
-
-    public function setForfait(?float $forfait): self
-    {
-        $this->forfait = $forfait;
-
-        return $this;
-    }
 }

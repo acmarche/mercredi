@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Reduction\Form;
 
 use AcMarche\Mercredi\Entity\Reduction;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -25,13 +26,23 @@ final class ReductionType extends AbstractType
                     'type' => 'integer',
                     'help' => 'Uniquement les chiffres',
                 ]
-            )->add(
-                'forfait',
+            )
+            ->add(
+                'amount',
                 MoneyType::class,
                 [
                     'label' => 'Montant fixe',
                     'required' => false,
                     'help' => 'Montant fixe de la réduction, uniquement les chiffres',
+                ]
+            )
+            ->add(
+                'is_forfait',
+                CheckboxType::class,
+                [
+                    'label' => 'Appliquer un forfait',
+                    'required' => false,
+                    'help' => 'Un forfait sera appliqué et non une réduction ! Uniquement valable pour un montant fixe',
                 ]
             )
             ->add(

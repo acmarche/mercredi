@@ -259,7 +259,7 @@ final class FactureHandler implements FactureHandlerInterface
         if ($total > 0) {
             $complement = new FactureComplement($facture);
             $complement->setDateLe(new DateTime());
-            $complement->setForfait($total);
+            $complement->setAmount($total);
             $complement->setNom('Retard pour les accueils: '.implode(', ', $retards));
             $facture->addFactureComplement($complement);
             $this->factureRepository->persist($complement);

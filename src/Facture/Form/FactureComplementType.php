@@ -36,11 +36,11 @@ final class FactureComplementType extends AbstractType
                 ]
             )
             ->add(
-                'forfait',
+                'amount',
                 MoneyType::class,
                 [
                     'required' => false,
-                    'help' => 'Montant du forfait, uniquement les chiffres',
+                    'help' => 'Montant fixe, uniquement les chiffres',
                 ]
             )
             ->add(

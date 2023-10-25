@@ -16,8 +16,12 @@
                 {{ reduction.pourcentage| format_number }} %
             {% endif %}
 
-            {% if reduction.forfait %}
-                {{ reduction.forfait | format_number }} €
+            {% if reduction.amount %}
+                <strong>Montant fixe: </strong> {{ reduction.amount | format_currency('eur') }}
+            {% endif %}
+
+            {% if reduction.isForfait %}
+                <br/> <strong>Il s'agit d'un forfait</strong>
             {% endif %}
 
             <br/>

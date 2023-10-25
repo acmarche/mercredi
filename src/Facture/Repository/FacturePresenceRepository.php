@@ -5,8 +5,8 @@ namespace AcMarche\Mercredi\Facture\Repository;
 use AcMarche\Mercredi\Contrat\Presence\PresenceInterface;
 use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
-use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
+use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -60,7 +60,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|FacturePresence[]
+     * @return FacturePresence[]
      */
     public function findByFactureAndType(FactureInterface $facture, string $type): array
     {
@@ -87,10 +87,23 @@ final class FacturePresenceRepository extends ServiceEntityRepository
         return $this->findByIdAndType($accueil->getId(), FactureInterface::OBJECT_ACCUEIL);
     }
 
-    private function createQbl(): QueryBuilder {
+    /**
+     * @return FacturePresence[]
+     */
+    public function findByReduction(Reduction $reduction): array
+    {
+        return $this->createQbl()
+            ->andWhere('facture_presence.reduction = :reduction')
+            ->setParameter('reduction', $reduction)
+            ->getQuery()->getResult();
+    }
+
+    private function createQbl(): QueryBuilder
+    {
         return $this->createQueryBuilder('facture_presence')
             ->leftJoin('facture_presence.facture', 'facture', 'WITH')
             ->leftJoin('facture_presence.reduction', 'reduction', 'WITH')
             ->addSelect('facture', 'reduction');
     }
+
 }

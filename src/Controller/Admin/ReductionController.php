@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Reduction;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Reduction\Form\ReductionType;
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
 use AcMarche\Mercredi\Reduction\Message\ReductionDeleted;
@@ -22,6 +23,7 @@ final class ReductionController extends AbstractController
 {
     public function __construct(
         private ReductionRepository $reductionRepository,
+        private FacturePresenceRepository $facturePresenceRepository,
         private MessageBusInterface $dispatcher
     ) {
     }
@@ -43,6 +45,7 @@ final class ReductionController extends AbstractController
         $reduction = new Reduction();
         $form = $this->createForm(ReductionType::class, $reduction);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->reductionRepository->persist($reduction);
             $this->reductionRepository->flush();
@@ -102,6 +105,15 @@ final class ReductionController extends AbstractController
     public function delete(Request $request, Reduction $reduction): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$reduction->getId(), $request->request->get('_token'))) {
+
+            if (count($this->facturePresenceRepository->findByReduction($reduction)) > 0) {
+                $this->addFlash(
+                    'danger',
+                    'Cette réduction ne peut être supprimée, des factures sont attachées à celle-ci'
+                );
+
+                return $this->redirectToRoute('mercredi_admin_reduction_index');
+            }
             $id = $reduction->getId();
             $this->reductionRepository->remove($reduction);
             $this->reductionRepository->flush();

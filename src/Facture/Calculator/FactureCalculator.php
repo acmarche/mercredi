@@ -37,14 +37,14 @@ class FactureCalculator implements FactureCalculatorInterface
         $factureDetail->totalPresences = $this->totalPresences($facture);
         $factureDetail->totalAccueils = $this->totalAccueils($facture);
         $factureDetail->totalPlaines = $this->totalPlaine($facture);
-        $factureDetail->totalReductionForfaits = $this->totalReductionForfaits($facture);
+        $factureDetail->totalReductionAmounts = $this->totalReductionAmounts($facture);
         $factureDetail->totalReductionPourcentage = $this->totalReductionPourcentage($facture);
-        $factureDetail->totalComplementForfaits = $this->totalComplementForfaits($facture);
+        $factureDetail->totalComplementAmounts = $this->totalComplementAmounts($facture);
         $factureDetail->totalComplementPourcentage = $this->totalComplementPourcentage($facture);
         $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
 
-        $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementForfaits;
-        $factureDetail->total -= $factureDetail->totalReductionForfaits;
+        $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementAmounts;
+        $factureDetail->total -= $factureDetail->totalReductionAmounts;
         $factureDetail->totalHorsPourcentage = $factureDetail->total;
 
         $factureDetail->pourcentageEnPlus = $this->reductionCalculator->calculatePourcentage(
@@ -94,12 +94,12 @@ class FactureCalculator implements FactureCalculatorInterface
         return $cout;
     }
 
-    public function totalReductionForfaits(FactureInterface $facture): float
+    public function totalReductionAmounts(FactureInterface $facture): float
     {
         $reductionForfait = 0;
         foreach ($this->factureReductionRepository->findByFacture($facture) as $reduction) {
-            if ($reduction->getForfait() > 0) {
-                $reductionForfait += $reduction->getForfait();
+            if ($reduction->getAmount() > 0) {
+                $reductionForfait += $reduction->getAmount();
             }
         }
 
@@ -128,12 +128,12 @@ class FactureCalculator implements FactureCalculatorInterface
         return $reductionPourcentage;
     }
 
-    public function totalComplementForfaits(FactureInterface $facture): float
+    public function totalComplementAmounts(FactureInterface $facture): float
     {
         $complementForfait = 0;
         foreach ($this->factureComplementRepository->findByFacture($facture) as $complement) {
-            if ($complement->getForfait() > 0) {
-                $complementForfait += $complement->getForfait();
+            if ($complement->getAmount() > 0) {
+                $complementForfait += $complement->getAmount();
             }
         }
 

@@ -29,28 +29,19 @@ final class PrenceMarcheCalculator implements PresenceCalculatorInterface
         if (MercrediConstantes::ABSENCE_AVEC_CERTIF === $presence->getAbsent()) {
             return 0;
         }
+
+        if (null !== ($reduction = $presence->getReduction())) {
+            if ($reduction->is_forfait === true) {
+                return $reduction->amount;
+            }
+        }
+
         $jour = $presence->getJour();
         if (null !== $jour->getPlaine()) {
             return $this->calculatePlaine($presence, $jour);
         }
 
         return $this->calculatePresence($presence);
-    }
-
-    public function setMetaDatas(PresenceInterface $presence, FacturePresence $facturePresence): void
-    {
-        $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
-        $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
-        $enfant = $presence->getEnfant();
-        if (null !== $enfant->getEcole()) {
-            $this->ecoles[] = $enfant->getEcole()->getNom();
-        }
-        $facturePresence->setNom($enfant->getNom());
-        $facturePresence->setPrenom($enfant->getPrenom());
-        $ordre = $this->getOrdreOnPresence($presence);
-        $facturePresence->setOrdre($ordre);
-        $facturePresence->setAbsent($presence->getAbsent());
-        $facturePresence->setCoutBrut($this->getPrixByOrdre($presence, $ordre));
     }
 
     public function getOrdreOnPresence(PresenceInterface $presence): int

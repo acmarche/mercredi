@@ -150,6 +150,8 @@ final class PresenceController extends AbstractController
     {
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence, type: null);
         $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
+        $prix = $this->presenceCalculator->calculate($presence);
+        dump($prix);
         $fratries = $this->ordreService->getFratriesPresents($presence);
         $plaine = $presence->getJour()->getPlaine();
 

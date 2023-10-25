@@ -8,10 +8,11 @@ final class ReductionCalculator
 {
     public function applicate(Reduction $reduction, float $montant): float
     {
-        if ($forfait = $reduction->getForfait()) {
-            return $montant - $forfait;
+        if ($amount = $reduction->amount) {
+            return $montant - $amount;
         }
-        if ($pourcentage = $reduction->getPourcentage()) {
+
+        if ($pourcentage = $reduction->pourcentage) {
             return $montant - $this->calculatePourcentage($montant, $pourcentage);
         }
 

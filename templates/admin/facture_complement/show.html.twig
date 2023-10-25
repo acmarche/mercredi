@@ -18,8 +18,8 @@
                             {{ factureComplement.pourcentage|format_number }} %
                         {% endif %}
 
-                        {% if factureComplement.forfait %}
-                            {{ factureComplement.forfait|format_currency('eur') }}
+                        {% if factureComplement.amount %}
+                            {{ factureComplement.amount|format_currency('eur') }}
                         {% endif %}
                     </td>
                 </tr>

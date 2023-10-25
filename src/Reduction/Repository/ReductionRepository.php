@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Reduction\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Reduction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,23 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class ReductionRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Reduction::class);
-    }
-
-    public function remove(Reduction $reduction): void
-    {
-        $this->_em->remove($reduction);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Reduction $reduction): void
-    {
-        $this->_em->persist($reduction);
     }
 }
