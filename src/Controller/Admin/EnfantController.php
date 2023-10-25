@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Controller\Admin;
 
+use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
 use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Enfant\Form\EnfantType;
 use AcMarche\Mercredi\Enfant\Form\SearchEnfantType;
@@ -12,18 +13,19 @@ use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Form\ValidateForm;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Search\SearchHelper;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/enfant')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -34,6 +36,7 @@ final class EnfantController extends AbstractController
         private EnfantHandler $enfantHandler,
         private RelationRepository $relationRepository,
         private PresenceRepository $presenceRepository,
+        private AccueilRepository $accueilRepository,
         private PresenceUtils $presenceUtils,
         private SearchHelper $searchHelper,
         private PlainePresenceRepository $plainePresenceRepository,
@@ -98,7 +101,7 @@ final class EnfantController extends AbstractController
     public function show(Enfant $enfant): Response
     {
         $relations = $this->relationRepository->findByEnfant($enfant);
-        $presences = $this->presenceRepository->findAllByEnfant($enfant);
+        $presences = $this->presenceRepository->findByEnfant($enfant);
 
         $presencesGrouped = $this->presenceUtils->groupByYear($presences);
         $fratries = $this->relationRepository->findFrateries($enfant);
@@ -150,9 +153,40 @@ final class EnfantController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'mercredi_admin_enfant_delete', methods: ['POST'])]
-    public function delete(Request $request, Enfant $enfant): RedirectResponse
+    public function delete(Request $request, Enfant $enfant): Response
     {
         if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
+
+            $presences = $this->presenceRepository->findByEnfant($enfant);
+            $accueils = $this->accueilRepository->findByEnfant($enfant);
+
+            $form = $this->createForm(ValidateForm::class, null, [
+                'action' =>
+                    $this->generateUrl('mercredi_admin_enfant_delete_confirmed', ['id' => $enfant->getId()]),
+                'method' => 'POST',
+            ]);
+
+            return $this->render(
+                '@AcMarcheMercrediAdmin/enfant/delete.html.twig',
+                [
+                    'enfant' => $enfant,
+                    'accueils' => $accueils,
+                    'presences' => $presences,
+                    'form' => $form->createView(),
+                ]
+            );
+        }
+
+        return $this->redirectToRoute('mercredi_admin_enfant_index');
+    }
+
+    #[Route(path: '/{id}/delete/confirmed', name: 'mercredi_admin_enfant_delete_confirmed', methods: ['POST'])]
+    public function deleteConfirmed(Request $request, Enfant $enfant): RedirectResponse
+    {
+        $form = $this->createForm(ValidateForm::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $enfantId = $enfant->getId();
             $this->enfantRepository->remove($enfant);
             $this->enfantRepository->flush();

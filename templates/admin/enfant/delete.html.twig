@@ -1,0 +1,32 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="text-danger">Confirmation de suppression de {{ enfant }}</h3>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <p><strong>En supprimant la fiche de l'enfant, vous supprimerez</strong></p>
+
+            <ul class="list-group mb-3">
+                <li class="list-group-item">{{ presences|length }} présences(s)</li>
+                <li class="list-group-item">{{ accueils|length }} accueil(s)</li>
+            </ul>
+
+            <button class="btn btn-danger mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Oui je confirme la suppression de la fiche de l'enfant
+            </button>
+            {{ form_end(form) }}
+
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('mercredi_admin_enfant_show',{'id':enfant.id}) }}" class="mt-4">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %}
+

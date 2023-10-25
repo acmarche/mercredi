@@ -73,7 +73,7 @@ final class PresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findAllByEnfant(Enfant $enfant): array
+    public function findByEnfant(Enfant $enfant): array
     {
         return $this->createQBlBase()
             ->andWhere('presence.enfant = :enfant')
