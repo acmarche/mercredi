@@ -151,8 +151,7 @@ final class EnfantRepository extends ServiceEntityRepository
 
         switch ($archived) {
             case true | false:
-                $queryBuilder->andwhere('enfant.archived = :archive')
-                    ->setParameter('archive', $archived);
+                //no filter
                 break;
             default:
                 $queryBuilder->andwhere('enfant.archived = :archive')

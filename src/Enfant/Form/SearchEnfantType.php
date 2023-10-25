@@ -55,7 +55,7 @@ final class SearchEnfantType extends AbstractType
                 'archived',
                 CheckboxType::class,
                 [
-                    'label' => 'Afficher les enfants archivés',
+                    'label' => 'Afficher aussi les enfants archivés',
                     'required' => false,
                     'label_attr' => [
                         'class' => 'switch-custom',
