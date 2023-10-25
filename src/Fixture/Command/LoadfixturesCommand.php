@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Fixture\Command;
 use AcMarche\Mercredi\Fixture\FixtureLoader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,10 +13,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'mercredi:load-fixtures',
+    description: 'Chargment des fixtures'
+)]
 final class LoadfixturesCommand extends Command
 {
-    protected static $defaultName = 'mercredi:load-fixtures';
-
     public function __construct(
         private FixtureLoader $fixtureLoader,
         private EntityManagerInterface $entityManager,
@@ -27,7 +30,6 @@ final class LoadfixturesCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Chargment des fixtures')
             ->addOption('purge', null, InputOption::VALUE_OPTIONAL);
     }
 

@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\User\Command;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Repository\UserRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,6 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AsCommand(
+    name: 'mercredi:create-user',
+    description: 'Création d\'un utilisateur'
+)]
 final class CreateUserCommand extends Command
 {
     /**
@@ -30,7 +35,6 @@ final class CreateUserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Création d\'un utilisateur')
             ->addArgument('name', InputArgument::REQUIRED, 'nom')
             ->addArgument('email', InputArgument::REQUIRED, 'Email')
             ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe');

@@ -13,7 +13,7 @@ class MailerEventsSubscriber implements EventSubscriberInterface
     {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SentMessageEvent::class => 'onMessageSent',
