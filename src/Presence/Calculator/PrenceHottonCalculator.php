@@ -41,7 +41,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
             return $this->calculatePlaine($presence, $jour);
         }
 
-        return $this->calculatePresence($presence, $jour);
+        return $this->calculatePresence($presence);
     }
 
     public function getPrixByOrdre(PresenceInterface $presence, $ordre): float
@@ -67,7 +67,7 @@ final class PrenceHottonCalculator implements PresenceCalculatorInterface
         return $this->ordreService->getOrdreOnPresence($presence);
     }
 
-    private function calculatePresence(PresenceInterface $presence, Jour $jour): float
+    private function calculatePresence(PresenceInterface $presence): float
     {
         $ordre = $this->getOrdreOnPresence($presence);
         $prix = $this->getPrixByOrdre($presence, $ordre);
