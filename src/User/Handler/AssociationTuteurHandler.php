@@ -32,7 +32,7 @@ final class AssociationTuteurHandler
         try {
             $tuteur = $this->tuteurRepository->findOneByEmail($user->getEmail());
             if (null !== $tuteur) {
-                $associateUserTuteurDto->setTuteur($tuteur);
+                $associateUserTuteurDto->tuteur = $tuteur;
             }
         } catch (NonUniqueResultException) {
         }
@@ -40,8 +40,8 @@ final class AssociationTuteurHandler
 
     public function handleAssociateTuteur(AssociateUserTuteurDto $associateUserTuteurDto): void
     {
-        $tuteur = $associateUserTuteurDto->getTuteur();
-        $user = $associateUserTuteurDto->getUser();
+        $tuteur = $associateUserTuteurDto->tuteur;
+        $user = $associateUserTuteurDto->user;
 
         if ([] !== $this->tuteurRepository->getTuteursByUser($user)) {
             //remove old tuteur
@@ -58,7 +58,7 @@ final class AssociationTuteurHandler
 
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
-        if ($associateUserTuteurDto->isSendEmail()) {
+        if ($associateUserTuteurDto->sendEmail) {
             $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur);
             $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
             $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');

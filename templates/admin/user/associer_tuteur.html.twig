@@ -7,6 +7,9 @@
             <h3>Associer un parent au compte <i>{{ user }}</i></h3>
         </div>
         <div class="card-body">
+            <div class="alert alert-info">
+                Associez un parent existant
+            </div>
             {{ form_start(form) }}
             {{ form_errors(form) }}
             {{ form_widget(form) }}
@@ -16,7 +19,8 @@
             {{ form_end(form) }}
 
             <div class="alert alert-info mt-3">
-                Vous ne trouvez pas la fiche parent dans la liste ? <a href="{{ path('mercredi_admin_tuteur_new') }}">
+                Vous ne trouvez pas la fiche parent dans la liste ? <a
+                        href="{{ path('mercredi_admin_tuteur_new_from_user', {'id':user.id}) }}">
                     Créé une nouvelle fiche parent
                 </a>
             </div>

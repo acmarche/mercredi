@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Form\ValidateForm;
@@ -16,6 +17,7 @@ use AcMarche\Mercredi\Tuteur\Message\TuteurCreated;
 use AcMarche\Mercredi\Tuteur\Message\TuteurDeleted;
 use AcMarche\Mercredi\Tuteur\Message\TuteurUpdated;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
+use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Handler\AssociationTuteurHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -86,6 +88,42 @@ final class TuteurController extends AbstractController
                 ]);
                 $this->addFlash('info', $accountInfo);
             }
+
+            return $this->redirectToRoute('mercredi_admin_tuteur_show', [
+                'id' => $tuteur->getId(),
+            ]);
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/tuteur/new.html.twig',
+            [
+                'tuteur' => $tuteur,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    #[Route(path: '/new/fromuser/{id}', name: 'mercredi_admin_tuteur_new_from_user', methods: ['GET', 'POST'])]
+    public function newFromUser(Request $request, User $user): Response
+    {
+        $tuteur = new Tuteur();
+        $tuteur->setNom($user->getNom());
+        $tuteur->setPrenom($user->getPrenom());
+        $tuteur->setEmail($user->getEmail());
+        $tuteur->setGsm($user->getTelephone());
+
+        $form = $this->createForm(TuteurType::class, $tuteur);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->tuteurRepository->persist($tuteur);
+            $this->tuteurRepository->flush();
+
+            $associateUserTuteurDto = new AssociateUserTuteurDto($user);
+            $associateUserTuteurDto->tuteur = $tuteur;
+            $associateUserTuteurDto->sendEmail = true;
+            $this->associationTuteurHandler->handleAssociateTuteur($associateUserTuteurDto);
+
+            $this->dispatcher->dispatch(new TuteurCreated($tuteur->getId()));
 
             return $this->redirectToRoute('mercredi_admin_tuteur_show', [
                 'id' => $tuteur->getId(),
