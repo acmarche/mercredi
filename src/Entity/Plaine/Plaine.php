@@ -54,7 +54,7 @@ class Plaine implements SluggableInterface, Stringable
      * @var Facture[]
      */
     #[ORM\OneToMany(mappedBy: 'plaine', targetEntity: Facture::class, cascade: ['remove'])]
-    private Collection $factures;
+    private array|Collection $factures;
 
     /**
      * @var array|GroupeScolaire[] $groupesScolaire

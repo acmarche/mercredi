@@ -79,7 +79,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface, Stringable
      * @var Facture[]
      */
     #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'tuteur', cascade: ['remove'])]
-    private Collection $factures;
+    private array|Collection $factures;
     /**
      * @var User[]|Collection
      */

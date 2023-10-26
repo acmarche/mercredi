@@ -9,12 +9,12 @@ trait FacturesTrait
     /**
      * @var Facture[]
      */
-    private Collection $factures;
+    private array|Collection $factures;
 
     /**
      * @return Facture[]
      */
-    public function getFactures(): array
+    public function getFactures(): array|Collection
     {
         return $this->factures;
     }

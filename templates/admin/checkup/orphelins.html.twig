@@ -14,6 +14,8 @@
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Né le</th>
+                    <th>Présence(s)</th>
+                    <th>Accueil(s)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,6 +28,8 @@
                         </td>
                         <td>{{ enfant.prenom }}</td>
                         <td>{{ enfant.birthday ? enfant.birthday|format_datetime('short', 'none') }}</td>
+                        <td>{{ enfant.presences|length }}</td>
+                        <td>{{ enfant.accueils|length }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

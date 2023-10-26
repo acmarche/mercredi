@@ -91,14 +91,14 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     #[ORM\OneToMany(targetEntity: Relation::class, mappedBy: 'enfant', cascade: ['remove'])]
     private Collection $relations;
     /**
-     * J'ai mis la definition pour pouvoir mettre le cascade.
+     * J'ai mis la definition pour pouvoir mettre la cascade.
      *
      * @var Presence[]
      */
     #[ORM\OneToMany(targetEntity: Presence::class, mappedBy: 'enfant', cascade: ['remove'])]
     private Collection $presences;
     /**
-     * J'ai mis la definition pour pouvoir mettre le cascade.
+     * J'ai mis la definition pour pouvoir mettre la cascade.
      *
      * @var Accueil[]
      */

@@ -25,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class CheckupController extends AbstractController
 {
-    private $tutru = null;
+    private ?object $tutru = null;
 
     public function __construct(
         private EnfantRepository $enfantRepository,
@@ -65,10 +65,12 @@ final class CheckupController extends AbstractController
     #[Route(path: '/sansenfants', name: 'mercredi_admin_checkup_sansenfant')]
     public function sansenfant(): Response
     {
+        $tuteurs = $this->tuteurRepository->findSansEnfants();
+
         return $this->render(
             '@AcMarcheMercrediAdmin/checkup/sansenfants.html.twig',
             [
-                'tuteurs' => $this->tuteurRepository->findSansEnfants(),
+                'tuteurs' => $tuteurs,
             ]
         );
     }
