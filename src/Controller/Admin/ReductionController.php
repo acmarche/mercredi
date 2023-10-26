@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Reduction\Form\ReductionType;
 use AcMarche\Mercredi\Reduction\Message\ReductionCreated;
 use AcMarche\Mercredi\Reduction\Message\ReductionDeleted;
@@ -22,9 +23,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ReductionController extends AbstractController
 {
     public function __construct(
-        private ReductionRepository $reductionRepository,
-        private FacturePresenceRepository $facturePresenceRepository,
-        private MessageBusInterface $dispatcher
+        private readonly ReductionRepository $reductionRepository,
+        private readonly FacturePresenceRepository $facturePresenceRepository,
+        private readonly PresenceRepository $presenceRepository,
+        private readonly MessageBusInterface $dispatcher
     ) {
     }
 
@@ -69,10 +71,13 @@ final class ReductionController extends AbstractController
     #[Route(path: '/{id}', name: 'mercredi_admin_reduction_show', methods: ['GET'])]
     public function show(Reduction $reduction): Response
     {
+        $presences = $this->presenceRepository->findByReduction($reduction);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/reduction/show.html.twig',
             [
                 'reduction' => $reduction,
+                'presences' => $presences,
             ]
         );
     }

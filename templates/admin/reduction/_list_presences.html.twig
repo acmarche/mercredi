@@ -1,0 +1,20 @@
+<h4 class="text-success mt-2">Présences liées</h4>
+<table class="table table-bordered">
+    {% for presence in presences %}
+        {% set enfant = presence.enfant %}
+        <tr>
+            <td>
+                {{ enfant }}
+            </td>
+            <td>
+                <a href="{{ path('mercredi_admin_presence_show', {'id': presence.id}) }}">
+                    {{ presence.jour.dateJour|format_date('full') }}
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>Aucune</td>
+        </tr>
+    {% endfor %}
+</table>

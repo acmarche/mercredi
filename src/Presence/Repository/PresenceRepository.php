@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Presence\Presence;
+use AcMarche\Mercredi\Entity\Reduction;
 use AcMarche\Mercredi\Entity\Scolaire\Ecole;
 use AcMarche\Mercredi\Entity\Tuteur;
 use DateTimeInterface;
@@ -103,6 +104,18 @@ final class PresenceRepository extends ServiceEntityRepository
             ->andWhere('presence.jour = :jour')
             ->setParameter('jour', $jour)
             ->addOrderBy('enfant.nom')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Presence[]
+     */
+    public function findByReduction(Reduction $reduction): array
+    {
+        return $this->createQBlBase()
+            ->andWhere('presence.reduction = :reduction')
+            ->setParameter('reduction', $reduction)
+            ->addOrderBy('jour.date_jour')
             ->getQuery()->getResult();
     }
 
@@ -330,5 +343,6 @@ final class PresenceRepository extends ServiceEntityRepository
         return $this->createQBlBase()
             ->andWhere('jour.plaine IS NOT NULL');
     }
+
 
 }
