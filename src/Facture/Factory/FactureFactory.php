@@ -96,6 +96,13 @@ final class FactureFactory
         if ($force === false && is_readable($fileName)) {
             return $fileName;
         }
+        if (is_readable($fileName)) {
+            try {
+                unlink($fileName);
+            } catch (Exception $exception) {
+                throw new Exception($exception->getMessage(), $exception->getCode(), $exception);
+            }
+        }
         $htmlInvoice = $this->createHtml($facture);
         try {
             $this->getPdf()->generateFromHtml($htmlInvoice, $fileName);
