@@ -88,37 +88,22 @@ final class FacturePresenceController extends AbstractController
         );
     }
 
-    /**
-     * Route("/{id}/edit", name="mercredi_admin_facture_presence_edit", methods={"GET","POST"}).
-     */
-    public function edit(Request $request, Facture $facture): Response
-    {
-        $form = $this->createForm(FactureEditType::class, $facture);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            //todo
-            echo '';
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediAdmin/facture/edit.html.twig',
-            [
-                'facture' => $facture,
-                'form' => $form->createView(),
-            ]
-        );
-    }
-
-    #[Route(path: '/{id}/delete', name: 'mercredi_admin_facture_presence_delete', methods: ['POST'])]
-    public function delete(Request $request, FacturePresence $facturePresence): RedirectResponse
+    #[Route(path: '/{id}/detach', name: 'mercredi_admin_facture_presence_detach', methods: ['POST'])]
+    public function detach(Request $request, FacturePresence $facturePresence): RedirectResponse
     {
         $facture = $facturePresence->getFacture();
         if ($this->isCsrfTokenValid('delete'.$facturePresence->getId(), $request->request->get('_token'))) {
             $this->facturePresenceRepository->remove($facturePresence);
             $this->facturePresenceRepository->flush();
+            $presenceId = $facturePresence->getPresenceId();
 
             $this->addFlash('success', 'La présence a bien été détachée');
+
+            if ($presence = $this->presenceRepository->find($presenceId)) {
+                return $this->redirectToRoute('mercredi_admin_presence_show', [
+                    'id' => $presence->getId(),
+                ]);
+            }
         }
 
         return $this->redirectToRoute('mercredi_admin_facture_show', [
