@@ -25,14 +25,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Nombre envoyé
-                        <br/> <span class="text-muted">lors de la dernière synchro</span>
-                    </th>
-                    <td>
-                        {{ factureCron.number_sent }}
-                    </td>
-                </tr>
-                <tr>
                     <th>Finis</th>
                     <td>{{ factureCron.done }}</td>
                 </tr>
@@ -43,6 +35,12 @@
             </table>
 
             {{ factureCron.body|nl2br }}
+
+            <h4 class="text-success">Résultats des envois</h4>
+
+            {% for result in factureCron.results %}
+                {{ dump(result) }}
+            {% endfor %}
 
         </div>
     </div>

@@ -15,7 +15,6 @@
                     <th>Envoyé de</th>
                     <th>Sujet</th>
                     <th>Dernière syncro</th>
-                    <th>Nombre envoyé</th>
                     <th>Terminé</th>
                     <th>Force</th>
                 </tr>
@@ -35,7 +34,6 @@
                                 {{ factureCron.dateLastSync|format_date('full') }}
                             {% endif %}
                         </td>
-                        <td>{{ factureCron.number_sent }}</td>
                         <td>{{ factureCron.done }}</td>
                         <td>{{ factureCron.force_send }}</td>
                     </tr>
