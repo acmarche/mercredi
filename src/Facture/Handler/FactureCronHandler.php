@@ -25,7 +25,7 @@ class FactureCronHandler
 
     }
 
-    public function execute(int $max = 50): array
+    public function execute(int $max = 1): array
     {
         $result = [];
         $crons = $this->factureCronRepository->findNotDone();
@@ -66,7 +66,7 @@ class FactureCronHandler
                 $messageFacture = clone $messageBase; //sinon attachs multiple
 
                 try {
-                    $this->factureFactory->createOnePdf($facture, $cron->getMonthDate());
+                    $this->factureFactory->createOnePdf($facture, $cron->getMonthDate(), $cron->force_send);
                 } catch (\Exception $e) {
                     $error = 'Impossible de générer le pdf pour la facture: '.$facture->getId().' '.$e->getMessage();
                     $message = $this->adminEmailFactory->messageAlert('Erreur pdf facture', $error);
@@ -86,6 +86,7 @@ class FactureCronHandler
                     continue;
                 }
 
+                $emails = ['jf@marche.be'];
                 $this->factureEmailFactory->setTos($messageFacture, $emails);
 
                 try {
@@ -117,6 +118,7 @@ class FactureCronHandler
                 }
             }
             $result[] = ['message' => 'count '.$i];
+            $cron->addResult($result);
         }
 
         return $result;
