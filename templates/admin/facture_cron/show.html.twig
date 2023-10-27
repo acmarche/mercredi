@@ -39,7 +39,7 @@
             <h4 class="text-success">Résultats des envois</h4>
 
             {% for result in factureCron.results %}
-                {{ dump(result) }}
+                {{ result|join('') }}
             {% endfor %}
 
         </div>

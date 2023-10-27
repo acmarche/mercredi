@@ -54,7 +54,7 @@ final class DefaultController extends AbstractController
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            dd($e->getMessage());
+            var_dump($e->getMessage());
         }
 
         return $this->render(
