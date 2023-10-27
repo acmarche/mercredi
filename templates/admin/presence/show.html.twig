@@ -27,6 +27,10 @@
                         {% endif %}
                     </td>
                 </tr>
+                <tr>
+                    <th>Coût après calcul</th>
+                    <td>{{ amount|format_currency('euro') }}</td>
+                </tr>
                 {% if mercredi_paiement > 1 %}
                     <tr>
                         <th>Paiement (ancien système)</th>
