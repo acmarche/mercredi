@@ -46,7 +46,7 @@ final class FactureCronController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'mercredi_admin_facture_cron_edit', methods: ['GET'])]
+    #[Route(path: '/{id}/edit', name: 'mercredi_admin_facture_cron_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, FactureCron $factureCron): Response
     {
         $form = $this->createForm(FactureCronType::class);
