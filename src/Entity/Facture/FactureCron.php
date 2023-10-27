@@ -31,8 +31,8 @@ class FactureCron implements TimestampableInterface
     public bool $done = false;
     #[ORM\Column(type: 'datetime', nullable: true)]
     public ?DateTimeInterface $dateLastSync = null;
-    #[ORM\Column(type: 'integer', nullable: true)]
-    public ?int $number_sent = null;
+    #[ORM\Column(type: 'json', nullable: false)]
+    public array|null $results = [];
 
     public function __construct(
         string $fromAdresse,
@@ -44,6 +44,11 @@ class FactureCron implements TimestampableInterface
         $this->subject = $subject;
         $this->body = $body;
         $this->month_date = $month;
+    }
+
+    public function addResult(array $result)
+    {
+        $this->results[] = $result;
     }
 
     public function getMonthDate(): string
