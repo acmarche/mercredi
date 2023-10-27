@@ -75,11 +75,16 @@ final class FactureSendController extends AbstractController
             $this->factureEmailFactory->setTos($message, [$data['to']]);
             $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
 
-            $this->notificationMailer->sendAsEmailNotification($message);
-            $facture->setEnvoyeA($data['to']);
-            $facture->setEnvoyeLe(new DateTime());
-            $this->addFlash('success', 'La facture a bien été envoyée');
-            $this->factureRepository->flush();
+            try {
+                $this->notificationMailer->sendAsEmailNotification($message);
+                $facture->setEnvoyeA($data['to']);
+                $facture->setEnvoyeLe(new DateTime());
+                $this->addFlash('success', 'La facture a bien été envoyée');
+                $this->factureRepository->flush();
+
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', 'Erreur d\'envoie '.$exception->getMessage());
+            }
 
             return $this->redirectToRoute('mercredi_admin_facture_show', [
                 'id' => $facture->getId(),
