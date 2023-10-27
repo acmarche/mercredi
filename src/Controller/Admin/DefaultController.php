@@ -46,7 +46,7 @@ final class DefaultController extends AbstractController
     public function mailTest(Request $request): Response
     {
         $email = (new TemplatedEmail())
-            ->from('extra.scolaire@hotton.be')
+            ->from('contact@atl-hotton.be')
             ->to('jf@marche.be')
             ->subject('Coucou')
             ->text('super ovh pour les mails');
