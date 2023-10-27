@@ -1,0 +1,33 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Attacher la présence {{ presence.jour.dateJour|format_date('full') }} à une facture
+                pour {{ tuteur }}</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-info">
+                La liste des factures ci-dessous ne reprennent que les factures non payées
+            </div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.facture) }}
+
+            <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Attacher à la facture
+            </button>
+            {{ form_end(form) }}
+
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('mercredi_admin_presence_show',{'id':presence.id}) }}" class="mt-4">
+                <i class="fas fa-long-arrow-alt-left"></i> Annuler
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

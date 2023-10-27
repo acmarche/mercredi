@@ -24,6 +24,9 @@
                             </a>
                         {% else %}
                             Non
+                            <a href="{{ path('mercredi_admin_facture_presence_attach_from_presence', {'id': presence.id}) }}">
+                                Joindre à une facture existante
+                            </a>
                         {% endif %}
                     </td>
                 </tr>

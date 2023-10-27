@@ -40,11 +40,23 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
-    public function findFacturesByTuteur(Tuteur $tuteur): array
+    public function findByTuteur(Tuteur $tuteur): array
     {
         return $this->getQBl()
             ->andWhere('facture.tuteur = :tuteur')
             ->setParameter('tuteur', $tuteur)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
+    public function findByTuteurNotPaid(Tuteur $tuteur): array
+    {
+        return $this->getQBl()
+            ->andWhere('facture.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture.payeLe IS NULL')
             ->getQuery()->getResult();
     }
 

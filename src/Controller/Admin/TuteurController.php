@@ -187,7 +187,7 @@ final class TuteurController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
             $presences = $this->presenceRepository->findByTuteur($tuteur);
             $accueils = $this->accueilRepository->findByTuteur($tuteur);
-            $factures = $this->factureRepository->findFacturesByTuteur($tuteur);
+            $factures = $this->factureRepository->findByTuteur($tuteur);
 
             $form = $this->createForm(ValidateForm::class, null, [
                 'action' =>
@@ -221,7 +221,7 @@ final class TuteurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            foreach ($this->factureRepository->findFacturesByTuteur($tuteur) as $facture) {
+            foreach ($this->factureRepository->findByTuteur($tuteur) as $facture) {
                 $this->factureRepository->remove($facture);
             }
             $id = $tuteur->getId();
