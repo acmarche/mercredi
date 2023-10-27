@@ -32,7 +32,7 @@ class QrCodeGenerator
             'info' => $facture->getCommunication(),
         ];
 
-        $url = 'https://epc-qr.eu/?for=Hotton&euro=25&pp=maco';
+        $url = 'https://epc-qr.eu/?for=Hotton&euro='.$amount.'&pp=maco';
         $data = $this->executeRequest($url);
        // $data = $this->executeRequest($this->base_uri, ['query' => $params]);
 
