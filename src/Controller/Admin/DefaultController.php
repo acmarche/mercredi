@@ -4,9 +4,11 @@ namespace AcMarche\Mercredi\Controller\Admin;
 
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
 use AcMarche\Mercredi\Search\Form\SearchAutocompleteType;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -38,5 +40,29 @@ final class DefaultController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
+    }
+
+    #[Route(path: '/mailtest')]
+    public function mailTest(Request $request): Response
+    {
+        $email = (new TemplatedEmail())
+            ->from('extra.scolaire@hotton.be')
+            ->to('jf@marche.be')
+            ->subject('Coucou')
+            ->text('super ovh pour les mails');
+
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            dd($e->getMessage());
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediAdmin/default/test.html.twig',
+            [
+
+            ]
+        );
+
     }
 }
