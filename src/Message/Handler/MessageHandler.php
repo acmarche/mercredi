@@ -14,13 +14,10 @@ use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class MessageHandler
 {
     use InitMailerTrait;
-
-    private FlashBagInterface $flashBag;
 
     public function __construct(
         private MessageRepository $messageRepository,
@@ -32,7 +29,7 @@ final class MessageHandler
         private TuteurUtils $tuteurUtils,
         RequestStack $requestStack
     ) {
-        $this->flashBag = $requestStack->getSession()?->getFlashBag();
+
     }
 
     public function handle(Message $message): void
@@ -74,9 +71,6 @@ final class MessageHandler
                 }
             }
             $templatedEmail->to(...$emails);
-            /*  foreach ($emails as $email) {
-                  $templatedEmail->addTo(new Address('jf@marche.be', $email));
-              }*/
             $this->notificationMailer->sendAsEmailNotification($templatedEmail);
             unset($templatedEmail);
         }

@@ -17,14 +17,12 @@ class UserEmailFactory
 
     public function messageNewAccountToTuteur(User $user, Tuteur $tuteur, ?string $password = null): NotificationEmail
     {
-        $from = $this->getEmailAddressOrganisation();
-
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject('Informations sur votre compte de '.$this->organisation->getNom())
-            ->from($from)
+            ->from($this->getEmailSenderAddress())
             ->to($user->getEmail())
-            ->bcc($from)
+            ->bcc($this->getEmailContact())
             ->htmlTemplate('@AcMarcheMercrediEmail/welcome/_mail_welcome_parent.html.twig')
             ->context(
                 [
@@ -44,14 +42,13 @@ class UserEmailFactory
         Animateur $animateur,
         ?string $password = null
     ): NotificationEmail {
-        $from = $this->getEmailAddressOrganisation();
 
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject('Informations sur votre compte de '.$this->organisation->getNom())
-            ->from($from)
+            ->from(new Address($this->getEmailSenderAddress()))
             ->to($user->getEmail())
-            ->bcc($from)
+            ->bcc($this->getEmailContact())
             ->htmlTemplate('@AcMarcheMercrediEmail/welcome/_mail_welcome_animateur.html.twig')
             ->context(
                 [

@@ -21,7 +21,7 @@ final class RegistrationMailerFactory
     ): NotificationEmail {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
-            ->from(new Address($this->getEmailAddressOrganisation(), $this->organisation->getNom()))
+            ->from(new Address($this->getEmailSenderAddress(), $this->organisation->getNom()))
             ->subject('Votre inscription Accueil Temps Libre')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_register_success.html.twig')
             ->context([
@@ -38,8 +38,8 @@ final class RegistrationMailerFactory
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
-            ->from(new Address($this->getEmailAddressOrganisation(), $this->organisation->getNom()))
-            ->to($this->getEmailAddressOrganisationAdmin())
+            ->from(new Address($this->getEmailSenderAddress(), $this->organisation->getNom()))
+            ->to($this->getEmailContact())
             ->subject('Un nouveau compte a été crée sur Accueil Temps Libre')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/registration/_mail_new_account_created.html.twig')
             ->context(
@@ -56,7 +56,7 @@ final class RegistrationMailerFactory
     public function messageSendLinkLostPassword(User $user, ResetPasswordToken $resetPasswordToken): NotificationEmail
     {
         $message = NotificationEmailJf::asPublicEmailJf();
-        $message->from(new Address($this->getEmailAddressOrganisation(), $this->organisation->getNom()))
+        $message->from(new Address($this->getEmailSenderAddress(), $this->organisation->getNom()))
             ->to($user->getEmail())
             ->subject('Votre demande de changement de mot de passe')
             ->htmlTemplate('@AcMarcheMercrediEmail/front/request_password.html.twig')

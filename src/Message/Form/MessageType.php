@@ -21,6 +21,7 @@ final class MessageType extends AbstractType
                 EmailType::class,
                 [
                     'label' => 'De',
+                    'attr' => ['readonly' => true],
                 ]
             )
             ->add(

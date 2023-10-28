@@ -43,10 +43,10 @@ final class DefaultController extends AbstractController
     }
 
     #[Route(path: '/mailtest')]
-    public function mailTest(Request $request): Response
+    public function mailTest(): Response
     {
         $email = (new TemplatedEmail())
-            ->from('contact@atl-hotton.be')
+            ->from($this->getEmailSenderAddress())
             ->to('jf@marche.be')
             ->subject('Coucou')
             ->text('super ovh pour les mails');

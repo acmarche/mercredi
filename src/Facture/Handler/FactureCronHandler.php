@@ -57,7 +57,6 @@ class FactureCronHandler
             }
 
             $messageBase = $this->factureEmailFactory->messageFacture(
-                $cron->getFromAdresse(),
                 $cron->getSubject(),
                 $cron->getBody()
             );

@@ -147,8 +147,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         }
 
         $body = $this->environment->render('@AcMarcheMercrediAdmin/message/_plaine_facture_text.html.twig');
-        $from = $this->factureEmailFactory->getEmailAddressOrganisation();
-        $message = $this->factureEmailFactory->messageFacture($from, 'Votre inscription à '.$plaine->getNom(), $body);
+        $message = $this->factureEmailFactory->messageFacture('Votre inscription à '.$plaine->getNom(), $body);
         $this->factureEmailFactory->setTos($message, $emails);
         $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
 

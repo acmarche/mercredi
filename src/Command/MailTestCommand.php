@@ -23,19 +23,17 @@ class MailTestCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('from', InputArgument::REQUIRED, 'Expéditeur')
             ->addArgument('to', InputArgument::REQUIRED, 'Destinataire');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $from = $input->getArgument('from');
         $to = $input->getArgument('to');
 
         $message = new Email();
         $message->subject('Test applicaiton mercredi');
-        $message->from($from);
+        $message->from($this->getEmailSenderAddress());
         $message->to($to);
         $message->text('Coucou, mail de test');
 

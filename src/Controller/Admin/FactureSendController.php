@@ -71,7 +71,7 @@ final class FactureSendController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $message = $this->factureEmailFactory->messageFacture($data['from'], $data['sujet'], $data['texte']);
+            $message = $this->factureEmailFactory->messageFacture($data['sujet'], $data['texte']);
             $this->factureEmailFactory->setTos($message, [$data['to']]);
             $this->factureEmailFactory->attachFactureOnTheFly($facture, $message);
 

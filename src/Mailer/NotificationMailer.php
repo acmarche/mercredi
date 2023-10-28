@@ -14,7 +14,7 @@ final class NotificationMailer
     public function sendAsEmailNotification(NotificationEmail $templatedEmail, ?string $email = null): void
     {
         if (! $email) {
-            $email = $this->getEmailAddressOrganisation();
+            $email = $this->getEmailContact();
         }
         $recipient = new Recipient($email);
         $notification = new EmailNotification($templatedEmail);

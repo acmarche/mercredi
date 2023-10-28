@@ -54,7 +54,6 @@ class SendFactureCommand extends Command
             $io->writeln($count.' factures trouvées');
 
             $messageBase = $this->factureEmailFactory->messageFacture(
-                $cron->getFromAdresse(),
                 $cron->getSubject(),
                 $cron->getBody()
             );

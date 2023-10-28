@@ -39,7 +39,7 @@ class FactureEmailFactory
     public function initFromAndToForForm(?Facture $facture = null): array
     {
         $data = [];
-        $data['from'] = $this->getEmailAddressOrganisation();
+        $data['from'] = $this->getEmailSenderAddress();
         if (null !== $facture) {
             $tuteur = $facture->getTuteur();
             if ($emails = TuteurUtils::getEmailsOfOneTuteur($tuteur)) {
@@ -50,12 +50,12 @@ class FactureEmailFactory
         return $data;
     }
 
-    public function messageFacture(string $from, string $sujet, string $body): NotificationEmailJf
+    public function messageFacture(string $sujet, string $body): NotificationEmailJf
     {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject($sujet)
-            ->from(new Address($this->getEmailAddressOrganisationAdmin(), $from))
+            ->from(new Address($this->getEmailSenderAddress()))
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/facture_mail.html.twig')
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(

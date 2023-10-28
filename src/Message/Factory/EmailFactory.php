@@ -21,7 +21,7 @@ final class EmailFactory
     {
         $notification = NotificationEmailJf::asPublicEmailJf();
         $notification->subject($message->getSujet())
-            ->from($message->getFrom())
+            ->from($this->getEmailSenderAddress())
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/mail.html.twig')
             ->context(
                 [
@@ -48,7 +48,7 @@ final class EmailFactory
     {
         $notification = NotificationEmailJf::asPublicEmailJf();
         $notification->subject($message->getSujet())
-            ->from($message->getFrom())
+            ->from($this->getEmailSenderAddress())
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/mail.html.twig')
             ->context(
                 [

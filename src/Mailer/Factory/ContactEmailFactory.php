@@ -17,8 +17,8 @@ class ContactEmailFactory
 
         $message
             ->subject('[Mercredi] '.$nom.' vous contact via le site')
-            ->from($this->getEmailAddressOrganisation())
-            ->to($this->getEmailAddressOrganisationAdmin())
+            ->from($this->getEmailSenderAddress())
+            ->to($this->getEmailContact())
             ->htmlTemplate('@AcMarcheMercrediEmail/front/contact.html.twig')
             ->context(
                 [
