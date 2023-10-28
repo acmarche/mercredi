@@ -25,7 +25,7 @@ class FactureCronHandler
 
     }
 
-    public function execute(int $max = 1): array
+    public function execute(int $max = 25): array
     {
         $result = [];
         $crons = $this->factureCronRepository->findNotDone();
@@ -85,7 +85,6 @@ class FactureCronHandler
                     continue;
                 }
 
-                $emails = ['jf@marche.be'];
                 $this->factureEmailFactory->setTos($messageFacture, $emails);
 
                 try {
