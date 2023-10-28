@@ -38,9 +38,11 @@
 
             <h4 class="text-success">Résultats des envois</h4>
 
-            {% for result in factureCron.results %}
-                {{ result|join('') }}
-            {% endfor %}
+            {% if cron.results %}
+                {% for result in factureCron.results %}
+                    {{ result|join('') }}
+                {% endfor %}
+            {% endif %}
 
         </div>
     </div>

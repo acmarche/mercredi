@@ -31,7 +31,7 @@ class FactureCron implements TimestampableInterface
     public bool $done = false;
     #[ORM\Column(type: 'datetime', nullable: true)]
     public ?DateTimeInterface $dateLastSync = null;
-    #[ORM\Column(type: 'json', nullable: false)]
+    #[ORM\Column(type: 'json', nullable: true)]
     public array|null $results = [];
 
     public function __construct(

@@ -116,7 +116,7 @@ class FactureCronHandler
                 }
             }
             $result[] = ['message' => 'count '.$i];
-            $cron->addResult($result);
+            //$cron->addResult($result);
         }
 
         return $result;
