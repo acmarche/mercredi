@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Entity\Traits\IdOldTrait;
 use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Sante\Repository\SanteReponseRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Stringable;
 
 #[ORM\Entity(repositoryClass: SanteReponseRepository::class)]
 #[ORM\Table(name: 'sante_reponse')]
@@ -18,19 +17,23 @@ class SanteReponse
 
     #[ORM\Column(type: 'boolean')]
     private bool $reponse;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $remarque = null;
-    #[ORM\ManyToOne(targetEntity: SanteFiche::class, inversedBy: 'reponses', cascade: ['remove'])]
-    #[ORM\JoinColumn(nullable: false)] private SanteFiche $sante_fiche;
-    #[ORM\ManyToOne(targetEntity: SanteQuestion::class, inversedBy: 'reponse')]
-    #[ORM\JoinColumn(nullable: false)] private SanteQuestion $question;
-    private SanteQuestion $santeQuestion;
 
-    public function __construct(SanteFiche $sante_fiche, SanteQuestion $santeQuestion)
+    #[ORM\ManyToOne(targetEntity: SanteFiche::class, inversedBy: 'reponses', cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private SanteFiche $sante_fiche;
+
+    #[ORM\ManyToOne(targetEntity: SanteQuestion::class, inversedBy: 'reponse')]
+    #[ORM\JoinColumn(nullable: false)]
+    private SanteQuestion $question;
+
+    public function __construct(SanteFiche $santeFiche, SanteQuestion $santeQuestion)
     {
         $this->reponse = false;
-        $this->sante_fiche = $sante_fiche;
-        $this->santeQuestion = $santeQuestion;
+        $this->sante_fiche = $santeFiche;
+        $this->question = $santeQuestion;
     }
 
     public function getQuestion(): SanteQuestion
