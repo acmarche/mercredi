@@ -4,11 +4,11 @@ use Symfony\Config\TwigConfig;
 
 return static function (TwigConfig $twig) {
     $twig
-        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/admin', 'AcMarcheMercrediAdmin',)
-        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/parent', 'AcMarcheMercrediParent',)
-        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/ecole', 'AcMarcheMercrediEcole',)
-        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/animateur', 'AcMarcheMercrediAnimateur',)
-        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/email', 'AcMarcheMercrediEmail',)
+        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/admin', 'AcMarcheMercrediAdmin')
+        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/parent', 'AcMarcheMercrediParent')
+        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/ecole', 'AcMarcheMercrediEcole')
+        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/animateur', 'AcMarcheMercrediAnimateur')
+        ->path('%kernel.project_dir%/src/AcMarche/Mercredi/templates/email', 'AcMarcheMercrediEmail')
         ->formThemes(['bootstrap_5_layout.html.twig'])
         ->global('mercredi_register', '%env(MERCREDI_REGISTER)%')
         ->global('mercredi_accueil', '%env(MERCREDI_ACCUEIL)%')
