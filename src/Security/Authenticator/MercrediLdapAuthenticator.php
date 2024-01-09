@@ -59,7 +59,7 @@ class MercrediLdapAuthenticator extends AbstractLoginFormAuthenticator
                 new RememberMeBadge(),
             ];
 
-        $query = "(&(|(sAMAccountName=*${email}*))(objectClass=person))";
+        $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
         $badges[] = new LdapBadge(
             LdapMercredi::class,
             $this->parameterBag->get(Option::LDAP_DN),
