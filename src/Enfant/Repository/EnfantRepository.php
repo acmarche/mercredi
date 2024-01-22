@@ -37,7 +37,12 @@ final class EnfantRepository extends ServiceEntityRepository
      */
     public function findAllActif(int $max = 10000): array
     {
-        return $this->getNotArchivedQueryBuilder()
+        return $this->createQueryBuilder('enfant')
+            ->leftJoin('enfant.ecole', 'ecole', 'WITH')
+            ->leftJoin('enfant.annee_scolaire', 'annee_scolaire', 'WITH')
+            ->leftJoin('enfant.sante_fiche', 'sante_fiche', 'WITH')
+            ->addSelect('ecole', 'sante_fiche', 'annee_scolaire')
+            ->addOrderBy('enfant.nom', 'ASC')
             ->getQuery()->getResult();
     }
 
