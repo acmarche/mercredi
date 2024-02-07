@@ -242,7 +242,7 @@ final class FactureRepository extends ServiceEntityRepository
 
     /**
      * @param DateTimeInterface $date
-     * @return array|Facture[]
+     * @return Facture[]
      */
     public function findByMonthYear(DateTimeInterface $date): array
     {
