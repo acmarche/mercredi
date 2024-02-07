@@ -7,7 +7,9 @@ use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -25,10 +27,42 @@ class FixCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->addOption('check', "check", InputOption::VALUE_NONE, 'Check');
+        $this->addOption('flush', "flush", InputOption::VALUE_NONE, 'Flush');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         //id: 2674 => enfantId= 1455
+
+        $check = (bool)$input->getOption('check');
+        $flush = (bool)$input->getOption('flush');
+
+        if ($check) {
+            $data = [];
+            foreach ($this->facturePresenceRepository->findAll() as $facturePresence) {
+                $enfant = $this->enfantRepository->find($facturePresence->enfantId);
+                if (strtolower($facturePresence->getNom()) != strtolower($enfant->getNom())) {
+                    $data[] = [
+                        $facturePresence->getNom(),
+                        $facturePresence->getPrenom(),
+                        $enfant->getNom(),
+                        $enfant->getPrenom(),
+                    ];
+                }
+            }
+            $table = new Table($output);
+            $table
+                ->setHeaders(['Nom', 'Prenom', 'Nom', 'Prenom'])
+                ->setRows($data);
+            $table->render();
+
+            return Command::SUCCESS;
+        }
+
         foreach ($this->facturePresenceRepository->findAll() as $facturePresence) {
             if (!$facturePresence->enfantId) {
 
@@ -57,7 +91,9 @@ class FixCommand extends Command
             }
         }
 
-        //    $this->facturePresenceRepository->flush();
+        if ($flush) {
+            $this->facturePresenceRepository->flush();
+        }
 
         return Command::SUCCESS;
     }
@@ -129,7 +165,7 @@ class FixCommand extends Command
         return false;
     }
 
-    private function error(FacturePresence $facturePresence)
+    private function error(FacturePresence $facturePresence): void
     {
         $this->io->error(
             'pas trouve '.$facturePresence->getFacture()->getId().' '.$facturePresence->getNom(
