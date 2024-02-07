@@ -58,7 +58,7 @@ final class AttestationController extends AbstractController
     public function index(Tuteur $tuteur, Enfant $enfant, int $year): Response
     {
         if ($this->attestationGenerator->hasAttestation($tuteur, $enfant, $year)) {
-            $this->addFlash('danger', 'Aucune présence en '.$year.' pour cette enfant');
+            $this->addFlash('danger', 'Aucune présence payée en '.$year.' pour cette enfant');
 
             return $this->redirectToRoute('mercredi_admin_tuteur_show', ['id' => $tuteur->getId()]);
         }

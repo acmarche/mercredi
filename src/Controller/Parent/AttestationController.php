@@ -37,7 +37,7 @@ final class AttestationController extends AbstractController
         }
 
         if ($this->attestationGenerator->hasAttestation($this->tuteur, $enfant, $year)) {
-            $this->addFlash('danger', 'Aucune présence en '.$year.' pour cette enfant');
+            $this->addFlash('danger', 'Aucune présence payée en '.$year.' pour cette enfant');
 
             return $this->redirectToRoute('mercredi_parent_tuteur_show');
         }
