@@ -57,7 +57,7 @@ class FixCommand extends Command
             }
         }
 
-        $this->facturePresenceRepository->flush();
+        //    $this->facturePresenceRepository->flush();
 
         return Command::SUCCESS;
     }
