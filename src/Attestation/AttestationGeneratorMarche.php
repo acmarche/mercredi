@@ -44,19 +44,10 @@ class AttestationGeneratorMarche implements AttestationGeneratorInterface
         if ($year > 2022) {
             $factures = $this->factureRepository->findByTuteurAndPaidInYear($tuteur, $year);
             $data = $this->treatment2023($factures, $tuteur, $enfant);
-
-            return $this->environment->render('@AcMarcheMercredi/admin/attestation/one/marche/2023.html.twig', [
-                'data' => $data,
-                'tuteur' => $tuteur,
-                'enfant' => $enfant,
-                'year' => $year,
-                'today' => new \DateTime(),
-                'organisation' => $this->organisation,
-            ]);
+        } else {
+            $presences = $this->presenceRepository->findByTuteurAndEnfantAndYear($tuteur, $enfant, $year);
+            $data = $this->treatment($presences);
         }
-
-        $presences = $this->presenceRepository->findByTuteurAndEnfantAndYear($tuteur, $enfant, $year);
-        $data = $this->treatment($presences);
 
         return $this->environment->render('@AcMarcheMercredi/admin/attestation/one/marche/2022.html.twig', [
             'data' => $data,
