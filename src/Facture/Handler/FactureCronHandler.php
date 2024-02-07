@@ -25,7 +25,7 @@ class FactureCronHandler
 
     }
 
-    public function execute(int $max = 25): array
+    public function execute(int $max = 40): array
     {
         $result = [];
         $crons = $this->factureCronRepository->findNotDone();
