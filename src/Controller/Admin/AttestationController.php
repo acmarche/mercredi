@@ -65,7 +65,7 @@ final class AttestationController extends AbstractController
 
         $html = $this->attestationGenerator->renderOne($tuteur, $enfant, $year);
 
-        //    return new Response($html);
+        return new Response($html);
 
         return $this->downloadPdf($html, 'attestation-'.$enfant->getSlug().'-'.$year.'.pdf');
     }
