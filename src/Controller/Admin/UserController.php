@@ -52,6 +52,7 @@ final class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/index.html.twig',
             [
                 'users' => $users,
+                'roles' => MercrediSecurityRole::explanation(),
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),
             ]

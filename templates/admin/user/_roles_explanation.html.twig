@@ -1,0 +1,5 @@
+<ul class="list-group">
+    {% for name,description in roles %}
+        <li class="list-group-item"><strong>{{ name }}: </strong><span class="text-muted">{{ description }}</span></li>
+    {% endfor %}
+</ul>

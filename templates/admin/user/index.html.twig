@@ -7,7 +7,7 @@
             <a href="{{ path('mercredi_admin_user_new') }}" class="btn btn-primary m-2">
                 <i class="fas fa-plus"></i> Ajouter un utilisateur
             </a>
-
+            {% include '@AcMarcheMercrediAdmin/user/_roles_explanation.html.twig' %}
             {% include '@AcMarcheMercrediAdmin/user/_search.html.twig' %}
 
             {% if search %}

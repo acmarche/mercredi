@@ -28,4 +28,25 @@ final class MercrediSecurityRole
 
         return $nices;
     }
+
+    public static function explanation(): array
+    {
+        $nices = [];
+        foreach (self::ROLES as $slug => $role) {
+            $nices[$role] = self::description($slug);
+        }
+        ksort($nices);
+
+        return $nices;
+    }
+
+    public static function description(string $role): string
+    {
+        return match ($role) {
+            self::ROLE_PARENT => 'Accède uniquement aux enfants liés à sa fiche parent',
+            self::ROLE_ECOLE => 'Accède aux enfants appartenant aux écoles liées à son compte et dont sur la fiche enfant le champ "accueil" est coché (Hotton)',
+            self::ROLE_ADMIN => 'Accède à tout',
+            self::ROLE_ANIMATEUR => 'Accède aux enfants qui sont présents aux jours où l\'animateur travaille',
+        };
+    }
 }
