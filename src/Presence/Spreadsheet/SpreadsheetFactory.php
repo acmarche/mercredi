@@ -2,6 +2,8 @@
 
 namespace AcMarche\Mercredi\Presence\Spreadsheet;
 
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
+use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Presence\Dto\ListingPresenceByMonth;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
@@ -14,21 +16,15 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 final class SpreadsheetFactory
 {
     use SpreadsheetDownloaderTrait;
-    /**
-     * @var string
-     */
-    private const NOM = 'Nom';
+
     /**
      * @var string
      */
     private const FORMAT = 'd-m-Y';
-    /**
-     * @var int
-     */
-    private const COLONNE = 1;
 
     public function __construct(
-        private ScolaireUtils $scolaireUtils
+        private ScolaireUtils $scolaireUtils,
+        private readonly FactureCalculatorInterface $factureCalculator
     ) {
     }
 
@@ -46,7 +42,7 @@ final class SpreadsheetFactory
          */
         $ligne = 1;
         $worksheet
-            ->setCellValue('A'.$ligne, self::NOM)
+            ->setCellValue('A'.$ligne, 'nom')
             ->setCellValue('B'.$ligne, 'Prénom')
             ->setCellValue('C'.$ligne, 'Né le')
             ->setCellValue('D'.$ligne, 'Groupe');
@@ -92,7 +88,7 @@ final class SpreadsheetFactory
         $ligne = 1;
         $colonne = 'A';
         $worksheet
-            ->setCellValue($colonne.$ligne, self::NOM)
+            ->setCellValue($colonne.$ligne, 'nom')
             ->setCellValue(++$colonne.$ligne, 'Prénom')
             ->setCellValue(++$colonne.$ligne, 'Né le');
 
@@ -152,9 +148,9 @@ final class SpreadsheetFactory
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
         $worksheet
-            ->setCellValue('A'.self::COLONNE, self::NOM)
-            ->setCellValue('B'.self::COLONNE, 'Prénom')
-            ->setCellValue('C'.self::COLONNE, 'Né le');
+            ->setCellValue('A1', 'nom')
+            ->setCellValue('B1', 'Prénom')
+            ->setCellValue('C1', 'Né le');
 
         $ligne = 3;
 
@@ -167,6 +163,54 @@ final class SpreadsheetFactory
                 ->setCellValue($colonne.$ligne, $enfant->getNom())
                 ->setCellValue(++$colonne.$ligne, $enfant->getPrenom())
                 ->setCellValue(++$colonne.$ligne, $neLe);
+            ++$ligne;
+        }
+
+        return $spreadsheet;
+    }
+
+    /**
+     * @param Facture[] $factures
+     */
+    public function facturesXls(array $factures): Spreadsheet
+    {
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+        $worksheet
+            ->setCellValue('A1', 'Numéro facture')
+            ->setCellValue('B1', 'Date facture')
+            ->setCellValue('C1', 'Nom parent')
+            ->setCellValue('D1', 'Prénom parent')
+            ->setCellValue('E1', 'Enfant(s)')
+            ->setCellValue('F1', 'Montant facturé')
+            ->setCellValue('G1', 'Montant payé')
+            ->setCellValue('H1', 'Payé le')
+            ->setCellValue('I1', 'Communication');
+
+        $ligne = 2;
+
+        foreach ($factures as $facture) {
+            $colonne = 'A';
+            $factureDetailDto = $this->factureCalculator->createDetail($facture);
+            if ($facture->getPayeLe()) {
+                $montantPaye = $factureDetailDto->total;
+                $payeLe = $facture->getPayeLe()->format(self::FORMAT);
+            } else {
+                $montantPaye = $factureDetailDto->totalDecomptes;
+                $payeLe = '';
+            }
+
+            $worksheet
+                ->setCellValue($colonne.$ligne, $facture->getId())
+                ->setCellValue(++$colonne.$ligne, $facture->getFactureLe()->format(self::FORMAT))
+                ->setCellValue(++$colonne.$ligne, $facture->getNom())
+                ->setCellValue(++$colonne.$ligne, $facture->getPrenom())
+                ->setCellValue(++$colonne.$ligne, join(',', $facture->getEnfants()))
+                ->setCellValue(++$colonne.$ligne, $factureDetailDto->total)
+                ->setCellValue(++$colonne.$ligne, $montantPaye)
+                ->setCellValue(++$colonne.$ligne, $payeLe)
+                ->setCellValue(++$colonne.$ligne, $facture->getCommunication());
+
             ++$ligne;
         }
 

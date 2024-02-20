@@ -212,6 +212,17 @@ final class FactureRepository extends ServiceEntityRepository
     /**
      * @return Facture[]
      */
+    public function findByMonthYearLike(int $year): array
+    {
+        return $this->getQBl()
+            ->andWhere('facture.mois LIKE :year')
+            ->setParameter('year', '%-'.$year)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return Facture[]
+     */
     public function byEcoleAndMonth(
         ?Ecole $ecole,
         ?string $monthYear = null,
