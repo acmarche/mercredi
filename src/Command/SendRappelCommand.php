@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
 
 #[AsCommand(
     name: 'mercredi:rappel',
@@ -79,7 +80,7 @@ class SendRappelCommand extends Command
                 continue;
             }
 
-            $messageBase->to('jf@marche.be');
+            $messageBase->to(new Address('jf@marche.be', join(',', $emails)));
             // $messageBase->to(...$emails);
             //$messageBase->bcc($this->getEmailSenderAddress());
 
