@@ -32,6 +32,10 @@ final class SanteChecker
             return false;
         }
 
+        if (null === $enfant->getRegistreNational()) {
+            return false;
+        }
+
         return (bool) $enfant->getAnneeScolaire();
     }
 
@@ -53,6 +57,10 @@ final class SanteChecker
             if (! $this->checkQuestionOk($question)) {
                 return false;
             }
+        }
+
+        if (null === $santeFiche->getEnfant()->getRegistreNational()) {
+            return false;
         }
 
         return \count($santeFiche->getAccompagnateurs()) >= 1;
