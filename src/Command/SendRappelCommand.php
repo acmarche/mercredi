@@ -80,9 +80,9 @@ class SendRappelCommand extends Command
                 continue;
             }
 
-            $messageBase->to(new Address('jf@marche.be', join(',', $emails)));
-            // $messageBase->to(...$emails);
-            //$messageBase->bcc($this->getEmailSenderAddress());
+            $messageBase->bcc(new Address('jf@marche.be', join(',', $emails)));
+            $messageBase->to(...$emails);
+            $messageBase->bcc($this->getEmailSenderAddress());
 
             try {
                 $this->notificationMailer->sendMail($messageBase);
