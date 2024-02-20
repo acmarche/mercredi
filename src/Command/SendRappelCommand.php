@@ -85,7 +85,7 @@ class SendRappelCommand extends Command
             $messageBase->bcc($this->getEmailSenderAddress());
 
             try {
-                $this->notificationMailer->sendMail($messageBase);
+                //$this->notificationMailer->sendMail($messageBase);
             } catch (TransportExceptionInterface $e) {
                 $error = 'send error '.$tuteur->getId().' '.$e->getMessage();
                 $io->error($error);
