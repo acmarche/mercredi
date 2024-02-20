@@ -42,6 +42,15 @@ final class AttestationController extends AbstractController
             return $this->redirectToRoute('mercredi_parent_tuteur_show');
         }
 
+        if ($enfant->getRegistreNational()) {
+            $this->addFlash(
+                'danger',
+                'Il est obligatoire que le numéro de registre nationale soit encodé pour accéder à l\'attestation'
+            );
+
+            return $this->redirectToRoute('mercredi_parent_tuteur_show');
+        }
+
         $html = $this->attestationGenerator->renderOne($this->tuteur, $enfant, $year);
 
         //   return new Response($html);
