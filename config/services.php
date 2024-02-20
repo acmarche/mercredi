@@ -3,6 +3,7 @@
 use AcMarche\Mercredi\Namer\DirectoryNamer;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
+use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
 use Fidry\AliceDataFixtures\LoaderInterface;
@@ -83,6 +84,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->arg('$adapter', service(Adapter::class))
             ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
     }
+
+    $services->set(TokenManager::class)
+        ->arg('$formLoginAuthenticator', service('security.authenticator.form_login.main'));
 
     /*  $services->set(PresenceConstraints::class)
           ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));*/

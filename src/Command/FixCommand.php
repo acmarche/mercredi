@@ -5,6 +5,7 @@ namespace AcMarche\Mercredi\Command;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -22,6 +23,7 @@ class FixCommand extends Command
 
     public function __construct(
         private FacturePresenceRepository $facturePresenceRepository,
+        private readonly UserRepository $userRepository,
         private EnfantRepository $enfantRepository
     ) {
         parent::__construct();
@@ -34,6 +36,20 @@ class FixCommand extends Command
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $this->io = new SymfonyStyle($input, $output);
+        foreach ($this->userRepository->findAll() as $user) {
+            //  if (!$user->getUuid()) {
+            $user->setUuid($user->generateUuid());
+            //  }
+        }
+
+        $this->userRepository->flush();
+
+        return Command::SUCCESS;
+    }
+
+    protected function executeOld(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         //id: 2674 => enfantId= 1455

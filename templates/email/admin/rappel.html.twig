@@ -1,0 +1,31 @@
+{% extends '@email/default/notification/body.html.twig' %}
+{% block lead %}
+    <p class="lead">
+        {{ email.subject }}
+    </p>
+{% endblock %}
+
+{% block content %}
+    Chers parents,
+    <br/><br/>
+    Suite aux activités auxquelles vous avez inscrit votre ou vos enfant(s) via https://mercredi.marche.be,<br/>
+    vous êtes peut-être éligibles pour obtenir l'une ou l'autre attestation fiscale.
+    <br/><br/>
+    Afin de pouvoir vous produire cette ou ces attestation(s), <br/>
+    nous avons besoin de votre Numéro de Registre National mais également celui de vos enfants. <br/>
+    Il s'agit d'une obligation de l'État Fédéral.
+    <br/><br/>
+    Le lien suivant vous permet d'accéder à votre profil personnel et d'y encoder ces numéros.
+    <br/><br/>
+    <a href="{{ urlLogin }}">https://mercredi.marche.be</a>
+    <br/><br/>
+    Merci d'encoder ceux-ci pour le vendredi 23 février 2024.
+    <br/><br/>
+    Sans cela, nous ne serons pas en mesure de transmettre les attestations fiscales concernant vos frais de garde au SPF Finance.
+    <br/><br/>
+    D'avance, nous vous remercions.
+    <br/><br/>
+    L'équipe de la Coordination Éducation Enfance
+    <br/><br/>
+{% endblock %}
+

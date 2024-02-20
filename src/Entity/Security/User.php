@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Entity\Traits\IdTrait;
 use AcMarche\Mercredi\Entity\Traits\NomTrait;
 use AcMarche\Mercredi\Entity\Traits\PrenomTrait;
 use AcMarche\Mercredi\Entity\Traits\TuteursTrait;
+use AcMarche\Mercredi\Entity\Traits\UuidTrait;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use AcMarche\Mercredi\User\Repository\UserRepository;
@@ -50,6 +51,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
     use LastLoginTrait;
     use IdOldTrait;
     use TimestampableTrait;
+    use UuidTrait;
 
     #[ORM\Column(type: 'string', nullable: true)]
     protected ?string $salt = null;
@@ -72,6 +74,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
         $this->tuteurs = new ArrayCollection();
         $this->ecoles = new ArrayCollection();
         $this->animateurs = new ArrayCollection();
+        $this->uuid = self::generateUuid();
     }
 
     public function __toString(): string
