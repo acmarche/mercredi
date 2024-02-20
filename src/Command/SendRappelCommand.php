@@ -91,8 +91,6 @@ class SendRappelCommand extends Command
                 continue;
             }
 
-            break;
-
         }
 
 
