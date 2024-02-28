@@ -45,7 +45,7 @@ final class AttestationController extends AbstractController
         if (!$enfant->getRegistreNational()) {
             $this->addFlash(
                 'danger',
-                'Il est obligatoire que le numéro de registre nationale soit encodé pour accéder à l\'attestation'
+                'Il est obligatoire que le numéro de registre national soit encodé pour accéder à l\'attestation'
             );
 
             return $this->redirectToRoute('mercredi_parent_tuteur_show');
