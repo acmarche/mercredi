@@ -49,18 +49,21 @@ final class FactureCronController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'mercredi_admin_facture_cron_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, FactureCron $factureCron): Response
     {
-        $form = $this->createForm(FactureCronType::class);
+        $form = $this->createForm(FactureCronType::class, $factureCron);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->factureCronRepository->flush();
+            $this->addFlash('success', 'Sauvegardé');
+
+            return $this->redirectToRoute('mercredi_admin_facture_cron_show', ['id' => $factureCron->getId()]);
         }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/facture_cron/edit.html.twig',
             [
                 'factureCron' => $factureCron,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
