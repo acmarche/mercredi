@@ -81,7 +81,7 @@ class FactureCronHandler
                     $error = 'Pas de mail pour la facture: '.$facture->getId();
                     $message = $this->adminEmailFactory->messageAlert('Erreur envoie facture', $error);
                     $this->notificationMailer->sendAsEmailNotification($message);
-                    $result[] = ['message' => $facture->getId().' error pas pdf '.$error];
+                    $result[] = ['message' => $facture->getId().' pas de mail '.$error];
                     continue;
                 }
 
