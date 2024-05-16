@@ -36,9 +36,8 @@
 
             {{ factureCron.body|nl2br }}
 
-            <h4 class="text-success">Résultats des envois</h4>
-
-            {% if cron.results %}
+            {% if factureCron.results | length > 0 %}
+                <h4 class="text-success">Résultats des envois</h4>
                 {% for result in factureCron.results %}
                     {{ result|join('') }}
                 {% endfor %}
