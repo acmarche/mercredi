@@ -44,6 +44,9 @@ final class AnneeScolaireRepository extends ServiceEntityRepository
 
     public function findNext(?AnneeScolaire $anneeScolaire): ?AnneeScolaire
     {
+        if (!$anneeScolaire) {
+            return null;
+        }
         $ordre = $anneeScolaire->getOrdre() + 1;
 
         return $this->createQueryBuilder('annee_scolaire')
