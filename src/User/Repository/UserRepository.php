@@ -35,11 +35,11 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      * @see UserProviderListener::checkPassport
      *
      */
-    public function loadUserByIdentifier(string $username): ?UserInterface
+    public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.email = :username OR user.username = :username')
-            ->setParameter('username', $username)
+            ->setParameter('username', $identifier)
             ->getQuery()
             ->getOneOrNullResult();
     }
