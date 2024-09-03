@@ -22,7 +22,7 @@ final class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if (null !== $this->getUser()) {
-            return $this->redirectToRoute('mercredi_front_home');
+            return $this->redirectToRoute('mercredi_front_user_show');
         }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
