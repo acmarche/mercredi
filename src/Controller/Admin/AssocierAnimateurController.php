@@ -20,14 +20,13 @@ final class AssocierAnimateurController extends AbstractController
 {
     public function __construct(
         private AssociationAnimateurHandler $associationAnimateurHandler,
-        private AnimateurRepository $animateurRepository
-    ) {
-    }
+        private AnimateurRepository $animateurRepository,
+    ) {}
 
     #[Route(path: '/{id}', name: 'mercredi_user_associate_animateur', methods: ['GET', 'POST'])]
     public function associate(Request $request, User $user): Response
     {
-        if (! $user->isAnimateur()) {
+        if (!$user->isAnimateur()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de animateur');
 
             return $this->redirectToRoute('mercredi_admin_user_show', [
@@ -38,7 +37,11 @@ final class AssocierAnimateurController extends AbstractController
         $form = $this->createForm(AssociateAnimateurType::class, $associateUserAnimateurDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->associationAnimateurHandler->handleAssociateAnimateur($associateUserAnimateurDto);
+            try {
+                $this->associationAnimateurHandler->handleAssociateAnimateur($associateUserAnimateurDto);
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', $exception->getMessage());
+            }
 
             return $this->redirectToRoute('mercredi_admin_user_show', [
                 'id' => $user->getId(),
@@ -50,7 +53,7 @@ final class AssocierAnimateurController extends AbstractController
             [
                 'user' => $user,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -58,7 +61,7 @@ final class AssocierAnimateurController extends AbstractController
     public function dissociate(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
-            $animateurId = (int) $request->request->get('animateur');
+            $animateurId = (int)$request->request->get('animateur');
             if (0 === $animateurId) {
                 $this->addFlash('danger', 'L\'animateur n\'a pas été trouvé');
 
