@@ -59,7 +59,6 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
             $fullDays = $result[1];
         }
 
-        dd($result);
         $this->presenceHandler->handleNew($tuteur, $enfant, $freeDays);
 
         return $daysFull;
