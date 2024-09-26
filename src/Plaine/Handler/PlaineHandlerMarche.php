@@ -194,7 +194,6 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $daysFull = [];
         foreach ($jours as $key => $jour) {
             if ($this->isDayFull($plaine, $jour, $groupeScolaire, $plaineGroupe)) {
-                dd($jour);
                 unset($jours[$key]);
                 $daysFull[] = $jour;
             }
