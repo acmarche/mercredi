@@ -54,12 +54,13 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     {
         $daysFull = [];
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
-            $result = $this->removeFullDays($plaine, $enfant, $jours);
-            $jours = $result[0];
-            $daysFull = $result[1];
+            $result = $this->getFreeDaysFullDays($plaine, $enfant, $jours);
+            $freeDays = $result[0];
+            $fullDays = $result[1];
         }
 
-        $this->presenceHandler->handleNew($tuteur, $enfant, $jours);
+        dd($result);
+        $this->presenceHandler->handleNew($tuteur, $enfant, $freeDays);
 
         return $daysFull;
     }
@@ -85,7 +86,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $daysFull = [];
 
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
-            $result = $this->removeFullDays($plaine, $enfant, $enPlus);
+            $result = $this->getFreeDaysFullDays($plaine, $enfant, $enPlus);
             $enPlus = $result[0];
             $daysFull = $result[1];
         }
@@ -171,7 +172,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      * @param array $jours
      * @return array //freeDays,fullDays
      */
-    private function removeFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
+    private function getFreeDaysFullDays(Plaine $plaine, Enfant $enfant, iterable $jours): array
     {
         $groupeScolaire = $this->getGroupeScolaire($enfant);
         if (!$groupeScolaire) {
@@ -194,6 +195,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         $daysFull = [];
         foreach ($jours as $key => $jour) {
             if ($this->isDayFull($plaine, $jour, $groupeScolaire, $plaineGroupe)) {
+                dd($jour);
                 unset($jours[$key]);
                 $daysFull[] = $jour;
             }
@@ -209,6 +211,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         PlaineGroupe $plaineGroupe
     ): bool {
         $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
+
         $enfants = array_filter(
             $enfantsByDay,
             function ($enfant) use ($plaine, $groupeScolaireReferent) {
@@ -218,7 +221,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
             }
         );
 
-        return count($enfants) > $plaineGroupe->getInscriptionMaximum();
+        return count($enfants) >= $plaineGroupe->getInscriptionMaximum();
     }
 
     /**
