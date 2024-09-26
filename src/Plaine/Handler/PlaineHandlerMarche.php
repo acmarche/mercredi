@@ -38,9 +38,8 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         private Environment $environment,
         private GroupingInterface $grouping,
         private PlaineGroupeRepository $plaineGroupeRepository,
-        private Security $security
-    ) {
-    }
+        private Security $security,
+    ) {}
 
     /**
      * @param Plaine $plaine
@@ -52,11 +51,10 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): array
     {
-        $daysFull = [];
+        $daysFull = $freeDays = [];
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             $result = $this->getFreeDaysFullDays($plaine, $enfant, $jours);
             $freeDays = $result[0];
-            $fullDays = $result[1];
         }
 
         $this->presenceHandler->handleNew($tuteur, $enfant, $freeDays);
@@ -78,7 +76,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         Tuteur $tuteur,
         Enfant $enfant,
         array $currentJours,
-        Collection $newJours
+        Collection $newJours,
     ): array {
         $enMoins = array_diff($currentJours, $newJours->toArray());
         $enPlus = array_diff($newJours->toArray(), $currentJours);
@@ -206,7 +204,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
         Plaine $plaine,
         Jour $jour,
         GroupeScolaire $groupeScolaireReferent,
-        PlaineGroupe $plaineGroupe
+        PlaineGroupe $plaineGroupe,
     ): bool {
         $enfantsByDay = $this->plainePresenceRepository->findEnfantsByPlaineAndJour($plaine, $jour);
 
@@ -216,7 +214,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
                 $groupeScolaire = $this->getGroupeScolaire($enfant);
 
                 return $groupeScolaireReferent->getId() == $groupeScolaire->getId();
-            }
+            },
         );
 
         return count($enfants) >= $plaineGroupe->getInscriptionMaximum();
