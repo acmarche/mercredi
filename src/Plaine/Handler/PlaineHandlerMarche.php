@@ -51,10 +51,12 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
      */
     public function handleAddEnfant(Plaine $plaine, Tuteur $tuteur, Enfant $enfant, iterable $jours = []): array
     {
-        $daysFull = $freeDays = [];
+        $daysFull = [];
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
             $result = $this->getFreeDaysFullDays($plaine, $enfant, $jours);
             $freeDays = $result[0];
+        } else {
+            $freeDays = $jours;//si admin j'inscris à tous les jours (force)
         }
 
         $this->presenceHandler->handleNew($tuteur, $enfant, $freeDays);
