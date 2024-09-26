@@ -188,7 +188,7 @@ final class PlaineController extends AbstractController
                 if (!$groupeScolaire) {
                     $this->addFlash(
                         'danger',
-                        'Enfant non inscrit,aucun groupe scolaire trouvé pour  :'.$enfant->getPrenom()
+                        'Enfant non inscrit,aucun groupe scolaire trouvé pour : '.$enfant->getPrenom(),
                     );
 
                     continue;
