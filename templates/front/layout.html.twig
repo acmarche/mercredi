@@ -4,8 +4,9 @@
     {{ render(path('mercredi_organisation_title')) }}
 {% endblock %}
 
-{% block javascripts %}
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% block stylesheets %}
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ recaptcha_site_key }}"></script>
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
 {% endblock %}
 
 {% block brand %}
