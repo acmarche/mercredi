@@ -7,11 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 trait RoleTrait
 {
     #[ORM\Column(type: 'array')]
-    private array $roles = [];
+    public array $roles = [];
 
     public function addRole(string $role): void
     {
-        if (! \in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
     }

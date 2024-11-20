@@ -37,7 +37,8 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
-        return $this->createQueryBuilder('user')
+        return $this
+            ->createQueryBuilder('user')
             ->andWhere('user.email = :username OR user.username = :username')
             ->setParameter('username', $identifier)
             ->getQuery()
@@ -49,7 +50,8 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function findAllOrderByNom(): array
     {
-        return $this->createQueryBuilder('user')
+        return $this
+            ->createQueryBuilder('user')
             ->leftJoin('user.tuteurs', 'tuteurs', 'WITH')
             ->leftJoin('user.ecoles', 'ecoles', 'WITH')
             ->leftJoin('user.animateurs', 'animateurs', 'WITH')
@@ -69,13 +71,14 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         }
 
         $user->setPassword($newHashedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->persist($user);
+        $this->flush();
     }
 
     public function findOneByEmailOrUserName(string $username): ?User
     {
-        return $this->createQueryBuilder('user')
+        return $this
+            ->createQueryBuilder('user')
             ->andWhere('user.email = :username OR user.username = :username')
             ->setParameter('username', $username)
             ->getQuery()
@@ -87,19 +90,22 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function findByNameOrRoles(?string $name, ?string $role): array
     {
-        $queryBuilder = $this->createQueryBuilder('user')
+        $queryBuilder = $this
+            ->createQueryBuilder('user')
             ->leftJoin('user.ecoles', 'ecoles', 'WITH')
             ->leftJoin('user.animateurs', 'animateurs', 'WITH')
             ->leftJoin('user.tuteurs', 'tuteurs', 'WITH')
             ->addSelect('ecoles', 'animateurs', 'tuteurs');
 
         if ($name) {
-            $queryBuilder->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
+            $queryBuilder
+                ->andWhere('user.nom LIKE :nom OR user.prenom LIKE :nom OR user.email LIKE :nom ')
                 ->setParameter('nom', '%'.$name.'%');
         }
 
         if ($role) {
-            $queryBuilder->andWhere('user.roles LIKE :role')
+            $queryBuilder
+                ->andWhere('user.roles LIKE :role')
                 ->setParameter('role', '%'.$role.'%');
         }
 

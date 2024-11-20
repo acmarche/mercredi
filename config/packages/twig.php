@@ -14,10 +14,11 @@ return static function (TwigConfig $twig) {
         ->global('mercredi_accueil', '%env(MERCREDI_ACCUEIL)%')
         ->global('mercredi_paiement', '%env(MERCREDI_PAIEMENT)%')
         ->global('mercredi_add_enfant', '%env(MERCREDI_ADD_ENFANT)%')
-        ->global('presence_nb_days', '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%',)
-        ->global('pedagogique_nb_days', '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%',)
+        ->global('presence_nb_days', '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%')
+        ->global('pedagogique_nb_days', '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%')
         ->global(
             'bootcdn',
             'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css',
-        );
+        )
+        ->global('recaptcha_site_key', '%env(GOOGLE_RECAPTCHA_SITE_KEY)%');
 };

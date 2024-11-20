@@ -24,7 +24,7 @@ class FixCommand extends Command
     public function __construct(
         private FacturePresenceRepository $facturePresenceRepository,
         private readonly UserRepository $userRepository,
-        private EnfantRepository $enfantRepository
+        private EnfantRepository $enfantRepository,
     ) {
         parent::__construct();
     }
@@ -38,12 +38,19 @@ class FixCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
+        $i = 0;
         foreach ($this->userRepository->findAll() as $user) {
-            //  if (!$user->getUuid()) {
-            $user->setUuid($user->generateUuid());
-            //  }
+            if (!$user->getUuid()) {
+                $user->setUuid($user->generateUuid());
+            }
+            if (count($user->roles) === 0) {
+                //$this->userRepository->remove($user);
+                $this->io->writeln($user->getUserIdentifier());
+                $i++;
+            }
         }
 
+        $this->io->writeln($i);
         $this->userRepository->flush();
 
         return Command::SUCCESS;
@@ -81,7 +88,6 @@ class FixCommand extends Command
 
         foreach ($this->facturePresenceRepository->findAll() as $facturePresence) {
             if (!$facturePresence->enfantId) {
-
                 if ($this->nohamCollas($facturePresence)) {
                     continue;
                 }
@@ -94,15 +100,13 @@ class FixCommand extends Command
                 }
 
                 $enfant = $this->enfantRepository->findOneBy(
-                    ['nom' => $facturePresence->getNom(), 'prenom' => $facturePresence->getPrenom()]
+                    ['nom' => $facturePresence->getNom(), 'prenom' => $facturePresence->getPrenom()],
                 );
 
                 if ($enfant) {
                     $facturePresence->enfantId = $enfant->getId();
                 } else {
-
                     $this->error($facturePresence);
-
                 }
             }
         }
@@ -119,7 +123,7 @@ class FixCommand extends Command
         if (in_array($facturePresence->getFacture()->getId(), [1656])) {
             if ($facturePresence->getPrenom() == 'Arthur') {
                 $enfant = $this->enfantRepository->findOneBy(
-                    ['nom' => 'GHEYS', 'prenom' => $facturePresence->getPrenom()]
+                    ['nom' => 'GHEYS', 'prenom' => $facturePresence->getPrenom()],
                 );
                 if ($enfant) {
                     $facturePresence->enfantId = $enfant->getId();
@@ -129,14 +133,13 @@ class FixCommand extends Command
             }
             if ($facturePresence->getPrenom() == 'Aurélia') {
                 $enfant = $this->enfantRepository->findOneBy(
-                    ['nom' => 'NOWAK', 'prenom' => $facturePresence->getPrenom()]
+                    ['nom' => 'NOWAK', 'prenom' => $facturePresence->getPrenom()],
                 );
                 if ($enfant) {
                     $facturePresence->enfantId = $enfant->getId();
                 } else {
                     $this->error($facturePresence);
                 }
-
             }
 
             return true;
@@ -149,7 +152,7 @@ class FixCommand extends Command
     {
         if (in_array($facturePresence->getFacture()->getId(), [304])) {
             $enfant = $this->enfantRepository->findOneBy(
-                ['nom' => 'MUSTAFTAPUR', 'prenom' => $facturePresence->getPrenom()]
+                ['nom' => 'MUSTAFTAPUR', 'prenom' => $facturePresence->getPrenom()],
             );
             if ($enfant) {
                 $facturePresence->enfantId = $enfant->getId();
@@ -167,7 +170,7 @@ class FixCommand extends Command
     {
         if (in_array($facturePresence->getFacture()->getId(), [128, 234, 372, 479, 591, 751])) {
             $enfant = $this->enfantRepository->findOneBy(
-                ['nom' => 'GASMI', 'prenom' => $facturePresence->getPrenom()]
+                ['nom' => 'GASMI', 'prenom' => $facturePresence->getPrenom()],
             );
             if ($enfant) {
                 $facturePresence->enfantId = $enfant->getId();
@@ -185,8 +188,7 @@ class FixCommand extends Command
     {
         $this->io->error(
             'pas trouve '.$facturePresence->getFacture()->getId().' '.$facturePresence->getNom(
-            ).' '.$facturePresence->getPrenom()
+            ).' '.$facturePresence->getPrenom(),
         );
-
     }
 }

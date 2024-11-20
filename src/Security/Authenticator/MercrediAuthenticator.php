@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Security\Authenticator;
 
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +20,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
@@ -33,7 +33,8 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  * @see CheckCredentialsListener
  * bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main
  */
-class MercrediAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface, InteractiveAuthenticatorInterface
+class MercrediAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface,
+                                                                     InteractiveAuthenticatorInterface
 {
     use TargetPathTrait;
 
@@ -42,9 +43,8 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private UserRepository $userRepository,
-        private ParameterBagInterface $parameterBag
-    ) {
-    }
+        private ParameterBagInterface $parameterBag,
+    ) {}
 
     public function supports(Request $request): bool
     {
@@ -57,7 +57,7 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
         $password = $request->request->get('password', '');
         $token = $request->request->get('_csrf_token', '');
 
-        $request->getSession()->set(Security::LAST_USERNAME, $email);
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         $badges =
             [
@@ -69,7 +69,7 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
         return new Passport(
             new UserBadge($email, fn(string $identifier) => $this->userRepository->loadUserByIdentifier($identifier)),
             new PasswordCredentials($password),
-            $badges
+            $badges,
         );
     }
 
@@ -88,7 +88,7 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         if ($request->hasSession()) {
-            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+            $request->getSession()->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $exception);
         }
 
         if (interface_exists(LdapInterface::class)) {

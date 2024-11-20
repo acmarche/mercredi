@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Doctrine\EventSubscriber;
 
 use AcMarche\Mercredi\Entity\History;
-use AcMarche\Mercredi\Spam\Repository\HistoryRepository;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
@@ -17,10 +16,8 @@ class DeleteRecordSubscriber
 {
     public function __construct(
         private Security $security,
-        private HistoryRepository $historyRepository,
-        private EntityManagerInterface $entityManager
-    ) {
-    }
+        private EntityManagerInterface $entityManager,
+    ) {}
 
     public function getSubscribedEvents(): array
     {
