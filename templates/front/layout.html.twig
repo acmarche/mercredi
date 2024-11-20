@@ -4,11 +4,6 @@
     {{ render(path('mercredi_organisation_title')) }}
 {% endblock %}
 
-{% block stylesheets %}
-    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ recaptcha_site_key }}"></script>
-    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
-{% endblock %}
-
 {% block brand %}
     <a class="navbar-brand" href="{{ path('mercredi_front_home') }}">
         <i class="fas fa-frog icon-rose d-inline-block align-text-top"></i>

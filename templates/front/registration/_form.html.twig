@@ -1,6 +1,8 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr':{'id':'zeze'}}) }}
 {{ form_errors(form) }}
 <div class="row">
+
+    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
     <div class="col-6">
         {{ form_row(form.nom) }}
@@ -20,10 +22,14 @@
     <div class="col-6">
         {{ form_row(form.agreeTerms) }}
     </div>
-
 </div>
-<button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+<button class="btn btn-primary mr-1 mb-2" type="button"
+        id="recaptcha-btn"
+        data-sitekey="{{ recaptcha_site_key }}"
+        data-callback='onSubmit'
+        data-action='submit'>
+    <i class="far fa-save" aria-hidden="true"></i>
     M'enregistrer
 </button>
-<div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+
 {{ form_end(form) }}

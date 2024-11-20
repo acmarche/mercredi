@@ -1,6 +1,9 @@
 {% extends '@AcMarcheMercredi/front/layout.html.twig' %}
 
 {% block title %}M'enregistrer{% endblock %}
+{% block stylesheets %}
+    <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}" async defer></script>
+{% endblock %}
 {% block body %}
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
@@ -20,6 +23,20 @@
             {% include '@AcMarcheMercredi/front/registration/_form.html.twig' %}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        document.getElementById("recaptcha-btn").addEventListener("click", function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            grecaptcha.ready(function () {
+                grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'submit'}).then(function (token) {
+                    // Add the token to the hidden input
+                    document.getElementById("g-recaptcha-response").value = token;
 
-
+                    // Submit the form
+                    document.getElementById("zeze").submit();
+                });
+            });
+        });
+    </script>
 {% endblock %}
