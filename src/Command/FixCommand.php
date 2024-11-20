@@ -41,10 +41,10 @@ class FixCommand extends Command
         $i = 0;
         foreach ($this->userRepository->findAll() as $user) {
             if (!$user->getUuid()) {
-                $user->setUuid($user->generateUuid());
+                //$user->setUuid($user->generateUuid());
             }
             if (count($user->roles) === 0) {
-                //$this->userRepository->remove($user);
+                $this->userRepository->remove($user);
                 $this->io->writeln($user->getUserIdentifier());
                 $i++;
             }
