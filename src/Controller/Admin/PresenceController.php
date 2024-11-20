@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/presence')]
@@ -47,9 +47,8 @@ final class PresenceController extends AbstractController
         private FactureHandlerInterface $factureHandler,
         private PresenceCalculatorInterface $presenceCalculator,
         private OrdreService $ordreService,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_presence_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -77,7 +76,7 @@ final class PresenceController extends AbstractController
                 'search' => $form->isSubmitted(),
                 'jour' => $jour,
                 'display_remarques' => $displayRemarque,
-            ]
+            ],
         );
     }
 
@@ -113,7 +112,7 @@ final class PresenceController extends AbstractController
                 'search' => $form->isSubmitted(),
                 'month' => $mois,
                 'listingPresences' => $listingPresences,
-            ]
+            ],
         );
     }
 
@@ -141,7 +140,7 @@ final class PresenceController extends AbstractController
                 'enfant' => $enfant,
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -164,7 +163,7 @@ final class PresenceController extends AbstractController
                 'plaine' => $plaine,
                 'amount' => $amount,
                 'enfant' => $presence->getEnfant(),
-            ]
+            ],
         );
     }
 
@@ -195,7 +194,7 @@ final class PresenceController extends AbstractController
             [
                 'presence' => $presence,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -234,7 +233,7 @@ final class PresenceController extends AbstractController
             [
                 'presences' => $presences,
                 'presencesPlaines' => $presencesPlaines,
-            ]
+            ],
         );
     }
 }

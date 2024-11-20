@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
@@ -27,9 +27,8 @@ class ResetPasswordController extends AbstractController
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private RegistrationMailerFactory $registrationMailerFactory,
         private NotificationMailer $notificationMailer,
-        private ManagerRegistry $managerRegistry
-    ) {
-    }
+        private ManagerRegistry $managerRegistry,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_front_forgot_password_request')]
     public function request(Request $request): Response
@@ -38,7 +37,7 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
-                $form->get('email')->getData()
+                $form->get('email')->getData(),
             );
         }
 
@@ -46,7 +45,7 @@ class ResetPasswordController extends AbstractController
             '@AcMarcheMercredi/front/reset_password/request.html.twig',
             [
                 'requestForm' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -66,7 +65,7 @@ class ResetPasswordController extends AbstractController
             '@AcMarcheMercredi/front/reset_password/check_email.html.twig',
             [
                 'resetToken' => $resetToken,
-            ]
+            ],
         );
     }
 
@@ -77,7 +76,7 @@ class ResetPasswordController extends AbstractController
     public function reset(
         Request $request,
         UserPasswordHasherInterface $passwordEncoder,
-        string $token = null
+        string $token = null,
     ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -97,8 +96,8 @@ class ResetPasswordController extends AbstractController
                 'danger',
                 sprintf(
                     'There was a problem validating your reset request - %s',
-                    $e->getReason()
-                )
+                    $e->getReason(),
+                ),
             );
 
             return $this->redirectToRoute('mercredi_front_forgot_password_request');
@@ -114,7 +113,7 @@ class ResetPasswordController extends AbstractController
             // Encode the plain password, and set it.
             $encodedPassword = $passwordEncoder->hashPassword(
                 $user,
-                $form->get('plainPassword')->getData()
+                $form->get('plainPassword')->getData(),
             );
 
             $user->setPassword($encodedPassword);
@@ -130,7 +129,7 @@ class ResetPasswordController extends AbstractController
             '@AcMarcheMercredi/front/reset_password/reset.html.twig',
             [
                 'resetForm' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -139,7 +138,7 @@ class ResetPasswordController extends AbstractController
         $user = $this->managerRegistry->getRepository(User::class)->findOneBy(
             [
                 'email' => $emailFormData,
-            ]
+            ],
         );
 
         // Do not reveal whether a user account was found or not.
@@ -160,8 +159,8 @@ class ResetPasswordController extends AbstractController
                 'danger',
                 sprintf(
                     'There was a problem handling your password reset request - %s',
-                    $e->getReason()
-                )
+                    $e->getReason(),
+                ),
             );
 
             return $this->redirectToRoute('mercredi_front_forgot_password_request');

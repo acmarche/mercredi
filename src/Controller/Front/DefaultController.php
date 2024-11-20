@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 final class DefaultController extends AbstractController
@@ -18,9 +18,8 @@ final class DefaultController extends AbstractController
     public function __construct(
         private PageRepository $pageRepository,
         private PageFactory $pageFactory,
-        private FactureCronHandler $factureCronHandler
-    ) {
-    }
+        private FactureCronHandler $factureCronHandler,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_front_home')]
     public function index(): Response
@@ -34,7 +33,7 @@ final class DefaultController extends AbstractController
             '@AcMarcheMercredi/default/index.html.twig',
             [
                 'page' => $homePage,
-            ]
+            ],
         );
     }
 
@@ -47,7 +46,7 @@ final class DefaultController extends AbstractController
             '@AcMarcheMercredi/front/_menu_top.html.twig',
             [
                 'pages' => $pages,
-            ]
+            ],
         );
     }
 

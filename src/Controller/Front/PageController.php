@@ -13,7 +13,7 @@ use AcMarche\Mercredi\Spam\Handler\SpamHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class PageController extends AbstractController
 {
@@ -23,9 +23,8 @@ final class PageController extends AbstractController
         private PageFactory $pageFactory,
         private ContactEmailFactory $contactEmailFactory,
         private NotificationMailer $notificationMailer,
-        private SpamHandler $spamHandler
-    ) {
-    }
+        private SpamHandler $spamHandler,
+    ) {}
 
     #[Route(path: '/page/{slug}', name: 'mercredi_front_page_show')]
     public function page(Page $page): Response
@@ -41,7 +40,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercredi/front/page.html.twig',
             [
                 'page' => $page,
-            ]
+            ],
         );
     }
 
@@ -79,7 +78,7 @@ final class PageController extends AbstractController
                 'page' => $page,
                 'organisation' => $this->organisationRepository->getOrganisation(),
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -95,7 +94,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercredi/front/page.html.twig',
             [
                 'page' => $page,
-            ]
+            ],
         );
     }
 }

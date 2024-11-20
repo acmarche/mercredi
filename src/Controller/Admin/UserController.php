@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/user')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -30,9 +30,8 @@ final class UserController extends AbstractController
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $userPasswordEncoder,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_user_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -55,7 +54,7 @@ final class UserController extends AbstractController
                 'roles' => MercrediSecurityRole::explanation(),
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),
-            ]
+            ],
         );
     }
 
@@ -67,7 +66,7 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
-                $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
+                $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData()),
             );
             $user->setUsername($user->getEmail());
             $this->userRepository->persist($user);
@@ -83,7 +82,7 @@ final class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -97,7 +96,7 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
-                $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData())
+                $this->userPasswordEncoder->hashPassword($user, $form->get('plainPassword')->getData()),
             );
             $user->setUsername($user->getEmail());
             $this->userRepository->persist($user);
@@ -113,7 +112,7 @@ final class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -127,7 +126,7 @@ final class UserController extends AbstractController
             [
                 'user' => $user,
                 'check' => $check,
-            ]
+            ],
         );
     }
 
@@ -150,7 +149,7 @@ final class UserController extends AbstractController
             [
                 'user' => $user,
                 'form' => $editForm->createView(),
-            ]
+            ],
         );
     }
 
@@ -173,7 +172,7 @@ final class UserController extends AbstractController
             [
                 'user' => $user,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/document')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -25,9 +25,8 @@ final class DocumentController extends AbstractController
     public function __construct(
         private DocumentRepository $documentRepository,
         private PageRepository $pageRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_document_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -38,7 +37,7 @@ final class DocumentController extends AbstractController
             '@AcMarcheMercrediAdmin/document/index.html.twig',
             [
                 'documents' => $documents,
-            ]
+            ],
         );
     }
 
@@ -65,7 +64,7 @@ final class DocumentController extends AbstractController
             '@AcMarcheMercrediAdmin/document/new.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -76,7 +75,7 @@ final class DocumentController extends AbstractController
             '@AcMarcheMercrediAdmin/document/show.html.twig',
             [
                 'document' => $document,
-            ]
+            ],
         );
     }
 
@@ -100,7 +99,7 @@ final class DocumentController extends AbstractController
             [
                 'document' => $document,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

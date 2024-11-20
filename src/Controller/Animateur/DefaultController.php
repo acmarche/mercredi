@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[IsGranted('ROLE_MERCREDI_ANIMATEUR')]
@@ -32,7 +32,7 @@ final class DefaultController extends AbstractController
             '@AcMarcheMercrediAnimateur/default/nouveau.html.twig',
             [
                 'organisation' => $this->organisation,
-            ]
+            ],
         );
     }
 }

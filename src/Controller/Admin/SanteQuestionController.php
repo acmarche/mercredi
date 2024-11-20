@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/sante/question')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -22,9 +22,8 @@ final class SanteQuestionController extends AbstractController
 {
     public function __construct(
         private SanteQuestionRepository $santeQuestionRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_sante_question_index', methods: ['GET'])]
     public function index(): Response
@@ -33,7 +32,7 @@ final class SanteQuestionController extends AbstractController
             '@AcMarcheMercrediAdmin/sante_question/index.html.twig',
             [
                 'sante_questions' => $this->santeQuestionRepository->findAllOrberByPosition(),
-            ]
+            ],
         );
     }
 
@@ -59,7 +58,7 @@ final class SanteQuestionController extends AbstractController
             [
                 'sante_question' => $santeQuestion,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -70,7 +69,7 @@ final class SanteQuestionController extends AbstractController
             '@AcMarcheMercrediAdmin/sante_question/show.html.twig',
             [
                 'sante_question' => $santeQuestion,
-            ]
+            ],
         );
     }
 
@@ -94,7 +93,7 @@ final class SanteQuestionController extends AbstractController
             [
                 'sante_question' => $santeQuestion,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -120,7 +119,7 @@ final class SanteQuestionController extends AbstractController
             '@AcMarcheMercrediAdmin/sante_question/sort.html.twig',
             [
                 'questions' => $questions,
-            ]
+            ],
         );
     }
 }

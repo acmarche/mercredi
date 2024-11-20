@@ -17,7 +17,7 @@ use AcMarche\Mercredi\User\Repository\UserRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -37,9 +37,8 @@ final class CheckupController extends AbstractController
         private FactureRepository $factureRepository,
         private FactureCalculatorInterface $factureCalculator,
         private FacturePresenceRepository $facturePresenceRepository,
-        private PresenceCalculatorInterface $presenceCalculator
-    ) {
-    }
+        private PresenceCalculatorInterface $presenceCalculator,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_checkup_index')]
     public function checkup(): Response
@@ -47,7 +46,7 @@ final class CheckupController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/checkup/index.html.twig',
             [
-            ]
+            ],
         );
     }
 
@@ -58,7 +57,7 @@ final class CheckupController extends AbstractController
             '@AcMarcheMercrediAdmin/checkup/orphelins.html.twig',
             [
                 'enfants' => $this->enfantRepository->findOrphelins(),
-            ]
+            ],
         );
     }
 
@@ -71,7 +70,7 @@ final class CheckupController extends AbstractController
             '@AcMarcheMercrediAdmin/checkup/sansenfants.html.twig',
             [
                 'tuteurs' => $tuteurs,
-            ]
+            ],
         );
     }
 
@@ -83,7 +82,7 @@ final class CheckupController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/default/index.html.twig',
             [
-            ]
+            ],
         );
     }
 
@@ -103,7 +102,7 @@ final class CheckupController extends AbstractController
             '@AcMarcheMercrediAdmin/checkup/accounts.html.twig',
             [
                 'users' => $bad,
-            ]
+            ],
         );
     }
 
@@ -118,7 +117,7 @@ final class CheckupController extends AbstractController
             [
                 'tuteurs' => $tuteurs,
                 'enfants' => $enfants,
-            ]
+            ],
         );
     }
 
@@ -138,7 +137,7 @@ final class CheckupController extends AbstractController
             '@AcMarcheMercrediAdmin/checkup/presences.html.twig',
             [
                 'presences' => $presences,
-            ]
+            ],
         );
     }
 
@@ -153,7 +152,7 @@ final class CheckupController extends AbstractController
             $tuteur = $facture->getTuteur();
             $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
                 $facture,
-                FactureInterface::OBJECT_PRESENCE
+                FactureInterface::OBJECT_PRESENCE,
             );
             foreach ($facturePresences as $presenceFactured) {
                 $presence = $this->presenceRepository->find($presenceFactured->getPresenceId());
@@ -174,7 +173,7 @@ final class CheckupController extends AbstractController
                     ];
                     if (null !== $presence) {
                         $newcout = $this->presenceCalculator->calculate(
-                            $presence
+                            $presence,
                         );
                     }
                     if (!isset($data[$i]['montant'])) {
@@ -195,7 +194,7 @@ final class CheckupController extends AbstractController
                 'factures' => $factures,
                 'total' => $total,
                 'data' => $data,
-            ]
+            ],
         );
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -19,8 +19,7 @@ final class FactureCronController extends AbstractController
 {
     public function __construct(
         private FactureCronRepository $factureCronRepository,
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_facture_cron_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -31,7 +30,7 @@ final class FactureCronController extends AbstractController
             '@AcMarcheMercrediAdmin/facture_cron/index.html.twig',
             [
                 'crons' => $crons,
-            ]
+            ],
         );
     }
 
@@ -42,7 +41,7 @@ final class FactureCronController extends AbstractController
             '@AcMarcheMercrediAdmin/facture_cron/show.html.twig',
             [
                 'factureCron' => $factureCron,
-            ]
+            ],
         );
     }
 
@@ -64,7 +63,7 @@ final class FactureCronController extends AbstractController
             [
                 'factureCron' => $factureCron,
                 'form' => $form,
-            ]
+            ],
         );
     }
 

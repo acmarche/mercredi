@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -43,9 +43,8 @@ final class FactureController extends AbstractController
         private FactureCalculatorInterface $factureCalculator,
         private FactureRenderInterface $factureRender,
         private MessageBusInterface $dispatcher,
-        private QrCodeGenerator $qrCodeGenerator
-    ) {
-    }
+        private QrCodeGenerator $qrCodeGenerator,
+    ) {}
 
     #[Route(path: '/{id}/index', name: 'mercredi_admin_facture_index_by_tuteur', methods: ['GET', 'POST'])]
     public function indexByTuteur(Tuteur $tuteur): Response
@@ -58,7 +57,7 @@ final class FactureController extends AbstractController
                 'action' => $this->generateUrl('mercredi_admin_facture_new_month', [
                     'id' => $tuteur->getId(),
                 ]),
-            ]
+            ],
         );
 
         return $this->render(
@@ -67,7 +66,7 @@ final class FactureController extends AbstractController
                 'factures' => $factures,
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -101,7 +100,7 @@ final class FactureController extends AbstractController
             null,
             [
                 'action' => $this->generateUrl('mercredi_admin_facture_new_month_all'),
-            ]
+            ],
         );
 
         return $this->render(
@@ -112,7 +111,7 @@ final class FactureController extends AbstractController
                 'formMonth' => $formMonth->createView(),
                 'search' => $form->isSubmitted(),
                 'total' => $total,
-            ]
+            ],
         );
     }
 
@@ -143,7 +142,7 @@ final class FactureController extends AbstractController
                 'presences' => $presences,
                 'accueils' => $accueils,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -207,7 +206,7 @@ final class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/generate.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -223,7 +222,7 @@ final class FactureController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'content' => $html,
-            ]
+            ],
         );
     }
 
@@ -243,7 +242,7 @@ final class FactureController extends AbstractController
             [
                 'facture' => $facture,
                 'img' => $img,
-            ]
+            ],
         );
     }
 
@@ -267,7 +266,7 @@ final class FactureController extends AbstractController
             [
                 'facture' => $facture,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -291,7 +290,7 @@ final class FactureController extends AbstractController
             [
                 'facture' => $facture,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -365,7 +364,7 @@ final class FactureController extends AbstractController
                 'total' => $total,
                 'group' => $group,
                 'totalGroup' => $totalGroup,
-            ]
+            ],
         );
     }
 }

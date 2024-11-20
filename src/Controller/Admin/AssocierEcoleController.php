@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/security/associer/ecole')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -20,14 +20,13 @@ final class AssocierEcoleController extends AbstractController
 {
     public function __construct(
         private AssociationEcoleHandler $associationEcoleHandler,
-        private EcoleRepository $ecoleRepository
-    ) {
-    }
+        private EcoleRepository $ecoleRepository,
+    ) {}
 
     #[Route(path: '/{id}', name: 'mercredi_user_associate_ecole', methods: ['GET', 'POST'])]
     public function associate(Request $request, User $user): Response
     {
-        if (! $user->isEcole()) {
+        if (!$user->isEcole()) {
             $this->addFlash('danger', 'Le compte n\'a pas le rôle de école');
 
             return $this->redirectToRoute('mercredi_admin_user_show', [
@@ -50,7 +49,7 @@ final class AssocierEcoleController extends AbstractController
             [
                 'user' => $user,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -58,7 +57,7 @@ final class AssocierEcoleController extends AbstractController
     public function dissociate(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('dissociate'.$user->getId(), $request->request->get('_token'))) {
-            $ecoleId = (int) $request->request->get('tuteur');
+            $ecoleId = (int)$request->request->get('tuteur');
             if (0 === $ecoleId) {
                 $this->addFlash('danger', 'L\'école n\'a pas été trouvée');
 

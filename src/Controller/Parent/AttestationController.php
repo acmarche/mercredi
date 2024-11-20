@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -25,8 +25,7 @@ final class AttestationController extends AbstractController
         private PresenceRepository $presenceRepository,
         private AccueilRepository $accueilRepository,
         private AttestationGeneratorInterface $attestationGenerator,
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/{year}/{uuid}', name: 'mercredi_parent_attestation')]
     #[IsGranted('enfant_show', subject: 'enfant')]
@@ -45,7 +44,7 @@ final class AttestationController extends AbstractController
         if (!$enfant->getRegistreNational()) {
             $this->addFlash(
                 'danger',
-                'Il est obligatoire que le numéro de registre national soit encodé pour accéder à l\'attestation'
+                'Il est obligatoire que le numéro de registre national soit encodé pour accéder à l\'attestation',
             );
 
             return $this->redirectToRoute('mercredi_parent_tuteur_show');

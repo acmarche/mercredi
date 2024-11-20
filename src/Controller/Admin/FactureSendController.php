@@ -17,7 +17,7 @@ use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -30,8 +30,7 @@ final class FactureSendController extends AbstractController
         private FacturePdfFactoryTrait $facturePdfFactory,
         private FactureEmailFactory $factureEmailFactory,
         private NotificationMailer $notificationMailer,
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/select/month', name: 'mercredi_admin_facture_send_select_month', methods: ['GET', 'POST'])]
     public function selectMonth(Request $request): Response
@@ -57,7 +56,7 @@ final class FactureSendController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/select_month.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -81,7 +80,6 @@ final class FactureSendController extends AbstractController
                 $facture->setEnvoyeLe(new DateTime());
                 $this->addFlash('success', 'La facture a bien été envoyée');
                 $this->factureRepository->flush();
-
             } catch (\Exception $exception) {
                 $this->addFlash('danger', 'Erreur d\'envoie '.$exception->getMessage());
             }
@@ -97,7 +95,7 @@ final class FactureSendController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -110,7 +108,6 @@ final class FactureSendController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if ([] === $factures) {
                 $this->addFlash('warning', 'Aucune facture non payée n\'a été trouvée pour ce mois');
 
@@ -140,7 +137,7 @@ final class FactureSendController extends AbstractController
                 'mercredi_admin_facture_cron_launch',
                 [
                     'id' => $cron->getId(),
-                ]
+                ],
             );
         }
 
@@ -150,7 +147,7 @@ final class FactureSendController extends AbstractController
                 'form' => $form->createView(),
                 'factures' => $factures,
                 'month' => $month,
-            ]
+            ],
         );
     }
 
@@ -159,10 +156,12 @@ final class FactureSendController extends AbstractController
     {
         $copies = $this->getParameter(Option::EMAILS_FACTURE);
 
-        return $this->render('@AcMarcheMercrediAdmin/facture/facture_cron_launch.html.twig', [
+        return $this->render(
+            '@AcMarcheMercrediAdmin/facture/facture_cron_launch.html.twig',
+            [
                 'factureCron' => $factureCron,
                 'copies' => $copies,
-            ]
+            ],
         );
     }
 
@@ -181,7 +180,7 @@ final class FactureSendController extends AbstractController
             [
                 'factures' => $factures,
                 'month' => $month,
-            ]
+            ],
         );
     }
 

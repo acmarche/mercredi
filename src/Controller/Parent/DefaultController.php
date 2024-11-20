@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -21,9 +21,8 @@ final class DefaultController extends AbstractController
     public function __construct(
         private RelationUtils $relationUtils,
         private SanteChecker $santeChecker,
-        private FactureRepository $factureRepository
-    ) {
-    }
+        private FactureRepository $factureRepository,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_parent_home')]
     #[IsGranted('ROLE_MERCREDI_PARENT')]
@@ -45,7 +44,7 @@ final class DefaultController extends AbstractController
                 'factures' => $factures,
                 'tuteurIsComplete' => $tuteurIsComplete,
                 'year' => date('Y'),
-            ]
+            ],
         );
     }
 
@@ -56,7 +55,7 @@ final class DefaultController extends AbstractController
             '@AcMarcheMercrediParent/default/nouveau.html.twig',
             [
                 'organisation' => $this->organisation,
-            ]
+            ],
         );
     }
 }

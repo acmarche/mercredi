@@ -11,16 +11,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/plaine_groupe')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
 final class PlaineGroupeController extends AbstractController
 {
     public function __construct(
-        private PlaineGroupeRepository $plaineGroupeRepository
-    ) {
-    }
+        private PlaineGroupeRepository $plaineGroupeRepository,
+    ) {}
 
     #[Route(path: '/index/{id}', name: 'mercredi_admin_plaine_groupe_index', methods: ['GET', 'POST'])]
     public function index(Request $request, Plaine $plaine): Response
@@ -36,7 +35,6 @@ final class PlaineGroupeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             foreach ($plaine->groupesScolaire as $groupeScolaire) {
                 if (!$this->plaineGroupeRepository->findByPlaineAndGroupeScolaire($plaine, $groupeScolaire)) {
                     $groupePlaine = new PlaineGroupe($plaine, $groupeScolaire);
@@ -64,7 +62,7 @@ final class PlaineGroupeController extends AbstractController
             [
                 'plaine' => $plaine,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -89,7 +87,7 @@ final class PlaineGroupeController extends AbstractController
                 'plaine' => $plaine,
                 'plaine_groupe' => $plaineGroupe,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

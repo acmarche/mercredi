@@ -11,16 +11,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
 #[Route(path: '/creance')]
 final class CreanceController extends AbstractController
 {
     public function __construct(
-        private CreanceRepository $creanceRepository
-    ) {
-    }
+        private CreanceRepository $creanceRepository,
+    ) {}
 
     #[Route(path: '/{id}', name: 'mercredi_admin_creance_index', methods: ['GET'])]
     public function index(Tuteur $tuteur): Response
@@ -32,7 +31,7 @@ final class CreanceController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'creances' => $creances,
-            ]
+            ],
         );
     }
 
@@ -58,7 +57,7 @@ final class CreanceController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -72,7 +71,7 @@ final class CreanceController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'creance' => $creance,
-            ]
+            ],
         );
     }
 
@@ -97,7 +96,7 @@ final class CreanceController extends AbstractController
                 'creance' => $creance,
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

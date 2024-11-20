@@ -20,7 +20,7 @@ use AcMarche\Mercredi\Relation\Utils\OrdreService;
 use AcMarche\Mercredi\Spreadsheet\SpreadsheetDownloaderTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/attestation')]
@@ -41,8 +41,7 @@ final class AttestationController extends AbstractController
         private AttestationGeneratorInterface $attestationGenerator,
         private FactureRepository $factureRepository,
         private FactureUtils $factureUtils,
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_attestation_index')]
     public function default(): Response
@@ -50,7 +49,7 @@ final class AttestationController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/admin/attestation/index.html.twig',
             [
-            ]
+            ],
         );
     }
 

@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/tuteur')]
@@ -39,9 +39,8 @@ final class TuteurController extends AbstractController
         private PresenceRepository $presenceRepository,
         private SearchHelper $searchHelper,
         private MessageBusInterface $dispatcher,
-        private AssociationTuteurHandler $associationTuteurHandler
-    ) {
-    }
+        private AssociationTuteurHandler $associationTuteurHandler,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_tuteur_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -62,7 +61,7 @@ final class TuteurController extends AbstractController
                 'tuteurs' => $tuteurs,
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),
-            ]
+            ],
         );
     }
 
@@ -99,7 +98,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -135,7 +134,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -153,7 +152,7 @@ final class TuteurController extends AbstractController
                 'tuteur' => $tuteur,
                 'relations' => $relations,
                 'formAddChild' => $form,
-            ]
+            ],
         );
     }
 
@@ -177,7 +176,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -204,7 +203,7 @@ final class TuteurController extends AbstractController
                     'presences' => $presences,
                     'factures' => $factures,
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -220,7 +219,6 @@ final class TuteurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             foreach ($this->factureRepository->findByTuteur($tuteur) as $facture) {
                 $this->factureRepository->remove($facture);
             }

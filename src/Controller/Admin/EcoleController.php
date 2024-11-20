@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/ecole')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -24,9 +24,8 @@ final class EcoleController extends AbstractController
     public function __construct(
         private EcoleRepository $ecoleRepository,
         private EnfantRepository $enfantRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_ecole_index', methods: ['GET'])]
     public function index(): Response
@@ -35,7 +34,7 @@ final class EcoleController extends AbstractController
             '@AcMarcheMercrediAdmin/ecole/index.html.twig',
             [
                 'ecoles' => $this->ecoleRepository->findAllOrderByNom(),
-            ]
+            ],
         );
     }
 
@@ -61,7 +60,7 @@ final class EcoleController extends AbstractController
             [
                 'ecole' => $ecole,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -75,7 +74,7 @@ final class EcoleController extends AbstractController
             [
                 'ecole' => $ecole,
                 'enfants' => $enfants,
-            ]
+            ],
         );
     }
 
@@ -99,7 +98,7 @@ final class EcoleController extends AbstractController
             [
                 'ecole' => $ecole,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

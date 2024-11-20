@@ -9,7 +9,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/presence')]
 #[IsGranted('ROLE_MERCREDI_ANIMATEUR')]
@@ -20,9 +20,8 @@ final class PresenceController extends AbstractController
     public function __construct(
         private PresenceRepository $presenceRepository,
         private JourRepository $jourRepository,
-        private EnfantRepository $enfantRepository
-    ) {
-    }
+        private EnfantRepository $enfantRepository,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_animateur_presence_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -36,7 +35,7 @@ final class PresenceController extends AbstractController
             '@AcMarcheMercrediAnimateur/presence/index.html.twig',
             [
                 'jours' => $jours,
-            ]
+            ],
         );
     }
 
@@ -54,7 +53,7 @@ final class PresenceController extends AbstractController
             [
                 'enfants' => $enfants,
                 'jour' => $jour,
-            ]
+            ],
         );
     }
 }

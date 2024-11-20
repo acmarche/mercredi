@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -21,9 +21,8 @@ final class TuteurController extends AbstractController
 
     public function __construct(
         private TuteurRepository $tuteurRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_parent_tuteur_show', methods: ['GET'])]
     #[IsGranted('ROLE_MERCREDI_PARENT')]
@@ -39,7 +38,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteurIsComplete' => $tuteurIsComplete,
                 'tuteur' => $this->tuteur,
-            ]
+            ],
         );
     }
 
@@ -65,7 +64,7 @@ final class TuteurController extends AbstractController
             [
                 'tuteur' => $this->tuteur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

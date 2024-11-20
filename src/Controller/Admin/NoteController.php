@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/note')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -23,9 +23,8 @@ final class NoteController extends AbstractController
 {
     public function __construct(
         private NoteRepository $noteRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_note_index', methods: ['GET'])]
     public function index(): Response
@@ -34,7 +33,7 @@ final class NoteController extends AbstractController
             '@AcMarcheMercrediAdmin/note/index.html.twig',
             [
                 'notes' => $this->noteRepository->findAll(),
-            ]
+            ],
         );
     }
 
@@ -63,7 +62,7 @@ final class NoteController extends AbstractController
             [
                 'note' => $note,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -90,7 +89,7 @@ final class NoteController extends AbstractController
                 'note' => $note,
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -102,7 +101,7 @@ final class NoteController extends AbstractController
             [
                 'note' => $note,
                 'enfant' => $note->getEnfant(),
-            ]
+            ],
         );
     }
 
@@ -114,7 +113,7 @@ final class NoteController extends AbstractController
             [
                 'enfant' => $enfant,
                 'notes' => $enfant->getNotes(),
-            ]
+            ],
         );
     }
 
@@ -138,7 +137,7 @@ final class NoteController extends AbstractController
             [
                 'note' => $note,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

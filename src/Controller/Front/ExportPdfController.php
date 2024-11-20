@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/export/pdf')]
 final class ExportPdfController extends AbstractController
@@ -19,12 +19,11 @@ final class ExportPdfController extends AbstractController
     public function __construct(
         private SanteHandler $santeHandler,
         private SantePdfFactoryTrait $santePdfFactory,
-        private FacturePdfFactoryTrait $facturePdfFactory
-    ) {
-    }
+        private FacturePdfFactoryTrait $facturePdfFactory,
+    ) {}
 
     #[Route(path: '/santefiche/{uuid}', name: 'mercredi_commun_export_sante_fiche_pdf')]
-    #[IsGranted( 'enfant_show', subject: 'enfant')]
+    #[IsGranted('enfant_show', subject: 'enfant')]
     public function sante(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);

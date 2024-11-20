@@ -24,7 +24,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/plaine')]
@@ -44,9 +44,8 @@ final class PlaineController extends AbstractController
         private NotificationMailer $notificationMailer,
         private AdminEmailFactory $adminEmailFactory,
         private PlaineHandlerInterface $plaineHandler,
-        private FactureRepository $factureRepository
-    ) {
-    }
+        private FactureRepository $factureRepository,
+    ) {}
 
     /**
      * Render from layout !
@@ -62,7 +61,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediParent/plaine/_open.html.twig',
             [
                 'plaine' => $plaine,
-            ]
+            ],
         );
     }
 
@@ -91,7 +90,7 @@ final class PlaineController extends AbstractController
                 'inscriptions' => $inscriptions,
                 'resteEnfants' => $resteEnfant,
                 'facture' => $facture,
-            ]
+            ],
         );
     }
 
@@ -144,7 +143,7 @@ final class PlaineController extends AbstractController
             [
                 'enfants' => $enfants,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -197,7 +196,7 @@ final class PlaineController extends AbstractController
                 if (!$plaineGroupe) {
                     $this->addFlash(
                         'danger',
-                        'Enfant non inscrit,aucun de groupe de plaine trouvé pour  :'.$enfant->getPrenom()
+                        'Enfant non inscrit,aucun de groupe de plaine trouvé pour  :'.$enfant->getPrenom(),
                     );
 
                     continue;
@@ -231,7 +230,7 @@ final class PlaineController extends AbstractController
             [
                 'plaine' => $plaine,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -279,7 +278,7 @@ final class PlaineController extends AbstractController
                 'enfantsInscrits' => $enfantsInscrits,
                 'enfants' => $enfants,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

@@ -5,16 +5,15 @@ namespace AcMarche\Mercredi\Controller\Front;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[Route(path: '/organisation')]
 final class OrganisationController extends AbstractController
 {
     public function __construct(
-        private OrganisationRepository $organisationRepository
-    ) {
-    }
+        private OrganisationRepository $organisationRepository,
+    ) {}
 
     #[Route(path: '/show', name: 'mercredi_organisation_show')]
     public function organisation(): Response
@@ -25,7 +24,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercredi/organisation/_organisation.html.twig',
             [
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 
@@ -38,7 +37,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercredi/organisation/_organisation_title.html.twig',
             [
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 
@@ -51,7 +50,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercredi/organisation/_organisation_short.html.twig',
             [
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 }

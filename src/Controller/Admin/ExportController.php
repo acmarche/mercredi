@@ -13,7 +13,7 @@ use AcMarche\Mercredi\Utils\DateUtils;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -27,9 +27,8 @@ final class ExportController extends AbstractController
         private PresenceRepository $presenceRepository,
         private PlainePdfFactory $plainePdfFactory,
         private readonly FactureRepository $factureRepository,
-        private SearchHelper $searchHelper
-    ) {
-    }
+        private SearchHelper $searchHelper,
+    ) {}
 
     #[Route(path: '/presence', name: 'mercredi_admin_export_presence_xls')]
     public function default(): Response
@@ -90,9 +89,8 @@ final class ExportController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/index_export.html.twig',
             [
                 'years' => range(2022, (int)date('Y') + 1),
-            ]
+            ],
         );
-
     }
 
     #[Route(path: '/facture/{year}/xls', name: 'mercredi_admin_facture_xls')]
@@ -102,6 +100,5 @@ final class ExportController extends AbstractController
         $spreadsheet = $this->spreadsheetFactory->facturesXls($factures);
 
         return $this->spreadsheetFactory->downloadXls($spreadsheet, 'factures-'.$year.'.xlsx');
-
     }
 }

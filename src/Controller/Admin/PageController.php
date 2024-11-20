@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/page')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -22,9 +22,8 @@ final class PageController extends AbstractController
 {
     public function __construct(
         private PageRepository $pageRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_page_index', methods: ['GET'])]
     public function index(): Response
@@ -33,7 +32,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercrediAdmin/page/index.html.twig',
             [
                 'pages' => $this->pageRepository->findAll(),
-            ]
+            ],
         );
     }
 
@@ -59,7 +58,7 @@ final class PageController extends AbstractController
             [
                 'page' => $page,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -70,7 +69,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercrediAdmin/page/show.html.twig',
             [
                 'page' => $page,
-            ]
+            ],
         );
     }
 
@@ -94,7 +93,7 @@ final class PageController extends AbstractController
             [
                 'page' => $page,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -120,7 +119,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercrediAdmin/page/sort.html.twig',
             [
                 'pages' => $pages,
-            ]
+            ],
         );
     }
 }

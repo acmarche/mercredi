@@ -10,10 +10,10 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
-#[IsGranted( 'ROLE_MERCREDI_PARENT')]
+#[IsGranted('ROLE_MERCREDI_PARENT')]
 #[Route(path: '/facture')]
 final class FactureController extends AbstractController
 {
@@ -23,9 +23,8 @@ final class FactureController extends AbstractController
         private FactureRepository $factureRepository,
         private FacturePresenceRepository $facturePresenceRepository,
         private FactureCalculatorInterface $factureCalculator,
-        private factureRenderInterface $factureRender
-    ) {
-    }
+        private factureRenderInterface $factureRender,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_parent_facture_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -40,7 +39,7 @@ final class FactureController extends AbstractController
             [
                 'factures' => $factures,
                 'tuteur' => $this->tuteur,
-            ]
+            ],
         );
     }
 
@@ -57,7 +56,7 @@ final class FactureController extends AbstractController
             [
                 'facture' => $facture,
                 'content' => $html,
-            ]
+            ],
         );
     }
 }

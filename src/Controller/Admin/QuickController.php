@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -24,9 +24,8 @@ final class QuickController extends AbstractController
         private TuteurRepository $tuteurRepository,
         private EnfantRepository $enfantRepository,
         private RelationRepository $relationRepository,
-        private AssociationTuteurHandler $associationTuteurHandler
-    ) {
-    }
+        private AssociationTuteurHandler $associationTuteurHandler,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_parent_enfant_new')]
     public function new(Request $request): Response
@@ -65,7 +64,7 @@ final class QuickController extends AbstractController
                     'tuteur' => $tuteur,
                     'user' => $user,
                     'password' => $password,
-                ]
+                ],
             );
         }
 
@@ -73,7 +72,7 @@ final class QuickController extends AbstractController
             '@AcMarcheMercrediAdmin/quick/new.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

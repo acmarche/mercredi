@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/utilisateur/password')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -18,9 +18,8 @@ final class PasswordController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
-        private UserPasswordHasherInterface $userPasswordEncoder
-    ) {
-    }
+        private UserPasswordHasherInterface $userPasswordEncoder,
+    ) {}
 
     /**
      * Displays a form to edit an existing Utilisateur utilisateur.
@@ -46,7 +45,7 @@ final class PasswordController extends AbstractController
             [
                 'user' => $user,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

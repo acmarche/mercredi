@@ -6,7 +6,7 @@ use AcMarche\Mercredi\Spam\Repository\HistoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -15,9 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class HistoryController extends AbstractController
 {
     public function __construct(
-        private readonly HistoryRepository $historyRepository
-    ) {
-    }
+        private readonly HistoryRepository $historyRepository,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_history_index')]
     public function index(Request $request): Response
@@ -28,7 +27,7 @@ final class HistoryController extends AbstractController
             '@AcMarcheMercrediAdmin/history/index.html.twig',
             [
                 'histories' => $histories,
-            ]
+            ],
         );
     }
 

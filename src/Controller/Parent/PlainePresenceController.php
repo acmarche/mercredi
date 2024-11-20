@@ -13,7 +13,7 @@ use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class PlainePresenceController extends AbstractController
 {
@@ -22,17 +22,15 @@ class PlainePresenceController extends AbstractController
     public function __construct(
         private PlainePresenceRepository $plainePresenceRepository,
         private PlaineHandlerInterface $plaineHandler,
-        private FactureRepository $factureRepository
-    ) {
-    }
+        private FactureRepository $factureRepository,
+    ) {}
 
     #[Route(path: '/{plaine}/{uuid}/edit', name: 'mercredi_parent_plaine_presence_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Plaine $plaine,
-        Enfant $enfant
+        Enfant $enfant,
     ): Response {
-
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
@@ -45,7 +43,7 @@ class PlainePresenceController extends AbstractController
                     'mercredi_parent_plaine_show',
                     [
                         'id' => $plaine->getId(),
-                    ]
+                    ],
                 );
             }
         }
@@ -65,7 +63,7 @@ class PlainePresenceController extends AbstractController
                     $this->tuteur,
                     $enfant,
                     $currentJours,
-                    $new
+                    $new,
                 );
             } catch (\Exception $e) {
                 $this->addFlash('danger', $e->getMessage());
@@ -74,7 +72,7 @@ class PlainePresenceController extends AbstractController
                     'mercredi_parent_plaine_show',
                     [
                         'id' => $plaine->getId(),
-                    ]
+                    ],
                 );
             }
 
@@ -93,7 +91,7 @@ class PlainePresenceController extends AbstractController
                 'mercredi_parent_plaine_show',
                 [
                     'id' => $plaine->getId(),
-                ]
+                ],
             );
         }
 
@@ -103,7 +101,7 @@ class PlainePresenceController extends AbstractController
                 'plaine' => $plaine,
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

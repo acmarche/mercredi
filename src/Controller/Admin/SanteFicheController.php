@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/santeFiche')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -30,15 +30,14 @@ final class SanteFicheController extends AbstractController
         private OrganisationRepository $organisationRepository,
         private SanteHandler $santeHandler,
         private SanteChecker $santeChecker,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/{id}', name: 'mercredi_admin_sante_fiche_show', methods: ['GET'])]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
-        if (! $santeFiche->getId()) {
+        if (!$santeFiche->getId()) {
             $this->addFlash('warning', 'Cette enfant n\'a pas encore de fiche santé');
 
             return $this->redirectToRoute('mercredi_admin_sante_fiche_edit', [
@@ -57,7 +56,7 @@ final class SanteFicheController extends AbstractController
                 'is_complete' => $isComplete,
                 'questions' => $questions,
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 
@@ -86,7 +85,7 @@ final class SanteFicheController extends AbstractController
             [
                 'sante_fiche' => $santeFiche,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

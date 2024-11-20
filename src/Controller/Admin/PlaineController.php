@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/plaine')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -34,9 +34,8 @@ final class PlaineController extends AbstractController
         private GroupeScolaireRepository $groupeScolaireRepository,
         private PlaineAdminHandler $plaineAdminHandler,
         private GroupingInterface $grouping,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_plaine_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -60,7 +59,7 @@ final class PlaineController extends AbstractController
             [
                 'plaines' => $plaines,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -92,7 +91,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine/new.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -126,7 +125,7 @@ final class PlaineController extends AbstractController
                 'plaine' => $plaine,
                 'enfants' => $enfants,
                 'data' => $data,
-            ]
+            ],
         );
     }
 
@@ -150,7 +149,7 @@ final class PlaineController extends AbstractController
             [
                 'plaine' => $plaine,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -167,7 +166,7 @@ final class PlaineController extends AbstractController
                 $this->addFlash(
                     'danger',
                     'Les inscriptions n\'ont pas pu être ouvrir car la plaine '.$plaineOpen->getNom(
-                    ).' est toujours ouverte'
+                    ).' est toujours ouverte',
                 );
             }
 
@@ -181,7 +180,7 @@ final class PlaineController extends AbstractController
             [
                 'plaine' => $plaine,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

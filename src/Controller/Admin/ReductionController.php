@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/reduction')]
@@ -26,9 +26,8 @@ final class ReductionController extends AbstractController
         private readonly ReductionRepository $reductionRepository,
         private readonly FacturePresenceRepository $facturePresenceRepository,
         private readonly PresenceRepository $presenceRepository,
-        private readonly MessageBusInterface $dispatcher
-    ) {
-    }
+        private readonly MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_reduction_index', methods: ['GET'])]
     public function index(): Response
@@ -37,7 +36,7 @@ final class ReductionController extends AbstractController
             '@AcMarcheMercrediAdmin/reduction/index.html.twig',
             [
                 'reductions' => $this->reductionRepository->findAll(),
-            ]
+            ],
         );
     }
 
@@ -64,7 +63,7 @@ final class ReductionController extends AbstractController
             [
                 'reduction' => $reduction,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -78,7 +77,7 @@ final class ReductionController extends AbstractController
             [
                 'reduction' => $reduction,
                 'presences' => $presences,
-            ]
+            ],
         );
     }
 
@@ -102,7 +101,7 @@ final class ReductionController extends AbstractController
             [
                 'reduction' => $reduction,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -110,11 +109,10 @@ final class ReductionController extends AbstractController
     public function delete(Request $request, Reduction $reduction): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$reduction->getId(), $request->request->get('_token'))) {
-
             if (count($this->facturePresenceRepository->findByReduction($reduction)) > 0) {
                 $this->addFlash(
                     'danger',
-                    'Cette réduction ne peut être supprimée, des factures sont attachées à celle-ci'
+                    'Cette réduction ne peut être supprimée, des factures sont attachées à celle-ci',
                 );
 
                 return $this->redirectToRoute('mercredi_admin_reduction_index');

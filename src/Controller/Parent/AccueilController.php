@@ -7,7 +7,7 @@ use AcMarche\Mercredi\Entity\Presence\Accueil;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/accueil')]
 #[IsGranted('ROLE_MERCREDI_PARENT')]
@@ -16,9 +16,8 @@ final class AccueilController extends AbstractController
     use GetTuteurTrait;
 
     public function __construct(
-        private AccueilCalculatorInterface $accueilCalculator
-    ) {
-    }
+        private AccueilCalculatorInterface $accueilCalculator,
+    ) {}
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_accueil_show', methods: ['GET'])]
     #[IsGranted('accueil_show', subject: 'accueil')]
@@ -32,7 +31,7 @@ final class AccueilController extends AbstractController
                 'accueil' => $accueil,
                 'cout' => $cout,
                 'enfant' => $accueil->getEnfant(),
-            ]
+            ],
         );
     }
 }

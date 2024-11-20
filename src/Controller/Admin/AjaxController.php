@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -20,9 +20,8 @@ final class AjaxController extends AbstractController
     public function __construct(
         private EnfantRepository $enfantRepository,
         private SanteQuestionRepository $santeQuestionRepository,
-        private PageRepository $pageRepository
-    ) {
-    }
+        private PageRepository $pageRepository,
+    ) {}
 
     #[Route(path: '/enfants/link', name: 'mercredi_admin_autocomplete_enfants', methods: ['GET'])]
     public function enfants(Request $request): JsonResponse

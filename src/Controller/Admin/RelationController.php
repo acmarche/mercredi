@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/relation')]
@@ -27,9 +27,8 @@ final class RelationController extends AbstractController
     public function __construct(
         private RelationRepository $relationRepository,
         private RelationHandler $relationHandler,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/attach/enfant/{id}', name: 'mercredi_admin_relation_attach_enfant', methods: ['POST'])]
     public function attachEnfant(Request $request, Tuteur $tuteur): RedirectResponse
@@ -79,7 +78,7 @@ final class RelationController extends AbstractController
             [
                 'relation' => $relation,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

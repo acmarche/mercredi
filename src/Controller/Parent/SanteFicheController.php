@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/santeFiche')]
@@ -30,9 +30,8 @@ final class SanteFicheController extends AbstractController
         private SanteHandler $santeHandler,
         private SanteChecker $santeChecker,
         private SanteFicheRepository $santeFicheRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_sante_fiche_show', methods: ['GET'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
@@ -58,7 +57,7 @@ final class SanteFicheController extends AbstractController
                 'is_complete' => $isComplete,
                 'questions' => $questions,
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 
@@ -82,7 +81,7 @@ final class SanteFicheController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -111,7 +110,7 @@ final class SanteFicheController extends AbstractController
                 'sante_fiche' => $santeFiche,
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -139,7 +138,7 @@ final class SanteFicheController extends AbstractController
                 'sante_fiche' => $santeFiche,
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

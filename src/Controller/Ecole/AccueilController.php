@@ -25,7 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/accueil')]
@@ -42,9 +42,8 @@ final class AccueilController extends AbstractController
         private EnfantRepository $enfantRepository,
         private DateUtils $dateUtils,
         private FacturePresenceRepository $facturePresenceRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/index', name: 'mercredi_ecole_accueils_index', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MERCREDI_ECOLE')]
@@ -70,7 +69,7 @@ final class AccueilController extends AbstractController
                 'accueils' => $accueils,
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),
-            ]
+            ],
         );
     }
 
@@ -95,7 +94,7 @@ final class AccueilController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -114,7 +113,7 @@ final class AccueilController extends AbstractController
                 'cout' => $cout,
                 'enfant' => $enfant,
                 'facture' => $factureAccueil,
-            ]
+            ],
         );
     }
 
@@ -139,7 +138,7 @@ final class AccueilController extends AbstractController
             [
                 'accueil' => $accueil,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -153,7 +152,7 @@ final class AccueilController extends AbstractController
         int $year,
         int $month,
         string $heure,
-        int $week = 0
+        int $week = 0,
     ): Response {
         if (0 !== $week) {
             $date = $this->dateUtils->createDateImmutableFromYearWeek($year, $week);
@@ -212,7 +211,7 @@ final class AccueilController extends AbstractController
                 'form' => $form->createView(),
                 'calendar' => $calendar,
                 'data' => $data,
-            ]
+            ],
         );
     }
 
@@ -233,7 +232,7 @@ final class AccueilController extends AbstractController
             if (($accueil = $this->accueilRepository->findOneByEnfantAndDayAndHour(
                     $enfant,
                     $dateRetard,
-                    AccueilInterface::SOIR
+                    AccueilInterface::SOIR,
                 )) === null) {
                 $this->addFlash('danger', 'Aucun accueil encodé pour ce jour là. Veuillez d\'abord ajouté un accueil');
             } else {
@@ -253,7 +252,7 @@ final class AccueilController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

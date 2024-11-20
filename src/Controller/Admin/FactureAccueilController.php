@@ -10,7 +10,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -19,9 +19,8 @@ final class FactureAccueilController extends AbstractController
 {
     public function __construct(
         private FactureHandlerInterface $factureHandler,
-        private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
-    ) {
-    }
+        private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
+    ) {}
 
     #[Route(path: '/{id}/attach', name: 'mercredi_admin_facture_accueil_attach', methods: ['GET', 'POST'])]
     public function attach(Request $request, Facture $facture): Response
@@ -31,7 +30,7 @@ final class FactureAccueilController extends AbstractController
         $form = $this->createForm(FactureAttachType::class, $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $accueilsF = (array) $request->request->all('accueils');
+            $accueilsF = (array)$request->request->all('accueils');
             $this->factureHandler->handleManually($facture, [], $accueilsF);
 
             $this->addFlash('success', 'Les accueils ont bien été attachés');
@@ -48,7 +47,7 @@ final class FactureAccueilController extends AbstractController
                 'tuteur' => $facture->getTuteur(),
                 'accueils' => $accueils,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

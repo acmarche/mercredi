@@ -12,7 +12,7 @@ use Carbon\CarbonImmutable;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/presence')]
@@ -26,8 +26,7 @@ final class PresenceController extends AbstractController
         private JourRepository $jourRepository,
         private PresenceRepository $presenceRepository,
         private DateProvider $dateProvider,
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/{dateSelected}', name: 'mercredi_ecole_presence_index')]
     public function default(\DateTime $dateSelected = null): Response

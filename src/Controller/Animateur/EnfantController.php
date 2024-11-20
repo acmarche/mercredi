@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[Route(path: '/enfant')]
@@ -26,9 +26,8 @@ final class EnfantController extends AbstractController
         private SanteHandler $santeHandler,
         private SanteChecker $santeChecker,
         private PresenceRepository $presenceRepository,
-        private RelationRepository $relationRepository
-    ) {
-    }
+        private RelationRepository $relationRepository,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_animateur_enfant_index', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MERCREDI_ANIMATEUR')]
@@ -43,7 +42,7 @@ final class EnfantController extends AbstractController
             null,
             [
                 'animateur' => $this->animateur,
-            ]
+            ],
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -57,7 +56,7 @@ final class EnfantController extends AbstractController
             [
                 'enfants' => $enfants,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -77,7 +76,7 @@ final class EnfantController extends AbstractController
                 'presences' => $presences,
                 'relations' => $relations,
                 'ficheSanteComplete' => $ficheSanteComplete,
-            ]
+            ],
         );
     }
 }

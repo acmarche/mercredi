@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/enfant')]
@@ -41,9 +41,8 @@ final class EnfantController extends AbstractController
         private SearchHelper $searchHelper,
         private PlainePresenceRepository $plainePresenceRepository,
         private MessageBusInterface $dispatcher,
-        private FactureCalculatorInterface $factureCalculator
-    ) {
-    }
+        private FactureCalculatorInterface $factureCalculator,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_enfant_index', methods: ['GET', 'POST'])]
     #[Route(path: '/all/{all}', name: 'mercredi_admin_enfant_all', methods: ['GET'])]
@@ -59,7 +58,7 @@ final class EnfantController extends AbstractController
                 $data['nom'],
                 $data['ecole'],
                 $data['annee_scolaire'],
-                $data['archived']
+                $data['archived'],
             );
         }
 
@@ -69,7 +68,7 @@ final class EnfantController extends AbstractController
                 'enfants' => $enfants,
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),
-            ]
+            ],
         );
     }
 
@@ -93,7 +92,7 @@ final class EnfantController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -124,7 +123,7 @@ final class EnfantController extends AbstractController
                 'prensencesGrouped' => $presencesGrouped,
                 'plaines' => $plaines,
                 'currentYear' => $currentYear,
-            ]
+            ],
         );
     }
 
@@ -148,7 +147,7 @@ final class EnfantController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -156,7 +155,6 @@ final class EnfantController extends AbstractController
     public function delete(Request $request, Enfant $enfant): Response
     {
         if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->request->get('_token'))) {
-
             $presences = $this->presenceRepository->findByEnfant($enfant);
             $accueils = $this->accueilRepository->findByEnfant($enfant);
 
@@ -173,7 +171,7 @@ final class EnfantController extends AbstractController
                     'accueils' => $accueils,
                     'presences' => $presences,
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 

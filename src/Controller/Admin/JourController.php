@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/jour')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -27,9 +27,8 @@ final class JourController extends AbstractController
         private JourRepository $jourRepository,
         private TarificationFormGeneratorInterface $tarificationFormGenerator,
         private PresenceRepository $presenceRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_jour_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -50,7 +49,7 @@ final class JourController extends AbstractController
             [
                 'jours' => $jours,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -76,7 +75,7 @@ final class JourController extends AbstractController
             [
                 'jour' => $jour,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -101,7 +100,7 @@ final class JourController extends AbstractController
             [
                 'jour' => $jour,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -117,7 +116,7 @@ final class JourController extends AbstractController
                 'jour' => $jour,
                 'tarifs' => $tarifs,
                 'presences' => $presences,
-            ]
+            ],
         );
     }
 
@@ -142,7 +141,7 @@ final class JourController extends AbstractController
             [
                 'jour' => $jour,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

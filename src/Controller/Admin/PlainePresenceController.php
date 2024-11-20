@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/plaine/presence')]
@@ -38,9 +38,8 @@ final class PlainePresenceController extends AbstractController
         private readonly JourRepository $jourRepository,
         private PlainePresenceRepository $plainePresenceRepository,
         private PlaineCalculatorInterface $plaineCalculator,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/new/{id}', name: 'mercredi_admin_plaine_presence_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Plaine $plaine): Response
@@ -67,7 +66,7 @@ final class PlainePresenceController extends AbstractController
                 'enfants' => $enfants,
                 'plaine' => $plaine,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -87,7 +86,7 @@ final class PlainePresenceController extends AbstractController
                     'plaine' => $plaine->getId(),
                     'tuteur' => $tuteur->getId(),
                     'enfant' => $enfant->getId(),
-                ]
+                ],
             );
         }
 
@@ -97,7 +96,7 @@ final class PlainePresenceController extends AbstractController
                 'enfant' => $enfant,
                 'plaine' => $plaine,
                 'tuteurs' => $tuteurs,
-            ]
+            ],
         );
     }
 
@@ -115,7 +114,7 @@ final class PlainePresenceController extends AbstractController
             [
                 'plaine' => $plaine->getId(),
                 'enfant' => $enfant->getId(),
-            ]
+            ],
         );
     }
 
@@ -133,7 +132,7 @@ final class PlainePresenceController extends AbstractController
                 'enfant' => $enfant,
                 'presences' => $presences,
                 'cout' => $cout,
-            ]
+            ],
         );
     }
 
@@ -153,7 +152,7 @@ final class PlainePresenceController extends AbstractController
                 [
                     'plaine' => $plaine->getId(),
                     'enfant' => $enfant->getId(),
-                ]
+                ],
             );
         }
 
@@ -164,7 +163,7 @@ final class PlainePresenceController extends AbstractController
                 'presence' => $presence,
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -202,7 +201,7 @@ final class PlainePresenceController extends AbstractController
                 [
                     'plaine' => $plaine->getId(),
                     'enfant' => $enfant->getId(),
-                ]
+                ],
             );
         }
 
@@ -212,7 +211,7 @@ final class PlainePresenceController extends AbstractController
                 'plaine' => $plaine,
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -245,7 +244,7 @@ final class PlainePresenceController extends AbstractController
             [
                 'plaine' => $plaine->getId(),
                 'enfant' => $enfant->getId(),
-            ]
+            ],
         );
     }
 

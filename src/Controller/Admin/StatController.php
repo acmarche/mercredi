@@ -11,7 +11,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -24,9 +24,8 @@ final class StatController extends AbstractController
         private PresenceRepository $presenceRepository,
         private EcoleRepository $ecoleRepository,
         private FactureRepository $factureRepository,
-        private FactureComplementRepository $factureComplementRepository
-    ) {
-    }
+        private FactureComplementRepository $factureComplementRepository,
+    ) {}
 
     #[Route(path: '/{year}', name: 'mercredi_admin_stat_index')]
     public function default(int $year = 2023): Response
@@ -78,7 +77,7 @@ final class StatController extends AbstractController
                 'factureLate' => $facturesLate,
                 'years' => $years,
                 'yearSelected' => $year,
-            ]
+            ],
         );
     }
 }

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/animateur')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -25,9 +25,8 @@ final class AnimateurController extends AbstractController
     public function __construct(
         private AnimateurRepository $animateurRepository,
         private SearchHelper $searchHelper,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_animateur_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -47,8 +46,8 @@ final class AnimateurController extends AbstractController
             [
                 'animateurs' => $animateurs,
                 'form' => $form->createView(),
-                'search' => $form->isSubmitted()
-            ]
+                'search' => $form->isSubmitted(),
+            ],
         );
     }
 
@@ -74,7 +73,7 @@ final class AnimateurController extends AbstractController
             [
                 'animateur' => $animateur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -85,7 +84,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/show.html.twig',
             [
                 'animateur' => $animateur,
-            ]
+            ],
         );
     }
 
@@ -109,7 +108,7 @@ final class AnimateurController extends AbstractController
             [
                 'animateur' => $animateur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

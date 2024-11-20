@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/annee_scolaire')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -22,9 +22,8 @@ final class AnneeScolaireController extends AbstractController
 {
     public function __construct(
         private AnneeScolaireRepository $anneeScolaireRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_annee_scolaire_index', methods: ['GET'])]
     public function index(): Response
@@ -33,7 +32,7 @@ final class AnneeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/annee_scolaire/index.html.twig',
             [
                 'annees' => $this->anneeScolaireRepository->findAllOrderByOrdre(),
-            ]
+            ],
         );
     }
 
@@ -59,7 +58,7 @@ final class AnneeScolaireController extends AbstractController
             [
                 'annee' => $anneeScolaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -70,7 +69,7 @@ final class AnneeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/annee_scolaire/show.html.twig',
             [
                 'annee_scolaire' => $anneeScolaire,
-            ]
+            ],
         );
     }
 
@@ -94,7 +93,7 @@ final class AnneeScolaireController extends AbstractController
             [
                 'annee_scolaire' => $anneeScolaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

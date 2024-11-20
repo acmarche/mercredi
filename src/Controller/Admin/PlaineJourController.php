@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/plaine_jour')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -22,9 +22,8 @@ final class PlaineJourController extends AbstractController
     public function __construct(
         private PlaineAdminHandler $plaineAdminHandler,
         private PlainePresenceRepository $plainePresenceRepository,
-        private GroupingInterface $grouping
-    ) {
-    }
+        private GroupingInterface $grouping,
+    ) {}
 
     #[Route(path: '/edit/{id}', name: 'mercredi_admin_plaine_jour_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Plaine $plaine): Response
@@ -48,7 +47,7 @@ final class PlaineJourController extends AbstractController
             [
                 'plaine' => $plaine,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -67,7 +66,7 @@ final class PlaineJourController extends AbstractController
                 'jour' => $jour,
                 'plaine' => $plaine,
                 'datas' => $plaineGroupingDto,
-            ]
+            ],
         );
     }
 }

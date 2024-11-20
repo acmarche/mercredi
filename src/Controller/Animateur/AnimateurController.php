@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/animateur')]
 #[IsGranted('ROLE_MERCREDI_ANIMATEUR')]
@@ -22,9 +22,8 @@ final class AnimateurController extends AbstractController
     public function __construct(
         private AnimateurRepository $animateurRepository,
         private EnfantRepository $enfantRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_animateur_animateur_show', methods: ['GET'])]
     public function show(): Response
@@ -38,7 +37,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAnimateur/animateur/show.html.twig',
             [
                 'animateur' => $this->animateur,
-            ]
+            ],
         );
     }
 
@@ -64,7 +63,7 @@ final class AnimateurController extends AbstractController
             [
                 'animateur' => $this->animateur,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

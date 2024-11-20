@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -23,9 +23,8 @@ class FacturePlaineController extends AbstractController
     public function __construct(
         private FacturePlaineHandler $facturePlaineHandler,
         private RelationRepository $relationRepository,
-        private PlainePresenceRepository $plainePresenceRepository
-    ) {
-    }
+        private PlainePresenceRepository $plainePresenceRepository,
+    ) {}
 
     #[Route(path: '/{id}/manual', name: 'mercredi_admin_facture_select_plaine', methods: ['GET', 'POST'])]
     public function selectPlaine(Tuteur $tuteur): Response
@@ -49,7 +48,7 @@ class FacturePlaineController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'plaines' => $plaines,
-            ]
+            ],
         );
     }
 
@@ -77,7 +76,7 @@ class FacturePlaineController extends AbstractController
                 'plaine' => $plaine,
                 'presences' => $presences,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

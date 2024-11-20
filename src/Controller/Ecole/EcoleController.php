@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/ecole')]
 #[IsGranted('ROLE_MERCREDI_ECOLE')]
@@ -20,9 +20,8 @@ final class EcoleController extends AbstractController
 
     public function __construct(
         private EcoleRepository $ecoleRepository,
-        private EnfantRepository $enfantRepository
-    ) {
-    }
+        private EnfantRepository $enfantRepository,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_ecole_ecole_index', methods: ['GET'])]
     public function index(): Response
@@ -38,7 +37,7 @@ final class EcoleController extends AbstractController
                 'ecoles' => $this->ecoles,
                 'today' => $today,
                 'heures' => AccueilInterface::HEURES,
-            ]
+            ],
         );
     }
 
@@ -49,8 +48,7 @@ final class EcoleController extends AbstractController
         $accueil = $this->getParameter('mercredi.accueil');
         if ($accueil > 0) {
             $enfants = $this->enfantRepository->findByEcolesForEcole([$ecole]);
-        }
-        else {
+        } else {
             $enfants = $this->enfantRepository->findByEcolesForEcoleMarche([$ecole]);
         }
         $today = Carbon::today();
@@ -62,7 +60,7 @@ final class EcoleController extends AbstractController
                 'enfants' => $enfants,
                 'today' => $today,
                 'heures' => AccueilInterface::HEURES,
-            ]
+            ],
         );
     }
 }

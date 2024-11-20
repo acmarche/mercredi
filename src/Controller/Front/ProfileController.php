@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -22,9 +22,8 @@ final class ProfileController extends AbstractController
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $userPasswordEncoder,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/show', name: 'mercredi_front_user_show')]
     public function show(): Response
@@ -41,7 +40,7 @@ final class ProfileController extends AbstractController
             '@AcMarcheMercredi/front/user/show.html.twig',
             [
                 'user' => $user,
-            ]
+            ],
         );
     }
 
@@ -57,7 +56,7 @@ final class ProfileController extends AbstractController
 
             $roles = array_filter(
                 $roles,
-                fn($e) => $e !== $del_val
+                fn($e) => $e !== $del_val,
             );
 
             if (\count($roles) > 1) {
@@ -90,7 +89,7 @@ final class ProfileController extends AbstractController
     public function selectProfile(): Response
     {
         return $this->render(
-            '@AcMarcheMercredi/front/user/select_profile.html.twig'
+            '@AcMarcheMercredi/front/user/select_profile.html.twig',
         );
     }
 
@@ -114,7 +113,7 @@ final class ProfileController extends AbstractController
             [
                 'user' => $user,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -138,7 +137,7 @@ final class ProfileController extends AbstractController
             '@AcMarcheMercredi/front/user/password.html.twig',
             [
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }

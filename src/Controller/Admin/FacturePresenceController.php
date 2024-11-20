@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
@@ -34,9 +34,8 @@ final class FacturePresenceController extends AbstractController
         private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
         public PresenceCalculatorInterface $presenceCalculator,
         private PresenceRepository $presenceRepository,
-        private AccueilRepository $accueilRepository
-    ) {
-    }
+        private AccueilRepository $accueilRepository,
+    ) {}
 
     #[Route(path: '/{id}/attach', name: 'mercredi_admin_facture_presence_attach', methods: ['GET', 'POST'])]
     public function attach(Request $request, Facture $facture): Response
@@ -63,7 +62,7 @@ final class FacturePresenceController extends AbstractController
                 'tuteur' => $facture->getTuteur(),
                 'presences' => $presences,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -80,7 +79,6 @@ final class FacturePresenceController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $facture = $form->get('facture')->getData();
 
             if ($facture instanceof Facture) {
@@ -101,7 +99,7 @@ final class FacturePresenceController extends AbstractController
                 'tuteur' => $tuteur,
                 'presence' => $presence,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -125,7 +123,7 @@ final class FacturePresenceController extends AbstractController
                 'facturePresence' => $facturePresence,
                 'presence' => $presence,
                 'accueil' => $accueil,
-            ]
+            ],
         );
     }
 

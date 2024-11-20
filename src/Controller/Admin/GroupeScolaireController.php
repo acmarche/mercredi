@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/groupe_scolaire')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -24,9 +24,8 @@ final class GroupeScolaireController extends AbstractController
     public function __construct(
         private GroupeScolaireRepository $groupeScolaireRepository,
         private PlaineGroupeRepository $plaineGroupeRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_groupe_scolaire_index', methods: ['GET'])]
     public function index(): Response
@@ -35,7 +34,7 @@ final class GroupeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/groupe_scolaire/index.html.twig',
             [
                 'groupes' => $this->groupeScolaireRepository->findAllOrderByOrdre(),
-            ]
+            ],
         );
     }
 
@@ -61,7 +60,7 @@ final class GroupeScolaireController extends AbstractController
             [
                 'groupe' => $groupeScolaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -72,7 +71,7 @@ final class GroupeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/groupe_scolaire/show.html.twig',
             [
                 'groupe_scolaire' => $groupeScolaire,
-            ]
+            ],
         );
     }
 
@@ -82,8 +81,7 @@ final class GroupeScolaireController extends AbstractController
         $form = $this->createForm(GroupeScolaireType::class, $groupeScolaire);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            foreach ($form->getData()->getAnneesScolaires() as $anneesScolaire){
+            foreach ($form->getData()->getAnneesScolaires() as $anneesScolaire) {
                 $anneesScolaire->setGroupeScolaire($groupeScolaire);
             }
 
@@ -101,7 +99,7 @@ final class GroupeScolaireController extends AbstractController
             [
                 'groupe_scolaire' => $groupeScolaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

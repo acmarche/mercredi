@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/organisation')]
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -22,9 +22,8 @@ final class OrganisationController extends AbstractController
 {
     public function __construct(
         private OrganisationRepository $organisationRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_admin_organisation_index', methods: ['GET'])]
     public function index(): Response
@@ -39,7 +38,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercrediAdmin/organisation/index.html.twig',
             [
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 
@@ -72,7 +71,7 @@ final class OrganisationController extends AbstractController
             [
                 'organisation' => $organisation,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -83,7 +82,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercrediAdmin/organisation/show.html.twig',
             [
                 'organisation' => $organisation,
-            ]
+            ],
         );
     }
 
@@ -107,7 +106,7 @@ final class OrganisationController extends AbstractController
             [
                 'organisation' => $organisation,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

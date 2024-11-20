@@ -20,7 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[Route(path: '/enfant')]
@@ -39,12 +39,11 @@ final class EnfantController extends AbstractController
         private EnfantHandler $enfantHandler,
         private AdminEmailFactory $adminEmailFactory,
         private NotificationMailer $notifcationMailer,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/', name: 'mercredi_parent_enfant_index', methods: ['GET'])]
-    #[IsGranted( 'ROLE_MERCREDI_PARENT')]
+    #[IsGranted('ROLE_MERCREDI_PARENT')]
     public function index(): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
@@ -58,12 +57,12 @@ final class EnfantController extends AbstractController
             [
                 'enfants' => $enfants,
                 'year' => date('Y'),
-            ]
+            ],
         );
     }
 
     #[Route(path: '/new', name: 'mercredi_parent_enfant_new', methods: ['GET', 'POST'])]
-    #[IsGranted( 'ROLE_MERCREDI_PARENT')]
+    #[IsGranted('ROLE_MERCREDI_PARENT')]
     public function new(Request $request): Response
     {
         if ($this->getParameter('mercredi.add_enfant') < 1) {
@@ -92,12 +91,12 @@ final class EnfantController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_enfant_show', methods: ['GET'])]
-    #[IsGranted( 'enfant_show', subject: 'enfant')]
+    #[IsGranted('enfant_show', subject: 'enfant')]
     public function show(Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
@@ -114,7 +113,7 @@ final class EnfantController extends AbstractController
                 'plaines' => $plaines,
                 'accueils' => $accueils,
                 'ficheSanteComplete' => $ficheSanteComplete,
-            ]
+            ],
         );
     }
 }

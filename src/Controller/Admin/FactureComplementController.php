@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[IsGranted('ROLE_MERCREDI_ADMIN')]
@@ -19,9 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FactureComplementController extends AbstractController
 {
     public function __construct(
-        private FactureComplementRepository $factureComplementRepository
-    ) {
-    }
+        private FactureComplementRepository $factureComplementRepository,
+    ) {}
 
     #[Route(path: '/{id}/new', name: 'mercredi_admin_facture_complement_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Facture $facture): Response
@@ -46,7 +45,7 @@ final class FactureComplementController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $facture->getTuteur(),
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -60,7 +59,7 @@ final class FactureComplementController extends AbstractController
             [
                 'facture' => $facture,
                 'factureComplement' => $factureComplement,
-            ]
+            ],
         );
     }
 
@@ -77,7 +76,7 @@ final class FactureComplementController extends AbstractController
                 'mercredi_admin_facture_complement_show',
                 [
                     'id' => $factureComplement->getId(),
-                ]
+                ],
             );
         }
 
@@ -87,7 +86,7 @@ final class FactureComplementController extends AbstractController
                 'facture' => $factureComplement->getFacture(),
                 'factureComplement' => $factureComplement,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

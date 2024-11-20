@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/accueil')]
@@ -38,9 +38,8 @@ final class AccueilController extends AbstractController
         private AccueilCalculatorInterface $accueilCalculator,
         private FactureHandlerInterface $factureHandler,
         private FacturePresenceRepository $facturePresenceRepository,
-        private MessageBusInterface $dispatcher
-    ) {
-    }
+        private MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/index', name: 'mercredi_admin_accueil_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -76,7 +75,7 @@ final class AccueilController extends AbstractController
                 'dateSelected' => $date,
                 'count' => $count,
                 'heure' => $heure,
-            ]
+            ],
         );
     }
 
@@ -92,7 +91,7 @@ final class AccueilController extends AbstractController
                 'accueils' => $accueils,
                 'relations' => $relations,
                 'enfant' => $enfant,
-            ]
+            ],
         );
     }
 
@@ -116,7 +115,7 @@ final class AccueilController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -136,7 +135,7 @@ final class AccueilController extends AbstractController
                 'coutRetard' => $coutRetard,
                 'enfant' => $enfant,
                 'facturePresence' => $facturePresence,
-            ]
+            ],
         );
     }
 
@@ -167,7 +166,7 @@ final class AccueilController extends AbstractController
             [
                 'accueil' => $accueil,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -240,7 +239,7 @@ final class AccueilController extends AbstractController
             [
                 'enfant' => $enfant,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 }
