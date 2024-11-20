@@ -45,7 +45,7 @@ class FixCommand extends Command
             }
             if (count($user->roles) === 0) {
                 $this->userRepository->remove($user);
-                $this->io->writeln($user->getUserIdentifier());
+                //$this->io->writeln($user->getUserIdentifier());
                 $i++;
             }
         }
