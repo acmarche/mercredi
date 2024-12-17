@@ -12,7 +12,6 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Jour\Repository\JourRepository;
-use AcMarche\Mercredi\Migration\PaiementRepository;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -32,7 +31,6 @@ final class AttestationController extends AbstractController
     public function __construct(
         private JourRepository $jourRepository,
         private PresenceRepository $presenceRepository,
-        private PaiementRepository $paiementRepository,
         private FacturePresenceRepository $facturePresenceRepository,
         private PresenceCalculatorInterface $presenceCalculator,
         private OrdreService $ordreService,
@@ -76,34 +74,4 @@ final class AttestationController extends AbstractController
 
         return $this->downloadXls($spreadSheet, 'spf-'.$year.'.xls');
     }
-
-    private function oldOne(Tuteur $tuteur, Enfant $enfant, int $year, array $presences): string
-    {
-        $paiments = $this->paiementRepository->getByEnfantTuteur($tuteur, $enfant, $year);
-        if (0 == count($paiments)) {
-            return 'Aucun paiement en '.$year.'<div class="page-breaker"></div>';
-        }
-
-        $presencesPaid = [];
-        foreach ($presences as $presence) {
-            if ($this->factureCalculator->isPresencePaid($presence)) {
-                $presencesPaid[] = $presence;
-            }
-        }
-
-        $totalPaiement = 0;
-        foreach ($paiments as $paiment) {
-            $totalPaiement += $paiment->getMontant();
-        }
-
-        return $this->renderView('@AcMarcheMercredi/admin/attestation/fiscale/index.html.twig', [
-            'tuteur' => $tuteur,
-            'enfant' => $enfant,
-            'presences' => $presencesPaid,
-            'totalpaiement' => $totalPaiement,
-            'year' => $year,
-            'organisation' => $this->organisation,
-        ]);
-    }
-
 }
