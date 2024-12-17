@@ -20,9 +20,8 @@ class FactureCalculator implements FactureCalculatorInterface
         private FactureReductionRepository $factureReductionRepository,
         private FactureComplementRepository $factureComplementRepository,
         private FactureDecompteRepository $factureDecompteRepository,
-        private ReductionCalculator $reductionCalculator
-    ) {
-    }
+        private ReductionCalculator $reductionCalculator,
+    ) {}
 
     public function total(FactureInterface $facture): float
     {
@@ -49,12 +48,12 @@ class FactureCalculator implements FactureCalculatorInterface
 
         $factureDetail->pourcentageEnPlus = $this->reductionCalculator->calculatePourcentage(
             $factureDetail->totalComplementPourcentage,
-            $factureDetail->totalHorsPourcentage
+            $factureDetail->totalHorsPourcentage,
         );
 
         $factureDetail->pourcentageEnMoins = $this->reductionCalculator->calculatePourcentage(
             $factureDetail->totalReductionPourcentage,
-            $factureDetail->totalHorsPourcentage
+            $factureDetail->totalHorsPourcentage,
         );
 
         $factureDetail->total += $factureDetail->pourcentageEnPlus;
@@ -67,7 +66,7 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
             $facture,
-            FactureInterface::OBJECT_PRESENCE
+            FactureInterface::OBJECT_PRESENCE,
         );
 
         $cout = 0;
@@ -82,7 +81,7 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
             $facture,
-            FactureInterface::OBJECT_ACCUEIL
+            FactureInterface::OBJECT_ACCUEIL,
         );
 
         $cout = 0;
@@ -156,7 +155,7 @@ class FactureCalculator implements FactureCalculatorInterface
     {
         $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
             $facture,
-            FactureInterface::OBJECT_PLAINE
+            FactureInterface::OBJECT_PLAINE,
         );
 
         $cout = 0;
@@ -172,7 +171,7 @@ class FactureCalculator implements FactureCalculatorInterface
         if ($presence->getPaiement()) {
             return true;
         }
-        $presenceFacture = $this->facturePresenceRepository->findByPresence($presence,type: null);
+        $presenceFacture = $this->facturePresenceRepository->findByPresence($presence);
         if ($presenceFacture) {
             $facture = $presenceFacture->getFacture();
             if ($facture->getPayeLe()) {
@@ -182,7 +181,7 @@ class FactureCalculator implements FactureCalculatorInterface
 
         return false;
     }
-    
+
     public function isAccueilPaid(Accueil $accueil): bool
     {
         $presenceFacture = $this->facturePresenceRepository->findByAccueil($accueil);

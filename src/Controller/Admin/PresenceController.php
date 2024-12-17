@@ -147,7 +147,7 @@ final class PresenceController extends AbstractController
     #[Route(path: '/{id}', name: 'mercredi_admin_presence_show', methods: ['GET'])]
     public function show(Presence $presence): Response
     {
-        $facturePresence = $this->facturePresenceRepository->findByPresence($presence, type: null);
+        $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
         $ordre = $this->presenceCalculator->getOrdreOnPresence($presence);
         $amount = $this->presenceCalculator->calculate($presence);
         $fratries = $this->ordreService->getFratriesPresents($presence);

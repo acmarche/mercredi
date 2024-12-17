@@ -33,7 +33,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByIdsAndType(array $presenceIds, string $type): array
     {
-        return $this->createQbl()
+        return $this
+            ->createQbl()
             ->andWhere('facture_presence.presenceId IN (:presences)')
             ->setParameter('presences', $presenceIds)
             ->andWhere('facture_presence.objectType = :type')
@@ -46,7 +47,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByIdAndType(int $presenceId, ?string $type): ?FacturePresence
     {
-        $qbl = $this->createQbl()
+        $qbl = $this
+            ->createQbl()
             ->andWhere('facture_presence.presenceId = :presence')
             ->setParameter('presence', $presenceId);
 
@@ -64,7 +66,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByFactureAndType(FactureInterface $facture, string $type): array
     {
-        return $this->createQbl()
+        return $this
+            ->createQbl()
             ->andWhere('facture_presence.facture = :fact')
             ->setParameter('fact', $facture)
             ->andWhere('facture_presence.objectType = :type')
@@ -77,7 +80,7 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByPresence(
         PresenceInterface $presence,
-        ?string $type = FactureInterface::OBJECT_PRESENCE
+        string $type = FactureInterface::OBJECT_PRESENCE,
     ): ?FacturePresence {
         return $this->findByIdAndType($presence->getId(), $type);
     }
@@ -92,7 +95,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
      */
     public function findByReduction(Reduction $reduction): array
     {
-        return $this->createQbl()
+        return $this
+            ->createQbl()
             ->andWhere('facture_presence.reduction = :reduction')
             ->setParameter('reduction', $reduction)
             ->getQuery()->getResult();
@@ -100,7 +104,8 @@ final class FacturePresenceRepository extends ServiceEntityRepository
 
     private function createQbl(): QueryBuilder
     {
-        return $this->createQueryBuilder('facture_presence')
+        return $this
+            ->createQueryBuilder('facture_presence')
             ->leftJoin('facture_presence.facture', 'facture', 'WITH')
             ->leftJoin('facture_presence.reduction', 'reduction', 'WITH')
             ->addSelect('facture', 'reduction');

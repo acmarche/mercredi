@@ -110,7 +110,7 @@ final class PresenceController extends AbstractController
     #[IsGranted('presence_show', subject: 'presence')]
     public function show(Presence $presence): Response
     {
-        $facturePresence = $this->facturePresenceRepository->findByPresence($presence, type: null);
+        $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
 
         return $this->render(
             '@AcMarcheMercrediParent/presence/show.html.twig',
