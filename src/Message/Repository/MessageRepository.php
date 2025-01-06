@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Message\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Message;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,23 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class MessageRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Message::class);
-    }
-
-    public function remove(Message $message): void
-    {
-        $this->_em->remove($message);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Message $message): void
-    {
-        $this->_em->persist($message);
     }
 }

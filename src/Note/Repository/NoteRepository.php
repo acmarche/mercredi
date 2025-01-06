@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Note\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Note;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,23 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class NoteRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Note::class);
-    }
-
-    public function remove(Note $note): void
-    {
-        $this->_em->remove($note);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Note $note): void
-    {
-        $this->_em->persist($note);
     }
 }

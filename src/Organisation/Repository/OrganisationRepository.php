@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Organisation\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Organisation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class OrganisationRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Organisation::class);
@@ -21,22 +24,8 @@ final class OrganisationRepository extends ServiceEntityRepository
 
     public function getOrganisation(): ?Organisation
     {
-        return $this->createQueryBuilder('organisation')
+        return $this
+            ->createQueryBuilder('organisation')
             ->getQuery()->getOneOrNullResult();
-    }
-
-    public function remove(Organisation $organisation): void
-    {
-        $this->_em->remove($organisation);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Organisation $organisation): void
-    {
-        $this->_em->persist($organisation);
     }
 }

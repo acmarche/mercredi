@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\Document\Repository;
 
+use AcMarche\Mercredi\Doctrine\OrmCrudTrait;
 use AcMarche\Mercredi\Entity\Document;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class DocumentRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Document::class);
@@ -27,31 +30,18 @@ final class DocumentRepository extends ServiceEntityRepository
      */
     public function search(?string $keyword): array
     {
-        return $this->createQueryBuilder('document')
+        return $this
+            ->createQueryBuilder('document')
             ->andWhere('document.nom LIKE :keyword OR document.prenom LIKE :keyword')
             ->setParameter('keyword', '%'.$keyword.'%')
             ->addOrderBy('document.nom', 'ASC')
             ->getQuery()->getResult();
     }
 
-    public function remove(Document $document): void
-    {
-        $this->_em->remove($document);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Document $document): void
-    {
-        $this->_em->persist($document);
-    }
-
     public function getQbForListing(): QueryBuilder
     {
-        return $this->createQueryBuilder('document')
+        return $this
+            ->createQueryBuilder('document')
             ->orderBy('document.nom', 'ASC');
     }
 }
