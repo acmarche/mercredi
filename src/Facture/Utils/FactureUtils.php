@@ -11,9 +11,8 @@ class FactureUtils
 {
     public function __construct(
         public SluggerInterface $slugger,
-        private FactureCalculatorInterface $factureCalculator
-    ) {
-    }
+        private FactureCalculatorInterface $factureCalculator,
+    ) {}
 
     /**
      * @return array|Enfant[]
@@ -42,7 +41,7 @@ class FactureUtils
             $tuteur = $facture->getTuteur();
             $data[$tuteur->getId()]['tuteur'] = $tuteur;
             $data[$tuteur->getId()]['factures'][] = $facture;
-            if(!isset($data[$tuteur->getId()]['total'])){
+            if (!isset($data[$tuteur->getId()]['total'])) {
                 $data[$tuteur->getId()]['total'] = $facture->factureDetailDto->total;
             }
             $data[$tuteur->getId()]['total'] += $facture->factureDetailDto->total;
