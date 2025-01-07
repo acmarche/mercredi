@@ -16,15 +16,12 @@ trait ConnectionTrait
 {
     private HttpClientInterface $httpClient;
     private ?string $code_query = null;
-    private ?string $base_uri = null;
     private ?string $ws_key = null;
     public ?string $url_executed = null;
     public ?string $data_raw = null;
 
     public function connect(): void
     {
-        $this->base_uri = $_ENV['QRCODE_URI'] ?? null;
-
         $headers = [
 
         ];
@@ -42,7 +39,7 @@ trait ConnectionTrait
             $response = $this->httpClient->request(
                 $method,
                 $url,
-                $options
+                $options,
             );
 
             $this->data_raw = $response->getContent();
