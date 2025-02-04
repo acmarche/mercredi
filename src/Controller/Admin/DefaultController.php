@@ -41,27 +41,4 @@ final class DefaultController extends AbstractController
             ],
         );
     }
-
-    #[Route(path: '/mailtest')]
-    public function mailTest(): Response
-    {
-        $email = (new TemplatedEmail())
-            ->from($this->getEmailSenderAddress())
-            ->to('jf@marche.be')
-            ->subject('Coucou')
-            ->text('super ovh pour les mails');
-
-        try {
-            $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            var_dump($e->getMessage());
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediAdmin/default/test.html.twig',
-            [
-
-            ],
-        );
-    }
 }

@@ -50,9 +50,9 @@ trait ConnectionTrait
         }
     }
 
-    private function debug(ResponseInterface $response)
+    private function debug(ResponseInterface $response): mixed
     {
-        var_dump($response->getInfo('debug'));
+        return $response->getInfo('debug');
     }
 
 }

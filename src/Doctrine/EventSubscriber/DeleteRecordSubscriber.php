@@ -50,7 +50,6 @@ class DeleteRecordSubscriber
         try {
             $this->entityManager->flush();
         } catch (\Exception $exception) {
-            dd($exception);
         }
     }
 }
