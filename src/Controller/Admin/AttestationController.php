@@ -44,9 +44,12 @@ final class AttestationController extends AbstractController
     #[Route(path: '/', name: 'mercredi_admin_attestation_index')]
     public function default(): Response
     {
+        $years = range((int)date('Y') - 2, (int)date('Y'));
+
         return $this->render(
             '@AcMarcheMercredi/admin/attestation/index.html.twig',
             [
+                'years' => $years,
             ],
         );
     }

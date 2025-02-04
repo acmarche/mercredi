@@ -26,9 +26,8 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
         private PresenceCalculatorInterface $presenceCalculator,
         private FactureCalculatorInterface $factureCalculator,
         private FactureUtils $factureUtils,
-        private Environment $environment
-    ) {
-    }
+        private Environment $environment,
+    ) {}
 
     public function hasAttestation(Tuteur $tuteur, Enfant $enfant, int $year): bool
     {
@@ -42,7 +41,7 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
     {
         $factures = $this->factureRepository->findByTuteurAndPaidInYear($tuteur, $year);
 
-        $data = $this->treatment($factures, $tuteur, $enfant);
+        $data = $this->treatmentForTuteur($factures, $tuteur, $enfant);
 
         return $this->environment->render('@AcMarcheMercredi/admin/attestation/one/hotton/2022.html.twig', [
             'data' => $data,
@@ -56,8 +55,38 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
 
     public function getDataByYear(int $year): array
     {
-        //todo
-        return [];
+        $presences = $this->presenceRepository->findByYear($year);
+
+        return $this->treatment($presences);
+    }
+
+    private function treatment(array $presences): array
+    {
+        $presencesPaid = [];
+        foreach ($presences as $presence) {
+            if ($this->factureCalculator->isPresencePaid($presence)) {
+                $presence->cout = $this->presenceCalculator->calculate($presence);
+                $presencesPaid[] = $presence;
+            }
+        }
+
+        $data = [];
+        foreach ($presencesPaid as $presence) {
+            $enfant = $presence->getEnfant();
+            $idEnfant = $enfant->getId();
+            $tuteur = $presence->getTuteur();
+            $idTuteur = $tuteur->getId();
+
+            $data[$idEnfant]['enfant'] = $enfant;
+            $data[$idEnfant]['tuteurs'][$idTuteur]['tuteur'] = $tuteur;
+            $data[$idEnfant]['tuteurs'][$idTuteur]['presences'][] = $presence;
+            if (!isset($data[$idEnfant]['tuteurs'][$idTuteur]['total'])) {
+                $data[$idEnfant]['tuteurs'][$idTuteur]['total'] = 0;
+            }
+            $data[$idEnfant]['tuteurs'][$idTuteur]['total'] += $presence->cout;
+        }
+
+        return $data;
     }
 
     /**
@@ -66,7 +95,7 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
      * @param Enfant $enfant
      * @return array
      */
-    private function treatment(array $factures, Tuteur $tuteur, Enfant $enfant): array
+    private function treatmentForTuteur(array $factures, Tuteur $tuteur, Enfant $enfant): array
     {
         $presencesPaid = [];
         foreach ($factures as $facture) {

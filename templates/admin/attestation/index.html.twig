@@ -7,14 +7,12 @@
         </div>
         <div class="card-body">
             <ul class="list-group">
-                <li class="list-group-item">
-                    <a href="{{ path('mercredi_admin_attestation_spf', {'year': 2023}) }}">
-                        Année 2023 Xls</a>
-                </li>
-                <li class="list-group-item">
-                    <a href="{{ path('mercredi_admin_attestation_spf', {'year': 2022}) }}">
-                        Année 2022 Xls</a>
-                </li>
+                {% for year in years %}
+                    <li class="list-group-item">
+                        <a href="{{ path('mercredi_admin_attestation_spf', {'year': year}) }}">
+                            Année {{ year }} Xls</a>
+                    </li>
+                {% endfor %}
             </ul>
             <br/><br/>
             <div class="alert alert-info">
