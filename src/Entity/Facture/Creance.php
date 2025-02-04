@@ -33,7 +33,7 @@ class Creance implements TimestampableInterface, UuidableInterface, Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?Tuteur $tuteur = null;
 
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
+    #[ORM\Column(precision: 6, scale: 2, nullable: false)]
     #[Assert\Range(min: '0.1')]
     private ?float $montant = 0;
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -42,7 +42,7 @@ class Creance implements TimestampableInterface, UuidableInterface, Stringable
     private ?DateTimeInterface $payeLe = null;
 
     public function __construct(
-        Tuteur $tuteur
+        Tuteur $tuteur,
     ) {
         $this->tuteur = $tuteur;
     }

@@ -70,13 +70,13 @@ class Facture implements TimestampableInterface, UuidableInterface, FactureInter
     private ?string $plaine_nom = null;
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $ecoles = null;
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
+    #[ORM\Column(precision: 6, scale: 2, nullable: true)]
     private float $montant_obsolete;
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private float $cloture_obsolete;
+    #[ORM\Column(nullable: true)]
+    private bool $cloture_obsolete;
 
     public function __construct(
-          Tuteur $tuteur
+        Tuteur $tuteur,
     ) {
         $this->tuteur = $tuteur;
         $this->facturePresences = new ArrayCollection();

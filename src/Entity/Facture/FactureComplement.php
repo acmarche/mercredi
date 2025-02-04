@@ -31,17 +31,17 @@ class FactureComplement implements TimestampableInterface, UuidableInterface, St
 
     #[ORM\ManyToOne(targetEntity: Facture::class, inversedBy: 'factureComplements')]
     private FactureInterface $facture;
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
+    #[ORM\Column(precision: 6, scale: 2, nullable: true)]
     #[Assert\Range(min: 0)]
     private ?float $amount = null;
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: true)]
+    #[ORM\Column(precision: 6, scale: 2, nullable: true)]
     #[Assert\Range(min: 0, max: 100)]
     private ?float $pourcentage = null;
     #[ORM\Column(type: 'datetime', nullable: false)]
     private ?DateTimeInterface $dateLe = null;
 
     public function __construct(
-        Facture $facture
+        Facture $facture,
     ) {
         $this->facture = $facture;
     }

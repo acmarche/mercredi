@@ -30,9 +30,9 @@ interface FactureInterface
 
     public function setRue(?string $rue): void;
 
-    public function getCodePostal(): ?string;
+    public function getCodePostal(): ?int;
 
-    public function setCodePostal(?string $code_postal): void;
+    public function setCodePostal(?int $code_postal): void;
 
     public function getLocalite(): ?string;
 

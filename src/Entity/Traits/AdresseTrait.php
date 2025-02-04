@@ -10,7 +10,7 @@ trait AdresseTrait
     private ?string $rue = null;
 
     #[ORM\Column(type: 'integer', length: 6, nullable: true)]
-    private ?string $code_postal = null;
+    private ?int $code_postal = null;
 
     #[ORM\Column(type: 'string', length: 200, nullable: true)]
     private ?string $localite = null;
@@ -25,12 +25,12 @@ trait AdresseTrait
         $this->rue = $rue;
     }
 
-    public function getCodePostal(): ?string
+    public function getCodePostal(): ?int
     {
         return $this->code_postal;
     }
 
-    public function setCodePostal(?string $code_postal): void
+    public function setCodePostal(?int $code_postal): void
     {
         $this->code_postal = $code_postal;
     }

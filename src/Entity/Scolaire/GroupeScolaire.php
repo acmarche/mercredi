@@ -31,10 +31,10 @@ class GroupeScolaire implements Stringable
     use RemarqueTrait;
     use OrdreTrait;
 
-    #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
+    #[ORM\Column(precision: 3, scale: 1, nullable: true)]
     #[Assert\LessThan(propertyPath: 'age_maximum')]
     private ?float $age_minimum = null;
-    #[ORM\Column(type: 'decimal', precision: 3, scale: 1, nullable: true)]
+    #[ORM\Column(precision: 3, scale: 1, nullable: true)]
     #[Assert\GreaterThan(propertyPath: 'age_minimum')]
     private ?float $age_maximum = null;
     /**

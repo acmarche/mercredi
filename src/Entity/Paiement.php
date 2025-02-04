@@ -28,9 +28,9 @@ class Paiement implements Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
+    #[ORM\Column(precision: 6, scale: 2, nullable: false)]
     #[Assert\NotBlank]
-    protected $montant;
+    protected float $montant;
     #[ORM\Column(type: 'date', nullable: false)]
     protected ?DateTimeInterface $date_paiement = null;
     #[ORM\Column(type: 'string', nullable: true, length: 150)]
@@ -55,9 +55,7 @@ class Paiement implements Stringable
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     protected ?Enfant $enfant = null;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function __toString(): string
     {

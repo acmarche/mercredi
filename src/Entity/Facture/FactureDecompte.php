@@ -29,12 +29,12 @@ class FactureDecompte implements TimestampableInterface, UuidableInterface, Stri
     private FactureInterface $facture;
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $payeLe = null;
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2, nullable: false)]
+    #[ORM\Column(precision: 6, scale: 2, nullable: false)]
     #[Assert\Range(min: '0.1')]
     private ?float $montant = null;
 
     public function __construct(
-        Facture $facture
+        Facture $facture,
     ) {
         $this->facture = $facture;
     }

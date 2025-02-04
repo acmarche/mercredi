@@ -20,10 +20,11 @@ class Reduction implements Stringable
     use IdTrait;
     use NomTrait;
     use RemarqueTrait;
-    #[ORM\Column(type: 'float', nullable: true)]
+
+    #[ORM\Column(nullable: true)]
     #[Assert\Range(min: 0, max: 100)]
     public ?float $pourcentage = null;
-    #[ORM\Column(type: 'float', nullable: true)]
+    #[ORM\Column(nullable: true)]
     #[Assert\Range(min: 0)]
     public ?float $amount = null;
     #[ORM\Column(nullable: true)]
