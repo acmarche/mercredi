@@ -37,9 +37,8 @@ final class FactureHandler implements FactureHandlerInterface
         private AccueilCalculatorInterface $accueilCalculator,
         private TuteurRepository $tuteurRepository,
         private CommunicationFactoryInterface $communicationFactory,
-        private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository
-    ) {
-    }
+        private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
+    ) {}
 
     public function newFacture(Tuteur $tuteur): FactureInterface
     {
@@ -68,21 +67,6 @@ final class FactureHandler implements FactureHandlerInterface
         return $facture;
     }
 
-    /**
-     * @param Facture $facture
-     * @param array|int[] $presencesId
-     * @param array|int[] $accueilsId
-     */
-    public function handleManuallyNotResolved(FactureInterface $facture, array $presences, array $accueilsId): Facture
-    {
-        $this->finish($facture, $presences, []);
-        $this->flush();
-        $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
-        $this->flush();
-
-        return $facture;
-    }
-
     public function generateByMonthForTuteur(Tuteur $tuteur, string $month): ?FactureInterface
     {
         [$month, $year] = explode('-', $month);
@@ -98,6 +82,10 @@ final class FactureHandler implements FactureHandlerInterface
         return $facture;
     }
 
+    /**
+     * @param string $monthSelected
+     * @return Facture[]
+     */
     public function generateByMonthForEveryone(string $monthSelected): array
     {
         [$month, $year] = explode('-', $monthSelected);
@@ -137,7 +125,7 @@ final class FactureHandler implements FactureHandlerInterface
     public function registerDataOnFacturePresence(
         FactureInterface $facture,
         PresenceInterface $presence,
-        FacturePresence $facturePresence
+        FacturePresence $facturePresence,
     ): void {
         $facturePresence->setPedagogique($presence->getJour()->isPedagogique());
         $facturePresence->setPresenceDate($presence->getJour()->getDateJour());
@@ -199,7 +187,7 @@ final class FactureHandler implements FactureHandlerInterface
                 $facture,
                 $presence->getEnfant()->getId(),
                 $presence->getId(),
-                FactureInterface::OBJECT_PRESENCE
+                FactureInterface::OBJECT_PRESENCE,
             );
             $this->registerDataOnFacturePresence($facture, $presence, $facturePresence);
             $facturePresence->setCoutCalculated($this->presenceCalculator->calculate($presence));
@@ -218,7 +206,7 @@ final class FactureHandler implements FactureHandlerInterface
                 $facture,
                 $accueil->getEnfant()->getId(),
                 $accueil->getId(),
-                FactureInterface::OBJECT_ACCUEIL
+                FactureInterface::OBJECT_ACCUEIL,
             );
             $facturePresence->setPresenceDate($accueil->getDateJour());
             $facturePresence->setHeure($accueil->getHeure());
