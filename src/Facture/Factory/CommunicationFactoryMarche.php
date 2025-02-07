@@ -5,13 +5,13 @@ namespace AcMarche\Mercredi\Facture\Factory;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use AcMarche\Mercredi\Facture\Utils\BelgianStructuredGenerator;
 
 class CommunicationFactoryMarche implements CommunicationFactoryInterface
 {
     public function __construct(
-        private FactureRepository $factureRepository
-    ) {
-    }
+        private FactureRepository $factureRepository,
+    ) {}
 
     /**
      * Pour la communication à faire apparaitre :.
@@ -43,7 +43,6 @@ class CommunicationFactoryMarche implements CommunicationFactoryInterface
      *
      * Exemple : La communication structurée suivante +++ 201 / 8000 / 53522 +++ se rapporte donc à la facture n° 535 de l’année 2018.
      */
-
     public function generateForPlaine(Plaine $plaine, FactureInterface $facture): string
     {
         $communication = $plaine->getCommunication();
@@ -67,6 +66,7 @@ class CommunicationFactoryMarche implements CommunicationFactoryInterface
 
     public function generateForPresence(FactureInterface $facture): string
     {
+        //return BelgianStructuredGenerator::generate();
         $ecoles = '';
         foreach ($facture->ecolesListing as $ecole) {
             if ($ecole->getAbreviation()) {
