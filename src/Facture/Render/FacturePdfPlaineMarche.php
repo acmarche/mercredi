@@ -6,8 +6,12 @@ use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FacturePdfPlaineInterface;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
+use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
+use AcMarche\Mercredi\QrCode\QrCodeGenerator;
+use Knp\DoctrineBehaviors\Exception\ShouldNotHappenException;
 use Twig\Environment;
 
 class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
@@ -17,9 +21,11 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
         private FactureCalculatorInterface $factureCalculator,
         private PlainePresenceRepository $plainePresenceRepository,
         private FacturePresenceRepository $facturePresenceRepository,
-        private Environment $environment
-    ) {
-    }
+        private Environment $environment,
+        private QrCodeGenerator $qrCodeGenerator,
+        private NotificationMailer $notificationMailer,
+        private AdminEmailFactory $adminEmailFactory,
+    ) {}
 
     public function render(FactureInterface $facture): string
     {
@@ -29,7 +35,7 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
             '@AcMarcheMercrediAdmin/facture/marche/pdf.html.twig',
             [
                 'content' => $content,
-            ]
+            ],
         );
     }
 
@@ -39,11 +45,22 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
         $plaine = $facture->getPlaine();
         $facturePlaines = $this->facturePresenceRepository->findByFactureAndType(
             $facture,
-            FactureInterface::OBJECT_PLAINE
+            FactureInterface::OBJECT_PLAINE,
         );
         $dto = $this->factureCalculator->createDetail($facture);
         $organisation = $this->organisationRepository->getOrganisation();
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $tuteur);
+
+        try {
+            $imgQrcode = $this->qrCodeGenerator->generate($facture, $dto->total);
+        } catch (ShouldNotHappenException|\Exception $e) {
+            $message = $this->adminEmailFactory->messageToJf(
+                'Error create qrcode marche',
+                'facture id '.$facture->getId(),
+            );
+            $this->notificationMailer->sendAsEmailNotification($message);
+            $imgQrcode = null;
+        }
 
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/marche/_plaine_content_pdf.html.twig',
@@ -54,8 +71,9 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
                 'facturePlaines' => $facturePlaines,
                 'organisation' => $organisation,
                 'dto' => $dto,
+                'imgQrcode' => $imgQrcode,
                 'plaine' => $plaine,
-            ]
+            ],
         );
     }
 }

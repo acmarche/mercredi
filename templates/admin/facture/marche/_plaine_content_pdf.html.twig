@@ -67,16 +67,6 @@
                     Sylvie WIGNY
                 </td>
             </tr>
-            <!--   <tr>
-                <td>
-                    <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/dewez.jpg')) }}"
-                         height="70" alt="signature"/>
-                </td>
-                <td>
-                    <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/chaplier.jpg')) }}"
-                         height="70" alt="signature"/>
-                </td>
-            </tr>-->
         </table>
     </div>
     <div class="card-footer text-success mt-3">
@@ -84,4 +74,6 @@
         IBAN: BE27 0016 3639 7373<br>
         Communication: {{ facture.communication }}
     </div>
+
+    {% include '@AcMarcheMercrediAdmin/facture/_qrcode.html.twig' %}
 </div>

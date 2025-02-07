@@ -9,7 +9,7 @@
                 </td>
                 <td>
                     Asbl Espaces Parents Enfants<br>
-                    rue Victor Libert, 36E<br>
+                    Rue Victor Libert, 36E<br>
                     6900 Marche-en-Famenne.<br>
                     084/32 69 90<br>
                     cee@marche.be
@@ -17,8 +17,8 @@
                 <td class="me-4 float-end">
                     Marche, le {{ facture.createdAt|format_date('full') }}
                     <br><br>
-                    {{ facture.nom }} {{ facture.prenom }}<br>
-                    {{ facture.rue }} <br/>
+                    {{ facture.nom|title }} {{ facture.prenom|title }}<br>
+                    {{ facture.rue|title }} <br/>
                     {{ facture.codepostal }} {{ facture.localite }}
                 </td>
             </tr>
@@ -94,16 +94,6 @@
                     Sylvie WIGNY
                 </td>
             </tr>
-         <!--   <tr>
-                <td>
-                    <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/dewez.jpg')) }}"
-                         height="70" alt="signature"/>
-                </td>
-                <td>
-                    <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/signatures/chaplier.jpg')) }}"
-                         height="70" alt="signature"/>
-                </td>
-            </tr>-->
         </table>
     </div>
     <div class="card-footer text-success mt-3">
@@ -111,4 +101,6 @@
         IBAN: BE27 0016 3639 7373<br>
         Communication: {{ facture.communication }}
     </div>
+
+    {% include '@AcMarcheMercrediAdmin/facture/_qrcode.html.twig' %}
 </div>

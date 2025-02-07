@@ -8,7 +8,11 @@ use AcMarche\Mercredi\Entity\Facture\FacturePresence;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
+use AcMarche\Mercredi\Mailer\Factory\AdminEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
+use AcMarche\Mercredi\QrCode\QrCodeGenerator;
+use Knp\DoctrineBehaviors\Exception\ShouldNotHappenException;
 use Twig\Environment;
 
 class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
@@ -18,9 +22,11 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         private OrganisationRepository $organisationRepository,
         private FactureUtils $factureUtils,
         private FacturePresenceRepository $facturePresenceRepository,
-        private FactureCalculatorInterface $factureCalculator
-    ) {
-    }
+        private FactureCalculatorInterface $factureCalculator,
+        private QrCodeGenerator $qrCodeGenerator,
+        private NotificationMailer $notificationMailer,
+        private AdminEmailFactory $adminEmailFactory,
+    ) {}
 
     public function render(FactureInterface $facture): string
     {
@@ -30,7 +36,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
             '@AcMarcheMercrediAdmin/facture/marche/pdf.html.twig',
             [
                 'content' => $content,
-            ]
+            ],
         );
     }
 
@@ -46,7 +52,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
             '@AcMarcheMercrediAdmin/facture/marche/pdf.html.twig',
             [
                 'content' => $content,
-            ]
+            ],
         );
     }
 
@@ -69,7 +75,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         $tuteur = $facture->getTuteur();
         $facturePresences = $this->facturePresenceRepository->findByFactureAndType(
             $facture,
-            FactureInterface::OBJECT_PRESENCE
+            FactureInterface::OBJECT_PRESENCE,
         );
 
         foreach ($facturePresences as $facturePresence) {
@@ -82,6 +88,17 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
 
         $dto = $this->factureCalculator->createDetail($facture);
 
+        try {
+            $imgQrcode = $this->qrCodeGenerator->generate($facture, $dto->total);
+        } catch (ShouldNotHappenException|\Exception $e) {
+            $message = $this->adminEmailFactory->messageToJf(
+                'Error create qrcode marche',
+                'facture id '.$facture->getId(),
+            );
+            $this->notificationMailer->sendAsEmailNotification($message);
+            $imgQrcode = null;
+        }
+
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/marche/_presence_content_pdf.html.twig',
             [
@@ -90,8 +107,9 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
                 'organisation' => $organisation,
                 'data' => $data,
                 'countPresences' => \count($facturePresences),
-                'dto'=>$dto
-            ]
+                'dto' => $dto,
+                'imgQrcode' => $imgQrcode,
+            ],
         );
     }
 
@@ -99,7 +117,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
     {
         $enfant = $facturePresence->getNom().' '.$facturePresence->getPrenom();
         $slug = $this->factureUtils->slugger->slug($enfant);
-        if (! $facturePresence->isPedagogique()) {
+        if (!$facturePresence->isPedagogique()) {
             ++$data['enfants'][$slug->toString()]['mercredi'];
         }
         $data['enfants'][$slug->toString()]['cout'] += $facturePresence->getCoutCalculated();

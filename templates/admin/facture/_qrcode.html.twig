@@ -1,0 +1,21 @@
+{% if imgQrcode %}
+    <table style="position: absolute;right: 25px;top:1100px;width: 90%; margin: auto;">
+        <tr>
+            <td style="width:20%;">
+                <img src="{{ absolute_url(asset('bundles/acmarchemercredi/images/qr-code-scanning2.jpg')) }}"
+                     width="150" alt="scan"/>
+            </td>
+            <td style="width:40%;">
+                <h3>Payer facilement !</h3>
+                <p>
+                    Scannez ce code via l'application bancaire <br>de votre smartphone et payez <br>facilement et en
+                    toute
+                    sécurité.
+                </p>
+            </td>
+            <td style="width:40%;">
+                <img src="{{ absolute_url(asset(imgQrcode)) }}" alt="qrcode" width="240" height="240">
+            </td>
+        </tr>
+    </table>
+{% endif %}
