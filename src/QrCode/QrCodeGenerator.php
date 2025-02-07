@@ -3,55 +3,81 @@
 namespace AcMarche\Mercredi\QrCode;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Http\ConnectionTrait;
+use AcMarche\Mercredi\Facture\Utils\BelgianStructuredGenerator;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
 use Knp\DoctrineBehaviors\Exception\ShouldNotHappenException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class QrCodeGenerator
 {
     use OrganisationPropertyInitTrait;
-    use ConnectionTrait;
 
-    public function __construct(private ParameterBagInterface $parameterBag)
-    {
-    }
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        private string $project_dir,
+    ) {}
 
     /**
+     * Service Tag:    BCD
+     * Version:    002
+     * Character set:    1
+     * Identification:    SCT
+     * Name:    Red Cross
+     * IBAN:    BE72000000001616
+     * Amount:    EUR1
+     * Reason (4 chars max):    CHAR
+     * Ref of invoice:    Empty line or REFINVOICE
+     * Or text:    Urgency fund or Empty line
+     * Information:    Sample EPC QR code
      * @throws ShouldNotHappenException
      * @throws \Exception
      */
     public function generate(Facture $facture, float $amount): string
     {
-        $this->connect();
-        $params = [
-            'bname' => $this->organisation->getNom(),
-            'iban' => $this->organisation->numero_compte,
-            'euro' => $amount,
-            'info' => $facture->getCommunication(),
-        ];
+        $qr_content = [];
+        $qr_content[] = "BCD";
+        $qr_content[] = "002";
+        $qr_content[] = "1";
+        $qr_content[] = "SCT";
+        $qr_content[] = "";//BIC
+        $qr_content[] = $this->organisation->getNom();
+        $qr_content[] = $this->organisation->numero_compte;
+        $qr_content[] = "EUR".$amount;
+        $qr_content[] = "CHAR";//reason
+        $qr_content[] = "";
+        $qr_content[] = $facture->getCommunication();//BelgianStructuredGenerator::generate();
+        $qr_content[] = "Sample EPC QR code";
 
-        $url = 'https://epc-qr.eu/?for=Hotton&euro='.$amount.'&pp=maco';
-        $data = $this->executeRequest($url);
-       // $data = $this->executeRequest($this->base_uri, ['query' => $params]);
+        $qr_string = implode(PHP_EOL, $qr_content);
 
-        $fileName = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$facture->getUuid().'.png';
-        $filePath = DIRECTORY_SEPARATOR.'public'.$fileName;
+        $qrCode = new Builder(
+            writer: new PngWriter(),
+            writerOptions: [],
+            validateResult: true,
+            data: $qr_string,
+            encoding: new Encoding('UTF-8'),
+            size: 300,
+        );
+        $result = $qrCode->build();
 
-        $imageFullPath = $this->parameterBag->get('kernel.project_dir').$filePath;
+        $fileName = $facture->getUuid().'.png';
+        $directory = $this->project_dir.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR;
+        $publicPath = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$fileName;
+
         try {
-            $filesystem = new Filesystem();
-            $filesystem->dumpFile($imageFullPath, $data);
+            $result->saveToFile($directory.$fileName);
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
 
-        $mime = \mime_content_type($imageFullPath);
+        $mime = \mime_content_type($directory.$fileName);
         if ($mime != 'image/png') {
-            throw new \Exception($data);
+            throw new \Exception('Not image/png mime:'.$result->getMimeType());
         }
 
-        return $fileName;
+        return $publicPath;
     }
 }
