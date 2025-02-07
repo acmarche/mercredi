@@ -17,9 +17,8 @@ final class FacturePdfFactoryTrait
     public function __construct(
         private FacturePdfPresenceInterface $facturePdfPresence,
         private FacturePdfPlaineInterface $facturePdfPlaine,
-        private SluggerInterface $slugger
-    ) {
-    }
+        private SluggerInterface $slugger,
+    ) {}
 
     public function generate(FactureInterface $facture): Response
     {
@@ -30,7 +29,7 @@ final class FacturePdfFactoryTrait
         }
         $slug = $this->slugger->slug($facture->getNom().' '.$facture->getPrenom());
 
-        //   return new Response($html);
+        //return new Response($html);
 
         return $this->downloadPdf($html, 'facture_'.$facture->getId().'_'.$slug.'.pdf');
     }
