@@ -56,8 +56,14 @@ class SanteFiche implements TimestampableInterface, Stringable
      */
     private Collection $questions;
 
+    /**
+     * Pq pas complet
+     * @var array<int,string> $reasons
+     */
+    public array $reasons = [];
+
     public function __construct(
-        Enfant $enfant
+        Enfant $enfant,
     ) {
         $this->reponses = new ArrayCollection();
         $this->questions = new ArrayCollection();

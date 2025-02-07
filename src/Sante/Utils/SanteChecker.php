@@ -14,17 +14,16 @@ final class SanteChecker
     public function __construct(
         private SanteQuestionRepository $santeQuestionRepository,
         private SanteReponseRepository $santeReponseRepository,
-        private SanteHandler $santeHandler
-    ) {
-    }
+        private SanteHandler $santeHandler,
+    ) {}
 
     public function identiteEnfantIsComplete(Enfant $enfant): bool
     {
-        if (! $enfant->getNom()) {
+        if (!$enfant->getNom()) {
             return false;
         }
 
-        if (! $enfant->getPrenom()) {
+        if (!$enfant->getPrenom()) {
             return false;
         }
 
@@ -36,34 +35,47 @@ final class SanteChecker
             return false;
         }
 
-        return (bool) $enfant->getAnneeScolaire();
+        return (bool)$enfant->getAnneeScolaire();
     }
 
     public function isComplete(SanteFiche $santeFiche): bool
     {
-        if (! $santeFiche->getId()) {
+        if (!$santeFiche->getId()) {
             return false;
         }
+
+        $santeFiche->reasons = [];
 
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
         $questions = $this->santeQuestionRepository->findAllOrberByPosition();
 
         if (\count($reponses) < \count($questions)) {
+            $count = \count($questions) - \count($reponses);
+            $santeFiche->reasons[] = 'Vous n\'avez pas répondu à '.$count.' questions';
+
             return false;
         }
 
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
-            if (! $this->checkQuestionOk($question)) {
+            if (!$this->checkQuestionOk($question)) {
+                $santeFiche->reasons[] = 'La réponse à la question : '.$question->getNom().' n\'est pas complète';
+
                 return false;
             }
         }
 
         if (null === $santeFiche->getEnfant()->getRegistreNational()) {
+            $santeFiche->reasons[] = 'Il manque le numéro de registre national';
+
             return false;
         }
 
-        return \count($santeFiche->getAccompagnateurs()) >= 1;
+        if (\count($santeFiche->getAccompagnateurs()) === 0) {
+            $santeFiche->reasons[] = 'Vous n\'avez pas mis remplis les personnes autorisées à reprendre l’enfant';
+        }
+
+        return true;
     }
 
     /**
@@ -75,7 +87,7 @@ final class SanteChecker
         $reponses = $this->santeReponseRepository->findBySanteFiche($santeFiche);
         foreach ($reponses as $reponse) {
             $question = $reponse->getQuestion();
-            if (! $this->checkQuestionOk($question)) {
+            if (!$this->checkQuestionOk($question)) {
                 $questionsnotOk[] = $question;
             }
         }
@@ -92,7 +104,7 @@ final class SanteChecker
         //si complement on verifie si mis
         if ($santeQuestion->getComplement()) {
             //on repond non
-            if (0 === (int) $santeQuestion->getReponseTxt()) {
+            if (0 === (int)$santeQuestion->getReponseTxt()) {
                 return true;
             }
             if (null === $santeQuestion->getRemarque()) {
