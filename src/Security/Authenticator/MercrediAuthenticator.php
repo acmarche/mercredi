@@ -15,7 +15,6 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -23,27 +22,17 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-/**
- * Essayer de voir les events
- * Si reponse null en cas de failure le manager va essayer un autre authenticator.
- *
- * @see \Symfony\Component\Security\Http\Authentication\AuthenticatorManager
- * @see UserCheckerListener::postCheckCredentials
- * @see UserProviderListener::checkPassport
- * @see CheckCredentialsListener
- * bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main
- */
 class MercrediAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface,
                                                                      InteractiveAuthenticatorInterface
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    final public const LOGIN_ROUTE = 'app_login';
 
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator,
-        private UserRepository $userRepository,
-        private ParameterBagInterface $parameterBag,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly UserRepository $userRepository,
+        private readonly ParameterBagInterface $parameterBag,
     ) {}
 
     public function supports(Request $request): bool
@@ -63,11 +52,10 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
             [
                 new CsrfTokenBadge('authenticate', $token),
                 new PasswordUpgradeBadge($password, $this->userRepository),
-                new RememberMeBadge(),
             ];
 
         return new Passport(
-            new UserBadge($email, fn(string $identifier) => $this->userRepository->loadUserByIdentifier($identifier)),
+            new UserBadge($email),
             new PasswordCredentials($password),
             $badges,
         );
@@ -79,7 +67,12 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('mercredi_front_profile_redirect'));
+        return new RedirectResponse($this->urlGenerator->generate('mercredi_front_home'));
+    }
+
+    protected function getLoginUrl(Request $request): string
+    {
+        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 
     /**
@@ -114,10 +107,5 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
     public function isInteractive(): bool
     {
         return true;
-    }
-
-    protected function getLoginUrl(Request $request): string
-    {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

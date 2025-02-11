@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\LdapInterface;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -32,9 +33,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PLAINE_PRIX3, '%env(MERCREDI_PLAINE_PRIX3)%');
     $parameters->set(Option::PRESENCE_DEADLINE_DAYS, '%env(MERCREDI_PRESENCE_DEADLINE_DAYS)%');
     $parameters->set(Option::PEDAGOGIQUE_DEADLINE_DAYS, '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%');
-    $parameters->set(Option::LDAP_DN, '%env(ACLDAP_DN)%');
-    $parameters->set(Option::LDAP_USER, '%env(ACLDAP_USER)%');
-    $parameters->set(Option::LDAP_PASSWORD, '%env(ACLDAP_PASSWORD)%');
 
     $services = $containerConfigurator->services();
 
@@ -44,20 +42,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure()
         ->private();
 
-    $services->load('AcMarche\Mercredi\\', __DIR__.'/../src/*')
+    $services
+        ->load('AcMarche\Mercredi\\', __DIR__.'/../src/*')
         ->exclude([__DIR__.'/../src/{Entity,Tests2}']);
 
-    $services->set(DirectoryNamer::class)
+    $services
+        ->set(DirectoryNamer::class)
         ->public();
 
     if (interface_exists(LoaderInterface::class)) {
         $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
     }
 
-    $services->instanceof(AfterUserRegistration::class)
+    $services
+        ->instanceof(AfterUserRegistration::class)
         ->tag('app.user.after_registration');
 
-    $services->set(Register::class)
+    $services
+        ->set(Register::class)
         ->arg('$secondaryFlows', tagged_iterator('app.user.after_registration'));
 
     if (interface_exists(LdapInterface::class)) {
@@ -65,7 +67,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->set(Ldap::class)
             ->args(['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter'])
             ->tag('ldap');
-        $services->set(Adapter::class)
+        $services
+            ->set(Adapter::class)
             ->args(
                 [
                     [
@@ -77,17 +80,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                             'referrals' => false,
                         ],
                     ],
-                ]
+                ],
             );
 
-        $services->set(LdapMercredi::class)
+        $services
+            ->set(LdapMercredi::class)
             ->arg('$adapter', service(Adapter::class))
             ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
     }
 
-    $services->set(TokenManager::class)
+    $services
+        ->set(TokenManager::class)
         ->arg('$formLoginAuthenticator', service('security.authenticator.form_login.main'));
-
     /*  $services->set(PresenceConstraints::class)
           ->arg('$constraints', tagged_iterator('mercredi.presence_constraint'));*/
 };
