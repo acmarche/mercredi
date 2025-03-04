@@ -22,12 +22,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ExportController extends AbstractController
 {
     public function __construct(
-        private SpreadsheetFactory $spreadsheetFactory,
-        private ListingPresenceByMonth $listingPresenceByMonth,
-        private PresenceRepository $presenceRepository,
-        private PlainePdfFactory $plainePdfFactory,
+        private readonly SpreadsheetFactory $spreadsheetFactory,
+        private readonly ListingPresenceByMonth $listingPresenceByMonth,
+        private readonly PresenceRepository $presenceRepository,
+        private readonly PlainePdfFactory $plainePdfFactory,
         private readonly FactureRepository $factureRepository,
-        private SearchHelper $searchHelper,
+        private readonly SearchHelper $searchHelper,
     ) {}
 
     #[Route(path: '/presence', name: 'mercredi_admin_export_presence_xls')]
