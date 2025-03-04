@@ -18,7 +18,7 @@ return static function (TwigConfig $twig) {
         ->global('pedagogique_nb_days', '%env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)%')
         ->global(
             'bootcdn',
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css',
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
         )
         ->global('recaptcha_site_key', '%env(GOOGLE_RECAPTCHA_SITE_KEY)%');
 };
