@@ -93,7 +93,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         } catch (ShouldNotHappenException|\Exception $e) {
             $message = $this->adminEmailFactory->messageToJf(
                 'Error create qrcode marche',
-                'facture id '.$facture->getId(),
+                'facture id '.$facture->getId().' error: '.$e->getMessage(),
             );
             $this->notificationMailer->sendAsEmailNotification($message);
             $imgQrcode = null;
