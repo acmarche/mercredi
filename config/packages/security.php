@@ -12,8 +12,7 @@ return static function (SecurityConfig $security): void {
         ->provider('mercredi_user_provider')
         ->entity()
         ->class(User::class)
-        ->managerName('default')
-        ->property('username');
+        ->managerName('default');
 
     $security
         ->firewall('dev')
