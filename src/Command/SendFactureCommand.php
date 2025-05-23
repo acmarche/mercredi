@@ -30,7 +30,7 @@ class SendFactureCommand extends Command
         private FactureEmailFactory $factureEmailFactory,
         private AdminEmailFactory $adminEmailFactory,
         private NotificationMailer $notificationMailer,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
     }

@@ -29,7 +29,7 @@ final class PresenceController extends AbstractController
     ) {}
 
     #[Route(path: '/{dateSelected}', name: 'mercredi_ecole_presence_index')]
-    public function default(\DateTime $dateSelected = null): Response
+    public function default(?\DateTime $dateSelected = null): Response
     {
         if (($response = $this->hasEcoles()) !== null) {
             return $response;

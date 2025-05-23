@@ -82,7 +82,7 @@ final class PlainePresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur, bool $confirmed = null): array
+    public function findByPlaineAndTuteur(Plaine $plaine, Tuteur $tuteur, ?bool $confirmed = null): array
     {
         $jours = $plaine->getJours();
 

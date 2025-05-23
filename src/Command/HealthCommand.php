@@ -22,7 +22,7 @@ class HealthCommand extends Command
         private TuteurRepository $tuteurRepository,
         private AdminEmailFactory $adminEmailFactory,
         private NotificationMailer $notifcationMailer,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
     }

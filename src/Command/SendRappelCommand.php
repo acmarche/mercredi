@@ -28,7 +28,7 @@ class SendRappelCommand extends Command
         private PresenceRepository $presenceRepository,
         private readonly TokenManager $tokenManager,
         private NotificationMailer $notificationMailer,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
     }

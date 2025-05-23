@@ -61,7 +61,7 @@ class BelgianStructuredGenerator
      *
      * @throws \Exception If the number is out of bounds
      */
-    public static function setNumber(int $number = null): void
+    public static function setNumber(?int $number = null): void
     {
         try {
             if (is_null($number)) {

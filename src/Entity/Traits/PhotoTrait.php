@@ -21,7 +21,7 @@ trait PhotoTrait
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $mime = null;
 
-    public function setPhoto(File|UploadedFile $file = null): void
+    public function setPhoto(File|UploadedFile|null $file = null): void
     {
         $this->photo = $file;
 

@@ -43,7 +43,7 @@ class PaiementRepository extends ServiceEntityRepository
     /**
      * @return Paiement[]
      */
-    public function getByEnfantTuteur(Tuteur $tuteur, Enfant $enfant, int $year = null): array
+    public function getByEnfantTuteur(Tuteur $tuteur, Enfant $enfant, ?int $year = null): array
     {
         return $this->createQueryBuilder('paiement')
             ->andWhere('paiement.tuteur = :tuteur')

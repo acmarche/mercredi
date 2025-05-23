@@ -63,7 +63,7 @@ class GroupingMarche implements GroupingInterface
         return null;
     }
 
-    public function findGroupeScolaire(Enfant $enfant, Plaine $plaine = null): ?GroupeScolaire
+    public function findGroupeScolaire(Enfant $enfant, ?Plaine $plaine = null): ?GroupeScolaire
     {
         return $this->scolaireUtils->findGroupeScolaireEnfantByAnneeScolaire($enfant);
     }

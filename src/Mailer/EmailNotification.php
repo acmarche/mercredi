@@ -21,7 +21,7 @@ class EmailNotification extends Notification implements EmailNotificationInterfa
         parent::__construct($subject, $channels);
     }
 
-    public function asEmailMessage(EmailRecipientInterface $recipient, string $transport = null): ?EmailMessage
+    public function asEmailMessage(EmailRecipientInterface $recipient, ?string $transport = null): ?EmailMessage
     {
         return new EmailMessage($this->templatedEmail);
     }
