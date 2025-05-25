@@ -30,7 +30,7 @@ final class FacturePdfFactoryTrait
         }
         $slug = $this->slugger->slug($facture->getNom().' '.$facture->getPrenom());
 
-        return new Response($html);
+        // return new Response($html);
 
         return $this->downloadPdf($html, 'facture_'.$facture->getId().'_'.$slug.'.pdf');
     }
