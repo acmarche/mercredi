@@ -42,7 +42,7 @@ final class FacturePdfFactoryTrait
     {
         $html = $this->facturePdfPresence->renderMultiple($factures);
 
-        // return new Response($html);
+        return new Response($html);
 
         return $this->downloadPdf($html, 'factures_'.$month.'.pdf');
     }
