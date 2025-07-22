@@ -44,7 +44,8 @@ final class FactureController extends AbstractController
         private FactureRenderInterface $factureRender,
         private MessageBusInterface $dispatcher,
         private QrCodeGenerator $qrCodeGenerator,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/{id}/index', name: 'mercredi_admin_facture_index_by_tuteur', methods: ['GET', 'POST'])]
     public function indexByTuteur(Tuteur $tuteur): Response

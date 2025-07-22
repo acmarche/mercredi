@@ -46,12 +46,14 @@
                             Attacher des présences
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item"
-                           href="{{ path('mercredi_admin_facture_accueil_attach', { 'id': facture.id }) }}">
-                            Attacher des accueils
-                        </a>
-                    </li>
+                    {% if mercredi_accueil >1 %}
+                        <li>
+                            <a class="dropdown-item"
+                               href="{{ path('mercredi_admin_facture_accueil_attach', { 'id': facture.id }) }}">
+                                Attacher des accueils
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

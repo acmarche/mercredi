@@ -39,10 +39,6 @@ class FactureRenderMarche implements FactureRenderInterface
             $facture,
             FactureInterface::OBJECT_PRESENCE
         );
-        $factureAccueils = $this->facturePresenceRepository->findByFactureAndType(
-            $facture,
-            FactureInterface::OBJECT_ACCUEIL
-        );
 
         $factureReductions = $this->factureReductionRepository->findByFacture($facture);
         $factureComplements = $this->factureComplementRepository->findByFacture($facture);
@@ -56,7 +52,6 @@ class FactureRenderMarche implements FactureRenderInterface
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'facturePresences' => $facturePresences,
-                'factureAccueils' => $factureAccueils,
                 'factureReductions' => $factureReductions,
                 'factureComplements' => $factureComplements,
                 'factureDecomptes' => $factureDecomptes,
@@ -72,7 +67,11 @@ class FactureRenderMarche implements FactureRenderInterface
             $facture,
             FactureInterface::OBJECT_PLAINE
         );
+
         $dto = $this->factureCalculator->createDetail($facture);
+        $factureReductions = $this->factureReductionRepository->findByFacture($facture);
+        $factureComplements = $this->factureComplementRepository->findByFacture($facture);
+        $factureDecomptes = $this->factureDecompteRepository->findByFacture($facture);
 
         return $this->environment->render(
             '@AcMarcheMercrediAdmin/facture/marche/_show_plaine.html.twig',
@@ -80,6 +79,9 @@ class FactureRenderMarche implements FactureRenderInterface
                 'facture' => $facture,
                 'tuteur' => $tuteur,
                 'facturePlaines' => $facturePlaines,
+                'factureReductions' => $factureReductions,
+                'factureComplements' => $factureComplements,
+                'factureDecomptes' => $factureDecomptes,
                 'dto' => $dto,
             ]
         );

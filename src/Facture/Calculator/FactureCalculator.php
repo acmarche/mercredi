@@ -21,7 +21,8 @@ class FactureCalculator implements FactureCalculatorInterface
         private FactureComplementRepository $factureComplementRepository,
         private FactureDecompteRepository $factureDecompteRepository,
         private ReductionCalculator $reductionCalculator,
-    ) {}
+    ) {
+    }
 
     public function total(FactureInterface $facture): float
     {
@@ -44,6 +45,7 @@ class FactureCalculator implements FactureCalculatorInterface
 
         $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementAmounts;
         $factureDetail->total -= $factureDetail->totalReductionAmounts;
+        $factureDetail->total -= $factureDetail->totalDecomptes;
         $factureDetail->totalHorsPourcentage = $factureDetail->total;
 
         $factureDetail->pourcentageEnPlus = $this->reductionCalculator->calculatePourcentage(

@@ -11,7 +11,7 @@ trait FactureDecomptesTrait
      * @var FactureDecompte[]|Collection
      */
     #[ORM\OneToMany(targetEntity: FactureDecompte::class, mappedBy: 'facture', cascade: ['remove'])]
-    private Collection $factureDecomptes;
+    public Collection $factureDecomptes;
 
     /**
      * @return Collection|FactureDecompte[]
@@ -23,7 +23,7 @@ trait FactureDecomptesTrait
 
     public function addFactureDecompte(FactureDecompte $factureDecompte): self
     {
-        if (! $this->factureDecomptes->contains($factureDecompte)) {
+        if (!$this->factureDecomptes->contains($factureDecompte)) {
             $this->factureDecomptes[] = $factureDecompte;
             $factureDecompte->setFacture($this);
         }
