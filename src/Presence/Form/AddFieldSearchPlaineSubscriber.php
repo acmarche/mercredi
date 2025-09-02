@@ -46,6 +46,20 @@ class AddFieldSearchPlaineSubscriber implements EventSubscriberInterface
                         'placeholder' => 'Sélectionnez',
                     ]
                 );
+        }
+        if ($this->parameterBag->get('mercredi.accueil') > 1) {
+            $form
+                ->add(
+                    'filter',
+                    ChoiceType::class,
+                    [
+                        'required' => true,
+                        'help' => 'Filtrer',
+                        'label' => 'Quoi',
+                        'choices' => PresenceUtils::types,
+                        'placeholder' => 'Sélectionnez',
+                    ]
+                );
         } else {
             $form
                 ->add(

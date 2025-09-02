@@ -11,7 +11,15 @@
     <br><br>
     Un compte vient d'être ouvert à votre nom sur le site internet {{ absolute_url(path('mercredi_front_home')) }}
     <br><br>
-    Voici les informations nécessaires pour vous connecter sur le site :
+
+    <div class="alert alert-info">
+        <a href="{{ path('mercredi_security_autologin',{'value':token.value}) }}">
+            Utilisez ce lien pour vous connecter.
+        </a>
+    </div>
+
+    <br/><br/>
+    Vous pouvez aussi vous connecter sur le site avec vos identifiants :
     <br><br>
     Nom d'utilisateur: {{ user.email }}
     {% if password %}<br>

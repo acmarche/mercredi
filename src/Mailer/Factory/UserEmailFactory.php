@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Animateur;
+use AcMarche\Mercredi\Entity\Security\Token;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
@@ -16,8 +17,12 @@ class UserEmailFactory
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    public function messageNewAccountToTuteur(User $user, Tuteur $tuteur, ?string $password = null): NotificationEmail
-    {
+    public function messageNewAccountToTuteur(
+        User $user,
+        Tuteur $tuteur,
+        Token $token,
+        ?string $password = null
+    ): NotificationEmail {
         $message = NotificationEmailJf::asPublicEmailJf();
         $message
             ->subject('Informations sur votre compte de '.$this->organisation->getNom())
@@ -28,6 +33,7 @@ class UserEmailFactory
             ->context(
                 [
                     'tuteur' => $tuteur,
+                    'token' => $token,
                     'user' => $user,
                     'password' => $password,
                     'footer_text' => 'orga',
@@ -41,6 +47,7 @@ class UserEmailFactory
     public function messageNewAccountToAnimateur(
         User $user,
         Animateur $animateur,
+        Token $token,
         ?string $password = null
     ): NotificationEmail {
 

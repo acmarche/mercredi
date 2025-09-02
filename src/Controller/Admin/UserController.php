@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Checker\UserChecker;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
+use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\User\Form\UserEditType;
 use AcMarche\Mercredi\User\Form\UserRoleType;
 use AcMarche\Mercredi\User\Form\UserSearchType;
@@ -31,7 +32,9 @@ final class UserController extends AbstractController
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $userPasswordEncoder,
         private MessageBusInterface $dispatcher,
-    ) {}
+        private readonly TokenManager $tokenManager
+    ) {
+    }
 
     #[Route(path: '/', name: 'mercredi_admin_user_index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -120,12 +123,14 @@ final class UserController extends AbstractController
     public function show(User $user): Response
     {
         $check = UserChecker::check($user);
+        $token = $this->tokenManager->getInstance($user);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
             [
                 'user' => $user,
                 'check' => $check,
+                'token' => $token,
             ],
         );
     }

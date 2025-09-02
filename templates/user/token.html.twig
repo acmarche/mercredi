@@ -1,0 +1,21 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Liens de connections</h3>
+        <div class="card-body">
+            <div class="alert alert-info">
+                Les "tokens" servent aux utilisateurs à se connecter à la plate-forme via un lien privé<br/>
+                sans devoir rentrer un mot de passe
+            </div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <button type="submit" name="save" class="btn btn-primary my-1 mr-sm-2 mb-3">
+                <i class="fas fa-save"></i> Générer un nouveau pour tous
+            </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}

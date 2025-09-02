@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Animateur;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Mailer\Factory\UserEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\User\Dto\AssociateUserAnimateurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,6 +20,7 @@ final class AssociationAnimateurHandler
     public function __construct(
         private AnimateurRepository $animateurRepository,
         private UserFactory $userFactory,
+        private readonly TokenManager $tokenManager,
         private NotificationMailer $notificationMailer,
         private UserEmailFactory $userEmailFactory,
         RequestStack $requestStack
@@ -39,7 +41,9 @@ final class AssociationAnimateurHandler
         $animateur = $associateUserAnimateurDto->getAnimateur();
         $user = $associateUserAnimateurDto->getUser();
 
-        if ((is_countable($this->animateurRepository->getAnimateursByUser($user)) ? \count($this->animateurRepository->getAnimateursByUser($user)) : 0) > 0) {
+        if ((is_countable($this->animateurRepository->getAnimateursByUser($user)) ? \count(
+                $this->animateurRepository->getAnimateursByUser($user)
+            ) : 0) > 0) {
             //remove old animateur
             $user->getAnimateurs()->clear();
         }
@@ -50,7 +54,8 @@ final class AssociationAnimateurHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserAnimateurDto->isSendEmail()) {
-            $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur);
+            $token = $this->tokenManager->getInstance($user);
+            $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $token);
             $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
             $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
         }
@@ -70,8 +75,9 @@ final class AssociationAnimateurHandler
     {
         $user = $this->userFactory->newFromAnimateur($animateur);
         $plainPassword = $user->getPlainPassword();
+        $token = $this->tokenManager->getInstance($user);
 
-        $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $plainPassword);
+        $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $token, $plainPassword);
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         return $user;

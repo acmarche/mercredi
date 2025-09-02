@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\Factory\UserEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\Tuteur\Repository\TuteurRepository;
 use AcMarche\Mercredi\User\Dto\AssociateUserTuteurDto;
 use AcMarche\Mercredi\User\Factory\UserFactory;
@@ -18,10 +19,11 @@ final class AssociationTuteurHandler
     private FlashBagInterface $flashBag;
 
     public function __construct(
-        private TuteurRepository $tuteurRepository,
-        private UserFactory $userFactory,
-        private NotificationMailer $notificationMailer,
-        private UserEmailFactory $userEmailFactory,
+        private readonly TuteurRepository $tuteurRepository,
+        private readonly TokenManager $tokenManager,
+        private readonly UserFactory $userFactory,
+        private readonly NotificationMailer $notificationMailer,
+        private readonly UserEmailFactory $userEmailFactory,
         RequestStack $requestStack
     ) {
         $this->flashBag = $requestStack->getSession()?->getFlashBag();
@@ -59,7 +61,8 @@ final class AssociationTuteurHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserTuteurDto->sendEmail) {
-            $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur);
+            $token = $this->tokenManager->getInstance($user);
+            $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $token);
             $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
             $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
         }
@@ -80,7 +83,8 @@ final class AssociationTuteurHandler
         $user = $this->userFactory->newFromTuteur($tuteur);
         $plainPassword = $user->getPlainPassword();
 
-        $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $plainPassword);
+        $token = $this->tokenManager->getInstance($user);
+        $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $token, $plainPassword);
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
         $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
 
