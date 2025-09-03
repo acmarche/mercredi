@@ -3,8 +3,6 @@
 namespace AcMarche\Mercredi\Controller\Ecole;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
-use AcMarche\Mercredi\Enfant\Form\EnfantEditForEcoleType;
-use AcMarche\Mercredi\Enfant\Message\EnfantUpdated;
 use AcMarche\Mercredi\Enfant\Repository\EnfantRepository;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
@@ -15,12 +13,12 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Search\Form\SearchEnfantEcoleType;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/enfant')]
@@ -38,7 +36,8 @@ final class EnfantController extends AbstractController
         private SanteQuestionRepository $santeQuestionRepository,
         private OrganisationRepository $organisationRepository,
         private MessageBusInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/', name: 'mercredi_ecole_enfant_index', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MERCREDI_ECOLE')]
@@ -49,9 +48,7 @@ final class EnfantController extends AbstractController
         }
         $nom = null;
         $accueil = true;
-        $form = $this->createForm(SearchEnfantEcoleType::class, [
-            'accueil' => true,
-        ]);
+        $form = $this->createForm(SearchEnfantEcoleType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -93,31 +90,6 @@ final class EnfantController extends AbstractController
                 'accueils' => $accueils,
                 'relations' => $relations,
                 'ficheSanteComplete' => $ficheSanteComplete,
-            ],
-        );
-    }
-
-    #[Route(path: '/{uuid}/edit', name: 'mercredi_ecole_enfant_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('enfant_edit', subject: 'enfant')]
-    public function edit(Request $request, Enfant $enfant): Response
-    {
-        $form = $this->createForm(EnfantEditForEcoleType::class, $enfant);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->enfantRepository->flush();
-
-            $this->dispatcher->dispatch(new EnfantUpdated($enfant->getId()));
-
-            return $this->redirectToRoute('mercredi_ecole_enfant_index', [
-                'uuid' => $enfant->getUuid(),
-            ]);
-        }
-
-        return $this->render(
-            '@AcMarcheMercrediEcole/enfant/edit.html.twig',
-            [
-                'enfant' => $enfant,
-                'form' => $form->createView(),
             ],
         );
     }

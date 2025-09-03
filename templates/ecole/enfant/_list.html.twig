@@ -2,10 +2,6 @@
     <tr>
         <th>Nom</th>
         <th>Ecole</th>
-        {% if mercredi_accueil > 1 %}
-            <th>Inscrit accueil ?</th>
-            <th>Modifier</th>
-        {% endif %}
     </tr>
     {% for enfant in enfants %}
         <tr>
@@ -15,13 +11,6 @@
                 </a>
             </td>
             <td>{{ enfant.ecole }}</td>
-            {% if mercredi_accueil > 1 %}
-                <td>{{ enfant.isAccueilEcole ? 'Oui' : 'Non' }}</td>
-                <td>
-                    <a class="btn btn-warning btn-sm" role="button"
-                       href="{{ path('mercredi_ecole_enfant_edit', {'uuid': enfant.uuid}) }}">Modifier</a>
-                </td>
-            {% endif %}
         </tr>
     {% else %}
         <tr>
