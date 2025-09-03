@@ -123,14 +123,14 @@ final class UserController extends AbstractController
     public function show(User $user): Response
     {
         $check = UserChecker::check($user);
-        $token = $this->tokenManager->getInstance($user);
+        $tokenUrl = $this->tokenManager->getLinkToConnect($user);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/show.html.twig',
             [
                 'user' => $user,
                 'check' => $check,
-                'token' => $token,
+                'tokenUrl' => $tokenUrl,
             ],
         );
     }

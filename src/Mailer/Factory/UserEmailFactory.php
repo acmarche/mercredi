@@ -20,7 +20,7 @@ class UserEmailFactory
     public function messageNewAccountToTuteur(
         User $user,
         Tuteur $tuteur,
-        Token $token,
+        string $tokenUrl,
         ?string $password = null
     ): NotificationEmail {
         $message = NotificationEmailJf::asPublicEmailJf();
@@ -33,7 +33,7 @@ class UserEmailFactory
             ->context(
                 [
                     'tuteur' => $tuteur,
-                    'token' => $token,
+                    'tokenUrl' => $tokenUrl,
                     'user' => $user,
                     'password' => $password,
                     'footer_text' => 'orga',
@@ -47,7 +47,7 @@ class UserEmailFactory
     public function messageNewAccountToAnimateur(
         User $user,
         Animateur $animateur,
-        Token $token,
+        string $tokenUrl,
         ?string $password = null
     ): NotificationEmail {
 
@@ -62,6 +62,7 @@ class UserEmailFactory
                 [
                     'animateur' => $animateur,
                     'user' => $user,
+                    'tokenUrl' => $tokenUrl,
                     'password' => $password,
                     'footer_text' => 'orga',
                     'organisation' => $this->organisation,

@@ -61,8 +61,8 @@ final class AssociationTuteurHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserTuteurDto->sendEmail) {
-            $token = $this->tokenManager->getInstance($user);
-            $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $token);
+            $tokenUrl = $this->tokenManager->getLinkToConnect($user);
+            $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $tokenUrl);
             $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
             $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
         }
@@ -83,8 +83,8 @@ final class AssociationTuteurHandler
         $user = $this->userFactory->newFromTuteur($tuteur);
         $plainPassword = $user->getPlainPassword();
 
-        $token = $this->tokenManager->getInstance($user);
-        $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $token, $plainPassword);
+        $tokenUrl = $this->tokenManager->getLinkToConnect($user);
+        $message = $this->userEmailFactory->messageNewAccountToTuteur($user, $tuteur, $tokenUrl, $plainPassword);
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
         $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
 

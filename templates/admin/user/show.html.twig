@@ -32,15 +32,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>
-                        Connection automatique<br>
-                        <span class="text-muted">Permet d'être automatiquement connecté</span>
-                    </th>
-                    <td>
-                        {{ path('mercredi_security_autologin',{'value':token.value}) }}
-                    </td>
-                </tr>
-                <tr>
                     <th>Parent(s) associé(s)</th>
                     <td>
                         <table class="table table-hover">
@@ -104,6 +95,15 @@
 
                             {% endfor %}
                         </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Connection automatique<br>
+                        <span class="text-muted">Permet d'être automatiquement connecté</span>
+                    </th>
+                    <td>
+                        {{ tokenUrl }}
                     </td>
                 </tr>
                 </tbody>

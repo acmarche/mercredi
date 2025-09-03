@@ -24,13 +24,41 @@ class TokenManager
 
     public function getInstance(User $user): Token
     {
-        if (!$token = $this->tokenRepository->findOneByUser($user) === null) {
-            $token = new Token();
-            $token->setUser($user);
-            $this->tokenRepository->persist($token);
+        $token = $this->tokenRepository->findOneByUser($user);
+
+        if ($token) {
+            return $token;
         }
 
+        return $this->generateNew($user);
+    }
+
+    public function generateNew(User $user): Token
+    {
+        if (!$token = $this->tokenRepository->findOneByUser($user)) {
+            $token = new Token($user);
+            $this->tokenRepository->persist($token);
+        }
+        $this->setValue($token);
+        $this->setExpireAt($token);
+        $this->tokenRepository->flush();
+
         return $token;
+    }
+
+    public function setValue(Token $token): void
+    {
+        try {
+            $token->setValue(bin2hex(random_bytes(20)));
+        } catch (\Exception $e) {
+            // Handle the exception appropriately
+            throw new \RuntimeException('Failed to generate secure random token', 0, $e);
+        }
+    }
+
+    public function setExpireAt(Token $token): void
+    {
+        $token->setExpireAt(new \DateTime('+90 days'));
     }
 
     public function loginUser(Request $request, User $user, $firewallName): void
@@ -40,25 +68,6 @@ class TokenManager
             $this->formLoginAuthenticator,
             $request,
         );
-    }
-
-    public function generate(User $user, ?\DateTime $expireAt = null): Token
-    {
-        $token = $this->getInstance($user);
-        try {
-            $token->setValue(bin2hex(random_bytes(20)));
-        } catch (\Exception) {
-        }
-
-        if (!$expireAt instanceof \DateTime) {
-            $expireAt = new \DateTime('+90 day');
-        }
-
-        $token->setExpireAt($expireAt);
-
-        $this->tokenRepository->flush();
-
-        return $token;
     }
 
     public function isExpired(Token $token): bool
@@ -72,7 +81,7 @@ class TokenManager
     {
         $users = $this->userRepository->findAll();
         foreach ($users as $user) {
-            $this->generate($user);
+            $this->generateNew($user);
         }
 
         $this->userRepository->flush();

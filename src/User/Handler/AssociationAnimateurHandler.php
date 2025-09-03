@@ -54,8 +54,8 @@ final class AssociationAnimateurHandler
         $this->flashBag->add('success', 'L\'utilisateur a bien été associé.');
 
         if ($associateUserAnimateurDto->isSendEmail()) {
-            $token = $this->tokenManager->getInstance($user);
-            $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $token);
+            $tokenUrl = $this->tokenManager->getLinkToConnect($user);
+            $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $tokenUrl);
             $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
             $this->flashBag->add('success', 'Un mail de bienvenue a été envoyé');
         }
@@ -75,9 +75,9 @@ final class AssociationAnimateurHandler
     {
         $user = $this->userFactory->newFromAnimateur($animateur);
         $plainPassword = $user->getPlainPassword();
-        $token = $this->tokenManager->getInstance($user);
+        $tokenUrl = $this->tokenManager->getLinkToConnect($user);
 
-        $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $token, $plainPassword);
+        $message = $this->userEmailFactory->messageNewAccountToAnimateur($user, $animateur, $tokenUrl, $plainPassword);
         $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
 
         return $user;

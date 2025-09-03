@@ -30,8 +30,13 @@ class Token implements TimestampableInterface, Stringable
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     protected DateTimeInterface $expire_at;
 
-    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'token')]
+    #[ORM\OneToOne(targetEntity: User::class)]
     protected User $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
 
     public function __toString(): string
     {
