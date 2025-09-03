@@ -1,0 +1,22 @@
+{% extends '@AcMarcheMercrediEcole/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card mb-2">
+        <h3 class="card-header">{{ enfant }}</h3>
+        <div class="card-body">
+            <div class="alert alert-info">
+                Ce qrcode sert aux accueils des enfants dans les écoles pour pointer leurs présences
+            </div>
+            {% if imgQrcode %}
+                <img src="{{ asset(imgQrcode) }}" alt="QR Code">
+            {% else %}
+                <p>Pas de qrcode trouvé</p>
+            {% endif %}
+            <br/>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('mercredi_ecole_enfant_show',{'uuid':enfant.uuid}) }}" class="btn btn-primary">Retour</a>
+        </div>
+    </div>
+{% endblock %}

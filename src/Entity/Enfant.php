@@ -77,6 +77,8 @@ class Enfant implements SluggableInterface, TimestampableInterface, UuidableInte
     use PoidsTrait;
     use IdOldTrait;
 
+    public ?string $imgQrCodeAccueil = null;
+
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $photo_autorisation;
     #[ORM\ManyToOne(targetEntity: AnneeScolaire::class, inversedBy: 'enfants')]

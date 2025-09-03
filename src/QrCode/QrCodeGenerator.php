@@ -2,6 +2,7 @@
 
 namespace AcMarche\Mercredi\QrCode;
 
+use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Endroid\QrCode\Builder\Builder;
@@ -9,6 +10,8 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\Writer\PngWriter;
 use Knp\DoctrineBehaviors\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class QrCodeGenerator
 {
@@ -17,6 +20,7 @@ class QrCodeGenerator
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private string $project_dir,
+        private readonly RouterInterface $router,
     ) {
     }
 
@@ -53,19 +57,39 @@ class QrCodeGenerator
 
         $qr_string = implode(PHP_EOL, $qr_content);
 
+        return $this->generateQrCode($qr_string, $facture->getUuid().'.png');
+    }
+
+    public function generateForAccueil(Enfant $enfant): string
+    {
+        $data = $this->router->generate(
+            'mercredi_ecole_enfant_show',
+            ['uuid' => $enfant->getUuid()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        return $this->generateQrCode($data, ''.'qr-accueil-'.$enfant->getSlug().'.png');
+    }
+
+    private function generateQrCode(string $content, string $fileName): string
+    {
+        $directory = $this->project_dir.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR;
+        $publicPath = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$fileName;
+
+        if (is_readable($directory.$fileName)) {
+            return $publicPath;
+        }
+
         $qrCode = new Builder(
             writer: new PngWriter(),
             writerOptions: [],
             validateResult: false,//todo active !
-            data: $qr_string,
+            data: $content,
             encoding: new Encoding('UTF-8'),
             size: 300,
         );
-        $result = $qrCode->build();
 
-        $fileName = $facture->getUuid().'.png';
-        $directory = $this->project_dir.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR;
-        $publicPath = DIRECTORY_SEPARATOR.'qrcode'.DIRECTORY_SEPARATOR.$fileName;
+        $result = $qrCode->build();
 
         try {
             $result->saveToFile($directory.$fileName);
@@ -79,10 +103,5 @@ class QrCodeGenerator
         }
 
         return $publicPath;
-    }
-
-    public function generateForAccueil(Enfant $enfant): string
-    {
-
     }
 }

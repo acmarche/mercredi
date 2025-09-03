@@ -123,7 +123,7 @@ final class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Enfant[]
+     * @return array<int,Enfant>
      */
     public function findOrphelins(): array
     {
@@ -133,7 +133,7 @@ final class EnfantRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Enfant[]
+     * @return array<int,Enfant>
      */
     public function search(?string $nom, ?Ecole $ecole, ?AnneeScolaire $anneeScolaire, ?bool $archived): array
     {
@@ -167,8 +167,15 @@ final class EnfantRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function searchForEcole(iterable $ecoles, ?string $nom, bool $accueil = true)
-    {
+    /**
+     * @return array<int,Enfant>
+     */
+    public function searchForEcole(
+        iterable $ecoles,
+        ?string $nom,
+        bool $accueil = true,
+        ?int $ecoleSelected = null
+    ): array {
         $queryBuilder = $this->getNotArchivedQueryBuilder();
 
         if ($nom) {
@@ -176,18 +183,23 @@ final class EnfantRepository extends ServiceEntityRepository
                 ->setParameter('keyword', '%'.$nom.'%');
         }
 
-        $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
-            ->setParameter('ecoles', $ecoles);
-
         if ($accueil) {
             $queryBuilder->andWhere('enfant.accueil_ecole = 1');
+        }
+
+        if ($ecoleSelected) {
+            $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
+                ->setParameter('ecoles', $ecoleSelected);
+        } else {
+            $queryBuilder->andWhere('enfant.ecole IN (:ecoles)')
+                ->setParameter('ecoles', $ecoles);
         }
 
         return $queryBuilder->getQuery()->getResult();
     }
 
     /**
-     * @return array|Enfant[]
+     * @return array<int,Enfant>
      */
     public function findAllForAnimateur(Animateur $animateur): array
     {

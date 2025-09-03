@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
+use AcMarche\Mercredi\QrCode\QrCodeGenerator;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
 
 #[Route(path: '/enfant')]
 final class EnfantController extends AbstractController
@@ -35,6 +35,7 @@ final class EnfantController extends AbstractController
         private RelationRepository $relationRepository,
         private SanteQuestionRepository $santeQuestionRepository,
         private OrganisationRepository $organisationRepository,
+        private QrCodeGenerator $qrCodeGenerator,
         private MessageBusInterface $dispatcher,
     ) {
     }
@@ -48,20 +49,21 @@ final class EnfantController extends AbstractController
         }
         $nom = null;
         $accueil = true;
-        $form = $this->createForm(SearchEnfantEcoleType::class);
+        $form = $this->createForm(SearchEnfantEcoleType::class, options: ['ecoles' => $this->ecoles->toArray()]);
         $form->handleRequest($request);
 
+        $ecoleSelected = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $nom = $data['nom'];
-            $accueil = $data['accueil'] ?? false;
+            $ecoleSelected = $data['ecole'];
         }
 
         if ($this->getParameter(Option::ACCUEIL) < 2) {
             $accueil = false;
         }
 
-        $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom, $accueil);
+        $enfants = $this->enfantRepository->searchForEcole($this->ecoles, $nom, $accueil, $ecoleSelected);
 
         return $this->render(
             '@AcMarcheMercrediEcole/enfant/index.html.twig',
@@ -119,6 +121,26 @@ final class EnfantController extends AbstractController
                 'questions' => $questions,
                 'organisation' => $organisation,
             ],
+        );
+    }
+
+    #[Route(path: '/qrcode/{uuid}', name: 'mercredi_ecole_enfant_qrcode', methods: ['GET'])]
+    #[IsGranted('enfant_show', subject: 'enfant')]
+    public function qrCode(Enfant $enfant): Response
+    {
+        try {
+            $imgQrcode = $this->qrCodeGenerator->generateForAccueil($enfant);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Qrcode non généré: '.$e->getMessage());
+            $imgQrcode = null;
+        }
+
+        return $this->render(
+            '@AcMarcheMercrediEcole/enfant/qrcode.html.twig',
+            [
+                'enfant' => $enfant,
+                'imgQrcode' => $imgQrcode,
+            ]
         );
     }
 }
