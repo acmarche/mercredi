@@ -16,6 +16,7 @@
                 <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Né le</th>
                     <th>Nombre de fois</th>
                 </tr>
                 </thead>
@@ -26,10 +27,15 @@
                             <td>
                                 {{ enfant.nom }}  {{ enfant.prenom }}
                             </td>
+                            <td>
+                                {% if enfant.birthday %}
+                                    {{ enfant.birthday|format_date('full') }}
+                                {% endif %}
+                            </td>
                             <td>{{ enfant.lignes }}</td>
                         </tr>
                     {% endif %}
-                    {% else %}
+                {% else %}
                     <tr>
                         <td colspan="2">Aucun doublon trouvé</td>
                     </tr>
@@ -49,12 +55,12 @@
                     {% if tuteur.lignes > 1 %}
                         <tr>
                             <td>
-                                    {{ tuteur.nom }}  {{ tuteur.prenom }}
+                                {{ tuteur.nom }}  {{ tuteur.prenom }}
                             </td>
                             <td>{{ tuteur.lignes }}</td>
                         </tr>
                     {% endif %}
-                    {% else %}
+                {% else %}
                     <tr>
                         <td colspan="2">Aucun doublon trouvé</td>
                     </tr>

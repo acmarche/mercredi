@@ -233,9 +233,10 @@ final class EnfantRepository extends ServiceEntityRepository
     public function findDoublon(): array
     {
         return $this->createQueryBuilder('enfant')
-            ->select('count(enfant.nom) as lignes, enfant.nom, enfant.prenom')
+            ->select('count(enfant.nom) as lignes, enfant.nom, enfant.prenom, enfant.birthday')
             ->addGroupBy('enfant.nom')
             ->addGroupBy('enfant.prenom')
+            ->addGroupBy('enfant.birthday')
             ->getQuery()->getResult();
     }
 

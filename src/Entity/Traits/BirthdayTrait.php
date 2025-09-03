@@ -14,7 +14,7 @@ trait BirthdayTrait
      * @var DateTime|null
      */
     #[ORM\Column(name: 'birthday', type: 'date', nullable: true)]
-    private ?DateTimeInterface $birthday = null;
+    public ?DateTimeInterface $birthday = null;
 
     /**
      * @return DateTime|DateTimeImmutable|null
@@ -39,7 +39,7 @@ trait BirthdayTrait
     {
         $birthday = $this->birthday;
 
-        if (! $birthday) {
+        if (!$birthday) {
             return null;
         }
 
@@ -49,7 +49,7 @@ trait BirthdayTrait
             $today = Carbon::instance($dateReference);
         }
 
-        $age = (float) Carbon::parse($birthday)->diff($today)->format('%y.%m');
+        $age = (float)Carbon::parse($birthday)->diff($today)->format('%y.%m');
         if ($rounded) {
             return floor($age * 2) / 2;
         }
