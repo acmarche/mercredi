@@ -2,14 +2,27 @@
 
 namespace AcMarche\Mercredi\Controller\Front;
 
+use AcMarche\Mercredi\Mailer\Factory\UserEmailFactory;
+use AcMarche\Mercredi\Mailer\NotificationMailer;
+use AcMarche\Mercredi\Security\Token\TokenManager;
+use AcMarche\Mercredi\User\Repository\UserRepository;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class SecurityController extends AbstractController
 {
+    public function __construct(
+        private readonly UserRepository $userRepository,
+        private readonly TokenManager $tokenManager,
+        private readonly UserEmailFactory $userEmailFactory,
+        private readonly NotificationMailer $notificationMailer,
+    ) {
+    }
+
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -20,6 +33,47 @@ final class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render(
+            '@AcMarcheMercredi/security/login.html.twig',
+            [
+                'last_username' => $lastUsername,
+                'error' => $error,
+            ],
+        );
+    }
+
+
+    #[Route(path: '/login/with/email', name: 'app_login_with_email')]
+    public function loginWithEmail(AuthenticationUtils $authenticationUtils): Response
+    {
+        $lastUsername = $authenticationUtils->getLastUsername();
+        $user = $this->userRepository->loadUserByIdentifier($lastUsername);
+        if (!$user) {
+            $error = new AuthenticationException('Adresse mail inconnue');
+
+            return $this->render(
+                '@AcMarcheMercredi/security/login.html.twig',
+                [
+                    'last_username' => $lastUsername,
+                    'error' => $error,
+                ],
+            );
+        }
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        $tokenUrl = $this->tokenManager->getLinkToConnect($user);
+
+        try {
+            $message = $this->userEmailFactory->messageSendAutoLogin($user, $tokenUrl);
+            $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
+            $this->addFlash('success', 'Consultez votre boite mail');
+
+            return $this->redirectToRoute('mercredi_front_home');
+        } catch (\Exception $exception) {
+            $error = new AuthenticationException('Le mail n\'a pas pu être envoyé '.$error->getMessage());
+        }
 
         return $this->render(
             '@AcMarcheMercredi/security/login.html.twig',

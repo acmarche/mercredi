@@ -71,4 +71,27 @@ class UserEmailFactory
 
         return $message;
     }
+
+    public function messageSendAutoLogin(
+        User $user,
+        string $tokenUrl
+    ): NotificationEmail {
+        $message = NotificationEmailJf::asPublicEmailJf();
+        $message
+            ->subject('Connection à votre compte pour '.$this->organisation->getNom())
+            ->from($this->getEmailSenderAddress())
+            ->to($user->getEmail())
+            ->htmlTemplate('@AcMarcheMercrediEmail/welcome/_mail_auto_login.html.twig')
+            ->context(
+                [
+                    'user' => $user,
+                    'tokenUrl' => $tokenUrl,
+                    'footer_text' => 'orga',
+                    'organisation' => $this->organisation,
+                ]
+            );
+
+        return $message;
+    }
+
 }

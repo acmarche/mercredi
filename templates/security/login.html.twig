@@ -7,37 +7,87 @@
 {% endblock %}
 
 {% block body %}
-    <div class="text-center">
-        <main class="form-signin">
+    <div class="container cjfs">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="login-container mx-auto">
 
-            {% if error %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endif %}
+                    <!-- Error Alert -->
+                    {% if error %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
 
-            <form method="post" action="{{ path('app_login') }}">
-                <img class="mb-4" src="{{ asset('bundles/acmarchemercredi/images/favicon/favicon-96x96.png') }}"
-                     alt="Adl" width="72"
-                     height="57">
-                <h1 class="h3 mb-3 fw-normal">Authentifiez-vous</h1>
+                    <!-- Logo and Title -->
+                    <div class="logo-container">
+                        <img class="mb-3" src="{{ asset('bundles/acmarchemercredi/images/favicon/favicon-96x96.png') }}"
+                             alt="Adl" width="72" height="57">
+                        <h2 class="main-title">Authentifiez-vous</h2>
+                    </div>
 
-                <div class="form-floating">
-                    <input type="text" value="{{ last_username }}" name="username" class="form-control"
-                           id="floatingInput" placeholder="jdupont" autofocus>
-                    <label for="floatingInput">Nom d'utilisateur</label>
+                    <!-- Email Login Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-envelope me-2"></i>Via votre adresse mail</h4>
+                        <form method="post" action="{{ path('app_login_with_email') }}">
+                            <div class="form-floating">
+                                <input type="email" value="{{ last_username }}" name="username"
+                                       class="form-control" id="emailInput"
+                                       placeholder="votre@email.com" required>
+                                <label for="emailInput">
+                                    <i class="fas fa-envelope me-2"></i>Votre adresse mail
+                                </label>
+                            </div>
+                            <button class="w-100 btn btn-custom btn-primary-custom" type="submit">
+                                <i class="fas fa-paper-plane me-2"></i>Envoyer le lien
+                            </button>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        </form>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="divider">
+                        <span>OU</span>
+                    </div>
+
+                    <!-- Password Login Section -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-key me-2"></i>Avec votre mot de passe</h3>
+                        <form method="post" action="{{ path('app_login') }}">
+                            <div class="form-floating">
+                                <input type="text" value="{{ last_username }}" name="username"
+                                       class="form-control" id="usernameInput"
+                                       placeholder="jdupont" required>
+                                <label for="usernameInput">
+                                    <i class="fas fa-user me-2"></i>Nom d'utilisateur
+                                </label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="password" name="password" class="form-control"
+                                       id="passwordInput" placeholder="Mot de passe" required>
+                                <label for="passwordInput">
+                                    <i class="fas fa-lock me-2"></i>Mot de passe
+                                </label>
+                            </div>
+                            <button class="w-100 btn btn-custom btn-primary-custom" type="submit">
+                                <i class="fas fa-sign-in-alt me-2"></i>Me connecter
+                            </button>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        </form>
+                    </div>
+
+                    <!-- Forgot Password Link -->
+                    <div class="text-end">
+                        <a href="{{ path('mercredi_front_forgot_password_request') }}" class="forgot-password">
+                            <i class="fas fa-question-circle me-1"></i>Mot de passe perdu?
+                        </a>
+                    </div>
+
                 </div>
-                <div class="form-floating mt-3">
-                    <input type="password" name="password" class="form-control" id="floatingPassword"
-                           placeholder="Mot de passe">
-                    <label for="floatingPassword">Mot de passe</label>
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Me connecter</button>
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            </form>
-            <a href="{{ path('mercredi_front_forgot_password_request') }}" class="float-end mt-3">Mot de passe
-                perdu?</a>
-        </main>
+            </div>
+        </div>
     </div>
+
 {% endblock %}
