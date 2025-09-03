@@ -19,7 +19,7 @@ final class PresenceNewType extends AbstractType
     {
         $enfant = $formBuilder->getData()->getEnfant();
         $date = new DateTime();
-        $date->modify('-2 Years');
+        $date->modify('-8 months');
 
         $formBuilder
             ->add(
@@ -28,7 +28,7 @@ final class PresenceNewType extends AbstractType
                 [
                     'class' => Jour::class,
                     'multiple' => true,
-                    'query_builder' => fn (JourRepository $cr) => $cr->getQlJourByDateGreatherOrEqualAndNotRegister(
+                    'query_builder' => fn(JourRepository $cr) => $cr->getQlJourByDateGreatherOrEqualAndNotRegister(
                         $enfant,
                         $date
                     ),
@@ -45,7 +45,7 @@ final class PresenceNewType extends AbstractType
                     'attr' => [
                         'style' => 'height:150px;',
                     ],
-                    'group_by' => fn ($date) => $date->getDateJour()->format('m').'-'.$date->getDateJour()->format('Y'),
+                    'group_by' => fn($date) => $date->getDateJour()->format('m').'-'.$date->getDateJour()->format('Y'),
                 ]
             );
     }
