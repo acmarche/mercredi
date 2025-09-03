@@ -49,11 +49,20 @@ final class UserController extends AbstractController
 
             $users = $this->userRepository->findByNameOrRoles($nom, $role);
         }
+        $bad = [];
+        $users = $this->userRepository->findAllOrderByNom();
+        foreach ($users as $user) {
+            $check = UserChecker::check($user);
+            if (count($check) > 0) {
+                $bad[] = $check;
+            }
+        }
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/index.html.twig',
             [
                 'users' => $users,
+                'bad' => $bad,
                 'roles' => MercrediSecurityRole::explanation(),
                 'form' => $form->createView(),
                 'search' => $form->isSubmitted(),

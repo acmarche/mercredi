@@ -7,6 +7,12 @@
             <a href="{{ path('mercredi_admin_user_new') }}" class="btn btn-primary m-2">
                 <i class="fas fa-plus"></i> Ajouter un utilisateur
             </a>
+            {% if bad|length > 0 %}
+                <div class="alert alert-warning">
+                    <a href="{{ path('mercredi_admin_checkup_accounts') }}">
+                        Il y a {{ bad|length }} utilisateurs invalides, pensez à nettoyer</a>
+                </div>
+            {% endif %}
             {% include '@AcMarcheMercrediAdmin/user/_roles_explanation.html.twig' %}
             {% include '@AcMarcheMercrediAdmin/user/_search.html.twig' %}
 
