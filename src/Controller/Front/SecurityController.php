@@ -8,6 +8,7 @@ use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\User\Repository\UserRepository;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -43,14 +44,34 @@ final class SecurityController extends AbstractController
         );
     }
 
+    function isValidEmailStrict($email)
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE) !== false;
+    }
 
     #[Route(path: '/login/with/email', name: 'app_login_with_email')]
-    public function loginWithEmail(AuthenticationUtils $authenticationUtils): Response
+    public function loginWithEmail(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $lastUsername = $request->request->get('username');
+
+        if (!$this->isValidEmailStrict($lastUsername)) {
+            $error = new AuthenticationException('Adresse mail inconnue');
+            $this->addFlash('error', $error->getMessage());
+
+            return $this->render(
+                '@AcMarcheMercredi/security/login.html.twig',
+                [
+                    'last_username' => $lastUsername,
+                    'error' => $error,
+                ],
+            );
+        }
+
         $user = $this->userRepository->loadUserByIdentifier($lastUsername);
+
         if (!$user) {
             $error = new AuthenticationException('Adresse mail inconnue');
+            $this->addFlash('error', $error->getMessage());
 
             return $this->render(
                 '@AcMarcheMercredi/security/login.html.twig',
@@ -68,7 +89,7 @@ final class SecurityController extends AbstractController
         try {
             $message = $this->userEmailFactory->messageSendAutoLogin($user, $tokenUrl);
             $this->notificationMailer->sendAsEmailNotification($message, $user->getEmail());
-            $this->addFlash('success', 'Consultez votre boite mail');
+            $this->addFlash('success', 'Un lien pour vous connecter vous a été envoyé sur votre boite mail');
 
             return $this->redirectToRoute('mercredi_front_home');
         } catch (\Exception $exception) {
