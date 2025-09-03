@@ -233,7 +233,7 @@ final class FactureController extends AbstractController
         $dto = $this->factureCalculator->createDetail($facture);
         $img = null;
         try {
-            $img = $this->qrCodeGenerator->generate($facture, $dto->total);
+            $img = $this->qrCodeGenerator->generateForFacture($facture, $dto->total);
         } catch (ShouldNotHappenException|Exception $e) {
             $this->addFlash('danger', 'erreur image qrcode '.$e->getMessage());
         }

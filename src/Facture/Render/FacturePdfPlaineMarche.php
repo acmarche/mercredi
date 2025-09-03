@@ -25,7 +25,8 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
         private QrCodeGenerator $qrCodeGenerator,
         private NotificationMailer $notificationMailer,
         private AdminEmailFactory $adminEmailFactory,
-    ) {}
+    ) {
+    }
 
     public function render(FactureInterface $facture): string
     {
@@ -52,7 +53,7 @@ class FacturePdfPlaineMarche implements FacturePdfPlaineInterface
         $enfants = $this->plainePresenceRepository->findEnfantsByPlaineAndTuteur($plaine, $tuteur);
 
         try {
-            $imgQrcode = $this->qrCodeGenerator->generate($facture, $dto->total);
+            $imgQrcode = $this->qrCodeGenerator->generateForFacture($facture, $dto->total);
         } catch (ShouldNotHappenException|\Exception $e) {
             $message = $this->adminEmailFactory->messageToJf(
                 'Error create qrcode Marche plaine',

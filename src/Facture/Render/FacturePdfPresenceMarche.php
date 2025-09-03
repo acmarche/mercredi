@@ -26,7 +26,8 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         private QrCodeGenerator $qrCodeGenerator,
         private NotificationMailer $notificationMailer,
         private AdminEmailFactory $adminEmailFactory,
-    ) {}
+    ) {
+    }
 
     public function render(FactureInterface $facture): string
     {
@@ -89,7 +90,7 @@ class FacturePdfPresenceMarche implements FacturePdfPresenceInterface
         $dto = $this->factureCalculator->createDetail($facture);
 
         try {
-            $imgQrcode = $this->qrCodeGenerator->generate($facture, $dto->total);
+            $imgQrcode = $this->qrCodeGenerator->generateForFacture($facture, $dto->total);
         } catch (ShouldNotHappenException|\Exception $e) {
             $message = $this->adminEmailFactory->messageToJf(
                 'Error create qrcode Marche',

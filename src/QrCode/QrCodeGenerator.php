@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\QrCode;
 
 use AcMarche\Mercredi\Entity\Facture\Facture;
-use AcMarche\Mercredi\Facture\Utils\BelgianStructuredGenerator;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
@@ -18,7 +17,8 @@ class QrCodeGenerator
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private string $project_dir,
-    ) {}
+    ) {
+    }
 
     /**
      * Service Tag:    BCD
@@ -35,7 +35,7 @@ class QrCodeGenerator
      * @throws ShouldNotHappenException
      * @throws \Exception
      */
-    public function generate(Facture $facture, float $amount): string
+    public function generateForFacture(Facture $facture, float $amount): string
     {
         $qr_content = [];
         $qr_content[] = "BCD";
@@ -79,5 +79,10 @@ class QrCodeGenerator
         }
 
         return $publicPath;
+    }
+
+    public function generateForAccueil(Enfant $enfant): string
+    {
+
     }
 }
