@@ -8,7 +8,6 @@ use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use AcMarche\Mercredi\Presence\Form\AddFieldTuteurSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,16 +33,19 @@ final class AccueilType extends AbstractType
                     'placeholder' => 'Matin ou soir',
                     'choices' => array_flip(AccueilInterface::HEURES),
                     'multiple' => false,
-                    'expanded' => false,
+                    'expanded' => true,
                     'required' => true,
                 ]
             )
             ->add(
                 'duree',
-                IntegerType::class,
+                ChoiceType::class,
                 [
+                    'choices' => [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6],
                     'label' => 'Temps resté',
                     'help' => 'Nombre de demi heure que l\'enfant est resté',
+                    'expanded' => true,
+                    'multiple' => false,
                     'constraints' => [
                         new GreaterThan(
                             [

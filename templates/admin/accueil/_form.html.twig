@@ -3,6 +3,9 @@
 <div class="row">
     <div class="col-6">
         {{ form_row(form.date_jour) }}
+        {% if form.tuteur is defined %}
+            {{ form_row(form.tuteur) }}
+        {% endif %}
     </div>
     <div class="col-6">
         {{ form_row(form.duree) }}
