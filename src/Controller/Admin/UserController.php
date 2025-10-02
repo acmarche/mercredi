@@ -50,13 +50,16 @@ final class UserController extends AbstractController
             $users = $this->userRepository->findByNameOrRoles($nom, $role);
         }
         $bad = [];
-        $users = $this->userRepository->findAllOrderByNom();
-        foreach ($users as $user) {
+
+        $allUsers = $this->userRepository->findAllOrderByNom();
+        foreach ($allUsers as $user) {
             $check = UserChecker::check($user);
             if (count($check) > 0) {
                 $bad[] = $check;
             }
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@AcMarcheMercrediAdmin/user/index.html.twig',
@@ -67,6 +70,7 @@ final class UserController extends AbstractController
                 'form' => $form,
                 'search' => $form->isSubmitted(),
             ],
+            $response
         );
     }
 
