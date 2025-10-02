@@ -77,7 +77,7 @@ final class RelationController extends AbstractController
             '@AcMarcheMercrediAdmin/relation/edit.html.twig',
             [
                 'relation' => $relation,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

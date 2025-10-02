@@ -75,7 +75,7 @@ class FacturePlaineController extends AbstractController
                 'tuteur' => $tuteur,
                 'plaine' => $plaine,
                 'presences' => $presences,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

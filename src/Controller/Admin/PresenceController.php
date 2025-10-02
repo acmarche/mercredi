@@ -72,7 +72,7 @@ final class PresenceController extends AbstractController
             '@AcMarcheMercrediAdmin/presence/index.html.twig',
             [
                 'datas' => $data,
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
                 'jour' => $jour,
                 'display_remarques' => $displayRemarque,
@@ -107,8 +107,8 @@ final class PresenceController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index_by_month.html.twig',
             [
-                'form' => $form->createView(),
-                'search_form' => $form->createView(),
+                'form' => $form,
+                'search_form' => $form,
                 'search' => $form->isSubmitted(),
                 'month' => $mois,
                 'listingPresences' => $listingPresences,
@@ -139,7 +139,7 @@ final class PresenceController extends AbstractController
             [
                 'enfant' => $enfant,
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -193,7 +193,7 @@ final class PresenceController extends AbstractController
             '@AcMarcheMercrediAdmin/presence/edit.html.twig',
             [
                 'presence' => $presence,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

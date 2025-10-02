@@ -51,7 +51,7 @@ final class FactureReductionController extends AbstractController
             [
                 'facture' => $facture,
                 'tuteur' => $facture->getTuteur(),
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -99,7 +99,7 @@ final class FactureReductionController extends AbstractController
             [
                 'facture' => $factureReduction->getFacture(),
                 'factureReduction' => $factureReduction,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

@@ -57,7 +57,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercrediAdmin/page/new.html.twig',
             [
                 'page' => $page,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -92,7 +92,7 @@ final class PageController extends AbstractController
             '@AcMarcheMercrediAdmin/page/edit.html.twig',
             [
                 'page' => $page,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

@@ -46,7 +46,7 @@ final class FactureAccueilController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $facture->getTuteur(),
                 'accueils' => $accueils,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

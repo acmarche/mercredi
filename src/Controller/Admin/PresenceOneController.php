@@ -111,7 +111,7 @@ final class PresenceOneController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index_by_quarter.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
                 'data' => $data,
                 'search' => $form->isSubmitted(),
                 'ages' => $ages,

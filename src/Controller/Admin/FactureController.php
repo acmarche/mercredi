@@ -22,7 +22,6 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\QrCode\QrCodeGenerator;
 use Exception;
-use Knp\DoctrineBehaviors\Exception\ShouldNotHappenException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +65,7 @@ final class FactureController extends AbstractController
             [
                 'factures' => $factures,
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -108,8 +107,8 @@ final class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/search.html.twig',
             [
                 'factures' => $factures,
-                'form' => $form->createView(),
-                'formMonth' => $formMonth->createView(),
+                'form' => $form,
+                'formMonth' => $formMonth,
                 'search' => $form->isSubmitted(),
                 'total' => $total,
             ],
@@ -142,7 +141,7 @@ final class FactureController extends AbstractController
                 'tuteur' => $tuteur,
                 'presences' => $presences,
                 'accueils' => $accueils,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -206,7 +205,7 @@ final class FactureController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/generate.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -234,7 +233,7 @@ final class FactureController extends AbstractController
         $img = null;
         try {
             $img = $this->qrCodeGenerator->generateForFacture($facture, $dto->total);
-        } catch (ShouldNotHappenException|Exception $e) {
+        } catch (Exception $e) {
             $this->addFlash('danger', 'erreur image qrcode '.$e->getMessage());
         }
 
@@ -266,7 +265,7 @@ final class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/edit.html.twig',
             [
                 'facture' => $facture,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -290,7 +289,7 @@ final class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/payer.html.twig',
             [
                 'facture' => $facture,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -360,7 +359,7 @@ final class FactureController extends AbstractController
             '@AcMarcheMercrediAdmin/facture/by_ecole.html.twig',
             [
                 'factures' => $factures,
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
                 'total' => $total,
                 'group' => $group,

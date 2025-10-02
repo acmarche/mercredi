@@ -61,7 +61,7 @@ final class NoteController extends AbstractController
             '@AcMarcheMercrediAdmin/note/new.html.twig',
             [
                 'note' => $note,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -88,7 +88,7 @@ final class NoteController extends AbstractController
             [
                 'note' => $note,
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -136,7 +136,7 @@ final class NoteController extends AbstractController
             '@AcMarcheMercrediAdmin/note/edit.html.twig',
             [
                 'note' => $note,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

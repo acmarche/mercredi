@@ -48,7 +48,7 @@ final class JourController extends AbstractController
             '@AcMarcheMercrediAdmin/jour/index.html.twig',
             [
                 'jours' => $jours,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -74,7 +74,7 @@ final class JourController extends AbstractController
             '@AcMarcheMercrediAdmin/jour/new.html.twig',
             [
                 'jour' => $jour,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -99,7 +99,7 @@ final class JourController extends AbstractController
             '@AcMarcheMercrediAdmin/jour/tarif.html.twig',
             [
                 'jour' => $jour,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -140,7 +140,7 @@ final class JourController extends AbstractController
             '@AcMarcheMercrediAdmin/jour/edit.html.twig',
             [
                 'jour' => $jour,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

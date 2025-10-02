@@ -142,7 +142,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediParent/plaine/select_enfant.html.twig',
             [
                 'enfants' => $enfants,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -229,7 +229,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediParent/plaine/select_jour.html.twig',
             [
                 'plaine' => $plaine,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -277,7 +277,7 @@ final class PlaineController extends AbstractController
                 'plaine' => $plaine,
                 'enfantsInscrits' => $enfantsInscrits,
                 'enfants' => $enfants,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

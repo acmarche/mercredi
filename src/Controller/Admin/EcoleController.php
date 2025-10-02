@@ -59,7 +59,7 @@ final class EcoleController extends AbstractController
             '@AcMarcheMercrediAdmin/ecole/new.html.twig',
             [
                 'ecole' => $ecole,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -97,7 +97,7 @@ final class EcoleController extends AbstractController
             '@AcMarcheMercrediAdmin/ecole/edit.html.twig',
             [
                 'ecole' => $ecole,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

@@ -77,7 +77,7 @@ final class PageController extends AbstractController
             [
                 'page' => $page,
                 'organisation' => $this->organisationRepository->getOrganisation(),
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

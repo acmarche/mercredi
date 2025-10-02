@@ -84,7 +84,7 @@ final class SanteFicheController extends AbstractController
             '@AcMarcheMercrediAdmin/sante_fiche/edit.html.twig',
             [
                 'sante_fiche' => $santeFiche,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

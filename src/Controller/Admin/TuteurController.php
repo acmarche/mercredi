@@ -59,7 +59,7 @@ final class TuteurController extends AbstractController
             '@AcMarcheMercrediAdmin/tuteur/index.html.twig',
             [
                 'tuteurs' => $tuteurs,
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
             ],
         );
@@ -97,7 +97,7 @@ final class TuteurController extends AbstractController
             '@AcMarcheMercrediAdmin/tuteur/new.html.twig',
             [
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -133,7 +133,7 @@ final class TuteurController extends AbstractController
             '@AcMarcheMercrediAdmin/tuteur/new.html.twig',
             [
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -175,7 +175,7 @@ final class TuteurController extends AbstractController
             '@AcMarcheMercrediAdmin/tuteur/edit.html.twig',
             [
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -202,7 +202,7 @@ final class TuteurController extends AbstractController
                     'accueils' => $accueils,
                     'presences' => $presences,
                     'factures' => $factures,
-                    'form' => $form->createView(),
+                    'form' => $form,
                 ],
             );
         }

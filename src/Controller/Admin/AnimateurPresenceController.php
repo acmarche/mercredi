@@ -36,7 +36,7 @@ final class AnimateurPresenceController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/presences_edit.html.twig',
             [
                 'animateur' => $animateur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

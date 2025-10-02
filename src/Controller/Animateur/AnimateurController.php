@@ -62,7 +62,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAnimateur/animateur/edit.html.twig',
             [
                 'animateur' => $this->animateur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

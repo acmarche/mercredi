@@ -112,7 +112,7 @@ final class ProfileController extends AbstractController
             '@AcMarcheMercredi/front/user/edit.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -136,7 +136,7 @@ final class ProfileController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/user/password.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

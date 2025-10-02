@@ -79,7 +79,7 @@ final class RegistrationController extends AbstractController
         return $this->render(
             '@AcMarcheMercredi/front/registration/register.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

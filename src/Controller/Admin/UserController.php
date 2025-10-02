@@ -64,7 +64,7 @@ final class UserController extends AbstractController
                 'users' => $users,
                 'bad' => $bad,
                 'roles' => MercrediSecurityRole::explanation(),
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
             ],
         );
@@ -93,7 +93,7 @@ final class UserController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -123,7 +123,7 @@ final class UserController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/user/new.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -162,7 +162,7 @@ final class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/edit.html.twig',
             [
                 'user' => $user,
-                'form' => $editForm->createView(),
+                'form' => $editForm,
             ],
         );
     }
@@ -185,7 +185,7 @@ final class UserController extends AbstractController
             '@AcMarcheMercrediAdmin/user/roles_edit.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

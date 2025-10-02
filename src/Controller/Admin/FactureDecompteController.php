@@ -44,7 +44,7 @@ final class FactureDecompteController extends AbstractController
             [
                 'facture' => $facture,
                 'tuteur' => $facture->getTuteur(),
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -82,7 +82,7 @@ final class FactureDecompteController extends AbstractController
             [
                 'facture' => $factureDecompte->getFacture(),
                 'factureDecompte' => $factureDecompte,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

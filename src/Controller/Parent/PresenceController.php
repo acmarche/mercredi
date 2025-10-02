@@ -100,7 +100,7 @@ final class PresenceController extends AbstractController
             '@AcMarcheMercrediParent/presence/select_jours.html.twig',
             [
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
                 'dates' => $dates,
             ],
         );

@@ -59,7 +59,7 @@ final class GroupeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/groupe_scolaire/new.html.twig',
             [
                 'groupe' => $groupeScolaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -98,7 +98,7 @@ final class GroupeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/groupe_scolaire/edit.html.twig',
             [
                 'groupe_scolaire' => $groupeScolaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

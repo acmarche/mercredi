@@ -57,7 +57,7 @@ final class AnneeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/annee_scolaire/new.html.twig',
             [
                 'annee' => $anneeScolaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -92,7 +92,7 @@ final class AnneeScolaireController extends AbstractController
             '@AcMarcheMercrediAdmin/annee_scolaire/edit.html.twig',
             [
                 'annee_scolaire' => $anneeScolaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

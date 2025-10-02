@@ -48,7 +48,7 @@ final class AssocierEcoleController extends AbstractController
             '@AcMarcheMercrediAdmin/user/associer_ecole.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

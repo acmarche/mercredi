@@ -52,7 +52,7 @@ final class AssocierAnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/user/associer_animateur.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

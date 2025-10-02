@@ -80,7 +80,7 @@ final class SanteFicheController extends AbstractController
             '@AcMarcheMercredi/parent/sante_fiche/edit/etape1.html.twig',
             [
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -109,7 +109,7 @@ final class SanteFicheController extends AbstractController
             [
                 'sante_fiche' => $santeFiche,
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -137,7 +137,7 @@ final class SanteFicheController extends AbstractController
             [
                 'sante_fiche' => $santeFiche,
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

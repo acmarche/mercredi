@@ -63,7 +63,7 @@ final class DocumentController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/document/new.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -98,7 +98,7 @@ final class DocumentController extends AbstractController
             '@AcMarcheMercrediAdmin/document/edit.html.twig',
             [
                 'document' => $document,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

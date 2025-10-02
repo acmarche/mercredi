@@ -55,7 +55,7 @@ final class FactureSendController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/select_month.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -94,7 +94,7 @@ final class FactureSendController extends AbstractController
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -144,7 +144,7 @@ final class FactureSendController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/send_all.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
                 'factures' => $factures,
                 'month' => $month,
             ],

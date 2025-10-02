@@ -71,7 +71,7 @@ final class QuickController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/quick/new.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

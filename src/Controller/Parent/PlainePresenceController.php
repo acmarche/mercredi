@@ -100,7 +100,7 @@ class PlainePresenceController extends AbstractController
             [
                 'plaine' => $plaine,
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

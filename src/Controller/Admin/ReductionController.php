@@ -62,7 +62,7 @@ final class ReductionController extends AbstractController
             '@AcMarcheMercrediAdmin/reduction/new.html.twig',
             [
                 'reduction' => $reduction,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -100,7 +100,7 @@ final class ReductionController extends AbstractController
             '@AcMarcheMercrediAdmin/reduction/edit.html.twig',
             [
                 'reduction' => $reduction,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

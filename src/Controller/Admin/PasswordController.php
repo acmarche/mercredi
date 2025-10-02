@@ -44,7 +44,7 @@ final class PasswordController extends AbstractController
             '@AcMarcheMercrediAdmin/user/password.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

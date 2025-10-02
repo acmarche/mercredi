@@ -44,7 +44,7 @@ final class FactureComplementController extends AbstractController
             [
                 'facture' => $facture,
                 'tuteur' => $facture->getTuteur(),
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -85,7 +85,7 @@ final class FactureComplementController extends AbstractController
             [
                 'facture' => $factureComplement->getFacture(),
                 'factureComplement' => $factureComplement,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

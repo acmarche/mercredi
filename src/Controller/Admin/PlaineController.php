@@ -58,7 +58,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine/index.html.twig',
             [
                 'plaines' => $plaines,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -90,7 +90,7 @@ final class PlaineController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/new.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -148,7 +148,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine/edit.html.twig',
             [
                 'plaine' => $plaine,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -179,7 +179,7 @@ final class PlaineController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine/open.html.twig',
             [
                 'plaine' => $plaine,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

@@ -67,7 +67,7 @@ final class AccueilController extends AbstractController
             '@AcMarcheMercrediEcole/accueil/index.html.twig',
             [
                 'accueils' => $accueils,
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
             ],
         );
@@ -93,7 +93,7 @@ final class AccueilController extends AbstractController
             '@AcMarcheMercrediEcole/accueil/new.html.twig',
             [
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -137,7 +137,7 @@ final class AccueilController extends AbstractController
             '@AcMarcheMercrediEcole/accueil/edit.html.twig',
             [
                 'accueil' => $accueil,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -208,7 +208,7 @@ final class AccueilController extends AbstractController
                 'week' => $weekPeriod,
                 'date' => $date,
                 'heure' => $heure,
-                'form' => $form->createView(),
+                'form' => $form,
                 'calendar' => $calendar,
                 'data' => $data,
             ],
@@ -251,7 +251,7 @@ final class AccueilController extends AbstractController
             '@AcMarcheMercrediEcole/accueil/retard.html.twig',
             [
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

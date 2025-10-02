@@ -70,7 +70,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercrediAdmin/organisation/new.html.twig',
             [
                 'organisation' => $organisation,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -105,7 +105,7 @@ final class OrganisationController extends AbstractController
             '@AcMarcheMercrediAdmin/organisation/edit.html.twig',
             [
                 'organisation' => $organisation,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

@@ -49,7 +49,7 @@ final class AssocierParentController extends AbstractController
             '@AcMarcheMercrediAdmin/user/associer_tuteur.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

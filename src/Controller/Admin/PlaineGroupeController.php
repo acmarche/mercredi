@@ -61,7 +61,7 @@ final class PlaineGroupeController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine_groupe/index.html.twig',
             [
                 'plaine' => $plaine,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -86,7 +86,7 @@ final class PlaineGroupeController extends AbstractController
             [
                 'plaine' => $plaine,
                 'plaine_groupe' => $plaineGroupe,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

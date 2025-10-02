@@ -55,7 +55,7 @@ final class EnfantController extends AbstractController
             '@AcMarcheMercrediAnimateur/enfant/index.html.twig',
             [
                 'enfants' => $enfants,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

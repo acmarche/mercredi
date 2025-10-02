@@ -46,7 +46,7 @@ final class PlaineJourController extends AbstractController
             '@AcMarcheMercrediAdmin/plaine_jour/edit.html.twig',
             [
                 'plaine' => $plaine,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

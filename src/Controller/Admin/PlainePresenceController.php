@@ -65,7 +65,7 @@ final class PlainePresenceController extends AbstractController
             [
                 'enfants' => $enfants,
                 'plaine' => $plaine,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -162,7 +162,7 @@ final class PlainePresenceController extends AbstractController
                 'plaine' => $plaine,
                 'presence' => $presence,
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -210,7 +210,7 @@ final class PlainePresenceController extends AbstractController
             [
                 'plaine' => $plaine,
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

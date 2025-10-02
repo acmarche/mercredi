@@ -57,7 +57,7 @@ final class SanteQuestionController extends AbstractController
             '@AcMarcheMercrediAdmin/sante_question/new.html.twig',
             [
                 'sante_question' => $santeQuestion,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -92,7 +92,7 @@ final class SanteQuestionController extends AbstractController
             '@AcMarcheMercrediAdmin/sante_question/edit.html.twig',
             [
                 'sante_question' => $santeQuestion,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

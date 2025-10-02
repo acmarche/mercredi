@@ -66,7 +66,7 @@ final class EnfantController extends AbstractController
             '@AcMarcheMercrediAdmin/enfant/index.html.twig',
             [
                 'enfants' => $enfants,
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
             ],
         );
@@ -91,7 +91,7 @@ final class EnfantController extends AbstractController
             '@AcMarcheMercrediAdmin/enfant/new.html.twig',
             [
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -146,7 +146,7 @@ final class EnfantController extends AbstractController
             '@AcMarcheMercrediAdmin/enfant/edit.html.twig',
             [
                 'enfant' => $enfant,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -170,7 +170,7 @@ final class EnfantController extends AbstractController
                     'enfant' => $enfant,
                     'accueils' => $accueils,
                     'presences' => $presences,
-                    'form' => $form->createView(),
+                    'form' => $form,
                 ],
             );
         }

@@ -37,7 +37,7 @@ final class DefaultController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/default/index.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

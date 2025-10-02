@@ -81,7 +81,7 @@ final class MessageController extends AbstractController
         return $this->render(
             '@AcMarcheMercrediAdmin/message/index.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
                 'emails' => $emails,
                 'tuteurs' => $tuteursWithOutEmails,
             ],
@@ -110,7 +110,7 @@ final class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                'form' => $form->createView(),
+                'form' => $form,
                 'emails' => $emails,
                 'jour' => $jour,
                 'tuteurs' => [],
@@ -149,7 +149,7 @@ final class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                'form' => $form->createView(),
+                'form' => $form,
                 'emails' => $emails,
                 'tuteurs' => [],
             ],
@@ -182,7 +182,7 @@ final class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/new_from_plaine.html.twig',
             [
                 'emailuser' => $this->getUser()->getEmail(),
-                'form' => $form->createView(),
+                'form' => $form,
                 'emails' => $emails,
                 'plaine' => $plaine,
             ],
@@ -211,7 +211,7 @@ final class MessageController extends AbstractController
             '@AcMarcheMercrediAdmin/message/new.html.twig',
             [
                 'emails' => $emails,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

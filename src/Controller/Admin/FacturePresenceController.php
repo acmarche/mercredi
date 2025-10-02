@@ -61,7 +61,7 @@ final class FacturePresenceController extends AbstractController
                 'facture' => $facture,
                 'tuteur' => $facture->getTuteur(),
                 'presences' => $presences,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -98,7 +98,7 @@ final class FacturePresenceController extends AbstractController
             [
                 'tuteur' => $tuteur,
                 'presence' => $presence,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

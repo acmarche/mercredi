@@ -56,7 +56,7 @@ final class CreanceController extends AbstractController
             '@AcMarcheMercrediAdmin/creance/new.html.twig',
             [
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -95,7 +95,7 @@ final class CreanceController extends AbstractController
             [
                 'creance' => $creance,
                 'tuteur' => $tuteur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

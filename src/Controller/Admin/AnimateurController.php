@@ -45,7 +45,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/index.html.twig',
             [
                 'animateurs' => $animateurs,
-                'form' => $form->createView(),
+                'form' => $form,
                 'search' => $form->isSubmitted(),
             ],
         );
@@ -72,7 +72,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/new.html.twig',
             [
                 'animateur' => $animateur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -107,7 +107,7 @@ final class AnimateurController extends AbstractController
             '@AcMarcheMercrediAdmin/animateur/edit.html.twig',
             [
                 'animateur' => $animateur,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
