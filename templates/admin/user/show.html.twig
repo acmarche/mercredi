@@ -141,7 +141,7 @@
                 let button = event.relatedTarget;
                 let ecoleId = button.dataset.id;
                 let modal = document.querySelector('#dissocierModalEcole');
-                modal.querySelector('#modal-ecole').val(ecoleId)
+                modal.querySelector('#modal-ecole').value = ecoleId
             })
         })
     </script>
@@ -151,7 +151,7 @@
                 let button = event.relatedTarget;
                 let animateurId = button.dataset.id;
                 let modal = document.querySelector('#dissocierModalAnimateur');
-                modal.querySelector('#modal-animateur').val(animateurId)
+                modal.querySelector('#modal-animateur').value = animateurId
             })
         })
     </script>
