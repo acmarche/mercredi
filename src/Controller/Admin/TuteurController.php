@@ -55,13 +55,15 @@ final class TuteurController extends AbstractController
             $tuteurs = $this->tuteurRepository->search($data['nom'], $data['archived']);
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/tuteur/index.html.twig',
             [
                 'tuteurs' => $tuteurs,
                 'form' => $form,
                 'search' => $form->isSubmitted(),
-            ],
+            ],$response
         );
     }
 

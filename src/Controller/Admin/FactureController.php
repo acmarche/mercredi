@@ -103,6 +103,8 @@ final class FactureController extends AbstractController
             ],
         );
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/search.html.twig',
             [
@@ -111,7 +113,7 @@ final class FactureController extends AbstractController
                 'formMonth' => $formMonth,
                 'search' => $form->isSubmitted(),
                 'total' => $total,
-            ],
+            ],$response
         );
     }
 

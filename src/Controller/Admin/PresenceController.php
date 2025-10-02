@@ -68,6 +68,8 @@ final class PresenceController extends AbstractController
             $data = $this->presenceHandler->searchAndGrouping($jour, $ecole, $displayRemarque);
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index.html.twig',
             [
@@ -76,7 +78,7 @@ final class PresenceController extends AbstractController
                 'search' => $form->isSubmitted(),
                 'jour' => $jour,
                 'display_remarques' => $displayRemarque,
-            ],
+            ],$response
         );
     }
 
@@ -104,6 +106,8 @@ final class PresenceController extends AbstractController
             $this->searchHelper->saveSearch(SearchHelper::PRESENCE_LIST_BY_MONTH, $data);
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index_by_month.html.twig',
             [
@@ -112,7 +116,7 @@ final class PresenceController extends AbstractController
                 'search' => $form->isSubmitted(),
                 'month' => $mois,
                 'listingPresences' => $listingPresences,
-            ],
+            ],$response
         );
     }
 

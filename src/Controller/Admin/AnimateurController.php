@@ -41,13 +41,15 @@ final class AnimateurController extends AbstractController
             $animateurs = $this->animateurRepository->search($data['nom']);
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/animateur/index.html.twig',
             [
                 'animateurs' => $animateurs,
                 'form' => $form,
                 'search' => $form->isSubmitted(),
-            ],
+            ],$response
         );
     }
 

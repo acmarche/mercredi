@@ -65,6 +65,8 @@ final class AccueilController extends AbstractController
             }
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/accueil/index.html.twig',
             [
@@ -75,7 +77,7 @@ final class AccueilController extends AbstractController
                 'dateSelected' => $date,
                 'count' => $count,
                 'heure' => $heure,
-            ],
+            ],$response
         );
     }
 

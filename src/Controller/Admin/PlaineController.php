@@ -54,12 +54,14 @@ final class PlaineController extends AbstractController
             $plaine->enfants = $this->plainePresenceRepository->findEnfantsByPlaine($plaine);
         }, $plaines);
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine/index.html.twig',
             [
                 'plaines' => $plaines,
                 'form' => $form,
-            ],
+            ],$response
         );
     }
 

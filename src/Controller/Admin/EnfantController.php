@@ -62,13 +62,15 @@ final class EnfantController extends AbstractController
             );
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/enfant/index.html.twig',
             [
                 'enfants' => $enfants,
                 'form' => $form,
                 'search' => $form->isSubmitted(),
-            ],
+            ],$response
         );
     }
 

@@ -44,12 +44,14 @@ final class JourController extends AbstractController
         }
         $jours = $this->jourRepository->search($archived, $pedagogique);
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/jour/index.html.twig',
             [
                 'jours' => $jours,
                 'form' => $form,
-            ],
+            ],$response
         );
     }
 

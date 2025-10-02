@@ -108,6 +108,8 @@ final class PresenceOneController extends AbstractController
             }
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/presence/index_by_quarter.html.twig',
             [
@@ -115,7 +117,7 @@ final class PresenceOneController extends AbstractController
                 'data' => $data,
                 'search' => $form->isSubmitted(),
                 'ages' => $ages,
-            ],
+            ],$response
         );
     }
 
