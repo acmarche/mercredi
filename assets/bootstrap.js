@@ -1,4 +1,4 @@
-import { startStimulusApp } from '@symfony/stimulus-bridge';
+import { startStimulusApp } from '@symfony/stimulus-bundle';
 import Lightbox from "stimulus-lightbox"
 
 // Registers Stimulus controllers from controllers.json and in the controllers/ directory
