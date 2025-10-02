@@ -19,16 +19,19 @@
     </div>
 
 {% endblock %}
-{% block javascripts %}
+{% block scripts %}
     <script>
-        let elements = document.querySelectorAll('.remove-tag');
+        document.addEventListener('DOMContentLoaded', function () {
 
-        Array.prototype.forEach.call(elements, function (element, i) {
-            element.addEventListener('click', () => {
-                const elementId = element.dataset.elementid;
-                let line = document.querySelector('#el' + elementId)
-                line.remove()
+            let elements = document.querySelectorAll('.remove-tag');
+
+            Array.prototype.forEach.call(elements, function (element, i) {
+                element.addEventListener('click', () => {
+                    const elementId = element.dataset.elementid;
+                    let line = document.querySelector('#el' + elementId)
+                    line.remove()
+                });
             });
-        });
+        })
     </script>
 {% endblock %}

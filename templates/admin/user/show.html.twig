@@ -110,7 +110,8 @@
             </table>
         </div>
         <div class="card-footer">
-            <span class="text-muted">{{ user.roles|join(', ') }}. Inscrit le {% if  user.createdAt %} {{ user.createdAt |format_date('full') }}{% endif %}</span>
+            <span
+                class="text-muted">{{ user.roles|join(', ') }}. Inscrit le {% if  user.createdAt %} {{ user.createdAt |format_date('full') }}{% endif %}</span>
         </div>
     </div>
 
@@ -123,29 +124,35 @@
 
 {% endblock %}
 
-{% block javascripts %}
+{% block scripts %}
     <script type="text/javascript">
-        document.querySelector('#dissocierModalTuteur').addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const tuteurId = button.dataset.id;
-            let modal = document.querySelector('#dissocierModalTuteur');
-            modal.querySelector('#modal-tuteur').value = tuteurId;
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('#dissocierModalTuteur').addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const tuteurId = button.dataset.id;
+                let modal = document.querySelector('#dissocierModalTuteur');
+                modal.querySelector('#modal-tuteur').value = tuteurId;
+            })
         })
     </script>
     <script type="text/javascript">
-        document.querySelector('#dissocierModalEcole').addEventListener('show.bs.modal', function (event) {
-            let button = event.relatedTarget;
-            let ecoleId = button.dataset.id;
-            let modal = document.querySelector('#dissocierModalEcole');
-            modal.querySelector('#modal-ecole').val(ecoleId)
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('#dissocierModalEcole').addEventListener('show.bs.modal', function (event) {
+                let button = event.relatedTarget;
+                let ecoleId = button.dataset.id;
+                let modal = document.querySelector('#dissocierModalEcole');
+                modal.querySelector('#modal-ecole').val(ecoleId)
+            })
         })
     </script>
     <script type="text/javascript">
-        document.querySelector('#dissocierModalAnimateur').addEventListener('show.bs.modal', function (event) {
-            let button = event.relatedTarget;
-            let animateurId = button.dataset.id;
-            let modal = document.querySelector('#dissocierModalAnimateur');
-            modal.querySelector('#modal-animateur').val(animateurId)
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('#dissocierModalAnimateur').addEventListener('show.bs.modal', function (event) {
+                let button = event.relatedTarget;
+                let animateurId = button.dataset.id;
+                let modal = document.querySelector('#dissocierModalAnimateur');
+                modal.querySelector('#modal-animateur').val(animateurId)
+            })
         })
     </script>
 {% endblock %}
