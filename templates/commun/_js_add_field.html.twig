@@ -1,6 +1,6 @@
 <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        var btn = document.querySelector('#add-another-accompagnateur');
+    document.addEventListener("turbo:load", () => {
+        const btn = document.querySelector('#add-another-accompagnateur');
         btn.addEventListener('click', () => {
             const id = btn.getAttribute('data-list-selector');//#email-fields-list
             const list = document.querySelector(id);
