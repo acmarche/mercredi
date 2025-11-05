@@ -44,7 +44,7 @@ final class SecurityController extends AbstractController
         );
     }
 
-    function isValidEmailStrict($email)
+    function isValidEmailStrict($email): bool
     {
         return filter_var($email, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE) !== false;
     }
