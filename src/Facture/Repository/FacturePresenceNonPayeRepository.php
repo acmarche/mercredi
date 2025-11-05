@@ -20,21 +20,32 @@ class FacturePresenceNonPayeRepository
     }
 
     /**
-     * @return array|Presence[]
+     * @return Presence[]
      */
     public function findPresencesNonPayes(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $presences = $this->presenceRepository->findByTuteurAndMonth($tuteur, $date);
+
         $ids = array_map(
-            fn ($presence) => $presence->getId(),
+            fn($presence) => $presence->getId(),
             $presences
         );
+
+        if (count($ids) === 0) {
+            return [];
+        }
         $presencesPayes = $this->facturePresenceRepository->findByIdsAndType($ids, FactureInterface::OBJECT_PRESENCE);
+
         $idPayes = array_map(
-            fn ($presence) => $presence->getPresenceId(),
+            fn($presence) => $presence->getPresenceId(),
             $presencesPayes
         );
+
         $idsNonPayes = array_diff($ids, $idPayes);
+
+        if (count($idsNonPayes) === 0) {
+            return [];
+        }
 
         return $this->presenceRepository->findBy([
             'id' => $idsNonPayes,
@@ -42,21 +53,30 @@ class FacturePresenceNonPayeRepository
     }
 
     /**
-     * @return array|Accueil[]
+     * @return Accueil[]
      */
     public function findAccueilsNonPayes(Tuteur $tuteur, ?DateTimeInterface $date = null): array
     {
         $accueils = $this->accueilRepository->findByTuteurAndMonth($tuteur, $date);
+
         $ids = array_map(
-            fn ($accueil) => $accueil->getId(),
+            fn($accueil) => $accueil->getId(),
             $accueils
         );
+        if (count($ids) === 0) {
+            return [];
+        }
         $presencesPayes = $this->facturePresenceRepository->findByIdsAndType($ids, FactureInterface::OBJECT_ACCUEIL);
+
         $idPayes = array_map(
-            fn ($presence) => $presence->getPresenceId(),
+            fn($presence) => $presence->getPresenceId(),
             $presencesPayes
         );
+
         $idsNonPayes = array_diff($ids, $idPayes);
+        if (count($idsNonPayes) === 0) {
+            return [];
+        }
 
         return $this->accueilRepository->findBy([
             'id' => $idsNonPayes,
