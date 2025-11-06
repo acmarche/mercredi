@@ -49,6 +49,21 @@ final class FactureRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Tuteur $tuteur
+     * @param DateTimeInterface $date
+     * @return Facture|null
+     */
+    public function findByTuteurAndMonth(Tuteur $tuteur, DateTimeInterface $date): ?Facture
+    {
+        return $this->getQBl()
+            ->andWhere('facture.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->andWhere('facture.mois LIKE :date')
+            ->setParameter('date', $date->format('m-Y'))
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @return Facture[]
      */
     public function findByTuteurNotPaid(Tuteur $tuteur): array

@@ -38,7 +38,8 @@ final class FactureHandler implements FactureHandlerInterface
         private TuteurRepository $tuteurRepository,
         private CommunicationFactoryInterface $communicationFactory,
         private FacturePresenceNonPayeRepository $facturePresenceNonPayeRepository,
-    ) {}
+    ) {
+    }
 
     public function newFacture(Tuteur $tuteur): FactureInterface
     {
@@ -199,7 +200,7 @@ final class FactureHandler implements FactureHandlerInterface
     /**
      * @param array|Accueil[] $accueils
      */
-    private function attachAccueils(Facture $facture, array $accueils): void
+    public function attachAccueils(Facture $facture, array $accueils): void
     {
         foreach ($accueils as $accueil) {
             $facturePresence = new FacturePresence(
