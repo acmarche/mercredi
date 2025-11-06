@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Organisation\Repository\OrganisationRepository;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use AcMarche\Mercredi\Spam\Handler\SpamHandler;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,11 +25,13 @@ final class PageController extends AbstractController
         private ContactEmailFactory $contactEmailFactory,
         private NotificationMailer $notificationMailer,
         private SpamHandler $spamHandler,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/page/{slug}', name: 'mercredi_front_page_show')]
-    public function page(Page $page): Response
-    {
+    public function page(
+        #[MapEntity(expr: 'repository.findOneBySlug(slug)')] Page $page
+    ): Response {
         if ('home' === $page->getSlugSystem()) {
             return $this->redirectToRoute('mercredi_front_home');
         }
