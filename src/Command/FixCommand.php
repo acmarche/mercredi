@@ -65,7 +65,6 @@ class FixCommand extends Command
                 $factureOctobre = $this->factureRepository->findByTuteurAndMonth($tuteur, $dateOctobre);
                 if (!$factureOctobre) {
                     $factureOctobre = $this->factureHandler->generateByMonthForTuteur($tuteur, '10-2025');
-                    //continue;
                     $this->io->error('Pas de facture octobre');
                 }
                 foreach ($accueilsNotAttached as $accueil) {
