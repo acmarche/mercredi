@@ -64,8 +64,9 @@ class FixCommand extends Command
                 $this->io->title($tuteur->getNom().' '.$tuteur->getPrenom());
                 $factureOctobre = $this->factureRepository->findByTuteurAndMonth($tuteur, $dateOctobre);
                 if (!$factureOctobre) {
+                    $factureOctobre = $this->factureHandler->generateByMonthForTuteur($tuteur, '10-2025');
+                    //continue;
                     $this->io->error('Pas de facture octobre');
-                    continue;
                 }
                 foreach ($accueilsNotAttached as $accueil) {
                     $this->io->writeln(
@@ -82,7 +83,7 @@ class FixCommand extends Command
                 $this->factureHandler->attachPresences($factureOctobre, $presencesNotAttached);
             }
 
-            //$this->factureRepository->flush();
+            $this->factureRepository->flush();
         }
 
         return Command::SUCCESS;
