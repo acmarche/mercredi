@@ -6,7 +6,6 @@ use AcMarche\Mercredi\Security\Ldap\LdapMercredi;
 use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\ServiceIterator\AfterUserRegistration;
 use AcMarche\Mercredi\ServiceIterator\Register;
-use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 use Symfony\Component\Ldap\Ldap;
@@ -50,10 +49,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->set(DirectoryNamer::class)
         ->public();
 
-    if (interface_exists(LoaderInterface::class)) {
-        $services->alias(LoaderInterface::class, 'fidry_alice_data_fixtures.doctrine.persister_loader');
-    }
-
     $services
         ->instanceof(AfterUserRegistration::class)
         ->tag('app.user.after_registration');
@@ -83,10 +78,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             );
 
-        $services
-            ->set(LdapMercredi::class)
-            ->arg('$adapter', service(Adapter::class))
-            ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
+        if (interface_exists(LdapInterface::class)) {
+            $services
+                ->set(LdapMercredi::class)
+                ->arg('$adapter', service(Adapter::class))
+                ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
+        }
     }
 
     $services
