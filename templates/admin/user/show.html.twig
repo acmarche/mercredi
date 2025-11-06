@@ -126,7 +126,7 @@
 
 {% block scripts %}
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             document.querySelector('#dissocierModalTuteur').addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const tuteurId = button.dataset.id;
@@ -136,7 +136,7 @@
         })
     </script>
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             document.querySelector('#dissocierModalEcole').addEventListener('show.bs.modal', function (event) {
                 let button = event.relatedTarget;
                 let ecoleId = button.dataset.id;
@@ -146,7 +146,7 @@
         })
     </script>
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             document.querySelector('#dissocierModalAnimateur').addEventListener('show.bs.modal', function (event) {
                 let button = event.relatedTarget;
                 let animateurId = button.dataset.id;
