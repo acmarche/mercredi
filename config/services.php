@@ -78,12 +78,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             );
 
-        if (interface_exists(LdapInterface::class)) {
-            $services
-                ->set(LdapMercredi::class)
-                ->arg('$adapter', service(Adapter::class))
-                ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
-        }
+        $services
+            ->set(LdapMercredi::class)
+            ->arg('$adapter', service(Adapter::class))
+            ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
     }
 
     $services

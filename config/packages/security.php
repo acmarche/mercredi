@@ -37,7 +37,7 @@ return static function (SecurityConfig $security): void {
 
     $authenticators = [MercrediAuthenticator::class];
 
-    if (!interface_exists(LdapInterface::class)) {
+    if (interface_exists(LdapInterface::class)) {
         $authenticators[] = MercrediLdapAuthenticator::class;
         $mainFirewall->formLoginLdap([
             'service' => Ldap::class,
