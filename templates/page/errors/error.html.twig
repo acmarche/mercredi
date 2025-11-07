@@ -100,7 +100,6 @@
                             <h5 class="mb-3"><i class="fas fa-lightbulb text-warning"></i> Que pouvez-vous faire ?</h5>
                             <ul class="list-unstyled text-muted">
                                 {% if status_code is defined and status_code >= 500 %}
-                                    <li class="mb-2"><i class="fas fa-redo text-primary"></i> Rafraîchissez la page</li>
                                     <li class="mb-2"><i class="fas fa-clock text-primary"></i> Réessayez dans quelques
                                         minutes
                                     </li>
@@ -108,12 +107,6 @@
                                         le problème persiste
                                     </li>
                                 {% else %}
-                                    <li class="mb-2"><i class="fas fa-search text-primary"></i> Vérifiez l'URL et les
-                                        paramètres de votre requête
-                                    </li>
-                                    <li class="mb-2"><i class="fas fa-arrow-left text-primary"></i> Utilisez le bouton
-                                        retour de votre navigateur
-                                    </li>
                                     <li class="mb-2"><i class="fas fa-home text-primary"></i> Retournez à la page
                                         d'accueil
                                     </li>
@@ -149,7 +142,8 @@
                             </p>
                             <p class="text-muted small">
                                 Si cette erreur persiste, veuillez
-                                <a href="{{ path('mercredi_front_home') }}" class="text-decoration-none">contacter notre
+                                <a href="{{ path('mercredi_front_contact') }}" class="text-decoration-none">contacter
+                                    notre
                                     équipe</a>
                                 en précisant le code d'erreur et l'heure de l'incident.
                             </p>

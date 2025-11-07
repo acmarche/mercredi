@@ -54,13 +54,8 @@
                         <div class="text-start mb-4" style="max-width: 500px; margin: 0 auto;">
                             <h5 class="mb-3"><i class="fas fa-tools text-danger"></i> Solutions à essayer :</h5>
                             <ul class="list-unstyled text-muted">
-                                <li class="mb-2"><i class="fas fa-redo text-primary"></i> Rafraîchissez la page (F5)
-                                </li>
                                 <li class="mb-2"><i class="fas fa-clock text-primary"></i> Réessayez dans quelques
                                     minutes
-                                </li>
-                                <li class="mb-2"><i class="fas fa-trash-alt text-primary"></i> Videz le cache de votre
-                                    navigateur
                                 </li>
                                 <li class="mb-2"><i class="fas fa-home text-primary"></i> Retournez à la page d'accueil
                                 </li>
@@ -87,9 +82,6 @@
 
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
-                            <button onclick="location.reload()" class="btn btn-primary btn-lg px-4">
-                                <i class="fas fa-sync-alt"></i> Recharger la page
-                            </button>
                             <a href="{{ path('mercredi_front_home') }}" class="btn btn-outline-secondary btn-lg px-4">
                                 <i class="fas fa-home"></i> Page d'accueil
                             </a>
@@ -109,7 +101,8 @@
                             </p>
                             <p class="text-muted small">
                                 Si l'erreur continue après plusieurs tentatives, veuillez
-                                <a href="{{ path('mercredi_front_home') }}" class="text-decoration-none">contacter notre
+                                <a href="{{ path('mercredi_front_contact') }}" class="text-decoration-none">contacter
+                                    notre
                                     support technique</a>.
                                 Merci de mentionner le code d'erreur <strong>500</strong> et l'heure de l'incident.
                             </p>
