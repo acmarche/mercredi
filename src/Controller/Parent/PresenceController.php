@@ -17,6 +17,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -41,7 +42,8 @@ final class PresenceController extends AbstractController
         private PresenceDaysProviderInterface $presenceDaysProvider,
         private FacturePresenceRepository $facturePresenceRepository,
         private MessageBusInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     /**
      * Etape 1 select enfant.
@@ -67,8 +69,10 @@ final class PresenceController extends AbstractController
      */
     #[Route(path: '/select/jour/{uuid}', name: 'mercredi_parent_presence_select_jours', methods: ['GET', 'POST'])]
     #[IsGranted('enfant_edit', subject: 'enfant')]
-    public function selectJours(Request $request, Enfant $enfant): Response
-    {
+    public function selectJours(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant
+    ): Response {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;
         }
@@ -108,7 +112,7 @@ final class PresenceController extends AbstractController
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_presence_show', methods: ['GET'])]
     #[IsGranted('presence_show', subject: 'presence')]
-    public function show(Presence $presence): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Presence $presence): Response
     {
         $facturePresence = $this->facturePresenceRepository->findByPresence($presence);
 

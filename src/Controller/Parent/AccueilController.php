@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Parent;
 
 use AcMarche\Mercredi\Accueil\Calculator\AccueilCalculatorInterface;
 use AcMarche\Mercredi\Entity\Presence\Accueil;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,11 +18,12 @@ final class AccueilController extends AbstractController
 
     public function __construct(
         private AccueilCalculatorInterface $accueilCalculator,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_accueil_show', methods: ['GET'])]
     #[IsGranted('accueil_show', subject: 'accueil')]
-    public function show(Accueil $accueil): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Accueil $accueil): Response
     {
         $cout = $this->accueilCalculator->calculate($accueil);
 

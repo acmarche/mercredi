@@ -14,6 +14,7 @@ use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
 use AcMarche\Mercredi\Search\Form\SearchEnfantEcoleType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +77,7 @@ final class EnfantController extends AbstractController
 
     #[Route(path: '/show/{uuid}', name: 'mercredi_ecole_enfant_show', methods: ['GET'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function show(Enfant $enfant): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);
@@ -98,7 +99,7 @@ final class EnfantController extends AbstractController
 
     #[Route(path: '/sante/{uuid}', name: 'mercredi_ecole_sante_fiche_show', methods: ['GET'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function santeFiche(Enfant $enfant): Response
+    public function santeFiche(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         if (!$santeFiche->getId()) {
@@ -126,7 +127,7 @@ final class EnfantController extends AbstractController
 
     #[Route(path: '/qrcode/{uuid}', name: 'mercredi_ecole_enfant_qrcode', methods: ['GET'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function qrCode(Enfant $enfant): Response
+    public function qrCode(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         try {
             $imgQrcode = $this->qrCodeGenerator->generateForAccueil($enfant);

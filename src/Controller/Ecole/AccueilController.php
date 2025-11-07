@@ -21,6 +21,7 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Utils\DateUtils;
 use DateTime;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,8 @@ final class AccueilController extends AbstractController
         private DateUtils $dateUtils,
         private FacturePresenceRepository $facturePresenceRepository,
         private MessageBusInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/index', name: 'mercredi_ecole_accueils_index', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MERCREDI_ECOLE')]
@@ -100,7 +102,7 @@ final class AccueilController extends AbstractController
 
     #[Route(path: '/{uuid}/show', name: 'mercredi_ecole_accueil_show', methods: ['GET'])]
     #[IsGranted('accueil_show', subject: 'accueil')]
-    public function show(Accueil $accueil): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Accueil $accueil): Response
     {
         $enfant = $accueil->getEnfant();
         $cout = $this->accueilCalculator->calculate($accueil);
@@ -119,8 +121,10 @@ final class AccueilController extends AbstractController
 
     #[Route(path: '/{uuid}/edit', name: 'mercredi_ecole_accueil_edit', methods: ['GET', 'POST'])]
     #[IsGranted('accueil_edit', subject: 'accueil')]
-    public function edit(Request $request, Accueil $accueil): Response
-    {
+    public function edit(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Accueil $accueil
+    ): Response {
         $form = $this->createForm(AccueilType::class, $accueil);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -217,8 +221,10 @@ final class AccueilController extends AbstractController
 
     #[Route(path: '/{uuid}/retard', name: 'mercredi_ecole_accueil_retard', methods: ['GET', 'POST'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function retard(Request $request, Enfant $enfant): Response
-    {
+    public function retard(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant
+    ): Response {
         $args = [
             'date_retard' => new DateTime(),
             'heure_retard' => new DateTime(),

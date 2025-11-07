@@ -10,6 +10,7 @@ use AcMarche\Mercredi\Plaine\Dto\PlainePresencesDto;
 use AcMarche\Mercredi\Plaine\Form\PlainePresencesEditType;
 use AcMarche\Mercredi\Plaine\Repository\PlainePresenceRepository;
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,13 +24,14 @@ class PlainePresenceController extends AbstractController
         private PlainePresenceRepository $plainePresenceRepository,
         private PlaineHandlerInterface $plaineHandler,
         private FactureRepository $factureRepository,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/{plaine}/{uuid}/edit', name: 'mercredi_parent_plaine_presence_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Plaine $plaine,
-        Enfant $enfant,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant,
     ): Response {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;

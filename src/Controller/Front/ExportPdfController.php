@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Sante\Factory\SantePdfFactoryTrait;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,11 +20,12 @@ final class ExportPdfController extends AbstractController
         private SanteHandler $santeHandler,
         private SantePdfFactoryTrait $santePdfFactory,
         private FacturePdfFactoryTrait $facturePdfFactory,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/santefiche/{uuid}', name: 'mercredi_commun_export_sante_fiche_pdf')]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function sante(Enfant $enfant): Response
+    public function sante(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
 
@@ -31,7 +33,7 @@ final class ExportPdfController extends AbstractController
     }
 
     #[Route(path: '/facture/{uuid}', name: 'mercredi_commun_export_facture_pdf')]
-    public function facture(Facture $facture): Response
+    public function facture(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Facture $facture): Response
     {
         $tuteur = $facture->getTuteur();
         $this->denyAccessUnlessGranted('tuteur_show', $tuteur);

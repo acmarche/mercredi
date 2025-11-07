@@ -15,6 +15,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Utils\RelationUtils;
 use AcMarche\Mercredi\Sante\Handler\SanteHandler;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,8 @@ final class EnfantController extends AbstractController
         private AdminEmailFactory $adminEmailFactory,
         private NotificationMailer $notifcationMailer,
         private MessageBusInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/', name: 'mercredi_parent_enfant_index', methods: ['GET'])]
     #[IsGranted('ROLE_MERCREDI_PARENT')]
@@ -97,7 +99,7 @@ final class EnfantController extends AbstractController
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_enfant_show', methods: ['GET'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function show(Enfant $enfant): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         $ficheSanteComplete = $this->santeChecker->isComplete($santeFiche);

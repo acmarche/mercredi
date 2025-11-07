@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Contrat\Facture\FactureRenderInterface;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,8 @@ final class FactureController extends AbstractController
         private FacturePresenceRepository $facturePresenceRepository,
         private FactureCalculatorInterface $factureCalculator,
         private factureRenderInterface $factureRender,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/', name: 'mercredi_parent_facture_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -44,7 +46,7 @@ final class FactureController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/show', name: 'mercredi_parent_facture_show', methods: ['GET'])]
-    public function show(Facture $facture): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Facture $facture): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;

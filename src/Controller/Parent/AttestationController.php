@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,11 +26,12 @@ final class AttestationController extends AbstractController
         private PresenceRepository $presenceRepository,
         private AccueilRepository $accueilRepository,
         private AttestationGeneratorInterface $attestationGenerator,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/{year}/{uuid}', name: 'mercredi_parent_attestation')]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function default(int $year, Enfant $enfant): Response
+    public function default(int $year, #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         if (($hasTuteur = $this->hasTuteur()) !== null) {
             return $hasTuteur;

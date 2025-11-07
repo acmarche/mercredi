@@ -13,6 +13,7 @@ use AcMarche\Mercredi\Sante\Message\SanteFicheUpdated;
 use AcMarche\Mercredi\Sante\Repository\SanteFicheRepository;
 use AcMarche\Mercredi\Sante\Repository\SanteQuestionRepository;
 use AcMarche\Mercredi\Sante\Utils\SanteChecker;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,11 +32,12 @@ final class SanteFicheController extends AbstractController
         private SanteChecker $santeChecker,
         private SanteFicheRepository $santeFicheRepository,
         private MessageBusInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/{uuid}', name: 'mercredi_parent_sante_fiche_show', methods: ['GET'])]
     #[IsGranted('enfant_show', subject: 'enfant')]
-    public function show(Enfant $enfant): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant): Response
     {
         $santeFiche = $this->santeHandler->init($enfant);
         if (!$santeFiche->getId()) {
@@ -63,8 +65,10 @@ final class SanteFicheController extends AbstractController
 
     #[Route(path: '/{uuid}/edit/etape1', name: 'mercredi_parent_sante_fiche_edit', methods: ['GET', 'POST'])]
     #[IsGranted('enfant_edit', subject: 'enfant')]
-    public function edit(Request $request, Enfant $enfant): Response
-    {
+    public function edit(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant
+    ): Response {
         $form = $this->createForm(SanteFicheEtape1Type::class, $enfant);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -87,8 +91,10 @@ final class SanteFicheController extends AbstractController
 
     #[Route(path: '/{uuid}/edit/etape2', name: 'mercredi_parent_sante_fiche_edit_etape2', methods: ['GET', 'POST'])]
     #[IsGranted('enfant_edit', subject: 'enfant')]
-    public function editEtape2(Request $request, Enfant $enfant): Response
-    {
+    public function editEtape2(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant
+    ): Response {
         $santeFiche = $this->santeHandler->init($enfant, false);
         if ([] === $santeFiche->getAccompagnateurs()) {
             $santeFiche->addAccompagnateur(' ');
@@ -116,8 +122,10 @@ final class SanteFicheController extends AbstractController
 
     #[Route(path: '/{uuid}/edit/etape3', name: 'mercredi_parent_sante_fiche_edit_etape3', methods: ['GET', 'POST'])]
     #[IsGranted('enfant_edit', subject: 'enfant')]
-    public function editEtape3(Request $request, Enfant $enfant): Response
-    {
+    public function editEtape3(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Enfant $enfant
+    ): Response {
         $santeFiche = $this->santeHandler->init($enfant);
         $form = $this->createForm(SanteFicheEtape3Type::class, $santeFiche);
         $form->handleRequest($request);
