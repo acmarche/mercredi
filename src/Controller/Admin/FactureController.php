@@ -22,6 +22,7 @@ use AcMarche\Mercredi\Facture\Repository\FacturePresenceNonPayeRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\QrCode\QrCodeGenerator;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,7 +114,8 @@ final class FactureController extends AbstractController
                 'formMonth' => $formMonth,
                 'search' => $form->isSubmitted(),
                 'total' => $total,
-            ],$response
+            ],
+            $response
         );
     }
 
@@ -273,8 +275,10 @@ final class FactureController extends AbstractController
     }
 
     #[Route(path: '/{uuid}/payer', name: 'mercredi_admin_facture_payer', methods: ['GET', 'POST'])]
-    public function payer(Request $request, Facture $facture): Response
-    {
+    public function payer(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Facture $facture
+    ): Response {
         $form = $this->createForm(FacturePayerType::class, $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
