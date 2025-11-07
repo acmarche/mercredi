@@ -3,13 +3,12 @@
 namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Animateur;
-use AcMarche\Mercredi\Entity\Security\Token;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
-use AcMarche\Mercredi\Mailer\NotificationEmailJf;
+use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 
 class UserEmailFactory
@@ -22,8 +21,8 @@ class UserEmailFactory
         Tuteur $tuteur,
         string $tokenUrl,
         ?string $password = null
-    ): NotificationEmail {
-        $message = NotificationEmailJf::asPublicEmailJf();
+    ): TemplatedEmail {
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->subject('Informations sur votre compte de '.$this->organisation->getNom())
             ->from($this->getEmailSenderAddress())
@@ -49,9 +48,9 @@ class UserEmailFactory
         Animateur $animateur,
         string $tokenUrl,
         ?string $password = null
-    ): NotificationEmail {
+    ): TemplatedEmail {
 
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->subject('Informations sur votre compte de '.$this->organisation->getNom())
             ->from(new Address($this->getEmailSenderAddress()))
@@ -75,8 +74,8 @@ class UserEmailFactory
     public function messageSendAutoLogin(
         User $user,
         string $tokenUrl
-    ): NotificationEmail {
-        $message = NotificationEmailJf::asPublicEmailJf();
+    ): TemplatedEmail {
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->subject('Connection à votre compte pour '.$this->organisation->getNom())
             ->from($this->getEmailSenderAddress())

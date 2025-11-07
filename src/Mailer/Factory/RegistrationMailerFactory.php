@@ -4,9 +4,9 @@ namespace AcMarche\Mercredi\Mailer\Factory;
 
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
-use AcMarche\Mercredi\Mailer\NotificationEmailJf;
+use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
@@ -18,8 +18,8 @@ final class RegistrationMailerFactory
 
     public function generateMessagRegisgerSuccess(
         VerifyEmailSignatureComponents $verifyEmailSignatureComponents
-    ): NotificationEmail {
-        $message = NotificationEmailJf::asPublicEmailJf();
+    ): TemplatedEmail {
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from(new Address($this->getEmailSenderAddress(), $this->organisation->getNom()))
             ->subject('Votre inscription Accueil Temps Libre')
@@ -34,9 +34,9 @@ final class RegistrationMailerFactory
         return $message;
     }
 
-    public function generateMessageToAdminAccountCreated(User $user): NotificationEmail
+    public function generateMessageToAdminAccountCreated(User $user): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from(new Address($this->getEmailSenderAddress(), $this->organisation->getNom()))
             ->to($this->getEmailContact())
@@ -53,9 +53,9 @@ final class RegistrationMailerFactory
         return $message;
     }
 
-    public function messageSendLinkLostPassword(User $user, ResetPasswordToken $resetPasswordToken): NotificationEmail
+    public function messageSendLinkLostPassword(User $user, ResetPasswordToken $resetPasswordToken): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message->from(new Address($this->getEmailSenderAddress(), $this->organisation->getNom()))
             ->to($user->getEmail())
             ->subject('Votre demande de changement de mot de passe')

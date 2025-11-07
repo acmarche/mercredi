@@ -2,7 +2,7 @@
 
 namespace AcMarche\Mercredi\Command;
 
-use AcMarche\Mercredi\Mailer\NotificationEmailJf;
+use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
@@ -51,7 +51,7 @@ class SendRappelCommand extends Command
             }
         }
 
-        $messageBase = NotificationEmailJf::asPublicEmailJf();
+        $messageBase = TemplatedEmailFactory::asPublicEmailJf();
 
         foreach ($missing as $tuteur) {
 

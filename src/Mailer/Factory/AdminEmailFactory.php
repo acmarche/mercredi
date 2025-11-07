@@ -5,17 +5,18 @@ namespace AcMarche\Mercredi\Mailer\Factory;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Security\User;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Mailer\NotificationEmailJf;
+use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminEmailFactory
 {
     use OrganisationPropertyInitTrait;
 
-    public function messageEnfantCreated(User|UserInterface $user, Enfant $enfant): NotificationEmailJf
+    public function messageEnfantCreated(User|UserInterface $user, Enfant $enfant): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from($this->getEmailSenderAddress())
             ->to($this->getEmailContact())
@@ -36,9 +37,9 @@ class AdminEmailFactory
     /**
      * @param Enfant[] $enfants
      */
-    public function messagEnfantsOrphelins(array $enfants): NotificationEmailJf
+    public function messagEnfantsOrphelins(array $enfants): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from($this->getEmailSenderAddress())
             ->to($this->getEmailContact())
@@ -58,9 +59,9 @@ class AdminEmailFactory
     /**
      * @param array|Tuteur[] $tuteurs
      */
-    public function messageTuteurArchived(array $tuteurs): NotificationEmailJf
+    public function messageTuteurArchived(array $tuteurs): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from($this->getEmailSenderAddress())
             ->to($this->getEmailContact())
@@ -77,26 +78,26 @@ class AdminEmailFactory
         return $message;
     }
 
-    public function messageAlert(string $subject, string $texte): NotificationEmailJf
+    public function messageAlert(string $subject, string $texte): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from($this->getEmailSenderAddress())
             ->to($this->getEmailContact())
             ->subject($subject)
-            ->content($texte);
+            ->text($texte);
 
         return $message;
     }
 
-    public function messageToJf(string $subject, string $texte): NotificationEmailJf
+    public function messageToJf(string $subject, string $texte): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->from($this->getEmailSenderAddress())
             ->to('jf@marche.be')
             ->subject($subject)
-            ->content($texte);
+            ->text($texte);
 
         return $message;
     }

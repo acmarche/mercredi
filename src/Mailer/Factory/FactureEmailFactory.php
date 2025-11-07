@@ -9,17 +9,17 @@ use AcMarche\Mercredi\Facture\Factory\FactureFactory;
 use AcMarche\Mercredi\Facture\Factory\FacturePdfFactoryTrait;
 use AcMarche\Mercredi\Facture\FactureInterface;
 use AcMarche\Mercredi\Mailer\InitMailerTrait;
-use AcMarche\Mercredi\Mailer\NotificationEmailJf;
+use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Exception;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Notifier\Notification\Notification;
 
 class FactureEmailFactory
 {
@@ -50,9 +50,9 @@ class FactureEmailFactory
         return $data;
     }
 
-    public function messageFacture(string $sujet, string $body): NotificationEmailJf
+    public function messageFacture(string $sujet, string $body): TemplatedEmail
     {
-        $message = NotificationEmailJf::asPublicEmailJf();
+        $message = TemplatedEmailFactory::asPublicEmailJf();
         $message
             ->subject($sujet)
             ->from(new Address($this->getEmailSenderAddress()))

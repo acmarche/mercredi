@@ -3,7 +3,7 @@
 namespace AcMarche\Mercredi\Mailer;
 
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Notifier\Recipient\Recipient;
 
 final class NotificationMailer
@@ -11,9 +11,9 @@ final class NotificationMailer
     use InitMailerTrait;
     use OrganisationPropertyInitTrait;
 
-    public function sendAsEmailNotification(NotificationEmail $templatedEmail, ?string $email = null): void
+    public function sendAsEmailNotification(TemplatedEmail $templatedEmail, ?string $email = null): void
     {
-        if (! $email) {
+        if (!$email) {
             $email = $this->getEmailContact();
         }
         $recipient = new Recipient($email);

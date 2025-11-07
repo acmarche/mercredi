@@ -4,7 +4,7 @@ namespace AcMarche\Mercredi\Message\Factory;
 
 use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
-use AcMarche\Mercredi\Mailer\NotificationEmailJf;
+use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -17,9 +17,9 @@ final class EmailFactory
     ) {
     }
 
-    public function create(Message $message): NotificationEmailJf
+    public function create(Message $message): TemplatedEmailFactory
     {
-        $notification = NotificationEmailJf::asPublicEmailJf();
+        $notification = TemplatedEmailFactory::asPublicEmailJf();
         $notification->subject($message->getSujet())
             ->from($this->getEmailSenderAddress())
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/mail.html.twig')
@@ -44,9 +44,9 @@ final class EmailFactory
         return $notification;
     }
 
-    public function createForPlaine(Message $message): NotificationEmailJf
+    public function createForPlaine(Message $message): TemplatedEmailFactory
     {
-        $notification = NotificationEmailJf::asPublicEmailJf();
+        $notification = TemplatedEmailFactory::asPublicEmailJf();
         $notification->subject($message->getSujet())
             ->from($this->getEmailSenderAddress())
             ->htmlTemplate('@AcMarcheMercrediEmail/admin/mail.html.twig')
@@ -72,11 +72,11 @@ final class EmailFactory
     }
 
     /**
-     * @param NotificationEmailJf $notification
+     * @param TemplatedEmailFactory $notification
      * @param array|PlaineGroupe[] $groupes
      * @return void
      */
-    public function attachmentsForPlaine(NotificationEmailJf $notification, array $groupes): void
+    public function attachmentsForPlaine(TemplatedEmailFactory $notification, array $groupes): void
     {
         foreach ($groupes as $plaineGroupe) {
             if ($plaineGroupe->getFileName()) {
