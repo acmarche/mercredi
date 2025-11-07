@@ -1,5 +1,5 @@
-{% extends '@email/default/notification/body.html.twig' %}
-{% block lead %}
+{% extends '@AcMarcheMercredi/email/body.html.twig' %}
+{% block subject %}
     <p class="lead">
         {{ email.subject }}
     </p>
@@ -7,13 +7,9 @@
 
 {% block content %}
     Les tuteurs suivant on été archivés car ils n'ont plus d'enfants actifs
-<br /><br />
+    <br/><br/>
     {% for tuteur in tuteurs %}
-        {{ tuteur }}<br />
+        {{ tuteur }}<br/>
         {{ absolute_url(path('mercredi_admin_tuteur_show', {'id': tuteur.id})) }}
     {% endfor %}
-{% endblock %}
-
-{% block footer_content %}
-    {% include '@AcMarcheMercrediAdmin/organisation/_signature.html.twig' %}
 {% endblock %}

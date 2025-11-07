@@ -1,5 +1,5 @@
-{% extends '@email/default/notification/body.html.twig' %}
-{% block lead %}
+{% extends '@AcMarcheMercredi/email/body.html.twig' %}
+{% block subject %}
     <p class="lead">
         {{ email.subject }}
     </p>
@@ -26,8 +26,3 @@
     <br/>
 
 {% endblock %}
-
-{% block footer_content %}
-    <p><small>{{ render(path('mercredi_organisation_short')) }}</small></p>
-{% endblock %}
-

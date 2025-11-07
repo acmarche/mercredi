@@ -1,5 +1,5 @@
-{% extends '@email/default/notification/body.html.twig' %}
-{% block lead %}
+{% extends '@AcMarcheMercredi/email/body.html.twig' %}
+{% block subject %}
     <p class="lead">
         {{ email.subject }}
     </p>
@@ -10,7 +10,7 @@
     Cher(s) parent(s),
     <br/><br/>
     Un compte vient d'être ouvert à votre nom sur le site <a
-        href="{{ absolute_url(path('mercredi_front_home')) }}">{{ absolute_url(path('mercredi_front_home')) }}</a>.
+    href="{{ absolute_url(path('mercredi_front_home')) }}">{{ absolute_url(path('mercredi_front_home')) }}</a>.
     <br/><br/>
 
     <div class="alert alert-info">
@@ -48,9 +48,5 @@
     {% endif %}
     <br/>
 
-{% endblock %}
-
-{% block footer_content %}
-    <p><small>{{ render(path('mercredi_organisation_short')) }}</small></p>
 {% endblock %}
 

@@ -1,5 +1,5 @@
-{% extends '@email/default/notification/body.html.twig' %}
-{% block lead %}
+{% extends '@AcMarcheMercredi/email/body.html.twig' %}
+{% block subject %}
     <p class="lead">
         {{ email.subject }}
     </p>
@@ -16,16 +16,8 @@
     <ul class="list-group">
         <li class="list-group-item">Donnez le rôle "parent"</li>
         <li class="list-group-item"><strong>Ajoutez une nouvelle fiche parent.</strong></li>
-    </ul>
-
-{% endblock %}
-
-{% block action %}
-    <spacer size="16"></spacer>
+    </ul>  <br/><br/>
     <button href="{{ absolute_url(path('mercredi_admin_user_show', {'id': user.id})) }}">Gestion de l'utilisateur
     </button>
 {% endblock %}
 
-{% block footer_content %}
-    {% include '@AcMarcheMercrediAdmin/organisation/_signature.html.twig' %}
-{% endblock %}

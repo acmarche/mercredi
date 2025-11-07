@@ -60,10 +60,8 @@ class FactureEmailFactory
             ->textTemplate('@AcMarcheMercrediEmail/admin/facture_mail.txt.twig')
             ->context(
                 [
-                    'importance' => Notification::IMPORTANCE_HIGH,
                     'texte' => $body,
                     'organisation' => $this->organisation,
-                    'footer_text' => 'orga',
                 ]
             );
 

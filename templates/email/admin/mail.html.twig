@@ -1,5 +1,5 @@
-{% extends '@email/default/notification/body.html.twig' %}
-{% block lead %}
+{% extends '@AcMarcheMercredi/email/body.html.twig' %}
+{% block subject %}
     <p class="lead">
         {{ email.subject }}
     </p>
@@ -7,14 +7,6 @@
 
 {% block content %}
 
-{{ texte|nl2br }}
+    {{ texte|nl2br }}
 
-{% endblock %}
-
-{% block footer_content %}
-    <p>
-    <small>
-    {% include '@AcMarcheMercrediAdmin/organisation/_identite.txt.twig' %}
-   </small>
-   </p>
 {% endblock %}

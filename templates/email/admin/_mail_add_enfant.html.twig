@@ -1,25 +1,19 @@
-{% extends '@email/default/notification/body.html.twig' %}
-{% block lead %}
+{% extends '@AcMarcheMercredi/email/body.html.twig' %}
+{% block subject %}
     <p class="lead">
         {{ email.subject }}
     </p>
 {% endblock %}
 
 {% block content %}
-{{ user.username }} a ajouté un enfant
-<br /><br />
-Nom: {{ enfant.nom }}<br />
-Prénom: {{ enfant.prenom }}<br />
-<br /><br />
-Vous pouvez consulter la fiche de l'enfant :{{ absolute_url(path('mercredi_admin_enfant_show', {'id': enfant.id})) }}
-{% endblock %}
-
-{% block action %}
-    <spacer size="16"></spacer>
+    {{ user.username }} a ajouté un enfant
+    <br/><br/>
+    Nom: {{ enfant.nom }}<br/>
+    Prénom: {{ enfant.prenom }}<br/>
+    <br/><br/>
+    Vous pouvez consulter la fiche de l'enfant :{{ absolute_url(path('mercredi_admin_enfant_show', {'id': enfant.id})) }}
+    <br/><br/>
     <button href="{{ absolute_url(path('mercredi_admin_user_show', {'id': user.id})) }}">Gestion de l'utilisateur
     </button>
 {% endblock %}
 
-{% block footer_content %}
-    {% include '@AcMarcheMercrediAdmin/organisation/_signature.html.twig' %}
-{% endblock %}
