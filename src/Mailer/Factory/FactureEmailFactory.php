@@ -15,7 +15,6 @@ use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use Exception;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
@@ -68,7 +67,7 @@ class FactureEmailFactory
         return $message;
     }
 
-    public function setTos(NotificationEmail $message, array $tos): void
+    public function setTos(TemplatedEmail $message, array $tos): void
     {
         foreach ($tos as $email) {
             $message->addTo(new Address($email));
@@ -88,7 +87,7 @@ class FactureEmailFactory
     /**
      * @throws Exception
      */
-    public function attachFactureFromPath(NotificationEmail $message, Facture $facture): void
+    public function attachFactureFromPath(TemplatedEmail $message, Facture $facture): void
     {
         $path = $this->factureFactory->getBasePathFacture($facture->getMois());
         $factureFile = $path.'facture-'.$facture->getId().'.pdf';
