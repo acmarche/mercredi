@@ -4,14 +4,120 @@
 
 {% block body -%}
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3>Accès interdit</h3>
-        </div>
-        <div class="card-body">
-            <br/><br/>
-            <a href="{{ path('mercredi_front_home') }}">Retour à l'accueil</a>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center p-5">
+                        <!-- Custom SVG Illustration - Lock Icon -->
+                        <div class="mb-4">
+                            <svg width="200" height="200" viewBox="0 0 200 200" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <rect x="60" y="90" width="80" height="70" rx="8" fill="#fff3cd" stroke="#ffc107"
+                                      stroke-width="3"/>
+                                <rect x="85" y="60" width="30" height="40" rx="15" fill="none" stroke="#ffc107"
+                                      stroke-width="3"/>
+                                <circle cx="100" cy="125" r="8" fill="#ffc107"/>
+                                <rect x="97" y="125" width="6" height="20" fill="#ffc107"/>
+                                <text x="100" y="185" font-size="24" font-weight="bold" fill="#856404"
+                                      text-anchor="middle">403
+                                </text>
+                            </svg>
+                        </div>
+
+                        <!-- Error Code Badge -->
+                        <span class="badge bg-warning text-dark mb-3" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-lock"></i> Erreur 403
+                        </span>
+
+                        <!-- Main Heading -->
+                        <h1 class="display-4 mb-3" style="color: #212529; font-weight: 700;">
+                            Accès interdit
+                        </h1>
+
+                        <!-- Friendly Message -->
+                        <p class="lead text-muted mb-4">
+                            Désolé, vous n'avez pas la permission d'accéder à cette page.
+                            Cette ressource est protégée et nécessite des droits d'accès spécifiques.
+                        </p>
+
+                        <hr class="my-4" style="max-width: 200px; margin: 2rem auto;">
+
+                        <!-- Helpful Suggestions -->
+                        <div class="text-start mb-4" style="max-width: 500px; margin: 0 auto;">
+                            <h5 class="mb-3"><i class="fas fa-lightbulb text-warning"></i> Que faire ?</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-2"><i class="fas fa-user-check text-info"></i> Vérifiez que vous êtes
+                                    connecté avec le bon compte
+                                </li>
+                                <li class="mb-2"><i class="fas fa-key text-info"></i> Assurez-vous d'avoir les
+                                    permissions nécessaires
+                                </li>
+                                <li class="mb-2"><i class="fas fa-envelope text-info"></i> Contactez un administrateur
+                                    si vous pensez qu'il s'agit d'une erreur
+                                </li>
+                                <li class="mb-2"><i class="fas fa-home text-info"></i> Retournez à une page accessible
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Info Alert -->
+                        <div class="alert alert-warning d-flex align-items-center" role="alert"
+                             style="max-width: 500px; margin: 0 auto 2rem;">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <div class="text-start">
+                                <strong>Note importante :</strong> Si vous avez besoin d'accéder à cette ressource,
+                                veuillez demander les autorisations appropriées à votre administrateur.
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+                            <a href="{{ path('mercredi_front_home') }}" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-home"></i> Retour à l'accueil
+                            </a>
+                            {% if is_granted('ROLE_USER') %}
+                                <a href="{{ path('mercredi_front_home') }}" class="btn btn-outline-info btn-lg px-4">
+                                    <i class="fas fa-user-circle"></i> Mon compte
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-outline-success btn-lg px-4">
+                                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="mt-5 pt-4 border-top">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-user-shield"></i> Problème d'accès ?
+                            </p>
+                            <p class="text-muted small">
+                                Si vous pensez avoir reçu ce message par erreur, veuillez
+                                <a href="{{ path('mercredi_front_home') }}" class="text-decoration-none">contacter le
+                                    support</a>
+                                ou votre administrateur système.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <style>
+        .card {
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .alert {
+            border-radius: 10px;
+        }
+    </style>
 
 {% endblock %}

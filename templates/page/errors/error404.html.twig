@@ -4,14 +4,113 @@
 
 {% block body -%}
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3>Page non trouvée</h3>
-        </div>
-        <div class="card-body">
-            <br/><br/>
-            <a href="{{ path('mercredi_front_home') }}">Retour à l'accueil</a>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center p-5">
+                        <!-- Custom SVG Illustration -->
+                        <div class="mb-4">
+                            <svg width="200" height="200" viewBox="0 0 200 200" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="100" cy="100" r="80" fill="#f8f9fa" stroke="#6c757d" stroke-width="2"/>
+                                <text x="100" y="110" font-size="60" font-weight="bold" fill="#dc3545"
+                                      text-anchor="middle">404
+                                </text>
+                                <path d="M60 140 Q100 160 140 140" stroke="#6c757d" stroke-width="3" fill="none"
+                                      stroke-linecap="round"/>
+                                <circle cx="75" cy="85" r="8" fill="#6c757d"/>
+                                <circle cx="125" cy="85" r="8" fill="#6c757d"/>
+                            </svg>
+                        </div>
+
+                        <!-- Error Code Badge -->
+                        <span class="badge bg-danger mb-3" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-exclamation-triangle"></i> Erreur 404
+                        </span>
+
+                        <!-- Main Heading -->
+                        <h1 class="display-4 mb-3" style="color: #212529; font-weight: 700;">
+                            Oups ! Page non trouvée
+                        </h1>
+
+                        <!-- Friendly Message -->
+                        <p class="lead text-muted mb-4">
+                            La page que vous recherchez semble avoir disparu dans la nature.
+                            Elle a peut-être été déplacée, supprimée ou n'a jamais existé.
+                        </p>
+
+                        <hr class="my-4" style="max-width: 200px; margin: 2rem auto;">
+
+                        <!-- Helpful Suggestions -->
+                        <div class="text-start mb-4" style="max-width: 500px; margin: 0 auto;">
+                            <h5 class="mb-3"><i class="fas fa-lightbulb text-warning"></i> Suggestions utiles :</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Vérifiez l'URL dans la
+                                    barre d'adresse
+                                </li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Utilisez le formulaire
+                                    de recherche ci-dessous
+                                </li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Retournez à la page
+                                    d'accueil
+                                </li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Consultez le menu de
+                                    navigation
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Search Form -->
+                        <div class="mb-4" style="max-width: 500px; margin: 0 auto;">
+                            <form action="{{ path('mercredi_front_home') }}" method="get"
+                                  class="input-group input-group-lg">
+                                <input type="text" class="form-control" name="q" placeholder="Rechercher une page..."
+                                       aria-label="Recherche">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i> Rechercher
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+                            <a href="{{ path('mercredi_front_home') }}" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-home"></i> Retour à l'accueil
+                            </a>
+                            <button onclick="history.back()" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="fas fa-arrow-left"></i> Page précédente
+                            </button>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="mt-5 pt-4 border-top">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-question-circle"></i> Besoin d'aide ?
+                            </p>
+                            <p class="text-muted small">
+                                Si le problème persiste, n'hésitez pas à
+                                <a href="{{ path('mercredi_front_home') }}" class="text-decoration-none">nous
+                                    contacter</a>
+                                ou à consulter notre <a href="{{ path('mercredi_front_home') }}"
+                                                        class="text-decoration-none">page d'aide</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <style>
+        .card {
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 
 {% endblock %}

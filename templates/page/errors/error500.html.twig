@@ -1,20 +1,149 @@
 {% extends '@AcMarcheMercredi/front/layout.html.twig' %}
 
-{% block title %}Error Mercredi{% endblock %}
+{% block title %}Erreur serveur - Mercredi{% endblock %}
 
 {% block body -%}
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3>L'application a rencontré un problème technique</h3>
-        </div>
-        <div class="card-body">
-            Nous allons résoudre ce problème dès que possible
-            <br/> <br/> <a href="{{ path('mercredi_front_home') }}">Retour à l'accueil</a>
-        </div>
-        <div class="card-footer">
-            {{ status_code }}: {{ status_text }} {{ exception.getMessage }}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center p-5">
+                        <!-- Custom SVG Illustration - Server/Tools Icon -->
+                        <div class="mb-4">
+                            <svg width="200" height="200" viewBox="0 0 200 200" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <!-- Server boxes -->
+                                <rect x="50" y="60" width="100" height="30" rx="4" fill="#f8d7da" stroke="#dc3545"
+                                      stroke-width="2"/>
+                                <rect x="50" y="95" width="100" height="30" rx="4" fill="#f8d7da" stroke="#dc3545"
+                                      stroke-width="2"/>
+                                <circle cx="65" cy="75" r="3" fill="#dc3545"/>
+                                <circle cx="75" cy="75" r="3" fill="#dc3545"/>
+                                <circle cx="65" cy="110" r="3" fill="#dc3545"/>
+                                <circle cx="75" cy="110" r="3" fill="#dc3545"/>
+                                <!-- Wrench -->
+                                <path d="M110 130 L130 150 L125 155 L105 135 Q100 130 105 125 L110 130 Z"
+                                      fill="#6c757d"/>
+                                <circle cx="110" cy="125" r="8" fill="none" stroke="#6c757d" stroke-width="2"/>
+                                <text x="100" y="185" font-size="24" font-weight="bold" fill="#721c24"
+                                      text-anchor="middle">500
+                                </text>
+                            </svg>
+                        </div>
+
+                        <!-- Error Code Badge -->
+                        <span class="badge bg-danger mb-3" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-server"></i> Erreur 500
+                        </span>
+
+                        <!-- Main Heading -->
+                        <h1 class="display-4 mb-3" style="color: #212529; font-weight: 700;">
+                            Problème technique
+                        </h1>
+
+                        <!-- Friendly Message -->
+                        <p class="lead text-muted mb-4">
+                            L'application a rencontré un problème technique inattendu.
+                            Notre équipe en a été automatiquement informée et travaille à le résoudre.
+                        </p>
+
+                        <hr class="my-4" style="max-width: 200px; margin: 2rem auto;">
+
+                        <!-- Helpful Suggestions -->
+                        <div class="text-start mb-4" style="max-width: 500px; margin: 0 auto;">
+                            <h5 class="mb-3"><i class="fas fa-tools text-danger"></i> Solutions à essayer :</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-2"><i class="fas fa-redo text-primary"></i> Rafraîchissez la page (F5)
+                                </li>
+                                <li class="mb-2"><i class="fas fa-clock text-primary"></i> Réessayez dans quelques
+                                    minutes
+                                </li>
+                                <li class="mb-2"><i class="fas fa-trash-alt text-primary"></i> Videz le cache de votre
+                                    navigateur
+                                </li>
+                                <li class="mb-2"><i class="fas fa-home text-primary"></i> Retournez à la page d'accueil
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Error Details Alert (if in debug mode) -->
+                        {% if status_code is defined and status_text is defined %}
+                            <div class="alert alert-danger d-flex align-items-start" role="alert"
+                                 style="max-width: 500px; margin: 0 auto 2rem;">
+                                <i class="fas fa-exclamation-triangle me-2 mt-1"></i>
+                                <div class="text-start">
+                                    <strong>Détails techniques :</strong>
+                                    <div class="mt-2 small font-monospace">
+                                        <div><strong>Code :</strong> {{ status_code }}</div>
+                                        <div><strong>Statut :</strong> {{ status_text }}</div>
+                                        {% if exception is defined and exception.message is defined %}
+                                            <div class="mt-2"><strong>Message :</strong> {{ exception.message }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+                            <button onclick="location.reload()" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-sync-alt"></i> Recharger la page
+                            </button>
+                            <a href="{{ path('mercredi_front_home') }}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="fas fa-home"></i> Page d'accueil
+                            </a>
+                        </div>
+
+                        <!-- Status Info -->
+                        <div class="alert alert-info" role="alert" style="max-width: 500px; margin: 0 auto 2rem;">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Rassurez-vous :</strong> Ce problème est temporaire.
+                            Vos données sont en sécurité et nous travaillons à rétablir le service.
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="mt-5 pt-4 border-top">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-life-ring"></i> Le problème persiste ?
+                            </p>
+                            <p class="text-muted small">
+                                Si l'erreur continue après plusieurs tentatives, veuillez
+                                <a href="{{ path('mercredi_front_home') }}" class="text-decoration-none">contacter notre
+                                    support technique</a>.
+                                Merci de mentionner le code d'erreur <strong>500</strong> et l'heure de l'incident.
+                            </p>
+                            <p class="text-muted small mt-3">
+                                <i class="fas fa-clock"></i>
+                                Heure de l'incident : <strong>{{ "now"|date("d/m/Y H:i:s") }}</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <style>
+        .card {
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .alert {
+            border-radius: 10px;
+        }
+
+        .font-monospace {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+    </style>
 
 {% endblock %}
