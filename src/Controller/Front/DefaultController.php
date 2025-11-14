@@ -6,16 +6,17 @@ use AcMarche\Mercredi\Facture\Handler\FactureCronHandler;
 use AcMarche\Mercredi\Page\Factory\PageFactory;
 use AcMarche\Mercredi\Page\Repository\PageRepository;
 use PHPUnit\TextUI\Exception;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\EventListener\StopWorkerOnMessageLimitListener;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Worker;
 use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Messenger\Transport\TransportInterface;
-use Symfony\Component\Messenger\Worker;
-use Symfony\Component\Messenger\EventListener\StopWorkerOnMessageLimitListener;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 final class DefaultController extends AbstractController
 {
@@ -23,6 +24,9 @@ final class DefaultController extends AbstractController
         private PageRepository $pageRepository,
         private PageFactory $pageFactory,
         private FactureCronHandler $factureCronHandler,
+        private MessageBusInterface $bus,
+        #[Autowire(service: 'messenger.receiver_locator')]
+        private ContainerInterface $receiverLocator
     ) {
     }
 
@@ -77,11 +81,11 @@ final class DefaultController extends AbstractController
     }
 
     #[Route('/consume')]
-    public function consume(
-        TransportInterface $asyncTransport,
-        MessageBusInterface $bus
-    ): Response {
+    public function consume(): Response
+    {
         $eventDispatcher = new EventDispatcher();
+
+        $receiver = $this->receiverLocator->get('async');
 
         // Stop after processing 10 messages
         $eventDispatcher->addSubscriber(
@@ -89,8 +93,8 @@ final class DefaultController extends AbstractController
         );
 
         $worker = new Worker(
-            [$asyncTransport],
-            $bus,
+            [$receiver],
+            $this->bus,
             $eventDispatcher
         );
 
