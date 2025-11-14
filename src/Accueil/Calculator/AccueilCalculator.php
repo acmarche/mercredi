@@ -37,7 +37,7 @@ final class AccueilCalculator implements AccueilCalculatorInterface
             $h18 = Carbon::instance($heureRetard);
             $h18->hour(18);
             $h18->minute(15);
-            $minutes = $h18->diffInMinutes($heureRetard);
+            $minutes = $h18->diffInMinutes($heureRetard, true);
             if ($minutes > 45) {
                 return 1.5;
             }

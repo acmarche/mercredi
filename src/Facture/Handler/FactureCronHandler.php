@@ -36,9 +36,9 @@ class FactureCronHandler
 
                 $lastSync = new Carbon($cron->getDateLastSync());
 
-                if ($now->diffInMinutes($lastSync) < 60) {
+                if ($now->diffInMinutes($lastSync, true) < 60) {
                     $result[] = [
-                        'message' => ' Last sync too early. Minutes: '.$now->diffInMinutes($lastSync),
+                        'message' => ' Last sync too early. Minutes: '.$now->diffInMinutes($lastSync, true),
                     ];
                     continue;
                 }
