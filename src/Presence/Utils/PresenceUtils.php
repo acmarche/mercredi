@@ -7,12 +7,11 @@ use AcMarche\Mercredi\Entity\Jour;
 use AcMarche\Mercredi\Entity\Plaine\Plaine;
 use AcMarche\Mercredi\Entity\Presence\Presence;
 use AcMarche\Mercredi\Entity\Tuteur;
-use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Relation\Repository\RelationRepository;
 use AcMarche\Mercredi\Tuteur\Utils\TuteurUtils;
 use AcMarche\Mercredi\Utils\SortUtils;
 use Carbon\Carbon;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class PresenceUtils
 {
@@ -26,7 +25,10 @@ final class PresenceUtils
     public const mercredi_plaine = false;
 
     public function __construct(
-        private ParameterBagInterface $parameterBag,
+        #[Autowire('env(MERCREDI_PRESENCE_DEADLINE_DAYS)')]
+        private string $MERCREDI_PRESENCE_DEADLINE_DAYS,
+        #[Autowire('env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)')]
+        private string $PEDAGOGIQUE_DEADLINE_DAYS,
         private RelationRepository $relationRepository
     ) {
     }
@@ -34,7 +36,7 @@ final class PresenceUtils
     public function getDeadLineDatePresence(): Carbon
     {
         $today = Carbon::today();
-        $today->addDays($this->parameterBag->get(Option::PRESENCE_DEADLINE_DAYS));
+        $today->addDays((int)$this->MERCREDI_PRESENCE_DEADLINE_DAYS);
 
         return $today;
     }
@@ -42,7 +44,7 @@ final class PresenceUtils
     public function getDeadLineDatePedagogique(): Carbon
     {
         $today = Carbon::today();
-        $today->addDays($this->parameterBag->get(Option::PEDAGOGIQUE_DEADLINE_DAYS));
+        $today->addDays((int)$this->PEDAGOGIQUE_DEADLINE_DAYS);
 
         return $today;
     }
