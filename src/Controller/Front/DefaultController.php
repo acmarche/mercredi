@@ -9,9 +9,13 @@ use PHPUnit\TextUI\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Messenger\Transport\TransportInterface;
+use Symfony\Component\Messenger\Worker;
+use Symfony\Component\Messenger\EventListener\StopWorkerOnMessageLimitListener;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 final class DefaultController extends AbstractController
 {
@@ -19,7 +23,8 @@ final class DefaultController extends AbstractController
         private PageRepository $pageRepository,
         private PageFactory $pageFactory,
         private FactureCronHandler $factureCronHandler,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/', name: 'mercredi_front_home')]
     public function index(): Response
@@ -70,5 +75,30 @@ final class DefaultController extends AbstractController
 
         return $this->json($result);
     }
+
+    #[Route('/consume')]
+    public function consume(
+        TransportInterface $asyncTransport,
+        MessageBusInterface $bus
+    ): Response {
+        $eventDispatcher = new EventDispatcher();
+
+        // Stop after processing 10 messages
+        $eventDispatcher->addSubscriber(
+            new StopWorkerOnMessageLimitListener(10)
+        );
+
+        $worker = new Worker(
+            [$asyncTransport],
+            $bus,
+            $eventDispatcher
+        );
+
+        // This will block the HTTP request!
+        $worker->run();
+
+        return new Response('Messages consumed');
+    }
+
 
 }
