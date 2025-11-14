@@ -80,7 +80,6 @@ final class DefaultController extends AbstractController
         return $this->json($result);
     }
 
-    #[Route('/consume')]
     public function consume(): Response
     {
         $eventDispatcher = new EventDispatcher();
