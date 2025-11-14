@@ -49,9 +49,6 @@
                                 <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Vérifiez l'URL dans la
                                     barre d'adresse
                                 </li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Utilisez le formulaire
-                                    de recherche ci-dessous
-                                </li>
                                 <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Retournez à la page
                                     d'accueil
                                 </li>
@@ -60,19 +57,6 @@
                                 </li>
                             </ul>
                         </div>
-
-                        <!-- Search Form -->
-                        <div class="mb-4" style="max-width: 500px; margin: 0 auto;">
-                            <form action="{{ path('mercredi_front_home') }}" method="get"
-                                  class="input-group input-group-lg">
-                                <input type="text" class="form-control" name="q" placeholder="Rechercher une page..."
-                                       aria-label="Recherche">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search"></i> Rechercher
-                                </button>
-                            </form>
-                        </div>
-
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
                             <a href="{{ path('mercredi_front_home') }}" class="btn btn-primary btn-lg px-4">
