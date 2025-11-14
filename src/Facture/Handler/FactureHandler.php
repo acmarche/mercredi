@@ -164,7 +164,7 @@ final class FactureHandler implements FactureHandlerInterface
      * @param array|Presence[] $presences
      * @param array|Accueil[] $accueils
      */
-    private function finish(Facture $facture, array $presences, array $accueils): Facture
+    private function finish(Facture $facture, array $presences, array $accueils): void
     {
         $this->attachPresences($facture, $presences);
         $this->attachAccueils($facture, $accueils);
@@ -175,7 +175,6 @@ final class FactureHandler implements FactureHandlerInterface
             $this->factureRepository->persist($facture);
         }
 
-        return $facture;
     }
 
     /**
