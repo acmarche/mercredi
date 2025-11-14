@@ -23,13 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::ADD_ENFANT, '%env(MERCREDI_ADD_ENFANT)%');
     $parameters->set(Option::PAIEMENT, '%env(MERCREDI_PAIEMENT)%');
     $parameters->set(Option::PLAINE, '%env(MERCREDI_PLAINE)%');
-    $parameters->set(Option::ACCUEIL_PRIX, '%env(MERCREDI_ACCUEIL_PRIX)%');
-    $parameters->set(Option::PRESENCE_PRIX1, '%env(MERCREDI_PRESENCE_PRIX1)%');
-    $parameters->set(Option::PRESENCE_PRIX2, '%env(MERCREDI_PRESENCE_PRIX2)%');
-    $parameters->set(Option::PRESENCE_PRIX3, '%env(MERCREDI_PRESENCE_PRIX3)%');
-    $parameters->set(Option::PLAINE_PRIX1, '%env(MERCREDI_PLAINE_PRIX1)%');
-    $parameters->set(Option::PLAINE_PRIX2, '%env(MERCREDI_PLAINE_PRIX2)%');
-    $parameters->set(Option::PLAINE_PRIX3, '%env(MERCREDI_PLAINE_PRIX3)%');
 
     $services = $containerConfigurator->services();
 
