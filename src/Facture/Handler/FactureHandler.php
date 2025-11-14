@@ -152,7 +152,7 @@ final class FactureHandler implements FactureHandlerInterface
         $accueils = $this->facturePresenceNonPayeRepository->findAccueilsNonPayes($tuteur, $date->toDateTime());
 
         if ([] === $presences && [] === $accueils) {
-            //return null;
+            return null;
         }
 
         $this->finish($facture, $presences, $accueils);
