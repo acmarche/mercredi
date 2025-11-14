@@ -19,7 +19,7 @@ class QrCodeGenerator
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
-        private string $project_dir,
+        private readonly string $project_dir,
         private readonly RouterInterface $router,
     ) {
     }

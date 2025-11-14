@@ -6,9 +6,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class TemplatedEmailFactory
 {
-    /**
-     * Pour mettre important, car plus jolie.
-     */
     public static function asPublicEmailJf(): TemplatedEmail
     {
         return new TemplatedEmail();
