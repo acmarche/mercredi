@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Command;
 
 use AcMarche\Mercredi\Accueil\Repository\AccueilRepository;
+use AcMarche\Mercredi\Contrat\Facture\FactureCalculatorInterface;
 use AcMarche\Mercredi\Contrat\Facture\FactureHandlerInterface;
 use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
@@ -29,6 +30,7 @@ class FixCommand extends Command
         private readonly AccueilRepository $accueilRepository,
         private readonly FactureRepository $factureRepository,
         private readonly FactureHandlerInterface $factureHandler,
+        private readonly FactureCalculatorInterface $factureCalculator
     ) {
         parent::__construct();
     }
@@ -42,6 +44,26 @@ class FixCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
+
+        foreach ($this->factureRepository->findFacturesByMonth('10-2025') as $facture) {
+            // $facture = $this->factureRepository->find(12629);
+            if ($facture->getMois() == '10-2025') {
+                $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
+                if ($facture->factureDetailDto->total === 0.0) {
+                    $tuteurFullName = $facture->getTuteur()->getNom().' '.$facture->getTuteur()->getPrenom();
+                    $this->io->error('Facture '.$facture->getId().' '.$tuteurFullName.' est nulle');
+                    $this->factureRepository->remove($facture);
+                }
+            }
+        }
+
+        $this->factureRepository->flush();
+
+        return Command::SUCCESS;
+    }
+
+    private function missOctobre(): void
+    {
         $dateSeptembre = new \DateTime('2025-09-01');
         $dateOctobre = new \DateTime('2025-10-01');
 
@@ -64,8 +86,8 @@ class FixCommand extends Command
                 $this->io->title($tuteur->getNom().' '.$tuteur->getPrenom());
                 $factureOctobre = $this->factureRepository->findByTuteurAndMonth($tuteur, $dateOctobre);
                 if (!$factureOctobre) {
-                 //   $factureOctobre = $this->factureHandler->generateByMonthForTuteur($tuteur, '10-2025');
-                    continue;
+                    $factureOctobre = $this->factureHandler->generateByMonthForTuteur($tuteur, '10-2025');
+                    // continue;
                     $this->io->error('Pas de facture octobre');
                 }
                 foreach ($accueilsNotAttached as $accueil) {
@@ -83,10 +105,8 @@ class FixCommand extends Command
                 $this->factureHandler->attachPresences($factureOctobre, $presencesNotAttached);
             }
 
-          // $this->factureRepository->flush();
+            $this->factureRepository->flush();
         }
-
-        return Command::SUCCESS;
     }
 
 }
