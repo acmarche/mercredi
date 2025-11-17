@@ -4,6 +4,7 @@ namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Security\Token;
 use AcMarche\Mercredi\Security\Token\TokenManager;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,8 +39,10 @@ class TokenController extends AbstractController
     }
 
     #[Route(path: '/token/{value}', name: 'mercredi_security_autologin')]
-    public function show(Request $request, Token $token): RedirectResponse
-    {
+    public function show(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByValue(value)')] Token $token
+    ): RedirectResponse {
         if ($this->tokenManager->isExpired($token)) {
             $this->addFlash('error', 'Cette url a expirée');
 
