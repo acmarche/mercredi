@@ -10,11 +10,11 @@ use AcMarche\Mercredi\Entity\Scolaire\GroupeScolaire;
 use AcMarche\Mercredi\Form\Type\OrdreType;
 use AcMarche\Mercredi\Form\Type\RegistryNumberType;
 use AcMarche\Mercredi\Form\Type\RemarqueType;
-use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Security\Role\MercrediSecurityRole;
 use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -22,13 +22,15 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bundle\SecurityBundle\Security;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 final class EnfantType extends AbstractType
 {
-    public function __construct(private Security $security, private ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        private Security $security,
+        #[Autowire(env: 'MERCREDI_ACCUEIL')]
+        private int $accueil,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
@@ -36,7 +38,6 @@ final class EnfantType extends AbstractType
         $year = new DateTime('today');
         $year = $year->format('Y');
         $isAdmin = !$this->security->isGranted(MercrediSecurityRole::ROLE_ADMIN);
-        $accueil = $this->parameterBag->get(Option::ACCUEIL);
 
         $formBuilder
             ->add(
@@ -158,7 +159,7 @@ final class EnfantType extends AbstractType
                     'image_uri' => false,
                 ]
             );
-        if ($accueil) {
+        if ($this->accueil > 1) {
             $formBuilder->add(
                 'accueilEcole',
                 CheckboxType::class,

@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Presence\Form;
 
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -12,8 +11,10 @@ use Symfony\Component\Form\FormEvents;
 
 class AddFieldSearchPlaineSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        private int $accueil,
+        private int $plaine,
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -33,7 +34,7 @@ class AddFieldSearchPlaineSubscriber implements EventSubscriberInterface
         //$types
         //?bool $filter null => only mercredi, true only plaine, false both
 
-        if ($this->parameterBag->get('mercredi.plaine') > 1) {
+        if ($this->plaine > 1) {
             $form
                 ->add(
                     'filter',
@@ -47,7 +48,7 @@ class AddFieldSearchPlaineSubscriber implements EventSubscriberInterface
                     ]
                 );
         }
-        if ($this->parameterBag->get('mercredi.accueil') > 1) {
+        if ($this->accueil > 1) {
             $form
                 ->add(
                     'filter',

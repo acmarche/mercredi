@@ -2,15 +2,19 @@
 
 namespace AcMarche\Mercredi\Presence\Form;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 final class SearchPresenceByMonthType extends AbstractType
 {
-    public function __construct(private ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        #[Autowire(env: 'MERCREDI_ACCUEIL')]
+        private int $accueil,
+        #[Autowire(env: 'MERCREDI_PLAINE')]
+        private int $plaine,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -28,6 +32,6 @@ final class SearchPresenceByMonthType extends AbstractType
                 ]
             );
 
-        $builder->addEventSubscriber(new AddFieldSearchPlaineSubscriber($this->parameterBag));
+        $builder->addEventSubscriber(new AddFieldSearchPlaineSubscriber($this->accueil, $this->plaine));
     }
 }
