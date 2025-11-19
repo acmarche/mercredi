@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Presence\Form;
 
 use AcMarche\Mercredi\Presence\Utils\PresenceUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -12,7 +13,9 @@ use Symfony\Component\Form\FormEvents;
 class AddFieldSearchPlaineSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        #[Autowire(env: 'MERCREDI_ACCUEIL')]
         private int $accueil,
+        #[Autowire(env: 'MERCREDI_PLAINE')]
         private int $plaine,
     ) {
     }
