@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 final class FactureEditType extends AbstractType
 {
@@ -80,6 +81,18 @@ final class FactureEditType extends AbstractType
                     'attr' => [
                         'rows' => 5,
                     ],
+                ]
+            )
+            ->add(
+                'ecoles',
+                TextareaType::class,
+                [
+                    'required' => false,
+                    'label' => 'Écoles',
+                    'attr' => [
+                        'rows' => 5,
+                    ],
+                    'constraints' => [new Length(max: 250)],
                 ]
             );
     }
