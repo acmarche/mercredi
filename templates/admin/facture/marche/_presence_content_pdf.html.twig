@@ -54,7 +54,7 @@
                 <tr>
                     <td>
                         Mercredis récréatifs<br/>
-                        6 €, 4 €, 3 € (selon le nbre d'enfants)
+                        {{ getPrice('presence',1)}} €, {{ getPrice('presence',2)}} €, {{ getPrice('presence',3)}} € (selon le nbre d'enfants)
                     </td>
                     {% for row in data.enfants %}
                         <td>{{ row.mercredi }}</td>

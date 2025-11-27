@@ -66,20 +66,14 @@
         <td>Tarif journalier (2):</td>
         <td>
             <strong>Tarifs par mercredi **</strong><br/>
-            Premier enfant : 5.50 €<br/>
-            Deuxième enfant :3.50 €<br/>
-            Les suivants: 2.50 €
+            Premier enfant : {{ getPrice('presence',1) }} €<br/>
+            Deuxième enfant :{{ getPrice('presence',2) }} €<br/>
+            Les suivants: {{ getPrice('presence',3) }} €
             <br/><br/>
             <strong> Tarifs des journées pédagogiques et plaines de vacances par jour **</strong><br/>
-            {% if year > 2016 %}
-                Premier enfant : 8 €<br/>
-                Deuxième enfant : 5 €<br/>
-                Les suivants: 3 €<br/>
-            {% else %}
-                Premier enfant : 7 €<br/>
-                Deuxième enfant : 4 €<br/>
-                Les suivants: 2 €<br/>
-            {% endif %}
+            Premier enfant : {{ getPrice('plaine',1) }} €<br/>
+            Deuxième enfant : {{ getPrice('plaine',2) }} €<br/>
+            Les suivants: {{ getPrice('plaine',3) }} €<br/>
         </td>
     </tr>
     <tr>

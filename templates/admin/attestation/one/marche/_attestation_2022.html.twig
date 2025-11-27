@@ -103,15 +103,15 @@ Code postal : {{ tuteur.codePostal }}   Commune : {{ tuteur.localite }}
     <tr>
         <td>
             <strong>Tarifs par mercredi **</strong><br/>
-            Premier enfant : 6 €<br/>
-            Deuxième enfant :4 €<br/>
-            Les suivants: 3 €
+            Premier enfant : {{ getPrice('presence',1) }} €<br/>
+            Deuxième enfant :{{ getPrice('presence',2) }} €<br/>
+            Les suivants: {{ getPrice('presence',3) }} €
         </td>
         <td>
             <strong>Tarifs des journées pédagogiques et plaines de vacances par jour **</strong><br/>
-            Premier enfant : 8 €<br/>
-            Deuxième enfant : 6 €<br/>
-            Les suivants: 4 €<br/>
+            Premier enfant : {{ getPrice('plaine',1) }} €<br/>
+            Deuxième enfant : {{ getPrice('plaine',2) }} €<br/>
+            Les suivants: {{ getPrice('plaine',3) }} €<br/>
         </td>
         <td>
             <strong>** Des réductions peuvent être appliquées suivant différents critères</strong>
