@@ -47,8 +47,8 @@
                 <tr>
                     <td>
                         Accueils matin<br/>
-                        ≤ 7h29=0,50€ &7h30 -
-                        8h = 0,50€
+                        ≤ 7h29={{ getPrice('accueil',1) }}€ &7h30 -
+                        8h = {{ getPrice('accueil',1) }}€
                     </td>
                     {% for row in data.enfants %}
                         <td>{{ row.accueils.Matin.nb }} demi-heure(s)</td>
@@ -57,8 +57,8 @@
                 <tr>
                     <td>
                         Accueils soir <br/>
-                        ≤ 17h = 0,50€ & Après
-                        17h = 0,50 €/demi-heure
+                        ≤ 17h = {{ getPrice('accueil',1) }}€ & Après
+                        17h = {{ getPrice('accueil',1) }}€/demi-heure
                     </td>
                     {% for row in data.enfants %}
                         <td>{{ row.accueils.Soir.nb }} demi-heure(s)</td>
