@@ -4,10 +4,9 @@ namespace AcMarche\Mercredi\Registration\MessageHandler;
 
 use AcMarche\Mercredi\Mailer\Factory\RegistrationMailerFactory;
 use AcMarche\Mercredi\Mailer\NotificationMailer;
-use AcMarche\Mercredi\Parameter\Option;
 use AcMarche\Mercredi\Registration\Message\RegisterCreated;
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -24,7 +23,8 @@ final class RegisterCreatedHandler
         private RegistrationMailerFactory $registrationMailerFactory,
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private NotificationMailer $notificationMailer,
-        private ParameterBagInterface $parameterBag
+        #[Autowire(env: 'MERCREDI_REGISTER')]
+        private int $register,
     ) {
 
     }
@@ -60,7 +60,7 @@ final class RegisterCreatedHandler
 
     public function isOpen(): bool
     {
-        return (int)$this->parameterBag->get(Option::REGISTER) > 0;
+        return $this->register > 0;
     }
 
     /**

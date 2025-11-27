@@ -12,15 +12,16 @@ use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Pdf\PdfDownloaderTrait;
 use DateTime;
 use Exception;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class FactureFactory
 {
     use PdfDownloaderTrait;
 
     public function __construct(
+        #[Autowire('kernel.project_dir')]
+        private string $project_dir,
         private FacturePdfPresenceInterface $facturePdfPresence,
-        private ParameterBagInterface $parameterBag,
         private FactureRepository $factureRepository,
         private FacturePdfPlaineInterface $facturePdfPlaine,
     ) {
@@ -126,6 +127,6 @@ final class FactureFactory
 
     public function getBasePathFacture(string $month): string
     {
-        return $this->parameterBag->get('kernel.project_dir').'/var/factures/'.$month.'/';
+        return $this->project_dir.'/var/factures/'.$month.'/';
     }
 }

@@ -10,7 +10,7 @@ use AcMarche\Mercredi\Presence\Repository\PresenceRepository;
 use AcMarche\Mercredi\Scolaire\Grouping\GroupingInterface;
 use AcMarche\Mercredi\Scolaire\Repository\GroupeScolaireRepository;
 use AcMarche\Mercredi\Scolaire\Utils\ScolaireUtils;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -19,10 +19,11 @@ class PlainePdfFactory
     use PdfDownloaderTrait;
 
     public function __construct(
+        #[Autowire('kernel.project_dir')]
+        private string $project_dir,
         private GroupingInterface $grouping,
         private PresenceRepository $presenceRepository,
         private PlainePresenceRepository $plainePresenceRepository,
-        private ParameterBagInterface $parameterBag,
         private Environment $environment,
         private ScolaireUtils $scolaireUtils,
         private GroupeScolaireRepository $groupeScolaireRepository
@@ -94,7 +95,7 @@ class PlainePdfFactory
 
     private function getImagesBase64(): array
     {
-        $root = $this->parameterBag->get('kernel.project_dir').'/public/bundles/acmarchemercredi/images/';
+        $root = $this->project_dir.'/public/bundles/acmarchemercredi/images/';
         $ok = $root.'check_ok.jpg';
         $ko = $root.'check_ko.jpg';
         $data = [];

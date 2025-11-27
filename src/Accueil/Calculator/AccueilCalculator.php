@@ -3,14 +3,14 @@
 namespace AcMarche\Mercredi\Accueil\Calculator;
 
 use AcMarche\Mercredi\Entity\Presence\Accueil;
-use AcMarche\Mercredi\Parameter\Option;
 use Carbon\Carbon;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class AccueilCalculator implements AccueilCalculatorInterface
 {
     public function __construct(
-        private ParameterBagInterface $parameterBag
+        #[Autowire(env: 'MERCREDI_ACCUEIL_PRIX')]
+        private float $accueilPrix
     ) {
     }
 
@@ -23,7 +23,7 @@ final class AccueilCalculator implements AccueilCalculatorInterface
 
     public function getPrix(Accueil $accueil): float
     {
-        return $this->parameterBag->get(Option::ACCUEIL_PRIX) ?? 0;
+        return $this->accueilPrix ?? 0;
     }
 
     /**

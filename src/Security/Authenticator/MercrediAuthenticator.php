@@ -3,7 +3,6 @@
 namespace AcMarche\Mercredi\Security\Authenticator;
 
 use AcMarche\Mercredi\User\Repository\UserRepository;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +22,7 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class MercrediAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface,
-                                                                     InteractiveAuthenticatorInterface
+    InteractiveAuthenticatorInterface
 {
     use TargetPathTrait;
 
@@ -32,8 +31,8 @@ class MercrediAuthenticator extends AbstractAuthenticator implements Authenticat
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly UserRepository $userRepository,
-        private readonly ParameterBagInterface $parameterBag,
-    ) {}
+    ) {
+    }
 
     public function supports(Request $request): bool
     {
