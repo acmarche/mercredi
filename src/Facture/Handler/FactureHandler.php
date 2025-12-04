@@ -53,13 +53,17 @@ final class FactureHandler implements FactureHandlerInterface
      */
     public function handleManually(FactureInterface $facture, array $presencesId, array $accueilsId): Facture
     {
-        $presences = $this->presenceRepository->findBy([
-            'id' => $presencesId,
-        ]);
-        $accueils = $this->accueilRepository->findBy([
-            'id' => $accueilsId,
-        ]);
-
+        $presences = $accueils = [];
+        if (count($presencesId) > 0) {
+            $presences = $this->presenceRepository->findBy([
+                'id' => $presencesId,
+            ]);
+        }
+        if (count($accueilsId) > 0) {
+            $accueils = $this->accueilRepository->findBy([
+                'id' => $accueilsId,
+            ]);
+        }
         $this->finish($facture, $presences, $accueils);
         $this->flush();
         $facture->setCommunication($this->communicationFactory->generateForPresence($facture));
