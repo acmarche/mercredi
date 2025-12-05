@@ -10,7 +10,7 @@
             {% if plaine.inscriptionOpen and resteEnfants == true %}
                 <br/>
                 <a href="{{ path('mercredi_parent_plaine_select_enfant') }}" role="button" class="btn btn-primary mb-3"><i
-                            class="fas fa-user-plus"></i> Inscrire mes enfants</a>
+                        class="fas fa-user-plus"></i> Inscrire mes enfants</a>
             {% endif %}
 
             {% if enfants|length > 0 %}
@@ -55,7 +55,7 @@
                 {% else %}
                     <div class="alert alert-warning" role="alert">
                         <strong>
-                            La réception du paiment de la facture fera preuve de confirmation des inscriptions !
+                            La réception du paiement de la facture fera preuve de confirmation des inscriptions !
                         </strong>
                         <br/>
                         <a href="{{ path('mercredi_parent_plaine_presence_confirmation') }}"

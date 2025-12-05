@@ -19,6 +19,6 @@ final class FactureUnpaidedHandler
 
     public function __invoke(FactureUnpaided $factureDeleted): void
     {
-        $this->flashBag->add('success', 'Le paiment a été annulé');
+        $this->flashBag->add('success', 'Le paiement a été annulé');
     }
 }
