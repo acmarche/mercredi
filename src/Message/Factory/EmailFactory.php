@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Message;
 use AcMarche\Mercredi\Entity\Plaine\PlaineGroupe;
 use AcMarche\Mercredi\Mailer\TemplatedEmailFactory;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 final class EmailFactory
@@ -17,7 +18,7 @@ final class EmailFactory
     ) {
     }
 
-    public function create(Message $message): TemplatedEmailFactory
+    public function create(Message $message): TemplatedEmail
     {
         $notification = TemplatedEmailFactory::asPublicEmailJf();
         $notification->subject($message->getSujet())
@@ -44,7 +45,7 @@ final class EmailFactory
         return $notification;
     }
 
-    public function createForPlaine(Message $message): TemplatedEmailFactory
+    public function createForPlaine(Message $message): TemplatedEmail
     {
         $notification = TemplatedEmailFactory::asPublicEmailJf();
         $notification->subject($message->getSujet())
@@ -72,11 +73,11 @@ final class EmailFactory
     }
 
     /**
-     * @param TemplatedEmailFactory $notification
+     * @param TemplatedEmail $notification
      * @param array|PlaineGroupe[] $groupes
      * @return void
      */
-    public function attachmentsForPlaine(TemplatedEmailFactory $notification, array $groupes): void
+    public function attachmentsForPlaine(TemplatedEmail $notification, array $groupes): void
     {
         foreach ($groupes as $plaineGroupe) {
             if ($plaineGroupe->getFileName()) {
