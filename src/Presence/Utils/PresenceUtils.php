@@ -25,9 +25,9 @@ final class PresenceUtils
     public const mercredi_plaine = false;
 
     public function __construct(
-        #[Autowire('env(MERCREDI_PRESENCE_DEADLINE_DAYS)')]
+        #[Autowire(env: 'MERCREDI_PRESENCE_DEADLINE_DAYS')]
         private string $MERCREDI_PRESENCE_DEADLINE_DAYS,
-        #[Autowire('env(MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS)')]
+        #[Autowire(env: 'MERCREDI_PEDAGOGIQUE_DEADLINE_DAYS')]
         private string $PEDAGOGIQUE_DEADLINE_DAYS,
         private RelationRepository $relationRepository
     ) {
