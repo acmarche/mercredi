@@ -19,7 +19,7 @@ class PlainePdfFactory
     use PdfDownloaderTrait;
 
     public function __construct(
-        #[Autowire('kernel.project_dir')]
+        #[Autowire('%kernel.project_dir%')]
         private string $project_dir,
         private GroupingInterface $grouping,
         private PresenceRepository $presenceRepository,
