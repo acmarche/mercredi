@@ -55,7 +55,7 @@ final class SecurityController extends AbstractController
         $lastUsername = $request->request->get('username');
 
         if (!$this->isValidEmailStrict($lastUsername)) {
-            $error = new AuthenticationException('Adresse mail inconnue');
+            $error = new AuthenticationException('Adresse mail non valide');
             $this->addFlash('error', $error->getMessage());
 
             return $this->render(

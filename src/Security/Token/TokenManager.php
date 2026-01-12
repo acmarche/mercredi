@@ -74,7 +74,13 @@ class TokenManager
     {
         $today = new \DateTime('today');
 
-        return $today > $token->getExpireAt();
+        if( $today->format('Y-m-d') > $token->getExpireAt()->format('Y-m-d')){
+            $this->tokenRepository->remove($token);
+            $this->tokenRepository->flush();
+            return true;
+        }
+
+        return false;
     }
 
     public function createForAllUsers(): void
