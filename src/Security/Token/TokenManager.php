@@ -74,10 +74,14 @@ class TokenManager
     {
         $today = new \DateTime('today');
 
-        if( $today->format('Y-m-d') > $token->getExpireAt()->format('Y-m-d')){
+        if ($today->format('Y-m-d') > $token->getExpireAt()->format('Y-m-d')) {
+            $user = $token->getUser();
             $this->tokenRepository->remove($token);
             $this->tokenRepository->flush();
-            return true;
+
+            $this->generateNew($user);
+
+            return false;
         }
 
         return false;
