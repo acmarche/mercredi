@@ -56,7 +56,7 @@ final class SecurityController extends AbstractController
 
         if (!$this->isValidEmailStrict($lastUsername)) {
             $error = new AuthenticationException('Adresse mail non valide');
-            $this->addFlash('error', $error->getMessage());
+            $this->addFlash('danger', $error->getMessage());
 
             return $this->render(
                 '@AcMarcheMercredi/security/login.html.twig',
@@ -71,7 +71,7 @@ final class SecurityController extends AbstractController
 
         if (!$user) {
             $error = new AuthenticationException('Adresse mail inconnue');
-            $this->addFlash('error', $error->getMessage());
+            $this->addFlash('danger', $error->getMessage());
 
             return $this->render(
                 '@AcMarcheMercredi/security/login.html.twig',

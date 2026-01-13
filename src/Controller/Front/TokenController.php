@@ -44,7 +44,7 @@ class TokenController extends AbstractController
         #[MapEntity(expr: 'repository.findOneByValue(value)')] Token $token
     ): RedirectResponse {
         if ($this->tokenManager->isExpired($token)) {
-            $this->addFlash('error', 'Cette url a expirée');
+            $this->addFlash('danger', 'Cette url a expirée');
 
             return $this->redirectToRoute('mercredi_front_home');
         }
