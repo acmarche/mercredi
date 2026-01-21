@@ -46,21 +46,7 @@ class AddFieldSearchPlaineSubscriber implements EventSubscriberInterface
                         'required' => true,
                         'help' => 'Filtrer',
                         'label' => 'Quoi',
-                        'choices' => PresenceUtils::types,
-                        'placeholder' => 'Sélectionnez',
-                    ]
-                );
-        }
-        if ($this->accueil > 1) {
-            $form
-                ->add(
-                    'filter',
-                    ChoiceType::class,
-                    [
-                        'required' => true,
-                        'help' => 'Filtrer',
-                        'label' => 'Quoi',
-                        'choices' => PresenceUtils::types,
+                        'choices' => PresenceUtils::typesWithPlaines,
                         'placeholder' => 'Sélectionnez',
                     ]
                 );
