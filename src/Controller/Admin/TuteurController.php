@@ -182,45 +182,10 @@ final class TuteurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'mercredi_admin_tuteur_delete', methods: ['POST'])]
-    public function delete(Request $request, Tuteur $tuteur): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
-            $presences = $this->presenceRepository->findByTuteur($tuteur);
-            $accueils = $this->accueilRepository->findByTuteur($tuteur);
-            $factures = $this->factureRepository->findByTuteur($tuteur);
-
-            $form = $this->createForm(ValidateForm::class, null, [
-                'action' =>
-                    $this->generateUrl('mercredi_admin_tuteur_delete_confirmed', ['id' => $tuteur->getId()]),
-                'method' => 'POST',
-            ]);
-
-
-            return $this->render(
-                '@AcMarcheMercrediAdmin/tuteur/delete.html.twig',
-                [
-                    'tuteur' => $tuteur,
-                    'accueils' => $accueils,
-                    'presences' => $presences,
-                    'factures' => $factures,
-                    'form' => $form,
-                ],
-            );
-        }
-
-        $this->addFlash('warning', 'Page non accessible');
-
-        return $this->redirectToRoute('mercredi_admin_tuteur_index');
-    }
-
     #[Route(path: '/{id}/delete/confirmed', name: 'mercredi_admin_tuteur_delete_confirmed', methods: ['POST'])]
     public function deleteConfirmed(Request $request, Tuteur $tuteur): RedirectResponse
     {
-        $form = $this->createForm(ValidateForm::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->isCsrfTokenValid('delete'.$tuteur->getId(), $request->request->get('_token'))) {
             foreach ($this->factureRepository->findByTuteur($tuteur) as $facture) {
                 $this->factureRepository->remove($facture);
             }

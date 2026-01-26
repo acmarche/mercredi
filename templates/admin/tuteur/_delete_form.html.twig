@@ -13,7 +13,7 @@
                 Supprimer {{ tuteur }} ?
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('mercredi_admin_tuteur_delete', {'id': tuteur.id}) }}">
+                <form method="post" action="{{ path('mercredi_admin_tuteur_delete_confirmed', {'id': tuteur.id}) }}">
 
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tuteur.id) }}">
                     <button type="button" class="btn btn-secondary"
