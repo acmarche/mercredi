@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class PresenceUtils
 {
-    public const types = [
+    public const typesWithPlaines = [
         'Mercredi et Plaines' => self::mercredi_plaine,
         'Mercredi' => self::mercredi,
         'Plaines' => self::plaine,

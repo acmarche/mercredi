@@ -16,7 +16,7 @@
                 <form method="post" action="{{ path('mercredi_user_dissociate_ecole', {'id': user.id}) }}">
 
                     <input type="hidden" name="_token" value="{{ csrf_token('dissociate' ~ user.id) }}">
-                    <input type="hidden" name="tuteur" id="modal-ecole" value="">
+                    <input type="hidden" name="ecole" id="modal-ecole" value="">
                     <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Annuler
                     </button>
