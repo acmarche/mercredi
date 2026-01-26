@@ -39,7 +39,8 @@ final class PlainePresenceController extends AbstractController
         private PlainePresenceRepository $plainePresenceRepository,
         private PlaineCalculatorInterface $plaineCalculator,
         private MessageBusInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/new/{id}', name: 'mercredi_admin_plaine_presence_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Plaine $plaine): Response
@@ -60,6 +61,8 @@ final class PlainePresenceController extends AbstractController
         }
         $enfants = $nom ? $this->enfantRepository->findByName($nom) : $this->enfantRepository->findAllActif();
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/plaine_presence/new.html.twig',
             [
@@ -67,6 +70,7 @@ final class PlainePresenceController extends AbstractController
                 'plaine' => $plaine,
                 'form' => $form,
             ],
+            $response
         );
     }
 
