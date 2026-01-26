@@ -317,6 +317,18 @@ final class PresenceRepository extends ServiceEntityRepository
                 ->getResult();
     }
 
+    /**
+     * @return Presence[]
+     */
+    public function findByTuteur(Tuteur $tuteur): array
+    {
+        return $this->createQBlWithoutPlaine()
+            ->andWhere('presence.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->getQuery()
+            ->getResult();
+    }
+
     private function createQBlBase(): QueryBuilder
     {
         return $this->createQueryBuilder('presence')
