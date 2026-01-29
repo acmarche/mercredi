@@ -1,0 +1,76 @@
+{% extends '@AcMarcheMercrediAdmin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Parents sans numéro national ({{ year }})
+                <span class="badge bg-info">{{ tuteurs|length }}</span>
+            </h3>
+        </div>
+        <div class="card-body">
+            {% if tuteurs|length > 0 %}
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Localité</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for tuteur in tuteurs %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('mercredi_admin_tuteur_show', { 'id': tuteur.id }) }}">
+                                    {{ tuteur.nom }}
+                                </a>
+                            </td>
+                            <td>{{ tuteur.prenom }}</td>
+                            <td>{{ tuteur.localite }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucun parent sans numéro national.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Enfants sans numéro national ({{ year }})
+                <span class="badge bg-info">{{ enfants|length }}</span>
+            </h3>
+        </div>
+        <div class="card-body">
+            {% if enfants|length > 0 %}
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Né le</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for enfant in enfants %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('mercredi_admin_enfant_show', { 'id': enfant.id }) }}">
+                                    {{ enfant.nom }}
+                                </a>
+                            </td>
+                            <td>{{ enfant.prenom }}</td>
+                            <td>{{ enfant.birthday ? enfant.birthday|format_datetime('short', 'none') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucun enfant sans numéro national.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

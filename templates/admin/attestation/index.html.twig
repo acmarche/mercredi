@@ -10,7 +10,9 @@
                 {% for year in years %}
                     <li class="list-group-item">
                         <a href="{{ path('mercredi_admin_attestation_spf', {'year': year}) }}">
-                            Année {{ year }} Xls</a>
+                            Année {{ year }} Xls</a> |
+                        <a href="{{ path('mercredi_admin_attestation_missing_rrn', {'year': year}) }}">
+                            Parcourir les numéros nationaux manquant</a>
                     </li>
                 {% endfor %}
             </ul>

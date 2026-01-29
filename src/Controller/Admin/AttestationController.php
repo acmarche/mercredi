@@ -39,7 +39,8 @@ final class AttestationController extends AbstractController
         private AttestationGeneratorInterface $attestationGenerator,
         private FactureRepository $factureRepository,
         private FactureUtils $factureUtils,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/', name: 'mercredi_admin_attestation_index')]
     public function default(): Response
@@ -70,11 +71,40 @@ final class AttestationController extends AbstractController
         return $this->downloadPdf($html, 'attestation-'.$enfant->getSlug().'-'.$year.'.pdf');
     }
 
-    #[Route(path: '/{year}', name: 'mercredi_admin_attestation_spf')]
+    #[Route(path: '/byYear/{year}', name: 'mercredi_admin_attestation_spf')]
     public function spf(int $year): Response
     {
         $spreadSheet = $this->xlsGenerator->forSpf($year);
 
         return $this->downloadXls($spreadSheet, 'spf-'.$year.'.xls');
+    }
+
+    #[Route(path: '/missing/{year}', name: 'mercredi_admin_attestation_missing_rrn')]
+    public function missing(int $year): Response
+    {
+        $data = $this->attestationGenerator->getDataByYear($year);
+        $missing = ['tuteurs' => [], 'enfants' => []];
+        foreach ($data as $item) {
+            $enfant = $item['enfant'];
+            if ($enfant->getRegistreNational() === null) {
+                $missing['enfants'][$enfant->id] = $enfant;
+            }
+
+            foreach ($item['tuteurs'] as $row) {
+                $tuteur = $row['tuteur'];
+                if ($tuteur->getRegistreNational() === null) {
+                    $missing['tuteurs'][$tuteur->id] = $tuteur;
+                }
+            }
+        }
+
+        return $this->render(
+            '@AcMarcheMercredi/admin/attestation/missing.html.twig',
+            [
+                'year' => $year,
+                'tuteurs' => $missing['tuteurs'],
+                'enfants' => $missing['enfants'],
+            ],
+        );
     }
 }
