@@ -70,7 +70,9 @@ final class PlainePresenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Enfant[]|ArrayCollection
+     * @param Plaine $plaine
+     * @param Jour $jour
+     * @return array<int, Enfant>
      */
     public function findEnfantsByPlaineAndJour(Plaine $plaine, Jour $jour): array
     {
@@ -139,7 +141,7 @@ final class PlainePresenceRepository extends ServiceEntityRepository
     /**
      * @return Presence[]
      */
-    public function findByDay($jour, Plaine $plaine): array
+    public function findByDay(Jour $jour, Plaine $plaine): array
     {
         return $this->createQBl()
             ->andWhere('presence.jour = :jour')
