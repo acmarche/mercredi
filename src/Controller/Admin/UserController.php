@@ -199,6 +199,8 @@ final class UserController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $id = $user->getId();
+            $token = $this->tokenManager->getInstance($user);
+            $this->userRepository->remove($token);
             $this->userRepository->remove($user);
             $this->userRepository->flush();
             $this->dispatcher->dispatch(new UserDeleted($id));
