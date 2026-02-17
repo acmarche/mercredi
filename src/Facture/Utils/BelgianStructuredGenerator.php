@@ -76,7 +76,7 @@ class BelgianStructuredGenerator
                 self::$number = $number;
             }
         } catch (\Exception $e) {
-            throw new \Exception('Failed to set number', null, $e);
+            throw new \Exception('Failed to set number', 0, $e);
         }
     }
 
