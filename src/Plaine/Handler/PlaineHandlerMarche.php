@@ -53,8 +53,7 @@ class PlaineHandlerMarche implements PlaineHandlerInterface
     {
         $daysFull = [];
         if (!$this->security->isGranted('ROLE_MERCREDI_ADMIN')) {
-            $result = $this->getFreeDaysFullDays($plaine, $enfant, $jours);
-            $freeDays = $result[0];
+            [$freeDays, $daysFull] = $this->getFreeDaysFullDays($plaine, $enfant, $jours);
         } else {
             $freeDays = $jours;//si admin j'inscris à tous les jours (force)
         }

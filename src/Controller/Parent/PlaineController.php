@@ -208,15 +208,20 @@ final class PlaineController extends AbstractController
                     $this->addFlash('danger', $e->getMessage());
                     continue;
                 }
-                if (count($daysFull) > 0) {
+                if (count($daysFull) === count($jours)) {
+                    $this->addFlash(
+                        'danger',
+                        $enfant.' n\'a pas pu être inscrit(e) à la plaine : toutes les journées sélectionnées sont complètes pour cette catégorie d\'âge.',
+                    );
+                } elseif (count($daysFull) > 0) {
                     $text = "Attention $enfant n'a pas pu être inscrit aux dates suivantes, il n'y a plus de place pour cette catégorie d'âge: <ul>";
                     foreach ($daysFull as $day) {
                         $text .= '<li>'.$day->getDateJour()->format('d-m').'</li>';
                     }
-                    $text .= "</ul>";
+                    $text .= '</ul>';
                     $this->addFlash('danger', $text);
                 } else {
-                    $this->addFlash('success', $enfant.' a bien été inscrits à la plaine');
+                    $this->addFlash('success', $enfant.' a bien été inscrit(e) à la plaine.');
                 }
             }
 
