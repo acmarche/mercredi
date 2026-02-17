@@ -9,6 +9,8 @@ use AcMarche\Mercredi\Contrat\Presence\PresenceCalculatorInterface;
 use AcMarche\Mercredi\Entity\Enfant;
 use AcMarche\Mercredi\Entity\Facture\Facture;
 use AcMarche\Mercredi\Entity\Tuteur;
+use AcMarche\Mercredi\Facture\FactureInterface;
+use AcMarche\Mercredi\Facture\Repository\FacturePresenceRepository;
 use AcMarche\Mercredi\Facture\Repository\FactureRepository;
 use AcMarche\Mercredi\Facture\Utils\FactureUtils;
 use AcMarche\Mercredi\Organisation\Traits\OrganisationPropertyInitTrait;
@@ -22,6 +24,7 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
     public function __construct(
         private PresenceRepository $presenceRepository,
         private FactureRepository $factureRepository,
+        private FacturePresenceRepository $facturePresenceRepository,
         private AccueilRepository $accueilRepository,
         private PresenceCalculatorInterface $presenceCalculator,
         private FactureCalculatorInterface $factureCalculator,
@@ -62,9 +65,23 @@ class AttestationGeneratorHotton implements AttestationGeneratorInterface
 
     private function treatment(array $presences): array
     {
+        $presenceIds = array_map(fn($p) => $p->getId(), $presences);
+        $facturePresences = $this->facturePresenceRepository->findByIdsAndType(
+            $presenceIds,
+            FactureInterface::OBJECT_PRESENCE
+        );
+
+        $paidByPresenceId = [];
+        foreach ($facturePresences as $facturePresence) {
+            $facture = $facturePresence->getFacture();
+            if ($facture->getPayeLe()) {
+                $paidByPresenceId[$facturePresence->getPresenceId()] = true;
+            }
+        }
+
         $presencesPaid = [];
         foreach ($presences as $presence) {
-            if ($this->factureCalculator->isPresencePaid($presence)) {
+            if ($presence->getPaiement() || isset($paidByPresenceId[$presence->getId()])) {
                 $presence->cout = $this->presenceCalculator->calculate($presence);
                 $presencesPaid[] = $presence;
             }
