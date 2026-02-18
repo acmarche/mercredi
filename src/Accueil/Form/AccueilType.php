@@ -7,6 +7,7 @@ use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Form\Type\DateWidgetType;
 use AcMarche\Mercredi\Presence\Form\AddFieldTuteurSubscriber;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -42,8 +43,8 @@ final class AccueilType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6],
-                    'label' => 'Temps resté',
-                    'help' => 'Nombre de demi heure que l\'enfant est resté',
+                    'label' => 'Temps resté en demi-heure',
+                    'help' => 'Nombre de demi-heure que l\'enfant est resté',
                     'expanded' => true,
                     'multiple' => false,
                     'constraints' => [
@@ -53,6 +54,14 @@ final class AccueilType extends AbstractType
                             ]
                         ),
                     ],
+                ]
+            )
+            ->add(
+                'free_bus',
+                CheckboxType::class,
+                [
+                    'label' => 'Bus gratuit',
+                    'required' => false,
                 ]
             )
             ->add(

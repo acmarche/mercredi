@@ -52,6 +52,8 @@ class Accueil implements TimestampableInterface, UuidableInterface, Stringable
     private int $duree;
     #[ORM\Column(type: 'string', nullable: false, length: 50)]
     private ?string $heure = null;
+    #[ORM\Column(nullable: false)]
+    public bool|null $free_bus = false;
 
     public float $cout = 0;//pour attestation
 

@@ -44,6 +44,17 @@
                     <td>{{ accueil.heureRetard ? accueil.heureRetard|format_datetime('none', 'short') : 'Non' }}</td>
                 </tr>
                 <tr>
+                    <th>Bus gratuit <i
+                            class="fas fa-bus"></i></th>
+                    <td>
+                        {% if accueil.free_bus %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
                     <th>Coût</th>
                     <td>
                         {{ cout|format_currency('eur') }}
