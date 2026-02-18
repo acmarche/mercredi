@@ -39,7 +39,7 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
         if (count($jours) == 0) {
             throw new \Exception('Aucune dates pour la plaine '.$plaine->getNom());
         }
-        $facture->setMois($jours[0]->format('m-Y'));
+        $facture->setMois($jours[0]->getDateJour()->format('m-Y'));
         $facture->setPlaineNom($plaine->getNom());
 
         return $facture;
