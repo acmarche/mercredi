@@ -71,6 +71,8 @@ final class FactureController extends AbstractController
         );
     }
 
+    private const string SESSION_KEY_FACTURE_SEARCH = 'facture_search_criteria';
+
     #[Route(path: '/search', name: 'mercredi_admin_facture_index', methods: ['GET', 'POST'])]
     public function search(Request $request): Response
     {
@@ -78,7 +80,10 @@ final class FactureController extends AbstractController
         $form = $this->createForm(FactureSearchType::class);
         $form->handleRequest($request);
         $total = 0;
+        $session = $request->getSession();
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $session->set(self::SESSION_KEY_FACTURE_SEARCH, $request->request->all('facture_search'));
             $dataForm = $form->getData();
             $factures = $this->factureRepository->search(
                 $dataForm['numero'],
@@ -91,6 +96,23 @@ final class FactureController extends AbstractController
                 $dataForm['mois'],
                 $dataForm['communication'],
             );
+        } elseif (!$form->isSubmitted() && $session->has(self::SESSION_KEY_FACTURE_SEARCH)) {
+            $savedData = $session->get(self::SESSION_KEY_FACTURE_SEARCH);
+            $form->submit($savedData);
+            if ($form->isValid()) {
+                $dataForm = $form->getData();
+                $factures = $this->factureRepository->search(
+                    $dataForm['numero'],
+                    $dataForm['tuteur'],
+                    $dataForm['enfant'],
+                    $dataForm['ecole'],
+                    $dataForm['plaine'],
+                    $dataForm['paye'],
+                    $dataForm['datePaiement'],
+                    $dataForm['mois'],
+                    $dataForm['communication'],
+                );
+            }
         }
         foreach ($factures as $facture) {
             $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
@@ -117,6 +139,14 @@ final class FactureController extends AbstractController
             ],
             $response
         );
+    }
+
+    #[Route(path: '/search/reset', name: 'mercredi_admin_facture_search_reset', methods: ['GET'])]
+    public function searchReset(Request $request): RedirectResponse
+    {
+        $request->getSession()->remove(self::SESSION_KEY_FACTURE_SEARCH);
+
+        return $this->redirectToRoute('mercredi_admin_facture_index');
     }
 
     #[Route(path: '/{id}/manual', name: 'mercredi_admin_facture_new_manual', methods: ['GET', 'POST'])]
