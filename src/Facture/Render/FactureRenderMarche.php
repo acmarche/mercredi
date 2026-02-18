@@ -51,6 +51,7 @@ class FactureRenderMarche implements FactureRenderInterface
             [
                 'facture' => $facture,
                 'tuteur' => $tuteur,
+                'factureAccueils' => [],
                 'facturePresences' => $facturePresences,
                 'factureReductions' => $factureReductions,
                 'factureComplements' => $factureComplements,
