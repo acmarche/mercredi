@@ -4,19 +4,59 @@
 
     <div class="card">
         <div class="card-header">
-            <h3>Liste des présences par trimestre</h3>
+            <h3>Liste des accueils par trimestre</h3>
         </div>
 
         <div class="card-body">
             {% include '@AcMarcheMercrediAdmin/accueil/_search_quarter.html.twig' %}
 
-            <div class="alert alert-info">
-                Ne sont repris que les accueils des écoles, le soir
-            </div>
-
             {% if search %}
+
+                <h4>Moyennes du trimestre</h4>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Total accueils</th>
+                        <th>Moyenne par jour</th>
+                        <th>Total demi-heures</th>
+                        <th>Moyenne demi-heures par accueil</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>Matin</th>
+                        <td>{{ averages.matin.total }}</td>
+                        <td>{{ averages.matin.frequentation }}</td>
+                        <td>{{ averages.matin.totalDuree }}</td>
+                        <td>{{ averages.matin.duree }}</td>
+                    </tr>
+                    <tr>
+                        <th>Soir</th>
+                        <td>{{ averages.soir.total }}</td>
+                        <td>{{ averages.soir.frequentation }}</td>
+                        <td>{{ averages.soir.totalDuree }}</td>
+                        <td>{{ averages.soir.duree }}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <td>{{ averages.matin.total + averages.soir.total }}</td>
+                        <td>{{ averages.days > 0 ? ((averages.matin.total + averages.soir.total) / averages.days)|round(2) : 0 }}</td>
+                        <td>{{ averages.matin.totalDuree + averages.soir.totalDuree }}</td>
+                        <td>{{ (averages.matin.total + averages.soir.total) > 0 ? ((averages.matin.totalDuree + averages.soir.totalDuree) / (averages.matin.total + averages.soir.total))|round(2) : 0 }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-muted">
+                            Sur {{ averages.days }} jours ouvrables
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+
                 <h4>Par age</h4>
-                Nombre d'enfants différents qui ont été présents dans le lieu d'accueil au moins un jour durant le trimestre
+                Nombre d'enfants diff&eacute;rents qui ont &eacute;t&eacute; pr&eacute;sents dans le lieu d'accueil au moins un jour durant le trimestre
                 <table class="table table-bordered">
                     <tr>
                         <th>Maternelle</th>
@@ -32,21 +72,42 @@
 
                 {% for month, row in data %}
                     <h4>{{ month|date('m-Y') }}</h4>
-                    <table class="table table-bordered">
-                        <tr>
-                            {% for day, total in row.days %}
-                                <td>
-                                    {{ day|date('d D') }}<br>
-                                    <strong>{{ total }}</strong>
-                                </td>
-                            {% endfor %}
-                            <td>
-                                <strong>Total du mois</strong><br>
-                                {{ row.total }}
-                            </td>
-                        </tr>
-                    </table>
 
+                    <div class="mb-2 text-muted">
+                        Matin: {{ row.totalMatin }} accueils, {{ row.totalDureeMatin }} demi-heures
+                        &mdash;
+                        Soir: {{ row.totalSoir }} accueils, {{ row.totalDureeSoir }} demi-heures
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                {% for day, heures in row.days %}
+                                    <th class="text-center">{{ day|date('d D') }}</th>
+                                {% endfor %}
+                                <th class="text-center">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>Matin</th>
+                                {% for day, heures in row.days %}
+                                    <td class="text-center">{{ heures['Matin'].count > 0 ? heures['Matin'].count : '' }}</td>
+                                {% endfor %}
+                                <td class="text-center"><strong>{{ row.totalMatin }}</strong></td>
+                            </tr>
+                            <tr>
+                                <th>Soir</th>
+                                {% for day, heures in row.days %}
+                                    <td class="text-center">{{ heures['Soir'].count > 0 ? heures['Soir'].count : '' }}</td>
+                                {% endfor %}
+                                <td class="text-center"><strong>{{ row.totalSoir }}</strong></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 {% endfor %}
             {% endif %}
         </div>

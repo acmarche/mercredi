@@ -19,17 +19,18 @@ final class PresenceOneController extends AbstractController
 {
     public function __construct(
         private AccueilRepository $accueilRepository,
-    ) {}
+    ) {
+    }
 
     /**
      * Liste toutes les presences par trimestre
      */
     #[Route(path: '/quarter', name: 'mercredi_admin_presence_by_quarter', methods: ['GET', 'POST'])]
-    public function indexByQuarter(Request $request, ?int $num = null): Response
+    public function indexByQuarter(Request $request): Response
     {
         $form = $this->createForm(SearchAccueilForQuarter::class, ['year' => date('Y')]);
         $form->handleRequest($request);
-        $childs = $data = $ages = [];
+        $childs = $data = $ages = $averages = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dataForm = $form->getData();
@@ -37,60 +38,95 @@ final class PresenceOneController extends AbstractController
             $trimestre = $dataForm['trimestre'];
             $year = $dataForm['year'];
 
-            switch ($trimestre) {
-                case 1:
-                {
-                    $months = [1, 2, 3];
-                    break;
-                }
-                case 2:
-                {
-                    $months = [4, 5, 6];
-                    break;
-                }
-                case 3:
-                {
-                    $months = [7, 8, 9];
-                    break;
-                }
-                case 4:
-                {
-                    $months = [10, 11, 12];
-                    break;
-                }
-                default:
-                    $months = [];
-                    break;
-            }
+            $months = match ($trimestre) {
+                1 => [1, 2, 3],
+                2 => [4, 5, 6],
+                3 => [7, 8, 9],
+                4 => [10, 11, 12],
+                default => [],
+            };
 
-            $data = [];
+            $totalAccueilsMatin = 0;
+            $totalAccueilsSoir = 0;
+            $totalDureeMatin = 0;
+            $totalDureeSoir = 0;
+            $totalDaysWithData = 0;
+
             foreach ($months as $monthString) {
                 try {
                     $month = DateUtils::createDateTimeFromDayMonth($monthString.'/'.$year);
                     $dataMonth = ['days' => []];
-                    $totalByMonth = 0;
+                    $totalByMonthMatin = 0;
+                    $totalByMonthSoir = 0;
+                    $totalDureeByMonthMatin = 0;
+                    $totalDureeByMonthSoir = 0;
+
                     foreach (DateUtils::getAllDaysOfMonth($month) as $day) {
                         if (DateUtils::dayIsWeek($day)) {
-                            $accueils = $this->accueilRepository->findByDateHeureAndEcole(
-                                $day,
-                                AccueilInterface::SOIR,
-                                $ecole,
-                            );
-                            $count = count($accueils);
-                            $dataMonth['days'][$day->format('Y-m-d')] = $count;
-                            $totalByMonth += $count;
-                            foreach ($accueils as $accueil) {
-                                $enfant = $accueil->getEnfant();
-                                $childs[$enfant->getId()] = $enfant;
+                            $dayKey = $day->format('Y-m-d');
+                            $dataMonth['days'][$dayKey] = [];
+
+                            foreach (AccueilInterface::HEURES as $heure => $name) {
+                                $accueils = $this->accueilRepository->findByDateHeureAndEcole(
+                                    $day,
+                                    $heure,
+                                    $ecole,
+                                );
+                                $count = count($accueils);
+                                $duree = 0;
+                                foreach ($accueils as $accueil) {
+                                    $duree += $accueil->getDuree();
+                                    $enfant = $accueil->getEnfant();
+                                    $childs[$enfant->getId()] = $enfant;
+                                }
+                                $dataMonth['days'][$dayKey][$heure] = [
+                                    'count' => $count,
+                                    'duree' => $duree,
+                                ];
+
+                                if ($heure === AccueilInterface::MATIN) {
+                                    $totalByMonthMatin += $count;
+                                    $totalDureeByMonthMatin += $duree;
+                                } else {
+                                    $totalByMonthSoir += $count;
+                                    $totalDureeByMonthSoir += $duree;
+                                }
                             }
+
+                            $totalDaysWithData++;
                         }
                     }
-                    $dataMonth['total'] = $totalByMonth;
+
+                    $dataMonth['totalMatin'] = $totalByMonthMatin;
+                    $dataMonth['totalSoir'] = $totalByMonthSoir;
+                    $dataMonth['totalDureeMatin'] = $totalDureeByMonthMatin;
+                    $dataMonth['totalDureeSoir'] = $totalDureeByMonthSoir;
                     $data[$month->format('Y-m-d')] = $dataMonth;
+
+                    $totalAccueilsMatin += $totalByMonthMatin;
+                    $totalAccueilsSoir += $totalByMonthSoir;
+                    $totalDureeMatin += $totalDureeByMonthMatin;
+                    $totalDureeSoir += $totalDureeByMonthSoir;
                 } catch (Exception $e) {
                     $this->addFlash('danger', $e->getMessage());
                 }
             }
+
+            $averages = [
+                'matin' => [
+                    'frequentation' => $totalDaysWithData > 0 ? round($totalAccueilsMatin / $totalDaysWithData, 2) : 0,
+                    'duree' => $totalAccueilsMatin > 0 ? round($totalDureeMatin / $totalAccueilsMatin, 2) : 0,
+                    'total' => $totalAccueilsMatin,
+                    'totalDuree' => $totalDureeMatin,
+                ],
+                'soir' => [
+                    'frequentation' => $totalDaysWithData > 0 ? round($totalAccueilsSoir / $totalDaysWithData, 2) : 0,
+                    'duree' => $totalAccueilsSoir > 0 ? round($totalDureeSoir / $totalAccueilsSoir, 2) : 0,
+                    'total' => $totalAccueilsSoir,
+                    'totalDuree' => $totalDureeSoir,
+                ],
+                'days' => $totalDaysWithData,
+            ];
 
             $ages = [
                 'all' => count($childs),
@@ -117,7 +153,9 @@ final class PresenceOneController extends AbstractController
                 'data' => $data,
                 'search' => $form->isSubmitted(),
                 'ages' => $ages,
-            ],$response
+                'averages' => $averages,
+            ],
+            $response
         );
     }
 
