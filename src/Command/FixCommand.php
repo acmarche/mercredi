@@ -45,6 +45,7 @@ class FixCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
+        return Command::SUCCESS;
         foreach ($this->factureRepository->findFacturesByMonth('10-2025') as $facture) {
             // $facture = $this->factureRepository->find(12629);
             if ($facture->getMois() == '10-2025') {
@@ -57,7 +58,7 @@ class FixCommand extends Command
             }
         }
 
-        $this->factureRepository->flush();
+        //  $this->factureRepository->flush();
 
         return Command::SUCCESS;
     }
