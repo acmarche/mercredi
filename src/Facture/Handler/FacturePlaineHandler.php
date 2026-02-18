@@ -26,11 +26,20 @@ class FacturePlaineHandler implements FacturePlaineHandlerInterface
     ) {
     }
 
+    /**
+     * @param Plaine $plaine
+     * @param Tuteur $tuteur
+     * @return FactureInterface
+     * @throws \Exception
+     */
     public function newInstance(Plaine $plaine, Tuteur $tuteur): FactureInterface
     {
         $facture = $this->factureFactory->newInstance($tuteur, $plaine);
         $jours = $plaine->getJours();
-        $facture->setMois($jours[0]);
+        if (count($jours) == 0) {
+            throw new \Exception('Aucune dates pour la plaine '.$plaine->getNom());
+        }
+        $facture->setMois($jours[0]->format('m-Y'));
         $facture->setPlaineNom($plaine->getNom());
 
         return $facture;
