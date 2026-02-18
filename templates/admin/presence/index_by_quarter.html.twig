@@ -43,13 +43,14 @@
                     <tr>
                         <th>Total</th>
                         <td>{{ averages.matin.total + averages.soir.total }}</td>
-                        <td>{{ averages.days > 0 ? ((averages.matin.total + averages.soir.total) / averages.days)|round(2) : 0 }}</td>
+                        <td>{{ (averages.matin.days + averages.soir.days) > 0 ? ((averages.matin.total + averages.soir.total) / ((averages.matin.days + averages.soir.days) / 2))|round(2) : 0 }}</td>
                         <td>{{ averages.matin.totalDuree + averages.soir.totalDuree }}</td>
                         <td>{{ (averages.matin.total + averages.soir.total) > 0 ? ((averages.matin.totalDuree + averages.soir.totalDuree) / (averages.matin.total + averages.soir.total))|round(2) : 0 }}</td>
                     </tr>
                     <tr>
                         <td colspan="5" class="text-muted">
-                            Sur {{ averages.days }} jours ouvrables
+                            Sur {{ averages.days }} jours ouvrables ({{ averages.matin.days }} jours avec accueil
+                            matin, {{ averages.soir.days }} jours avec accueil soir)
                         </td>
                     </tr>
                     </tfoot>

@@ -51,6 +51,8 @@ final class PresenceOneController extends AbstractController
             $totalDureeMatin = 0;
             $totalDureeSoir = 0;
             $totalDaysWithData = 0;
+            $daysWithMatin = 0;
+            $daysWithSoir = 0;
 
             foreach ($months as $monthString) {
                 try {
@@ -87,9 +89,15 @@ final class PresenceOneController extends AbstractController
                                 if ($heure === AccueilInterface::MATIN) {
                                     $totalByMonthMatin += $count;
                                     $totalDureeByMonthMatin += $duree;
+                                    if ($count > 0) {
+                                        $daysWithMatin++;
+                                    }
                                 } else {
                                     $totalByMonthSoir += $count;
                                     $totalDureeByMonthSoir += $duree;
+                                    if ($count > 0) {
+                                        $daysWithSoir++;
+                                    }
                                 }
                             }
 
@@ -114,16 +122,18 @@ final class PresenceOneController extends AbstractController
 
             $averages = [
                 'matin' => [
-                    'frequentation' => $totalDaysWithData > 0 ? round($totalAccueilsMatin / $totalDaysWithData, 2) : 0,
+                    'frequentation' => $daysWithMatin > 0 ? round($totalAccueilsMatin / $daysWithMatin, 2) : 0,
                     'duree' => $totalAccueilsMatin > 0 ? round($totalDureeMatin / $totalAccueilsMatin, 2) : 0,
                     'total' => $totalAccueilsMatin,
                     'totalDuree' => $totalDureeMatin,
+                    'days' => $daysWithMatin,
                 ],
                 'soir' => [
-                    'frequentation' => $totalDaysWithData > 0 ? round($totalAccueilsSoir / $totalDaysWithData, 2) : 0,
+                    'frequentation' => $daysWithSoir > 0 ? round($totalAccueilsSoir / $daysWithSoir, 2) : 0,
                     'duree' => $totalAccueilsSoir > 0 ? round($totalDureeSoir / $totalAccueilsSoir, 2) : 0,
                     'total' => $totalAccueilsSoir,
                     'totalDuree' => $totalDureeSoir,
+                    'days' => $daysWithSoir,
                 ],
                 'days' => $totalDaysWithData,
             ];
