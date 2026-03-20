@@ -124,7 +124,7 @@
             <tr>
                 <th>Total à payer</th>
                 <td class="text-end" colspan="{{ data.enfants|length }}">
-                    <strong>{{ dto.total | format_currency('eur') }}</strong>
+                    <strong>{{ dto.totalDu | format_currency('eur') }}</strong>
                 </td>
             </tr>
         </table>
@@ -159,7 +159,7 @@
         <table class="table" style="margin-bottom: 0;">
             <tr>
                 <td>
-                    A payer: {{ dto.total | format_currency('eur') }}<br>
+                    A payer: {{ dto.totalDu | format_currency('eur') }}<br>
                     IBAN: B E 2 3 0 9 1 0 1 9 6 1 9 6 9 1<br>
                     BIC: G K C C B E B B<br>
                     Communication: {{ facture.communication }}

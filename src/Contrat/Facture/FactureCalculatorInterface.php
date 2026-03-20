@@ -12,11 +12,6 @@ interface FactureCalculatorInterface
     public function createDetail(FactureInterface $facture): FactureDetailDto;
 
     /**
-     * Total de la facture, complements et reductions compris.
-     */
-    public function total(FactureInterface $facture): float;
-
-    /**
      * Total.
      */
     public function totalPresences(FactureInterface $facture): float;
@@ -47,5 +42,6 @@ interface FactureCalculatorInterface
     public function totalComplementPourcentage(FactureInterface $facture): float;
 
     public function isPresencePaid(Presence $presence): bool;
+
     public function isAccueilPaid(Accueil $accueil): bool;
 }

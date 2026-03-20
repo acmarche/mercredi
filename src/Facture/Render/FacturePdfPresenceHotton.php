@@ -120,7 +120,7 @@ class FacturePdfPresenceHotton implements FacturePdfPresenceInterface
         $dto = $this->factureCalculator->createDetail($facture);
 
         try {
-            $imgQrcode = $this->qrCodeGenerator->generateForFacture($facture, $dto->total);
+            $imgQrcode = $this->qrCodeGenerator->generateForFacture($facture, $dto->totalDu);
         } catch (ShouldNotHappenException|\Exception $e) {
             $message = $this->adminEmailFactory->messageToJf(
                 'Error create qrcode hotton',

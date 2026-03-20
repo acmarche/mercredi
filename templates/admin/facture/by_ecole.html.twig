@@ -5,7 +5,7 @@
     <div class="card mb-3">
         <div class="card-header">
             <h3>Factures par ecoles {% if search %} <span
-                        class="badge bg-info">{{ factures|length }}</span> {% endif %}</h3>
+                    class="badge bg-info">{{ factures|length }}</span> {% endif %}</h3>
         </div>
 
         <div class="card-body">
@@ -29,7 +29,7 @@
                     <thead>
                     <tr>
                         <th>Ecole</th>
-                        <th>Montant</th>
+                        <th>Montant de la facture</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -39,13 +39,13 @@
                                 {{ ecole }}
                             </td>
                             <td>
-                                {{ montant }}
+                                {{ montant|format_currency('euro') }}
                             </td>
                         </tr>
                     {% endfor %}
                     <tr>
                         <th>Total</th>
-                        <td>{{ totalGroup }}</td>
+                        <td>{{ totalGroup|format_currency('euro') }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -59,7 +59,7 @@
                         <th>Mois</th>
                         <th>Enfants</th>
                         <th>Ecoles</th>
-                        <th>Montant</th>
+                        <th>Montant de la facture</th>
                     </tr>
                     </thead>
                     <tbody>

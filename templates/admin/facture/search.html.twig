@@ -16,16 +16,16 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>Numéro</th>
-                        <th>Mois</th>
-                        <th>Facturé à</th>
-                        <th>Enfants</th>
-                        <th>Ecoles</th>
-                        <th>Payé le</th>
-                        <th>Envoyé le</th>
-                        <th>Communication</th>
-                        <th>Montant initial</th>
-                        <th>Décomptes</th>
+                        <th class="text-center">Numéro</th>
+                        <th class="text-center">Mois</th>
+                        <th class="text-center">Facturé à</th>
+                        <th class="text-center">Enfants</th>
+                        <th class="text-center">Payé le</th>
+                        <th class="text-center">Envoyé le</th>
+                        <th class="text-center">Communication</th>
+                        <th class="text-center">Montant de la facture</th>
+                        <th class="text-center">Paiements effectués</th>
+                        <th class="text-center">Solde dû</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -33,7 +33,7 @@
                         <tr>
                             <td>
                                 <a href="{{ path('mercredi_admin_facture_show', { 'id': facture.id }) }}">
-                                    N° {{ facture.id }}
+                                    {{ facture.id }}
                                 </a>
                             </td>
                             <td>
@@ -43,7 +43,6 @@
                                 {{ facture.tuteur }}
                             </td>
                             <td>{{ facture.enfants|join(',') }}</td>
-                            <td>{{ facture.ecoles|join(',') }}</td>
                             <td>
                                 {{ facture.payeLe ? facture.payeLe | format_date('short') }}
                             </td>
@@ -65,6 +64,11 @@
                                     {{ facture.factureDetailDto.totalDecomptes|format_currency('euro') }}
                                 {% endif %}
                             </td>
+                            <td>
+                                {% if facture.factureDetailDto %}
+                                    {{ facture.factureDetailDto.totalDu|format_currency('euro') }}
+                                {% endif %}
+                            </td>
                         </tr>
                     {% else %}
                         <tr>
@@ -76,7 +80,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th colspan="8"><strong>Total des factures</strong></th>
+                        <th colspan="8"><strong>Montant total des factures</strong></th>
                         <td>{{ total|format_currency('euro') }}</td>
                     </tr>
                     </tfoot>

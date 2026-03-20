@@ -182,8 +182,8 @@ final class SpreadsheetFactory
             ->setCellValue('C1', 'Nom parent')
             ->setCellValue('D1', 'Prénom parent')
             ->setCellValue('E1', 'Enfant(s)')
-            ->setCellValue('F1', 'Montant facturé')
-            ->setCellValue('G1', 'Montant payé')
+            ->setCellValue('F1', 'Montant de la facture')
+            ->setCellValue('G1', 'Paiements effectués')
             ->setCellValue('H1', 'Payé le')
             ->setCellValue('I1', 'Communication');
 
@@ -196,7 +196,11 @@ final class SpreadsheetFactory
                 $montantPaye = $factureDetailDto->total;
                 $payeLe = $facture->getPayeLe()->format(self::FORMAT);
             } else {
-                $montantPaye = $factureDetailDto->totalDecomptes;
+                if ($factureDetailDto->totalDecomptes > 0) {
+                    $montantPaye = $factureDetailDto->totalDecomptes;
+                } else {
+                    $montantPaye = 0;
+                }
                 $payeLe = '';
             }
 

@@ -24,13 +24,6 @@ class FactureCalculator implements FactureCalculatorInterface
     ) {
     }
 
-    public function total(FactureInterface $facture): float
-    {
-        $factureDetail = $this->createDetail($facture);
-
-        return $factureDetail->total;
-    }
-
     public function createDetail(FactureInterface $facture): FactureDetailDto
     {
         $factureDetail = new FactureDetailDto();
@@ -44,9 +37,11 @@ class FactureCalculator implements FactureCalculatorInterface
         $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
 
         $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementAmounts;
-        $factureDetail->total -= $factureDetail->totalReductionAmounts;
-        $factureDetail->total -= $factureDetail->totalDecomptes;
-        $factureDetail->totalHorsPourcentage = $factureDetail->total;
+
+        $factureDetail->totalDu = $factureDetail->total;
+        $factureDetail->totalDu -= $factureDetail->totalReductionAmounts;
+        $factureDetail->totalDu -= $factureDetail->totalDecomptes;
+        $factureDetail->totalHorsPourcentage = $factureDetail->totalDu;
 
         $factureDetail->pourcentageEnPlus = $this->reductionCalculator->calculatePourcentage(
             $factureDetail->totalComplementPourcentage,
@@ -58,8 +53,8 @@ class FactureCalculator implements FactureCalculatorInterface
             $factureDetail->totalHorsPourcentage,
         );
 
-        $factureDetail->total += $factureDetail->pourcentageEnPlus;
-        $factureDetail->total -= $factureDetail->pourcentageEnMoins;
+        $factureDetail->totalDu += $factureDetail->pourcentageEnPlus;
+        $factureDetail->totalDu -= $factureDetail->pourcentageEnMoins;
 
         return $factureDetail;
     }

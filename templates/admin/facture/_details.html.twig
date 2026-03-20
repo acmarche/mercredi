@@ -63,9 +63,15 @@
             </tr>
             <tr>
                 <th>
-                    Total à payer
+                    Montant total de la facture
                 </th>
                 <td>{{ dto.total|format_currency('eur') }}</td>
+            </tr>
+            <tr>
+                <th>
+                    Total restant à payer
+                </th>
+                <td>{{ dto.totalDu|format_currency('eur') }}</td>
             </tr>
             {% if dto.totalDecomptes > 0 %}
                 <tr>

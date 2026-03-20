@@ -41,7 +41,11 @@
             = {{ dto.pourcentageEnPlus|format_currency('euro') }}</td>
     </tr>
     <tr>
-        <td><strong>Total</strong></td>
+        <td><strong>Restant a payer</strong></td>
+        <td><strong>{{ dto.totalDu|format_currency('eur') }}</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Total de la facture</strong></td>
         <td><strong>{{ dto.total|format_currency('eur') }}</strong></td>
     </tr>
 </table>

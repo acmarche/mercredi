@@ -266,7 +266,7 @@ final class FactureController extends AbstractController
         $dto = $this->factureCalculator->createDetail($facture);
         $img = null;
         try {
-            $img = $this->qrCodeGenerator->generateForFacture($facture, $dto->total);
+            $img = $this->qrCodeGenerator->generateForFacture($facture, $dto->totalDu);
         } catch (Exception $e) {
             $this->addFlash('danger', 'erreur image qrcode '.$e->getMessage());
         }
@@ -391,6 +391,8 @@ final class FactureController extends AbstractController
             $totalGroup += $facture->factureDetailDto->total;
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheMercrediAdmin/facture/by_ecole.html.twig',
             [
@@ -401,6 +403,7 @@ final class FactureController extends AbstractController
                 'group' => $group,
                 'totalGroup' => $totalGroup,
             ],
+            $response
         );
     }
 }
