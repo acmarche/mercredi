@@ -21,11 +21,11 @@
         <td>{{ dto.totalComplementAmounts|format_currency('euro') }}</td>
     </tr>
     <tr>
-        <td><strong>Total intermédiaire avant pourcentage</strong></td>
+        <td><strong>Total intermédiaire avant l'application des pourcentages en plus ou en moins</strong></td>
         <td>{{ dto.totalHorsPourcentage|format_currency('euro') }}</td>
     </tr>
     <tr>
-        <td>Réduction en pourcentage a appliquer</td>
+        <td>Réduction en pourcentage à appliquer</td>
         <td>
             {{ dto.totalReductionPourcentage }} %
             sur {{ dto.totalHorsPourcentage|format_currency('euro') }}
@@ -41,11 +41,11 @@
             = {{ dto.pourcentageEnPlus|format_currency('euro') }}</td>
     </tr>
     <tr>
-        <td><strong>Restant a payer</strong></td>
-        <td><strong>{{ dto.totalDu|format_currency('eur') }}</strong></td>
-    </tr>
-    <tr>
         <td><strong>Total de la facture</strong></td>
         <td><strong>{{ dto.total|format_currency('eur') }}</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Restant a payer</strong></td>
+        <td><strong>{{ dto.totalDu|format_currency('eur') }}</strong></td>
     </tr>
 </table>

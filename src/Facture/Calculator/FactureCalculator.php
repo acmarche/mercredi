@@ -31,17 +31,22 @@ class FactureCalculator implements FactureCalculatorInterface
         $factureDetail->totalAccueils = $this->totalAccueils($facture);
         $factureDetail->totalPlaines = $this->totalPlaine($facture);
         $factureDetail->totalReductionAmounts = $this->totalReductionAmounts($facture);
-        $factureDetail->totalReductionPourcentage = $this->totalReductionPourcentage($facture);
         $factureDetail->totalComplementAmounts = $this->totalComplementAmounts($facture);
+
+        $factureDetail->totalHorsPourcentage = $factureDetail->totalPresences
+            + $factureDetail->totalAccueils
+            + $factureDetail->totalPlaines
+            + $factureDetail->totalComplementAmounts
+            - $factureDetail->totalReductionAmounts;
+
+        /**
+         * represent a number in percentage like 5%
+         */
+        $factureDetail->totalReductionPourcentage = $this->totalReductionPourcentage($facture);
+        /**
+         * represent a number in percentage like 5%
+         */
         $factureDetail->totalComplementPourcentage = $this->totalComplementPourcentage($facture);
-        $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
-
-        $factureDetail->total = $factureDetail->totalPresences + $factureDetail->totalAccueils + $factureDetail->totalPlaines + $factureDetail->totalComplementAmounts;
-
-        $factureDetail->totalDu = $factureDetail->total;
-        $factureDetail->totalDu -= $factureDetail->totalReductionAmounts;
-        $factureDetail->totalDu -= $factureDetail->totalDecomptes;
-        $factureDetail->totalHorsPourcentage = $factureDetail->totalDu;
 
         $factureDetail->pourcentageEnPlus = $this->reductionCalculator->calculatePourcentage(
             $factureDetail->totalComplementPourcentage,
@@ -53,8 +58,14 @@ class FactureCalculator implements FactureCalculatorInterface
             $factureDetail->totalHorsPourcentage,
         );
 
-        $factureDetail->totalDu += $factureDetail->pourcentageEnPlus;
-        $factureDetail->totalDu -= $factureDetail->pourcentageEnMoins;
+        $factureDetail->total = $factureDetail->totalHorsPourcentage + $factureDetail->pourcentageEnPlus - $factureDetail->pourcentageEnMoins;
+        $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
+
+        if ($facture->getPayeLe()) {
+            $factureDetail->totalDu = 0;
+        } else {
+            $factureDetail->totalDu = $factureDetail->total - $factureDetail->totalDecomptes;
+        }
 
         return $factureDetail;
     }
