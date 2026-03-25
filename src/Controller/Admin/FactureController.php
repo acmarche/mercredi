@@ -79,7 +79,7 @@ final class FactureController extends AbstractController
         $factures = [];
         $form = $this->createForm(FactureSearchType::class);
         $form->handleRequest($request);
-        $total = 0;
+        $totalFactures = $totalPayes = $totalMontantDu = 0;
         $session = $request->getSession();
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -116,7 +116,13 @@ final class FactureController extends AbstractController
         }
         foreach ($factures as $facture) {
             $facture->factureDetailDto = $this->factureCalculator->createDetail($facture);
-            $total += $facture->factureDetailDto->total;
+            $totalFactures += $facture->factureDetailDto->total;
+            if ($facture->getPayeLe() instanceof \DateTimeInterface) {
+                $totalPayes += $facture->factureDetailDto->total;
+            } else {
+                $totalPayes += $facture->factureDetailDto->totalDecomptes;
+            }
+            $totalMontantDu += $facture->factureDetailDto->totalDu;
         }
         $formMonth = $this->createForm(
             FactureSelectMonthType::class,
@@ -135,7 +141,9 @@ final class FactureController extends AbstractController
                 'form' => $form,
                 'formMonth' => $formMonth,
                 'search' => $form->isSubmitted(),
-                'total' => $total,
+                'totalFactures' => $totalFactures,
+                'totalMontantDu' => $totalMontantDu,
+                'totalPayes' => $totalPayes,
             ],
             $response
         );

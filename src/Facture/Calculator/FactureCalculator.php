@@ -59,12 +59,13 @@ class FactureCalculator implements FactureCalculatorInterface
         );
 
         $factureDetail->total = $factureDetail->totalHorsPourcentage + $factureDetail->pourcentageEnPlus - $factureDetail->pourcentageEnMoins;
-        $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
 
         if ($facture->getPayeLe()) {
             $factureDetail->totalDu = 0;
+            $factureDetail->totalDecomptes = $factureDetail->total;
         } else {
             $factureDetail->totalDu = $factureDetail->total - $factureDetail->totalDecomptes;
+            $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
         }
 
         return $factureDetail;
