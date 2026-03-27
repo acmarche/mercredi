@@ -64,8 +64,8 @@ class FactureCalculator implements FactureCalculatorInterface
             $factureDetail->totalDu = 0;
             $factureDetail->totalDecomptes = $factureDetail->total;
         } else {
-            $factureDetail->totalDu = $factureDetail->total - $factureDetail->totalDecomptes;
             $factureDetail->totalDecomptes = $this->totalDecomptes($facture);
+            $factureDetail->totalDu = $factureDetail->total - $factureDetail->totalDecomptes;
         }
 
         return $factureDetail;
