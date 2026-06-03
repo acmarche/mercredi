@@ -55,6 +55,24 @@ final class TuteurRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * Tuteurs non archivés avec leurs relations (enfants) et comptes utilisateurs liés.
+     *
+     * @return Tuteur[]
+     */
+    public function findNotArchivedWithEnfantsAndUsers(): array
+    {
+        return $this->createQueryBuilder('tuteur')
+            ->leftJoin('tuteur.relations', 'relations')->addSelect('relations')
+            ->leftJoin('relations.enfant', 'enfant')->addSelect('enfant')
+            ->leftJoin('tuteur.users', 'users')->addSelect('users')
+            ->andWhere('tuteur.archived = :archived')
+            ->setParameter('archived', false)
+            ->addOrderBy('tuteur.nom', 'ASC')
+            ->addOrderBy('tuteur.prenom', 'ASC')
+            ->getQuery()->getResult();
+    }
+
     public function findForAssociateParent(): QueryBuilder
     {
         return $this->createQueryBuilder('tuteur')
