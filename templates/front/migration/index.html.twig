@@ -1,0 +1,42 @@
+{% extends '@AcMarcheMercredi/front/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card mb-3">
+
+        <h3 class="card-header">Nos services évoluent</h3>
+
+        <div class="card-body">
+
+            <p>
+                Pour simplifier vos démarches administratives, nos services évoluent.
+                Dès la rentrée scolaire 2026, les sites mercredi.marche.be et enfance-jeunesse.marche.be
+                fusionnent en une seule et unique plateforme.
+            </p>
+
+            {% if accepted %}
+
+                <div class="alert alert-success mb-0" role="alert">
+                    <i class="fas fa-check" aria-hidden="true"></i>
+                    Vous avez déjà accepté la migration de vos données, merci.
+                </div>
+
+            {% else %}
+
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{ form_widget(form) }}
+                <button class="btn btn-primary mr-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                    Confirmer
+                </button>
+                {{ form_end(form) }}
+
+            {% endif %}
+
+        </div>
+        <div class="card-footer text-muted mt-3">
+            {{ user }}
+        </div>
+    </div>
+
+{% endblock %}

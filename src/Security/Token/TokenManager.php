@@ -81,7 +81,7 @@ class TokenManager
 
             $this->generateNew($user);
 
-            return false;
+            return true;
         }
 
         return false;
@@ -103,6 +103,17 @@ class TokenManager
 
         return $this->router->generate(
             'mercredi_security_autologin',
+            ['value' => $token->getValue()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+    }
+
+    public function getLinkToMigration(User $user): ?string
+    {
+        $token = $this->getInstance($user);
+
+        return $this->router->generate(
+            'mercredi_front_migration',
             ['value' => $token->getValue()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

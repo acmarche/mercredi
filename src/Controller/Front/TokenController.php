@@ -6,6 +6,7 @@ use AcMarche\Mercredi\Entity\Security\Token;
 use AcMarche\Mercredi\Security\Token\TokenManager;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class TokenController extends AbstractController
     #[IsGranted('ROLE_MERCREDI_ADMIN')]
     public function index(Request $request): Response
     {
-        $form = $this->createForm(EmptyType::class);
+        $form = $this->createForm(FormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

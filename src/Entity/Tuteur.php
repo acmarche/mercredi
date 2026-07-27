@@ -9,6 +9,7 @@ use AcMarche\Mercredi\Entity\Presence\Accueil;
 use AcMarche\Mercredi\Entity\Security\Traits\UserAddTrait;
 use AcMarche\Mercredi\Entity\Security\Traits\UsersTrait;
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Entity\Traits\AcceptMigrationTrait;
 use AcMarche\Mercredi\Entity\Traits\AccueilsTraits;
 use AcMarche\Mercredi\Entity\Traits\AdresseTrait;
 use AcMarche\Mercredi\Entity\Traits\ArchiveTrait;
@@ -62,6 +63,7 @@ class Tuteur implements SluggableInterface, TimestampableInterface, Stringable
     use CreancesTrait;
     use IdOldTrait;
     use RegistreNationalTrait;
+    use AcceptMigrationTrait;
 
     /**
      * @var Relation[]
