@@ -3,6 +3,7 @@
 namespace AcMarche\Mercredi\Controller\Front;
 
 use AcMarche\Mercredi\Entity\Security\User;
+use AcMarche\Mercredi\Entity\Tuteur;
 use AcMarche\Mercredi\Security\Token\TokenManager;
 use AcMarche\Mercredi\Security\Token\TokenRepository;
 use AcMarche\Mercredi\Tuteur\Form\AcceptMigrationType;
@@ -53,25 +54,23 @@ final class MigrationController extends AbstractController
             return $this->redirectToRoute('mercredi_front_home');
         }
 
-        $accepted = true;
-        foreach ($tuteurs as $tuteur) {
-            if (!$tuteur->isAcceptMigration()) {
-                $accepted = false;
-
-                break;
-            }
-        }
+        $reponse = $this->reponseDonnee($tuteurs);
 
         $form = $this->createForm(AcceptMigrationType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $accepte = (bool)$form->get('acceptMigration')->getData();
+
             foreach ($tuteurs as $tuteur) {
-                $tuteur->setAcceptMigration(true);
+                $tuteur->setAcceptMigration($accepte);
             }
             $this->tuteurRepository->flush();
 
-            $this->addFlash('success', 'Merci, votre accord a bien été enregistré');
+            $this->addFlash(
+                'success',
+                $accepte ? 'Merci, votre accord a bien été enregistré' : 'Votre refus a bien été enregistré'
+            );
 
             return $this->redirectToRoute('mercredi_front_migration', ['value' => $value]);
         }
@@ -81,10 +80,33 @@ final class MigrationController extends AbstractController
             [
                 'user' => $user,
                 'tuteurs' => $tuteurs,
-                'accepted' => $accepted,
+                'reponse' => $reponse,
                 'form' => $form,
             ],
         );
+    }
+
+    /**
+     * Réponse déjà enregistrée : null tant qu'un des tuteurs n'a pas répondu,
+     * true si tous acceptent, false sinon.
+     *
+     * @param Tuteur[] $tuteurs
+     */
+    private function reponseDonnee(array $tuteurs): ?bool
+    {
+        foreach ($tuteurs as $tuteur) {
+            if (null === $tuteur->isAcceptMigration()) {
+                return null;
+            }
+        }
+
+        foreach ($tuteurs as $tuteur) {
+            if (!$tuteur->isAcceptMigration()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

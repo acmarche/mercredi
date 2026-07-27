@@ -3,9 +3,9 @@
 namespace AcMarche\Mercredi\Tuteur\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 final class AcceptMigrationType extends AbstractType
 {
@@ -14,15 +14,20 @@ final class AcceptMigrationType extends AbstractType
         $formBuilder
             ->add(
                 'acceptMigration',
-                CheckboxType::class,
+                ChoiceType::class,
                 [
-                    'label' => 'J\'accepte le transfert de mes données vers la nouvelle plateforme',
-                    'required' => true,
+                    'label' => false,
+                    'expanded' => true,
+                    'multiple' => false,
                     'mapped' => false,
+                    'choices' => [
+                        'J\'accepte le transfert de mes données vers cette unique plateforme à savoir le site enfance-jeunesse.marche.be' => true,
+                        'Je n\'accepte pas le transfert de mes données vers cette unique plateforme à savoir le site enfance-jeunesse.marche.be. Je créerai moi-même un compte sur ce site.' => false,
+                    ],
                     'constraints' => [
-                        new IsTrue(
+                        new NotNull(
                             [
-                                'message' => 'Vous devez cocher la case pour accepter la migration.',
+                                'message' => 'Vous devez choisir une des deux réponses.',
                             ]
                         ),
                     ],
