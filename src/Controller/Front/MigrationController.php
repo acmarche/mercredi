@@ -45,9 +45,9 @@ final class MigrationController extends AbstractController
         $user = $token->getUser();
         $this->autoLogin($request, $user);
 
-        $tuteurs = $user->getTuteurs();
+        $tuteurs = $this->tuteurRepository->findByUserWithEnfants($user);
 
-        if (0 === $tuteurs->count()) {
+        if ([] === $tuteurs) {
             $this->addFlash('warning', 'Aucun parent n\'est lié à votre compte');
 
             return $this->redirectToRoute('mercredi_front_home');
@@ -80,6 +80,7 @@ final class MigrationController extends AbstractController
             '@AcMarcheMercredi/front/migration/index.html.twig',
             [
                 'user' => $user,
+                'tuteurs' => $tuteurs,
                 'accepted' => $accepted,
                 'form' => $form,
             ],

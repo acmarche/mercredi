@@ -76,6 +76,26 @@ final class TuteurRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * Tuteurs d'un utilisateur avec leurs enfants, écoles et classes.
+     *
+     * @return Tuteur[]
+     */
+    public function findByUserWithEnfants(User $user): array
+    {
+        return $this->createQueryBuilder('tuteur')
+            ->leftJoin('tuteur.relations', 'relations')->addSelect('relations')
+            ->leftJoin('relations.enfant', 'enfant')->addSelect('enfant')
+            ->leftJoin('enfant.ecole', 'ecole')->addSelect('ecole')
+            ->leftJoin('enfant.groupe_scolaire', 'groupe_scolaire')->addSelect('groupe_scolaire')
+            ->leftJoin('tuteur.users', 'users')
+            ->andWhere('users = :user')
+            ->setParameter('user', $user)
+            ->addOrderBy('tuteur.nom', 'ASC')
+            ->addOrderBy('enfant.nom', 'ASC')
+            ->getQuery()->getResult();
+    }
+
     public function findForAssociateParent(): QueryBuilder
     {
         return $this->createQueryBuilder('tuteur')

@@ -14,6 +14,126 @@
                 fusionnent en une seule et unique plateforme.
             </p>
 
+            <p class="text-muted">
+                Voici les données qui seront transférées vers la nouvelle plateforme.
+            </p>
+
+            {% for tuteur in tuteurs %}
+
+                <div class="card mb-3">
+                    <h5 class="card-header">
+                        <i class="fas fa-user" aria-hidden="true"></i> {{ tuteur }}
+                    </h5>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-bordered table-sm">
+                                    <tbody>
+                                    <tr>
+                                        <th><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Adresse</th>
+                                        <td>
+                                            {{ tuteur.rue }}
+                                            {% if tuteur.rue and (tuteur.codePostal or tuteur.localite) %}<br/>{% endif %}
+                                            {{ tuteur.codePostal }} {{ tuteur.localite }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fas fa-phone" aria-hidden="true"></i> Téléphone</th>
+                                        <td>{{ tuteur.telephone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fas fa-phone" aria-hidden="true"></i> Téléphone bureau</th>
+                                        <td>{{ tuteur.telephoneBureau }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fas fa-mobile-alt" aria-hidden="true"></i> Gsm</th>
+                                        <td>{{ tuteur.gsm }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="far fa-envelope" aria-hidden="true"></i> Email</th>
+                                        <td>{{ tuteur.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fas fa-museum" aria-hidden="true"></i> Numéro national</th>
+                                        <td>{{ tuteur.registreNational }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {% if tuteur.nomConjoint or tuteur.prenomConjoint or tuteur.emailConjoint %}
+                                <div class="col-md-6">
+                                    <table class="table table-bordered table-sm">
+                                        <tbody>
+                                        <tr>
+                                            <th><i class="fas fa-heart" style="color:hotpink;"
+                                                   aria-hidden="true"></i> Conjoint
+                                            </th>
+                                            <td>{{ tuteur.nomConjoint }} {{ tuteur.prenomConjoint }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><i class="fas fa-phone" aria-hidden="true"></i> Téléphone</th>
+                                            <td>{{ tuteur.telephoneConjoint }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><i class="fas fa-phone" aria-hidden="true"></i> Téléphone bureau</th>
+                                            <td>{{ tuteur.telephoneBureauConjoint }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><i class="fas fa-mobile-alt" aria-hidden="true"></i> Gsm</th>
+                                            <td>{{ tuteur.gsmConjoint }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><i class="far fa-envelope" aria-hidden="true"></i> Email</th>
+                                            <td>{{ tuteur.emailConjoint }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <h6 class="text-success">Enfant(s)</h6>
+
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Date de naissance</th>
+                                <th>École</th>
+                                <th>Classe</th>
+                                <th>Numéro national</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for relation in tuteur.relations %}
+                                {% set enfant = relation.enfant %}
+                                <tr>
+                                    <td>
+                                        {{ enfant }}
+                                        {% if enfant.archived %}
+                                            <span class="badge bg-secondary">archivé</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ enfant.birthday ? enfant.birthday|date('d/m/Y') : '' }}</td>
+                                    <td>{{ enfant.ecole }}</td>
+                                    <td>{{ enfant.groupeScolaire }}</td>
+                                    <td>{{ enfant.registreNational }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">Aucun enfant lié à votre compte</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            {% endfor %}
+
             {% if accepted %}
 
                 <div class="alert alert-success mb-0" role="alert">
