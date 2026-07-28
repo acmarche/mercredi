@@ -14,37 +14,31 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Envoie le texte de data/mail.txt aux utilisateurs ayant au moins un tuteur
+ * Envoie l'annonce de fusion des plateformes aux utilisateurs ayant au moins un tuteur
  * possédant un numéro de registre national.
  *
- * Format du fichier :
- * - la première ligne non vide est le sujet du mail ;
- * - le reste est le corps, les paragraphes étant séparés par une ligne vide ;
- * - la syntaxe [libellé] link to 'nom_de_route' devient un lien vers cette route.
- *   Pour mercredi_front_migration le lien contient le token de connexion du destinataire.
+ * Le corps du mail se trouve dans @AcMarcheMercredi/email/front/_migration.html.twig,
+ * la variable link étant le lien de migration propre à chaque destinataire.
  */
 #[AsCommand(
     name: 'mercredi:migration-mail',
-    description: 'Envoie le texte de data/mail.txt aux parents ayant un tuteur avec registre national'
+    description: 'Envoie l\'annonce de migration aux parents ayant un tuteur avec registre national'
 )]
 class SendMigrationMailCommand extends Command
 {
     use OrganisationPropertyInitTrait;
 
-    private const LINK_PATTERN = "/\[([^\]]+)\]\s*link to\s*'([a-zA-Z0-9_]+)'/";
+    private const SUBJECT = 'Fusion du site mercredi.marche.be et du site enfance-jeunesse.marche.be';
+
+    private const TEMPLATE = '@AcMarcheMercredi/email/admin/migration.html.twig';
 
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly TokenManager $tokenManager,
         private readonly NotificationMailer $notificationMailer,
-        private readonly UrlGeneratorInterface $urlGenerator,
-        #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir,
         ?string $name = null
     ) {
         parent::__construct($name);
@@ -53,7 +47,6 @@ class SendMigrationMailCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('file', null, InputOption::VALUE_REQUIRED, 'Fichier contenant le mail', 'data/mail.txt')
             ->addOption('send', null, InputOption::VALUE_NONE, 'Envoie réellement les mails (sinon simulation)')
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Limite le nombre de destinataires')
             ->addOption(
@@ -74,23 +67,6 @@ class SendMigrationMailCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
-        $fileName = $input->getOption('file');
-        $path = str_starts_with((string)$fileName, '/') ? $fileName : $this->projectDir.'/'.$fileName;
-
-        if (!is_readable($path)) {
-            $io->error('Fichier introuvable: '.$path);
-
-            return Command::FAILURE;
-        }
-
-        [$subject, $body] = $this->parseFile((string)file_get_contents($path));
-
-        if ('' === $subject || '' === $body) {
-            $io->error('Le fichier doit contenir un sujet (première ligne) et un corps de message.');
-
-            return Command::FAILURE;
-        }
 
         $users = $this->userRepository->findWithTuteurHavingRegistreNational();
         $users = $this->filterWithEmail($users, $io);
@@ -117,7 +93,7 @@ class SendMigrationMailCommand extends Command
         }
 
         $io->section('Sujet');
-        $io->writeln($subject);
+        $io->writeln(self::SUBJECT);
         $io->section(\count($users).' destinataire(s)');
 
         if (!$send) {
@@ -131,12 +107,12 @@ class SendMigrationMailCommand extends Command
         foreach ($users as $user) {
             $message = new TemplatedEmail();
             $message
-                ->subject($subject)
+                ->subject(self::SUBJECT)
                 ->from($this->getEmailSenderAddress())
                 ->to($testEmail ?: $user->getEmail())
-                ->htmlTemplate('@AcMarcheMercredi/email/admin/migration.html.twig')
+                ->htmlTemplate(self::TEMPLATE)
                 ->context([
-                    'content' => $this->renderBody($body, $tokenUser ?? $user),
+                    'link' => $this->tokenManager->getLinkToMigration($tokenUser ?? $user),
                     'organisation' => $this->organisation,
                 ]);
 
@@ -174,68 +150,6 @@ class SendMigrationMailCommand extends Command
         }
 
         return $user;
-    }
-
-    /**
-     * @return array{0: string, 1: string} sujet, corps
-     */
-    private function parseFile(string $content): array
-    {
-        $content = str_replace(["\r\n", "\r"], "\n", $content);
-        $lines = explode("\n", $content);
-        $subject = '';
-
-        while ([] !== $lines) {
-            $line = trim((string)array_shift($lines));
-            if ('' !== $line) {
-                $subject = $line;
-                break;
-            }
-        }
-
-        return [$subject, trim(implode("\n", $lines))];
-    }
-
-    /**
-     * Transforme le texte brut en html, les liens étant résolus pour ce destinataire.
-     */
-    private function renderBody(string $body, User $user): string
-    {
-        $links = [];
-        $body = preg_replace_callback(
-            self::LINK_PATTERN,
-            function (array $matches) use (&$links, $user): string {
-                $placeholder = '@@LINK'.\count($links).'@@';
-                $links[$placeholder] = sprintf(
-                    '<a href="%s">%s</a>',
-                    htmlspecialchars($this->generateUrl($matches[2], $user), ENT_QUOTES),
-                    htmlspecialchars($matches[1], ENT_QUOTES)
-                );
-
-                return $placeholder;
-            },
-            $body
-        );
-
-        $html = '';
-        foreach (preg_split("/\n\s*\n/", (string)$body) as $paragraph) {
-            $paragraph = trim((string)$paragraph);
-            if ('' === $paragraph) {
-                continue;
-            }
-            $html .= '<p style="margin: 0 0 16px">'.nl2br(htmlspecialchars($paragraph, ENT_QUOTES)).'</p>';
-        }
-
-        return strtr($html, $links);
-    }
-
-    private function generateUrl(string $route, User $user): string
-    {
-        if ('mercredi_front_migration' === $route) {
-            return $this->tokenManager->getLinkToMigration($user);
-        }
-
-        return $this->urlGenerator->generate($route, [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**

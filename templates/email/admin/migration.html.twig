@@ -6,5 +6,5 @@
 {% endblock %}
 
 {% block content %}
-    {{ content|raw }}
+    {% include '@AcMarcheMercredi/email/front/_migration.html.twig' with {'link': link} only %}
 {% endblock %}
