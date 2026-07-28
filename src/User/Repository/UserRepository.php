@@ -62,6 +62,25 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     }
 
     /**
+     * Utilisateurs liés à au moins un tuteur qui possède un numéro de registre national.
+     *
+     * @return User[]
+     */
+    public function findWithTuteurHavingRegistreNational(): array
+    {
+        return $this
+            ->createQueryBuilder('user')
+            ->innerJoin('user.tuteurs', 'tuteurs')
+            ->addSelect('tuteurs')
+            ->andWhere('tuteurs.registre_national IS NOT NULL')
+            ->andWhere("TRIM(tuteurs.registre_national) != ''")
+            ->addOrderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
