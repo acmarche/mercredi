@@ -56,7 +56,8 @@ final class TuteurRepository extends ServiceEntityRepository
     }
 
     /**
-     * Tuteurs non archivés avec leurs relations (enfants) et comptes utilisateurs liés.
+     * Tuteurs non archivés ayant accepté la migration, avec leurs relations (enfants)
+     * et comptes utilisateurs liés.
      *
      * @return Tuteur[]
      */
@@ -71,6 +72,8 @@ final class TuteurRepository extends ServiceEntityRepository
             ->leftJoin('tuteur.users', 'users')->addSelect('users')
             ->andWhere('tuteur.archived = :archived')
             ->setParameter('archived', false)
+            ->andWhere('tuteur.acceptMigration = :acceptMigration')
+            ->setParameter('acceptMigration', true)
             ->addOrderBy('tuteur.nom', 'ASC')
             ->addOrderBy('tuteur.prenom', 'ASC')
             ->getQuery()->getResult();

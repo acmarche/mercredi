@@ -27,7 +27,8 @@ final class TuteurApiController
     }
 
     /**
-     * Liste des tuteurs non archivés avec leurs enfants et comptes utilisateurs liés.
+     * Liste des tuteurs non archivés ayant accepté la migration (acceptMigration = true),
+     * avec leurs enfants et comptes utilisateurs liés.
      *
      * Authentification : en-tête `Authorization: Bearer <MERCREDI_API_TOKEN>`.
      */
@@ -101,6 +102,7 @@ final class TuteurApiController
             'facture_papier' => $tuteur->getFacturePapier(),
             'remarque' => $tuteur->getRemarque(),
             'archived' => $tuteur->isArchived(),
+            'accept_migration' => $tuteur->isAcceptMigration(),
             'user_add' => $tuteur->getUserAdd(),
             'id_old' => $tuteur->getIdOld(),
             'created_at' => $tuteur->getCreatedAt()?->format(DateTimeInterface::ATOM),
